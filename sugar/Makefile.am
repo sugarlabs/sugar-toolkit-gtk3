@@ -13,11 +13,11 @@ pkgpyexecdir = $(pythondir)/sugar
 pkgpyexec_LTLIBRARIES = _sugarext.la
 
 _sugarext_la_CFLAGS = 		\
-	$(LIB_CFLAGS)		\
+	$(EXT_CFLAGS)		\
 	$(PYTHON_INCLUDES)
 
 _sugarext_la_LDFLAGS = -module -avoid-version
-_sugarext_la_LIBADD = $(LIB_LIBS)
+_sugarext_la_LIBADD = $(EXT_LIBS)
 
 _sugarext_la_SOURCES =			\
 	$(BUILT_SOURCES)		\

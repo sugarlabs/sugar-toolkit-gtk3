@@ -1,4 +1,4 @@
-AC_INIT([Sugar],[0.75.0],[],[sugar])
+AC_INIT([sugar-toolkit],[0.79.0],[],[sugar-toolkit])
 
 AC_PREREQ([2.59])
 
@@ -17,62 +17,28 @@ AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
 AC_PATH_PROG(PYGTK_CODEGEN, pygtk-codegen-2.0, no)
 
-PKG_CHECK_MODULES(SHELL, pygtk-2.0 gtk+-2.0)
-
-PKG_CHECK_MODULES(LIB, pygtk-2.0 gtk+-2.0)
+PKG_CHECK_MODULES(EXT, pygtk-2.0 gtk+-2.0)
 
 PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
 AC_SUBST(PYGTK_DEFSDIR)
 
 # Setup GETTEXT
 #
-ALL_LINGUAS="am ar ay bn de dz el en es fa fr ha hi ig is it ja ko mk ml ne nl pa pl pt pt_BR qu ro ru rw th ur yo zh_CN zh_TW"
+ALL_LINGUAS=""
 GETTEXT_PACKAGE=sugar
 AC_PROG_INTLTOOL([0.33])
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
 
-AC_ARG_ENABLE(update-mimedb,
-   AC_HELP_STRING([--disable-update-mimedb],
-                   [disable the update-mime-database after install [default=no]]),,
-    enable_update_mimedb=yes)
-AM_CONDITIONAL(ENABLE_UPDATE_MIMEDB, test x$enable_update_mimedb = xyes)
-
-AC_CONFIG_FILES([
-bin/sugar
-bin/sugar-control-panel
-bin/sugar-emulator
-bin/sugar-shell
-bin/sugar-shell-service
-service/config.py
-src/config.py
-])
-
 AC_OUTPUT([
 Makefile
-bin/Makefile
-data/Makefile
-lib/Makefile
-lib/sugar/Makefile
-lib/sugar/activity/Makefile
-lib/sugar/bundle/Makefile
-lib/sugar/clipboard/Makefile
-lib/sugar/graphics/Makefile
-lib/sugar/presence/Makefile
-lib/sugar/datastore/Makefile
-service/Makefile
-src/Makefile
-src/controlpanel/Makefile
-src/intro/Makefile
-src/hardware/Makefile
-src/view/Makefile
-src/view/devices/Makefile
-src/view/devices/network/Makefile
-src/view/frame/Makefile
-src/view/home/Makefile
-src/model/Makefile
-src/model/devices/Makefile
-src/model/devices/network/Makefile
+sugar/Makefile
+sugar/activity/Makefile
+sugar/bundle/Makefile
+sugar/clipboard/Makefile
+sugar/graphics/Makefile
+sugar/presence/Makefile
+sugar/datastore/Makefile
 po/Makefile.in
 ])
