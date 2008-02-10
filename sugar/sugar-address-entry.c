@@ -450,11 +450,11 @@ sugar_address_entry_expose(GtkWidget      *widget,
 
 		get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
 
-/*      gtk_paint_flat_box (widget->style, entry->text_area,
-                          GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
-                          NULL, widget, "entry_bg",
-                          0, 0, area_width, area_height);
-*/
+		gtk_paint_flat_box (widget->style, entry->text_area,
+		          GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+		          NULL, widget, "entry_bg",
+		          0, 0, area_width, area_height);
+
 
 		if (address_entry->progress != 0.0 && address_entry->progress != 1.0 &&
 		    !GTK_WIDGET_HAS_FOCUS(entry)) {
