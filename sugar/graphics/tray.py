@@ -302,4 +302,5 @@ class TrayIcon(gtk.ToolItem):
 
     def get_icon(self):
         return self._icon_widget.get_icon()
+    icon = property(get_icon, None)
 
