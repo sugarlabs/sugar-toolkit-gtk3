@@ -31,11 +31,11 @@ def _activity_info_from_dict(info_dict):
     return ActivityInfo(info_dict['name'], info_dict['icon'],
                         info_dict['bundle_id'], info_dict['version'],
                         info_dict['path'], info_dict['show_launcher'],
-                        info_dict['command'])
+                        info_dict['command'], info_dict['favorite'])
 
 class ActivityInfo(object):
     def __init__(self, name, icon, bundle_id, version,
-                 path, show_launcher, command):
+                 path, show_launcher, command, favorite):
         self.name = name
         self.icon = icon
         self.bundle_id = bundle_id
@@ -43,13 +43,16 @@ class ActivityInfo(object):
         self.path = path
         self.command = command
         self.show_launcher = show_launcher
+        self.favorite = favorite
 
 class ActivityRegistry(gobject.GObject):
     __gsignals__ = {
-        'activity-added': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                           ([gobject.TYPE_PYOBJECT])),
+        'activity-added':   (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                             ([gobject.TYPE_PYOBJECT])),
         'activity-removed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                           ([gobject.TYPE_PYOBJECT]))
+                             ([gobject.TYPE_PYOBJECT])),
+        'activity-changed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                             ([gobject.TYPE_PYOBJECT]))
     }
     def __init__(self):
         gobject.GObject.__init__(self)
@@ -67,6 +70,7 @@ class ActivityRegistry(gobject.GObject):
         self._registry = dbus.Interface(bus_object, _ACTIVITY_REGISTRY_IFACE)
         self._registry.connect_to_signal('ActivityAdded', self._activity_added_cb)
         self._registry.connect_to_signal('ActivityRemoved', self._activity_removed_cb)
+        self._registry.connect_to_signal('ActivityChanged', self._activity_changed_cb)
 
         # Two caches fo saving some travel across dbus.
         self._service_name_to_activity_info = {}
@@ -148,15 +152,21 @@ class ActivityRegistry(gobject.GObject):
         self._mime_type_to_activities.clear()
 
     def remove_bundle(self, bundle_path):
-        self._service_name_to_activity_info.clear()
-        self._mime_type_to_activities.clear()
+        self._invalidate_cache()
         return self._registry.RemoveBundle(bundle_path)
 
     def _activity_removed_cb(self, info_dict):
         logging.debug('ActivityRegistry._activity_removed_cb: flushing caches')
-        self._service_name_to_activity_info.clear()
-        self._mime_type_to_activities.clear()
+        self._invalidate_cache()
         self.emit('activity-removed', _activity_info_from_dict(info_dict))
+
+    def _activity_changed_cb(self, info_dict):
+        logging.debug('ActivityRegistry._activity_changed_cb: flushing caches')
+        self._invalidate_cache()
+        self.emit('activity-changed', _activity_info_from_dict(info_dict))
+
+    def set_activity_favorite(self, bundle_id, version, favorite):
+        self._registry.SetActivityFavorite(bundle_id, version, favorite)
 
 _registry = None
 
