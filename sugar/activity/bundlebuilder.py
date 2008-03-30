@@ -94,9 +94,6 @@ def _get_bundle_dir():
     bundle_name = os.path.basename(_get_source_path())
     return bundle_name + '.activity'    
 
-def _get_install_dir(prefix):
-    return os.path.join(prefix, 'share/activities')
-
 def _get_package_name(bundle_name):
     bundle = ActivityBundle(_get_source_path())
     zipname = '%s-%d.xo' % (bundle_name, bundle.get_activity_version())
@@ -192,15 +189,14 @@ def cmd_dist(bundle_name, manifest):
 
     bundle_zip.close()
 
-def cmd_install(bundle_name, manifest, prefix):
+def cmd_install(bundle_name, manifest, path):
     cmd_dist(bundle_name, manifest)
-    cmd_uninstall(prefix)
+    cmd_uninstall(path)
 
-    _extract_bundle(_get_package_name(bundle_name),
-                    _get_install_dir(prefix))
+    _extract_bundle(_get_package_name(bundle_name), path)
 
-def cmd_uninstall(prefix):
-    path = os.path.join(_get_install_dir(prefix), _get_bundle_dir())
+def cmd_uninstall(path):
+    path = os.path.join(path, _get_bundle_dir())
     if os.path.isdir(path):
         shutil.rmtree(path)
 
