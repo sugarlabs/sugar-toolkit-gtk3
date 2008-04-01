@@ -131,8 +131,18 @@ class Palette(gtk.Window):
     __gtype_name__ = 'SugarPalette'
 
     __gproperties__ = {
-        'invoker'    : (object, None, None,
-                        gobject.PARAM_READWRITE)
+        'invoker'        : (object, None, None,
+                            gobject.PARAM_READWRITE),
+        'primary-text'   : (str, None, None, None,
+                            gobject.PARAM_READWRITE),
+        'secondary-text' : (str, None, None, None,
+                            gobject.PARAM_READWRITE),
+        'icon'           : (object, None, None,
+                            gobject.PARAM_READWRITE),
+        'icon-visible'   : (bool, None, None, True,
+                            gobject.PARAM_READWRITE),
+        'group-id'       : (str, None, None, None,
+                            gobject.PARAM_READWRITE)
     }
 
     __gsignals__ = {
@@ -142,19 +152,87 @@ class Palette(gtk.Window):
                      gobject.TYPE_NONE, ([]))
     }
 
+    # DEPRECATED: label is passed with the primary-text property, accel_path 
+    # is set via the invoker property, and menu_after_content is not used
     def __init__(self, label, accel_path=None, menu_after_content=False,
-                text_maxlen=0):
-        gtk.Window.__init__(self)
+                 text_maxlen=0, **kwargs):
+
+        self.palette_state = self.PRIMARY
+
+        self._primary_text = None
+        self._secondary_text = None
+        self._icon = None
+        self._icon_visible = True
+        self._group_id = None
+
+        palette_box = gtk.VBox()
+
+        primary_box = gtk.HBox()
+        palette_box.pack_start(primary_box, expand=False)
+        primary_box.show()
+
+        self._icon_box = gtk.HBox()
+        self._icon_box.set_size_request(style.zoom(style.GRID_CELL_SIZE), -1)
+        primary_box.pack_start(self._icon_box, expand=False)
+
+        labels_box = gtk.VBox()
+        self._label_alignment = gtk.Alignment(xalign=0, yalign=0.5, 
+                                              xscale=0, yscale=0.33)
+        self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING, 
+                                          style.DEFAULT_SPACING)
+        self._label_alignment.add(labels_box)
+        self._label_alignment.show()
+        primary_box.pack_start(self._label_alignment, expand=True)
+        labels_box.show()
+
+        self._label = gtk.AccelLabel('')
+        self._label.set_alignment(0, 0.5)
+
+        if text_maxlen > 0:
+            self._label.set_max_width_chars(text_maxlen)
+            self._label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+        labels_box.pack_start(self._label, expand=True)
+
+        self._secondary_label = gtk.Label()
+        self._secondary_label.set_alignment(0, 0.5)
+
+        if text_maxlen > 0:
+            self._secondary_label.set_max_width_chars(text_maxlen)
+            self._secondary_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+
+        labels_box.pack_start(self._secondary_label, expand=True)
+
+        self._secondary_box = gtk.VBox()
+        palette_box.pack_start(self._secondary_box)
+
+        self._separator = gtk.HSeparator()
+        self._secondary_box.pack_start(self._separator)
+
+        self._menu_content_separator = gtk.HSeparator()
+
+        self._popup_anim = animator.Animator(0.3, 10)
+        self._popup_anim.add(_PopupAnimation(self))
+
+        self._secondary_anim = animator.Animator(1.0, 10)
+        self._secondary_anim.add(_SecondaryAnimation(self))
+
+        self._popdown_anim = animator.Animator(0.6, 10)
+        self._popdown_anim.add(_PopdownAnimation(self))
+
+        # we init after initializing all of our containers
+        gobject.GObject.__init__(self, **kwargs)
 
         self.set_decorated(False)
         self.set_resizable(False)
         # Just assume xthickness and ythickness are the same
         self.set_border_width(self.style.xthickness)
+
+        primary_box.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE)
+                                     - 2 * self.get_border_width())
+
         self.connect('realize', self._realize_cb)
         self.connect('destroy', self.__destroy_cb)
         self.connect('map-event', self.__map_event_cb)
-
-        self.palette_state = self.PRIMARY
 
         self._alignment = None
         self._old_alloc = None
@@ -166,52 +244,20 @@ class Palette(gtk.Window):
         self._up = False
         self._palette_popup_sid = None
 
-        self._popup_anim = animator.Animator(0.3, 10)
-        self._popup_anim.add(_PopupAnimation(self))
+        # we set these for backward compatibility
+        if label is not None:
+            self.props.primary_text = label
 
-        self._secondary_anim = animator.Animator(1.0, 10)
-        self._secondary_anim.add(_SecondaryAnimation(self))
-
-        self._popdown_anim = animator.Animator(0.6, 10)
-        self._popdown_anim.add(_PopdownAnimation(self))
-
-        vbox = gtk.VBox()
-
-        self._label = gtk.AccelLabel('')
-        self._label.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE) -
-                                         2 * self.get_border_width())
-        self._label.set_alignment(0, 0.5)
-        self._label.set_padding(style.DEFAULT_SPACING, 0)
-
-        if text_maxlen > 0:
-            self._label.set_max_width_chars(text_maxlen)
-            self._label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
-
-        vbox.pack_start(self._label)
-
-        self._secondary_box = gtk.VBox()
-        vbox.pack_start(self._secondary_box)
-
-        self._separator = gtk.HSeparator()
-        self._secondary_box.pack_start(self._separator)
-
-        self._menu_content_separator = gtk.HSeparator()
-
-        if menu_after_content:
-            self._add_content()
-            self._secondary_box.pack_start(self._menu_content_separator)
-            self._add_menu()
-        else:
-            self._add_menu()
-            self._secondary_box.pack_start(self._menu_content_separator)
-            self._add_content()
+        self._add_menu()
+        self._secondary_box.pack_start(self._menu_content_separator)
+        self._add_content()
 
         self.action_bar = PaletteActionBar()
         self._secondary_box.pack_start(self.action_bar)
         self.action_bar.show()
 
-        self.add(vbox)
-        vbox.show()
+        self.add(palette_box)
+        palette_box.show()
 
         # The menu is not shown here until an item is added
         self.menu = _Menu(self)
@@ -220,9 +266,6 @@ class Palette(gtk.Window):
                      self._enter_notify_event_cb)
         self.connect('leave-notify-event',
                      self._leave_notify_event_cb)
-
-        self.set_primary_text(label)
-        self.set_group_id('default')
 
         self._mouse_detector = MouseSpeedDetector(self, 200, 5)
         self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
@@ -264,10 +307,66 @@ class Palette(gtk.Window):
         
         return gtk.gdk.Rectangle(x, y, width, height)
 
-    def set_primary_text(self, label):
+    def _set_invoker(self, invoker):
+        if self._invoker is not None:
+            self._invoker.disconnect(self._enter_invoker_hid)
+            self._invoker.disconnect(self._leave_invoker_hid)
+
+        self._invoker = invoker
+        if invoker is not None:
+            self._enter_invoker_hid = self._invoker.connect(
+                'mouse-enter', self._invoker_mouse_enter_cb)
+            self._leave_invoker_hid = self._invoker.connect(
+                'mouse-leave', self._invoker_mouse_leave_cb)
+            if hasattr(invoker.props, 'widget'):
+                self._label.props.accel_widget = invoker.props.widget
+
+    def set_primary_text(self, label, accel_path=None):
+        self._primary_text = label
+
         if label is not None:
             self._label.set_markup('<b>%s</b>' % label)
             self._label.show()
+
+    def _set_secondary_text(self, label):
+        self._secondary_text = label
+
+        if label is None:
+            self._secondary_label.hide()
+        else:
+            self._secondary_label.set_text(label)
+            self._secondary_label.show()
+
+    def _show_icon(self):
+        self._label_alignment.set_padding(0, 0, 0, style.DEFAULT_SPACING)
+        self._icon_box.show()
+
+    def _hide_icon(self):
+        self._icon_box.hide()
+        self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING,
+                                          style.DEFAULT_SPACING)
+
+    def _set_icon(self, icon):        
+        if icon is None:
+            self._icon = None
+            self._hide_icon()
+        else:
+            if self._icon:
+                self._icon_box.remove(self._icon)
+
+            self._icon = icon
+            self._icon.props.icon_size = gtk.ICON_SIZE_LARGE_TOOLBAR
+            self._icon_box.pack_start(self._icon)
+            self._icon.show()
+            self._show_icon()
+
+    def _set_icon_visible(self, visible):
+        self._icon_visible = visible
+
+        if visible and self._icon is not None:
+            self._show_icon()
+        else:
+            self._hide_icon()
 
     def set_content(self, widget):
         if len(self._content.get_children()) > 0:
@@ -293,24 +392,33 @@ class Palette(gtk.Window):
 
     def do_set_property(self, pspec, value):
         if pspec.name == 'invoker':
-            if self._invoker is not None:
-                self._invoker.disconnect(self._enter_invoker_hid)
-                self._invoker.disconnect(self._leave_invoker_hid)
-
-            self._invoker = value
-            if value is not None:
-                self._enter_invoker_hid = self._invoker.connect(
-                    'mouse-enter', self._invoker_mouse_enter_cb)
-                self._leave_invoker_hid = self._invoker.connect(
-                    'mouse-leave', self._invoker_mouse_leave_cb)
-                if hasattr(value.props, 'widget'):
-                    self._label.props.accel_widget = value.props.widget
+            self._set_invoker(value)
+        elif pspec.name == 'primary-text':
+            self.set_primary_text(value, None)
+        elif pspec.name == 'secondary-text':
+            self._set_secondary_text(value)
+        elif pspec.name == 'icon':
+            self._set_icon(value)
+        elif pspec.name == 'icon-visible':
+            self._set_icon_visible(value)
+        elif pspec.name == 'group-id':
+            self.set_group_id(value)
         else:
             raise AssertionError
 
     def do_get_property(self, pspec):
         if pspec.name == 'invoker':
             return self._invoker
+        elif pspec.name == 'primary-text':
+            return self._primary_text
+        elif pspec.name == 'secondary-text':
+            return self._secondary_text
+        elif pspec.name == 'icon':
+            return self._icon
+        elif pspec.name == 'icon-visible':
+            return self._icon_visible
+        elif pspec.name == 'group-id':
+            return self._group_id
         else:
             raise AssertionError
 
