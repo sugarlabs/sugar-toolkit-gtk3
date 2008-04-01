@@ -1,5 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
-# Copyright (C) 2007, One Laptop Per Child
+# Copyright (C) 2007-2008, One Laptop Per Child
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,19 +16,58 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import logging
+
 import gtk
+import gobject
 
 from sugar.graphics.icon import Icon
 from sugar.graphics.palette import Palette, ToolInvoker
+from sugar.graphics import toolbutton
 
 class RadioToolButton(gtk.RadioToolButton):
     __gtype_name__ = "SugarRadioToolButton"
 
-    def __init__(self, named_icon=None, group=None, xo_color=None):
-        gtk.RadioToolButton.__init__(self, group=group)
+    def __init__(self, named_icon=None, group=None, xo_color=None, **kwargs):
+        self._accelerator = None
+        self._tooltip = None
         self._palette = None
         self._xo_color = xo_color
-        self.set_named_icon(named_icon)
+
+        gobject.GObject.__init__(self, **kwargs)
+
+        if named_icon:
+            self.set_named_icon(named_icon)
+        if group:
+            self.props.group = group
+
+    def set_tooltip(self, tooltip):
+        """ Set a simple palette with just a single label.
+        """
+        if self.palette is None or self._tooltip is None:
+            self.palette = Palette(tooltip)
+        elif self.palette is not None:
+            self.palette.set_primary_text(tooltip)
+
+        self._tooltip = tooltip
+
+        # Set label, shows up when toolbar overflows
+        gtk.RadioToolButton.set_label(self, tooltip)
+
+    def get_tooltip(self):
+        return self._tooltip
+
+    tooltip = gobject.property(type=str, setter=set_tooltip, getter=get_tooltip)
+
+    def set_accelerator(self, accelerator):
+        self._accelerator = accelerator
+        toolbutton.setup_accelerator(self)
+
+    def get_accelerator(self):
+        return self._accelerator
+
+    accelerator = gobject.property(type=str, setter=set_accelerator,
+            getter=get_accelerator)
 
     def set_named_icon(self, named_icon):
         icon = Icon(icon_name=named_icon,
@@ -46,8 +85,7 @@ class RadioToolButton(gtk.RadioToolButton):
         self._palette = palette
         self._palette.props.invoker = ToolInvoker(self)
 
-    def set_tooltip(self, text):
-        self.set_palette(Palette(text))
+    palette = gobject.property(type=object, setter=set_palette, getter=get_palette)
 
     def do_expose_event(self, event):
         if self._palette and self._palette.is_up():
@@ -63,5 +101,4 @@ class RadioToolButton(gtk.RadioToolButton):
                                        self.allocation.height)
 
         gtk.RadioToolButton.do_expose_event(self, event)
-    
-    palette = property(get_palette, set_palette)
+

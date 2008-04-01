@@ -28,6 +28,7 @@ See the methods of the Activity class below for more information on what you
 will need for a real activity.
 """
 # Copyright (C) 2006-2007 Red Hat, Inc.
+# Copyright (C) 2007-2008 One Laptop Per Child
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -125,14 +126,14 @@ class ActivityToolbar(gtk.Toolbar):
 
         self._update_share()
 
-        self.keep = ToolButton('document-save')
-        self.keep.set_tooltip(_('Keep'))
+        self.keep = ToolButton('document-save', tooltip=_('Keep'))
+        self.keep.props.accelerator = '<Ctrl>S'
         self.keep.connect('clicked', self.__keep_clicked_cb)
         self.insert(self.keep, -1)
         self.keep.show()
 
-        self.stop = ToolButton('activity-stop')
-        self.stop.set_tooltip(_('Stop'))
+        self.stop = ToolButton('activity-stop', tooltip=_('Stop'))
+        self.stop.props.accelerator = '<Ctrl>Q'
         self.stop.connect('clicked', self.__stop_clicked_cb)
         self.insert(self.stop, -1)
         self.stop.show()
@@ -418,7 +419,6 @@ class Activity(Window, gtk.Container):
 
         self.connect('realize', self.__realize_cb)
         self.connect('delete-event', self.__delete_event_cb)
-        self.connect("key_press_event", self.__key_press_event_cb)
 
         self._active = False
         self._activity_id = handle.activity_id
@@ -432,6 +432,10 @@ class Activity(Window, gtk.Container):
         self._deleting = False
         self._max_participants = 0
         self._invites_queue = []
+
+        accel_group = gtk.AccelGroup()
+        self.set_data('sugar-accel-group', accel_group)
+        self.add_accel_group(accel_group)
 
         self._bus = ActivityService(self)
         self._owns_file = False
@@ -904,13 +908,6 @@ class Activity(Window, gtk.Container):
             return None
 
     metadata = property(get_metadata, None)
-
-    def __key_press_event_cb(self, widget, event):
-        key = gtk.gdk.keyval_name(event.keyval)
-        if key == 's' and (event.state & gtk.gdk.CONTROL_MASK):
-            logging.debug('Keep requested')
-            self.copy()
-            return True
 
 def get_bundle_name():
     """Return the bundle name for the current process' bundle"""

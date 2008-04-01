@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Eduardo Silva <edsiper@gmail.com>
+# Copyright (C) 2008, One Laptop Per Child
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -176,9 +177,9 @@ class Palette(gtk.Window):
 
         vbox = gtk.VBox()
 
-        self._label = gtk.Label()
-        self._label.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE)
-                                          - 2*self.get_border_width())
+        self._label = gtk.AccelLabel('')
+        self._label.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE) -
+                                         2 * self.get_border_width())
         self._label.set_alignment(0, 0.5)
         self._label.set_padding(style.DEFAULT_SPACING, 0)
 
@@ -186,7 +187,7 @@ class Palette(gtk.Window):
             self._label.set_max_width_chars(text_maxlen)
             self._label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 
-        vbox.pack_start(self._label, False)
+        vbox.pack_start(self._label)
 
         self._secondary_box = gtk.VBox()
         vbox.pack_start(self._secondary_box)
@@ -220,7 +221,7 @@ class Palette(gtk.Window):
         self.connect('leave-notify-event',
                      self._leave_notify_event_cb)
 
-        self.set_primary_text(label, accel_path)
+        self.set_primary_text(label)
         self.set_group_id('default')
 
         self._mouse_detector = MouseSpeedDetector(self, 200, 5)
@@ -263,9 +264,9 @@ class Palette(gtk.Window):
         
         return gtk.gdk.Rectangle(x, y, width, height)
 
-    def set_primary_text(self, label, accel_path=None):
+    def set_primary_text(self, label):
         if label is not None:
-            self._label.set_markup("<b>"+label+"</b>")
+            self._label.set_markup('<b>%s</b>' % label)
             self._label.show()
 
     def set_content(self, widget):
@@ -302,6 +303,8 @@ class Palette(gtk.Window):
                     'mouse-enter', self._invoker_mouse_enter_cb)
                 self._leave_invoker_hid = self._invoker.connect(
                     'mouse-leave', self._invoker_mouse_leave_cb)
+                if hasattr(value.props, 'widget'):
+                    self._label.props.accel_widget = value.props.widget
         else:
             raise AssertionError
 
@@ -314,11 +317,15 @@ class Palette(gtk.Window):
     def do_size_request(self, requisition):
         gtk.Window.do_size_request(self, requisition)
 
-        requisition.width = max(requisition.width, self._full_request[0])
+        # gtk.AccelLabel request doesn't include the accelerator.
+        label_width = self._label.size_request()[0] + \
+                      self._label.get_accel_width() + \
+                      2 * self.get_border_width()
 
-        # Minimum width
         requisition.width = max(requisition.width,
-                                style.zoom(style.GRID_CELL_SIZE*2))
+                                style.zoom(style.GRID_CELL_SIZE * 2),
+                                label_width,
+                                self._full_request[0])
 
     def do_size_allocate(self, allocation):
         gtk.Window.do_size_allocate(self, allocation)
@@ -818,6 +825,10 @@ class WidgetInvoker(Invoker):
     def notify_popdown(self):
         Invoker.notify_popdown(self)
         self._widget.queue_draw()
+
+    def _get_widget(self):
+        return self._widget
+    widget = gobject.property(type=object, getter=_get_widget, setter=None)
 
 class CanvasInvoker(Invoker):
     def __init__(self, item):
