@@ -177,7 +177,7 @@ class Palette(gtk.Window):
 
         labels_box = gtk.VBox()
         self._label_alignment = gtk.Alignment(xalign=0, yalign=0.5, 
-                                              xscale=0, yscale=0.33)
+                                              xscale=1, yscale=0.33)
         self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING, 
                                           style.DEFAULT_SPACING)
         self._label_alignment.add(labels_box)
@@ -426,7 +426,7 @@ class Palette(gtk.Window):
         gtk.Window.do_size_request(self, requisition)
 
         # gtk.AccelLabel request doesn't include the accelerator.
-        label_width = self._label.size_request()[0] + \
+        label_width = self._label_alignment.size_request()[0] + \
                       self._label.get_accel_width() + \
                       2 * self.get_border_width()
 
