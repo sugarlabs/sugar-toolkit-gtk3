@@ -154,7 +154,7 @@ class Palette(gtk.Window):
 
     # DEPRECATED: label is passed with the primary-text property, accel_path 
     # is set via the invoker property, and menu_after_content is not used
-    def __init__(self, label, accel_path=None, menu_after_content=False,
+    def __init__(self, label=None, accel_path=None, menu_after_content=False,
                  text_maxlen=0, **kwargs):
 
         self.palette_state = self.PRIMARY
