@@ -236,7 +236,7 @@ class PresenceService(gobject.GObject):
 
     def _private_invitation_cb(self, bus_name, connection, channel):
         """Callback for dbus event (forwards to method to emit GObject event)"""
-        gobject.idle_add(self._emit_service_disappeared_signal, bus_name,
+        gobject.idle_add(self._emit_private_invitation_signal, bus_name,
                 connection, channel)
 
     def _emit_activity_appeared_signal(self, object_path):
