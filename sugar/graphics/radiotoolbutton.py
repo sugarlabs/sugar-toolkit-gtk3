@@ -16,8 +16,6 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-import logging
-
 import gtk
 import gobject
 
@@ -85,20 +83,22 @@ class RadioToolButton(gtk.RadioToolButton):
         self._palette = palette
         self._palette.props.invoker = ToolInvoker(self)
 
-    palette = gobject.property(type=object, setter=set_palette, getter=get_palette)
+    palette = gobject.property(
+            type=object, setter=set_palette, getter=get_palette)
 
     def do_expose_event(self, event):
+        child = self.get_child()
+        allocation = self.get_allocation()
+
         if self._palette and self._palette.is_up():
             invoker = self._palette.props.invoker
             invoker.draw_rectangle(event, self._palette)
-        elif self.child.state == gtk.STATE_PRELIGHT:
-            self.child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
-                                       gtk.SHADOW_NONE, event.area,
-                                       self.child, "toolbutton-prelight",
-                                       self.allocation.x,
-                                       self.allocation.y,
-                                       self.allocation.width,
-                                       self.allocation.height)
+        elif child.state == gtk.STATE_PRELIGHT:
+            child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
+                                  gtk.SHADOW_NONE, event.area,
+                                  child, "toolbutton-prelight",
+                                  allocation.x, allocation.y,
+                                  allocation.width, allocation.height)
 
         gtk.RadioToolButton.do_expose_event(self, event)
 

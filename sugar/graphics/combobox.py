@@ -14,9 +14,6 @@
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
-import sys
-import os
-import logging
 
 import gobject
 import gtk
@@ -44,17 +41,17 @@ class ComboBox(gtk.ComboBox):
 
     def do_get_property(self, pspec):
         if pspec.name == 'value':
-             row = self.get_active_item()
-             if not row:
+            row = self.get_active_item()
+            if not row:
                 return None
-             return row[0]
+            return row[0]
         else:
             return gtk.ComboBox.do_get_property(self, pspec)
 
     def _get_real_name_from_theme(self, name, size):
         icon_theme = gtk.icon_theme_get_default()
         width, height = gtk.icon_size_lookup(size)
-        info = icon_theme.lookup_icon(name, width, 0)
+        info = icon_theme.lookup_icon(name, max(width, height), 0)
         if not info:
             raise ValueError("Icon '" + name + "' not found.")
         fname = info.get_filename()
@@ -66,8 +63,9 @@ class ComboBox(gtk.ComboBox):
             self._icon_renderer = gtk.CellRendererPixbuf()
 
             settings = self.get_settings()
-            w, h = gtk.icon_size_lookup_for_settings(settings, gtk.ICON_SIZE_MENU)
-            self._icon_renderer.props.stock_size = w
+            w, h = gtk.icon_size_lookup_for_settings(
+                                            settings, gtk.ICON_SIZE_MENU)
+            self._icon_renderer.props.stock_size = max(w, h)
 
             self.pack_start(self._icon_renderer, False)
             self.add_attribute(self._icon_renderer, 'pixbuf', 2)
@@ -87,7 +85,8 @@ class ComboBox(gtk.ComboBox):
             if icon_name:
                 file_name = self._get_real_name_from_theme(icon_name, size)
 
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(file_name, width, height)
+            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(
+                                                file_name, width, height)
         else:
             pixbuf = None
 
@@ -110,5 +109,4 @@ class ComboBox(gtk.ComboBox):
         self._model.clear()
 
     def _is_separator(self, model, row):
-        action_id, text, icon_name, is_separator = model[row]
-        return is_separator
+        return model[row][3]

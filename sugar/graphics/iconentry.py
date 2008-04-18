@@ -21,7 +21,6 @@ from sugar import _sugarext
 
 from sugar.graphics import style
 from sugar.graphics.icon import _SVGLoader
-import sugar.profile
 
 ICON_ENTRY_PRIMARY = _sugarext.ICON_ENTRY_PRIMARY
 ICON_ENTRY_SECONDARY = _sugarext.ICON_ENTRY_SECONDARY
@@ -44,7 +43,6 @@ class IconEntry(_sugarext.IconEntry):
 
         if icon_info.get_filename().endswith('.svg'):
             loader = _SVGLoader()
-            color = sugar.profile.get_color()
             entities = {'fill_color': style.COLOR_TOOLBAR_GREY.get_svg(),
                         'stroke_color': style.COLOR_TOOLBAR_GREY.get_svg()}
             handle = loader.load(icon_info.get_filename(), entities, None)
