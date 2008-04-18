@@ -14,7 +14,7 @@ headers
 #include <glib.h>
 
 %%
-modulename _sugarext
+modulename sugar._sugarext
 %%
 import gobject.GObject as PyGObject_Type
 import gtk.Entry as PyGtkEntry_Type
