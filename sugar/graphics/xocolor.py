@@ -219,24 +219,24 @@ class XoColor:
     def __init__(self, color_string=None):
         if color_string == None or not is_valid(color_string):
             n = int(random.random() * (len(_colors) - 1))
-            [self._stroke, self._fill] = _colors[n]
+            [self.stroke, self.fill] = _colors[n]
         else:
-            [self._stroke, self._fill] = _parse_string(color_string)
+            [self.stroke, self.fill] = _parse_string(color_string)
 
     def __cmp__(self, other):
         if isinstance(other, XoColor):
-            if self._stroke == other._stroke and self._fill == other._fill:
+            if self.stroke == other.stroke and self.fill == other.fill:
                 return 0
         return -1
 
     def get_stroke_color(self):
-        return self._stroke
+        return self.stroke
 
     def get_fill_color(self):
-        return self._fill
+        return self.fill
 
     def to_string(self):
-        return '%s,%s' % (self._stroke, self._fill)
+        return '%s,%s' % (self.stroke, self.fill)
 
 if __name__ == "__main__":
     import sys

@@ -29,7 +29,7 @@ class CanvasRoundBox(hippo.CanvasBox, hippo.CanvasItem):
     def __init__(self, **kwargs):
         hippo.CanvasBox.__init__(self, **kwargs)
 
-        # TODO: we should calculate this value depending on the height of the box.
+        # TODO: we should calculate radius depending on the height of the box.
         self._radius = style.zoom(10)
         
         self.props.orientation = hippo.ORIENTATION_HORIZONTAL
@@ -46,18 +46,18 @@ class CanvasRoundBox(hippo.CanvasBox, hippo.CanvasItem):
         width -= self._BORDER_DEFAULT
         height -= self._BORDER_DEFAULT
 
-        cr.move_to(x + self._radius, y);
+        cr.move_to(x + self._radius, y)
         cr.arc(x + width - self._radius, y + self._radius,
-               self._radius, math.pi * 1.5, math.pi * 2);
+               self._radius, math.pi * 1.5, math.pi * 2)
         cr.arc(x + width - self._radius, x + height - self._radius,
-               self._radius, 0, math.pi * 0.5);
+               self._radius, 0, math.pi * 0.5)
         cr.arc(x + self._radius, y + height - self._radius,
-               self._radius, math.pi * 0.5, math.pi);
+               self._radius, math.pi * 0.5, math.pi)
         cr.arc(x + self._radius, y + self._radius, self._radius,
-               math.pi, math.pi * 1.5);
+               math.pi, math.pi * 1.5)
 
         hippo.cairo_set_source_rgba32(cr, self.props.background_color)
-        cr.fill_preserve();
+        cr.fill_preserve()
 
         # TODO: we should be more consistent here with the border properties.
         if self.props.border_color:

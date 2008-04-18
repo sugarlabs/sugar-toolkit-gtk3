@@ -68,27 +68,29 @@ class _TrayViewport(gtk.Viewport):
             self._scroll_next()
 
     def _scroll_next(self):
+        allocation = self.get_allocation()
         if self.orientation == gtk.ORIENTATION_HORIZONTAL:
             adj = self.get_hadjustment()
-            new_value = adj.value + self.allocation.width
-            adj.value = min(new_value, adj.upper - self.allocation.width)
+            new_value = adj.value + allocation.width
+            adj.value = min(new_value, adj.upper - allocation.width)
         else:
             adj = self.get_vadjustment()
-            new_value = adj.value + self.allocation.height
-            adj.value = min(new_value, adj.upper - self.allocation.height)
+            new_value = adj.value + allocation.height
+            adj.value = min(new_value, adj.upper - allocation.height)
 
     def _scroll_previous(self):
+        allocation = self.get_allocation()
         if self.orientation == gtk.ORIENTATION_HORIZONTAL:
             adj = self.get_hadjustment()
-            new_value = adj.value - self.allocation.width
+            new_value = adj.value - allocation.width
             adj.value = max(adj.lower, new_value)
         else:
             adj = self.get_vadjustment()
-            new_value = adj.value - self.allocation.height
+            new_value = adj.value - allocation.height
             adj.value = max(adj.lower, new_value)
 
     def do_size_request(self, requisition):
-        child_requisition = self.child.size_request()
+        child_requisition = self.get_child().size_request()
         if self.orientation == gtk.ORIENTATION_HORIZONTAL:
             requisition[0] = 0
             requisition[1] = child_requisition[1]

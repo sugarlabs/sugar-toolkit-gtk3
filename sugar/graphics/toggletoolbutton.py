@@ -46,17 +46,18 @@ class ToggleToolButton(gtk.ToggleToolButton):
         self.set_palette(Palette(text))
     
     def do_expose_event(self, event):
+        allocation = self.get_allocation()
+        child = self.get_child()
+
         if self._palette and self._palette.is_up():
             invoker = self._palette.props.invoker
             invoker.draw_rectangle(event, self._palette)
-        elif self.child.state == gtk.STATE_PRELIGHT:
-            self.child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
-                                       gtk.SHADOW_NONE, event.area,
-                                       self.child, "toolbutton-prelight",
-                                       self.allocation.x,
-                                       self.allocation.y,
-                                       self.allocation.width,
-                                       self.allocation.height)
+        elif child.state == gtk.STATE_PRELIGHT:
+            child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
+                                  gtk.SHADOW_NONE, event.area,
+                                  child, "toolbutton-prelight",
+                                  allocation.x, allocation.y,
+                                  allocation.width, allocation.height)
 
         gtk.ToggleToolButton.do_expose_event(self, event)
     

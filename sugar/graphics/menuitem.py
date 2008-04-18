@@ -29,5 +29,6 @@ class MenuItem(gtk.ImageMenuItem):
             icon.show()
 
         if text_maxlen > 0:
-            self.child.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
-            self.child.set_max_width_chars(text_maxlen)
+            child = self.get_child()
+            child.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+            child.set_max_width_chars(text_maxlen)

@@ -30,7 +30,8 @@ class Notebook(gtk.Notebook):
 
     __gproperties__ = {
         'can-close-tabs': (bool, None, None, False,
-                           gobject.PARAM_READWRITE | gobject.PARAM_CONSTRUCT_ONLY)
+                           gobject.PARAM_READWRITE |
+                           gobject.PARAM_CONSTRUCT_ONLY)
     }
 
     def __init__(self, **kwargs):
@@ -41,7 +42,8 @@ class Notebook(gtk.Notebook):
         #        Set True the scrollable notebook property
         
         gobject.GObject.__init__(self, **kwargs)
-        gtk.Notebook.__init__(self)
+
+        self._can_close_tabs = None
 
         self.set_scrollable(True)
         self.show()
@@ -59,7 +61,7 @@ class Notebook(gtk.Notebook):
         gtk.Button.set_relief(button, gtk.RELIEF_NONE)
 
         settings = gtk.Widget.get_settings(button)
-        (w,h) = gtk.icon_size_lookup_for_settings(settings, gtk.ICON_SIZE_MENU)
+        w, h = gtk.icon_size_lookup_for_settings(settings, gtk.ICON_SIZE_MENU)
         gtk.Widget.set_size_request(button, w + 4, h + 4)
         image.show()
         icon_box.pack_start(image, True, False, 0)
@@ -77,7 +79,6 @@ class Notebook(gtk.Notebook):
 
         # Add a picture on a button
         self._add_icon_to_button(tab_button)
-        icon_box = gtk.HBox(False, 0)
 
         event_box.show()
         tab_button.show()

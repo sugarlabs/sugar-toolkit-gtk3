@@ -16,7 +16,6 @@
 # Boston, MA 02111-1307, USA.
 
 import logging
-import time
 
 import gobject
 import gtk

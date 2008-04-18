@@ -17,7 +17,6 @@
 
 import gobject
 import gtk
-import logging
 
 from sugar.graphics.icon import Icon
 

@@ -19,7 +19,6 @@ import gtk
 import gobject
 import hippo
 
-from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics import style
 
 class Toolbox(gtk.VBox):
@@ -60,7 +59,7 @@ class Toolbox(gtk.VBox):
         
     def add_toolbar(self, name, toolbar):
         label = gtk.Label(name)
-        width, height = label.size_request()
+        width = label.size_request()[0]
         label.set_size_request(max(width, style.TOOLBOX_TAB_LABEL_WIDTH), -1)
         label.set_alignment(0.0, 0.5)
 
