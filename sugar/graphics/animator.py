@@ -28,13 +28,14 @@ class Animator(gobject.GObject):
                       gobject.TYPE_NONE, ([])),
     }
     
-    def __init__(self, time, fps=20, easing=EASE_OUT_EXPO):
+    def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO):
         gobject.GObject.__init__(self)
         self._animations = []
-        self._time = time
+        self._duration = duration
         self._interval = 1.0 / fps
         self._easing = easing
         self._timeout_sid = 0
+        self._start_time = None
 
     def add(self, animation):
         self._animations.append(animation)
@@ -58,13 +59,13 @@ class Animator(gobject.GObject):
             self.emit('completed')
 
     def _next_frame_cb(self):
-        current_time = min(self._time, time.time() - self._start_time)
+        current_time = min(self._duration, time.time() - self._start_time)
         current_time = max(current_time, 0.0)
 
         for animation in self._animations:
-            animation.do_frame(current_time, self._time, self._easing)
+            animation.do_frame(current_time, self._duration, self._easing)
 
-        if current_time == self._time:
+        if current_time == self._duration:
             self.stop()
             return False
         else:
@@ -75,18 +76,18 @@ class Animation(object):
         self.start = start
         self.end = end
 
-    def do_frame(self, time, duration, easing):
+    def do_frame(self, t, duration, easing):
         start = self.start
         change = self.end - self.start
 
-        if time == duration:
+        if t == duration:
             # last frame
             frame = self.end
         else:
             if easing == EASE_OUT_EXPO:
-                frame = change * (-pow(2, -10 * time/duration) + 1) + start;
+                frame = change * (-pow(2, -10 * t / duration) + 1) + start
             elif easing == EASE_IN_EXPO:
-                frame = change * pow(2, 10 * (time / duration - 1)) + start;
+                frame = change * pow(2, 10 * (t / duration - 1)) + start
 
         self.next_frame(frame)
 
