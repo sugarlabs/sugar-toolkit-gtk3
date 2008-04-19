@@ -20,9 +20,6 @@ import logging
 
 import dbus
 import dbus.glib
-import gobject
-
-from sugar import util
 
 DS_DBUS_SERVICE = "org.laptop.sugar.DataStore"
 DS_DBUS_INTERFACE = "org.laptop.sugar.DataStore"
@@ -51,7 +48,8 @@ def update(uid, properties, filename, transfer_ownership=False,
     debug_props = properties.copy()
     if debug_props.has_key("preview"):
         debug_props["preview"] = "<omitted>"
-    logging.debug('dbus_helpers.update: %s, %s, %s, %s' % (uid, filename, debug_props, transfer_ownership))
+    logging.debug('dbus_helpers.update: %s, %s, %s, %s' %
+                  (uid, filename, debug_props, transfer_ownership))
     if reply_handler and error_handler:
         _get_data_store().update(uid, dbus.Dictionary(properties), filename,
                 transfer_ownership,
@@ -59,7 +57,8 @@ def update(uid, properties, filename, transfer_ownership=False,
                 error_handler=error_handler,
                 timeout=timeout)
     else:
-        _get_data_store().update(uid, dbus.Dictionary(properties), filename, transfer_ownership)
+        _get_data_store().update(uid, dbus.Dictionary(properties),
+                                 filename, transfer_ownership)
 
 def delete(uid):
     logging.debug('dbus_helpers.delete: %r' % uid)
@@ -92,7 +91,8 @@ def mounts():
     return _get_data_store().mounts()
 
 def get_unique_values(key):
-    return _get_data_store().get_uniquevaluesfor(key, dbus.Dictionary({}, signature='ss'))
+    return _get_data_store().get_uniquevaluesfor(
+                                key, dbus.Dictionary({}, signature='ss'))
 
 def complete_indexing():
     return _get_data_store().complete_indexing()

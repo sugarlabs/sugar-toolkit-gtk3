@@ -27,7 +27,6 @@ from sugar import activity
 from sugar.activity.activityhandle import ActivityHandle
 from sugar.bundle.contentbundle import ContentBundle
 from sugar.bundle.activitybundle import ActivityBundle
-from sugar.bundle.contentbundle import ContentBundle
 from sugar import mime
 
 class DSMetadata(gobject.GObject):
@@ -122,7 +121,7 @@ class DSObject(object):
         result = registry.get_activities_for_type(mime_type)
         if not result:
             for parent_mime in mime.get_mime_parents(mime_type):
-                 result.extend(registry.get_activities_for_type(parent_mime))
+                result.extend(registry.get_activities_for_type(parent_mime))
         return result
 
     def get_activities(self):
@@ -158,7 +157,7 @@ class DSObject(object):
 
         if self.is_activity_bundle():
             if bundle_id is not None:
-                raise ValueError('Object is a bundle, cannot be resumed as an activity.')
+                raise ValueError('Bundle cannot be resumed as an activity.')
 
             logging.debug('Creating activity bundle')
             bundle = ActivityBundle(self.file_path)
@@ -169,7 +168,8 @@ class DSObject(object):
                 logging.debug('Upgrading activity bundle')
                 bundle.upgrade()
 
-            logging.debug('activityfactory.creating bundle with id %r', bundle.get_bundle_id())
+            logging.debug('activityfactory.creating bundle with id %r',
+                          bundle.get_bundle_id())
             activityfactory.create(bundle.get_bundle_id())
         else:
             if not self.get_activities() and bundle_id is None:
@@ -192,7 +192,6 @@ class DSObject(object):
     def destroy(self):
         if self._destroyed:
             logging.warning('This DSObject has already been destroyed!.')
-            import traceback;traceback.print_stack()
             return
         self._destroyed = True
         if self._file_path and self._owns_file:
@@ -204,7 +203,7 @@ class DSObject(object):
     def __del__(self):
         if not self._destroyed:
             logging.warning('DSObject was deleted without cleaning up first. ' \
-                            'Please call DSObject.destroy() before disposing it.')
+                            'Call DSObject.destroy() before disposing it.')
             self.destroy()
 
     def copy(self):
@@ -224,7 +223,8 @@ def create():
     metadata['timestamp'] = int(time.time())
     return DSObject(object_id=None, metadata=metadata, file_path=None)
 
-def write(ds_object, update_mtime=True, transfer_ownership=False, reply_handler=None, error_handler=None, timeout=-1):
+def write(ds_object, update_mtime=True, transfer_ownership=False,
+          reply_handler=None, error_handler=None, timeout=-1):
     logging.debug('datastore.write')
 
     properties = ds_object.metadata.get_dictionary().copy()
@@ -250,8 +250,8 @@ def write(ds_object, update_mtime=True, transfer_ownership=False, reply_handler=
                             timeout=timeout)
     else:
         if reply_handler or error_handler:
-            logging.warning('datastore.write() cannot currently be called async' \
-                            ' for creates, see https://dev.laptop.org/ticket/3071')
+            logging.warning('datastore.write() cannot currently be called' \
+                            'async for creates, see ticket 3071')
         ds_object.object_id = dbus_helpers.create(properties,
                                                   file_path,
                                                   transfer_ownership)
@@ -274,7 +274,8 @@ def find(query, sorting=None, limit=None, offset=None, properties=[],
     if offset:
         query['offset'] = offset
     
-    props_list, total_count = dbus_helpers.find(query, properties, reply_handler, error_handler)
+    props_list, total_count = dbus_helpers.find(query, properties,
+                                                reply_handler, error_handler)
     
     objects = []
     for props in props_list:
