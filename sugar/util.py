@@ -21,11 +21,6 @@ import sha
 import random
 import binascii
 import string
-import os
-import logging
-
-from ConfigParser import ConfigParser
-from ConfigParser import NoOptionError
 
 def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
@@ -65,7 +60,7 @@ def is_hex(s):
 
 def validate_activity_id(actid):
     """Validate an activity ID."""
-    if not isinstance(actid, (str,unicode)):
+    if not isinstance(actid, (str, unicode)):
         return False
     if len(actid) != ACTIVITY_ID_LEN:
         return False
@@ -92,7 +87,7 @@ def set_proc_title(title):
         libc.prctl(15, str(title), 0, 0, 0)
 
         return True
-    except:
+    except Exception:
         return False
 
 class Node(object):
@@ -169,7 +164,7 @@ class LRU:
     def iterkeys(self):
         return iter(self.d)
     def itervalues(self):
-        for i,j in self.iteritems():
+        for i, j in self.iteritems():
             yield j
     def keys(self):
         return self.d.keys()

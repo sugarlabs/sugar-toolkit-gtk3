@@ -15,8 +15,6 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-# pylint: disable-msg = W0221
-
 import socket
 import os
 import threading
@@ -56,7 +54,8 @@ class GlibTCPServer(SocketServer.TCPServer):
     request_queue_size = 20
 
     def __init__(self, server_address, RequestHandlerClass):
-        SocketServer.TCPServer.__init__(self, server_address, RequestHandlerClass)
+        SocketServer.TCPServer.__init__(self, server_address,
+                                        RequestHandlerClass)
         self.socket.setblocking(0)  # Set nonblocking
 
         # Watch the listener socket for data
@@ -87,7 +86,8 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def __init__(self, request, client_address, server):
         self._file = None
         self._srcid = 0
-        SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, request, client_address, server)
+        SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(
+                                        self, request, client_address, server)
 
     def log_request(self, code='-', size='-'):
         pass
@@ -96,7 +96,9 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         """Serve a GET request."""
         self._file = self.send_head()
         if self._file:
-            self._srcid = gobject.io_add_watch(self.wfile, gobject.IO_OUT | gobject.IO_ERR, self._send_next_chunk)
+            self._srcid = gobject.io_add_watch(self.wfile, gobject.IO_OUT |
+                                               gobject.IO_ERR,
+                                               self._send_next_chunk)
         else:
             self._file.close()
             self._cleanup()
@@ -169,7 +171,8 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", ctype)
         self.send_header("Content-Length", str(os.fstat(f.fileno())[6]))
-        self.send_header("Content-Disposition", 'attachment; filename="%s"' % os.path.basename(path))
+        self.send_header("Content-Disposition", 'attachment; filename="%s"' %
+                         os.path.basename(path))
         self.end_headers()
         return f
 
@@ -195,6 +198,8 @@ class GlibURLDownloader(gobject.GObject):
         self._srcid = 0
         self._fname = None
         self._outf = None
+        self._suggested_fname = None
+        self._info = None
         self._written = 0
         gobject.GObject.__init__(self)
 
@@ -203,7 +208,8 @@ class GlibURLDownloader(gobject.GObject):
         self._outf = None
         self._fname = None
         if destfd and not destfile:
-            raise ValueError("Must provide destination file too when specifying file descriptor")
+            raise ValueError("Must provide destination file too when" \
+                             "specifying file descriptor")
         if destfile:
             self._suggested_fname = os.path.basename(destfile)
             self._fname = os.path.abspath(os.path.expanduser(destfile))
@@ -211,15 +217,18 @@ class GlibURLDownloader(gobject.GObject):
                 # Use the user-supplied destination file descriptor
                 self._outf = destfd
             else:
-                self._outf = os.open(self._fname, os.O_RDWR | os.O_TRUNC | os.O_CREAT, 0644)
+                self._outf = os.open(self._fname, os.O_RDWR |
+                                     os.O_TRUNC | os.O_CREAT, 0644)
         else:
-            self._suggested_fname = self._get_filename_from_headers(self._info.headers)
-            garbage, path = urllib.splittype(self._url)
-            garbage, path = urllib.splithost(path or "")
-            path, garbage = urllib.splitquery(path or "")
-            path, garbage = urllib.splitattr(path or "")
+            fname = self._get_filename_from_headers(self._info.headers)
+            self._suggested_fname = fname
+            path = urllib.splittype(self._url)[1]
+            path = urllib.splithost(path or "")[1]
+            path = urllib.splitquery(path or "")[0]
+            path = urllib.splitattr(path or "")[0]
             suffix = os.path.splitext(path)[1]
-            (self._outf, self._fname) = tempfile.mkstemp(suffix=suffix, dir=self._destdir)
+            (self._outf, self._fname) = tempfile.mkstemp(suffix=suffix,
+                                                         dir=self._destdir)
 
         fcntl.fcntl(self._info.fp.fileno(), fcntl.F_SETFD, os.O_NDELAY)
         self._srcid = gobject.io_add_watch(self._info.fp.fileno(),
@@ -313,7 +322,8 @@ class GlibXMLRPCRequestHandler(SimpleXMLRPCServer.SimpleXMLRPCRequestHandler):
             traceback.print_exc()
         _del_authinfo()
 
-class GlibXMLRPCServer(GlibTCPServer, SimpleXMLRPCServer.SimpleXMLRPCDispatcher):
+class GlibXMLRPCServer(GlibTCPServer,
+                       SimpleXMLRPCServer.SimpleXMLRPCDispatcher):
     """GlibXMLRPCServer
     
     Use nonblocking sockets and handle the accept via glib rather than
@@ -324,7 +334,8 @@ class GlibXMLRPCServer(GlibTCPServer, SimpleXMLRPCServer.SimpleXMLRPCDispatcher)
                  logRequests=0, allow_none=False):
         self.logRequests = logRequests
         if sys.version_info[:3] >= (2, 5, 0):
-            SimpleXMLRPCServer.SimpleXMLRPCDispatcher.__init__(self, allow_none, encoding="utf-8")
+            SimpleXMLRPCServer.SimpleXMLRPCDispatcher.__init__(
+                                            self, allow_none, encoding="utf-8")
         else:
             SimpleXMLRPCServer.SimpleXMLRPCDispatcher.__init__(self)
         GlibTCPServer.__init__(self, addr, requestHandler)
@@ -381,13 +392,14 @@ class GlibXMLRPCTransport(xmlrpclib.Transport):
     # @return A connection handle.
 
     def __init__(self, use_datetime=0):
+        self.verbose = None
         if sys.version_info[:3] >= (2, 5, 0):
             xmlrpclib.Transport.__init__(self, use_datetime)
 
     def make_connection(self, host):
         """Use our own connection object so we can get its socket."""
         # create a HTTP connection object from a host descriptor
-        host, extra_headers, x509 = self.get_host_info(host)
+        host = self.get_host_info(host)[0]
         return GlibHTTP(host)
 
     ##
@@ -399,7 +411,8 @@ class GlibXMLRPCTransport(xmlrpclib.Transport):
     # @param verbose Debugging flag.
     # @return Parsed response.
 
-    def start_request(self, host, handler, request_body, verbose=0, reply_handler=None, error_handler=None, user_data=None):
+    def start_request(self, host, handler, request_body, verbose=0,
+                      reply_handler=None, error_handler=None, user_data=None):
         """Do the first half of the request by sending data to the remote
         server.  The bottom half bits get run when the remote server's response
         actually comes back."""
@@ -416,10 +429,12 @@ class GlibXMLRPCTransport(xmlrpclib.Transport):
 
         # Schedule a GIOWatch so we don't block waiting for the response
         gobject.io_add_watch(h._conn.sock, gobject.IO_IN, self._finish_request,
-                h, host, handler, verbose, reply_handler, error_handler, user_data)
+             h, host, handler, verbose, reply_handler, error_handler, user_data)
 
-    def _finish_request(self, source, condition, h, host, handler, verbose, reply_handler=None, error_handler=None, user_data=None):
-        """Parse and return response when the remote server actually returns it."""
+    def _finish_request(self, source, condition, h, host, handler, verbose,
+                        reply_handler=None, error_handler=None, user_data=None):
+        """Parse and return response when the
+           remote server actually returns it."""
         if not (condition & gobject.IO_IN):
             return True
 
@@ -434,7 +449,8 @@ class GlibXMLRPCTransport(xmlrpclib.Transport):
                 return False
                 
         if errcode != 200:
-            raise xmlrpclib.ProtocolError(host + handler, errcode, errmsg, headers)
+            raise xmlrpclib.ProtocolError(host + handler, errcode,
+                                          errmsg, headers)
         self.verbose = verbose        
         response = self._parse_response(h.getfile(), h._conn.sock)
         if reply_handler:
@@ -485,10 +501,10 @@ class GlibServerProxy(xmlrpclib.ServerProxy):
         self._encoding = encoding
         self._verbose = verbose
         self._allow_none = allow_none
-        xmlrpclib.ServerProxy.__init__(self, uri, self._transport, encoding, verbose, allow_none)
+        xmlrpclib.ServerProxy.__init__(self, uri, self._transport,
+                                       encoding, verbose, allow_none)
 
         # get the url
-        import urllib
         urltype, uri = urllib.splittype(uri)
         if urltype not in ("http", "https"):
             raise IOError, "unsupported XML-RPC protocol"
@@ -499,7 +515,8 @@ class GlibServerProxy(xmlrpclib.ServerProxy):
     def __request(self, methodname, *args, **kwargs):
         """Call the method on the remote server.  We just start the request here
         and the transport itself takes care of scheduling the response callback
-        when the remote server returns the response.  We don't want to block anywhere."""
+        when the remote server returns the response.
+        We don't want to block anywhere."""
 
         request = xmlrpclib.dumps(args, methodname, encoding=self._encoding,
                         allow_none=self._allow_none)
