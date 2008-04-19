@@ -183,7 +183,8 @@ class ClipboardService(gobject.GObject):
         
         returns None
         """
-        self._dbus_service.set_object_percent(dbus.ObjectPath(object_id), percent)
+        self._dbus_service.set_object_percent(
+                                dbus.ObjectPath(object_id), percent)
 
     def get_object(self, object_id):
         """Retrieve the clipboard object structure for given object 
