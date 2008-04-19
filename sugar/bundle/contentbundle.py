@@ -39,6 +39,16 @@ class ContentBundle(Bundle):
     def __init__(self, path):
         Bundle.__init__(self, path)
 
+        self._locale = None
+        self._l10n = None
+        self._category = None
+        self._name = None
+        self._subcategory = None
+        self._category_class = None
+        self._category_icon = None
+        self._library_version = None
+        self._bundle_class = None
+
         info_file = self._get_file('library/library.info')
         if info_file is None:
             raise MalformedBundleException('No library.info file')
@@ -145,9 +155,6 @@ class ContentBundle(Bundle):
     def get_category(self):
         return self._category
 
-    def get_category(self):
-        return self._category
-
     def get_category_icon(self):
         return self._category_icon
 
@@ -161,9 +168,11 @@ class ContentBundle(Bundle):
         return self._bundle_class
 
     def _run_indexer(self):
-        os.spawnlp(os.P_WAIT, 'python',
-                   'python',
-                   env.get_prefix_path('share/library-common/make_index.py'))
+        if os.environ.has_key('XDG_DATA_DIRS'):
+            for path in os.environ['XDG_DATA_DIRS'].split(':'):
+                indexer = os.path.join(path, 'library-common', 'make_index.py')
+                if os.path.exists(indexer):
+                    os.spawnlp(os.P_WAIT, 'python', 'python', indexer)
 
     def is_installed(self):
         if self._unpacked:

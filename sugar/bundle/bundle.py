@@ -18,15 +18,27 @@
 """Sugar bundle file handler"""
 
 import os
+import logging
 import StringIO
 import zipfile
 
-class AlreadyInstalledException(Exception): pass
-class NotInstalledException(Exception): pass
-class InvalidPathException(Exception): pass
-class ZipExtractException(Exception): pass
-class RegistrationException(Exception): pass
-class MalformedBundleException(Exception): pass
+class AlreadyInstalledException(Exception):
+    pass
+
+class NotInstalledException(Exception):
+    pass
+
+class InvalidPathException(Exception):
+    pass
+
+class ZipExtractException(Exception):
+    pass
+
+class RegistrationException(Exception):
+    pass
+
+class MalformedBundleException(Exception):
+    pass
 
 class Bundle:
     """A Sugar activity, content module, etc.
@@ -38,8 +50,13 @@ class Bundle:
     This is an abstract base class. See ActivityBundle and
     ContentBundle for more details on those bundle types.
     """
+
+    _zipped_extension = None
+    _unzipped_extension = None
+
     def __init__(self, path):
         self._path = path
+        self._zip_root_dir = None
 
         if os.path.isdir(self._path):
             self._unpacked = True
@@ -66,7 +83,7 @@ class Bundle:
 
         self._zip_root_dir = file_names[0].split('/')[0]
         if self._unzipped_extension is not None:
-            (name, ext) = os.path.splitext(self._zip_root_dir)
+            ext = os.path.splitext(self._zip_root_dir)[0]
             if ext != self._unzipped_extension:
                 raise MalformedBundleException(
                     'All files in the bundle must be inside a single ' +
@@ -80,24 +97,23 @@ class Bundle:
                     'top-level directory')
 
     def _get_file(self, filename):
-        file = None
+        f = None
 
         if self._unpacked:
             path = os.path.join(self._path, filename)
             if os.path.isfile(path):
-                file = open(path)
+                f = open(path)
         else:
             zip_file = zipfile.ZipFile(self._path)
             path = os.path.join(self._zip_root_dir, filename)
             try:
                 data = zip_file.read(path)
-                file = StringIO.StringIO(data)
+                f = StringIO.StringIO(data)
             except KeyError:
-                # == "file not found"
-                pass
+                logging.log('%s not found.' % filename)
             zip_file.close()
 
-        return file
+        return f
 
     def get_path(self):
         """Get the bundle path."""
@@ -123,12 +139,7 @@ class Bundle:
         if not self._unpacked:
             raise NotInstalledException
 
-        # FIXME: use manifest
-        zip = zipfile.ZipFile(bundle_path, 'w', zipfile.ZIP_DEFLATED)
-        for root, dirs, files in os.walk(self._path):
-            for name in files:
-                zip.write(filename, os.path.join(base_dir, filename))
-        zip.close()
+        raise NotImplementedError
 
     def _uninstall(self, install_path):
         if not os.path.isdir(install_path):

@@ -217,8 +217,9 @@ class ActivityBundle(Bundle):
             return False
 
     def install(self):
+        activities_path = env.get_user_activities_path()
         act = activity.get_registry().get_activity(self._bundle_id)
-        if act is not None and act.path.startswith(env.get_user_activities_path()):
+        if act is not None and act.path.startswith(activities_path):
             raise AlreadyInstalledException
 
         install_dir = env.get_user_activities_path()
@@ -226,7 +227,8 @@ class ActivityBundle(Bundle):
 
         install_path = os.path.join(install_dir, self._zip_root_dir)
 
-        xdg_data_home = os.getenv('XDG_DATA_HOME', os.path.expanduser('~/.local/share'))
+        xdg_data_home = os.getenv('XDG_DATA_HOME',
+                                  os.path.expanduser('~/.local/share'))
 
         mime_path = os.path.join(install_path, 'activity', 'mimetypes.xml')
         if os.path.isfile(mime_path):
@@ -234,7 +236,8 @@ class ActivityBundle(Bundle):
             mime_pkg_dir = os.path.join(mime_dir, 'packages')
             if not os.path.isdir(mime_pkg_dir):
                 os.makedirs(mime_pkg_dir)
-            installed_mime_path = os.path.join(mime_pkg_dir, '%s.xml' % self._bundle_id)
+            installed_mime_path = os.path.join(mime_pkg_dir,
+                                               '%s.xml' % self._bundle_id)
             os.symlink(mime_path, installed_mime_path)
             os.spawnlp(os.P_WAIT, 'update-mime-database',
                        'update-mime-database', mime_dir)
@@ -272,7 +275,7 @@ class ActivityBundle(Bundle):
 
             act = activity.get_registry().get_activity(self._bundle_id)
             if not force and act.version != self._activity_version:
-                logging.warning('Not uninstalling because different bundle present')
+                logging.warning('Not uninstalling, different bundle present')
                 return
             elif not act.path.startswith(env.get_user_activities_path()):
                 logging.warning('Not uninstalling system activity')
@@ -281,10 +284,12 @@ class ActivityBundle(Bundle):
             install_path = os.path.join(env.get_user_activities_path(),
                                         self._zip_root_dir)
 
-        xdg_data_home = os.getenv('XDG_DATA_HOME', os.path.expanduser('~/.local/share'))
+        xdg_data_home = os.getenv('XDG_DATA_HOME',
+                                  os.path.expanduser('~/.local/share'))
 
         mime_dir = os.path.join(xdg_data_home, 'mime')
-        installed_mime_path = os.path.join(mime_dir, 'packages', '%s.xml' % self._bundle_id)
+        installed_mime_path = os.path.join(mime_dir, 'packages',
+                                           '%s.xml' % self._bundle_id)
         if os.path.exists(installed_mime_path):
             os.remove(installed_mime_path)
             os.spawnlp(os.P_WAIT, 'update-mime-database',
@@ -294,8 +299,8 @@ class ActivityBundle(Bundle):
         if mime_types is not None:
             installed_icons_dir = os.path.join(xdg_data_home,
                                                'icons/sugar/scalable/mimetypes')
-            for file in os.listdir(installed_icons_dir):
-                path = os.path.join(installed_icons_dir, file)
+            for f in os.listdir(installed_icons_dir):
+                path = os.path.join(installed_icons_dir, f)
                 if os.path.islink(path) and \
                    os.readlink(path).startswith(install_path):
                     os.remove(path)
@@ -313,9 +318,11 @@ class ActivityBundle(Bundle):
             try:
                 self.uninstall(force=True)
             except Exception, e:
-                logging.warning('Uninstall failed (%s), still trying to install newer bundle', e)
+                logging.warning('Uninstall failed (%s), still trying ' \
+                                'to install newer bundle', e)
         else:
-            logging.warning('Unable to uninstall system activity, installing upgraded version in user activities')
+            logging.warning('Unable to uninstall system activity, ' \
+                            'installing upgraded version in user activities')
 
         self.install()
 
