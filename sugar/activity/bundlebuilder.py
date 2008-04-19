@@ -68,16 +68,15 @@ class _ManifestFileList(_DefaultFileList):
         f.close()
 
 def _extract_bundle(source_file, dest_dir):
-        if not os.path.exists(dest_dir):
-            os.mkdir(dest_dir)
+    if not os.path.exists(dest_dir):
+        os.mkdir(dest_dir)
 
-        zf = zipfile.ZipFile(source_file)
+    zf = zipfile.ZipFile(source_file)
 
-        for i, name in enumerate(zf.namelist()):
-            path = os.path.join(dest_dir, name)
-            
-            if not os.path.exists(os.path.dirname(path)):
-                os.makedirs(os.path.dirname(path))
+    for name in zf.namelist():
+        path = os.path.join(dest_dir, name)            
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
 
             outfile = open(path, 'wb')
             outfile.write(zf.read(name))
@@ -132,7 +131,7 @@ def cmd_dev():
         if os.path.islink(bundle_path):
             print 'ERROR - The bundle has been already setup for development.'
         else:
-            print 'ERROR - A bundle with the same name is already installed.'    
+            print 'ERROR - A bundle with the same name is already installed.'
 
 def _get_file_list(manifest):
     if os.path.isfile(manifest):

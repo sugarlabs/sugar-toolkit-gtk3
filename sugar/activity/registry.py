@@ -68,9 +68,12 @@ class ActivityRegistry(gobject.GObject):
                                     _ACTIVITY_REGISTRY_PATH,
                                     follow_name_owner_changes = True)
         self._registry = dbus.Interface(bus_object, _ACTIVITY_REGISTRY_IFACE)
-        self._registry.connect_to_signal('ActivityAdded', self._activity_added_cb)
-        self._registry.connect_to_signal('ActivityRemoved', self._activity_removed_cb)
-        self._registry.connect_to_signal('ActivityChanged', self._activity_changed_cb)
+        self._registry.connect_to_signal('ActivityAdded',
+                                         self._activity_added_cb)
+        self._registry.connect_to_signal('ActivityRemoved',
+                                         self._activity_removed_cb)
+        self._registry.connect_to_signal('ActivityChanged',
+                                         self._activity_changed_cb)
 
         # Two caches fo saving some travel across dbus.
         self._service_name_to_activity_info = {}
@@ -90,7 +93,6 @@ class ActivityRegistry(gobject.GObject):
 
     def _get_activities_cb(self, reply_handler, info_list):
         result = []
-        i = 0
         for info_dict in info_list:
             result.append(_activity_info_from_dict(info_dict))
 
@@ -104,12 +106,15 @@ class ActivityRegistry(gobject.GObject):
 
     def get_activities_async(self, reply_handler=None, error_handler=None):
         if not reply_handler:
-            logging.error('Function get_activities_async called without a reply handler. Can not run.') 
+            logging.error('Function get_activities_async called' \
+                          'without a reply handler. Can not run.') 
             return
 
         self._registry.GetActivities(
-             reply_handler=lambda info_list:self._get_activities_cb(reply_handler, info_list),
-             error_handler=lambda e:self._get_activities_error_cb(error_handler, e))
+             reply_handler=lambda info_list: \
+                    self._get_activities_cb(reply_handler, info_list),
+             error_handler=lambda e: \
+                    self._get_activities_error_cb(error_handler, e))
 
     def get_activity(self, service_name):
         if self._service_name_to_activity_info.has_key(service_name):

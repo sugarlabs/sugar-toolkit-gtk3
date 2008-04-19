@@ -71,13 +71,12 @@ from sugar.graphics.icon import Icon
 from sugar.datastore import datastore
 from sugar import wm
 from sugar import profile
-from sugar import _sugarbaseext
 from sugar import _sugarext
 
 _ = lambda msg: gettext.dgettext('sugar', msg)
 
 SCOPE_PRIVATE = "private"
-SCOPE_INVITE_ONLY = "invite"  # shouldn't be shown in UI, it's implicit when you invite somebody
+SCOPE_INVITE_ONLY = "invite"  # shouldn't be shown in UI, it's implicit
 SCOPE_NEIGHBORHOOD = "public"
 
 J_DBUS_SERVICE = 'org.laptop.Journal'
@@ -85,7 +84,8 @@ J_DBUS_PATH = '/org/laptop/Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 
 class ActivityToolbar(gtk.Toolbar):
-    """The Activity toolbar with the Journal entry title, sharing, Keep and Stop buttons
+    """The Activity toolbar with the Journal entry title, sharing,
+       Keep and Stop buttons
     
     All activities should have this toolbar. It is easiest to add it to your
     Activity by using the ActivityToolbox.
@@ -177,7 +177,8 @@ class ActivityToolbar(gtk.Toolbar):
 
     def __title_changed_cb(self, entry):
         if not self._update_title_sid:
-            self._update_title_sid = gobject.timeout_add(1000, self.__update_title_cb)
+            self._update_title_sid = gobject.timeout_add(
+                                                1000, self.__update_title_cb)
 
     def __update_title_cb(self):
         title = self.title.get_text()
@@ -219,9 +220,9 @@ class EditToolbar(gtk.Toolbar):
         paste -- the paste button
         separator -- A separator between undo/redo and copy/paste
     
-    This class only provides the 'edit' buttons in a standard layout, your activity
-    will need to either hide buttons which make no sense for your Activity, or you
-    need to connect the button events to your own callbacks:
+    This class only provides the 'edit' buttons in a standard layout,
+    your activity will need to either hide buttons which make no sense for your
+    Activity, or you need to connect the button events to your own callbacks:
     
         ## Example from Read.activity:
         # Create the edit toolbar:
@@ -273,15 +274,15 @@ class EditToolbar(gtk.Toolbar):
 class ActivityToolbox(Toolbox):
     """Creates the Toolbox for the Activity
     
-    By default, the toolbox contains only the ActivityToolbar. After creating the
-    toolbox, you can add your activity specific toolbars, for example the
+    By default, the toolbox contains only the ActivityToolbar. After creating
+    the toolbox, you can add your activity specific toolbars, for example the
     EditToolbar.
     
     To add the ActivityToolbox to your Activity in MyActivity.__init__() do:
     
         # Create the Toolbar with the ActivityToolbar: 
         toolbox = activity.ActivityToolbox(self)
-        ... your code, inserting all other toolbars you need, like EditToolbar ...
+        ... your code, inserting all other toolbars you need, like EditToolbar
         
         # Add the toolbox to the activity frame:
         self.set_toolbox(toolbox)
@@ -299,7 +300,8 @@ class ActivityToolbox(Toolbox):
         return self._activity_toolbar
 
 class Activity(Window, gtk.Container):
-    """This is the base Activity class that all other Activities derive from. This is where your activity starts.
+    """This is the base Activity class that all other Activities derive from.
+       This is where your activity starts.
     
     To get a working Activity:
         0. Derive your Activity from this class:
@@ -453,12 +455,13 @@ class Activity(Window, gtk.Container):
             self.set_title(self._jobject.metadata['title'])
                 
             if self._jobject.metadata.has_key('share-scope'):
-                share_scope = self._jobject.metadata['share-scope']                
+                share_scope = self._jobject.metadata['share-scope']
 
         elif create_jobject:
             logging.debug('Creating a jobject.')
             self._jobject = datastore.create()
-            self._jobject.metadata['title'] = _('%s Activity') % get_bundle_name()
+            title = _('%s Activity') % get_bundle_name()
+            self._jobject.metadata['title'] = title
             self.set_title(self._jobject.metadata['title'])
             self._jobject.metadata['title_set_by_user'] = '0'
             self._jobject.metadata['activity'] = self.get_bundle_id()
@@ -475,7 +478,8 @@ class Activity(Window, gtk.Container):
             self._jobject.metadata['icon-color'] = icon_color
 
             self._jobject.file_path = ''
-            # Cannot call datastore.write async for creates: https://dev.laptop.org/ticket/3071
+            # Cannot call datastore.write async for creates:
+            # https://dev.laptop.org/ticket/3071
             datastore.write(self._jobject)
         else:
             self._jobject = None
@@ -487,17 +491,20 @@ class Activity(Window, gtk.Container):
                       self._activity_id, mesh_instance, share_scope)
         if mesh_instance is not None:
             # There's already an instance on the mesh, join it
-            logging.debug("*** Act %s joining existing mesh instance %r", self._activity_id, mesh_instance)
+            logging.debug("*** Act %s joining existing mesh instance %r",
+                          self._activity_id, mesh_instance)
             self._shared_activity = mesh_instance
             self._shared_activity.connect('notify::private',
                     self.__privacy_changed_cb)
-            self._join_id = self._shared_activity.connect("joined", self.__joined_cb)
+            self._join_id = self._shared_activity.connect(
+                                                    "joined", self.__joined_cb)
             if not self._shared_activity.props.joined:
                 self._shared_activity.join()
             else:
                 self.__joined_cb(self._shared_activity, True, None)
         elif share_scope != SCOPE_PRIVATE:
-            logging.debug("*** Act %s no existing mesh instance, but used to be shared, will share" % self._activity_id)
+            logging.debug("*** Act %s no existing mesh instance, but used to " \
+                          "be shared, will share" % self._activity_id)
             # no existing mesh instance, but activity used to be shared, so
             # restart the share
             if share_scope == SCOPE_INVITE_ONLY:
@@ -569,7 +576,8 @@ class Activity(Window, gtk.Container):
         store activity related data that doesn't pertain to the current
         execution of the activity and thus cannot go into the DataStore.
         
-        Currently, this will return something like ~/.sugar/default/MyActivityName/
+        Currently, this will return something like
+        ~/.sugar/default/MyActivityName/
         
         Activities should ONLY save settings, user preferences and other data
         which isn't specific to a journal item here. If (meta-)data is in anyway
@@ -635,7 +643,8 @@ class Activity(Window, gtk.Container):
     def _cleanup_jobject(self):
         if self._jobject:
             if self._owns_file and os.path.isfile(self._jobject.file_path):
-                logging.debug('_cleanup_jobject: removing %r' % self._jobject.file_path)
+                logging.debug('_cleanup_jobject: removing %r' %
+                              self._jobject.file_path)
                 os.remove(self._jobject.file_path)
             self._owns_file = False
             self._jobject.destroy()
@@ -652,8 +661,8 @@ class Activity(Window, gtk.Container):
         # TODO: Find a way of taking a png out of the pixbuf without saving
         # to a temp file. Impementing gtk.gdk.Pixbuf.save_to_buffer in pygtk
         # would solve this.
-        fd, file_path = tempfile.mkstemp('.png')
-        del fd
+        fd, file_path = tempfile.mkstemp('.png')[0]
+        fd.close()
 
         pixbuf.save(file_path, 'png')
         f = open(file_path)
@@ -713,9 +722,10 @@ class Activity(Window, gtk.Container):
             self._owns_file = True
             self._jobject.file_path = file_path
         except NotImplementedError:
-            pass
+            logging.debug('Activity.write_file is not implemented.')
 
-        # Cannot call datastore.write async for creates: https://dev.laptop.org/ticket/3071
+        # Cannot call datastore.write async for creates:
+        # https://dev.laptop.org/ticket/3071
         if self._jobject.object_id is None:
             datastore.write(self._jobject, transfer_ownership=True)
         else:
@@ -726,7 +736,8 @@ class Activity(Window, gtk.Container):
                     error_handler=self.__save_error_cb)
 
     def copy(self):
-        """Request that the activity 'Keep in Journal' the current state of the activity.
+        """Request that the activity 'Keep in Journal' the current state
+           of the activity.
         
         Activities should not override this method. Instead, like save() do any
         copy work that needs to be done in write_file()
@@ -763,7 +774,8 @@ class Activity(Window, gtk.Container):
         self._pservice.disconnect(self._share_id)
         self._share_id = None
         if not success:
-            logging.debug('Share of activity %s failed: %s.' % (self._activity_id, err))
+            logging.debug('Share of activity %s failed: %s.' %
+                          (self._activity_id, err))
             return
 
         logging.debug('Share of activity %s successful, PS activity is %r.',
@@ -788,7 +800,8 @@ class Activity(Window, gtk.Container):
             buddy_key = self._invites_queue.pop()             
             buddy = self._pservice.get_buddy(buddy_key)
             if buddy:
-                self._shared_activity.invite(buddy, '', self._invite_response_cb)
+                self._shared_activity.invite(
+                            buddy, '', self._invite_response_cb)
             else:
                 logging.error('Cannot invite %s, no such buddy.' % buddy_key)
 
@@ -854,9 +867,9 @@ class Activity(Window, gtk.Container):
     def close(self, force=False, skip_save=False):
         """Request that the activity be stopped and saved to the Journal
         
-        Activities should not override this method, but should implement write_file() to
-        do any state saving instead. If the application wants to control wether it can
-        close, it should override can_close().
+        Activities should not override this method, but should implement
+        write_file() to do any state saving instead. If the application wants
+        to control wether it can close, it should override can_close().
         """
 
         if not force:
@@ -866,7 +879,7 @@ class Activity(Window, gtk.Container):
         try:
             if not skip_save:
                 self.save()
-        except:
+        except Exception:
             logging.info(traceback.format_exc())
             self._display_keep_failed_dialog()
             return

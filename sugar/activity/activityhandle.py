@@ -15,8 +15,6 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-from sugar.presence import presenceservice
-
 class ActivityHandle(object):
     """Data structure storing simple activity metadata"""
     def __init__(
