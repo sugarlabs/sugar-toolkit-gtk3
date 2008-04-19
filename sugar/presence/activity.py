@@ -64,6 +64,7 @@ class Activity(gobject.GObject):
     def __init__(self, bus, new_obj_cb, del_obj_cb, object_path):
         """Initialse the activity interface, connecting to service"""
         gobject.GObject.__init__(self)
+        self._telepathy_room_handle = None
         self._object_path = object_path
         self._ps_new_object = new_obj_cb
         self._ps_del_object = del_obj_cb

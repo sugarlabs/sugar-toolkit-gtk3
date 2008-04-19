@@ -70,6 +70,7 @@ class PresenceService(gobject.GObject):
         """
         gobject.GObject.__init__(self)
         self._objcache = {}
+        self._joined = None
 
         # Get a connection to the session bus
         self._bus = dbus.SessionBus()
@@ -121,7 +122,8 @@ class PresenceService(gobject.GObject):
                 )
             except dbus.exceptions.DBusException, err:
                 _logger.error(
-                    """Failure retrieving %r interface from the D-BUS service %r %r: %s""",
+                    """Failure retrieving %r interface from
+                       the D-BUS service %r %r: %s""",
                     DBUS_INTERFACE, DBUS_SERVICE, DBUS_PATH, err
                 )
                 if self._allow_offline_iface:
@@ -129,17 +131,24 @@ class PresenceService(gobject.GObject):
                 raise RuntimeError("Failed to connect to the presence service.")
             else:
                 self._ps_ = ps 
-                ps.connect_to_signal('BuddyAppeared', self._buddy_appeared_cb)
-                ps.connect_to_signal('BuddyDisappeared', self._buddy_disappeared_cb)
-                ps.connect_to_signal('ActivityAppeared', self._activity_appeared_cb)
-                ps.connect_to_signal('ActivityDisappeared', self._activity_disappeared_cb)
-                ps.connect_to_signal('ActivityInvitation', self._activity_invitation_cb)
-                ps.connect_to_signal('PrivateInvitation', self._private_invitation_cb)
+                ps.connect_to_signal('BuddyAppeared',
+                                     self._buddy_appeared_cb)
+                ps.connect_to_signal('BuddyDisappeared',
+                                     self._buddy_disappeared_cb)
+                ps.connect_to_signal('ActivityAppeared',
+                                     self._activity_appeared_cb)
+                ps.connect_to_signal('ActivityDisappeared',
+                                     self._activity_disappeared_cb)
+                ps.connect_to_signal('ActivityInvitation',
+                                     self._activity_invitation_cb)
+                ps.connect_to_signal('PrivateInvitation',
+                                     self._private_invitation_cb)
         return self._ps_
         
     _ps = property(
         _get_ps, None, None,
-        """DBUS interface to the PresenceService (services/presence/presenceservice)"""
+        """DBUS interface to the PresenceService
+           (services/presence/presenceservice)"""
     )
 
     def _new_object(self, object_path):
@@ -170,8 +179,8 @@ class PresenceService(gobject.GObject):
                 try:
                     # Pre-fill the activity's ID
                     foo = obj.props.id
-                except dbus.exceptions.DBusException, err:
-                    pass
+                except dbus.exceptions.DBusException:
+                    logging.debug('Cannot get the activity ID')
             else:
                 raise RuntimeError("Unknown object type")
             self._objcache[object_path] = obj
@@ -182,7 +191,8 @@ class PresenceService(gobject.GObject):
         return object_path in self._objcache.keys()
 
     def _del_object(self, object_path):
-        """Fully remove an object from the object cache when it's no longer needed.
+        """Fully remove an object from the object cache when
+           it's no longer needed.
         """
         del self._objcache[object_path]
 
@@ -304,12 +314,15 @@ class PresenceService(gobject.GObject):
         """
 
         if not reply_handler:
-            logging.error('Function get_activities_async called without a reply handler. Can not run.') 
+            logging.error('Function get_activities_async called without' \
+                          'a reply handler. Can not run.') 
             return
 
         self._ps.GetActivities(
-             reply_handler=lambda resp:self._get_activities_cb(reply_handler, resp),
-             error_handler=lambda e:self._get_activities_error_cb(error_handler, e))
+             reply_handler=lambda resp: \
+                    self._get_activities_cb(reply_handler, resp),
+             error_handler=lambda e: \
+                    self._get_activities_error_cb(error_handler, e))
 
 
     def get_activity(self, activity_id, warn_if_none=True):
@@ -370,12 +383,15 @@ class PresenceService(gobject.GObject):
         """
 
         if not reply_handler:
-            logging.error('Function get_buddies_async called without a reply handler. Can not run.') 
+            logging.error('Function get_buddies_async called without' \
+                          'a reply handler. Can not run.') 
             return
 
         self._ps.GetBuddies(
-             reply_handler=lambda resp:self._get_buddies_cb(reply_handler, resp),
-             error_handler=lambda e:self._get_buddies_error_cb(error_handler, e))
+             reply_handler=lambda resp: \
+                    self._get_buddies_cb(reply_handler, resp),
+             error_handler=lambda e: \
+                    self._get_buddies_error_cb(error_handler, e))
 
     def get_buddy(self, key):
         """Retrieve single Buddy object for the given public key
@@ -390,7 +406,8 @@ class PresenceService(gobject.GObject):
             buddy_op = self._ps.GetBuddyByPublicKey(dbus.ByteArray(key))
         except dbus.exceptions.DBusException, err:
             _logger.warn(
-                """Unable to retrieve buddy handle for %r from presence service: %s"""
+                """Unable to retrieve buddy handle
+                   for %r from presence service: %s"""
                 % key, err
             )
             return None
@@ -428,10 +445,11 @@ class PresenceService(gobject.GObject):
             owner_op = self._ps.GetOwner()
         except dbus.exceptions.DBusException, err:
             _logger.warn(
-                """Unable to retrieve local user/owner from presence service: %s"""
+                """Unable to retrieve local user/owner
+                   from presence service: %s"""
                 % err
             )
-            raise RuntimeError("Could not get owner object from presence service.")
+            raise RuntimeError("Could not get owner object.")
         return self._new_object(owner_op)
 
     def _share_activity_cb(self, activity, op):
@@ -447,7 +465,8 @@ class PresenceService(gobject.GObject):
 
     def _share_activity_error_cb(self, activity, err):
         """Notify with GObject event of unsuccessful sharing of activity"""
-        _logger.debug("Error sharing activity %s: %s" % (activity.get_id(), err))
+        _logger.debug("Error sharing activity %s: %s" %
+                      (activity.get_id(), err))
         self.emit("activity-shared", False, None, err)
 
     def share_activity(self, activity, properties={}, private=True):
@@ -521,7 +540,8 @@ class _OfflineInterface( object ):
     ):
         """Pretend to share and fail..."""
         exc = IOError(
-            """Unable to share activity as PresenceService is not currenly available"""
+            """Unable to share activity as PresenceService
+               is not currenly available"""
         )
         return error_handler( exc )
 
