@@ -20,13 +20,13 @@ import logging
 
 import gtk
 import gobject
-import time
 import hippo
 import pango
 
 from sugar.graphics import palettegroup
 from sugar.graphics import animator
 from sugar.graphics import style
+from sugar.graphics.icon import Icon
 from sugar import _sugarext
 
 # Helper function to find the gap position and size of widget a
@@ -81,10 +81,9 @@ class MouseSpeedDetector(gobject.GObject):
         self._threshold = thresh
         self._parent = parent
         self._delay = delay
-
         self._state = None
-
         self._timeout_hid = None
+        self._mouse_pos = None
 
     def start(self):
         self._state = None
@@ -99,8 +98,7 @@ class MouseSpeedDetector(gobject.GObject):
 
     def _get_mouse_position(self):
         display = gtk.gdk.display_get_default()
-        screen, x, y, mask = display.get_pointer()
-        return (x, y)
+        return display.get_pointer()[1:2]
 
     def _detect_motion(self):
         oldx, oldy = self._mouse_pos
@@ -225,7 +223,7 @@ class Palette(gtk.Window):
         self.set_decorated(False)
         self.set_resizable(False)
         # Just assume xthickness and ythickness are the same
-        self.set_border_width(self.style.xthickness)
+        self.set_border_width(self.get_style().xthickness)
 
         primary_box.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE)
                                      - 2 * self.get_border_width())
@@ -242,7 +240,11 @@ class Palette(gtk.Window):
         self._invoker = None
         self._group_id = None
         self._up = False
+        self._menu_box = None
+        self._content = None
         self._palette_popup_sid = None
+        self._enter_invoker_hid = None
+        self._leave_invoker_hid = None
 
         # we set these for backward compatibility
         if label is not None:
@@ -291,7 +293,7 @@ class Palette(gtk.Window):
         # Prevent a warning from pygtk
         if previous_style is not None:
             gtk.Window.do_style_set(self, previous_style)
-        self.set_border_width(self.style.xthickness)
+        self.set_border_width(self.get_style().xthickness)
 
     def is_up(self):
         return self._up
@@ -462,19 +464,18 @@ class Palette(gtk.Window):
         else:
             gap = False
 
+        allocation = self.get_allocation()
+        wstyle = self.get_style()
+
         if gap:
-            self.style.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
-                                     gtk.SHADOW_IN, event.area, self, "palette",
-                                     0, 0, 
-                                     self.allocation.width,
-                                     self.allocation.height,
-                                     gap[0], gap[1], gap[2])
-        else:
-            self.style.paint_box(event.window, gtk.STATE_PRELIGHT,
+            wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
                                  gtk.SHADOW_IN, event.area, self, "palette",
-                                 0, 0,
-                                 self.allocation.width,
-                                 self.allocation.height)
+                                 0, 0, allocation.width, allocation.height,
+                                 gap[0], gap[1], gap[2])
+        else:
+            wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
+                             gtk.SHADOW_IN, event.area, self, "palette",
+                             0, 0, allocation.width, allocation.height)
 
         # Fall trough to the container expose handler.
         # (Leaving out the window expose handler which redraws everything)
@@ -633,8 +634,8 @@ class Palette(gtk.Window):
         self.emit('popup')
 
 class PaletteActionBar(gtk.HButtonBox):
-    def add_action(label, icon_name=None):
-        button = Button(label)
+    def add_action(self, label, icon_name=None):
+        button = gtk.Button(label)
 
         if icon_name:
             icon = Icon(icon_name)
@@ -736,7 +737,7 @@ class Invoker(gobject.GObject):
 
         if self._cursor_x == -1 or self._cursor_y == -1:
             display = gtk.gdk.display_get_default()
-            screen, x, y, mask = display.get_pointer()
+            x, y = display.get_pointer()[1:2]
             self._cursor_x = x
             self._cursor_y = y
 
@@ -897,25 +898,25 @@ class WidgetInvoker(Invoker):
         return True
 
     def draw_rectangle(self, event, palette):
-        style = self._widget.style
+        wstyle = self._widget.get_style()
         gap = _calculate_gap(self.get_rect(), palette.get_rect())
         if gap:
-            style.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
-                                gtk.SHADOW_IN, event.area, self._widget,
-                                "palette-invoker",
-                                self._widget.allocation.x,
-                                self._widget.allocation.y,
-                                self._widget.allocation.width,
-                                self._widget.allocation.height,
-                                gap[0], gap[1], gap[2])
+            wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
+                                 gtk.SHADOW_IN, event.area, self._widget,
+                                 "palette-invoker",
+                                 self._widget.allocation.x,
+                                 self._widget.allocation.y,
+                                 self._widget.allocation.width,
+                                 self._widget.allocation.height,
+                                 gap[0], gap[1], gap[2])
         else:
-            style.paint_box(event.window, gtk.STATE_PRELIGHT,
-                            gtk.SHADOW_IN, event.area, self._widget,
-                            "palette-invoker",
-                            self._widget.allocation.x,
-                            self._widget.allocation.y,
-                            self._widget.allocation.width,
-                            self._widget.allocation.height)
+            wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
+                             gtk.SHADOW_IN, event.area, self._widget,
+                             "palette-invoker",
+                             self._widget.allocation.x,
+                             self._widget.allocation.y,
+                             self._widget.allocation.width,
+                             self._widget.allocation.height)
 
     def _enter_notify_event_cb(self, widget, event):
         self.emit('mouse-enter')
@@ -962,7 +963,6 @@ class CanvasInvoker(Invoker):
         
     def _motion_notify_event_cb(self, button, event):
         if event.detail == hippo.MOTION_DETAIL_ENTER:
-            context = self._item.get_context()
             self.emit('mouse-enter')
         elif event.detail == hippo.MOTION_DETAIL_LEAVE:
             self.emit('mouse-leave')
