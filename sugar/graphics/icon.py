@@ -25,7 +25,6 @@ import hippo
 import cairo
 
 from sugar.graphics.xocolor import XoColor
-from sugar.graphics.palette import Palette, CanvasInvoker
 from sugar.util import LRU
 
 _BADGE_SIZE = 0.45
@@ -533,6 +532,8 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         return self._palette
     
     def set_palette(self, palette):
+        from sugar.graphics.palette import CanvasInvoker
+
         if self._palette is not None:        
             self._palette.props.invoker = None
         self._palette = palette
@@ -540,6 +541,8 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
             self._palette.props.invoker = CanvasInvoker(self)
 
     def set_tooltip(self, text):
+        from sugar.graphics.palette import Palette
+
         self.set_palette(Palette(text))
     
     palette = property(get_palette, set_palette)
