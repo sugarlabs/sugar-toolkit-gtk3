@@ -70,12 +70,6 @@ class UnfullscreenButton(gtk.Window):
         self._reposition()
 
 class Window(gtk.Window):
-
-    __gproperties__ = {
-        'enable-fullscreen-mode': (bool, None, None, True,
-                                    gobject.PARAM_READWRITE),
-    }
-
     def __init__(self, **args):
         self._enable_fullscreen_mode = True
 
@@ -107,18 +101,6 @@ class Window(gtk.Window):
         self._unfullscreen_button.set_transient_for(self)
         self._unfullscreen_button.connect_button_press(
             self.__unfullscreen_button_pressed)
-
-    def do_get_property(self, prop):
-        if prop.name == 'enable-fullscreen-mode':
-            return self._enable_fullscreen_mode
-        else:
-            return gtk.Window.do_get_property(self, prop)
-
-    def do_set_property(self, prop, val):
-        if prop.name == 'enable-fullscreen-mode':
-            self._enable_fullscreen_mode = val
-        else:
-            gtk.Window.do_set_property(self, prop, val)
 
     def set_canvas(self, canvas):
         if self.canvas:
@@ -217,3 +199,14 @@ class Window(gtk.Window):
 
     def __unfullscreen_button_pressed(self, widget, event):
         self.unfullscreen()
+
+    def set_enable_fullscreen_mode(self, enable_fullscreen_mode):
+        self._enable_fullscreen_mode = enable_fullscreen_mode
+
+    def get_enable_fullscreen_mode(self):
+        return self._enable_fullscreen_mode
+
+    enable_fullscreen_mode = gobject.property(type=object,
+                                              setter=set_enable_fullscreen_mode,
+                                              getter=get_enable_fullscreen_mode)
+
