@@ -661,8 +661,8 @@ class Activity(Window, gtk.Container):
         # TODO: Find a way of taking a png out of the pixbuf without saving
         # to a temp file. Impementing gtk.gdk.Pixbuf.save_to_buffer in pygtk
         # would solve this.
-        fd, file_path = tempfile.mkstemp('.png')[0]
-        fd.close()
+        fd, file_path = tempfile.mkstemp('.png')
+        os.close(fd)
 
         pixbuf.save(file_path, 'png')
         f = open(file_path)
