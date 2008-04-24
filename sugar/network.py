@@ -222,10 +222,10 @@ class GlibURLDownloader(gobject.GObject):
         else:
             fname = self._get_filename_from_headers(self._info.headers)
             self._suggested_fname = fname
-            path = urllib.splittype(self._url)[1]
-            path = urllib.splithost(path or "")[1]
-            path = urllib.splitquery(path or "")[0]
-            path = urllib.splitattr(path or "")[0]
+            garbage_, path = urllib.splittype(self._url)
+            garbage_, path = urllib.splithost(path or "")
+            path, garbage_ = urllib.splitquery(path or "")
+            path, garbage_ = urllib.splitattr(path or "")
             suffix = os.path.splitext(path)[1]
             (self._outf, self._fname) = tempfile.mkstemp(suffix=suffix,
                                                          dir=self._destdir)
@@ -399,7 +399,7 @@ class GlibXMLRPCTransport(xmlrpclib.Transport):
     def make_connection(self, host):
         """Use our own connection object so we can get its socket."""
         # create a HTTP connection object from a host descriptor
-        host = self.get_host_info(host)[0]
+        host, extra_headers_, x509_ = self.get_host_info(host)
         return GlibHTTP(host)
 
     ##

@@ -98,7 +98,8 @@ class MouseSpeedDetector(gobject.GObject):
 
     def _get_mouse_position(self):
         display = gtk.gdk.display_get_default()
-        return display.get_pointer()[1:3]
+        screen_, x, y, mask_ = display.get_pointer()
+        return (x, y)
 
     def _detect_motion(self):
         oldx, oldy = self._mouse_pos
@@ -737,7 +738,7 @@ class Invoker(gobject.GObject):
 
         if self._cursor_x == -1 or self._cursor_y == -1:
             display = gtk.gdk.display_get_default()
-            x, y = display.get_pointer()[1:3]
+            screen_, x, y, mask_ = display.get_pointer()
             self._cursor_x = x
             self._cursor_y = y
 

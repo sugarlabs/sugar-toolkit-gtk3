@@ -59,7 +59,7 @@ class Toolbox(gtk.VBox):
         
     def add_toolbar(self, name, toolbar):
         label = gtk.Label(name)
-        width = label.size_request()[0]
+        width, height_ = label.size_request()
         label.set_size_request(max(width, style.TOOLBOX_TAB_LABEL_WIDTH), -1)
         label.set_alignment(0.0, 0.5)
 

@@ -58,7 +58,7 @@ _children_pid = []
 
 def _sigchild_handler(signum, frame):
     for child_pid in _children_pid:
-        pid = os.waitpid(child_pid, os.WNOHANG)[0]
+        pid, status_ = os.waitpid(child_pid, os.WNOHANG)
         if pid > 0:
             _children_pid.remove(pid)
 
