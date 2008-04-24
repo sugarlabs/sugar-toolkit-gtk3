@@ -83,7 +83,7 @@ class Bundle:
 
         self._zip_root_dir = file_names[0].split('/')[0]
         if self._unzipped_extension is not None:
-            ext = os.path.splitext(self._zip_root_dir)[0]
+            (name_, ext) = os.path.splitext(self._zip_root_dir)
             if ext != self._unzipped_extension:
                 raise MalformedBundleException(
                     'All files in the bundle must be inside a single ' +
@@ -110,7 +110,7 @@ class Bundle:
                 data = zip_file.read(path)
                 f = StringIO.StringIO(data)
             except KeyError:
-                logging.log('%s not found.' % filename)
+                logging.debug('%s not found.' % filename)
             zip_file.close()
 
         return f
@@ -145,7 +145,7 @@ class Bundle:
         if not os.path.isdir(install_path):
             raise InvalidPathException
         if self._unzipped_extension is not None:
-            ext = os.path.splitext(install_path)[1]
+            (name_, ext) = os.path.splitext(install_path)
             if ext != self._unzipped_extension:
                 raise InvalidPathException
 
