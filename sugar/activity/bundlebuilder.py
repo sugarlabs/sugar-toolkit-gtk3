@@ -78,10 +78,10 @@ def _extract_bundle(source_file, dest_dir):
         if not os.path.exists(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
 
-            outfile = open(path, 'wb')
-            outfile.write(zf.read(name))
-            outfile.flush()
-            outfile.close()
+        outfile = open(path, 'wb')
+        outfile.write(zf.read(name))
+        outfile.flush()
+        outfile.close()
 
 def _get_source_path(path=None):
     if path:
