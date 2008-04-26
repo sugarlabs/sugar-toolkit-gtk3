@@ -17,7 +17,7 @@
 
 import random
 
-_colors = [
+colors = [
 ['#B20008', '#FF2B34'], \
 ['#FF2B34', '#B20008'], \
 ['#E6000A', '#FF2B34'], \
@@ -218,8 +218,8 @@ def is_valid(color_string):
 class XoColor:
     def __init__(self, color_string=None):
         if color_string == None or not is_valid(color_string):
-            n = int(random.random() * (len(_colors) - 1))
-            [self.stroke, self.fill] = _colors[n]
+            n = int(random.random() * (len(colors) - 1))
+            [self.stroke, self.fill] = colors[n]
         else:
             [self.stroke, self.fill] = _parse_string(color_string)
 
@@ -244,7 +244,7 @@ if __name__ == "__main__":
 
     f = open(sys.argv[1], 'r')
 
-    print '_colors = ['
+    print 'colors = ['
 
     for line in f.readlines():
         match = re.match(r'fill: ([A-Z0-9]*) stroke: ([A-Z0-9]*)', line)
