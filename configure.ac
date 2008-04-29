@@ -33,12 +33,13 @@ AM_GLIB_GNU_GETTEXT
 
 AC_OUTPUT([
 Makefile
-sugar/Makefile
-sugar/activity/Makefile
-sugar/bundle/Makefile
-sugar/clipboard/Makefile
-sugar/graphics/Makefile
-sugar/presence/Makefile
-sugar/datastore/Makefile
+src/Makefile
+src/sugar/Makefile
+src/sugar/activity/Makefile
+src/sugar/bundle/Makefile
+src/sugar/clipboard/Makefile
+src/sugar/graphics/Makefile
+src/sugar/presence/Makefile
+src/sugar/datastore/Makefile
 po/Makefile.in
 ])

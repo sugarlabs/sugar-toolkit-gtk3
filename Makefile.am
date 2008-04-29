@@ -10,4 +10,4 @@ EXTRA_DIST =                    \
 	intltool-update.in      \
 	intltool-extract.in
 
-SUBDIRS = po sugar
+SUBDIRS = src po
