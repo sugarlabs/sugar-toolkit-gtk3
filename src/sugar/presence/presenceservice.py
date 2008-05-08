@@ -51,7 +51,7 @@ class PresenceService(gobject.GObject):
         'activity-invitation': (gobject.SIGNAL_RUN_FIRST, None, ([object]*3)),
         'private-invitation': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                         ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT,
-                          gobject.TYPE_PYOBJECT])),
+                          gobject.TYPE_PYOBJECT, str])),
         'activity-appeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                         ([gobject.TYPE_PYOBJECT])),
         'activity-disappeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -239,15 +239,15 @@ class PresenceService(gobject.GObject):
         gobject.idle_add(self._emit_activity_invitation_signal, activity_path,
                          buddy_path, message)
 
-    def _emit_private_invitation_signal(self, bus_name, connection, channel):
+    def _emit_private_invitation_signal(self, bus_name, connection, channel, chan_type):
         """Emit GObject event with bus_name, connection and channel"""
-        self.emit('private-invitation', bus_name, connection, channel)
+        self.emit('private-invitation', bus_name, connection, channel, chan_type)
         return False
 
-    def _private_invitation_cb(self, bus_name, connection, channel):
+    def _private_invitation_cb(self, bus_name, connection, channel, chan_type):
         """Callback for dbus event (forwards to method to emit GObject event)"""
         gobject.idle_add(self._emit_private_invitation_signal, bus_name,
-                connection, channel)
+                connection, channel, chan_type)
 
     def _emit_activity_appeared_signal(self, object_path):
         """Emit GObject event with presence.activity.Activity object"""
