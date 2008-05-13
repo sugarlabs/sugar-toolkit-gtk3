@@ -3,6 +3,7 @@ sugar_PYTHON =			\
 	__init__.py		\
 	activity.py		\
 	buddy.py		\
+	sugartubeconn.py	\
 	tubeconn.py		\
 	presenceservice.py
 
