@@ -271,78 +271,70 @@ class Activity(gobject.GObject):
 
     def set_up_tubes(self, reply_handler, error_handler):
 
-        cpaths = []
+        chans = []
 
-        def tubes_chan_ready(chan):
-            _logger.debug('%r: Tubes channel %r is ready', self, chan)
-            self.telepathy_tubes_chan = chan
+        def tubes_ready():
+            if self.telepathy_text_chan is None or \
+                self.telepathy_tubes_chan is None:
+                    return
 
             _logger.debug('%r: finished setting up tubes', self)
             reply_handler()
 
-        def got_tubes_chan(path):
-            _logger.debug('%r: got Tubes channel at %s', self, path)
-            telepathy.client.Channel(self.telepathy_conn.service_name,
-                                     path, ready_handler=tubes_chan_ready,
-                                     error_handler=error_handler)
+        def tubes_chan_ready(chan):
+            _logger.debug('%r: Tubes channel %r is ready', self, chan)
+            self.telepathy_tubes_chan = chan
+            tubes_ready()
 
         def text_chan_ready(chan):
             _logger.debug('%r: Text channel %r is ready', self, chan)
             self.telepathy_text_chan = chan
-
-            self.telepathy_conn.RequestChannel(telepathy.CHANNEL_TYPE_TUBES,
-                                               telepathy.HANDLE_TYPE_ROOM,
-                                               self._telepathy_room_handle,
-                                               True,
-                                               reply_handler=got_tubes_chan,
-                                               error_handler=error_handler)
-
-        def got_text_chan(path):
-            _logger.debug('%r: got Text channel at %s', self, path)
-            telepathy.client.Channel(self.telepathy_conn.service_name,
-                                     path, ready_handler=text_chan_ready,
-                                     error_handler=error_handler)
+            tubes_ready()
 
         def conn_ready(conn):
             _logger.debug('%r: Connection %r is ready', self, conn)
             self.telepathy_conn = conn
+            found_text_channel = False
+            found_tubes_channel = False
 
-            # For the moment we'll do this synchronously.
-            # If the PS gained a GetRoom method, we could
-            # do this async too
+            for chan_path, chan_iface, handle_type, handle in chans:
+                if handle_type != telepathy.HANDLE_TYPE_ROOM:
+                    return
 
-            for channel_path in cpaths:
-                channel = telepathy.client.Channel(conn.service_name,
-                                                   channel_path)
-                handle_type, handle = channel.GetHandle()
-                if handle_type == telepathy.HANDLE_TYPE_ROOM:
-                    room = handle
-                    break
+                if chan_iface == telepathy.CHANNEL_TYPE_TEXT:
+                    telepathy.client.Channel(
+                            conn.service_name, chan_path,
+                            ready_handler=text_chan_ready,
+                            error_handler=error_handler)
+                    found_text_channel = True
 
-            if room is None:
+                elif chan_iface == telepathy.CHANNEL_TYPE_TUBES:
+                    telepathy.client.Channel(
+                            conn.service_name, chan_path,
+                            ready_handler=tubes_chan_ready,
+                            error_handler=error_handler)
+                    found_tubes_channel = True
+
+            if not found_text_channel:
                 error_handler(AssertionError("Presence Service didn't create "
                     "a chatroom"))
-            else:
-                self._telepathy_room_handle = room
+            elif not found_tubes_channel:
+                error_handler(AssertionError("Presence Service didn't create "
+                    "tubes channel"))
 
-                conn.RequestChannel(telepathy.CHANNEL_TYPE_TEXT,
-                                    telepathy.HANDLE_TYPE_ROOM,
-                                    room, True,
-                                    reply_handler=got_text_chan,
-                                    error_handler=error_handler)
-
-        def got_channels(bus_name, conn_path, channel_paths):
-            _logger.debug('%r: Connection on %s at %s, channel paths: %r',
-                          self, bus_name, conn_path, channel_paths)
+        def channels_listed(bus_name, conn_path, channels):
+            _logger.debug('%r: Connection on %s at %s, channels: %r',
+                          self, bus_name, conn_path, channels)
 
             # can't use assignment for this due to Python scoping
-            cpaths.extend(channel_paths)
+            chans.extend(channels)
 
             telepathy.client.Connection(bus_name, conn_path,
                                         ready_handler=conn_ready,
                                         error_handler=error_handler)
 
-        self._activity.GetChannels(reply_handler=got_channels,
+
+        self._activity.ListChannels(reply_handler=channels_listed,
                                    error_handler=error_handler)
 
     def _join_cb(self):
