@@ -31,11 +31,12 @@ def _activity_info_from_dict(info_dict):
     return ActivityInfo(info_dict['name'], info_dict['icon'],
                         info_dict['bundle_id'], info_dict['version'],
                         info_dict['path'], info_dict['show_launcher'],
-                        info_dict['command'], info_dict['favorite'])
+                        info_dict['command'], info_dict['favorite'],
+                        info_dict['installation_time'])
 
 class ActivityInfo(object):
-    def __init__(self, name, icon, bundle_id, version,
-                 path, show_launcher, command, favorite):
+    def __init__(self, name, icon, bundle_id, version, path, show_launcher,
+                 command, favorite, installation_time):
         self.name = name
         self.icon = icon
         self.bundle_id = bundle_id
@@ -44,6 +45,7 @@ class ActivityInfo(object):
         self.command = command
         self.show_launcher = show_launcher
         self.favorite = favorite
+        self.installation_time = installation_time
 
 class ActivityRegistry(gobject.GObject):
     __gsignals__ = {

@@ -163,6 +163,11 @@ class ActivityBundle(Bundle):
         """Get the activity user visible name."""
         return self._name
 
+    def get_installation_time(self):
+        """Get a timestamp representing the time at which this activity was
+        installed."""
+        return os.stat(self._path).st_mtime
+
     def get_bundle_id(self):
         """Get the activity bundle id"""
         return self._bundle_id

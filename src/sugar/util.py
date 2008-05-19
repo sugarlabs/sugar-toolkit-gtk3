@@ -21,6 +21,8 @@ import sha
 import random
 import binascii
 import string
+from gettext import gettext as _
+import gettext
 
 def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
@@ -168,3 +170,70 @@ class LRU:
             yield j
     def keys(self):
         return self.d.keys()
+
+units = [['%d year',   '%d years',   356 * 24 * 60 * 60],
+         ['%d month',  '%d months',  30 * 24 * 60 * 60],
+         ['%d week',   '%d weeks',   7 * 24 * 60 * 60],
+         ['%d day',    '%d days',    24 * 60 * 60],
+         ['%d hour',   '%d hours',   60 * 60],
+         ['%d minute', '%d minutes', 60]]
+
+AND = _(' and ')
+COMMA = _(', ')
+
+# TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+NOW = _('Seconds ago')
+
+# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+# "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+ELAPSED = _('%s ago')
+
+# Explanation of the following hack:
+# The xgettext utility extracts plural forms by reading the strings included as
+# parameters of ngettext(). As our plurals are not passed to ngettext()
+# straight away because there needs to be a calculation before we know which
+# strings need to be used, then we need to call ngettext() in a fake way so
+# xgettext will pick them up as plurals.
+
+def ngettext(singular, plural, n): pass
+
+# TRANS: Relative dates (eg. 1 month and 5 days).
+ngettext('%d year',   '%d years',   1)
+ngettext('%d month',  '%d months',  1)
+ngettext('%d week',   '%d weeks',   1)
+ngettext('%d day',    '%d days',    1)
+ngettext('%d hour',   '%d hours',   1)
+ngettext('%d minute', '%d minutes', 1)
+
+del ngettext
+
+# End of plurals hack
+
+def timestamp_to_elapsed_string(timestamp, max_levels=2):
+    levels = 0
+    time_period = ''
+    elapsed_seconds = int(time.time() - timestamp)
+
+    for name_singular, name_plural, factor in units:
+        elapsed_units = elapsed_seconds / factor
+        if elapsed_units > 0:
+
+            if levels > 0:
+                time_period += COMMA
+
+            time_period += gettext.ngettext(name_singular, name_plural,
+                                            elapsed_units) % elapsed_units
+
+            elapsed_seconds -= elapsed_units * factor
+
+        if time_period != '':
+            levels += 1
+
+        if levels == max_levels:
+            break
+
+    if levels == 0:
+        return NOW
+
+    return ELAPSED % time_period
+
