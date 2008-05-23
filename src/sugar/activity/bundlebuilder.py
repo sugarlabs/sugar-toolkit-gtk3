@@ -67,6 +67,15 @@ class _ManifestFileList(_DefaultFileList):
                 self.append(stripped_line)
         f.close()
 
+class _AllFileList(list):
+    def __init__(self):
+        for root, dirs, files in os.walk('.'):
+            if not root.startswith('./locale'):
+                for f in files:
+                    if not f.endswith('.xo') and \
+                       f != '.gitignore':
+                        self.append(os.path.join(root, f))
+
 def _extract_bundle(source_file, dest_dir):
     if not os.path.exists(dest_dir):
         os.mkdir(dest_dir)
@@ -141,7 +150,7 @@ def _get_file_list(manifest):
     elif os.path.isdir('.svn'):
         return _SvnFileList()
     else:
-        return _DefaultFileList()
+        return _AllFileList()
 
 def _get_po_list(manifest):
     file_list = {}
