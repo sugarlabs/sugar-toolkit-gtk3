@@ -259,8 +259,6 @@ class _IconWidget(gtk.EventBox):
     def __init__(self, icon_name=None, xo_color=None):
         gtk.EventBox.__init__(self)
 
-        self._palette = None
-
         self.set_app_paintable(True)
 
         self._icon = Icon(icon_name=icon_name, xo_color=xo_color,
@@ -269,17 +267,12 @@ class _IconWidget(gtk.EventBox):
         self._icon.show()
 
     def do_expose_event(self, event):
-        if self._palette and self._palette.is_up():
-            invoker = self._palette.props.invoker
-            invoker.draw_rectangle(event, self._palette)
+        palette = self.parent.palette
+        if palette and palette.is_up():
+            invoker = palette.props.invoker
+            invoker.draw_rectangle(event, palette)
 
         gtk.EventBox.do_expose_event(self, event)
-
-    def set_palette(self, palette):
-        if self._palette is not None:        
-            self._palette.props.invoker = None
-        self._palette = palette
-        self._palette.props.invoker = ToolInvoker(self)
 
     def get_icon(self):
         return self._icon
@@ -294,13 +287,31 @@ class TrayIcon(gtk.ToolItem):
         self.add(self._icon_widget)
         self._icon_widget.show()
 
+        self._palette_invoker = ToolInvoker(self)
+
         self.set_size_request(style.GRID_CELL_SIZE, style.GRID_CELL_SIZE)
 
-    def set_palette(self, palette):
-        self._icon_widget.set_palette(palette)
+    def create_palette(self):
+        return None
 
-    def set_tooltip(self, text):
-        self.set_palette(Palette(text))
+    def get_palette(self):
+        return self._palette_invoker.palette
+
+    def set_palette(self, palette):
+        self._palette_invoker.palette = palette
+
+    palette = gobject.property(
+        type=object, setter=set_palette, getter=get_palette)
+
+    def get_palette_invoker(self):
+        return self._palette_invoker
+    
+    def set_palette_invoker(self, palette_invoker):
+        self._palette_invoker.detach()
+        self._palette_invoker = palette_invoker
+
+    palette_invoker = gobject.property(
+        type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def get_icon(self):
         return self._icon_widget.get_icon()

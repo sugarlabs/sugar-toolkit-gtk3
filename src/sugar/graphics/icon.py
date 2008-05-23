@@ -406,7 +406,9 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 
         hippo.CanvasBox.__init__(self, **kwargs)
 
-        self._palette = None
+        from sugar.graphics.palette import CanvasInvoker
+        self._palette_invoker = CanvasInvoker(self)
+
         self.connect('destroy', self.__destroy_cb)
 
     def __destroy_cb(self, icon):
@@ -547,17 +549,27 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         self.emit_activated()
         return True
 
-    def get_palette(self):
-        return self._palette
-    
-    def set_palette(self, palette):
-        from sugar.graphics.palette import CanvasInvoker
+    def create_palette(self):
+        return None
 
-        if self._palette is not None:        
-            self._palette.props.invoker = None
-        self._palette = palette
-        if not self._palette.props.invoker:
-            self._palette.props.invoker = CanvasInvoker(self)
+    def get_palette(self):
+        return self._palette_invoker.palette
+
+    def set_palette(self, palette):
+        self._palette_invoker.palette = palette
+
+    palette = gobject.property(
+        type=object, setter=set_palette, getter=get_palette)
+
+    def get_palette_invoker(self):
+        return self._palette_invoker
+    
+    def set_palette_invoker(self, palette_invoker):
+        self._palette_invoker.detach()
+        self._palette_invoker = palette_invoker
+
+    palette_invoker = gobject.property(
+        type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
         from sugar.graphics.palette import Palette
