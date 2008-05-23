@@ -29,10 +29,11 @@ class RadioToolButton(gtk.RadioToolButton):
     def __init__(self, named_icon=None, group=None, xo_color=None, **kwargs):
         self._accelerator = None
         self._tooltip = None
-        self._palette = None
         self._xo_color = xo_color
 
         gobject.GObject.__init__(self, **kwargs)
+
+        self._palette_invoker = ToolInvoker(self)
 
         if named_icon:
             self.set_named_icon(named_icon)
@@ -74,17 +75,27 @@ class RadioToolButton(gtk.RadioToolButton):
         self.set_icon_widget(icon)
         icon.show()
 
+    def create_palette(self):
+        return None
+
     def get_palette(self):
-        return self._palette
-    
+        return self._palette_invoker.palette
+
     def set_palette(self, palette):
-        if self._palette is not None:        
-            self._palette.props.invoker = None
-        self._palette = palette
-        self._palette.props.invoker = ToolInvoker(self)
+        self._palette_invoker.palette = palette
 
     palette = gobject.property(
-            type=object, setter=set_palette, getter=get_palette)
+        type=object, setter=set_palette, getter=get_palette)
+
+    def get_palette_invoker(self):
+        return self._palette_invoker
+    
+    def set_palette_invoker(self, palette_invoker):
+        self._palette_invoker.detach()
+        self._palette_invoker = palette_invoker
+
+    palette_invoker = gobject.property(
+        type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_expose_event(self, event):
         child = self.get_child()

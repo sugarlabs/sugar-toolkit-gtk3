@@ -724,13 +724,14 @@ class Invoker(gobject.GObject):
     def __init__(self, parent):
         gobject.GObject.__init__(self)
 
+        self.parent = parent
+
         self._screen_area = gtk.gdk.Rectangle(0, 0, gtk.gdk.screen_width(),
                                               gtk.gdk.screen_height())
         self._position_hint = self.ANCHORED
         self._cursor_x = -1
         self._cursor_y = -1
         self._palette = None
-        self._parent = parent
 
     def _get_position_for_alignment(self, alignment, palette_dim):
         palette_halign = alignment[0]

@@ -25,7 +25,8 @@ class ToggleToolButton(gtk.ToggleToolButton):
 
     def __init__(self, named_icon=None):
         gtk.ToggleToolButton.__init__(self)
-        self._palette = None
+
+        self._palette_invoker = ToolInvoker(self)
         self.set_named_icon(named_icon)
 
     def set_named_icon(self, named_icon):
@@ -33,14 +34,27 @@ class ToggleToolButton(gtk.ToggleToolButton):
         self.set_icon_widget(icon)
         icon.show()
 
+    def create_palette(self):
+        return None
+
     def get_palette(self):
-        return self._palette
-    
+        return self._palette_invoker.palette
+
     def set_palette(self, palette):
-        if self._palette is not None:        
-            self._palette.props.invoker = None
-        self._palette = palette
-        self._palette.props.invoker = ToolInvoker(self)
+        self._palette_invoker.palette = palette
+
+    palette = gobject.property(
+        type=object, setter=set_palette, getter=get_palette)
+
+    def get_palette_invoker(self):
+        return self._palette_invoker
+    
+    def set_palette_invoker(self, palette_invoker):
+        self._palette_invoker.detach()
+        self._palette_invoker = palette_invoker
+
+    palette_invoker = gobject.property(
+        type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
         self.set_palette(Palette(text))
