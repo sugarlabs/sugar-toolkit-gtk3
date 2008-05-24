@@ -195,7 +195,8 @@ ELAPSED = _('%s ago')
 # strings need to be used, then we need to call ngettext() in a fake way so
 # xgettext will pick them up as plurals.
 
-def ngettext(singular, plural, n): pass
+def ngettext(singular, plural, n):
+    pass
 
 # TRANS: Relative dates (eg. 1 month and 5 days).
 ngettext('%d year',   '%d years',   1)
