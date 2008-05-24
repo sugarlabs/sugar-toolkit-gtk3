@@ -949,6 +949,7 @@ class WidgetInvoker(Invoker):
         Invoker.detach(self)
         self._widget.disconnect(self._enter_hid)
         self._widget.disconnect(self._leave_hid)
+        self._widget.disconnect(self._release_hid)
 
     def get_rect(self):
         allocation = self._widget.get_allocation()
@@ -1044,6 +1045,7 @@ class CanvasInvoker(Invoker):
     def detach(self):
         Invoker.detach(self)
         self._item.disconnect(self._motion_hid)
+        self._item.disconnect(self._release_hid)
 
     def get_default_position(self):
         return self.AT_CURSOR
