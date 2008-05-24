@@ -721,10 +721,10 @@ class Invoker(gobject.GObject):
     LEFT   = [(-1.0, 0.0, 0.0, 0.0),
               (-1.0, -1.0, 0.0, 1.0)]
 
-    def __init__(self, parent):
+    def __init__(self):
         gobject.GObject.__init__(self)
 
-        self.parent = parent
+        self.parent = None
 
         self._screen_area = gtk.gdk.Rectangle(0, 0, gtk.gdk.screen_width(),
                                               gtk.gdk.screen_height())
@@ -732,6 +732,12 @@ class Invoker(gobject.GObject):
         self._cursor_x = -1
         self._cursor_y = -1
         self._palette = None
+
+    def attach(self, parent):
+        self.parent = parent
+
+    def detach(self):
+        self.parent = None
 
     def _get_position_for_alignment(self, alignment, palette_dim):
         palette_halign = alignment[0]
@@ -898,9 +904,15 @@ class Invoker(gobject.GObject):
         type=object, setter=set_palette, getter=get_palette)
 
 class WidgetInvoker(Invoker):
-    def __init__(self, parent, widget=None):
-        Invoker.__init__(self, parent)
+    def __init__(self, parent=None, widget=None):
+        Invoker.__init__(self)
 
+        self._widget = None
+
+        if parent or widget:
+            self.attach_widget(parent, widget)
+
+    def attach_widget(self, parent, widget=None):
         if widget:
             self._widget = widget
         else:
@@ -910,6 +922,13 @@ class WidgetInvoker(Invoker):
                                          self._enter_notify_event_cb)
         self._leave_hid = widget.connect('leave-notify-event',
                                          self._leave_notify_event_cb)
+
+        self.attach(parent)
+
+    def detach(self):
+        Invoker.detach(self)
+        self._widget.disconnect(self._enter_hid)
+        self._widget.disconnect(self._leave_hid)
 
     def get_rect(self):
         allocation = self._widget.get_allocation()
@@ -971,23 +990,29 @@ class WidgetInvoker(Invoker):
         Invoker.notify_popdown(self)
         self._widget.queue_draw()
 
-    def detach(self):
-        self._widget.disconnect(self._enter_hid)
-        self._widget.disconnect(self._leave_hid)
-
     def _get_widget(self):
         return self._widget
     widget = gobject.property(type=object, getter=_get_widget, setter=None)
 
 class CanvasInvoker(Invoker):
-    def __init__(self, item):
-        Invoker.__init__(self, item)
+    def __init__(self, parent=None):
+        Invoker.__init__(self)
 
-        self._item = item
         self._position_hint = self.AT_CURSOR
 
-        self._motion_hid = item.connect('motion-notify-event',
-                                        self._motion_notify_event_cb)
+        if parent:
+            self.attach(parent)
+
+    def attach(self, parent):
+        Invoker.attach(self, parent)
+
+        self._item = parent
+        self._motion_hid = self._item.connect('motion-notify-event',
+                                              self._motion_notify_event_cb)
+
+    def detach(self):
+        Invoker.detach(self)
+        self._item.disconnect(self._motion_hid)
 
     def get_default_position(self):
         return self.AT_CURSOR
@@ -1012,12 +1037,15 @@ class CanvasInvoker(Invoker):
     def get_toplevel(self):
         return hippo.get_canvas_for_item(self._item).get_toplevel()
 
-    def detach(self):
-        self._item.disconnect(self._motion_hid)
-
 class ToolInvoker(WidgetInvoker):
-    def __init__(self, widget):
-        WidgetInvoker.__init__(self, widget, widget.child)
+    def __init__(self, parent=None):
+        WidgetInvoker.__init__(self)
+
+        if parent:
+            self.attach_tool(parent)
+
+    def attach_tool(self, widget):
+        self.attach_widget(widget, widget.child)
 
     def _get_alignments(self):
         parent = self._widget.get_parent()

@@ -402,12 +402,14 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     __gtype_name__ = 'CanvasIcon'
 
     def __init__(self, **kwargs):
+        from sugar.graphics.palette import CanvasInvoker
+
         self._buffer = _IconBuffer()
+        self._palette_invoker = CanvasInvoker()
 
         hippo.CanvasBox.__init__(self, **kwargs)
 
-        from sugar.graphics.palette import CanvasInvoker
-        self._palette_invoker = CanvasInvoker(self)
+        self._palette_invoker.attach(self)
 
         self.connect('destroy', self.__destroy_cb)
 

@@ -55,10 +55,11 @@ class ToolButton(gtk.ToolButton):
     def __init__(self, icon_name=None, **kwargs):
         self._accelerator = None
         self._tooltip = None
+        self._palette_invoker = ToolInvoker()
 
         gobject.GObject.__init__(self, **kwargs)
 
-        self._palette_invoker = ToolInvoker(self)
+        self._palette_invoker.attach_tool(self)
 
         if icon_name:
             self.set_icon(icon_name)

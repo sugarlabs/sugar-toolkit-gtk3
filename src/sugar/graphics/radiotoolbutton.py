@@ -30,10 +30,11 @@ class RadioToolButton(gtk.RadioToolButton):
         self._accelerator = None
         self._tooltip = None
         self._xo_color = xo_color
+        self._palette_invoker = ToolInvoker()
 
         gobject.GObject.__init__(self, **kwargs)
 
-        self._palette_invoker = ToolInvoker(self)
+        self._palette_invoker.attach_tool(self)
 
         if named_icon:
             self.set_named_icon(named_icon)
