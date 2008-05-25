@@ -92,22 +92,6 @@ class _AllFileList(list):
                        f != '.gitignore':
                         self.append(os.path.join(root, f))
 
-def _extract_bundle(source_file, dest_dir):
-    if not os.path.exists(dest_dir):
-        os.mkdir(dest_dir)
-
-    zf = zipfile.ZipFile(source_file)
-
-    for name in zf.namelist():
-        path = os.path.join(dest_dir, name)            
-        if not os.path.exists(os.path.dirname(path)):
-            os.makedirs(os.path.dirname(path))
-
-        outfile = open(path, 'wb')
-        outfile.write(zf.read(name))
-        outfile.flush()
-        outfile.close()
-
 def cmd_help(config, options, args):
     print 'Usage: \n\
 setup.py dev                 - setup for development \n\
@@ -185,14 +169,25 @@ def cmd_install(config, options, args):
     path = args[0]
 
     cmd_dist(config, options, args)
-    cmd_uninstall(config, options, args)
 
-    _extract_bundle(config.xo_name, path)
+    root_path = os.path.join(args[0], config.bundle_root_dir)
+    if os.path.isdir(root_path):
+        shutil.rmtree(root_path)
 
-def cmd_uninstall(config, options, args):
-    path = os.path.join(args[0], config.bundle_top_dir)
-    if os.path.isdir(path):
-        shutil.rmtree(path)
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    zf = zipfile.ZipFile(config.xo_name)
+
+    for name in zf.namelist():
+        full_path = os.path.join(path, name)            
+        if not os.path.exists(os.path.dirname(full_path)):
+            os.makedirs(os.path.dirname(full_path))
+
+        outfile = open(full_path, 'wb')
+        outfile.write(zf.read(name))
+        outfile.flush()
+        outfile.close()
 
 def cmd_genpot(config, options, args):
     po_path = os.path.join(config.source_dir, 'po')
@@ -330,6 +325,9 @@ def cmd_release(config, options, args):
     cmd_dist(config, options, args)
 
     print 'Done.'
+
+def cmd_build(config, options, args):
+    pass
 
 def start(bundle_name, manifest='MANIFEST'):
     parser = OptionParser()
