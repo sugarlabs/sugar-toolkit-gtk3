@@ -26,6 +26,11 @@ import gettext
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
 
+class Config(object):
+    def __init__(self, bundle_name, manifest):
+        self.bundle_name = bundle_name
+        self.manifest = manifest
+
 class _SvnFileList(list):
     def __init__(self):
         f = os.popen('svn list -R')
@@ -181,40 +186,40 @@ def _get_activity_name():
     match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
     return match.group(1)
 
-def cmd_dist(bundle_name, manifest):
-    cmd_genl10n(bundle_name, manifest)
-    file_list = _get_file_list(manifest)
+def cmd_dist(config):
+    cmd_genl10n(config.bundle_name, config.manifest)
+    file_list = _get_file_list(config.manifest)
 
-    zipname = _get_package_name(bundle_name)
+    zipname = _get_package_name(config.bundle_name)
     bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
-    base_dir = bundle_name + '.activity'
+    base_dir = config.bundle_name + '.activity'
     
     for filename in file_list:
         bundle_zip.write(filename, os.path.join(base_dir, filename))
 
-    for filename in _get_l10n_list(manifest):
+    for filename in _get_l10n_list(config.manifest):
         bundle_zip.write(filename, os.path.join(base_dir, filename))
 
     bundle_zip.close()
 
-def cmd_install(bundle_name, manifest, path):
-    cmd_dist(bundle_name, manifest)
+def cmd_install(config, path):
+    cmd_dist(config)
     cmd_uninstall(path)
 
-    _extract_bundle(_get_package_name(bundle_name), path)
+    _extract_bundle(_get_package_name(config.bundle_name), path)
 
-def cmd_uninstall(path):
+def cmd_uninstall(config, path):
     path = os.path.join(path, _get_bundle_dir())
     if os.path.isdir(path):
         shutil.rmtree(path)
 
-def cmd_genpot(bundle_name, manifest):
+def cmd_genpot(config):
     po_path = os.path.join(_get_source_path(), 'po')
     if not os.path.isdir(po_path):
         os.mkdir(po_path)
 
     python_files = []
-    file_list = _get_file_list(manifest)
+    file_list = _get_file_list(config.manifest)
     for file_name in file_list:
         if file_name.endswith('.py'):
             python_files.append(file_name)
@@ -224,7 +229,7 @@ def cmd_genpot(bundle_name, manifest):
     # translations into that. (We can't just append the activity name
     # to the end of the .pot file afterwards, because that might
     # create a duplicate msgid.)
-    pot_file = os.path.join('po', '%s.pot' % bundle_name)
+    pot_file = os.path.join('po', '%s.pot' % config.bundle_name)
     activity_name = _get_activity_name()
     escaped_name = re.sub('([\\\\"])', '\\\\\\1', activity_name)
     f = open(pot_file, 'w')
@@ -242,11 +247,11 @@ def cmd_genpot(bundle_name, manifest):
         print 'ERROR - xgettext failed with return code %i.' % retcode
 
 
-def cmd_genl10n(bundle_name, manifest):
+def cmd_genl10n(config):
     source_path = _get_source_path()
     activity_name = _get_activity_name()
 
-    po_list = _get_po_list(manifest)
+    po_list = _get_po_list(config.manifest)
     for lang in po_list.keys():
         file_name = po_list[lang]
 
@@ -268,7 +273,7 @@ def cmd_genl10n(bundle_name, manifest):
         f.write('[Activity]\nname = %s\n' % translated_name)
         f.close()
 
-def cmd_release(bundle_name, manifest):
+def cmd_release(config):
     if not os.path.isdir('.git'):
         print 'ERROR - this command works only for git repositories'
 
@@ -305,7 +310,7 @@ def cmd_release(bundle_name, manifest):
         else:
             sugar_news = ''
 
-        sugar_news += '%s - %d\n\n' % (bundle_name, version)
+        sugar_news += '%s - %d\n\n' % (config.bundle_name, version)
 
         f = open(news_path,'r')
         for line in f.readlines():
@@ -345,11 +350,11 @@ def cmd_release(bundle_name, manifest):
         print 'ERROR - cannot push to git'
 
     print 'Creating the bundle...'
-    cmd_dist(bundle_name, manifest)
+    cmd_dist(config)
 
     print 'Done.'
 
-def cmd_clean():
+def cmd_clean(config):
     os.path.walk('.', _delete_backups, None)
 
 def sanity_check():
@@ -359,28 +364,30 @@ def sanity_check():
 def start(bundle_name, manifest='MANIFEST'):
     sanity_check()
 
+    config = Config(bundle_name, manifest)
+
     if len(sys.argv) < 2:
-        cmd_help()
+        cmd_help(config)
     elif sys.argv[1] == 'build':
         pass
     elif sys.argv[1] == 'dev':
-        cmd_dev()
+        cmd_dev(config)
     elif sys.argv[1] == 'dist':
-        cmd_dist(bundle_name, manifest)
+        cmd_dist(config)
     elif sys.argv[1] == 'install' and len(sys.argv) == 3:
-        cmd_install(bundle_name, manifest, sys.argv[2])
+        cmd_install(config, sys.argv[2])
     elif sys.argv[1] == 'uninstall' and len(sys.argv) == 3:
-        cmd_uninstall(sys.argv[2])
+        cmd_uninstall(config, sys.argv[2])
     elif sys.argv[1] == 'genpot':
-        cmd_genpot(bundle_name, manifest)
+        cmd_genpot(config)
     elif sys.argv[1] == 'genl10n':
-        cmd_genl10n(bundle_name, manifest)
+        cmd_genl10n(config)
     elif sys.argv[1] == 'clean':
-        cmd_clean()
+        cmd_clean(config)
     elif sys.argv[1] == 'release':
-        cmd_release(bundle_name, manifest)
+        cmd_release(config)
     else:
-        cmd_help()
+        cmd_help(config)
         
 if __name__ == '__main__':
     start()
