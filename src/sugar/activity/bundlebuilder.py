@@ -94,12 +94,12 @@ class _AllFileList(list):
 
 def cmd_help(config, options, args):
     print 'Usage: \n\
+setup.py build               - build generated files \n\
 setup.py dev                 - setup for development \n\
 setup.py dist                - create a bundle package \n\
 setup.py install   [dirname] - install the bundle \n\
 setup.py uninstall [dirname] - uninstall the bundle \n\
 setup.py genpot              - generate the gettext pot file \n\
-setup.py genl10n             - generate localization files \n\
 setup.py release             - do a new release of the bundle \n\
 setup.py help                - print this message \n\
 '
@@ -149,7 +149,7 @@ def _get_l10n_list(config):
     return l10n_list
 
 def cmd_dist(config, options, args):
-    cmd_genl10n(config, options, args)
+    cmd_build(config, options, args)
 
     file_list = _get_file_list(config.manifest)
 
@@ -220,30 +220,6 @@ def cmd_genpot(config, options, args):
     retcode = subprocess.call(args)
     if retcode:
         print 'ERROR - xgettext failed with return code %i.' % retcode
-
-
-def cmd_genl10n(config, options, args):
-    po_list = _get_po_list(config.manifest)
-    for lang in po_list.keys():
-        file_name = po_list[lang]
-
-        localedir = os.path.join(config.source_dir, 'locale', lang)
-        mo_path = os.path.join(localedir, 'LC_MESSAGES')
-        if not os.path.isdir(mo_path):
-            os.makedirs(mo_path)
-
-        mo_file = os.path.join(mo_path, "%s.mo" % config.bundle_id)
-        args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
-        retcode = subprocess.call(args)
-        if retcode:
-            print 'ERROR - msgfmt failed with return code %i.' % retcode
-
-        cat = gettext.GNUTranslations(open(mo_file, 'r'))
-        translated_name = cat.gettext(config.activity_name)
-        linfo_file = os.path.join(localedir, 'activity.linfo')
-        f = open(linfo_file, 'w')
-        f.write('[Activity]\nname = %s\n' % translated_name)
-        f.close()
 
 def cmd_release(config, options, args):
     if not os.path.isdir('.git'):
@@ -327,7 +303,27 @@ def cmd_release(config, options, args):
     print 'Done.'
 
 def cmd_build(config, options, args):
-    pass
+    po_list = _get_po_list(config.manifest)
+    for lang in po_list.keys():
+        file_name = po_list[lang]
+
+        localedir = os.path.join(config.source_dir, 'locale', lang)
+        mo_path = os.path.join(localedir, 'LC_MESSAGES')
+        if not os.path.isdir(mo_path):
+            os.makedirs(mo_path)
+
+        mo_file = os.path.join(mo_path, "%s.mo" % config.bundle_id)
+        args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
+        retcode = subprocess.call(args)
+        if retcode:
+            print 'ERROR - msgfmt failed with return code %i.' % retcode
+
+        cat = gettext.GNUTranslations(open(mo_file, 'r'))
+        translated_name = cat.gettext(config.activity_name)
+        linfo_file = os.path.join(localedir, 'activity.linfo')
+        f = open(linfo_file, 'w')
+        f.write('[Activity]\nname = %s\n' % translated_name)
+        f.close()
 
 def start(bundle_name, manifest='MANIFEST'):
     parser = OptionParser()
