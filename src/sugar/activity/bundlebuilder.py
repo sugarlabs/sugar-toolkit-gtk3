@@ -135,10 +135,15 @@ class Builder(object):
             f.write('[Activity]\nname = %s\n' % translated_name)
             f.close()
 
-class XOPackager(object):
+class Packager(object):
     def __init__(self, config):
         self.config = config
 
+    def get_files(self):
+        files = _get_file_list(self.config.manifest)
+        files.extend(_get_l10n_list(self.config))
+
+class XOPackager(Packager):
     def package(self):
         file_list = _get_file_list(self.config.manifest)
 
@@ -146,10 +151,7 @@ class XOPackager(object):
         bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
         base_dir = self.config.bundle_root_dir
         
-        for filename in file_list:
-            bundle_zip.write(filename, os.path.join(base_dir, filename))
-
-        for filename in _get_l10n_list(self.config):
+        for filename in self.get_files():
             bundle_zip.write(filename, os.path.join(base_dir, filename))
 
         bundle_zip.close()
