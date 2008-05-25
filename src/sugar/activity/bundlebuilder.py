@@ -26,73 +26,6 @@ from optparse import OptionParser
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
 
-class Config(object):
-    def __init__(self, bundle_name, manifest):
-        self.bundle_name = bundle_name
-        self.manifest = manifest
-        self.source_dir = os.getcwd()
-        self.bundle_root_dir = self.bundle_name + '.activity'
-
-        bundle = ActivityBundle(self.source_dir)
-        self.xo_name = '%s-%d.xo' % (
-                self.bundle_name, bundle.get_activity_version())
-        self.bundle_id = bundle.get_bundle_id()
-
-        info_path = os.path.join(self.source_dir, 'activity', 'activity.info')
-        f = open(info_path,'r')
-        info = f.read()
-        f.close()
-        match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
-        self.activity_name = match.group(1)
-
-class Builder(object):
-    def __init__(self, config):
-        self.config = config
-
-    def build(self):
-        self.build_locale()
-
-    def build_locale(self):
-        po_list = _get_po_list(self.config.manifest)
-        for lang in po_list.keys():
-            file_name = po_list[lang]
-
-            localedir = os.path.join(self.config.source_dir, 'locale', lang)
-            mo_path = os.path.join(localedir, 'LC_MESSAGES')
-            if not os.path.isdir(mo_path):
-                os.makedirs(mo_path)
-
-            mo_file = os.path.join(mo_path, "%s.mo" % self.config.bundle_id)
-            args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
-            retcode = subprocess.call(args)
-            if retcode:
-                print 'ERROR - msgfmt failed with return code %i.' % retcode
-
-            cat = gettext.GNUTranslations(open(mo_file, 'r'))
-            translated_name = cat.gettext(self.config.activity_name)
-            linfo_file = os.path.join(localedir, 'activity.linfo')
-            f = open(linfo_file, 'w')
-            f.write('[Activity]\nname = %s\n' % translated_name)
-            f.close()
-
-class _SvnFileList(list):
-    def __init__(self):
-        f = os.popen('svn list -R')
-        for line in f.readlines():
-            filename = line.strip()
-            if os.path.isfile(filename):
-                self.append(filename)
-        f.close()
-
-class _GitFileList(list):
-    def __init__(self):
-        f = os.popen('git-ls-files')
-        for line in f.readlines():
-            filename = line.strip()
-            if not filename.startswith('.'):
-                self.append(filename)
-        f.close()
-
 class _DefaultFileList(list):
     def __init__(self):
         for name in os.listdir('activity'):
@@ -153,6 +86,92 @@ def _get_l10n_list(config):
 
     return l10n_list
 
+class Config(object):
+    def __init__(self, bundle_name, manifest):
+        self.bundle_name = bundle_name
+        self.manifest = manifest
+        self.source_dir = os.getcwd()
+        self.bundle_root_dir = self.bundle_name + '.activity'
+
+        bundle = ActivityBundle(self.source_dir)
+        self.xo_name = '%s-%d.xo' % (
+                self.bundle_name, bundle.get_activity_version())
+        self.bundle_id = bundle.get_bundle_id()
+
+        info_path = os.path.join(self.source_dir, 'activity', 'activity.info')
+        f = open(info_path,'r')
+        info = f.read()
+        f.close()
+        match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
+        self.activity_name = match.group(1)
+
+class Builder(object):
+    def __init__(self, config):
+        self.config = config
+
+    def build(self):
+        self.build_locale()
+
+    def build_locale(self):
+        po_list = _get_po_list(self.config.manifest)
+        for lang in po_list.keys():
+            file_name = po_list[lang]
+
+            localedir = os.path.join(self.config.source_dir, 'locale', lang)
+            mo_path = os.path.join(localedir, 'LC_MESSAGES')
+            if not os.path.isdir(mo_path):
+                os.makedirs(mo_path)
+
+            mo_file = os.path.join(mo_path, "%s.mo" % self.config.bundle_id)
+            args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
+            retcode = subprocess.call(args)
+            if retcode:
+                print 'ERROR - msgfmt failed with return code %i.' % retcode
+
+            cat = gettext.GNUTranslations(open(mo_file, 'r'))
+            translated_name = cat.gettext(self.config.activity_name)
+            linfo_file = os.path.join(localedir, 'activity.linfo')
+            f = open(linfo_file, 'w')
+            f.write('[Activity]\nname = %s\n' % translated_name)
+            f.close()
+
+class XOPackager(object):
+    def __init__(self, config):
+        self.config = config
+
+    def package(self):
+        file_list = _get_file_list(self.config.manifest)
+
+        zipname = self.config.xo_name
+        bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
+        base_dir = self.config.bundle_root_dir
+        
+        for filename in file_list:
+            bundle_zip.write(filename, os.path.join(base_dir, filename))
+
+        for filename in _get_l10n_list(self.config):
+            bundle_zip.write(filename, os.path.join(base_dir, filename))
+
+        bundle_zip.close()
+
+class _SvnFileList(list):
+    def __init__(self):
+        f = os.popen('svn list -R')
+        for line in f.readlines():
+            filename = line.strip()
+            if os.path.isfile(filename):
+                self.append(filename)
+        f.close()
+
+class _GitFileList(list):
+    def __init__(self):
+        f = os.popen('git-ls-files')
+        for line in f.readlines():
+            filename = line.strip()
+            if not filename.startswith('.'):
+                self.append(filename)
+        f.close()
+
 def cmd_help(config, options, args):
     print 'Usage: \n\
 setup.py build               - build generated files \n\
@@ -182,24 +201,14 @@ def cmd_dist(config, options, args):
     builder = Builder(config)
     builder.build()
 
-    file_list = _get_file_list(config.manifest)
-
-    zipname = config.xo_name
-    bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
-    base_dir = config.bundle_root_dir
-    
-    for filename in file_list:
-        bundle_zip.write(filename, os.path.join(base_dir, filename))
-
-    for filename in _get_l10n_list(config):
-        bundle_zip.write(filename, os.path.join(base_dir, filename))
-
-    bundle_zip.close()
+    packager = XOPackager(config)
+    packager.package()
 
 def cmd_install(config, options, args):
     path = args[0]
 
-    cmd_dist(config, options, args)
+    packager = XOPackager(config)
+    packager.package()
 
     root_path = os.path.join(args[0], config.bundle_root_dir)
     if os.path.isdir(root_path):
@@ -329,7 +338,8 @@ def cmd_release(config, options, args):
         print 'ERROR - cannot push to git'
 
     print 'Creating the bundle...'
-    cmd_dist(config, options, args)
+    packager = XOPackager(config)
+    packager.package()
 
     print 'Done.'
 
