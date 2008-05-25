@@ -26,70 +26,20 @@ from optparse import OptionParser
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
 
-class _DefaultFileList(list):
-    def __init__(self):
-        for name in os.listdir('activity'):
-            if name.endswith('.svg'):
-                self.append(os.path.join('activity', name))
-
-        self.append('activity/activity.info')
-
-class _ManifestFileList(_DefaultFileList):
-    def __init__(self, manifest):
-        _DefaultFileList.__init__(self)
-        self.append(manifest)
-
-        f = open(manifest,'r')
-        for line in f.readlines():
-            stripped_line = line.strip()
-            if stripped_line and not stripped_line in self:
-                self.append(stripped_line)
-        f.close()
-
-class _AllFileList(list):
-    def __init__(self):
-        for root, dirs, files in os.walk('.'):
-            if not root.startswith('./locale'):
-                for f in files:
-                    if not f.endswith('.xo') and \
-                       f != '.gitignore':
-                        self.append(os.path.join(root, f))
-
-def _get_file_list(manifest):
-    if os.path.isfile(manifest):
-        return _ManifestFileList(manifest)
-    elif os.path.isdir('.git'):
-        return _GitFileList()
-    elif os.path.isdir('.svn'):
-        return _SvnFileList()
-    else:
-        return _AllFileList()
-
-def _get_po_list(manifest):
+def _get_po_list(config):
     file_list = {}
 
-    po_regex = re.compile("po/(.*)\.po$")
-    for file_name in _get_file_list(manifest):
-        match = po_regex.match(file_name)
-        if match:
-            file_list[match.group(1)] = file_name
+    po_dir = os.path.join(config.source_dir, 'po')
+    for filename in os.listdir(po_dir):
+        if filename.endswith('.po'):
+            path = os.path.join(po_dir, filename)
+            file_list[filename[:-3]] = path
 
     return file_list
 
-def _get_l10n_list(config):
-    l10n_list = []
-
-    for lang in _get_po_list(config.manifest).keys():
-        filename = config.bundle_id + '.mo'
-        l10n_list.append(os.path.join('locale', lang, 'LC_MESSAGES', filename))
-        l10n_list.append(os.path.join('locale', lang, 'activity.linfo'))
-
-    return l10n_list
-
 class Config(object):
-    def __init__(self, bundle_name, manifest):
+    def __init__(self, bundle_name):
         self.bundle_name = bundle_name
-        self.manifest = manifest
         self.source_dir = os.getcwd()
         self.bundle_root_dir = self.bundle_name + '.activity'
 
@@ -113,7 +63,7 @@ class Builder(object):
         self.build_locale()
 
     def build_locale(self):
-        po_list = _get_po_list(self.config.manifest)
+        po_list = _get_po_list(self.config)
         for lang in po_list.keys():
             file_name = po_list[lang]
 
@@ -138,20 +88,32 @@ class Builder(object):
 class Packager(object):
     def __init__(self, config):
         self.config = config
+        self.build_dir = self.config.source_dir
 
     def get_files(self):
-        files = _get_file_list(self.config.manifest)
-        files.extend(_get_l10n_list(self.config))
-        return files
+        package_files = []
+
+        source_dir = self.config.source_dir
+        for root, dirs, files in os.walk(self.build_dir):
+            for f in files:
+                if f != '.gitignore':
+                    rel_path = root[len(source_dir) + 1:]
+                    package_files.append(os.path.join(rel_path, f))
+            if root == source_dir:
+                for ignore_dir in [ 'po', '.git' ]:
+                    if ignore_dir in dirs:
+                        dirs.remove(ignore_dir)
+
+        return package_files
 
 class XOPackager(Packager):
     def package(self):
         zipname = self.config.xo_name
         bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
-        base_dir = self.config.bundle_root_dir
         
-        for filename in self.get_files():
-            bundle_zip.write(filename, os.path.join(base_dir, filename))
+        for f in self.get_files():
+            bundle_zip.write(os.path.join(self.build_dir, f),
+                             os.path.join(self.config.bundle_root_dir, f))
 
         bundle_zip.close()
 
@@ -236,7 +198,7 @@ def cmd_genpot(config, options, args):
         os.mkdir(po_path)
 
     python_files = []
-    for root, dirs, files in os.walk(config.source_dir):
+    for root_dummy, dirs_dummy, files in os.walk(config.source_dir):
         for file_name in files:
             if file_name.endswith('.py'):
                 python_files.append(file_name)
@@ -348,11 +310,11 @@ def cmd_build(config, options, args):
     builder = Builder(config)
     builder.build()
 
-def start(bundle_name, manifest='MANIFEST'):
+def start(bundle_name):
     parser = OptionParser()
     (options, args) = parser.parse_args()
 
-    config = Config(bundle_name, manifest)
+    config = Config(bundle_name)
 
     try:
         globals()['cmd_' + args[0]](config, options, args[1:])
