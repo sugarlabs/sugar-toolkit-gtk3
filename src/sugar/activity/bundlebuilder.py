@@ -92,31 +92,6 @@ class _AllFileList(list):
                        f != '.gitignore':
                         self.append(os.path.join(root, f))
 
-def cmd_help(config, options, args):
-    print 'Usage: \n\
-setup.py build               - build generated files \n\
-setup.py dev                 - setup for development \n\
-setup.py dist                - create a bundle package \n\
-setup.py install   [dirname] - install the bundle \n\
-setup.py uninstall [dirname] - uninstall the bundle \n\
-setup.py genpot              - generate the gettext pot file \n\
-setup.py release             - do a new release of the bundle \n\
-setup.py help                - print this message \n\
-'
-
-def cmd_dev(config, options, args):
-    bundle_path = env.get_user_activities_path()
-    if not os.path.isdir(bundle_path):
-        os.mkdir(bundle_path)
-    bundle_path = os.path.join(bundle_path, config.bundle_top_dir)
-    try:
-        os.symlink(config.source_dir, bundle_path)
-    except OSError:
-        if os.path.islink(bundle_path):
-            print 'ERROR - The bundle has been already setup for development.'
-        else:
-            print 'ERROR - A bundle with the same name is already installed.'
-
 def _get_file_list(manifest):
     if os.path.isfile(manifest):
         return _ManifestFileList(manifest)
@@ -147,6 +122,31 @@ def _get_l10n_list(config):
         l10n_list.append(os.path.join('locale', lang, 'activity.linfo'))
 
     return l10n_list
+
+def cmd_help(config, options, args):
+    print 'Usage: \n\
+setup.py build               - build generated files \n\
+setup.py dev                 - setup for development \n\
+setup.py dist                - create a bundle package \n\
+setup.py install   [dirname] - install the bundle \n\
+setup.py uninstall [dirname] - uninstall the bundle \n\
+setup.py genpot              - generate the gettext pot file \n\
+setup.py release             - do a new release of the bundle \n\
+setup.py help                - print this message \n\
+'
+
+def cmd_dev(config, options, args):
+    bundle_path = env.get_user_activities_path()
+    if not os.path.isdir(bundle_path):
+        os.mkdir(bundle_path)
+    bundle_path = os.path.join(bundle_path, config.bundle_top_dir)
+    try:
+        os.symlink(config.source_dir, bundle_path)
+    except OSError:
+        if os.path.islink(bundle_path):
+            print 'ERROR - The bundle has been already setup for development.'
+        else:
+            print 'ERROR - A bundle with the same name is already installed.'
 
 def cmd_dist(config, options, args):
     cmd_build(config, options, args)
