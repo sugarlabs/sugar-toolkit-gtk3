@@ -108,11 +108,6 @@ def _extract_bundle(source_file, dest_dir):
         outfile.flush()
         outfile.close()
 
-def _delete_backups(arg, dirname, names):
-    for name in names:
-        if name.endswith('~') or name.endswith('pyc'):
-            os.remove(os.path.join(dirname, name))
-
 def cmd_help(config, options, args):
     print 'Usage: \n\
 setup.py dev                 - setup for development \n\
@@ -121,7 +116,6 @@ setup.py install   [dirname] - install the bundle \n\
 setup.py uninstall [dirname] - uninstall the bundle \n\
 setup.py genpot              - generate the gettext pot file \n\
 setup.py genl10n             - generate localization files \n\
-setup.py clean               - clean the directory \n\
 setup.py release             - do a new release of the bundle \n\
 setup.py help                - print this message \n\
 '
@@ -336,9 +330,6 @@ def cmd_release(config, options, args):
     cmd_dist(config, options, args)
 
     print 'Done.'
-
-def cmd_clean(config, options, args):
-    os.path.walk('.', _delete_backups, None)
 
 def start(bundle_name, manifest='MANIFEST'):
     parser = OptionParser()
