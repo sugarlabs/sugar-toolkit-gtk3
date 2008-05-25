@@ -30,6 +30,20 @@ class Config(object):
     def __init__(self, bundle_name, manifest):
         self.bundle_name = bundle_name
         self.manifest = manifest
+        self.source_dir = os.getcwd()
+        self.bundle_root_dir = self.bundle_name + '.activity'
+
+        bundle = ActivityBundle(self.source_dir)
+        self.xo_name = '%s-%d.xo' % (
+                self.bundle_name, bundle.get_activity_version())
+        self.bundle_id = bundle.get_bundle_id()
+
+        info_path = os.path.join(self.source_dir, 'activity', 'activity.info')
+        f = open(info_path,'r')
+        info = f.read()
+        f.close()
+        match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
+        self.activity_name = match.group(1)
 
 class _SvnFileList(list):
     def __init__(self):
@@ -56,9 +70,6 @@ class _DefaultFileList(list):
                 self.append(os.path.join('activity', name))
 
         self.append('activity/activity.info')
-
-        if os.path.isfile(_get_source_path('NEWS')):
-            self.append('NEWS')
 
 class _ManifestFileList(_DefaultFileList):
     def __init__(self, manifest):
@@ -97,29 +108,10 @@ def _extract_bundle(source_file, dest_dir):
         outfile.flush()
         outfile.close()
 
-def _get_source_path(path=None):
-    if path:
-        return os.path.join(os.getcwd(), path)
-    else:
-        return os.getcwd()
-
-def _get_bundle_dir():
-    bundle_name = os.path.basename(_get_source_path())
-    return bundle_name + '.activity'    
-
-def _get_package_name(bundle_name):
-    bundle = ActivityBundle(_get_source_path())
-    zipname = '%s-%d.xo' % (bundle_name, bundle.get_activity_version())
-    return zipname
-
 def _delete_backups(arg, dirname, names):
     for name in names:
         if name.endswith('~') or name.endswith('pyc'):
             os.remove(os.path.join(dirname, name))
-
-def _get_bundle_id():
-    bundle = ActivityBundle(_get_source_path())
-    return bundle.get_bundle_id()
 
 def cmd_help(config, options, args):
     print 'Usage: \n\
@@ -138,9 +130,9 @@ def cmd_dev(config, options, args):
     bundle_path = env.get_user_activities_path()
     if not os.path.isdir(bundle_path):
         os.mkdir(bundle_path)
-    bundle_path = os.path.join(bundle_path, _get_bundle_dir())
+    bundle_path = os.path.join(bundle_path, config.bundle_top_dir)
     try:
-        os.symlink(_get_source_path(), bundle_path)
+        os.symlink(config.source_dir, bundle_path)
     except OSError:
         if os.path.islink(bundle_path):
             print 'ERROR - The bundle has been already setup for development.'
@@ -168,37 +160,29 @@ def _get_po_list(manifest):
 
     return file_list
 
-def _get_l10n_list(manifest):
+def _get_l10n_list(config):
     l10n_list = []
 
-    for lang in _get_po_list(manifest).keys():
-        filename = _get_bundle_id() + '.mo'
+    for lang in _get_po_list(config.manifest).keys():
+        filename = config.bundle_id + '.mo'
         l10n_list.append(os.path.join('locale', lang, 'LC_MESSAGES', filename))
         l10n_list.append(os.path.join('locale', lang, 'activity.linfo'))
 
     return l10n_list
-
-def _get_activity_name():
-    info_path = os.path.join(_get_source_path(), 'activity', 'activity.info')
-    f = open(info_path,'r')
-    info = f.read()
-    f.close()
-    match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
-    return match.group(1)
 
 def cmd_dist(config, options, args):
     cmd_genl10n(config, options, args)
 
     file_list = _get_file_list(config.manifest)
 
-    zipname = _get_package_name(config.bundle_name)
+    zipname = config.xo_name
     bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
-    base_dir = config.bundle_name + '.activity'
+    base_dir = config.bundle_root_dir
     
     for filename in file_list:
         bundle_zip.write(filename, os.path.join(base_dir, filename))
 
-    for filename in _get_l10n_list(config.manifest):
+    for filename in _get_l10n_list(config):
         bundle_zip.write(filename, os.path.join(base_dir, filename))
 
     bundle_zip.close()
@@ -209,15 +193,15 @@ def cmd_install(config, options, args):
     cmd_dist(config, options, args)
     cmd_uninstall(config, options, args)
 
-    _extract_bundle(_get_package_name(config.bundle_name), path)
+    _extract_bundle(config.xo_name, path)
 
 def cmd_uninstall(config, options, args):
-    path = os.path.join(args[0], _get_bundle_dir())
+    path = os.path.join(args[0], config.bundle_top_dir)
     if os.path.isdir(path):
         shutil.rmtree(path)
 
 def cmd_genpot(config, options, args):
-    po_path = os.path.join(_get_source_path(), 'po')
+    po_path = os.path.join(config.source_dir, 'po')
     if not os.path.isdir(po_path):
         os.mkdir(po_path)
 
@@ -233,8 +217,7 @@ def cmd_genpot(config, options, args):
     # to the end of the .pot file afterwards, because that might
     # create a duplicate msgid.)
     pot_file = os.path.join('po', '%s.pot' % config.bundle_name)
-    activity_name = _get_activity_name()
-    escaped_name = re.sub('([\\\\"])', '\\\\\\1', activity_name)
+    escaped_name = re.sub('([\\\\"])', '\\\\\\1', config.activity_name)
     f = open(pot_file, 'w')
     f.write('#: activity/activity.info:2\n')
     f.write('msgid "%s"\n' % escaped_name)
@@ -251,26 +234,23 @@ def cmd_genpot(config, options, args):
 
 
 def cmd_genl10n(config, options, args):
-    source_path = _get_source_path()
-    activity_name = _get_activity_name()
-
     po_list = _get_po_list(config.manifest)
     for lang in po_list.keys():
         file_name = po_list[lang]
 
-        localedir = os.path.join(source_path, 'locale', lang)
+        localedir = os.path.join(config.source_dir, 'locale', lang)
         mo_path = os.path.join(localedir, 'LC_MESSAGES')
         if not os.path.isdir(mo_path):
             os.makedirs(mo_path)
 
-        mo_file = os.path.join(mo_path, "%s.mo" % _get_bundle_id())
+        mo_file = os.path.join(mo_path, "%s.mo" % config.bundle_id)
         args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
         retcode = subprocess.call(args)
         if retcode:
             print 'ERROR - msgfmt failed with return code %i.' % retcode
 
         cat = gettext.GNUTranslations(open(mo_file, 'r'))
-        translated_name = cat.gettext(activity_name)
+        translated_name = cat.gettext(config.activity_name)
         linfo_file = os.path.join(localedir, 'activity.linfo')
         f = open(linfo_file, 'w')
         f.write('[Activity]\nname = %s\n' % translated_name)
@@ -286,7 +266,7 @@ def cmd_release(config, options, args):
 
     print 'Bumping activity version...'
 
-    info_path = os.path.join(_get_source_path(), 'activity', 'activity.info')
+    info_path = os.path.join(config.source_dir, 'activity', 'activity.info')
     f = open(info_path,'r')
     info = f.read()
     f.close()
@@ -300,7 +280,7 @@ def cmd_release(config, options, args):
     f.write(info)
     f.close()
 
-    news_path = os.path.join(_get_source_path(), 'NEWS')
+    news_path = os.path.join(config.source_dir, 'NEWS')
 
     if os.environ.has_key('SUGAR_NEWS'):
         print 'Update NEWS.sugar...'
@@ -360,13 +340,7 @@ def cmd_release(config, options, args):
 def cmd_clean(config, options, args):
     os.path.walk('.', _delete_backups, None)
 
-def sanity_check():
-    if not os.path.isfile(_get_source_path('NEWS')):
-        print 'WARNING: NEWS file is missing.'
-
 def start(bundle_name, manifest='MANIFEST'):
-    sanity_check()
-
     parser = OptionParser()
     (options, args) = parser.parse_args()
 
