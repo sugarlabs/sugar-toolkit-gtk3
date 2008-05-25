@@ -45,6 +45,36 @@ class Config(object):
         match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
         self.activity_name = match.group(1)
 
+class Builder(object):
+    def __init__(self, config):
+        self.config = config
+
+    def build(self):
+        self.build_locale()
+
+    def build_locale(self):
+        po_list = _get_po_list(self.config.manifest)
+        for lang in po_list.keys():
+            file_name = po_list[lang]
+
+            localedir = os.path.join(self.config.source_dir, 'locale', lang)
+            mo_path = os.path.join(localedir, 'LC_MESSAGES')
+            if not os.path.isdir(mo_path):
+                os.makedirs(mo_path)
+
+            mo_file = os.path.join(mo_path, "%s.mo" % self.config.bundle_id)
+            args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
+            retcode = subprocess.call(args)
+            if retcode:
+                print 'ERROR - msgfmt failed with return code %i.' % retcode
+
+            cat = gettext.GNUTranslations(open(mo_file, 'r'))
+            translated_name = cat.gettext(self.config.activity_name)
+            linfo_file = os.path.join(localedir, 'activity.linfo')
+            f = open(linfo_file, 'w')
+            f.write('[Activity]\nname = %s\n' % translated_name)
+            f.close()
+
 class _SvnFileList(list):
     def __init__(self):
         f = os.popen('svn list -R')
@@ -149,7 +179,8 @@ def cmd_dev(config, options, args):
             print 'ERROR - A bundle with the same name is already installed.'
 
 def cmd_dist(config, options, args):
-    cmd_build(config, options, args)
+    builder = Builder(config)
+    builder.build()
 
     file_list = _get_file_list(config.manifest)
 
@@ -303,27 +334,8 @@ def cmd_release(config, options, args):
     print 'Done.'
 
 def cmd_build(config, options, args):
-    po_list = _get_po_list(config.manifest)
-    for lang in po_list.keys():
-        file_name = po_list[lang]
-
-        localedir = os.path.join(config.source_dir, 'locale', lang)
-        mo_path = os.path.join(localedir, 'LC_MESSAGES')
-        if not os.path.isdir(mo_path):
-            os.makedirs(mo_path)
-
-        mo_file = os.path.join(mo_path, "%s.mo" % config.bundle_id)
-        args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
-        retcode = subprocess.call(args)
-        if retcode:
-            print 'ERROR - msgfmt failed with return code %i.' % retcode
-
-        cat = gettext.GNUTranslations(open(mo_file, 'r'))
-        translated_name = cat.gettext(config.activity_name)
-        linfo_file = os.path.join(localedir, 'activity.linfo')
-        f = open(linfo_file, 'w')
-        f.write('[Activity]\nname = %s\n' % translated_name)
-        f.close()
+    builder = Builder(config)
+    builder.build()
 
 def start(bundle_name, manifest='MANIFEST'):
     parser = OptionParser()
