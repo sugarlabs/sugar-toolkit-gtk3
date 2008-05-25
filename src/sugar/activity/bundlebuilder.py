@@ -15,13 +15,13 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-import sys
 import os
 import zipfile
 import shutil
 import subprocess
 import re
 import gettext
+from optparse import OptionParser
 
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
@@ -121,7 +121,7 @@ def _get_bundle_id():
     bundle = ActivityBundle(_get_source_path())
     return bundle.get_bundle_id()
 
-def cmd_help():
+def cmd_help(config, options, args):
     print 'Usage: \n\
 setup.py dev                 - setup for development \n\
 setup.py dist                - create a bundle package \n\
@@ -134,7 +134,7 @@ setup.py release             - do a new release of the bundle \n\
 setup.py help                - print this message \n\
 '
 
-def cmd_dev():
+def cmd_dev(config, options, args):
     bundle_path = env.get_user_activities_path()
     if not os.path.isdir(bundle_path):
         os.mkdir(bundle_path)
@@ -186,8 +186,9 @@ def _get_activity_name():
     match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
     return match.group(1)
 
-def cmd_dist(config):
-    cmd_genl10n(config.bundle_name, config.manifest)
+def cmd_dist(config, options, args):
+    cmd_genl10n(config, options, args)
+
     file_list = _get_file_list(config.manifest)
 
     zipname = _get_package_name(config.bundle_name)
@@ -202,18 +203,20 @@ def cmd_dist(config):
 
     bundle_zip.close()
 
-def cmd_install(config, path):
-    cmd_dist(config)
-    cmd_uninstall(path)
+def cmd_install(config, options, args):
+    path = args[0]
+
+    cmd_dist(config, options, args)
+    cmd_uninstall(config, options, args)
 
     _extract_bundle(_get_package_name(config.bundle_name), path)
 
-def cmd_uninstall(config, path):
-    path = os.path.join(path, _get_bundle_dir())
+def cmd_uninstall(config, options, args):
+    path = os.path.join(args[0], _get_bundle_dir())
     if os.path.isdir(path):
         shutil.rmtree(path)
 
-def cmd_genpot(config):
+def cmd_genpot(config, options, args):
     po_path = os.path.join(_get_source_path(), 'po')
     if not os.path.isdir(po_path):
         os.mkdir(po_path)
@@ -247,7 +250,7 @@ def cmd_genpot(config):
         print 'ERROR - xgettext failed with return code %i.' % retcode
 
 
-def cmd_genl10n(config):
+def cmd_genl10n(config, options, args):
     source_path = _get_source_path()
     activity_name = _get_activity_name()
 
@@ -273,7 +276,7 @@ def cmd_genl10n(config):
         f.write('[Activity]\nname = %s\n' % translated_name)
         f.close()
 
-def cmd_release(config):
+def cmd_release(config, options, args):
     if not os.path.isdir('.git'):
         print 'ERROR - this command works only for git repositories'
 
@@ -350,11 +353,11 @@ def cmd_release(config):
         print 'ERROR - cannot push to git'
 
     print 'Creating the bundle...'
-    cmd_dist(config)
+    cmd_dist(config, options, args)
 
     print 'Done.'
 
-def cmd_clean(config):
+def cmd_clean(config, options, args):
     os.path.walk('.', _delete_backups, None)
 
 def sanity_check():
@@ -364,30 +367,15 @@ def sanity_check():
 def start(bundle_name, manifest='MANIFEST'):
     sanity_check()
 
+    parser = OptionParser()
+    (options, args) = parser.parse_args()
+
     config = Config(bundle_name, manifest)
 
-    if len(sys.argv) < 2:
-        cmd_help(config)
-    elif sys.argv[1] == 'build':
-        pass
-    elif sys.argv[1] == 'dev':
-        cmd_dev(config)
-    elif sys.argv[1] == 'dist':
-        cmd_dist(config)
-    elif sys.argv[1] == 'install' and len(sys.argv) == 3:
-        cmd_install(config, sys.argv[2])
-    elif sys.argv[1] == 'uninstall' and len(sys.argv) == 3:
-        cmd_uninstall(config, sys.argv[2])
-    elif sys.argv[1] == 'genpot':
-        cmd_genpot(config)
-    elif sys.argv[1] == 'genl10n':
-        cmd_genl10n(config)
-    elif sys.argv[1] == 'clean':
-        cmd_clean(config)
-    elif sys.argv[1] == 'release':
-        cmd_release(config)
-    else:
-        cmd_help(config)
-        
+    try:
+        globals()['cmd_' + args[0]](config, options, args[1:])
+    except (KeyError, IndexError):
+        cmd_help(config, options, args)
+
 if __name__ == '__main__':
     start()
