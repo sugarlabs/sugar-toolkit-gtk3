@@ -17,6 +17,7 @@
 
 import os
 import zipfile
+import tarfile
 import shutil
 import subprocess
 import re
@@ -26,27 +27,34 @@ from optparse import OptionParser
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
 
-def _get_po_list(config):
-    file_list = {}
+def list_files(base_dir, ignore_dirs=None, ignore_files=None):
+    result = []
 
-    po_dir = os.path.join(config.source_dir, 'po')
-    for filename in os.listdir(po_dir):
-        if filename.endswith('.po'):
-            path = os.path.join(po_dir, filename)
-            file_list[filename[:-3]] = path
+    for root, dirs, files in os.walk(base_dir):
+        for f in files:
+            if ignore_files and f not in ignore_files:
+                rel_path = root[len(base_dir) + 1:]
+                result.append(os.path.join(rel_path, f))
+        if ignore_dirs and root == base_dir:
+            for ignore in ignore_dirs:
+                if ignore in dirs:
+                    dirs.remove(ignore)
 
-    return file_list
+    return result
 
 class Config(object):
     def __init__(self, bundle_name):
-        self.bundle_name = bundle_name
         self.source_dir = os.getcwd()
-        self.bundle_root_dir = self.bundle_name + '.activity'
 
         bundle = ActivityBundle(self.source_dir)
-        self.xo_name = '%s-%d.xo' % (
-                self.bundle_name, bundle.get_activity_version())
+        version = bundle.get_activity_version()
+
+        self.bundle_name = bundle_name
+        self.xo_name = '%s-%d.xo' % (self.bundle_name, version)
+        self.tarball_name = '%s-%d.tar.bz2' % (self.bundle_name, version)
         self.bundle_id = bundle.get_bundle_id()
+        self.bundle_root_dir = self.bundle_name + '.activity'
+        self.tarball_root_dir = '%s-%d' % (self.bundle_name, version)
 
         info_path = os.path.join(self.source_dir, 'activity', 'activity.info')
         f = open(info_path,'r')
@@ -63,9 +71,14 @@ class Builder(object):
         self.build_locale()
 
     def build_locale(self):
-        po_list = _get_po_list(self.config)
-        for lang in po_list.keys():
-            file_name = po_list[lang]
+        po_dir = os.path.join(self.config.source_dir, 'po')
+
+        for f in os.listdir(po_dir):
+            if not f.endswith('.po'):
+                continue
+
+            file_name = os.path.join(po_dir, f)
+            lang = f[:-3]
 
             localedir = os.path.join(self.config.source_dir, 'locale', lang)
             mo_path = os.path.join(localedir, 'LC_MESSAGES')
@@ -88,28 +101,31 @@ class Builder(object):
 class Packager(object):
     def __init__(self, config):
         self.config = config
+        self.dist_dir = os.path.join(self.config.source_dir, 'dist')
+        self.package_path = None
+
+        if not os.path.exists(self.dist_dir):
+            os.mkdir(self.dist_dir)
+            
+
+class BuildPackager(Packager):
+    def __init__(self, config):
+        Packager.__init__(self, config)
         self.build_dir = self.config.source_dir
 
     def get_files(self):
-        package_files = []
+        return list_files(self.build_dir,
+                          ignore_dirs=[ 'po', 'dist', '.git' ],
+                          ignore_files=[ '.gitignore' ])
 
-        source_dir = self.config.source_dir
-        for root, dirs, files in os.walk(self.build_dir):
-            for f in files:
-                if f != '.gitignore':
-                    rel_path = root[len(source_dir) + 1:]
-                    package_files.append(os.path.join(rel_path, f))
-            if root == source_dir:
-                for ignore_dir in [ 'po', '.git' ]:
-                    if ignore_dir in dirs:
-                        dirs.remove(ignore_dir)
+class XOPackager(BuildPackager):
+    def __init__(self, config):
+        BuildPackager.__init__(self, config)
+        self.package_path = os.path.join(self.dist_dir, self.config.xo_name)
 
-        return package_files
-
-class XOPackager(Packager):
     def package(self):
-        zipname = self.config.xo_name
-        bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
+        bundle_zip = zipfile.ZipFile(self.package_path, 'w',
+                                     zipfile.ZIP_DEFLATED)
         
         for f in self.get_files():
             bundle_zip.write(os.path.join(self.build_dir, f),
@@ -117,29 +133,32 @@ class XOPackager(Packager):
 
         bundle_zip.close()
 
-class _SvnFileList(list):
-    def __init__(self):
-        f = os.popen('svn list -R')
-        for line in f.readlines():
-            filename = line.strip()
-            if os.path.isfile(filename):
-                self.append(filename)
-        f.close()
+class SourcePackager(Packager):
+    def __init__(self, config):
+        Packager.__init__(self, config)
+        self.package_path = os.path.join(self.dist_dir,
+                                         self.config.tarball_name)
 
-class _GitFileList(list):
-    def __init__(self):
-        f = os.popen('git-ls-files')
-        for line in f.readlines():
-            filename = line.strip()
-            if not filename.startswith('.'):
-                self.append(filename)
-        f.close()
+    def get_files(self):
+        return list_files(self.config.source_dir,
+                          ignore_dirs=[ 'locale', 'dist', '.git' ],
+                          ignore_files=[ '.gitignore' ])
+
+    def package(self):
+
+
+        tar = tarfile.open(self.package_path, "w")
+        for f in self.get_files():
+            tar.add(os.path.join(self.config.source_dir, f),
+                    os.path.join(self.config.tarball_root_dir, f))
+        tar.close()
 
 def cmd_help(config, options, args):
     print 'Usage: \n\
 setup.py build               - build generated files \n\
 setup.py dev                 - setup for development \n\
-setup.py dist                - create a bundle package \n\
+setup.py dist_xo             - create a xo bundle package \n\
+setup.py dist_source         - create a tar source package \n\
 setup.py install   [dirname] - install the bundle \n\
 setup.py uninstall [dirname] - uninstall the bundle \n\
 setup.py genpot              - generate the gettext pot file \n\
@@ -160,11 +179,15 @@ def cmd_dev(config, options, args):
         else:
             print 'ERROR - A bundle with the same name is already installed.'
 
-def cmd_dist(config, options, args):
+def cmd_dist_xo(config, options, args):
     builder = Builder(config)
     builder.build()
 
     packager = XOPackager(config)
+    packager.package()
+
+def cmd_dist_source(config, options, args):
+    packager = SourcePackager(config)
     packager.package()
 
 def cmd_install(config, options, args):
@@ -180,7 +203,7 @@ def cmd_install(config, options, args):
     if not os.path.exists(path):
         os.mkdir(path)
 
-    zf = zipfile.ZipFile(config.xo_name)
+    zf = zipfile.ZipFile(packager.package_path)
 
     for name in zf.namelist():
         full_path = os.path.join(path, name)            
