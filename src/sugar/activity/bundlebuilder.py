@@ -142,11 +142,10 @@ class Packager(object):
     def get_files(self):
         files = _get_file_list(self.config.manifest)
         files.extend(_get_l10n_list(self.config))
+        return files
 
 class XOPackager(Packager):
     def package(self):
-        file_list = _get_file_list(self.config.manifest)
-
         zipname = self.config.xo_name
         bundle_zip = zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED)
         base_dir = self.config.bundle_root_dir
@@ -237,10 +236,10 @@ def cmd_genpot(config, options, args):
         os.mkdir(po_path)
 
     python_files = []
-    file_list = _get_file_list(config.manifest)
-    for file_name in file_list:
-        if file_name.endswith('.py'):
-            python_files.append(file_name)
+    for root, dirs, files in os.walk(config.source_dir):
+        for file_name in files:
+            if file_name.endswith('.py'):
+                python_files.append(file_name)
 
     # First write out a stub .pot file containing just the translated
     # activity name, then have xgettext merge the rest of the
