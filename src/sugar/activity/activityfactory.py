@@ -195,7 +195,7 @@ class ActivityCreationHandler(gobject.GObject):
         self._use_rainbow = os.path.exists('/etc/olpc-security')
         if service_name in [ 'org.laptop.JournalActivity',
                              'org.laptop.Terminal',
-                             'org.laptop.LogViewer',
+                             'org.laptop.Log',
                              'org.laptop.Analyze'
                              ]:
             self._use_rainbow = False                    
