@@ -1,4 +1,4 @@
-# Copyright (C) 2006-2007 Red Hat, Inc.
+# Copyright (C) 2008 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -115,8 +115,8 @@ class BuildPackager(Packager):
 
     def get_files(self):
         return list_files(self.build_dir,
-                          ignore_dirs=[ 'po', 'dist', '.git' ],
-                          ignore_files=[ '.gitignore' ])
+                          ignore_dirs=['po', 'dist', '.git'],
+                          ignore_files=['.gitignore'])
 
 class XOPackager(BuildPackager):
     def __init__(self, config):
@@ -141,12 +141,10 @@ class SourcePackager(Packager):
 
     def get_files(self):
         return list_files(self.config.source_dir,
-                          ignore_dirs=[ 'locale', 'dist', '.git' ],
-                          ignore_files=[ '.gitignore' ])
+                          ignore_dirs=['locale', 'dist', '.git'],
+                          ignore_files=['.gitignore'])
 
     def package(self):
-
-
         tar = tarfile.open(self.package_path, "w")
         for f in self.get_files():
             tar.add(os.path.join(self.config.source_dir, f),
