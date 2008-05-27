@@ -155,9 +155,7 @@ class DSObject(object):
     def resume(self, bundle_id=None):
         from sugar.activity import activityfactory
 
-        if self.is_activity_bundle():
-            if bundle_id is not None:
-                raise ValueError('Bundle cannot be resumed as an activity.')
+        if self.is_activity_bundle() and not bundle_id:
 
             logging.debug('Creating activity bundle')
             bundle = ActivityBundle(self.file_path)
