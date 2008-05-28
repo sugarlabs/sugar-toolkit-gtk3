@@ -1,3 +1,4 @@
 src/sugar/activity/activity.py
 src/sugar/graphics/alert.py
 src/sugar/graphics/objectchooser.py
+src/sugar/util.py
