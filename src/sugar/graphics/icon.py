@@ -414,8 +414,8 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         self.connect('destroy', self.__destroy_cb)
 
     def __destroy_cb(self, icon):
-        if self._palette is not None:
-            self._palette.destroy()
+        if self._palette_invoker is not None:
+            self._palette_invoker.detach()
 
     def set_file_name(self, value):
         if self._buffer.file_name != value:
