@@ -508,7 +508,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
             self._buffer.badge_name = value
             self.emit_paint_needed(0, 0, -1, -1)
 
-    def get_badge_name(self, value):
+    def get_badge_name(self):
         return self._buffer.badge_name
 
     badge_name = gobject.property(
