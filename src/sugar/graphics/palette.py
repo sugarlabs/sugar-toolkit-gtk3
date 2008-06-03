@@ -936,12 +936,12 @@ class WidgetInvoker(Invoker):
         else:
             self._widget = parent
 
-        self._enter_hid = widget.connect('enter-notify-event',
-                                         self.__enter_notify_event_cb)
-        self._leave_hid = widget.connect('leave-notify-event',
-                                         self.__leave_notify_event_cb)
-        self._release_hid = widget.connect('button-release-event',
-                                           self.__button_release_event_cb)
+        self._enter_hid = self._widget.connect('enter-notify-event',
+                                               self.__enter_notify_event_cb)
+        self._leave_hid = self._widget.connect('leave-notify-event',
+                                               self.__leave_notify_event_cb)
+        self._release_hid = self._widget.connect('button-release-event',
+                                                 self.__button_release_event_cb)
 
         self.attach(parent)
 
