@@ -26,6 +26,9 @@ from sugar.graphics.xocolor import XoColor
 
 DEFAULT_JABBER_SERVER = 'olpc.collabora.co.uk'
 DEFAULT_VOLUME = 81
+DEFAULT_TIMEZONE = 'UTC'
+DEFAULT_HOT_CORNERS_DELAY = 0.0
+DEFAULT_WARM_EDGES_DELAY = 1000.0
 
 _profile = None
 
@@ -63,8 +66,11 @@ class Profile(object):
         self.color = None
         self.jabber_server = DEFAULT_JABBER_SERVER
         self.jabber_registered = False
+        self.timezone = DEFAULT_TIMEZONE
         self.backup1 = None
         self.sound_volume = DEFAULT_VOLUME
+        self.hot_corners_delay = DEFAULT_HOT_CORNERS_DELAY
+        self.warm_edges_delay = DEFAULT_WARM_EDGES_DELAY
 
         self._pubkey = None
         self._privkey_hash = None
@@ -94,6 +100,12 @@ class Profile(object):
         if self.jabber_server:
             _set_key(cp, 'Jabber', 'Server', self.jabber_server)
 
+        _set_key(cp, 'Date', 'Timezone', self.timezone)
+        
+        _set_key(cp, 'Frame', 'HotCorners', self.hot_corners_delay)
+
+        _set_key(cp, 'Frame', 'WarmEdges', self.warm_edges_delay)
+
         _set_key(cp, 'Jabber', 'Registered', self.jabber_registered)
 
         _set_key(cp, 'Sound', 'Volume', self.sound_volume)
@@ -118,6 +130,12 @@ class Profile(object):
             registered = cp.get('Jabber', 'Registered')
             if registered.lower() == "true":
                 self.jabber_registered = True
+        if cp.has_option('Date', 'Timezone'):
+            self.timezone = cp.get('Date', 'Timezone')
+        if cp.has_option('Frame', 'HotCorners'):
+            self.hot_corners_delay = float(cp.get('Frame', 'HotCorners'))
+        if cp.has_option('Frame', 'WarmEdges'):
+            self.warm_edges_delay = float(cp.get('Frame', 'WarmEdges'))
         if cp.has_option('Server', 'Backup1'):
             self.backup1 = cp.get('Server', 'Backup1')
         if cp.has_option('Sound', 'Volume'):
