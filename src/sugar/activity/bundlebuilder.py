@@ -145,7 +145,7 @@ class SourcePackager(Packager):
                           ignore_files=['.gitignore'])
 
     def package(self):
-        tar = tarfile.open(self.package_path, "w")
+        tar = tarfile.open(self.package_path, "w:bz2")
         for f in self.get_files():
             tar.add(os.path.join(self.config.source_dir, f),
                     os.path.join(self.config.tarball_root_dir, f))
