@@ -31,7 +31,7 @@ class ObjectChooser(object):
     def __init__(self, title=None, parent=None, flags=None, buttons=None):
         # For backwards compatibility:
         # - We ignore title, flags and buttons.
-        # - 'parent' can be a xid or a gtk.gdk.Window
+        # - 'parent' can be a xid or a gtk.Window
 
         if title is not None or flags is not None or buttons is not None:
             logging.warning('Invocation of ObjectChooser() has deprecated '
