@@ -23,12 +23,16 @@ _sugarext_la_LIBADD = $(EXT_LIBS) -lSM -lICE
 _sugarext_la_SOURCES =			\
 	$(BUILT_SOURCES)		\
 	_sugarextmodule.c		\
-        app.h				\
-	app.c				\
-	client.h			\
-	client.c			\
-	client-xsmp.h			\
-	client-xsmp.c			\
+        gsm-app.h			\
+	gsm-app.c			\
+	gsm-client.h			\
+	gsm-client.c			\
+	gsm-client-xsmp.h		\
+	gsm-client-xsmp.c		\
+	gsm-xsmp.h			\
+	gsm-xsmp.c			\
+	gsm-session.h			\
+	gsm-session.c			\
 	eggaccelerators.c		\
 	eggaccelerators.h		\
 	eggdesktopfile.h		\
@@ -37,8 +41,6 @@ _sugarext_la_SOURCES =			\
 	eggsmclient.c			\
 	eggsmclient-private.h		\
 	eggsmclient-xsmp.c		\
-	session.h			\
-	session.c			\
 	sexy-icon-entry.h		\
 	sexy-icon-entry.c		\
 	sugar-address-entry.c		\
@@ -48,9 +50,7 @@ _sugarext_la_SOURCES =			\
 	sugar-menu.h			\
 	sugar-menu.c			\
 	sugar-preview.h			\
-	sugar-preview.c			\
-	xsmp.h				\
-	xsmp.c
+	sugar-preview.c
 
 BUILT_SOURCES = 			\
 	_sugarext.c			\

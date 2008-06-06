@@ -19,9 +19,9 @@
 
 #include <string.h>
 
-#include "session.h"
-#include "app.h"
-#include "xsmp.h"
+#include "gsm-session.h"
+#include "gsm-app.h"
+#include "gsm-xsmp.h"
 
 GsmSession *global_session;
 

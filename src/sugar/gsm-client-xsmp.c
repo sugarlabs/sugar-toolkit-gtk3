@@ -27,8 +27,8 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "client-xsmp.h"
-#include "session.h"
+#include "gsm-client-xsmp.h"
+#include "gsm-session.h"
 
 /* FIXME */
 #define GsmDesktopFile "_Gsm_DesktopFile"

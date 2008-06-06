@@ -21,7 +21,7 @@
 #define __GSM_SESSION_H__
 
 #include <glib.h>
-#include "client.h"
+#include "gsm-client.h"
 
 G_BEGIN_DECLS
 

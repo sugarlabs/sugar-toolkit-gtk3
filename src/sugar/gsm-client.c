@@ -21,7 +21,7 @@
 #include "config.h"
 #endif
 
-#include "client.h"
+#include "gsm-client.h"
 
 enum {
   SAVED_STATE,

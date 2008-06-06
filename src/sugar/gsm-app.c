@@ -25,7 +25,7 @@
 #include <string.h>
 #include <sys/wait.h>
 
-#include "app.h"
+#include "gsm-app.h"
 
 enum {
   EXITED,

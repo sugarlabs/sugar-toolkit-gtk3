@@ -10,7 +10,7 @@
 #include <sys/types.h>
 
 #include "eggdesktopfile.h"
-#include "session.h"
+#include "gsm-session.h"
 
 G_BEGIN_DECLS
 

@@ -32,10 +32,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "client-xsmp.h"
-//#include "gsm.h"
-//#include "util.h"
-#include "xsmp.h"
+#include "gsm-client-xsmp.h"
+#include "gsm-xsmp.h"
 
 #include <X11/ICE/ICElib.h>
 #include <X11/ICE/ICEutil.h>
