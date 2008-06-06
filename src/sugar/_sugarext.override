@@ -9,6 +9,11 @@ headers
 #include "sugar-menu.h"
 #include "sugar-preview.h"
 #include "sexy-icon-entry.h"
+#include "session.h"
+
+#define EGG_SM_CLIENT_BACKEND_XSMP
+#include "eggsmclient.h"
+#include "eggsmclient-private.h"
 
 #include <pygtk/pygtk.h>
 #include <glib.h>

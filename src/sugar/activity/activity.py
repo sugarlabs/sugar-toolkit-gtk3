@@ -69,6 +69,7 @@ from sugar.graphics.toolcombobox import ToolComboBox
 from sugar.graphics.alert import Alert
 from sugar.graphics.icon import Icon
 from sugar.datastore import datastore
+from sugar.session import XSMPClient
 from sugar import wm
 from sugar import profile
 from sugar import _sugarext
@@ -435,6 +436,11 @@ class Activity(Window, gtk.Container):
         self._max_participants = 0
         self._invites_queue = []
 
+        self._xsmp_client = XSMPClient()
+        self._xsmp_client.connect('quit-requested', self.__sm_quit_requested_cb)
+        self._xsmp_client.connect('quit', self.__sm_quit_cb)
+        self._xsmp_client.startup()
+
         accel_group = gtk.AccelGroup()
         self.set_data('sugar-accel-group', accel_group)
         self.add_accel_group(accel_group)
@@ -555,6 +561,13 @@ class Activity(Window, gtk.Container):
         """
         Window.set_canvas(self, canvas)
         canvas.connect('map', self.__canvas_map_cb)
+
+    def __sm_quit_requested_cb(self, client):
+        client.will_quit(True)
+
+    def __sm_quit_cb(self, client):
+        print 'sm quit'
+        self.close(force=True)
 
     def __canvas_map_cb(self, canvas):
         if self._jobject and self._jobject.file_path:

@@ -5,6 +5,7 @@ sugar_PYTHON =		\
 	env.py		\
         network.py	\
 	profile.py	\
+	session.py	\
 	util.py		\
 	wm.py
 
@@ -17,13 +18,27 @@ _sugarext_la_CFLAGS = 		\
 	$(PYTHON_INCLUDES)
 
 _sugarext_la_LDFLAGS = -module -avoid-version
-_sugarext_la_LIBADD = $(EXT_LIBS)
+_sugarext_la_LIBADD = $(EXT_LIBS) -lSM -lICE
 
 _sugarext_la_SOURCES =			\
 	$(BUILT_SOURCES)		\
 	_sugarextmodule.c		\
+        app.h				\
+	app.c				\
+	client.h			\
+	client.c			\
+	client-xsmp.h			\
+	client-xsmp.c			\
 	eggaccelerators.c		\
 	eggaccelerators.h		\
+	eggdesktopfile.h		\
+	eggdesktopfile.c		\
+	eggsmclient.h			\
+	eggsmclient.c			\
+	eggsmclient-private.h		\
+	eggsmclient-xsmp.c		\
+	session.h			\
+	session.c			\
 	sexy-icon-entry.h		\
 	sexy-icon-entry.c		\
 	sugar-address-entry.c		\
@@ -33,7 +48,9 @@ _sugarext_la_SOURCES =			\
 	sugar-menu.h			\
 	sugar-menu.c			\
 	sugar-preview.h			\
-	sugar-preview.c
+	sugar-preview.c			\
+	xsmp.h				\
+	xsmp.c
 
 BUILT_SOURCES = 			\
 	_sugarext.c			\
@@ -45,6 +62,7 @@ _sugarext.c: _sugarext.defs _sugarext.override
 .defs.c:
 	(cd $(srcdir)\
 	 && $(PYGTK_CODEGEN) \
+	    --register $(PYGTK_DEFSDIR)/gdk-types.defs \
 	    --register $(PYGTK_DEFSDIR)/gdk-types.defs \
 	    --register $(PYGTK_DEFSDIR)/gtk-types.defs \
 	    --override $*.override \
