@@ -566,7 +566,6 @@ class Activity(Window, gtk.Container):
         client.will_quit(True)
 
     def __sm_quit_cb(self, client):
-        print 'sm quit'
         self.close(force=True)
 
     def __canvas_map_cb(self, canvas):

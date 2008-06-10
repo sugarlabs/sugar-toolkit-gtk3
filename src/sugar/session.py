@@ -36,7 +36,7 @@ class SessionManager(object):
         self.session.connect('shutdown_completed',
                              self.__shutdown_completed_cb)
 
-    def initiate_shutdown(self, ):
+    def initiate_shutdown(self):
         self.session.initiate_shutdown()
 
     def shutdown_completed(self):
