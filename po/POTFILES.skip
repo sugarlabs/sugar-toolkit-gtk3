@@ -1,0 +1,6 @@
+# We don't care about these string, they are in code which we don't really
+# use and is there solely to not diverge too much from the "upstream"
+# versions of these files.
+src/sugar/eggdesktopfile.c
+src/sugar/eggsmclient.c
+src/sugar/gsm-xsmp.c
