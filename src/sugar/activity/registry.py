@@ -32,11 +32,12 @@ def _activity_info_from_dict(info_dict):
                         info_dict['bundle_id'], info_dict['version'],
                         info_dict['path'], info_dict['show_launcher'],
                         info_dict['command'], info_dict['favorite'],
-                        info_dict['installation_time'])
+                        info_dict['installation_time'],
+                        info_dict['position_x'], info_dict['position_y'])
 
 class ActivityInfo(object):
     def __init__(self, name, icon, bundle_id, version, path, show_launcher,
-                 command, favorite, installation_time):
+                 command, favorite, installation_time, position_x, position_y):
         self.name = name
         self.icon = icon
         self.bundle_id = bundle_id
@@ -46,6 +47,7 @@ class ActivityInfo(object):
         self.show_launcher = show_launcher
         self.favorite = favorite
         self.installation_time = installation_time
+        self.position = (position_x, position_y)
 
 class ActivityRegistry(gobject.GObject):
     __gsignals__ = {
@@ -174,6 +176,9 @@ class ActivityRegistry(gobject.GObject):
 
     def set_activity_favorite(self, bundle_id, version, favorite):
         self._registry.SetActivityFavorite(bundle_id, version, favorite)
+
+    def set_activity_position(self, bundle_id, version, x, y):
+        self._registry.SetActivityPosition(bundle_id, version, x, y)
 
 _registry = None
 
