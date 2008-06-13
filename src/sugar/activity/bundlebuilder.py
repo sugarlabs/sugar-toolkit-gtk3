@@ -23,6 +23,8 @@ import subprocess
 import re
 import gettext
 from optparse import OptionParser
+import logging
+from fnmatch import fnmatch
 
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
@@ -31,10 +33,14 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
     result = []
 
     for root, dirs, files in os.walk(base_dir):
+        if ignore_files:
+            for pattern in ignore_files:
+                files = [f for f in files if not fnmatch(f, pattern)]
+                
+        rel_path = root[len(base_dir) + 1:]
         for f in files:
-            if ignore_files and f not in ignore_files:
-                rel_path = root[len(base_dir) + 1:]
-                result.append(os.path.join(rel_path, f))
+            result.append(os.path.join(rel_path, f))
+            
         if ignore_dirs and root == base_dir:
             for ignore in ignore_dirs:
                 if ignore in dirs:
@@ -43,25 +49,27 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
     return result
 
 class Config(object):
-    def __init__(self, bundle_name):
-        self.source_dir = os.getcwd()
-
-        bundle = ActivityBundle(self.source_dir)
-        version = bundle.get_activity_version()
-
-        self.bundle_name = bundle_name
-        self.xo_name = '%s-%d.xo' % (self.bundle_name, version)
-        self.tarball_name = '%s-%d.tar.bz2' % (self.bundle_name, version)
+    def __init__(self, source_dir=None, dist_dir = None, dist_name = None):
+        self.source_dir = source_dir or os.getcwd()
+            
+        self.bundle = bundle = ActivityBundle(self.source_dir)
+        self.version = bundle.get_activity_version()
+        self.activity_name = bundle.get_name()
         self.bundle_id = bundle.get_bundle_id()
+        self.bundle_name = reduce(lambda x, y:x+y, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
-        self.tarball_root_dir = '%s-%d' % (self.bundle_name, version)
+        self.tar_root_dir = '%s-%d' % (self.bundle_name, self.version)
 
-        info_path = os.path.join(self.source_dir, 'activity', 'activity.info')
-        f = open(info_path,'r')
-        info = f.read()
-        f.close()
-        match = re.search('^name\s*=\s*(.*)$', info, flags = re.MULTILINE)
-        self.activity_name = match.group(1)
+        if dist_dir:
+            self.dist_dir = dist_dir
+        else:
+            self.dist_dir = os.path.join(self.source_dir, 'dist')
+            
+        if dist_name:
+            self.xo_name = self.tar_name = dist_name
+        else:
+            self.xo_name = '%s-%d.xo' % (self.bundle_name, self.version)
+            self.tar_name = '%s-%d.tar.bz2' % (self.bundle_name, self.version)
 
 class Builder(object):
     def __init__(self, config):
@@ -101,54 +109,70 @@ class Builder(object):
 class Packager(object):
     def __init__(self, config):
         self.config = config
-        self.dist_dir = os.path.join(self.config.source_dir, 'dist')
         self.package_path = None
 
-        if not os.path.exists(self.dist_dir):
-            os.mkdir(self.dist_dir)
+        if not os.path.exists(self.config.dist_dir):
+            os.mkdir(self.config.dist_dir)
             
 
 class BuildPackager(Packager):
-    def __init__(self, config):
-        Packager.__init__(self, config)
-        self.build_dir = self.config.source_dir
-
     def get_files(self):
-        return list_files(self.build_dir,
-                          ignore_dirs=['po', 'dist', '.git'],
-                          ignore_files=['.gitignore'])
+        return self.config.bundle.get_files()
+    
+    def _list_useful_files(self):
+        ignore_dirs = ['dist', '.git'],
+        ignore_files = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak']
+        
+        return list_files(self.config.source_dir, ignore_dirs, ignore_files)
+        
+    def fix_manifest(self):
+        manifest = self.config.bundle.manifest
+        
+        allfiles = self._list_useful_files()        
+        for path in allfiles:
+            if path not in manifest:
+                manifest.append(path)
+        
+        f = open(os.path.join(self.config.source_dir, "MANIFEST"), "wb")
+        for line in manifest:
+            f.write(line + "\n")
 
 class XOPackager(BuildPackager):
     def __init__(self, config):
         BuildPackager.__init__(self, config)
-        self.package_path = os.path.join(self.dist_dir, self.config.xo_name)
+        self.package_path = os.path.join(self.config.dist_dir,
+                                         self.config.xo_name)
 
     def package(self):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
         
         for f in self.get_files():
-            bundle_zip.write(os.path.join(self.build_dir, f),
+            bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
 
         bundle_zip.close()
 
-class SourcePackager(Packager):
+class SourcePackager(BuildPackager):
     def __init__(self, config):
-        Packager.__init__(self, config)
-        self.package_path = os.path.join(self.dist_dir,
-                                         self.config.tarball_name)
+        BuildPackager.__init__(self, config)
+        self.package_path = os.path.join(self.config.dist_dir,
+                                         self.config.tar_name)
 
     def get_files(self):
-        return list_files(self.config.source_dir,
-                          ignore_dirs=['locale', 'dist', '.git'],
-                          ignore_files=['.gitignore'])
+        git_ls = subprocess.Popen('git-ls-files', stdout=subprocess.PIPE, 
+                                  cwd=self.config.source_dir)
+        if git_ls.wait():
+            # Fall back to filtered list
+            return self._list_useful_files()
+        
+        return [path.strip() for path in git_ls.stdout.readlines()]
 
     def package(self):
-        tar = tarfile.open(self.package_path, "w:bz2")
+        tar = tarfile.open(self.package_path, 'w:bz2')
         for f in self.get_files():
             tar.add(os.path.join(self.config.source_dir, f),
-                    os.path.join(self.config.tarball_root_dir, f))
+                    os.path.join(self.config.tar_root_dir, f))
         tar.close()
 
 def cmd_help(config, options, args):
@@ -168,7 +192,7 @@ def cmd_dev(config, options, args):
     bundle_path = env.get_user_activities_path()
     if not os.path.isdir(bundle_path):
         os.mkdir(bundle_path)
-    bundle_path = os.path.join(bundle_path, config.bundle_root_dir)
+    bundle_path = os.path.join(bundle_path, config.bundle_top_dir)
     try:
         os.symlink(config.source_dir, bundle_path)
     except OSError:
@@ -331,11 +355,13 @@ def cmd_build(config, options, args):
     builder = Builder(config)
     builder.build()
 
-def start(bundle_name):
+def start(bundle_name=None):
+    if bundle_name:
+        logging.warn("bundle_name deprecated, now comes from activity.info")
     parser = OptionParser()
     (options, args) = parser.parse_args()
 
-    config = Config(bundle_name)
+    config = Config()
 
     try:
         globals()['cmd_' + args[0]](config, options, args[1:])

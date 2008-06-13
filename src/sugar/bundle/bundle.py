@@ -96,13 +96,15 @@ class Bundle:
                     'All files in the bundle must be inside a single ' +
                     'top-level directory')
 
-    def _get_file(self, filename):
+    def get_file(self, filename):
         f = None
 
         if self._unpacked:
             path = os.path.join(self._path, filename)
-            if os.path.isfile(path):
-                f = open(path)
+            try:
+                f = open(path,"rb")
+            except IOError:
+                return None
         else:
             zip_file = zipfile.ZipFile(self._path)
             path = os.path.join(self._zip_root_dir, filename)
@@ -114,6 +116,23 @@ class Bundle:
             zip_file.close()
 
         return f
+    
+    def is_file(self, filename):
+        if self._unpacked:
+            path = os.path.join(self._path, filename)
+            return os.path.isfile(path)
+        else:
+            zip_file = zipfile.ZipFile(self._path)
+            path = os.path.join(self._zip_root_dir, filename)
+            try:
+                zip_file.getinfo(path)
+            except KeyError:
+                return False
+            finally:
+                zip_file.close()
+
+            return True
+                
 
     def get_path(self):
         """Get the bundle path."""

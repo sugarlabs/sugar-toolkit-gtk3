@@ -56,7 +56,7 @@ class ActivityBundle(Bundle):
         self._show_launcher = True
         self._activity_version = 0
 
-        info_file = self._get_file('activity/activity.info')
+        info_file = self.get_file('activity/activity.info')
         if info_file is None:
             raise MalformedBundleException('No activity.info file')
         self._parse_info(info_file)
@@ -65,6 +65,66 @@ class ActivityBundle(Bundle):
         if linfo_file:
             self._parse_linfo(linfo_file)
 
+        self.manifest = None #This should be replaced by following function
+        self.read_manifest()
+
+    def _raw_manifest(self):
+        f = self.get_file("MANIFEST")
+        if not f:
+            logging.warning("Activity directory lacks a MANIFEST file.")
+            return []
+        
+        ret = [line.strip() for line in f.readlines()] 
+        f.close()
+        return ret
+        
+    def read_manifest(self):
+        """read_manifest: sets self.manifest to list of lines in MANIFEST, 
+        with invalid lines replaced by empty lines.
+        
+        Since absolute order carries information on file history, it should 
+        be preserved. For instance, when renaming a file, you should leave
+        the new name on the same line as the old one.
+        """
+        lines = self._raw_manifest()
+
+        # Remove trailing newlines, they do not help keep absolute position.
+        while lines and lines[-1] == "":
+            lines = lines[:-1]
+
+        for num, line in enumerate(lines):
+            if not line:
+                continue
+
+            # Remove duplicates
+            if line in lines[0:num]:
+                lines[num] = ""
+                logging.warning("Bundle %s: duplicate entry in MANIFEST: %s"
+                                % (self._name,line))
+                continue
+            
+            # Remove MANIFEST
+            if line == "MANIFEST":
+                lines[num] = ""
+                logging.warning("Bundle %s: MANIFEST includes itself: %s"
+                                % (self._name,line))
+                
+            # Remove invalid files
+            if not self.is_file(line):
+                lines[num] = ""
+                logging.warning("Bundle %s: invalid entry in MANIFEST: %s"
+                                % (self._name,line))
+
+        self.manifest = lines
+    
+    def get_files(self, manifest = None):
+        files = [line for line in (manifest or self.manifest) if line]
+
+        if self.is_file('MANIFEST'):
+            files.append('MANIFEST')
+
+        return files
+      
     def _parse_info(self, info_file):
         cp = ConfigParser()
         cp.readfp(info_file)
@@ -123,12 +183,12 @@ class ActivityBundle(Bundle):
             return None
 
         linfo_path = os.path.join('locale', lang, 'activity.linfo')
-        linfo_file = self._get_file(linfo_path)
+        linfo_file = self.get_file(linfo_path)
         if linfo_file is not None:
             return linfo_file
 
         linfo_path = os.path.join('locale', lang[:2], 'activity.linfo')
-        linfo_file = self._get_file(linfo_path)
+        linfo_file = self.get_file(linfo_path)
         if linfo_file is not None:
             return linfo_file
 
@@ -180,7 +240,7 @@ class ActivityBundle(Bundle):
         if self._unpacked:
             return os.path.join(self._path, icon_path)
         else:
-            icon_data = self._get_file(icon_path).read()
+            icon_data = self.get_file(icon_path).read()
             temp_file, temp_file_path = tempfile.mkstemp(self._icon)
             os.write(temp_file, icon_data)
             os.close(temp_file)
@@ -220,17 +280,38 @@ class ActivityBundle(Bundle):
             return True
         else:
             return False
-
-    def install(self):
-        activities_path = env.get_user_activities_path()
-        act = activity.get_registry().get_activity(self._bundle_id)
-        if act is not None and act.path.startswith(activities_path):
-            raise AlreadyInstalledException
-
-        install_dir = env.get_user_activities_path()
+    
+    def unpack(self, install_dir, strict_manifest=False):
         self._unzip(install_dir)
 
         install_path = os.path.join(install_dir, self._zip_root_dir)
+        
+        # List installed files
+        manifestfiles = self.get_files(self._raw_manifest())
+        paths  = []
+        for root, dirs, files in os.walk(install_path):
+            rel_path = root[len(install_path) + 1:]
+            for f in files:
+                paths.append(os.path.join(rel_path, f))
+                
+        # Check the list against the MANIFEST
+        for path in paths:
+            if path in manifestfiles:
+                manifestfiles.remove(path)
+            elif path != "MANIFEST":
+                logging.warning("Bundle %s: %s not in MANIFEST"%
+                                (self._name,path))
+                if strict_manifest:
+                    os.remove(os.path.join(install_path, path))
+                    
+        # Is anything in MANIFEST left over after accounting for all files?
+        if manifestfiles:
+            err = ("Bundle %s: files in MANIFEST not included: %s"%
+                   (self._name,str(manifestfiles)))
+            if strict_manifest:
+                raise MalformedBundleException(err)
+            else:
+                logging.warning(err)
 
         xdg_data_home = os.getenv('XDG_DATA_HOME',
                                   os.path.expanduser('~/.local/share'))
@@ -267,11 +348,21 @@ class ActivityBundle(Bundle):
                     os.symlink(info_file,
                                os.path.join(installed_icons_dir,
                                             os.path.basename(info_file)))
+        return install_path
 
+    def install(self):
+        activities_path = env.get_user_activities_path()
+        act = activity.get_registry().get_activity(self._bundle_id)
+        if act is not None and act.path.startswith(activities_path):
+            raise AlreadyInstalledException
+
+        install_dir = env.get_user_activities_path()
+        install_path = self.unpack(install_dir)
+        
         if not activity.get_registry().add_bundle(install_path):
             raise RegistrationException
 
-    def uninstall(self, force=False):
+    def uninstall(self, force=False):        
         if self._unpacked:
             install_path = self._path
         else:
