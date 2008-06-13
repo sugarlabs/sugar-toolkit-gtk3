@@ -198,7 +198,7 @@ def cmd_dev(config, options, args):
     bundle_path = env.get_user_activities_path()
     if not os.path.isdir(bundle_path):
         os.mkdir(bundle_path)
-    bundle_path = os.path.join(bundle_path, config.bundle_top_dir)
+    bundle_path = os.path.join(bundle_path, config.bundle_root_dir)
     try:
         os.symlink(config.source_dir, bundle_path)
     except OSError:
