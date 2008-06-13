@@ -40,7 +40,7 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
         rel_path = root[len(base_dir) + 1:]
         for f in files:
             result.append(os.path.join(rel_path, f))
-            
+
         if ignore_dirs and root == base_dir:
             for ignore in ignore_dirs:
                 if ignore in dirs:
@@ -113,14 +113,20 @@ class Packager(object):
 
         if not os.path.exists(self.config.dist_dir):
             os.mkdir(self.config.dist_dir)
-            
 
 class BuildPackager(Packager):
     def get_files(self):
-        return self.config.bundle.get_files()
+        files = self.config.bundle.get_files()
+
+        if not files:
+            logging.error('No files found, fixing the MANIFEST.')
+            self.fix_manifest()
+            files = self.config.bundle.get_files()
+
+        return files
     
     def _list_useful_files(self):
-        ignore_dirs = ['dist', '.git'],
+        ignore_dirs = ['dist', '.git']
         ignore_files = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak']
         
         return list_files(self.config.source_dir, ignore_dirs, ignore_files)
