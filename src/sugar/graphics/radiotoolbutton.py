@@ -24,22 +24,17 @@ from sugar.graphics.palette import Palette, ToolInvoker
 from sugar.graphics import toolbutton
 
 class RadioToolButton(gtk.RadioToolButton):
-    __gtype_name__ = "SugarRadioToolButton"
+    __gtype_name__ = 'SugarRadioToolButton'
 
-    def __init__(self, named_icon=None, group=None, xo_color=None, **kwargs):
+    def __init__(self, **kwargs):
         self._accelerator = None
         self._tooltip = None
-        self._xo_color = xo_color
+        self._xo_color = None
         self._palette_invoker = ToolInvoker()
 
         gobject.GObject.__init__(self, **kwargs)
 
         self._palette_invoker.attach_tool(self)
-
-        if named_icon:
-            self.set_named_icon(named_icon)
-        if group:
-            self.props.group = group
 
     def set_tooltip(self, tooltip):
         """ Set a simple palette with just a single label.
@@ -75,6 +70,27 @@ class RadioToolButton(gtk.RadioToolButton):
                     icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR)
         self.set_icon_widget(icon)
         icon.show()
+
+    def get_named_icon(self):
+        if self.props.icon_widget is not None:
+            return self.props.icon_widget.props.icon_name
+        else:
+            return None
+
+    named_icon = gobject.property(type=str, setter=set_named_icon,
+                                  getter=get_named_icon)
+
+    def set_xo_color(self, xo_color):
+        if self._xo_color != xo_color:
+            self._xo_color = xo_color
+            if self.props.icon_widget is not None:
+                self.props.icon_widget.props.xo_color = xo_color
+
+    def get_xo_color(self):
+        return self._xo_color
+
+    xo_color = gobject.property(type=str, setter=set_xo_color,
+                                getter=get_xo_color)
 
     def create_palette(self):
         return None
