@@ -217,3 +217,42 @@ sugar_key_grabber_grab(SugarKeyGrabber *grabber, const char *key)
 
 	grabber->keys = g_list_append(grabber->keys, keyinfo);	
 }
+
+gboolean
+sugar_key_grabber_is_modifier(SugarKeyGrabber *grabber, guint keycode, guint mask)
+{
+	Display *xdisplay;
+	XModifierKeymap *modmap;
+	gint start, end, i, mod_index;
+	gboolean is_modifier = FALSE;
+
+	xdisplay = gdk_x11_drawable_get_xdisplay(GDK_DRAWABLE (grabber->root));
+
+	modmap = XGetModifierMapping(xdisplay);
+
+	if (mask != -1) {
+		mod_index = 0;
+		mask = mask >> 1;
+		while (mask != 0) {
+			mask = mask >> 1;
+			mod_index += 1;
+		}
+		start = mod_index * modmap->max_keypermod;
+		end = (mod_index + 1) * modmap->max_keypermod;
+	} else {
+		start = 0;
+		end = 8 * modmap->max_keypermod;
+	}
+
+	for (i = start; i < end; i++) {
+		if (keycode == modmap->modifiermap[i]) {
+			is_modifier = TRUE;
+			break;
+		}
+	}
+	
+	XFreeModifiermap (modmap);
+	
+	return is_modifier;
+}
+

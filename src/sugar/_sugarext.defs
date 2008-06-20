@@ -121,6 +121,16 @@
   )
 )
 
+(define-method is_modifier
+  (of-object "SugarKeyGrabber")
+  (c-name "sugar_key_grabber_is_modifier")
+  (return-type "gboolean")
+  (parameters
+    '("guint" "keycode")
+    '("guint" "mask" (default "-1"))
+  )
+)
+
 ;; From sexy-icon-entry.h
 
 (define-function sexy_icon_entry_get_type

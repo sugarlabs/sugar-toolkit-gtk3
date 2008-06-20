@@ -60,6 +60,9 @@ void     sugar_key_grabber_grab		(SugarKeyGrabber *grabber,
 char    *sugar_key_grabber_get_key  (SugarKeyGrabber *grabber,
 									 guint            keycode,
 									 guint            state);
+gboolean sugar_key_grabber_is_modifier (SugarKeyGrabber *grabber,
+                                        guint            keycode,
+                                        guint            mask);
 
 G_END_DECLS
 
