@@ -67,6 +67,25 @@ class _TrayViewport(gtk.Viewport):
         elif direction == _NEXT_PAGE:
             self._scroll_next()
 
+    def scroll_to_item(self, item):
+        """This function scrolls the viewport so that item will be visible."""
+        assert item in self.traybar.get_children()
+
+        # Get the allocation, and make sure that it is visible
+        if self.orientation == gtk.ORIENTATION_HORIZONTAL:
+            adj = self.get_hadjustment()
+            start = item.allocation.x
+            stop = item.allocation.x + item.allocation.width
+        else:
+            adj = self.get_vadjustment()
+            start = item.allocation.y
+            stop = item.allocation.y + item.allocation.height
+
+        if start < adj.value:
+            adj.value = start
+        elif stop > adj.value + adj.page_size:
+            adj.value = stop - adj.page_size
+
     def _scroll_next(self):
         allocation = self.get_allocation()
         if self.orientation == gtk.ORIENTATION_HORIZONTAL:
@@ -218,6 +237,9 @@ class HTray(gtk.HBox):
     def get_item_index(self, item):
         return self._viewport.traybar.get_item_index(item)
 
+    def scroll_to_item(self, item):
+        self._viewport.scroll_to_item(item)
+
 class VTray(gtk.VBox):
     def __init__(self, **kwargs):
         gobject.GObject.__init__(self, **kwargs)
@@ -248,6 +270,9 @@ class VTray(gtk.VBox):
 
     def get_item_index(self, item):
         return self._viewport.traybar.get_item_index(item)
+
+    def scroll_to_item(self, item):
+        self._viewport.scroll_to_item(item)
 
 class TrayButton(ToolButton):
     def __init__(self, **kwargs):
