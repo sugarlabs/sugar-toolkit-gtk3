@@ -74,7 +74,7 @@ from sugar import wm
 from sugar import profile
 from sugar import _sugarext
 
-_ = lambda msg: gettext.dgettext('sugar', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 SCOPE_PRIVATE = "private"
 SCOPE_INVITE_ONLY = "invite"  # shouldn't be shown in UI, it's implicit

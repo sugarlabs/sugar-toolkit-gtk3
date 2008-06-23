@@ -25,7 +25,7 @@ import math
 from sugar.graphics import style
 from sugar.graphics.icon import Icon
 
-_ = lambda msg: gettext.dgettext('sugar', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 class Alert(gtk.EventBox):
     """UI interface for Alerts
