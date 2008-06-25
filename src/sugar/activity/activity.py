@@ -127,7 +127,11 @@ class ActivityToolbar(gtk.Toolbar):
 
         self._update_share()
 
-        self.keep = ToolButton('document-save', tooltip=_('Keep'))
+        self.keep = ToolButton(tooltip=_('Keep'))
+        keep_icon = Icon(icon_name='document-save', 
+                         xo_color=profile.get_color())
+        self.keep.set_icon_widget(keep_icon)
+        keep_icon.show()
         self.keep.props.accelerator = '<Ctrl>S'
         self.keep.connect('clicked', self.__keep_clicked_cb)
         self.insert(self.keep, -1)
