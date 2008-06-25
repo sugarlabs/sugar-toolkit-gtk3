@@ -89,7 +89,7 @@ class RadioToolButton(gtk.RadioToolButton):
     def get_xo_color(self):
         return self._xo_color
 
-    xo_color = gobject.property(type=str, setter=set_xo_color,
+    xo_color = gobject.property(type=object, setter=set_xo_color,
                                 getter=get_xo_color)
 
     def create_palette(self):
