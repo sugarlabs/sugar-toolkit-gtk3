@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-06-23 18:15-0400\n"
+"PO-Revision-Date: 2008-06-26 06:07-0400\n"
 "Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Memorizza"
 
 #: ../src/sugar/activity/activity.py:136
 msgid "Stop"
-msgstr "Ferma"
+msgstr "Chiudi"
 
 #: ../src/sugar/activity/activity.py:251
 msgid "Undo"
