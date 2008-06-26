@@ -439,6 +439,7 @@ class Activity(Window, gtk.Container):
         self._deleting = False
         self._max_participants = 0
         self._invites_queue = []
+        self._jobject = None
 
         self._xsmp_client = XSMPClient()
         self._xsmp_client.connect('quit-requested', self.__sm_quit_requested_cb)
@@ -466,33 +467,6 @@ class Activity(Window, gtk.Container):
                 
             if self._jobject.metadata.has_key('share-scope'):
                 share_scope = self._jobject.metadata['share-scope']
-
-        elif create_jobject:
-            logging.debug('Creating a jobject.')
-            self._jobject = datastore.create()
-            title = _('%s Activity') % get_bundle_name()
-            self._jobject.metadata['title'] = title
-            self.set_title(self._jobject.metadata['title'])
-            self._jobject.metadata['title_set_by_user'] = '0'
-            self._jobject.metadata['activity'] = self.get_bundle_id()
-            self._jobject.metadata['activity_id'] = self.get_id()
-            self._jobject.metadata['keep'] = '0'
-            self._jobject.metadata['preview'] = ''
-            self._jobject.metadata['share-scope'] = SCOPE_PRIVATE
-
-            if self._shared_activity is not None:
-                icon_color = self._shared_activity.props.color
-            else:
-                icon_color = profile.get_color().to_string()
-
-            self._jobject.metadata['icon-color'] = icon_color
-
-            self._jobject.file_path = ''
-            # Cannot call datastore.write async for creates:
-            # https://dev.laptop.org/ticket/3071
-            datastore.write(self._jobject)
-        else:
-            self._jobject = None
 
         # handle activity share/join
         mesh_instance = self._pservice.get_activity(self._activity_id,
@@ -523,6 +497,29 @@ class Activity(Window, gtk.Container):
                 self.share(private=False)
             else:
                 logging.debug("Unknown share scope %r" % share_scope)
+
+        if handle.object_id is None and create_jobject:
+            logging.debug('Creating a jobject.')
+            self._jobject = datastore.create()
+            title = _('%s Activity') % get_bundle_name()
+            self._jobject.metadata['title'] = title
+            self.set_title(self._jobject.metadata['title'])
+            self._jobject.metadata['title_set_by_user'] = '0'
+            self._jobject.metadata['activity'] = self.get_bundle_id()
+            self._jobject.metadata['activity_id'] = self.get_id()
+            self._jobject.metadata['keep'] = '0'
+            self._jobject.metadata['preview'] = ''
+            self._jobject.metadata['share-scope'] = SCOPE_PRIVATE
+            if self._shared_activity is not None:
+                icon_color = self._shared_activity.props.color
+            else:
+                icon_color = profile.get_color().to_string()
+            self._jobject.metadata['icon-color'] = icon_color
+
+            self._jobject.file_path = ''
+            # Cannot call datastore.write async for creates:
+            # https://dev.laptop.org/ticket/3071
+            datastore.write(self._jobject)
 
     def do_set_property(self, pspec, value):
         if pspec.name == 'active':
