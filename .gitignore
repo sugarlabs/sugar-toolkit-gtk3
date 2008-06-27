@@ -21,3 +21,4 @@ intltool-*
 libtool
 ltmain.sh
 missing
+compile

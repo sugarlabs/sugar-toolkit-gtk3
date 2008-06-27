@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-24 00:07+0530\n"
+"PO-Revision-Date: 2008-06-26 12:20-0400\n"
+"Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0rc2\n"
+
+#: ../src/sugar/activity/activity.py:120
+msgid "Share with:"
+msgstr "Partager avec:"
+
+#: ../src/sugar/activity/activity.py:122
+msgid "Private"
+msgstr "Privé"
+
+#: ../src/sugar/activity/activity.py:123
+msgid "My Neighborhood"
+msgstr "Mon voisinage"
+
+#: ../src/sugar/activity/activity.py:130
+msgid "Keep"
+msgstr "Conserver"
+
+#: ../src/sugar/activity/activity.py:136
+msgid "Stop"
+msgstr "Arrêter"
+
+#: ../src/sugar/activity/activity.py:251
+msgid "Undo"
+msgstr "Annuler"
+
+#: ../src/sugar/activity/activity.py:256
+msgid "Redo"
+msgstr "Répéter"
+
+#: ../src/sugar/activity/activity.py:266
+msgid "Copy"
+msgstr "Copier"
+
+#: ../src/sugar/activity/activity.py:271
+msgid "Paste"
+msgstr "Coller"
+
+#: ../src/sugar/activity/activity.py:297
+msgid "Activity"
+msgstr "Activité"
+
+#: ../src/sugar/activity/activity.py:469
+#, python-format
+msgid "%s Activity"
+msgstr "Activité %s"
+
+#: ../src/sugar/activity/activity.py:856
+msgid "Keep error"
+msgstr "Erreur d'enregistrement"
+
+#: ../src/sugar/activity/activity.py:857
+msgid "Keep error: all changes will be lost"
+msgstr "Erreur d'enregistrement : toutes les modifications seront perdues"
+
+#: ../src/sugar/activity/activity.py:860
+msgid "Don't stop"
+msgstr "Ne pas arrêter"
+
+#: ../src/sugar/activity/activity.py:863
+msgid "Stop anyway"
+msgstr "Arrêter quand même"
+
+#: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
+msgid "Ok"
+msgstr "Ok"
+
+#: ../src/sugar/graphics/alert.py:219
+msgid "Continue"
+msgstr "Continuer"
+
+#: ../src/sugar/util.py:181
+msgid " and "
+msgstr " et "
+
+#: ../src/sugar/util.py:182
+msgid ", "
+msgstr ", "
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar/util.py:185
+msgid "Seconds ago"
+msgstr "A l'instant"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar/util.py:189
+#, python-format
+msgid "%s ago"
+msgstr "il y a %s"
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar/util.py:202
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d an"
+msgstr[1] "%d ans"
+
+#: ../src/sugar/util.py:203
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d mois"
+msgstr[1] "%d mois"
+
+#: ../src/sugar/util.py:204
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d semaine"
+msgstr[1] "%d semaines"
+
+#: ../src/sugar/util.py:205
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d jour"
+msgstr[1] "%d jours"
+
+#: ../src/sugar/util.py:206
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d heure"
+msgstr[1] "%d heures"
+
+#: ../src/sugar/util.py:207
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minute"
+msgstr[1] "%d minutes"

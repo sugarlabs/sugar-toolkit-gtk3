@@ -1,0 +1,157 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-24 00:07+0530\n"
+"PO-Revision-Date: 2008-06-26 06:07-0400\n"
+"Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0rc2\n"
+
+#: ../src/sugar/activity/activity.py:120
+msgid "Share with:"
+msgstr "Condividi con:"
+
+#: ../src/sugar/activity/activity.py:122
+msgid "Private"
+msgstr "Privato"
+
+#: ../src/sugar/activity/activity.py:123
+msgid "My Neighborhood"
+msgstr "I miei vicini"
+
+#: ../src/sugar/activity/activity.py:130
+msgid "Keep"
+msgstr "Memorizza"
+
+#: ../src/sugar/activity/activity.py:136
+msgid "Stop"
+msgstr "Chiudi"
+
+#: ../src/sugar/activity/activity.py:251
+msgid "Undo"
+msgstr "Annulla"
+
+#: ../src/sugar/activity/activity.py:256
+msgid "Redo"
+msgstr "Ripeti"
+
+#: ../src/sugar/activity/activity.py:266
+msgid "Copy"
+msgstr "Copia"
+
+#: ../src/sugar/activity/activity.py:271
+msgid "Paste"
+msgstr "Incolla"
+
+#: ../src/sugar/activity/activity.py:297
+msgid "Activity"
+msgstr "Attività"
+
+#: ../src/sugar/activity/activity.py:469
+#, python-format
+msgid "%s Activity"
+msgstr "Attività %s "
+
+#: ../src/sugar/activity/activity.py:856
+msgid "Keep error"
+msgstr "Errore di memorizzazione"
+
+#: ../src/sugar/activity/activity.py:857
+msgid "Keep error: all changes will be lost"
+msgstr "Errore di memorizzazione: tutte le modifiche saranno perse"
+
+#: ../src/sugar/activity/activity.py:860
+msgid "Don't stop"
+msgstr "Non Fermare"
+
+#: ../src/sugar/activity/activity.py:863
+msgid "Stop anyway"
+msgstr "Ferma comunque"
+
+#: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
+msgid "Cancel"
+msgstr "Annulla"
+
+#: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
+msgid "Ok"
+msgstr "Ok"
+
+#: ../src/sugar/graphics/alert.py:219
+msgid "Continue"
+msgstr "Continua"
+
+#: ../src/sugar/util.py:181
+msgid " and "
+msgstr " e "
+
+#: ../src/sugar/util.py:182
+msgid ", "
+msgstr ", "
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar/util.py:185
+msgid "Seconds ago"
+msgstr "Pochi secondi fa"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar/util.py:189
+#, python-format
+msgid "%s ago"
+msgstr "%s fa"
+
+# True if Plural Form 1 means Singular.... (cf 2008_06_23)
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar/util.py:202
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d anno"
+msgstr[1] "%d anni"
+
+# True if Plural Form 1 means Singular.... (cf 2008_06_23)
+#: ../src/sugar/util.py:203
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d mese"
+msgstr[1] "%d mesi"
+
+# True if Plural Form 1 means Singular.... (cf 2008_06_23)
+#: ../src/sugar/util.py:204
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d settimana"
+msgstr[1] "%d settimane"
+
+# True if Plural Form 1 means Singular.... (cf 2008_06_23)
+#: ../src/sugar/util.py:205
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d giorno"
+msgstr[1] "%d giorni"
+
+# True if Plural Form 1 means Singular.... (cf 2008_06_23)
+#: ../src/sugar/util.py:206
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d ora"
+msgstr[1] "%d ore"
+
+#: ../src/sugar/util.py:207
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minuti"
