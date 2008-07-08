@@ -71,6 +71,8 @@ class Profile(object):
         self.sound_volume = DEFAULT_VOLUME
         self.hot_corners_delay = DEFAULT_HOT_CORNERS_DELAY
         self.warm_edges_delay = DEFAULT_WARM_EDGES_DELAY
+        self.automatic_pm = False
+        self.extreme_pm = False
 
         self._pubkey = None
         self._privkey_hash = None
@@ -110,6 +112,10 @@ class Profile(object):
 
         _set_key(cp, 'Sound', 'Volume', self.sound_volume)
 
+        _set_key(cp, 'Power', 'AutomaticPM', self.automatic_pm)
+
+        _set_key(cp, 'Power', 'ExtremePM', self.extreme_pm)
+
         f = open(self._config_path, 'w')
         cp.write(f)
         f.close()
@@ -140,6 +146,14 @@ class Profile(object):
             self.backup1 = cp.get('Server', 'Backup1')
         if cp.has_option('Sound', 'Volume'):
             self.sound_volume = float(cp.get('Sound', 'Volume'))
+        if cp.has_option('Power', 'AutomaticPM'):
+            state = cp.get('Power', 'AutomaticPM')
+            if state.lower() == "true":
+                self.automatic_pm = True
+        if cp.has_option('Power', 'ExtremePM'):
+            state = cp.get('Power', 'ExtremePM')
+            if state.lower() == "true":
+                self.extreme_pm = True
 
         del cp
 
