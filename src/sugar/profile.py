@@ -30,6 +30,10 @@ DEFAULT_TIMEZONE = 'UTC'
 DEFAULT_HOT_CORNERS_DELAY = 0.0
 DEFAULT_WARM_EDGES_DELAY = 1000.0
 
+RING_LAYOUT = 'ring-layout'
+RANDOM_LAYOUT = 'random-layout'
+DEFAULT_FAVORITES_LAYOUT = RANDOM_LAYOUT
+
 _profile = None
 
 def _set_key(cp, section, key, value):
@@ -73,6 +77,7 @@ class Profile(object):
         self.warm_edges_delay = DEFAULT_WARM_EDGES_DELAY
         self.automatic_pm = False
         self.extreme_pm = False
+        self.favorites_layout = DEFAULT_FAVORITES_LAYOUT
 
         self._pubkey = None
         self._privkey_hash = None
@@ -116,6 +121,8 @@ class Profile(object):
 
         _set_key(cp, 'Power', 'ExtremePM', self.extreme_pm)
 
+        _set_key(cp, 'Shell', 'FavoritesLayout', self.favorites_layout)
+
         f = open(self._config_path, 'w')
         cp.write(f)
         f.close()
@@ -154,6 +161,8 @@ class Profile(object):
             state = cp.get('Power', 'ExtremePM')
             if state.lower() == "true":
                 self.extreme_pm = True
+        if cp.has_option('Shell', 'FavoritesLayout'):
+            self.favorites_layout = cp.get('Shell', 'FavoritesLayout')
 
         del cp
 
