@@ -81,6 +81,10 @@ class Builder(object):
     def build_locale(self):
         po_dir = os.path.join(self.config.source_dir, 'po')
 
+        if not self.config.bundle.is_dir(po_dir):
+            logging.warn("Missing po/ dir, cannot build_locale")
+            return
+        
         for f in os.listdir(po_dir):
             if not f.endswith('.po'):
                 continue
@@ -213,6 +217,10 @@ def cmd_dist_xo(config, options, args):
 
     packager = XOPackager(config)
     packager.package()
+
+def cmd_dist(config, options, args):
+    logging.warn("dist deprecated, use dist_xo.")
+    cmd_dist_xo(config, options, args)
 
 def cmd_dist_source(config, options, args):
     packager = SourcePackager(config)

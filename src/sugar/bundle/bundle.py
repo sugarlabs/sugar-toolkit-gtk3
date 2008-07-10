@@ -132,7 +132,18 @@ class Bundle:
                 zip_file.close()
 
             return True
-                
+
+    def is_dir(self, filename):
+        if self._unpacked:
+            path = os.path.join(self._path, filename)
+            return os.path.isdir(path)
+        else:
+            zip_file = zipfile.ZipFile(self._path)
+            path = os.path.join(self._zip_root_dir, filename, "")
+            for f in zip_file.namelist():
+                if f.startswith(path):
+                    return True
+            return False
 
     def get_path(self):
         """Get the bundle path."""
