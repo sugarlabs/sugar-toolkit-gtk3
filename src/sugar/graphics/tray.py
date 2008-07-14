@@ -19,7 +19,7 @@ import gobject
 import gtk
 
 from sugar.graphics import style
-from sugar.graphics.palette import Palette, ToolInvoker
+from sugar.graphics.palette import ToolInvoker
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.icon import Icon
 
@@ -207,10 +207,12 @@ class _TrayScrollButton(ToolButton):
 
     viewport = property(fset=set_viewport)
 
+ALIGN_TO_START = 0
+ALIGN_TO_END = 1
+
 class HTray(gtk.HBox):
     def __init__(self, **kwargs):
         gobject.GObject.__init__(self, **kwargs)
-        self.set_direction(gtk.TEXT_DIR_LTR)
 
         scroll_left = _TrayScrollButton('go-left', _PREVIOUS_PAGE)
         self.pack_start(scroll_left, False)
@@ -225,17 +227,37 @@ class HTray(gtk.HBox):
         scroll_left.viewport = self._viewport
         scroll_right.viewport = self._viewport
 
+        if self.align == ALIGN_TO_END:
+            spacer = gtk.SeparatorToolItem()
+            spacer.set_size_request(0, 0)
+            spacer.props.draw = False
+            spacer.set_expand(True)
+            self._viewport.traybar.insert(spacer, 0)
+            spacer.show()
+
+    align = gobject.property(
+            flags=gobject.PARAM_CONSTRUCT_ONLY | gobject.PARAM_READWRITE,
+            default=ALIGN_TO_START, type=int)
+
     def get_children(self):
-        return self._viewport.traybar.get_children()
+        children = self._viewport.traybar.get_children()[:]
+        if self.align == ALIGN_TO_END:
+            children = children[1:]
+        return children
 
     def add_item(self, item, index=-1):
+        if self.align == ALIGN_TO_END and index > -1:
+            index += 1
         self._viewport.traybar.insert(item, index)
 
     def remove_item(self, item):
         self._viewport.traybar.remove(item)
 
     def get_item_index(self, item):
-        return self._viewport.traybar.get_item_index(item)
+        index = self._viewport.traybar.get_item_index(item)
+        if self.align == ALIGN_TO_END:
+            index -= 1
+        return index
 
     def scroll_to_item(self, item):
         self._viewport.scroll_to_item(item)
@@ -259,17 +281,37 @@ class VTray(gtk.VBox):
         scroll_left.viewport = self._viewport
         scroll_right.viewport = self._viewport
 
+        if self.align == ALIGN_TO_END:
+            spacer = gtk.SeparatorToolItem()
+            spacer.set_size_request(0, 0)
+            spacer.props.draw = False
+            spacer.set_expand(True)
+            self._viewport.traybar.insert(spacer, 0)
+            spacer.show()
+
+    align = gobject.property(
+            flags=gobject.PARAM_CONSTRUCT_ONLY | gobject.PARAM_READWRITE,
+            default=ALIGN_TO_START, type=int)
+
     def get_children(self):
-        return self._viewport.traybar.get_children()
+        children = self._viewport.traybar.get_children()[:]
+        if self.align == ALIGN_TO_END:
+            children = children[1:]
+        return children
 
     def add_item(self, item, index=-1):
+        if self.align == ALIGN_TO_END and index > -1:
+            index += 1
         self._viewport.traybar.insert(item, index)
 
     def remove_item(self, item):
         self._viewport.traybar.remove(item)
 
     def get_item_index(self, item):
-        return self._viewport.traybar.get_item_index(item)
+        index = self._viewport.traybar.get_item_index(item)
+        if self.align == ALIGN_TO_END:
+            index -= 1
+        return index
 
     def scroll_to_item(self, item):
         self._viewport.scroll_to_item(item)

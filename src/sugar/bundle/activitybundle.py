@@ -23,8 +23,7 @@ import os
 import tempfile
 
 from sugar.bundle.bundle import Bundle, MalformedBundleException, \
-    AlreadyInstalledException, RegistrationException, \
-    NotInstalledException
+    AlreadyInstalledException, RegistrationException, NotInstalledException
 
 from sugar import activity
 from sugar import env
@@ -55,6 +54,7 @@ class ActivityBundle(Bundle):
         self._mime_types = None
         self._show_launcher = True
         self._activity_version = 0
+        self._installation_time = os.stat(path).st_mtime
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
@@ -65,7 +65,7 @@ class ActivityBundle(Bundle):
         if linfo_file:
             self._parse_linfo(linfo_file)
 
-        self.manifest = None #This should be replaced by following function
+        self.manifest = None # This should be replaced by following function
         self.read_manifest()
 
     def _raw_manifest(self):
@@ -226,7 +226,7 @@ class ActivityBundle(Bundle):
     def get_installation_time(self):
         """Get a timestamp representing the time at which this activity was
         installed."""
-        return os.stat(self._path).st_mtime
+        return self._installation_time
 
     def get_bundle_id(self):
         """Get the activity bundle id"""

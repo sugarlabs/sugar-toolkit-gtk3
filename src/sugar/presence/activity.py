@@ -235,12 +235,18 @@ class Activity(gobject.GObject):
     def get_joined_buddies(self):
         """Retrieve the set of Buddy objects attached to this activity
 
-        returns list of presence Buddy objects
+        returns list of presence Buddy objects that we can successfully
+        create from the buddy object paths that PS has for this activity.
         """
         resp = self._activity.GetJoinedBuddies()
         buddies = []
         for item in resp:
-            buddies.append(self._ps_new_object(item))
+            try:
+                buddies.append(self._ps_new_object(item))
+            except dbus.DBusException:
+                _logger.debug(
+                    'get_joined_buddies failed to get buddy object for %r',
+                    item)
         return buddies
 
     def get_buddy_by_handle(self, handle):
