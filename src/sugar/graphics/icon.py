@@ -581,11 +581,10 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     palette = property(get_palette, set_palette)
 
 def get_icon_state(base_name, perc, step=5):
-    assert step > 0, 'get_icon_state(): step must be positive\n'
     strength = round(perc / step) * step
     icon_theme = gtk.icon_theme_get_default()
 
-    while strength <= 100:
+    while strength <= 100 and strength >= 0:
         icon_name = '%s-%03d' % (base_name, strength)
         if icon_theme.has_icon(icon_name):
             return icon_name
