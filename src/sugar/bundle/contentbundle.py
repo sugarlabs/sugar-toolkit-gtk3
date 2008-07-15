@@ -168,11 +168,12 @@ class ContentBundle(Bundle):
         return self._bundle_class
 
     def _run_indexer(self):
-        if os.environ.has_key('XDG_DATA_DIRS'):
-            for path in os.environ['XDG_DATA_DIRS'].split(':'):
-                indexer = os.path.join(path, 'library-common', 'make_index.py')
-                if os.path.exists(indexer):
-                    os.spawnlp(os.P_WAIT, 'python', 'python', indexer)
+        xdg_data_dirs = os.getenv('XDG_DATA_DIRS',
+                                  '/usr/local/share/:/usr/share/')
+        for path in xdg_data_dirs.split(':'):
+            indexer = os.path.join(path, 'library-common', 'make_index.py')
+            if os.path.exists(indexer):
+                os.spawnlp(os.P_WAIT, 'python', 'python', indexer)
 
     def is_installed(self):
         if self._unpacked:
