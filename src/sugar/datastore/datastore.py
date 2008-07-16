@@ -169,6 +169,24 @@ class DSObject(object):
             logging.debug('activityfactory.creating bundle with id %r',
                           bundle.get_bundle_id())
             activityfactory.create(bundle.get_bundle_id())
+
+        elif self.is_content_bundle() and not bundle_id:
+
+            logging.debug('Creating content bundle')
+            bundle = ContentBundle(self.file_path)
+            if not bundle.is_installed():
+                logging.debug('Installing content bundle')
+                bundle.install()
+
+            activities = self._get_activities_for_mime('text/html')
+            if len(activities) == 0:
+                logging.warning('No activity can open HTML content bundles')
+                return
+
+            uri = bundle.get_start_uri()
+            logging.debug('activityfactory.creating with uri %s', uri)
+            activityfactory.create_with_uri(activities[0].bundle_id,
+                                            bundle.get_start_uri())
         else:
             if not self.get_activities() and bundle_id is None:
                 logging.warning('No activity can open this object, %s.' %

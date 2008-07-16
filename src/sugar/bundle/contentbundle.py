@@ -19,6 +19,7 @@
 
 from ConfigParser import ConfigParser
 import os
+import urllib
 
 from sugar import env
 from sugar.bundle.bundle import Bundle, NotInstalledException, \
@@ -140,6 +141,11 @@ class ContentBundle(Bundle):
         else:
             self._bundle_class = None
 
+        if cp.has_option(section, 'activity_start'):
+            self._activity_start = cp.get(section, 'activity_start')
+        else:
+            self._activity_start = 'index.html'
+
     def get_name(self):
         return self._name
 
@@ -167,6 +173,9 @@ class ContentBundle(Bundle):
     def get_bundle_class(self):
         return self._bundle_class
 
+    def get_activity_start(self):
+        return self._activity_start
+
     def _run_indexer(self):
         xdg_data_dirs = os.getenv('XDG_DATA_DIRS',
                                   '/usr/local/share/:/usr/share/')
@@ -175,11 +184,19 @@ class ContentBundle(Bundle):
             if os.path.exists(indexer):
                 os.spawnlp(os.P_WAIT, 'python', 'python', indexer)
 
+    def get_root_dir(self):
+        return os.path.join(env.get_user_library_path(), self._zip_root_dir)
+
+    def get_start_path(self):
+        return os.path.join(self.get_root_dir(), self._activity_start)
+
+    def get_start_uri(self):
+        return "file://" + urllib.pathname2url(self.get_start_path())
+
     def is_installed(self):
         if self._unpacked:
             return True
-        elif os.path.isdir(os.path.join(env.get_user_library_path(),
-                                        self._zip_root_dir)):
+        elif os.path.isdir(self.get_root_dir()):
             return True
         else:
             return False
@@ -194,7 +211,6 @@ class ContentBundle(Bundle):
                 raise NotInstalledException
             install_dir = self._path
         else:
-            install_dir = os.path.join(env.get_user_library_path(),
-                                       self._zip_root_dir)
+            install_dir = os.path.join(self.get_root_dir())
         self._uninstall(install_dir)
         self._run_indexer()
