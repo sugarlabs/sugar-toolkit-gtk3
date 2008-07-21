@@ -879,6 +879,8 @@ class Activity(Window, gtk.Container):
         self.add_alert(alert)
         alert.connect('response', self._keep_failed_dialog_response_cb)
 
+        self.present()
+
     def _keep_failed_dialog_response_cb(self, alert, response_id):
         self.remove_alert(alert)
         if response_id == gtk.RESPONSE_OK:
