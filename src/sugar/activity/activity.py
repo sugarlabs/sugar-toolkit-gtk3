@@ -436,6 +436,7 @@ class Activity(Window, gtk.Container):
         self._preview = _sugarext.Preview()
         self._updating_jobject = False
         self._closing = False
+        self._quit_requested = False
         self._deleting = False
         self._max_participants = 0
         self._invites_queue = []
@@ -564,10 +565,15 @@ class Activity(Window, gtk.Container):
         canvas.connect('map', self.__canvas_map_cb)
 
     def __sm_quit_requested_cb(self, client):
-        client.will_quit(True)
+        self._quit_requested = True
+
+        if not self._prepare_close():
+            client.will_quit(False)
+        elif not self._updating_jobject:
+            client.will_quit(True)
 
     def __sm_quit_cb(self, client):
-        self.close(force=True)
+        self._complete_close()
 
     def __canvas_map_cb(self, canvas):
         if self._jobject and self._jobject.file_path:
@@ -641,16 +647,19 @@ class Activity(Window, gtk.Container):
     def __save_cb(self):
         logging.debug('Activity.__save_cb')
         self._updating_jobject = False
-        if self._closing:
-            self._cleanup_jobject()
-            self.destroy()
+        if self._quit_requested:
+            self._xsmp_client.will_quit(True)
+        elif self._closing:
+            self._complete_close()
 
     def __save_error_cb(self, err):
         logging.debug('Activity.__save_error_cb')
         self._updating_jobject = False
+        if self._quit_requested:
+            self._xsmp_client.will_quit(False)
         if self._closing:
-            self._cleanup_jobject()
-            self.destroy()
+            self._show_keep_failed_dialog()
+            self._closing = False
         logging.debug("Error saving activity object to datastore: %s" % err)
 
     def _cleanup_jobject(self):
@@ -712,6 +721,10 @@ class Activity(Window, gtk.Container):
         public API of an Acivity, and should behave in standard ways. Use your
         own implementation of write_file() to save your Activity specific data.        
         """
+
+        if self._jobject is None:
+            logging.debug('Cannot save, no journal object.')
+            return
 
         logging.debug('Activity.save: %r' % self._jobject.object_id)
 
@@ -852,7 +865,7 @@ class Activity(Window, gtk.Container):
                                                 self.__share_cb)
         self._pservice.share_activity(self, private=private)
 
-    def _display_keep_failed_dialog(self):
+    def _show_keep_failed_dialog(self):
         alert = Alert()
         alert.props.title = _('Keep error')
         alert.props.msg = _('Keep error: all changes will be lost')
@@ -877,7 +890,30 @@ class Activity(Window, gtk.Container):
 
         return True
 
-    def close(self, force=False, skip_save=False):
+    def _prepare_close(self, skip_save=False):
+        if not skip_save:
+            try:
+                self.save()
+            except Exception:
+                logging.info(traceback.format_exc())
+                self._show_keep_failed_dialog()
+                return False
+
+        if self._shared_activity:
+            self._shared_activity.leave()
+
+        self._closing = True
+
+        return True
+
+    def _complete_close(self):
+        self._cleanup_jobject()
+        self.destroy()
+
+        # Make the exported object inaccessible
+        dbus.service.Object.remove_from_connection(self._bus)
+
+    def close(self, skip_save=False):
         """Request that the activity be stopped and saved to the Journal
         
         Activities should not override this method, but should implement
@@ -885,28 +921,15 @@ class Activity(Window, gtk.Container):
         to control wether it can close, it should override can_close().
         """
 
-        if not force:
-            if not self.can_close():
-                return
-
-        try:
-            if not skip_save:
-                self.save()
-        except Exception:
-            logging.info(traceback.format_exc())
-            self._display_keep_failed_dialog()
+        if not self.can_close():
             return
 
-        if self._shared_activity:
-            self._shared_activity.leave()
+        if not self._closing:
+            if not self._prepare_close(skip_save):
+                return
 
-        if self._updating_jobject:
-            self._closing = True
-        else:
-            self.destroy()
-
-        # Make the exported object inaccessible
-        dbus.service.Object.remove_from_connection(self._bus)
+        if not self._updating_jobject:
+            self._complete_close()
 
     def __realize_cb(self, window):
         wm.set_bundle_id(window.window, self.get_bundle_id())
