@@ -275,11 +275,13 @@ class ActivityBundle(Bundle):
             return False
 
     def need_upgrade(self):
-        act = activity.get_registry().get_activity(self._bundle_id)
-        if act is None or act.version != self._activity_version:
-            return True
-        else:
-            return False
+        """Returns True if installing this activity bundle is meaningful -
+        that is, if an identical version of this activity is not
+        already installed.
+
+        Until we have cryptographic hashes to check identity, returns
+        True always. See http://dev.laptop.org/ticket/7534."""
+        return True
     
     def unpack(self, install_dir, strict_manifest=False):
         self._unzip(install_dir)
