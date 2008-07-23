@@ -377,8 +377,7 @@ class ActivityBundle(Bundle):
                 logging.warning('Not uninstalling system activity')
                 return
 
-            install_path = os.path.join(env.get_user_activities_path(),
-                                        self._zip_root_dir)
+            install_path = act.path
 
         xdg_data_home = os.getenv('XDG_DATA_HOME',
                                   os.path.expanduser('~/.local/share'))
