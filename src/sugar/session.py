@@ -40,7 +40,7 @@ class SessionManager(object):
         self.session.initiate_shutdown()
 
     def shutdown_completed(self):
-        pass
+        _sugarext.xsmp_shutdown()
 
     def __shutdown_completed_cb(self, session):
         self.shutdown_completed()
