@@ -29,7 +29,7 @@ from sugar.activity import registry
 from sugar import util
 from sugar import env
 
-from errno import EEXIST
+from errno import EEXIST, ENOSPC
 
 import os
 
@@ -150,6 +150,9 @@ def open_log_file(activity):
         except OSError, e:
             if e.errno == EEXIST:
                 i += 1
+            elif e.errno == ENOSPC:
+                # not the end of the world; let's try to keep going.
+                return ('/dev/null', open('/dev/null','w'))
             else:
                 raise e
 

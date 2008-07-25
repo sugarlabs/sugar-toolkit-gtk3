@@ -43,7 +43,7 @@ def get_profile_path(path=None):
         return base
 
 def get_logs_path(path=None):
-    base = get_profile_path('logs')
+    base = os.environ.get('SUGAR_LOGS_DIR', get_profile_path('logs'))
     if path != None:
         return os.path.join(base, path)
     else:
