@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-07-21 08:22-0400\n"
+"PO-Revision-Date: 2008-07-27 09:55-0400\n"
 "Last-Translator: korakurider <korakurider@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr "次の人と共有:"
 
 #: ../src/sugar/activity/activity.py:122
 msgid "Private"
-msgstr ""
+msgstr "（共有しない）"
 
 #: ../src/sugar/activity/activity.py:123
 msgid "My Neighborhood"
@@ -62,19 +62,19 @@ msgstr "%s アクティビティ"
 
 #: ../src/sugar/activity/activity.py:856
 msgid "Keep error"
-msgstr ""
+msgstr "保存エラー"
 
 #: ../src/sugar/activity/activity.py:857
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "保存エラー: 全ての変更は失われてしまいます"
 
 #: ../src/sugar/activity/activity.py:860
 msgid "Don't stop"
-msgstr ""
+msgstr "やめない"
 
 #: ../src/sugar/activity/activity.py:863
 msgid "Stop anyway"
-msgstr ""
+msgstr "とにかくやめる"
 
 #: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
 msgid "Cancel"
@@ -90,11 +90,11 @@ msgstr "続ける"
 
 #: ../src/sugar/util.py:181
 msgid " and "
-msgstr ""
+msgstr " そして "
 
 #: ../src/sugar/util.py:182
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar/util.py:185
@@ -106,7 +106,7 @@ msgstr "ちょっと前"
 #: ../src/sugar/util.py:189
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "だけ前"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar/util.py:202
@@ -115,18 +115,21 @@ msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d 年"
 
+# これは期間をあらわすので"ヶ月"の方がよいのでは。(Spiky)
 #: ../src/sugar/util.py:203
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d 月"
 
+# おなじく"週間"ではないでしょうか？
 #: ../src/sugar/util.py:204
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d 週"
 
+# おなじく"日間"ではないでしょうか？
 #: ../src/sugar/util.py:205
 #, python-format
 msgid "%d day"
