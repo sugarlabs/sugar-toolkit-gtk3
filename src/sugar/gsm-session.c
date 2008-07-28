@@ -539,7 +539,8 @@ client_disconnected (GsmClient *client, gpointer data)
 
   g_object_unref (client);
 
-  g_signal_emit (session, signals[SHUTDOWN_COMPLETED], 0);
+  if (session->phase == GSM_SESSION_PHASE_SHUTDOWN && !session->clients)
+    g_signal_emit (session, signals[SHUTDOWN_COMPLETED], 0);
 }
 
 GsmSession *
