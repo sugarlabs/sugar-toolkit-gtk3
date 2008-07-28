@@ -192,7 +192,7 @@ class ActivityToolbar(gtk.Toolbar):
         self._activity.metadata['title_set_by_user'] = '1'
         self._activity.save()
 
-        shared_activity = self._activity.shared_activity
+        shared_activity = self._activity.get_shared_activity()
         if shared_activity:
             shared_activity.props.name = title
 
@@ -836,6 +836,13 @@ class Activity(Window, gtk.Container):
         self.present()
         self.emit('joined')
         self.__privacy_changed_cb(self.shared_activity, None)
+
+    def get_shared_activity(self):
+        """Returns an instance of the shared Activity or None
+
+        The shared activity is of type sugar.presence.activity.Activity
+        """
+        return self._shared_activity
 
     def get_shared(self):
         """Returns TRUE if the activity is shared on the mesh."""
