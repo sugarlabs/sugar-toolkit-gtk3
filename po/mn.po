@@ -2,152 +2,151 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-06-27 06:28-0400\n"
+"Last-Translator: Odontsetseg Bat-Erdene <obat-erdene@suffolk.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: ../src/sugar/activity/activity.py:120
 msgid "Share with:"
-msgstr ""
+msgstr "Хуваалцах:"
 
 #: ../src/sugar/activity/activity.py:122
 msgid "Private"
-msgstr ""
+msgstr "Хувийн"
 
 #: ../src/sugar/activity/activity.py:123
 msgid "My Neighborhood"
-msgstr ""
+msgstr "Миний Хөршүүд"
 
 #: ../src/sugar/activity/activity.py:130
 msgid "Keep"
-msgstr ""
+msgstr "Хадгалах"
 
 #: ../src/sugar/activity/activity.py:136
 msgid "Stop"
-msgstr ""
+msgstr "Хаах"
 
 #: ../src/sugar/activity/activity.py:251
 msgid "Undo"
-msgstr ""
+msgstr "Буцаах"
 
 #: ../src/sugar/activity/activity.py:256
 msgid "Redo"
-msgstr ""
+msgstr "Давтах"
 
 #: ../src/sugar/activity/activity.py:266
 msgid "Copy"
-msgstr ""
+msgstr "Хуулах"
 
 #: ../src/sugar/activity/activity.py:271
 msgid "Paste"
-msgstr ""
+msgstr "Тавих"
 
 #: ../src/sugar/activity/activity.py:297
 msgid "Activity"
-msgstr ""
+msgstr "Үйл ажиллагаа"
 
 #: ../src/sugar/activity/activity.py:469
 #, python-format
 msgid "%s Activity"
-msgstr ""
+msgstr "%s үйл ажиллагаа"
 
 #: ../src/sugar/activity/activity.py:856
 msgid "Keep error"
-msgstr ""
+msgstr "Хадгалахын алдаа "
 
 #: ../src/sugar/activity/activity.py:857
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "Хадгалахын алдаа: бүх өөрчлөлтүүд устгагдана"
 
 #: ../src/sugar/activity/activity.py:860
 msgid "Don't stop"
-msgstr ""
+msgstr "Бүү хаа"
 
 #: ../src/sugar/activity/activity.py:863
 msgid "Stop anyway"
-msgstr ""
+msgstr "Ямар ч нөхцөлд хаах"
 
 #: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
 msgid "Cancel"
-msgstr ""
+msgstr "Болих"
 
 #: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
 msgid "Ok"
-msgstr ""
+msgstr "Тийм"
 
 #: ../src/sugar/graphics/alert.py:219
 msgid "Continue"
-msgstr ""
+msgstr "Үргэлжлүүлэх"
 
 #: ../src/sugar/util.py:181
 msgid " and "
-msgstr ""
+msgstr " ба_"
 
 #: ../src/sugar/util.py:182
 msgid ", "
-msgstr ""
+msgstr " ,_"
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar/util.py:185
 msgid "Seconds ago"
-msgstr ""
+msgstr "Секундын өмнө"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar/util.py:189
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s-ын өмнө"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar/util.py:202
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d жил"
+msgstr[1] "%d жил"
 
 #: ../src/sugar/util.py:203
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d сар"
+msgstr[1] "%d сар"
 
 #: ../src/sugar/util.py:204
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d долоо хоног"
+msgstr[1] "%d долоо хоног"
 
 #: ../src/sugar/util.py:205
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d хоног"
+msgstr[1] "%d хоног"
 
 #: ../src/sugar/util.py:206
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d цаг"
+msgstr[1] "%d цаг"
 
 #: ../src/sugar/util.py:207
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d минут"
+msgstr[1] "%d минут"
