@@ -247,6 +247,8 @@ class Palette(gtk.Window):
         self._enter_invoker_hid = None
         self._leave_invoker_hid = None
         self._right_click_invoker_hid = None
+        
+        self.set_group_id("default")
 
         # we set these for backward compatibility
         if label is not None:
