@@ -286,10 +286,12 @@ def cmd_genpot(config, options, args):
 def cmd_release(config, options, args):
     if not os.path.isdir('.git'):
         print 'ERROR - this command works only for git repositories'
+        return
 
     retcode = subprocess.call(['git', 'pull'])
     if retcode:
         print 'ERROR - cannot pull from git'
+        return
 
     print 'Bumping activity version...'
 
@@ -348,20 +350,32 @@ def cmd_release(config, options, args):
     f.write(news)
     f.close()
 
+    print 'Creating the bundle...'
+    packager = XOPackager(config)
+    packager.package()
+
     print 'Committing to git...'
 
     changelog = 'Release version %d.' % version
     retcode = subprocess.call(['git', 'commit', '-a', '-m % s' % changelog])
     if retcode:
         print 'ERROR - cannot commit to git'
+        return
+
+    retcode = subprocess.call(['git', 'tag', 'v%s' % version])
+    if retcode:
+        print 'ERROR - cannot tag the commit'
+        return
 
     retcode = subprocess.call(['git', 'push'])
     if retcode:
         print 'ERROR - cannot push to git'
-
-    print 'Creating the bundle...'
-    packager = XOPackager(config)
-    packager.package()
+        return
+    
+    retcode = subprocess.call(['git', 'push', '--tags'])
+    if retcode:
+        print 'ERROR - cannot push tags to git'
+        return
 
     print 'Done.'
 
