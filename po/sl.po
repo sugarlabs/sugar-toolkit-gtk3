@@ -1,0 +1,164 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-24 00:07+0530\n"
+"PO-Revision-Date: 2008-07-11 00:46-0400\n"
+"Last-Translator: Denis Oštir <denis.ostir@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0rc2\n"
+
+#: ../src/sugar/activity/activity.py:120
+msgid "Share with:"
+msgstr "Deli z:"
+
+#: ../src/sugar/activity/activity.py:122
+msgid "Private"
+msgstr "Zasebno"
+
+#: ../src/sugar/activity/activity.py:123
+msgid "My Neighborhood"
+msgstr "Moja soseščina"
+
+#: ../src/sugar/activity/activity.py:130
+msgid "Keep"
+msgstr "Obdrži"
+
+#: ../src/sugar/activity/activity.py:136
+msgid "Stop"
+msgstr "Ustavi"
+
+#: ../src/sugar/activity/activity.py:251
+msgid "Undo"
+msgstr "Razveljavi"
+
+#: ../src/sugar/activity/activity.py:256
+msgid "Redo"
+msgstr "Ponovi"
+
+#: ../src/sugar/activity/activity.py:266
+msgid "Copy"
+msgstr "Kopiraj"
+
+#: ../src/sugar/activity/activity.py:271
+msgid "Paste"
+msgstr "Prilepi"
+
+#: ../src/sugar/activity/activity.py:297
+msgid "Activity"
+msgstr "Aktivnost"
+
+#: ../src/sugar/activity/activity.py:469
+#, python-format
+msgid "%s Activity"
+msgstr "%s aktivnost"
+
+#: ../src/sugar/activity/activity.py:856
+msgid "Keep error"
+msgstr "Napaka pri shranjevanju"
+
+#: ../src/sugar/activity/activity.py:857
+msgid "Keep error: all changes will be lost"
+msgstr "Napaka pri shranjevanju: vse spremembe bodo izgubljene"
+
+#: ../src/sugar/activity/activity.py:860
+msgid "Don't stop"
+msgstr "Ne ustavi"
+
+#: ../src/sugar/activity/activity.py:863
+msgid "Stop anyway"
+msgstr "Vseeno ustavi"
+
+#: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
+msgid "Ok"
+msgstr "V redu"
+
+#: ../src/sugar/graphics/alert.py:219
+msgid "Continue"
+msgstr "Nadaljuj"
+
+#: ../src/sugar/util.py:181
+msgid " and "
+msgstr " in "
+
+#: ../src/sugar/util.py:182
+msgid ", "
+msgstr ", "
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar/util.py:185
+msgid "Seconds ago"
+msgstr "pred nekaj sekundami"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar/util.py:189
+#, python-format
+msgid "%s ago"
+msgstr "%s nazaj"
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar/util.py:202
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d leto"
+msgstr[1] "%d leti"
+msgstr[2] "%d let"
+msgstr[3] ""
+
+#: ../src/sugar/util.py:203
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d mesec"
+msgstr[1] "%d meseca"
+msgstr[2] "%d mesecev"
+msgstr[3] ""
+
+#: ../src/sugar/util.py:204
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d teden"
+msgstr[1] "%d tedna"
+msgstr[2] "%d tedni"
+msgstr[3] "%d tednov"
+
+#: ../src/sugar/util.py:205
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d dan"
+msgstr[1] "%d dni"
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/sugar/util.py:206
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d ura"
+msgstr[1] "%d uri"
+msgstr[2] "%d ure"
+msgstr[3] "%d ur"
+
+#: ../src/sugar/util.py:207
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuta"
+msgstr[1] "%d minuti"
+msgstr[2] "%d minute"
+msgstr[3] "%d minut"
