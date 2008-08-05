@@ -115,6 +115,8 @@ msgstr "%s ashize"
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/sugar/util.py:203
 #, python-format
@@ -141,6 +143,8 @@ msgstr[1] ""
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/sugar/util.py:207
 #, python-format
