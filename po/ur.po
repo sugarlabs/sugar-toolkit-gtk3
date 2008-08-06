@@ -2,152 +2,151 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-07-08 04:38-0400\n"
+"Last-Translator: salman minhas <sulmanminhas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
 #: ../src/sugar/activity/activity.py:120
 msgid "Share with:"
-msgstr ""
+msgstr "کے ساتھہ ‎‎‎شئر کريں:"
 
 #: ../src/sugar/activity/activity.py:122
 msgid "Private"
-msgstr ""
+msgstr "پرايويٹ"
 
 #: ../src/sugar/activity/activity.py:123
 msgid "My Neighborhood"
-msgstr ""
+msgstr "ميرا گردونواح"
 
 #: ../src/sugar/activity/activity.py:130
 msgid "Keep"
-msgstr ""
+msgstr "رکھيں"
 
 #: ../src/sugar/activity/activity.py:136
 msgid "Stop"
-msgstr ""
+msgstr "روکيں"
 
 #: ../src/sugar/activity/activity.py:251
 msgid "Undo"
-msgstr ""
+msgstr "کلعدم کريں"
 
 #: ../src/sugar/activity/activity.py:256
 msgid "Redo"
-msgstr ""
+msgstr "دوبارہ کريں"
 
 #: ../src/sugar/activity/activity.py:266
 msgid "Copy"
-msgstr ""
+msgstr "کاپی"
 
 #: ../src/sugar/activity/activity.py:271
 msgid "Paste"
-msgstr ""
+msgstr "جوڑيں"
 
 #: ../src/sugar/activity/activity.py:297
 msgid "Activity"
-msgstr ""
+msgstr "سرگرمی"
 
 #: ../src/sugar/activity/activity.py:469
 #, python-format
 msgid "%s Activity"
-msgstr ""
+msgstr "%sسرگرمی"
 
 #: ../src/sugar/activity/activity.py:856
 msgid "Keep error"
-msgstr ""
+msgstr "غلطی رکھيں"
 
 #: ../src/sugar/activity/activity.py:857
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "غلطی رکھيں: تمام تبديلياں ختم ہو سکتی ہیں"
 
 #: ../src/sugar/activity/activity.py:860
 msgid "Don't stop"
-msgstr ""
+msgstr "مت رکيں"
 
 #: ../src/sugar/activity/activity.py:863
 msgid "Stop anyway"
-msgstr ""
+msgstr "رک جائيں"
 
 #: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
 msgid "Cancel"
-msgstr ""
+msgstr "منسوخ کريں"
 
 #: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
 msgid "Ok"
-msgstr ""
+msgstr "ٹھيک ہے"
 
 #: ../src/sugar/graphics/alert.py:219
 msgid "Continue"
-msgstr ""
+msgstr "جاری رکھيں"
 
 #: ../src/sugar/util.py:181
 msgid " and "
-msgstr ""
+msgstr " اور "
 
 #: ../src/sugar/util.py:182
 msgid ", "
-msgstr ""
+msgstr "، "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar/util.py:185
 msgid "Seconds ago"
-msgstr ""
+msgstr "سيکنڈ پہلے"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar/util.py:189
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s پہلے"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar/util.py:202
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%dسال"
+msgstr[1] "%dسال"
 
 #: ../src/sugar/util.py:203
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%dمہينہ"
+msgstr[1] "%d مہينے"
 
 #: ../src/sugar/util.py:204
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ہفتہ"
+msgstr[1] "%d ہفتے"
 
 #: ../src/sugar/util.py:205
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d دن"
+msgstr[1] "%s دن"
 
 #: ../src/sugar/util.py:206
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d گھنٹہ"
+msgstr[1] "%d گھنٹے"
 
 #: ../src/sugar/util.py:207
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d منٹ"
+msgstr[1] "%d منٹ"
