@@ -304,6 +304,53 @@ class ActivityToolbox(Toolbox):
     def get_activity_toolbar(self):
         return self._activity_toolbar
 
+class _ActivitySession(gobject.GObject):
+    __gsignals__ = {
+        'quit-requested': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'quit':           (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([]))
+    }
+
+    def __init__(self):
+        gobject.GObject.__init__(self)
+
+        self._xsmp_client = XSMPClient()
+        self._xsmp_client.connect('quit-requested', self.__sm_quit_requested_cb)
+        self._xsmp_client.connect('quit', self.__sm_quit_cb)
+        self._xsmp_client.startup()
+
+        self._activities = []
+        self._will_quit = []
+
+    def register(self, activity):
+        self._activities.append(activity)
+
+    def unregister(self, activity):
+        self._activities.remove(activity)
+
+        if len(self._activities) == 0:
+            logging.debug('Quitting the activity process.')
+            gtk.main_quit()
+
+    def will_quit(self, activity, will_quit):
+        if will_quit:
+            self._will_quit.append(activity)
+
+            # We can quit only when all the instances agreed to
+            for activity in self._activities:
+                if activity not in self._will_quit:
+                    return
+
+            self._xsmp_client.will_quit(True)
+        else:
+            self._will_quit = []
+            self._xsmp_client.will_quit(False)
+
+    def __sm_quit_requested_cb(self, client):
+        self.emit('quit-requested')
+
+    def __sm_quit_cb(self, client):
+        self.emit('quit')
+
 class Activity(Window, gtk.Container):
     """This is the base Activity class that all other Activities derive from.
        This is where your activity starts.
@@ -442,10 +489,11 @@ class Activity(Window, gtk.Container):
         self._invites_queue = []
         self._jobject = None
 
-        self._xsmp_client = XSMPClient()
-        self._xsmp_client.connect('quit-requested', self.__sm_quit_requested_cb)
-        self._xsmp_client.connect('quit', self.__sm_quit_cb)
-        self._xsmp_client.startup()
+        self._session = _get_session()
+        self._session.register(self)
+        self._session.connect('quit-requested',
+                              self.__session_quit_requested_cb)
+        self._session.connect('quit', self.__session_quit_cb)
 
         accel_group = gtk.AccelGroup()
         self.set_data('sugar-accel-group', accel_group)
@@ -564,15 +612,15 @@ class Activity(Window, gtk.Container):
         Window.set_canvas(self, canvas)
         canvas.connect('map', self.__canvas_map_cb)
 
-    def __sm_quit_requested_cb(self, client):
+    def __session_quit_requested_cb(self, session):
         self._quit_requested = True
 
         if not self._prepare_close():
-            client.will_quit(False)
+            session.will_quit(self, False)
         elif not self._updating_jobject:
-            client.will_quit(True)
+            session.will_quit(self, True)
 
-    def __sm_quit_cb(self, client):
+    def __session_quit_cb(self, client):
         self._complete_close()
 
     def __canvas_map_cb(self, canvas):
@@ -648,7 +696,7 @@ class Activity(Window, gtk.Container):
         logging.debug('Activity.__save_cb')
         self._updating_jobject = False
         if self._quit_requested:
-            self._xsmp_client.will_quit(True)
+            self._session.will_quit(self, True)
         elif self._closing:
             self._complete_close()
 
@@ -656,7 +704,7 @@ class Activity(Window, gtk.Container):
         logging.debug('Activity.__save_error_cb')
         self._updating_jobject = False
         if self._quit_requested:
-            self._xsmp_client.will_quit(False)
+            self._session.will_quit(self, False)
         if self._closing:
             self._show_keep_failed_dialog()
             self._closing = False
@@ -915,6 +963,8 @@ class Activity(Window, gtk.Container):
         # Make the exported object inaccessible
         dbus.service.Object.remove_from_connection(self._bus)
 
+        self._session.unregister(self)
+
     def close(self, skip_save=False):
         """Request that the activity be stopped and saved to the Journal
         
@@ -959,6 +1009,16 @@ class Activity(Window, gtk.Container):
             return None
 
     metadata = property(get_metadata, None)
+
+_session = None
+
+def _get_session():
+    global _session
+
+    if _session is None:
+        _session = _ActivitySession()
+
+    return _session
 
 def get_bundle_name():
     """Return the bundle name for the current process' bundle"""
