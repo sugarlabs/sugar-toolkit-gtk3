@@ -1,4 +1,4 @@
-AC_INIT([sugar-toolkit],[0.81.8],[],[sugar-toolkit])
+AC_INIT([sugar-toolkit],[0.82.0],[],[sugar-toolkit])
 
 AC_PREREQ([2.59])
 
@@ -24,7 +24,7 @@ AC_SUBST(PYGTK_DEFSDIR)
 
 # Setup GETTEXT
 #
-ALL_LINGUAS="af am ar ay bg bn bn_IN ca de dz el en es fa fa_AF ff fr gu ha hi ht ig is it ja km ko mk ml mn mr mvo ne nl pa pap pis pl ps pt pt_BR qu ro ru rw sd si te th tpi tr ur vi yo zh_CN zh_TW"
+ALL_LINGUAS="af am ar ay bg bn bn_IN ca de dz el en es fa fa_AF ff fr gu ha hi ht ig is it ja km ko mk ml mn mr mvo nb ne nl pa pap pis pl ps pt pt_BR qu ro ru rw sd si sl te th tpi tr ur vi yo zh_CN zh_TW"
 GETTEXT_PACKAGE=sugar-toolkit
 AC_PROG_INTLTOOL([0.33])
 AC_SUBST(GETTEXT_PACKAGE)
