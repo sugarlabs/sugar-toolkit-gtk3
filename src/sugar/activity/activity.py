@@ -104,7 +104,7 @@ class ActivityToolbar(gtk.Toolbar):
 
         if activity.metadata:
             self.title = gtk.Entry()
-            self.title.set_size_request(int(gtk.gdk.screen_width() / 6), -1)
+            self.title.set_size_request(int(gtk.gdk.screen_width() / 3), -1)
             self.title.set_text(activity.metadata['title'])
             self.title.connect('changed', self.__title_changed_cb)
             self._add_widget(self.title)
