@@ -20,9 +20,9 @@ import time
 import sha
 import random
 import binascii
-import string
-from gettext import gettext as _
 import gettext
+
+_ = gettext.gettext
 
 def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
@@ -58,7 +58,12 @@ def unique_id(data = ''):
 ACTIVITY_ID_LEN = 40
 
 def is_hex(s):
-    return s.strip(string.hexdigits) == ''    
+    try:
+        int(s, 16)
+    except ValueError:
+        return False
+
+    return True 
 
 def validate_activity_id(actid):
     """Validate an activity ID."""
@@ -106,6 +111,7 @@ class LRU:
     http://pype.sourceforge.net
     Copyright 2003 Josiah Carlson.
     """
+    # pylint: disable-msg=W0102,W0612
     def __init__(self, count, pairs=[]):
         self.count = max(count, 1)
         self.d = {}
