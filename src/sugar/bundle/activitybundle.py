@@ -291,7 +291,7 @@ class ActivityBundle(Bundle):
         # List installed files
         manifestfiles = self.get_files(self._raw_manifest())
         paths  = []
-        for root, dirs, files in os.walk(install_path):
+        for root, dirs_, files in os.walk(install_path):
             rel_path = root[len(install_path) + 1:]
             for f in files:
                 paths.append(os.path.join(rel_path, f))

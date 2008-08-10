@@ -19,8 +19,8 @@
 from telepathy.constants import (
     CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES)
 
-from tubeconn import TubeConnection
-import presenceservice
+from sugar.presence.tubeconn import TubeConnection
+from sugar.presence import presenceservice
 
 
 class SugarTubeConnection(TubeConnection):

@@ -178,7 +178,7 @@ class PresenceService(gobject.GObject):
                         self._del_object, object_path)
                 try:
                     # Pre-fill the activity's ID
-                    foo = obj.props.id
+                    activity_id = obj.props.id
                 except dbus.exceptions.DBusException:
                     logging.debug('Cannot get the activity ID')
             else:
@@ -239,9 +239,11 @@ class PresenceService(gobject.GObject):
         gobject.idle_add(self._emit_activity_invitation_signal, activity_path,
                          buddy_path, message)
 
-    def _emit_private_invitation_signal(self, bus_name, connection, channel, chan_type):
+    def _emit_private_invitation_signal(self, bus_name, connection,
+                                        channel, chan_type):
         """Emit GObject event with bus_name, connection and channel"""
-        self.emit('private-invitation', bus_name, connection, channel, chan_type)
+        self.emit('private-invitation', bus_name, connection,
+                  channel, chan_type)
         return False
 
     def _private_invitation_cb(self, bus_name, connection, channel, chan_type):
@@ -469,7 +471,7 @@ class PresenceService(gobject.GObject):
                       (activity.get_id(), err))
         self.emit("activity-shared", False, None, err)
 
-    def share_activity(self, activity, properties={}, private=True):
+    def share_activity(self, activity, properties=None, private=True):
         """Ask presence service to ask the activity to share itself publicly.
         
         Uses the AdvertiseActivity method on the service to ask for the 
@@ -483,6 +485,9 @@ class PresenceService(gobject.GObject):
         returns None
         """
         actid = activity.get_id()
+
+        if properties is None:
+            properties = {}
 
         # Ensure the activity is not already shared/joined
         for obj in self._objcache.values():
@@ -584,7 +589,7 @@ class _MockPresenceService(gobject.GObject):
     def get_owner(self):
         return None
 
-    def share_activity(self, activity, properties={}):
+    def share_activity(self, activity, properties=None):
         return None
 
 _ps = None

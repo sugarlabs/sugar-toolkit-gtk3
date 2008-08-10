@@ -31,7 +31,7 @@ def printable_hash(in_hash):
         printable = printable + binascii.b2a_hex(char)
     return printable
 
-def _sha_data(data):
+def sha_data(data):
     """sha1 hash some bytes."""
     sha_hash = sha.new()
     sha_hash.update(data)
@@ -52,7 +52,7 @@ def unique_id(data = ''):
         perfectly unique values.
     """
     data_string = "%s%s%s" % (time.time(), random.randint(10000, 100000), data)
-    return printable_hash(_sha_data(data_string))
+    return printable_hash(sha_data(data_string))
 
 
 ACTIVITY_ID_LEN = 40
