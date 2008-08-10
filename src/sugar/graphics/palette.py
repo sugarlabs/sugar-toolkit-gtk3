@@ -1032,6 +1032,7 @@ class CanvasInvoker(Invoker):
         self._position_hint = self.AT_CURSOR
         self._motion_hid = None
         self._release_hid = None
+        self._item = None
 
         if parent:
             self.attach(parent)
@@ -1093,7 +1094,7 @@ class ToolInvoker(WidgetInvoker):
     def _get_alignments(self):
         parent = self._widget.get_parent()
         if parent is None:
-            return WidgetInvoker.get_alignments()
+            return WidgetInvoker._get_alignments()
 
         if parent.get_orientation() is gtk.ORIENTATION_HORIZONTAL:
             return self.BOTTOM + self.TOP
