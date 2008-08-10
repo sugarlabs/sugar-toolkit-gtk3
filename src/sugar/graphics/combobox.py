@@ -21,10 +21,6 @@ import gtk
 class ComboBox(gtk.ComboBox):
     __gtype_name__ = 'SugarComboBox'    
 
-    __gproperties__ = {
-        'value'    : (object, None, None,
-                      gobject.PARAM_READABLE)
-    }
     def __init__(self):
         gtk.ComboBox.__init__(self)
 
@@ -39,14 +35,14 @@ class ComboBox(gtk.ComboBox):
 
         self.set_row_separator_func(self._is_separator)
 
-    def do_get_property(self, pspec):
-        if pspec.name == 'value':
-            row = self.get_active_item()
-            if not row:
-                return None
-            return row[0]
-        else:
-            return gtk.ComboBox.do_get_property(self, pspec)
+    def get_value(self):
+        row = self.get_active_item()
+        if not row:
+            return None
+        return row[0]
+
+    value = gobject.property(
+        type=object, getter=get_value, setter=None)
 
     def _get_real_name_from_theme(self, name, size):
         icon_theme = gtk.icon_theme_get_default()

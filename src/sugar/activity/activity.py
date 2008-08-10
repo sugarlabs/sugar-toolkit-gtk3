@@ -425,13 +425,6 @@ class Activity(Window, gtk.Container):
         'joined': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([]))
     }
 
-    __gproperties__ = {
-        'active'          : (bool, None, None, False,
-                             gobject.PARAM_READWRITE),
-        'max-participants': (int, None, None, 0, 1000, 0,
-                             gobject.PARAM_READWRITE)
-    }
-
     def __init__(self, handle, create_jobject=True):
         """Initialise the Activity 
         
@@ -570,24 +563,27 @@ class Activity(Window, gtk.Container):
             # https://dev.laptop.org/ticket/3071
             datastore.write(self._jobject)
 
-    def do_set_property(self, pspec, value):
-        if pspec.name == 'active':
-            if self._active != value:
-                self._active = value
-                if not self._active and self._jobject:
-                    self.save()
-        elif pspec.name == 'max-participants':
-            self._max_participants = value
-        else:
-            Window.do_set_property(self, pspec, value)
+    def get_active(self):
+        return self._active
 
-    def do_get_property(self, pspec):
-        if pspec.name == 'active':
-            return self._active
-        elif pspec.name == 'max-participants':
-            return self._max_participants
-        else:
-            return Window.do_get_property(self, pspec)
+    def set_active(self, active):
+        if self._active != active:
+            self._active = active
+            if not self._active and self._jobject:
+                self.save()
+
+    active = gobject.property(
+        type=bool, default=False, getter=get_active, setter=set_active)
+
+    def get_max_participants(self):
+        return self._max_participants
+
+    def set_max_participants(self, participants):
+        self._max_participants = participants
+
+    max_participants = gobject.property(
+            type=int, default=0, getter=get_max_participants,
+            setter=set_max_participants)
 
     def get_id(self):
         """Returns the activity id of the current instance of your activity.
