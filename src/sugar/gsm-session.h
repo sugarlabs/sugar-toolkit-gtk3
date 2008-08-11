@@ -73,6 +73,8 @@ typedef enum {
   GSM_SESSION_LOGOUT_MODE_FORCE
 } GsmSessionLogoutMode;
 
+GType            gsm_session_get_type          (void) G_GNUC_CONST;
+
 void             gsm_session_set_name          (GsmSession *session,
                                                 const char *name);
 
