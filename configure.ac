@@ -10,6 +10,8 @@ AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
+GNOME_COMPILE_WARNINGS(maximum)
+
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 
 AM_PATH_PYTHON

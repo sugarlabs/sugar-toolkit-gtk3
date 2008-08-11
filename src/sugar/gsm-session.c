@@ -151,53 +151,6 @@ end_phase (GsmSession *session)
 }
 
 static void
-app_condition_changed (GsmApp *app, gboolean condition, gpointer data)
-{
-  GsmSession *session;
-  GsmClient *client = NULL;
-  GSList *cl = NULL;
-
-  g_return_if_fail (data != NULL);
-
-  session = (GsmSession *) data;
-
-  /* Check for an existing session client for this app */
-  for (cl = session->clients; cl; cl = cl->next)
-    {
-      GsmClient *c = GSM_CLIENT (cl->data);
-
-      if (!strcmp (app->client_id, gsm_client_get_client_id (c)))
-        client = c;
-    }
-
-  if (condition)
-    {
-      GError *error = NULL;
-
-      if (app->pid <= 0 && client == NULL)
-        gsm_app_launch (app, &error);
-
-      if (error != NULL)
-        {
-          g_warning ("Not able to launch autostart app from its condition: %s",
-                     error->message);
-
-          g_error_free (error);
-        }
-    }
-  else
-    {
-      /* Kill client in case condition if false and make sure it won't
-       * be automatically restarted by adding the client to 
-       * condition_clients */
-      session->condition_clients =
-            g_slist_prepend (session->condition_clients, client);
-      gsm_client_die (client);
-      app->pid = -1; 
-    }
-}
-
-static void
 app_registered (GsmApp *app, gpointer data)
 {
   GsmSession *session = data;
@@ -241,10 +194,6 @@ phase_timeout (gpointer data)
 static void
 start_phase (GsmSession *session)
 {
-  GsmApp *app;
-  GSList *a;
-  GError *err = NULL;
-
   g_debug ("starting phase %d\n", session->phase);
 
   g_slist_free (session->pending_apps);
@@ -359,8 +308,6 @@ client_saved_state (GsmClient *client, gpointer data)
 void
 gsm_session_initiate_shutdown (GsmSession *session)
 {
-  gboolean logout_prompt;
-
   if (session->phase == GSM_SESSION_PHASE_SHUTDOWN)
     {
       /* Already shutting down, nothing more to do */

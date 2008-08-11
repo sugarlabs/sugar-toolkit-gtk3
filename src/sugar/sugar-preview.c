@@ -19,6 +19,7 @@
 
 #include <gdk/gdkx.h>
 #include <gtk/gtkwindow.h>
+#include <X11/extensions/XShm.h>
 
 #include "sugar-preview.h"
 
@@ -37,8 +38,6 @@ sugar_preview_set_size(SugarPreview *preview, int width, int height)
 GdkPixbuf *
 sugar_preview_get_pixbuf(SugarPreview *preview)
 {
-    GdkPixbuf *pixbuf;
-
     if (preview->pixbuf != NULL) {
         return preview->pixbuf;
     }
@@ -92,7 +91,7 @@ sugar_preview_take_screenshot(SugarPreview *preview, GdkDrawable *drawable)
     XShmGetImage(GDK_SCREEN_XDISPLAY(screen),
                  GDK_DRAWABLE_XID(drawable),
                  gdk_x11_image_get_ximage(preview->image),
-                 0, 0, AllPlanes, ZPixmap);
+                 0, 0, AllPlanes);
 }
 
 static void
