@@ -23,8 +23,7 @@ import binascii
 import gettext
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
-_ngettext = lambda msg1, msg2, n: gettext.dngettext('sugar-toolkit', msg1, msg2, n)
-
+_ngettext = lambda m1, m2, n: gettext.dngettext('sugar-toolkit', m1, m2, n)
 
 def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
