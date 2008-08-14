@@ -244,9 +244,7 @@ class Palette(gtk.Window):
         self._menu_box = None
         self._content = None
         self._palette_popup_sid = None
-        self._enter_invoker_hid = None
-        self._leave_invoker_hid = None
-        self._right_click_invoker_hid = None
+        self._invoker_hids = []
         
         self.set_group_id("default")
 
@@ -312,21 +310,27 @@ class Palette(gtk.Window):
         return gtk.gdk.Rectangle(x, y, width, height)
 
     def _set_invoker(self, invoker):
-        if self._invoker is not None:
-            self._invoker.disconnect(self._enter_invoker_hid)
-            self._invoker.disconnect(self._leave_invoker_hid)
-            self._invoker.disconnect(self._right_click_invoker_hid)
+        for hid in self._invoker_hids[:]: 
+            self._invoker.disconnect(hid)
+            self._invoker_hids.remove(hid)
 
         self._invoker = invoker
         if invoker is not None:
-            self._enter_invoker_hid = self._invoker.connect(
-                'mouse-enter', self._invoker_mouse_enter_cb)
-            self._leave_invoker_hid = self._invoker.connect(
-                'mouse-leave', self._invoker_mouse_leave_cb)
-            self._right_click_invoker_hid = self._invoker.connect(
-                'right-click', self._invoker_right_click_cb)
+            self._invoker_hids.append(self._invoker.connect(
+                'mouse-enter', self._invoker_mouse_enter_cb))
+            self._invoker_hids.append(self._invoker.connect(
+                'mouse-leave', self._invoker_mouse_leave_cb))
+            self._invoker_hids.append(self._invoker.connect(
+                'right-click', self._invoker_right_click_cb))
             if hasattr(invoker.props, 'widget'):
-                self._label.props.accel_widget = invoker.props.widget
+                self._update_accel_widget()
+                logging.debug(('Setup widget', invoker.props.widget))
+                self._invoker_hids.append(self._invoker.connect(
+                    'notify::widget', self._invoker_widget_changed_cb))
+
+    def _update_accel_widget(self):
+        assert self.props.invoker is not None
+        self._label.props.accel_widget = self.props.invoker.props.widget
 
     def set_primary_text(self, label, accel_path=None):
         self._primary_text = label
@@ -610,6 +614,9 @@ class Palette(gtk.Window):
                 group.popdown()
 
         self.popup(immediate=immediate)
+
+    def _invoker_widget_changed_cb(self, invoker, spec):
+        self._update_accel_widget()
 
     def _invoker_mouse_enter_cb(self, invoker):
         self._mouse_detector.start()
@@ -938,6 +945,8 @@ class WidgetInvoker(Invoker):
             self._widget = widget
         else:
             self._widget = parent
+
+        self.notify('widget')
 
         self._enter_hid = self._widget.connect('enter-notify-event',
                                                self.__enter_notify_event_cb)
