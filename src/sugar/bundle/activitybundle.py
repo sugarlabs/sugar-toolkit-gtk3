@@ -205,13 +205,13 @@ class ActivityBundle(Bundle):
 
     def get_locale_path(self):
         """Get the locale path inside the (installed) activity bundle."""
-        if not self._unpacked:
+        if self._zip_file is not None:
             raise NotInstalledException
         return os.path.join(self._path, 'locale')
 
     def get_icons_path(self):
         """Get the icons path inside the (installed) activity bundle."""
-        if not self._unpacked:
+        if self._zip_file is not None:
             raise NotInstalledException
         return os.path.join(self._path, 'icons')
 
@@ -237,7 +237,7 @@ class ActivityBundle(Bundle):
     def get_icon(self):
         """Get the activity icon name"""
         icon_path = os.path.join('activity', self._icon + '.svg')
-        if self._unpacked:
+        if self._zip_file is None:
             return os.path.join(self._path, icon_path)
         else:
             icon_data = self.get_file(icon_path).read()
@@ -365,7 +365,7 @@ class ActivityBundle(Bundle):
             raise RegistrationException
 
     def uninstall(self, force=False):        
-        if self._unpacked:
+        if self._zip_file is None:
             install_path = self._path
         else:
             if not self.is_installed():

@@ -19,6 +19,7 @@
 
 import os
 import logging
+import shutil
 import StringIO
 import zipfile
 
@@ -59,9 +60,9 @@ class Bundle:
         self._zip_root_dir = None
 
         if os.path.isdir(self._path):
-            self._unpacked = True
+            self._zip_file = None
         else:
-            self._unpacked = False
+            self._zip_file = zipfile.ZipFile(self._path)
             self._check_zip_bundle()
 
         # manifest = self._get_file(self._infodir + '/contents')
@@ -72,9 +73,12 @@ class Bundle:
         # if signature is None:
         #     raise MalformedBundleException('No signature file')
 
+    def __del__(self):
+        if self._zip_file is not None:
+            self._zip_file.close()
+
     def _check_zip_bundle(self):
-        zip_file = zipfile.ZipFile(self._path)
-        file_names = zip_file.namelist()
+        file_names = self._zip_file.namelist()
         if len(file_names) == 0:
             raise MalformedBundleException('Empty zip file')
 
@@ -99,48 +103,42 @@ class Bundle:
     def get_file(self, filename):
         f = None
 
-        if self._unpacked:
+        if self._zip_file is None:
             path = os.path.join(self._path, filename)
             try:
                 f = open(path,"rb")
             except IOError:
                 return None
         else:
-            zip_file = zipfile.ZipFile(self._path)
             path = os.path.join(self._zip_root_dir, filename)
             try:
-                data = zip_file.read(path)
+                data = self._zip_file.read(path)
                 f = StringIO.StringIO(data)
             except KeyError:
                 logging.debug('%s not found.' % filename)
-            zip_file.close()
 
         return f
     
     def is_file(self, filename):
-        if self._unpacked:
+        if self._zip_file is None:
             path = os.path.join(self._path, filename)
             return os.path.isfile(path)
         else:
-            zip_file = zipfile.ZipFile(self._path)
             path = os.path.join(self._zip_root_dir, filename)
             try:
-                zip_file.getinfo(path)
+                self._zip_file.getinfo(path)
             except KeyError:
                 return False
-            finally:
-                zip_file.close()
 
             return True
 
     def is_dir(self, filename):
-        if self._unpacked:
+        if self._zip_file is None:
             path = os.path.join(self._path, filename)
             return os.path.isdir(path)
         else:
-            zip_file = zipfile.ZipFile(self._path)
             path = os.path.join(self._zip_root_dir, filename, "")
-            for f in zip_file.namelist():
+            for f in self._zip_file.namelist():
                 if f.startswith(path):
                     return True
             return False
@@ -150,7 +148,7 @@ class Bundle:
         return self._path
 
     def _unzip(self, install_dir):
-        if self._unpacked:
+        if self._zip_file is None:
             raise AlreadyInstalledException
 
         if not os.path.isdir(install_dir):
@@ -163,10 +161,13 @@ class Bundle:
         # FIXME: use manifest
         if os.spawnlp(os.P_WAIT, 'unzip', 'unzip', '-o', self._path,
                       '-x', 'mimetype', '-d', install_dir):
+            # clean up install dir after failure
+            shutil.rmtree(install_dir, ignore_errors=True)
+            # indicate failure.
             raise ZipExtractException
 
     def _zip(self, bundle_path):
-        if not self._unpacked:
+        if self._zip_file is not None:
             raise NotInstalledException
 
         raise NotImplementedError
