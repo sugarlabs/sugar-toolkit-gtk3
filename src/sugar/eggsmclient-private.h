@@ -25,6 +25,8 @@
 
 G_BEGIN_DECLS
 
+#define EGG_SM_CLIENT_BACKEND_XSMP
+
 GKeyFile *egg_sm_client_save_state     (EggSMClient *client);
 void      egg_sm_client_quit_requested (EggSMClient *client);
 void      egg_sm_client_quit_cancelled (EggSMClient *client);

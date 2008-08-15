@@ -278,10 +278,13 @@ def delete(object_id):
     logging.debug('datastore.delete')
     dbus_helpers.delete(object_id)
 
-def find(query, sorting=None, limit=None, offset=None, properties=[],
+def find(query, sorting=None, limit=None, offset=None, properties=None,
          reply_handler=None, error_handler=None):
 
     query = query.copy()
+
+    if properties is None:
+        properties = []
 
     if sorting:
         query['order_by'] = sorting

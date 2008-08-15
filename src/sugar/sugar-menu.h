@@ -50,6 +50,7 @@ void     sugar_menu_set_active (SugarMenu    *menu,
                                 gboolean      active);
 void     sugar_menu_embed      (SugarMenu    *menu,
                                 GtkContainer *parent);
+void     sugar_menu_unembed    (SugarMenu    *menu);
 
 G_END_DECLS
 

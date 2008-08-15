@@ -49,6 +49,7 @@ class ContentBundle(Bundle):
         self._category_icon = None
         self._library_version = None
         self._bundle_class = None
+        self._activity_start = None
 
         info_file = self.get_file('library/library.info')
         if info_file is None:

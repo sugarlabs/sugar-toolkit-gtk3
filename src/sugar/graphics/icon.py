@@ -293,17 +293,6 @@ class _IconBuffer(object):
 class Icon(gtk.Image):
     __gtype_name__ = 'SugarIcon'
 
-    __gproperties__ = {
-        'xo-color'      : (object, None, None,
-                           gobject.PARAM_WRITABLE),
-        'fill-color'    : (object, None, None,
-                           gobject.PARAM_READWRITE),
-        'stroke-color'  : (object, None, None,
-                           gobject.PARAM_READWRITE),
-        'badge-name'    : (str, None, None, None,
-                           gobject.PARAM_READWRITE)
-    }
-
     def __init__(self, **kwargs):
         self._buffer = _IconBuffer()
 
@@ -368,35 +357,46 @@ class Icon(gtk.Image):
         cr.set_source_surface(surface, x, y)
         cr.paint()
 
-    def do_set_property(self, pspec, value):
-        if pspec.name == 'xo-color':
-            if self._buffer.xo_color != value:
-                self._buffer.xo_color = value
-                self.queue_draw()
-        elif pspec.name == 'fill-color':
-            if self._buffer.fill_color != value:
-                self._buffer.fill_color = value
-                self.queue_draw()
-        elif pspec.name == 'stroke-color':
-            if self._buffer.stroke_color != value:
-                self._buffer.stroke_color = value
-                self.queue_draw()
-        elif pspec.name == 'badge-name':
-            if self._buffer.badge_name != value:
-                self._buffer.badge_name = value
-                self.queue_resize()
-        else:
-            gtk.Image.do_set_property(self, pspec, value)
+    def set_xo_color(self, value):
+        if self._buffer.xo_color != value:
+            self._buffer.xo_color = value
+            self.queue_draw()
 
-    def do_get_property(self, pspec):
-        if pspec.name == 'fill-color':
-            return self._buffer.fill_color
-        elif pspec.name == 'stroke-color':
-            return self._buffer.stroke_color
-        elif pspec.name == 'badge-name':
-            return self._buffer.badge_name
-        else:
-            return gtk.Image.do_get_property(self, pspec)
+    xo_color = gobject.property(
+        type=object, getter=None, setter=set_xo_color)
+
+    def set_fill_color(self, value):
+        if self._buffer.fill_color != value:
+            self._buffer.fill_color = value
+            self.queue_draw()
+
+    def get_fill_color(self):
+        return self._buffer.fill_color
+
+    fill_color = gobject.property(
+        type=object, getter=get_fill_color, setter=set_fill_color)
+
+    def set_stroke_color(self, value):
+        if self._buffer.stroke_color != value:
+            self._buffer.stroke_color = value
+            self.queue_draw()
+
+    def get_stroke_color(self):
+        return self._buffer.stroke_color
+
+    stroke_color = gobject.property(
+        type=object, getter=get_stroke_color, setter=set_stroke_color)
+
+    def set_badge_name(self, value):
+        if self._buffer.badge_name != value:
+            self._buffer.badge_name = value
+            self.queue_resize()
+
+    def get_badge_name(self):
+        return self._buffer.badge_name
+
+    badge_name = gobject.property(
+        type=str, getter=get_badge_name, setter=set_badge_name)
 
 class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     __gtype_name__ = 'CanvasIcon'

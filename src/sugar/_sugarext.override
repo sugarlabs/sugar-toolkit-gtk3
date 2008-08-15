@@ -10,8 +10,8 @@ headers
 #include "sugar-preview.h"
 #include "sexy-icon-entry.h"
 #include "gsm-session.h"
+#include "gsm-xsmp.h"
 
-#define EGG_SM_CLIENT_BACKEND_XSMP
 #include "eggsmclient.h"
 #include "eggsmclient-private.h"
 

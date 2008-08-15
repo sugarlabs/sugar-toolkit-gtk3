@@ -20,9 +20,10 @@ import time
 import sha
 import random
 import binascii
-import string
-from gettext import gettext as _
 import gettext
+
+_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ngettext = lambda m1, m2, n: gettext.dngettext('sugar-toolkit', m1, m2, n)
 
 def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
@@ -31,7 +32,7 @@ def printable_hash(in_hash):
         printable = printable + binascii.b2a_hex(char)
     return printable
 
-def _sha_data(data):
+def sha_data(data):
     """sha1 hash some bytes."""
     sha_hash = sha.new()
     sha_hash.update(data)
@@ -52,13 +53,18 @@ def unique_id(data = ''):
         perfectly unique values.
     """
     data_string = "%s%s%s" % (time.time(), random.randint(10000, 100000), data)
-    return printable_hash(_sha_data(data_string))
+    return printable_hash(sha_data(data_string))
 
 
 ACTIVITY_ID_LEN = 40
 
 def is_hex(s):
-    return s.strip(string.hexdigits) == ''    
+    try:
+        int(s, 16)
+    except ValueError:
+        return False
+
+    return True 
 
 def validate_activity_id(actid):
     """Validate an activity ID."""
@@ -106,6 +112,7 @@ class LRU:
     http://pype.sourceforge.net
     Copyright 2003 Josiah Carlson.
     """
+    # pylint: disable-msg=W0102,W0612
     def __init__(self, count, pairs=[]):
         self.count = max(count, 1)
         self.d = {}
@@ -222,8 +229,8 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
             if levels > 0:
                 time_period += COMMA
 
-            time_period += gettext.ngettext(name_singular, name_plural,
-                                            elapsed_units) % elapsed_units
+            time_period += _ngettext(name_singular, name_plural,
+                                     elapsed_units) % elapsed_units
 
             elapsed_seconds -= elapsed_units * factor
 

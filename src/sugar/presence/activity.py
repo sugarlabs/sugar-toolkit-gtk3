@@ -281,8 +281,8 @@ class Activity(gobject.GObject):
 
         def tubes_ready():
             if self.telepathy_text_chan is None or \
-                self.telepathy_tubes_chan is None:
-                    return
+               self.telepathy_tubes_chan is None:
+                return
 
             _logger.debug('%r: finished setting up tubes', self)
             reply_handler()
@@ -303,7 +303,7 @@ class Activity(gobject.GObject):
             found_text_channel = False
             found_tubes_channel = False
 
-            for chan_path, chan_iface, handle_type, handle in chans:
+            for chan_path, chan_iface, handle_type, handle_ in chans:
                 if handle_type != telepathy.HANDLE_TYPE_ROOM:
                     return
 

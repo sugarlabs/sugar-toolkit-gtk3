@@ -215,7 +215,7 @@ class Profile(object):
             return None
 
         # hash it
-        key_hash = util._sha_data(key)
+        key_hash = util.sha_data(key)
         return util.printable_hash(key_hash)
 
     def _get_privkey_hash(self):
