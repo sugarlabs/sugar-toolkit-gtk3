@@ -65,6 +65,12 @@ class ToolButton(gtk.ToolButton):
             self.set_icon(icon_name)
 
         self.connect('clicked', self.__button_clicked_cb)
+        self.get_child().connect('can-activate-accel',
+                                 self.__button_can_activate_accel_cb)
+
+    def __button_can_activate_accel_cb(self, button, signal_id):
+        # Accept activation via accelerators regardless of this widget's state
+        return True
 
     def set_tooltip(self, tooltip):
         """ Set a simple palette with just a single label.
