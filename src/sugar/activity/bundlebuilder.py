@@ -51,7 +51,21 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 class Config(object):
     def __init__(self, source_dir=None, dist_dir = None, dist_name = None):
         self.source_dir = source_dir or os.getcwd()
-            
+        self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
+        self.dist_name = dist_name
+        self.bundle = None
+        self.version = None
+        self.activity_name = None
+        self.bundle_id = None
+        self.bundle_name = None
+        self.bundle_root_dir = None
+        self.tar_root_dir = None
+        self.xo_name = None
+        self.tar_name = None
+
+        self.update()
+
+    def update(self):
         self.bundle = bundle = ActivityBundle(self.source_dir)
         self.version = bundle.get_activity_version()
         self.activity_name = bundle.get_name()
@@ -59,14 +73,9 @@ class Config(object):
         self.bundle_name = reduce(lambda x, y:x+y, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%d' % (self.bundle_name, self.version)
-
-        if dist_dir:
-            self.dist_dir = dist_dir
-        else:
-            self.dist_dir = os.path.join(self.source_dir, 'dist')
             
-        if dist_name:
-            self.xo_name = self.tar_name = dist_name
+        if self.dist_name:
+            self.xo_name = self.tar_name = self.dist_name
         else:
             self.xo_name = '%s-%d.xo' % (self.bundle_name, self.version)
             self.tar_name = '%s-%d.tar.bz2' % (self.bundle_name, self.version)
@@ -331,6 +340,8 @@ def cmd_release(config, options, args):
     f = open(info_path, 'w')
     f.write(info)
     f.close()
+
+    config.update()
 
     news_path = os.path.join(config.source_dir, 'NEWS')
 
