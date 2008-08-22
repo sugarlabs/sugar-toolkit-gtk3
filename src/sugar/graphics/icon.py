@@ -417,27 +417,10 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         if self._palette_invoker is not None:
             self._palette_invoker.detach()
 
-    def _repaint_for_icon_change(self):
-        box_width, box_height = self.get_allocation()
-
-        if self._buffer.width is None:
-            icon_width = 0
-        else:
-            icon_width = self._buffer.width
-
-        if self._buffer.height is None:
-            icon_height = 0
-        else:
-            icon_height = self._buffer.height
-
-        x = (box_width - icon_width) / 2
-        y = (box_height - icon_height) / 2
-        self.emit_paint_needed(x, y, icon_width, icon_height)
-
     def set_file_name(self, value):
         if self._buffer.file_name != value:
             self._buffer.file_name = value
-            self._repaint_for_icon_change()
+            self.emit_paint_needed(0, 0, -1, -1)
 
     def get_file_name(self):
         return self._buffer.file_name
@@ -448,7 +431,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     def set_icon_name(self, value):
         if self._buffer.icon_name != value:
             self._buffer.icon_name = value
-            self._repaint_for_icon_change()
+            self.emit_paint_needed(0, 0, -1, -1)
 
     def get_icon_name(self):
         return self._buffer.icon_name
@@ -459,7 +442,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     def set_xo_color(self, value):
         if self._buffer.xo_color != value:
             self._buffer.xo_color = value
-            self._repaint_for_icon_change()
+            self.emit_paint_needed(0, 0, -1, -1)
 
     xo_color = gobject.property(
         type=object, getter=None, setter=set_xo_color)
@@ -467,7 +450,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     def set_fill_color(self, value):
         if self._buffer.fill_color != value:
             self._buffer.fill_color = value
-            self._repaint_for_icon_change()
+            self.emit_paint_needed(0, 0, -1, -1)
 
     def get_fill_color(self):
         return self._buffer.fill_color
@@ -478,7 +461,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     def set_stroke_color(self, value):
         if self._buffer.stroke_color != value:
             self._buffer.stroke_color = value
-            self._repaint_for_icon_change()
+            self.emit_paint_needed(0, 0, -1, -1)
 
     def get_stroke_color(self):
         return self._buffer.stroke_color
@@ -523,7 +506,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     def set_badge_name(self, value):
         if self._buffer.badge_name != value:
             self._buffer.badge_name = value
-            self._repaint_for_icon_change()
+            self.emit_paint_needed(0, 0, -1, -1)
 
     def get_badge_name(self):
         return self._buffer.badge_name
