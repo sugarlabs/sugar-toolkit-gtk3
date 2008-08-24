@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-07-27 09:55-0400\n"
+"PO-Revision-Date: 2008-08-21 12:59-0400\n"
 "Last-Translator: korakurider <korakurider@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "私のお隣さん"
 
 #: ../src/sugar/activity/activity.py:130
 msgid "Keep"
-msgstr "残しておく"
+msgstr "ジャーナルに保存"
 
 #: ../src/sugar/activity/activity.py:136
 msgid "Stop"
@@ -106,7 +106,7 @@ msgstr "ちょっと前"
 #: ../src/sugar/util.py:189
 #, python-format
 msgid "%s ago"
-msgstr "だけ前"
+msgstr "%s前"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar/util.py:202

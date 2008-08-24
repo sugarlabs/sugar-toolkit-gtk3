@@ -16,6 +16,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import os
 import time
 import sha
 import random
@@ -23,7 +24,6 @@ import binascii
 import gettext
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
-_ngettext = lambda m1, m2, n: gettext.dngettext('sugar-toolkit', m1, m2, n)
 
 def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
@@ -217,6 +217,9 @@ del ngettext
 
 # End of plurals hack
 
+# gettext perfs hack (#7959)
+_i18n_timestamps_cache = LRU(60)
+
 def timestamp_to_elapsed_string(timestamp, max_levels=2):
     levels = 0
     time_period = ''
@@ -229,8 +232,17 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
             if levels > 0:
                 time_period += COMMA
 
-            time_period += _ngettext(name_singular, name_plural,
-                                     elapsed_units) % elapsed_units
+            key = ''.join((os.environ['LANG'], name_singular,
+                           str(elapsed_units)))
+            if key in _i18n_timestamps_cache:
+                time_period += _i18n_timestamps_cache[key]
+            else:
+                translation = gettext.dngettext('sugar-toolkit',
+                                                name_singular,
+                                                name_plural,
+                                                elapsed_units) % elapsed_units
+                _i18n_timestamps_cache[key] = translation
+                time_period += translation
 
             elapsed_seconds -= elapsed_units * factor
 

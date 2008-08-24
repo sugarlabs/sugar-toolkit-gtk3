@@ -195,7 +195,7 @@ class ContentBundle(Bundle):
         return "file://" + urllib.pathname2url(self.get_start_path())
 
     def is_installed(self):
-        if self._unpacked:
+        if self._zip_file is None:
             return True
         elif os.path.isdir(self.get_root_dir()):
             return True
@@ -207,7 +207,7 @@ class ContentBundle(Bundle):
         self._run_indexer()
 
     def uninstall(self):
-        if self._unpacked:
+        if self._zip_file is None:
             if not self.is_installed():
                 raise NotInstalledException
             install_dir = self._path

@@ -51,7 +51,21 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 class Config(object):
     def __init__(self, source_dir=None, dist_dir = None, dist_name = None):
         self.source_dir = source_dir or os.getcwd()
-            
+        self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
+        self.dist_name = dist_name
+        self.bundle = None
+        self.version = None
+        self.activity_name = None
+        self.bundle_id = None
+        self.bundle_name = None
+        self.bundle_root_dir = None
+        self.tar_root_dir = None
+        self.xo_name = None
+        self.tar_name = None
+
+        self.update()
+
+    def update(self):
         self.bundle = bundle = ActivityBundle(self.source_dir)
         self.version = bundle.get_activity_version()
         self.activity_name = bundle.get_name()
@@ -59,14 +73,9 @@ class Config(object):
         self.bundle_name = reduce(lambda x, y:x+y, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%d' % (self.bundle_name, self.version)
-
-        if dist_dir:
-            self.dist_dir = dist_dir
-        else:
-            self.dist_dir = os.path.join(self.source_dir, 'dist')
             
-        if dist_name:
-            self.xo_name = self.tar_name = dist_name
+        if self.dist_name:
+            self.xo_name = self.tar_name = self.dist_name
         else:
             self.xo_name = '%s-%d.xo' % (self.bundle_name, self.version)
             self.tar_name = '%s-%d.tar.bz2' % (self.bundle_name, self.version)
@@ -118,6 +127,12 @@ class Packager(object):
         if not os.path.exists(self.config.dist_dir):
             os.mkdir(self.config.dist_dir)
 
+    def _list_files(self):
+        ignore_dirs = ['dist', '.git']
+        ignore_files = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak']
+        
+        return list_files(self.config.source_dir, ignore_dirs, ignore_files)
+
 class BuildPackager(Packager):
     def get_files(self):
         files = self.config.bundle.get_files()
@@ -128,20 +143,22 @@ class BuildPackager(Packager):
             files = self.config.bundle.get_files()
 
         return files
-    
-    def _list_useful_files(self):
-        ignore_dirs = ['dist', '.git']
-        ignore_files = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak']
-        
-        return list_files(self.config.source_dir, ignore_dirs, ignore_files)
+
+    def _check_manifest(self):
+        missing_files = []
+
+        allfiles = self._list_files()        
+        for path in allfiles:
+            if path not in self.config.bundle.manifest:
+                missing_files.append(path)
+
+        return missing_files
         
     def fix_manifest(self):
         manifest = self.config.bundle.manifest
         
-        allfiles = self._list_useful_files()        
-        for path in allfiles:
-            if path not in manifest:
-                manifest.append(path)
+        for path in self._check_manifest():
+            manifest.append(path)
         
         f = open(os.path.join(self.config.source_dir, "MANIFEST"), "wb")
         for line in manifest:
@@ -157,15 +174,22 @@ class XOPackager(BuildPackager):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
         
+        missing_files = self._check_manifest()
+        if missing_files:
+            logging.warn('These files are not included in the manifest ' \
+                         'and will not be present in the bundle:\n\n' +
+                         '\n'.join(missing_files) +
+                         '\n\nUse fix_manifest if you want to add them.')
+
         for f in self.get_files():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
 
         bundle_zip.close()
 
-class SourcePackager(BuildPackager):
+class SourcePackager(Packager):
     def __init__(self, config):
-        BuildPackager.__init__(self, config)
+        Packager.__init__(self, config)
         self.package_path = os.path.join(self.config.dist_dir,
                                          self.config.tar_name)
 
@@ -174,7 +198,7 @@ class SourcePackager(BuildPackager):
                                   cwd=self.config.source_dir)
         if git_ls.wait():
             # Fall back to filtered list
-            return self._list_useful_files()
+            return self._list_files()
         
         return [path.strip() for path in git_ls.stdout.readlines()]
 
@@ -191,6 +215,7 @@ setup.py build               - build generated files \n\
 setup.py dev                 - setup for development \n\
 setup.py dist_xo             - create a xo bundle package \n\
 setup.py dist_source         - create a tar source package \n\
+setup.py fix_manifest        - add missing files to the manifest \n\
 setup.py install   [dirname] - install the bundle \n\
 setup.py uninstall [dirname] - uninstall the bundle \n\
 setup.py genpot              - generate the gettext pot file \n\
@@ -217,6 +242,13 @@ def cmd_dist_xo(config, options, args):
 
     packager = XOPackager(config)
     packager.package()
+
+def cmd_fix_manifest(config, options, args):
+    builder = Builder(config)
+    builder.build()
+
+    packager = XOPackager(config)
+    packager.fix_manifest()
 
 def cmd_dist(config, options, args):
     logging.warn("dist deprecated, use dist_xo.")
@@ -308,6 +340,8 @@ def cmd_release(config, options, args):
     f = open(info_path, 'w')
     f.write(info)
     f.close()
+
+    config.update()
 
     news_path = os.path.join(config.source_dir, 'NEWS')
 
