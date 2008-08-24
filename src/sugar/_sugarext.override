@@ -33,3 +33,48 @@ ignore-glob
   *_get_type
   _*
 %%
+override sugar_key_grabber_grab_keys kwargs
+static PyObject *
+_wrap_sugar_key_grabber_grab_keys(PyGObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = { "key", NULL };
+	PyObject *py_keys;
+	char **keys;
+	int i, len;
+
+    if (!PyArg_ParseTupleAndKeywords(args,kwargs,
+                                     "O:SugarKeyGrabber.grab_keys",
+                                     kwlist, &py_keys))
+        return NULL;
+
+    if (!PySequence_Check(py_keys) || (len = PySequence_Size(py_keys)) < 0) {
+        PyErr_SetString(PyExc_ValueError,
+                        "keys should be a sequence of strings");
+        return NULL;
+    }
+
+    keys = g_new(char*, len + 1);
+    for (i = 0; i < len; i++) {
+        PyObject *item = PySequence_GetItem(py_keys, i);
+        if (!item) {
+            g_free(keys);
+            return NULL;
+        }
+        if (!PyString_Check(item)) {
+            PyErr_SetString(PyExc_TypeError, "key must be a string");
+            g_free(keys);
+            Py_DECREF(item);
+            return NULL;
+        }
+        keys[i] = PyString_AsString(item);
+        Py_DECREF(item);
+    }
+    keys[len] = NULL;
+
+    sugar_key_grabber_grab_keys (SUGAR_KEY_GRABBER(self->obj), (const char**) keys);
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+%%

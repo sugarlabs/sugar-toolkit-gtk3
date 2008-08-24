@@ -102,12 +102,12 @@
   (return-type "GType")
 )
 
-(define-method grab
+(define-method grab_keys
   (of-object "SugarKeyGrabber")
-  (c-name "sugar_key_grabber_grab")
+  (c-name "sugar_key_grabber_grab_keys")
   (return-type "none")
   (parameters
-    '("const-char*" "key")
+    '("const-char*[]" "keys")
   )
 )
 

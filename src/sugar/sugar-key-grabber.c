@@ -155,21 +155,15 @@ sugar_key_grabber_init(SugarKeyGrabber *grabber)
  * gnome-control-center/gnome-settings-daemon/gnome-settings-multimedia-keys.c
  */
 
-static gboolean
+static void
 grab_key_real (Key *key, GdkWindow *root, gboolean grab, int result)
 {
-        gdk_error_trap_push ();
         if (grab)
                 XGrabKey (GDK_DISPLAY(), key->keycode, (result | key->state),
                                 GDK_WINDOW_XID (root), True, GrabModeAsync, GrabModeAsync);
         else
                 XUngrabKey(GDK_DISPLAY(), key->keycode, (result | key->state),
                                 GDK_WINDOW_XID (root));
-        gdk_flush ();
-
-        gdk_error_trap_pop ();
-
-        return TRUE;
 }
 
 #define N_BITS 32
@@ -198,24 +192,37 @@ grab_key (SugarKeyGrabber *grabber, Key *key, gboolean grab)
                                 result |= (1<<indexes[j]);
                 }
 
-                if (grab_key_real (key, grabber->root, grab, result) == FALSE)
-                        return;
+                grab_key_real (key, grabber->root, grab, result);
         }
 }
 
+
 void
-sugar_key_grabber_grab(SugarKeyGrabber *grabber, const char *key)
+sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber, const char **keys)
 {
+    char **cur = keys;
+    char *key;
 	Key *keyinfo;
 
-	keyinfo = g_new0 (Key, 1);
-	keyinfo->key = g_strdup(key);
-	egg_accelerator_parse_virtual (key, &keyinfo->keysym,
-								   &keyinfo->keycode, &keyinfo->state);
+    gdk_error_trap_push();
 
-	grab_key(grabber, keyinfo, TRUE);
+    while (*cur != NULL) {
+        key = *cur;
+        cur += 1;
+        
+        keyinfo = g_new0 (Key, 1);
+        keyinfo->key = g_strdup(key);
 
-	grabber->keys = g_list_append(grabber->keys, keyinfo);	
+        egg_accelerator_parse_virtual (key, &keyinfo->keysym,
+                                       &keyinfo->keycode, &keyinfo->state);
+
+        grab_key(grabber, keyinfo, TRUE);
+
+        grabber->keys = g_list_append(grabber->keys, keyinfo);	
+    }
+
+    gdk_flush();
+    gdk_error_trap_push();
 }
 
 gboolean
