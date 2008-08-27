@@ -85,6 +85,7 @@ def main():
 
     os.environ['SUGAR_BUNDLE_ID'] = bundle.get_bundle_id()
     os.environ['SUGAR_BUNDLE_NAME'] = bundle.get_name()
+    os.environ['SUGAR_BUNDLE_VERSION'] = str(bundle.get_activity_version())
 
     gtk.icon_theme_get_default().append_search_path(bundle.get_icons_path())
 
