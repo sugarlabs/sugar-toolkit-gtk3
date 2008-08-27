@@ -120,7 +120,7 @@ def main():
             name = None
 
         if not name:
-            service = SingleProcess(service_name, activity_constructor)
+            SingleProcess(service_name, activity_constructor)
         else:
             single_process = sessionbus.get_object(service_name, service_path)
             single_process.create(activity_handle.get_dict())
