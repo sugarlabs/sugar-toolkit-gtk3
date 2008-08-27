@@ -6,4 +6,5 @@ sugar_PYTHON =				\
 	activityhandle.py		\
 	activityservice.py		\
 	bundlebuilder.py		\
+	main.py				\
 	registry.py
