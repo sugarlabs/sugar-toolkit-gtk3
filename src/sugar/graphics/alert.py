@@ -105,9 +105,6 @@ class Alert(gtk.EventBox):
             if self._msg != value:
                 self._msg = value
                 self._msg_label.set_markup(self._msg)
-                width, height_ = self._msg_label.size_request()
-                self._msg_label.set_size_request(width-style.DEFAULT_SPACING, 
-                                                 -1)
                 self._msg_label.set_line_wrap(True)
         elif pspec.name == 'icon':
             if self._icon != value:
