@@ -16,6 +16,7 @@
 # Boston, MA 02111-1307, USA.
 
 import os
+import sys
 import zipfile
 import tarfile
 import shutil
@@ -29,6 +30,9 @@ from fnmatch import fnmatch
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
 
+IGNORE_DIRS = ['dist', '.git']
+IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak']
+        
 def list_files(base_dir, ignore_dirs=None, ignore_files=None):
     result = []
 
@@ -119,21 +123,6 @@ class Builder(object):
             f.write('[Activity]\nname = %s\n' % translated_name)
             f.close()
 
-class Packager(object):
-    def __init__(self, config):
-        self.config = config
-        self.package_path = None
-
-        if not os.path.exists(self.config.dist_dir):
-            os.mkdir(self.config.dist_dir)
-
-    def _list_files(self):
-        ignore_dirs = ['dist', '.git']
-        ignore_files = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak']
-        
-        return list_files(self.config.source_dir, ignore_dirs, ignore_files)
-
-class BuildPackager(Packager):
     def get_files(self):
         files = self.config.bundle.get_files()
 
@@ -144,10 +133,11 @@ class BuildPackager(Packager):
 
         return files
 
-    def _check_manifest(self):
+    def check_manifest(self):
         missing_files = []
 
-        allfiles = self._list_files()        
+        allfiles = list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
         for path in allfiles:
             if path not in self.config.bundle.manifest:
                 missing_files.append(path)
@@ -155,18 +145,30 @@ class BuildPackager(Packager):
         return missing_files
         
     def fix_manifest(self):
+        self.build()
+
         manifest = self.config.bundle.manifest
         
-        for path in self._check_manifest():
+        for path in self.check_manifest():
             manifest.append(path)
         
         f = open(os.path.join(self.config.source_dir, "MANIFEST"), "wb")
         for line in manifest:
             f.write(line + "\n")
 
-class XOPackager(BuildPackager):
+class Packager(object):
     def __init__(self, config):
-        BuildPackager.__init__(self, config)
+        self.config = config
+        self.package_path = None
+
+        if not os.path.exists(self.config.dist_dir):
+            os.mkdir(self.config.dist_dir)
+
+class XOPackager(Packager):
+    def __init__(self, builder):
+        Packager.__init__(self, builder.config)
+
+        self.builder = builder
         self.package_path = os.path.join(self.config.dist_dir,
                                          self.config.xo_name)
 
@@ -174,14 +176,14 @@ class XOPackager(BuildPackager):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
         
-        missing_files = self._check_manifest()
+        missing_files = self.builder.check_manifest()
         if missing_files:
             logging.warn('These files are not included in the manifest ' \
                          'and will not be present in the bundle:\n\n' +
                          '\n'.join(missing_files) +
                          '\n\nUse fix_manifest if you want to add them.')
 
-        for f in self.get_files():
+        for f in self.builder.get_files():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
 
@@ -198,7 +200,8 @@ class SourcePackager(Packager):
                                   cwd=self.config.source_dir)
         if git_ls.wait():
             # Fall back to filtered list
-            return self._list_files()
+            return list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
         
         return [path.strip() for path in git_ls.stdout.readlines()]
 
@@ -209,21 +212,50 @@ class SourcePackager(Packager):
                     os.path.join(self.config.tar_root_dir, f))
         tar.close()
 
-def cmd_help(config, options, args):
-    print 'Usage: \n\
-setup.py build               - build generated files \n\
-setup.py dev                 - setup for development \n\
-setup.py dist_xo             - create a xo bundle package \n\
-setup.py dist_source         - create a tar source package \n\
-setup.py fix_manifest        - add missing files to the manifest \n\
-setup.py install   [dirname] - install the bundle \n\
-setup.py uninstall [dirname] - uninstall the bundle \n\
-setup.py genpot              - generate the gettext pot file \n\
-setup.py release             - do a new release of the bundle \n\
-setup.py help                - print this message \n\
-'
+class Installer(object):
+    IGNORES = [ 'po/*', 'MANIFEST', 'AUTHORS' ]
 
-def cmd_dev(config, options, args):
+    def __init__(self, builder):
+        self.config = builder.config
+        self.builder = builder
+
+    def should_ignore(self, f):
+        for pattern in self.IGNORES:
+            if fnmatch(f, pattern):
+                return True
+        return False
+
+    def install(self, prefix):
+        self.builder.build()
+
+        activity_path = os.path.join(prefix, 'share', 'sugar', 'activities',
+                                     self.config.bundle_root_dir)
+
+        source_to_dest = {}
+        for f in self.builder.get_files():
+            if self.should_ignore(f):
+                pass
+            elif f.startswith('locale/') and f.endswith('.mo'):
+                source_to_dest[f] = os.path.join(prefix, 'share', f)
+            else:
+                source_to_dest[f] = os.path.join(activity_path, f)
+
+        for source, dest in source_to_dest.items():
+            print 'Install %s to %s.' % (source, dest)
+
+            path = os.path.dirname(dest)
+            if not os.path.exists(path):
+                os.makedirs(path)
+
+            shutil.copy(source, dest)
+
+def cmd_dev(config, args):
+    '''Setup for development'''
+
+    if args:
+        print 'Usage: %prog dev'
+        return
+
     bundle_path = env.get_user_activities_path()
     if not os.path.isdir(bundle_path):
         os.mkdir(bundle_path)
@@ -236,54 +268,57 @@ def cmd_dev(config, options, args):
         else:
             print 'ERROR - A bundle with the same name is already installed.'
 
-def cmd_dist_xo(config, options, args):
-    builder = Builder(config)
-    builder.build()
+def cmd_dist_xo(config, args):
+    '''Create a xo bundle package'''
 
-    packager = XOPackager(config)
+    if args:
+        print 'Usage: %prog dist_xo'
+        return
+   
+    packager = XOPackager(Builder(config))
     packager.package()
 
-def cmd_fix_manifest(config, options, args):
+def cmd_fix_manifest(config, args):
+    '''Add missing files to the manifest'''
+
+    if args:
+        print 'Usage: %prog fix_manifest'
+        return
+
     builder = Builder(config)
-    builder.build()
+    builder.fix_manifest()
 
-    packager = XOPackager(config)
-    packager.fix_manifest()
+def cmd_dist_source(config, args):
+    '''Create a tar source package'''
 
-def cmd_dist(config, options, args):
-    logging.warn("dist deprecated, use dist_xo.")
-    cmd_dist_xo(config, options, args)
+    if args:
+        print 'Usage: %prog dist_source'
+        return
 
-def cmd_dist_source(config, options, args):
     packager = SourcePackager(config)
     packager.package()
 
-def cmd_install(config, options, args):
-    path = args[0]
+def cmd_install(config, args):
+    '''Install the activity in the system'''
 
-    packager = XOPackager(config)
-    packager.package()
+    parser = OptionParser(usage='usage: %prog install [options]')
+    parser.add_option('--prefix', dest='prefix', default=sys.prefix,
+                      help='Prefix to install files to')
+    (suboptions, subargs) = parser.parse_args(args)
+    if subargs:
+        parser.print_help()
+        return
 
-    root_path = os.path.join(args[0], config.bundle_root_dir)
-    if os.path.isdir(root_path):
-        shutil.rmtree(root_path)
+    installer = Installer(Builder(config))
+    installer.install(suboptions.prefix)
 
-    if not os.path.exists(path):
-        os.mkdir(path)
+def cmd_genpot(config, args):
+    '''Generate the gettext pot file'''
 
-    zf = zipfile.ZipFile(packager.package_path)
+    if args:
+        print 'Usage: %prog genpot'
+        return
 
-    for name in zf.namelist():
-        full_path = os.path.join(path, name)            
-        if not os.path.exists(os.path.dirname(full_path)):
-            os.makedirs(os.path.dirname(full_path))
-
-        outfile = open(full_path, 'wb')
-        outfile.write(zf.read(name))
-        outfile.flush()
-        outfile.close()
-
-def cmd_genpot(config, options, args):
     po_path = os.path.join(config.source_dir, 'po')
     if not os.path.isdir(po_path):
         os.mkdir(po_path)
@@ -315,7 +350,13 @@ def cmd_genpot(config, options, args):
     if retcode:
         print 'ERROR - xgettext failed with return code %i.' % retcode
 
-def cmd_release(config, options, args):
+def cmd_release(config, args):
+    '''Do a new release of the bundle'''
+
+    if args:
+        print 'Usage: %prog release'
+        return
+
     if not os.path.isdir('.git'):
         print 'ERROR - this command works only for git repositories'
         return
@@ -413,22 +454,40 @@ def cmd_release(config, options, args):
 
     print 'Done.'
 
-def cmd_build(config, options, args):
+def cmd_build(config, args):
+    '''Build generated files'''
+
+    if args:
+        print 'Usage: %prog build'
+        return
+
     builder = Builder(config)
     builder.build()
+
+def print_commands():
+    print 'Available commands:\n'
+
+    for name, func in globals().items():
+        if name.startswith('cmd_'):
+            print "%-20s %s" % (name.replace('cmd_', ''), func.__doc__)
+
+    print '\n(Type "./setup.py <command> --help" for help about a ' \
+          'particular command\'s options.'
 
 def start(bundle_name=None):
     if bundle_name:
         logging.warn("bundle_name deprecated, now comes from activity.info")
-    parser = OptionParser()
+
+    parser = OptionParser(usage='[action] [options]')
+    parser.disable_interspersed_args()
     (options, args) = parser.parse_args()
 
     config = Config()
 
     try:
-        globals()['cmd_' + args[0]](config, options, args[1:])
+        globals()['cmd_' + args[0]](config, args[1:])
     except (KeyError, IndexError):
-        cmd_help(config, options, args)
+        print_commands()
 
 if __name__ == '__main__':
     start()
