@@ -480,7 +480,7 @@ def start(bundle_name=None):
 
     parser = OptionParser(usage='[action] [options]')
     parser.disable_interspersed_args()
-    (options, args) = parser.parse_args()
+    (options_, args) = parser.parse_args()
 
     config = Config()
 
