@@ -22,11 +22,11 @@ headers
 modulename sugar._sugarext
 %%
 import gobject.GObject as PyGObject_Type
+import gtk.Widget as PyGtkWidget_Type
 import gtk.Entry as PyGtkEntry_Type
 import gtk.Menu as PyGtkMenu_Type
 import gtk.Container as PyGtkContainer_Type
 import gtk.gdk.Window as PyGdkWindow_Type
-import gtk.gdk.Drawable as PyGdkDrawable_Type
 import gtk.Image as PyGtkImage_Type
 %%
 ignore-glob

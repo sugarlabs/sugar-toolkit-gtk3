@@ -754,8 +754,8 @@ class Activity(Window, gtk.Container):
             return {}
 
     def take_screenshot(self):
-        if self.canvas and self.canvas.window:
-            self._preview.take_screenshot(self.canvas.window)
+        if self.canvas:
+            self._preview.take_screenshot(self.canvas)
 
     def save(self):
         """Request that the activity is saved to the Journal.
