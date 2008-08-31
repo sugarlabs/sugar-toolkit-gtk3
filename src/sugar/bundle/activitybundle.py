@@ -396,11 +396,12 @@ class ActivityBundle(Bundle):
         if mime_types is not None:
             installed_icons_dir = os.path.join(xdg_data_home,
                                                'icons/sugar/scalable/mimetypes')
-            for f in os.listdir(installed_icons_dir):
-                path = os.path.join(installed_icons_dir, f)
-                if os.path.islink(path) and \
-                   os.readlink(path).startswith(install_path):
-                    os.remove(path)
+            if os.path.isdir(installed_icons_dir):
+                for f in os.listdir(installed_icons_dir):
+                    path = os.path.join(installed_icons_dir, f)
+                    if os.path.islink(path) and \
+                       os.readlink(path).startswith(install_path):
+                        os.remove(path)
 
         self._uninstall(install_path)
         

@@ -200,7 +200,7 @@
   (c-name "sugar_preview_take_screenshot")
   (return-type "none")
   (parameters
-    '("GdkDrawable" "drawable")
+    '("GtkWidget" "widget")
   )
 )
 

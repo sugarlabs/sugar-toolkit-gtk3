@@ -50,7 +50,7 @@ struct _SugarPreviewClass {
 
 GType	   sugar_preview_get_type        (void);
 void       sugar_preview_take_screenshot (SugarPreview *preview,
-                                          GdkDrawable  *drawable);
+                                          GtkWidget    *widget);
 void       sugar_preview_set_size        (SugarPreview *preview,
                                           int width,
                                           int height);

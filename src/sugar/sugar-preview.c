@@ -69,15 +69,37 @@ sugar_preview_clear(SugarPreview *preview)
     }
 }
 
-void
-sugar_preview_take_screenshot(SugarPreview *preview, GdkDrawable *drawable)
+static gboolean
+widget_is_off_screen(GtkWidget *widget)
 {
+    GdkScreen *screen;
+    gint x, y, width, height;
+
+    screen = gtk_widget_get_screen(widget);
+
+    gdk_window_get_geometry(widget->window, &x, &y, &width, &height, NULL);
+
+    return (x < 0 || y < 0 ||
+            x + width > gdk_screen_get_width(screen) ||
+            y + height > gdk_screen_get_height(screen));
+}
+
+void
+sugar_preview_take_screenshot(SugarPreview *preview, GtkWidget *widget)
+{
+    GdkDrawable *drawable;
     GdkScreen *screen;
     GdkVisual *visual;
     GdkColormap *colormap;
     gint width, height;
 
+    if (widget->window == NULL || widget_is_off_screen(widget)) {
+        return;
+    }
+    
     sugar_preview_clear(preview);
+
+    drawable = GDK_DRAWABLE(widget->window);
 
     gdk_drawable_get_size(drawable, &width, &height);
 
