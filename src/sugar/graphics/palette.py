@@ -229,9 +229,11 @@ class Palette(gtk.Window):
         primary_box.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE)
                                      - 2 * self.get_border_width())
 
-        self.connect('realize', self._realize_cb)
+
+        self.connect('show', self.__show_cb)
+        self.connect('hide', self.__hide_cb)
+        self.connect('realize', self.__realize_cb)
         self.connect('destroy', self.__destroy_cb)
-        self.connect('map-event', self.__map_event_cb)
 
         self._alignment = None
         self._old_alloc = None
@@ -243,7 +245,6 @@ class Palette(gtk.Window):
         self._up = False
         self._menu_box = None
         self._content = None
-        self._palette_popup_sid = None
         self._invoker_hids = []
         
         self.set_group_id("default")
@@ -274,9 +275,6 @@ class Palette(gtk.Window):
 
     def __destroy_cb(self, palette):        
         self.set_group_id(None)
-        
-        if self._palette_popup_sid is not None:
-            _palette_observer.disconnect(self._palette_popup_sid)
         
     def _add_menu(self):
         self._menu_box = gtk.VBox()
@@ -504,7 +502,7 @@ class Palette(gtk.Window):
         if self.window:
             self.window.set_accept_focus(accept_focus)
 
-    def _realize_cb(self, widget):
+    def __realize_cb(self, widget):
         self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self._update_accept_focus()
 
@@ -529,45 +527,19 @@ class Palette(gtk.Window):
 
         self.move(position.x, position.y)
 
-    def _show(self):
-        if self._up:
-            return
-
-        self._palette_popup_sid = _palette_observer.connect(
-                                'popup', self._palette_observer_popup_cb)
-
+    def popup(self, immediate=False):
         if self._invoker is not None:
             self._update_full_request()
             self._alignment = self._invoker.get_alignment(self._full_request)
             self._update_position()
             self.set_transient_for(self._invoker.get_toplevel())
 
-        self.menu.set_active(True)
-        self.show()
-
-    def _hide(self):
-        self._secondary_anim.stop()
-
-        if not self._palette_popup_sid is None:
-            _palette_observer.disconnect(self._palette_popup_sid)
-            self._palette_popup_sid = None
-
-        self.menu.set_active(False)
-        self.hide()
-
-        if self._invoker:
-            self._invoker.notify_popdown()
-
-        self._up = False
-        self.emit('popdown')
-
-    def popup(self, immediate=False):
         self._popdown_anim.stop()
 
         if not immediate:
             self._popup_anim.start()
         else:
-            self._show()
+            self.show()
 
         self._secondary_anim.start()
 
@@ -579,7 +551,7 @@ class Palette(gtk.Window):
         if not immediate:
             self._popdown_anim.start()
         else:
-            self._hide()
+            self.hide()
 
     def _set_state(self, state):
         if self.palette_state == state:
@@ -630,7 +602,7 @@ class Palette(gtk.Window):
         self._secondary_anim.stop()
         self._popdown_anim.stop()
         self._set_state(self.SECONDARY)
-        self._show()
+        self.show()
 
     def __enter_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR:
@@ -641,16 +613,25 @@ class Palette(gtk.Window):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR:
             self.popdown()
 
-    def _palette_observer_popup_cb(self, observer, palette):
-        if self != palette:
-            self._hide()
+    def __show_cb(self, widget):
+        self.menu.set_active(True)
 
-    def __map_event_cb(self, widget, event):
         self._invoker.notify_popup()
 
         self._up = True
-        _palette_observer.emit('popup', self)
         self.emit('popup')
+
+    def __hide_cb(self, widget):
+        self.menu.set_active(False)
+
+        self._secondary_anim.stop()
+
+        if self._invoker:
+            self._invoker.notify_popdown()
+
+        self._up = False
+        self.emit('popdown')
+
 
 class PaletteActionBar(gtk.HButtonBox):
     def add_action(self, label, icon_name=None):
@@ -687,7 +668,7 @@ class _Menu(_sugarext.Menu):
         pass
 
     def do_deactivate(self):
-        self._palette._hide()
+        self._palette.hide()
 
 class _PopupAnimation(animator.Animation):
     def __init__(self, palette):
@@ -697,7 +678,7 @@ class _PopupAnimation(animator.Animation):
     def next_frame(self, current):
         if current == 1.0:
             self._palette._set_state(Palette.PRIMARY)
-            self._palette._show()
+            self._palette.show()
 
 class _SecondaryAnimation(animator.Animation):
     def __init__(self, palette):
@@ -716,7 +697,7 @@ class _PopdownAnimation(animator.Animation):
 
     def next_frame(self, current):
         if current == 1.0:
-            self._palette._hide()
+            self._palette.hide()
 
 class Invoker(gobject.GObject):
     __gtype_name__ = 'SugarPaletteInvoker'
@@ -1109,15 +1090,3 @@ class ToolInvoker(WidgetInvoker):
             return self.BOTTOM + self.TOP
         else:
             return self.LEFT + self.RIGHT
-
-class _PaletteObserver(gobject.GObject):
-    __gtype_name__ = 'SugarPaletteObserver'
-
-    __gsignals__ = {
-        'popup': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([object]))
-    }
-
-    def __init__(self):
-        gobject.GObject.__init__(self)
-
-_palette_observer = _PaletteObserver()
