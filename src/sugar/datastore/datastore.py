@@ -83,10 +83,10 @@ class DSMetadata(gobject.GObject):
 class DSObject(object):
     def __init__(self, object_id, metadata=None, file_path=None):
         self.object_id = object_id
+        self.owns_file = False
         self._metadata = metadata
         self._file_path = file_path
         self._destroyed = False
-        self._owns_file = False
 
     def get_metadata(self):
         if self._metadata is None and not self.object_id is None:
@@ -103,15 +103,15 @@ class DSObject(object):
     def get_file_path(self):
         if self._file_path is None and not self.object_id is None:
             self.set_file_path(dbus_helpers.get_filename(self.object_id))
-            self._owns_file = True
+            self.owns_file = True
         return self._file_path
     
     def set_file_path(self, file_path):
         if self._file_path != file_path:
-            if self._file_path and self._owns_file:
+            if self._file_path and self.owns_file:
                 if os.path.isfile(self._file_path):
                     os.remove(self._file_path)
-                self._owns_file = False
+                self.owns_file = False
             self._file_path = file_path
 
     file_path = property(get_file_path, set_file_path)
@@ -210,10 +210,10 @@ class DSObject(object):
             logging.warning('This DSObject has already been destroyed!.')
             return
         self._destroyed = True
-        if self._file_path and self._owns_file:
+        if self._file_path and self.owns_file:
             if os.path.isfile(self._file_path):
                 os.remove(self._file_path)
-            self._owns_file = False
+            self.owns_file = False
         self._file_path = None
 
     def __del__(self):
@@ -249,10 +249,10 @@ def write(ds_object, update_mtime=True, transfer_ownership=False,
         properties['mtime'] = datetime.now().isoformat()
         properties['timestamp'] = int(time.time())
 
-    if ds_object._file_path is None:
-        file_path = ''
+    if ds_object.owns_file:
+        file_path = ds_object.file_path
     else:
-        file_path = ds_object._file_path
+        file_path = ''
 
     # FIXME: this func will be sync for creates regardless of the handlers
     # supplied. This is very bad API, need to decide what to do here.
