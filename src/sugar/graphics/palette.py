@@ -266,12 +266,16 @@ class Palette(gtk.Window):
 
         # The menu is not shown here until an item is added
         self.menu = _Menu(self)
+        self.menu.connect('item-inserted', self.__menu_item_inserted_cb)
 
         self.connect('enter-notify-event', self.__enter_notify_event_cb)
         self.connect('leave-notify-event', self.__leave_notify_event_cb)
 
         self._mouse_detector = MouseSpeedDetector(self, 200, 5)
         self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
+
+    def __menu_item_inserted_cb(self, menu):
+        self._update_separators()
 
     def __destroy_cb(self, palette):        
         self.set_group_id(None)
@@ -507,12 +511,15 @@ class Palette(gtk.Window):
         self._update_accept_focus()
 
     def _update_full_request(self):
-        state = self.palette_state
+        if self.palette_state == self.PRIMARY:
+            self.menu.embed(self._menu_box)
+            self._secondary_box.show()
 
-        self._set_state(self.SECONDARY)
         self._full_request = self.size_request()
 
-        self._set_state(state)
+        if self.palette_state == self.PRIMARY:
+            self.menu.unembed()
+            self._secondary_box.hide()
 
     def _update_position(self):
         invoker = self._invoker
@@ -553,7 +560,7 @@ class Palette(gtk.Window):
         else:
             self.hide()
 
-    def _set_state(self, state):
+    def set_state(self, state):
         if self.palette_state == state:
             return
 
@@ -563,6 +570,7 @@ class Palette(gtk.Window):
         elif state == self.SECONDARY:
             self.menu.embed(self._menu_box)
             self._secondary_box.show()
+            self._update_position()
 
         self.palette_state = state
 
@@ -580,7 +588,7 @@ class Palette(gtk.Window):
         if self._group_id:
             group = palettegroup.get_group(self._group_id)
             if group and group.is_up():
-                self._set_state(self.PRIMARY)
+                self.set_state(self.PRIMARY)
 
                 immediate = True
                 group.popdown()
@@ -601,7 +609,7 @@ class Palette(gtk.Window):
         self._popup_anim.stop()
         self._secondary_anim.stop()
         self._popdown_anim.stop()
-        self._set_state(self.SECONDARY)
+        self.set_state(self.SECONDARY)
         self.show()
 
     def __enter_notify_event_cb(self, widget, event):
@@ -648,13 +656,17 @@ class PaletteActionBar(gtk.HButtonBox):
 class _Menu(_sugarext.Menu):
     __gtype_name__ = 'SugarPaletteMenu'
 
+    __gsignals__ = {
+        'item-inserted': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([]))
+    }
+
     def __init__(self, palette):
         _sugarext.Menu.__init__(self)
         self._palette = palette
 
     def do_insert(self, item, position):
         _sugarext.Menu.do_insert(self, item, position)
-        self._palette._update_separators()
+        self.emit('item-inserted')
         self.show()
 
     def do_expose_event(self, event):
@@ -677,7 +689,7 @@ class _PopupAnimation(animator.Animation):
 
     def next_frame(self, current):
         if current == 1.0:
-            self._palette._set_state(Palette.PRIMARY)
+            self._palette.set_state(Palette.PRIMARY)
             self._palette.show()
 
 class _SecondaryAnimation(animator.Animation):
@@ -687,8 +699,7 @@ class _SecondaryAnimation(animator.Animation):
 
     def next_frame(self, current):
         if current == 1.0:
-            self._palette._set_state(Palette.SECONDARY)
-            self._palette._update_position()
+            self._palette.set_state(Palette.SECONDARY)
 
 class _PopdownAnimation(animator.Animation):
     def __init__(self, palette):
