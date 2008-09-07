@@ -1006,6 +1006,9 @@ class Activity(Window, gtk.Container):
 
     metadata = property(get_metadata, None)
 
+    # DEPRECATED
+    _shared_activity = property(lambda self: self.shared_activity, None)
+
 _session = None
 
 def _get_session():
