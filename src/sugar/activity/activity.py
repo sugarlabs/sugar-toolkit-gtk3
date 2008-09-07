@@ -192,7 +192,7 @@ class ActivityToolbar(gtk.Toolbar):
         self._activity.metadata['title_set_by_user'] = '1'
         self._activity.save()
 
-        shared_activity = self._activity._shared_activity
+        shared_activity = self._activity.shared_activity
         if shared_activity:
             shared_activity.props.name = title
 
@@ -470,7 +470,7 @@ class Activity(Window, gtk.Container):
         self._active = False
         self._activity_id = handle.activity_id
         self._pservice = presenceservice.get_instance()
-        self._shared_activity = None
+        self.shared_activity = None
         self._share_id = None
         self._join_id = None
         self._preview = _sugarext.Preview()
@@ -519,15 +519,15 @@ class Activity(Window, gtk.Container):
             # There's already an instance on the mesh, join it
             logging.debug("*** Act %s joining existing mesh instance %r",
                           self._activity_id, mesh_instance)
-            self._shared_activity = mesh_instance
-            self._shared_activity.connect('notify::private',
-                    self.__privacy_changed_cb)
-            self._join_id = self._shared_activity.connect(
-                                                    "joined", self.__joined_cb)
-            if not self._shared_activity.props.joined:
-                self._shared_activity.join()
+            self.shared_activity = mesh_instance
+            self.shared_activity.connect('notify::private',
+                                         self.__privacy_changed_cb)
+            self._join_id = self.shared_activity.connect
+                                            ("joined", self.__joined_cb)
+            if not self.shared_activity.props.joined:
+                self.shared_activity.join()
             else:
-                self.__joined_cb(self._shared_activity, True, None)
+                self.__joined_cb(self.shared_activity, True, None)
         elif share_scope != SCOPE_PRIVATE:
             logging.debug("*** Act %s no existing mesh instance, but used to " \
                           "be shared, will share" % self._activity_id)
@@ -552,8 +552,8 @@ class Activity(Window, gtk.Container):
             self._jobject.metadata['keep'] = '0'
             self._jobject.metadata['preview'] = ''
             self._jobject.metadata['share-scope'] = SCOPE_PRIVATE
-            if self._shared_activity is not None:
-                icon_color = self._shared_activity.props.color
+            if self.shared_activity is not None:
+                icon_color = self.shared_activity.props.color
             else:
                 icon_color = profile.get_color().to_string()
             self._jobject.metadata['icon-color'] = icon_color
@@ -743,9 +743,9 @@ class Activity(Window, gtk.Container):
         return preview_data
 
     def _get_buddies(self):
-        if self._shared_activity is not None:
+        if self.shared_activity is not None:
             buddies = {}
-            for buddy in self._shared_activity.get_joined_buddies():
+            for buddy in self.shared_activity.get_joined_buddies():
                 if not buddy.props.owner:
                     buddy_id = sha1(buddy.props.key).hexdigest()
                     buddies[buddy_id] = [buddy.props.nick, buddy.props.color]
@@ -824,7 +824,7 @@ class Activity(Window, gtk.Container):
 
     def __joined_cb(self, activity, success, err):
         """Callback when join has finished"""
-        self._shared_activity.disconnect(self._join_id)
+        self.shared_activity.disconnect(self._join_id)
         self._join_id = None
         if not success:
             logging.debug("Failed to join activity: %s" % err)
@@ -832,13 +832,13 @@ class Activity(Window, gtk.Container):
 
         self.present()
         self.emit('joined')
-        self.__privacy_changed_cb(self._shared_activity, None)
+        self.__privacy_changed_cb(self.shared_activity, None)
 
     def get_shared(self):
         """Returns TRUE if the activity is shared on the mesh."""
-        if not self._shared_activity:
+        if not self.shared_activity:
             return False
-        return self._shared_activity.props.joined
+        return self.shared_activity.props.joined
 
     def __share_cb(self, ps, success, activity, err):
         self._pservice.disconnect(self._share_id)
@@ -853,11 +853,11 @@ class Activity(Window, gtk.Container):
 
         activity.props.name = self._jobject.metadata['title']
 
-        self._shared_activity = activity
-        self._shared_activity.connect('notify::private',
+        self.shared_activity = activity
+        self.shared_activity.connect('notify::private',
                 self.__privacy_changed_cb)
         self.emit('shared')
-        self.__privacy_changed_cb(self._shared_activity, None)
+        self.__privacy_changed_cb(self.shared_activity, None)
 
         self._send_invites()
 
@@ -870,7 +870,7 @@ class Activity(Window, gtk.Container):
             buddy_key = self._invites_queue.pop()             
             buddy = self._pservice.get_buddy(buddy_key)
             if buddy:
-                self._shared_activity.invite(
+                self.shared_activity.invite(
                             buddy, '', self._invite_response_cb)
             else:
                 logging.error('Cannot invite %s, no such buddy.' % buddy_key)
@@ -884,8 +884,8 @@ class Activity(Window, gtk.Container):
         """
         self._invites_queue.append(buddy_key)
 
-        if (self._shared_activity is None
-            or not self._shared_activity.props.joined):
+        if (self.shared_activity is None
+            or not self.shared_activity.props.joined):
             self.share(True)
         else:
             self._send_invites()
@@ -899,7 +899,7 @@ class Activity(Window, gtk.Container):
         Once the activity is shared, its privacy can be changed by setting
         its 'private' property.
         """
-        if self._shared_activity and self._shared_activity.props.joined:
+        if self.shared_activity and self.shared_activity.props.joined:
             raise RuntimeError("Activity %s already shared." %
                                self._activity_id)
         verb = private and 'private' or 'public'
@@ -945,8 +945,8 @@ class Activity(Window, gtk.Container):
                 self._show_keep_failed_dialog()
                 return False
 
-        if self._shared_activity:
-            self._shared_activity.leave()
+        if self.shared_activity:
+            self.shared_activity.leave()
 
         self._closing = True
 
