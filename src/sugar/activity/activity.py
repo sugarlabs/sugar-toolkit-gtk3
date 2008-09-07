@@ -522,8 +522,8 @@ class Activity(Window, gtk.Container):
             self.shared_activity = mesh_instance
             self.shared_activity.connect('notify::private',
                                          self.__privacy_changed_cb)
-            self._join_id = self.shared_activity.connect
-                                            ("joined", self.__joined_cb)
+            self._join_id = self.shared_activity.connect("joined",
+                                                         self.__joined_cb)
             if not self.shared_activity.props.joined:
                 self.shared_activity.join()
             else:
