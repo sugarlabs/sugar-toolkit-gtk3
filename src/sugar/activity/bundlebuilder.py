@@ -426,7 +426,7 @@ def cmd_release(config, args):
     f.close()
 
     print 'Creating the bundle...'
-    packager = XOPackager(config)
+    packager = XOPackager(Builder(config))
     packager.package()
 
     print 'Committing to git...'
