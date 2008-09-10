@@ -23,6 +23,7 @@
 
 /* include this first, before NO_IMPORT_PYGOBJECT is defined */
 #include <pygobject.h>
+#include <pygtk/pygtk.h>
 
 extern PyMethodDef py_sugarext_functions[];
 
@@ -34,12 +35,13 @@ init_sugarext(void)
 {
     PyObject *m, *d;
 
-    init_pygobject ();
+    init_pygobject();
+    init_pygtk();
 
-    m = Py_InitModule ("_sugarext", py_sugarext_functions);
-    d = PyModule_GetDict (m);
+    m = Py_InitModule("_sugarext", py_sugarext_functions);
+    d = PyModule_GetDict(m);
 
-    py_sugarext_register_classes (d);
+    py_sugarext_register_classes(d);
     py_sugarext_add_constants(m, "SEXY_");
 
     if (PyErr_Occurred ()) {

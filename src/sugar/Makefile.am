@@ -46,6 +46,8 @@ _sugarext_la_SOURCES =			\
 	sexy-icon-entry.c		\
 	sugar-address-entry.c		\
 	sugar-address-entry.h		\
+	sugar-grid.c			\
+	sugar-grid.h			\
 	sugar-key-grabber.c		\
 	sugar-key-grabber.h		\
 	sugar-menu.h			\
@@ -63,7 +65,6 @@ _sugarext.c: _sugarext.defs _sugarext.override
 .defs.c:
 	(cd $(srcdir)\
 	 && $(PYGTK_CODEGEN) \
-	    --register $(PYGTK_DEFSDIR)/gdk-types.defs \
 	    --register $(PYGTK_DEFSDIR)/gdk-types.defs \
 	    --register $(PYGTK_DEFSDIR)/gtk-types.defs \
 	    --override $*.override \

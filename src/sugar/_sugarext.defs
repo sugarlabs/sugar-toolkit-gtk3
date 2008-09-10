@@ -22,6 +22,13 @@
   (gtype-id "SUGAR_TYPE_MENU")
 )
 
+(define-object Grid
+  (in-module "Sugar")
+  (parent "GObject")
+  (c-name "SugarGrid")
+  (gtype-id "SUGAR_TYPE_GRID")
+)
+
 (define-object Preview
   (in-module "Sugar")
   (parent "GObject")
@@ -93,6 +100,45 @@
   (of-object "SugarMenu")
   (c-name "sugar_menu_unembed")
   (return-type "none")
+)
+
+;; From sugar-grid.h
+
+(define-method setup
+  (of-object "SugarGrid")
+  (c-name "sugar_grid_setup")
+  (return-type "none")
+  (parameters
+    '("gint" "width")
+    '("gint" "height")
+  )
+)
+
+(define-method add_weight
+  (of-object "SugarGrid")
+  (c-name "sugar_grid_add_weight")
+  (return-type "none")
+  (parameters
+    '("GdkRectangle*" "rect")
+  )
+)
+
+(define-method remove_weight
+  (of-object "SugarGrid")
+  (c-name "sugar_grid_remove_weight")
+  (return-type "none")
+  (parameters
+    '("GdkRectangle*" "rect")
+  )
+)
+
+(define-method compute_weight
+  (of-object "SugarGrid")
+  (c-name "sugar_grid_compute_weight")
+  (return-type "guint")
+  (parameters
+    '("GdkRectangle*" "rect")
+  )
 )
 
 ;; From sugar-key-grabber.h
