@@ -97,7 +97,6 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                                                gobject.IO_ERR,
                                                self._send_next_chunk)
         else:
-            self._file.close()
             self._cleanup()
 
     def _send_next_chunk(self, source, condition):
