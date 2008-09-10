@@ -277,7 +277,7 @@ class Palette(gtk.Window):
     def __menu_item_inserted_cb(self, menu):
         self._update_separators()
 
-    def __destroy_cb(self, palette):        
+    def __destroy_cb(self, palette):
         self.set_group_id(None)
         
     def _add_menu(self):
@@ -749,6 +749,9 @@ class Invoker(gobject.GObject):
 
     def detach(self):
         self.parent = None
+        if self._palette is not None:
+            self._palette.destroy()
+            self._palette = None
 
     def _get_position_for_alignment(self, alignment, palette_dim):
         palette_halign = alignment[0]
