@@ -46,15 +46,6 @@ def _compute_zoom_factor():
 
     return 1.0
 
-def _compute_font_height(font):
-    widget = gtk.Label('')
-
-    context = widget.get_pango_context()
-    pango_font = context.load_font(font.get_pango_desc())
-    metrics = pango_font.get_metrics()
-    
-    return pango.PIXELS(metrics.get_ascent() + metrics.get_descent())
-
 class Font(object):
     def __init__(self, desc):
         self._desc = desc
@@ -124,8 +115,8 @@ XLARGE_ICON_SIZE = zoom(55 * 2.75)
 FONT_SIZE = zoom(7 * _XO_DPI / _get_screen_dpi())
 FONT_NORMAL = Font('Bitstream Vera Sans %d' % FONT_SIZE)
 FONT_BOLD = Font('Bitstream Vera Sans bold %d' % FONT_SIZE)
-FONT_NORMAL_H = _compute_font_height(FONT_NORMAL)
-FONT_BOLD_H = _compute_font_height(FONT_BOLD)
+FONT_NORMAL_H = zoom(24)
+FONT_BOLD_H = zoom(24)
 
 TOOLBOX_SEPARATOR_HEIGHT = zoom(9)
 TOOLBOX_HORIZONTAL_PADDING = zoom(75)
