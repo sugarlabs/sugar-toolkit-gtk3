@@ -24,7 +24,7 @@ from sugar import env
 from sugar import util
 from sugar.graphics.xocolor import XoColor
 
-DEFAULT_JABBER_SERVER = 'olpc.collabora.co.uk'
+DEFAULT_JABBER_SERVER = ''
 DEFAULT_VOLUME = 81
 DEFAULT_TIMEZONE = 'UTC'
 DEFAULT_HOT_CORNERS_DELAY = 0.0
