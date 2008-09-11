@@ -249,10 +249,9 @@ def write(ds_object, update_mtime=True, transfer_ownership=False,
         properties['mtime'] = datetime.now().isoformat()
         properties['timestamp'] = int(time.time())
 
-    if ds_object.get_file_path(fetch=False) is None:
+    file_path = ds_object.get_file_path(fetch=False)
+    if file_path is None:
         file_path = ''
-    else:
-        file_path = ds_object._file_path
 
     # FIXME: this func will be sync for creates regardless of the handlers
     # supplied. This is very bad API, need to decide what to do here.
