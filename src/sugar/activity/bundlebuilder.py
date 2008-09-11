@@ -31,7 +31,7 @@ from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
 
 IGNORE_DIRS = ['dist', '.git']
-IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak']
+IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
         
 def list_files(base_dir, ignore_dirs=None, ignore_files=None):
     result = []
