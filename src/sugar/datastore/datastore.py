@@ -100,8 +100,8 @@ class DSObject(object):
 
     metadata = property(get_metadata, set_metadata)
 
-    def get_file_path(self):
-        if self._file_path is None and not self.object_id is None:
+    def get_file_path(self, fetch=True):
+        if fetch and self._file_path is None and not self.object_id is None:
             self.set_file_path(dbus_helpers.get_filename(self.object_id))
             self._owns_file = True
         return self._file_path
@@ -249,10 +249,9 @@ def write(ds_object, update_mtime=True, transfer_ownership=False,
         properties['mtime'] = datetime.now().isoformat()
         properties['timestamp'] = int(time.time())
 
-    if ds_object._file_path is None:
+    file_path = ds_object.get_file_path(fetch=False)
+    if file_path is None:
         file_path = ''
-    else:
-        file_path = ds_object._file_path
 
     # FIXME: this func will be sync for creates regardless of the handlers
     # supplied. This is very bad API, need to decide what to do here.
