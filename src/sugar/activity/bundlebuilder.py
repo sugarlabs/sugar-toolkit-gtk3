@@ -99,7 +99,7 @@ class Builder(object):
             return
         
         for f in os.listdir(po_dir):
-            if not f.endswith('.po'):
+            if not f.endswith('.po') or f == 'pseudo.po':
                 continue
 
             file_name = os.path.join(po_dir, f)
