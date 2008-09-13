@@ -98,6 +98,11 @@ class Builder(object):
             logging.warn("Missing po/ dir, cannot build_locale")
             return
         
+        locale_dir = os.path.join(self.config.source_dir, 'locale')
+
+        if os.path.exists(locale_dir):
+            shutil.rmtree(locale_dir)
+
         for f in os.listdir(po_dir):
             if not f.endswith('.po') or f == 'pseudo.po':
                 continue
