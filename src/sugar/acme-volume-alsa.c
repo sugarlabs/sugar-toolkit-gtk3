@@ -303,9 +303,7 @@ acme_volume_alsa_init (AcmeVolumeAlsa *self)
 
 	if (acme_volume_alsa_open (self) == FALSE)
 	{
-		g_free (self->_priv);
-		self->_priv = NULL;
-		return;
+		g_warning ("Cannot open alsa.");
 	}
 
 	if (self->_priv->handle != NULL) {
