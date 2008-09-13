@@ -64,6 +64,20 @@
   (gtype-id "GSM_TYPE_SESSION")
 )
 
+(define-object Volume
+  (in-module "Acme")
+  (parent "GObject")
+  (c-name "AcmeVolume")
+  (gtype-id "ACME_TYPE_VOLUME")
+)
+
+(define-object VolumeAlsa
+  (in-module "Acme")
+  (parent "AcmeVolume")
+  (c-name "AcmeVolumeAlsa")
+  (gtype-id "ACME_TYPE_VOLUME_ALSA")
+)
+
 ;; Enumerations and flags ...
 
 (define-enum IconEntryPosition
@@ -391,3 +405,57 @@
   (return-type "GsmSession*")
 )
 
+;; From acme-volume.h
+
+(define-function acme_volume_get_type
+  (c-name "acme_volume_get_type")
+  (return-type "GType")
+)
+
+(define-method get_volume
+  (of-object "AcmeVolume")
+  (c-name "acme_volume_get_volume")
+  (return-type "int")
+)
+
+(define-method set_volume
+  (of-object "AcmeVolume")
+  (c-name "acme_volume_set_volume")
+  (return-type "none")
+  (parameters
+    '("int" "val")
+  )
+)
+
+(define-method get_mute
+  (of-object "AcmeVolume")
+  (c-name "acme_volume_get_mute")
+  (return-type "gboolean")
+)
+
+(define-method set_mute
+  (of-object "AcmeVolume")
+  (c-name "acme_volume_set_mute")
+  (return-type "none")
+  (parameters
+    '("gboolean" "val")
+  )
+)
+
+(define-method mute_toggle
+  (of-object "AcmeVolume")
+  (c-name "acme_volume_mute_toggle")
+  (return-type "none")
+)
+
+(define-method get_threshold
+  (of-object "AcmeVolume")
+  (c-name "acme_volume_get_threshold")
+  (return-type "int")
+)
+
+(define-function acme_volume_new
+  (c-name "acme_volume_new")
+  (is-constructor-of "AcmeVolume")
+  (return-type "AcmeVolume*")
+)

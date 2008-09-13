@@ -12,6 +12,7 @@ headers
 #include "sexy-icon-entry.h"
 #include "gsm-session.h"
 #include "gsm-xsmp.h"
+#include "acme-volume-alsa.h"
 
 #include "eggsmclient.h"
 #include "eggsmclient-private.h"
