@@ -300,16 +300,6 @@ static void
 acme_volume_alsa_init (AcmeVolumeAlsa *self)
 {
 	self->_priv = g_new0 (AcmeVolumeAlsaPrivate, 1);
-
-	if (acme_volume_alsa_open (self) == FALSE)
-	{
-		g_warning ("Cannot open alsa.");
-	}
-
-	if (self->_priv->handle != NULL) {
-		acme_volume_alsa_close_real (self);
-		return;
-	}
 }
 
 static void
