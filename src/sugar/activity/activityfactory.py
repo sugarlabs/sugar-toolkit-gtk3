@@ -134,7 +134,7 @@ def get_command(activity, activity_id=None, object_id=None, uri=None):
     if uri is not None:
         command.extend(['-u', uri])
 
-    print command
+    logging.debug('launching: %r' % command)
 
     return command
 
