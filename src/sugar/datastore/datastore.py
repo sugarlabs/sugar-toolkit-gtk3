@@ -23,8 +23,6 @@ import os
 import gobject
 
 from sugar.datastore import dbus_helpers
-from sugar import activity
-from sugar.activity.activityhandle import ActivityHandle
 from sugar.bundle.contentbundle import ContentBundle
 from sugar.bundle.activitybundle import ActivityBundle
 from sugar import mime
@@ -116,32 +114,6 @@ class DSObject(object):
 
     file_path = property(get_file_path, set_file_path)
 
-    def _get_activities_for_mime(self, mime_type):
-        registry = activity.get_registry()
-        result = registry.get_activities_for_type(mime_type)
-        if not result:
-            for parent_mime in mime.get_mime_parents(mime_type):
-                result.extend(registry.get_activities_for_type(parent_mime))
-        return result
-
-    def get_activities(self):
-        activities = []
-
-        bundle_id = self.metadata.get('activity', '')
-        if bundle_id:
-            activity_info = activity.get_registry().get_activity(bundle_id)
-            if activity_info:
-                activities.append(activity_info)
-
-        mime_type = self.metadata.get('mime_type', '')
-        if mime_type:
-            activities_info = self._get_activities_for_mime(mime_type)
-            for activity_info in activities_info:
-                if activity_info.bundle_id != bundle_id:
-                    activities.append(activity_info)
-
-        return activities
-
     def is_activity_bundle(self):
         return self.metadata['mime_type'] in \
                [ActivityBundle.MIME_TYPE, ActivityBundle.DEPRECATED_MIME_TYPE]
@@ -151,59 +123,6 @@ class DSObject(object):
 
     def is_bundle(self):
         return self.is_activity_bundle() or self.is_content_bundle()
-
-    def resume(self, bundle_id=None):
-        from sugar.activity import activityfactory
-
-        if self.is_activity_bundle() and not bundle_id:
-
-            logging.debug('Creating activity bundle')
-            bundle = ActivityBundle(self.file_path)
-            if not bundle.is_installed():
-                logging.debug('Installing activity bundle')
-                bundle.install()
-            elif bundle.need_upgrade():
-                logging.debug('Upgrading activity bundle')
-                bundle.upgrade()
-
-            logging.debug('activityfactory.creating bundle with id %r',
-                          bundle.get_bundle_id())
-            activityfactory.create(bundle.get_bundle_id())
-
-        elif self.is_content_bundle() and not bundle_id:
-
-            logging.debug('Creating content bundle')
-            bundle = ContentBundle(self.file_path)
-            if not bundle.is_installed():
-                logging.debug('Installing content bundle')
-                bundle.install()
-
-            activities = self._get_activities_for_mime('text/html')
-            if len(activities) == 0:
-                logging.warning('No activity can open HTML content bundles')
-                return
-
-            uri = bundle.get_start_uri()
-            logging.debug('activityfactory.creating with uri %s', uri)
-            activityfactory.create_with_uri(activities[0].bundle_id,
-                                            bundle.get_start_uri())
-        else:
-            if not self.get_activities() and bundle_id is None:
-                logging.warning('No activity can open this object, %s.' %
-                        self.metadata.get('mime_type', None))
-                return
-            if bundle_id is None:
-                bundle_id = self.get_activities()[0].bundle_id
-
-            activity_id = self.metadata['activity_id']
-            object_id = self.object_id
-
-            if activity_id:
-                handle = ActivityHandle(object_id=object_id,
-                                        activity_id=activity_id)
-                activityfactory.create(bundle_id, handle)
-            else:
-                activityfactory.create_with_object_id(bundle_id, object_id)
 
     def destroy(self):
         if self._destroyed:
