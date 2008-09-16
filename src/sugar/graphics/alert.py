@@ -97,6 +97,20 @@ class Alert(gtk.EventBox):
         self.show()
         
     def do_set_property(self, pspec, value):        
+        """
+        Set alert property
+
+        Parameters
+        ----------
+        pspec :
+
+        value :
+
+        Returns
+        -------
+        None
+
+        """
         if pspec.name == 'title':
             if self._title != value:
                 self._title = value
@@ -113,20 +127,46 @@ class Alert(gtk.EventBox):
                 self._hbox.reorder_child(self._icon, 0)
 
     def do_get_property(self, pspec):
+        """
+        Get alert property
+
+        Parameters
+        ----------
+        pspec :
+            property for which the value will be returned
+
+        Returns
+        -------
+        value of the property specified
+
+        """
         if pspec.name == 'title':
             return self._title
         elif pspec.name == 'msg':
             return self._msg
 
     def add_button(self, response_id, label, icon=None, position=-1):
-        """Add a button to the alert
+        """
+        Add a button to the alert
 
-        response_id: will be emitted with the response signal
-                     a response ID should one of the pre-defined
-                     GTK Response Type Constants or a positive number
-        label: that will occure right to the buttom
-        icon: this can be a SugarIcon or a gtk.Image
-        position: the position of the button in the box (optional)
+        Parameters
+        ----------
+        response_id :
+            will be emitted with the response signal a response ID should one of the
+            pre-defined GTK Response Type Constants or a positive number
+        label :
+            that will occure right to the buttom
+
+        icon :
+            this can be a SugarIcon or a gtk.Image
+
+        postion :
+            the position of the button in the box (optional)
+
+        Returns
+        -------
+        button :gtk.Button
+
         """
         button = gtk.Button()
         self._buttons[response_id] = button
@@ -141,7 +181,18 @@ class Alert(gtk.EventBox):
         return button
 
     def remove_button(self, response_id):
-        """Remove a button from the alert by the given response id"""
+        """
+        Remove a button from the alert by the given response id
+
+        Parameters
+        ----------
+        response_id :
+
+        Returns
+        -------
+        None
+
+        """
         self._buttons_box.remove(self._buttons[response_id])
 
     def _response(self, response_id):
