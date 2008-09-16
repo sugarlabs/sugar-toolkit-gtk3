@@ -39,7 +39,6 @@ src/Makefile
 src/sugar/Makefile
 src/sugar/activity/Makefile
 src/sugar/bundle/Makefile
-src/sugar/clipboard/Makefile
 src/sugar/graphics/Makefile
 src/sugar/presence/Makefile
 src/sugar/datastore/Makefile
