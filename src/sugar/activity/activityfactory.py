@@ -54,15 +54,18 @@ _RAINBOW_SERVICE_NAME = "org.laptop.security.Rainbow"
 _RAINBOW_ACTIVITY_FACTORY_PATH = "/"
 _RAINBOW_ACTIVITY_FACTORY_INTERFACE = "org.laptop.security.Rainbow"
 
-_children_pid = []
-
-def _sigchild_handler(signum, frame):
-    for child_pid in _children_pid:
-        pid, status_ = os.waitpid(child_pid, os.WNOHANG)
-        if pid > 0:
-            _children_pid.remove(pid)
-
-signal.signal(signal.SIGCHLD, _sigchild_handler)
+# helper method to close all filedescriptors
+# borrowed from subprocess.py
+try:
+    MAXFD = os.sysconf("SC_OPEN_MAX")
+except:
+    MAXFD = 256
+def _close_fds():
+    for i in xrange(3, MAXFD):
+        try:
+            os.close(i)
+        except:
+            pass
 
 def create_activity_id():
     """Generate a new, unique ID for this activity"""
@@ -245,9 +248,24 @@ class ActivityCreationHandler(gobject.GObject):
                                   self._handle.uri)
 
             if not self._use_rainbow:
-                p = subprocess.Popen(command, env=environ, cwd=activity.path,
-                                     stdout=log_file, stderr=log_file)
-                _children_pid.append(p.pid)
+                # use gobject spawn functionality, so that zombies are
+                # automatically reaped by the gobject event loop.
+                def child_setup():
+                    # clone logfile.fileno() onto stdout/stderr
+                    os.dup2(log_file.fileno(), 1)
+                    os.dup2(log_file.fileno(), 2)
+                    # close all other fds
+                    _close_fds()
+                # we need to sanitize and str-ize the various bits which
+                # dbus gives us.
+                gobject.spawn_async([str(s) for s in command],
+                                    envp=['%s=%s' % (k, str(v))
+                                          for k, v in environ.items()],
+                                    working_directory=str(activity.path),
+                                    child_setup=child_setup,
+                                    flags=(gobject.SPAWN_SEARCH_PATH |
+                                          gobject.SPAWN_LEAVE_DESCRIPTORS_OPEN))
+                log_file.close()
             else:
                 log_file.close()
                 system_bus = dbus.SystemBus()
