@@ -174,7 +174,6 @@ class ActivityToolbar(gtk.Toolbar):
         self._activity.copy()
 
     def __stop_clicked_cb(self, button):
-        self._activity.take_screenshot()
         self._activity.close()
 
     def __jobject_updated_cb(self, jobject):
@@ -467,6 +466,12 @@ class Activity(Window, gtk.Container):
         self.connect('realize', self.__realize_cb)
         self.connect('delete-event', self.__delete_event_cb)
 
+        # watch visibility-notify-events to know when we can safely
+        # take a screenshot of the activity
+        self.add_events(gtk.gdk.VISIBILITY_NOTIFY_MASK)
+        self.connect('visibility-notify-event', self.__visibility_notify_event_cb)
+        self._fully_obscured = True
+
         self._active = False
         self._activity_id = handle.activity_id
         self._pservice = presenceservice.get_instance()
@@ -724,19 +729,12 @@ class Activity(Window, gtk.Container):
         pixbuf = pixbuf.scale_simple(style.zoom(300), style.zoom(225),
                                      gtk.gdk.INTERP_BILINEAR)
 
-        # TODO: Find a way of taking a png out of the pixbuf without saving
-        # to a temp file. Impementing gtk.gdk.Pixbuf.save_to_buffer in pygtk
-        # would solve this.
-        fd, file_path = tempfile.mkstemp('.png')
-        os.close(fd)
+        preview_data = []
+        def save_func(buf, data):
+            data.append(buf)
 
-        pixbuf.save(file_path, 'png')
-        f = open(file_path)
-        try:
-            preview_data = f.read()
-        finally:
-            f.close()
-            os.remove(file_path)
+        pixbuf.save_to_callback(save_func, 'png', user_data=preview_data)
+        preview_data = ''.join(preview_data)
 
         self._preview.clear()
 
@@ -813,6 +811,8 @@ class Activity(Window, gtk.Container):
         copy work that needs to be done in write_file()
         """
         logging.debug('Activity.copy: %r' % self._jobject.object_id)
+        if not self._fully_obscured:
+            self.take_screenshot()
         self.save()
         self._jobject.object_id = None
 
@@ -968,6 +968,8 @@ class Activity(Window, gtk.Container):
         write_file() to do any state saving instead. If the application wants
         to control wether it can close, it should override can_close().
         """
+        if not self._fully_obscured:
+            self.take_screenshot()
 
         if not self.can_close():
             return
@@ -986,6 +988,15 @@ class Activity(Window, gtk.Container):
     def __delete_event_cb(self, widget, event):
         self.close()
         return True
+
+    def __visibility_notify_event_cb(self, widget, event):
+        """Visibility state is used when deciding if we can take screenshots.
+        Currently we allow screenshots whenever the activity window is fully
+        visible or partially obscured."""
+        if event.state is gtk.gdk.VISIBILITY_FULLY_OBSCURED:
+            self._fully_obscured = True
+        else:
+            self._fully_obscured = False
 
     def get_metadata(self):
         """Returns the jobject metadata or None if there is no jobject.
