@@ -17,8 +17,6 @@
 # Boston, MA 02111-1307, USA.
 
 import logging
-import subprocess
-import signal
 
 import dbus
 import gobject
@@ -58,14 +56,14 @@ _RAINBOW_ACTIVITY_FACTORY_INTERFACE = "org.laptop.security.Rainbow"
 # borrowed from subprocess.py
 try:
     MAXFD = os.sysconf("SC_OPEN_MAX")
-except:
+except ValueError:
     MAXFD = 256
 def _close_fds():
     for i in xrange(3, MAXFD):
         try:
             os.close(i)
         except:
-            pass
+            logging.error('Cannot close file file descriptors')
 
 def create_activity_id():
     """Generate a new, unique ID for this activity"""

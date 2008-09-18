@@ -49,7 +49,6 @@ import gettext
 import logging
 import os
 import time
-import tempfile
 from hashlib import sha1
 import traceback
 
@@ -469,7 +468,8 @@ class Activity(Window, gtk.Container):
         # watch visibility-notify-events to know when we can safely
         # take a screenshot of the activity
         self.add_events(gtk.gdk.VISIBILITY_NOTIFY_MASK)
-        self.connect('visibility-notify-event', self.__visibility_notify_event_cb)
+        self.connect('visibility-notify-event',
+                     self.__visibility_notify_event_cb)
         self._fully_obscured = True
 
         self._active = False
