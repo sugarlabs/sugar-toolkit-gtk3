@@ -36,6 +36,12 @@ class RadioToolButton(gtk.RadioToolButton):
 
         self._palette_invoker.attach_tool(self)
 
+        self.connect('destroy', self.__destroy_cb)
+
+    def __destroy_cb(self, icon):
+        if self._palette_invoker is not None:
+            self._palette_invoker.detach()
+
     def set_tooltip(self, tooltip):
         """ Set a simple palette with just a single label.
         """

@@ -30,6 +30,12 @@ class ToggleToolButton(gtk.ToggleToolButton):
         self._palette_invoker = ToolInvoker(self)
         self.set_named_icon(named_icon)
 
+        self.connect('destroy', self.__destroy_cb)
+
+    def __destroy_cb(self, icon):
+        if self._palette_invoker is not None:
+            self._palette_invoker.detach()
+
     def set_named_icon(self, named_icon):
         icon = Icon(icon_name=named_icon)
         self.set_icon_widget(icon)

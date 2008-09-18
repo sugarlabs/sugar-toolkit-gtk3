@@ -68,6 +68,12 @@ class ToolButton(gtk.ToolButton):
         self.get_child().connect('can-activate-accel',
                                  self.__button_can_activate_accel_cb)
 
+        self.connect('destroy', self.__destroy_cb)
+
+    def __destroy_cb(self, icon):
+        if self._palette_invoker is not None:
+            self._palette_invoker.detach()
+
     def __button_can_activate_accel_cb(self, button, signal_id):
         # Accept activation via accelerators regardless of this widget's state
         return True

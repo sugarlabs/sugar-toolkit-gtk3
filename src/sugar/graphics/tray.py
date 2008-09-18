@@ -358,6 +358,12 @@ class TrayIcon(gtk.ToolItem):
 
         self.set_size_request(style.GRID_CELL_SIZE, style.GRID_CELL_SIZE)
 
+        self.connect('destroy', self.__destroy_cb)
+
+    def __destroy_cb(self, icon):
+        if self._palette_invoker is not None:
+            self._palette_invoker.detach()
+
     def create_palette(self):
         return None
 
