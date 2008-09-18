@@ -458,7 +458,7 @@ class PresenceService(gobject.GObject):
         """Finish sharing the activity
         """
         # FIXME find a better way to shutup pylint
-        psact = (Activity)(self._new_object(op))
+        psact = self._new_object(op)
         psact._joined = True
         _logger.debug('%r: Just shared, setting up tubes', activity)
         psact.set_up_tubes(reply_handler=lambda:
