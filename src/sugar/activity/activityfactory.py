@@ -62,7 +62,7 @@ def _close_fds():
     for i in xrange(3, MAXFD):
         try:
             os.close(i)
-        except:
+        except Exception:
             logging.error('Cannot close file file descriptors')
 
 def create_activity_id():
