@@ -104,7 +104,7 @@ class Profile(object):
             _set_key(cp, 'Buddy', 'Color', self.color.to_string())
         if self.backup1:
             _set_key(cp, 'Server', 'Backup1', self.backup1)
-        if self.jabber_server:
+        if self.jabber_server is not None:
             _set_key(cp, 'Jabber', 'Server', self.jabber_server)
 
         _set_key(cp, 'Date', 'Timezone', self.timezone)
