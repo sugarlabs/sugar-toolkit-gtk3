@@ -62,8 +62,9 @@ def _close_fds():
     for i in xrange(3, MAXFD):
         try:
             os.close(i)
+        # pylint: disable-msg=W0704
         except Exception:
-            logging.error('Cannot close file file descriptors')
+            pass
 
 def create_activity_id():
     """Generate a new, unique ID for this activity"""
