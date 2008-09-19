@@ -673,6 +673,13 @@ class _Menu(_sugarext.Menu):
         self.emit('item-inserted')
         self.show()
 
+    def attach(self, child, left_attach, right_attach,
+               top_attach, bottom_attach):
+        _sugarext.Menu.attach(self, child, left_attach, right_attach,
+                              top_attach, bottom_attach)
+        self.emit('item-inserted')
+        self.show()
+
     def do_expose_event(self, event):
         # Ignore the Menu expose, just do the MenuShell expose to prevent any
         # border from being drawn here. A border is drawn by the palette object
