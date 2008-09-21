@@ -314,9 +314,43 @@ class _TimeoutIcon(hippo.CanvasText, hippo.CanvasItem):
 
 
 class TimeoutAlert(Alert):
-    """This is a ready-made two button (Cancel,Continue) alert
+    """
+    This is a ready-made two button (Cancel,Continue) alert
 
-    It times out with a positive reponse after the given amount of seconds.
+    It times out with a positive response after the given amount of seconds.
+
+
+    Examples
+    --------
+
+    .. code-block:: python
+      from sugar.graphics.alert import TimeoutAlert
+      ...
+        #### Method: _alert_timeout, create a Timeout alert (with ok and cancel buttons standard)
+        # and add it to the UI.
+        def _alert_timeout(self):
+            #Notice that for a TimeoutAlert, you pass the number of seconds in which to timeout. By
+            #default, this is 5.
+            alert = TimeoutAlert(10)
+            alert.props.title=_('Title of Alert Goes Here')
+            alert.props.msg = _('Text message of timeout alert goes here')
+            alert.connect('response', self._alert_response_cb)
+            self.add_alert(alert)
+
+        #### Method: _alert_response_cb, called when an alert object throws a response event.
+        def _alert_response_cb(self, alert, response_id):
+            #remove the alert from the screen, since either a response button was clicked or
+            #there was a timeout
+            self.remove_alert(alert)
+
+            #Do any work that is specific to the type of button clicked.
+            if response_id is gtk.RESPONSE_OK:
+                print 'Ok Button was clicked. Do any work upon ok here ...'
+            elif response_id is gtk.RESPONSE_CANCEL:
+                print 'Cancel Button was clicked.'
+            elif response_id == -1:
+                print 'Timout occurred'
+
     """
 
     def __init__(self, timeout=5, **kwargs):
@@ -349,7 +383,27 @@ class TimeoutAlert(Alert):
 
 
 class NotifyAlert(Alert):
-    """Timeout alert with only an "OK" button - just for notifications"""
+    """
+    Timeout alert with only an "OK" button - just for notifications
+
+    Examples
+    --------
+
+    .. code-block:: python
+      from sugar.graphics.alert import NotifyAlert
+      ...
+        #### Method: _alert_notify, create a Notify alert (with only an 'OK' button)
+        # and add it to the UI.
+        def _alert_notify(self):
+            #Notice that for a NotifyAlert, you pass the number of seconds in which to notify. By
+            #default, this is 5.
+            alert = NotifyAlert(10)
+            alert.props.title=_('Title of Alert Goes Here')
+            alert.props.msg = _('Text message of notify alert goes here')
+            alert.connect('response', self._alert_response_cb)
+            self.add_alert(alert)
+
+    """
 
     def __init__(self, timeout=5, **kwargs):
         Alert.__init__(self, **kwargs)

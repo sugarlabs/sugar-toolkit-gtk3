@@ -1,3 +1,7 @@
+"""
+A small fixed size picture, typically used to decorate components.
+
+"""
 # Copyright (C) 2006-2007 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -498,28 +502,80 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
             self._palette_invoker.detach()
 
     def set_file_name(self, value):
+        """
+        Parameters
+        ----------
+        value:
+
+        Returns
+        -------
+        None
+
+        \"\"\"
+
+        """
         if self._buffer.file_name != value:
             self._buffer.file_name = value
             self.emit_paint_needed(0, 0, -1, -1)
 
     def get_file_name(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        file name :
+
+        """
         return self._buffer.file_name
 
     file_name = gobject.property(
         type=str, getter=get_file_name, setter=set_file_name)
 
     def set_icon_name(self, value):
+        """
+        Parameters
+        ----------
+        value:
+
+        Returns
+        -------
+        None
+
+        """
         if self._buffer.icon_name != value:
             self._buffer.icon_name = value
             self.emit_paint_needed(0, 0, -1, -1)
 
     def get_icon_name(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        icon name :
+
+        """
         return self._buffer.icon_name
 
     icon_name = gobject.property(
         type=str, getter=get_icon_name, setter=set_icon_name)
 
     def set_xo_color(self, value):
+        """
+        Parameters
+        ----------
+        value:
+
+        Returns
+        -------
+        None
+
+        """
         if self._buffer.xo_color != value:
             self._buffer.xo_color = value
             self.emit_paint_needed(0, 0, -1, -1)
@@ -528,40 +584,110 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         type=object, getter=None, setter=set_xo_color)
 
     def set_fill_color(self, value):
+        """
+        Parameters
+        ----------
+        value:
+
+        Returns
+        -------
+        None
+
+        """
         if self._buffer.fill_color != value:
             self._buffer.fill_color = value
             self.emit_paint_needed(0, 0, -1, -1)
 
     def get_fill_color(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        fill color :
+
+        """
         return self._buffer.fill_color
 
     fill_color = gobject.property(
         type=object, getter=get_fill_color, setter=set_fill_color)
 
     def set_stroke_color(self, value):
+        """
+        Parameters
+        ----------
+        value:
+
+        Returns
+        -------
+        None
+
+        """
         if self._buffer.stroke_color != value:
             self._buffer.stroke_color = value
             self.emit_paint_needed(0, 0, -1, -1)
 
     def get_stroke_color(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        stroke color :
+
+        """
         return self._buffer.stroke_color
 
     stroke_color = gobject.property(
         type=object, getter=get_stroke_color, setter=set_stroke_color)
 
     def set_size(self, value):
+        """
+        Parameters
+        ----------
+        value:
+
+        Returns
+        -------
+        None
+
+        """
         if self._buffer.width != value:
             self._buffer.width = value
             self._buffer.height = value
             self.emit_request_changed()
 
     def get_size(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        size :
+
+        """
         return self._buffer.width
 
     size = gobject.property(
         type=int, getter=get_size, setter=set_size)
 
     def set_scale(self, value):
+        """
+        Parameters
+        ----------
+        value:
+
+        Returns
+        -------
+        None
+
+        """
         logging.warning(
             'CanvasIcon: the scale parameter is currently unsupported')
         if self._buffer.scale != value:
@@ -569,32 +695,94 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
             self.emit_request_changed()
 
     def get_scale(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        scale :
+
+        """
         return self._buffer.scale
 
     scale = gobject.property(
         type=float, getter=get_scale, setter=set_scale)
 
     def set_cache(self, value):
+        """
+        Parameters
+        ----------
+        cache
+
+        Returns
+        -------
+        None
+
+        """
         self._buffer.cache = value
 
     def get_cache(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        cache :
+
+        """
         return self._buffer.cache
 
     cache = gobject.property(
         type=bool, default=False, getter=get_cache, setter=set_cache)
 
     def set_badge_name(self, value):
+        """
+        Parameters
+        ----------
+        value :
+
+        Returns
+        -------
+        None
+
+        """
         if self._buffer.badge_name != value:
             self._buffer.badge_name = value
             self.emit_paint_needed(0, 0, -1, -1)
 
     def get_badge_name(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        badge name :
+
+        """
         return self._buffer.badge_name
 
     badge_name = gobject.property(
         type=str, getter=get_badge_name, setter=set_badge_name)
 
     def do_paint_below_children(self, cr, damaged_box):
+        """
+        Parameters
+        ----------
+        cr :
+
+        damaged_box :
+
+        Returns
+        -------
+        None
+
+        """
         surface = self._buffer.get_surface()
         if surface:
             width, height = self.get_allocation()
@@ -606,6 +794,16 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
             cr.paint()
 
     def do_get_content_width_request(self):
+        """
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        width :
+
+        """
         surface = self._buffer.get_surface()
         if surface:
             size = surface.get_width()
