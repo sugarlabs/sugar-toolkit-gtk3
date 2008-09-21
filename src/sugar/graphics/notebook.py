@@ -49,6 +49,23 @@ class Notebook(gtk.Notebook):
         self.show()
 
     def do_set_property(self, pspec, value):
+        """
+        Set notebook property
+
+        Parameters
+        ----------
+        pspec :
+            property for which the value will be set
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        AssertionError
+
+        """
         if pspec.name == 'can-close-tabs':
             self._can_close_tabs = value
         else:
@@ -93,6 +110,21 @@ class Notebook(gtk.Notebook):
         return event_box
 
     def add_page(self, text_label, widget):
+        """
+        Adds a page to the notebook.
+
+        Parameters
+        ----------
+        text_label :
+
+        widget :
+
+        Returns
+        -------
+        Boolean
+          Returns TRUE if the page is successfully added to th notebook.
+
+        """
         # Add a new page to the notebook
         if self._can_close_tabs:
             eventbox = self._create_custom_tab(text_label, widget)

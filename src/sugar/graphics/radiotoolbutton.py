@@ -24,6 +24,10 @@ from sugar.graphics.palette import Palette, ToolInvoker
 from sugar.graphics import toolbutton
 
 class RadioToolButton(gtk.RadioToolButton):
+    """
+    An implementation of a "push" button.
+
+    """
     __gtype_name__ = 'SugarRadioToolButton'
 
     def __init__(self, **kwargs):
@@ -43,7 +47,17 @@ class RadioToolButton(gtk.RadioToolButton):
             self._palette_invoker.detach()
 
     def set_tooltip(self, tooltip):
-        """ Set a simple palette with just a single label.
+        """
+        Set a simple palette with just a single label.
+
+        Parameters
+        ----------
+        tooltip:
+
+        Returns
+        -------
+        None
+
         """
         if self.palette is None or self._tooltip is None:
             self.palette = Palette(tooltip)
@@ -61,10 +75,34 @@ class RadioToolButton(gtk.RadioToolButton):
     tooltip = gobject.property(type=str, setter=set_tooltip, getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
+        """
+        Sets the accelerator.
+
+        Parameters
+        ----------
+        accelerator:
+
+        Returns
+        -------
+        None
+
+        """
         self._accelerator = accelerator
         toolbutton.setup_accelerator(self)
 
     def get_accelerator(self):
+        """
+        Returns the accelerator for the button.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        ------
+        accelerator:
+
+        """
         return self._accelerator
 
     accelerator = gobject.property(type=str, setter=set_accelerator,

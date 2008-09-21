@@ -1,3 +1,31 @@
+"""
+Alerts appear at the top of the body of your activity.
+
+At a high level, Alert and its different variations (TimeoutAlert,
+ConfirmationAlert, etc.) have a title, an alert message and then several
+buttons that the user can click. The Alert class will pass "response" events
+to your activity when any of these buttons are clicked, along with a
+response_id to help you identify what button was clicked.
+
+
+Examples
+--------
+create a simple alert message.
+
+.. code-block:: python
+  from sugar.graphics.alert import Alert
+  ...
+       # Create a new simple alert
+        alert = Alert()
+        # Populate the title and text body of the alert.
+        alert.props.title=_('Title of Alert Goes Here')
+        alert.props.msg = _('Text message of alert goes here')
+        # Call the add_alert() method (inherited via the sugar.graphics.Window superclass of Activity)
+        # to add this alert to the activity window.
+        self.add_alert(alert)
+        alert.show()
+
+"""
 # Copyright (C) 2007, One Laptop Per Child
 #
 # This library is free software; you can redistribute it and/or
@@ -28,7 +56,8 @@ from sugar.graphics.icon import Icon
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 class Alert(gtk.EventBox):
-    """UI interface for Alerts
+    """
+    UI interface for Alerts
 
     Alerts are used inside the activity window instead of being a
     separate popup window. They do not hide canvas content. You can
@@ -40,7 +69,9 @@ class Alert(gtk.EventBox):
         'title': the title of the alert,
         'message': the message of the alert,
         'icon': the icon that appears at the far left
+
     See __gproperties__
+
     """
 
     __gtype_name__ = 'SugarAlert'
@@ -209,7 +240,43 @@ class Alert(gtk.EventBox):
 
 
 class ConfirmationAlert(Alert):
-    """This is a ready-made two button (Cancel,Ok) alert"""
+    """
+    This is a ready-made two button (Cancel,Ok) alert.
+
+    A confirmation alert is a nice shortcut from a standard Alert because it
+    comes with 'OK' and 'Cancel' buttons already built-in. When clicked, the
+    'OK' button will emit a response with a response_id of gtk.RESPONSE_OK,
+    while the 'Cancel' button will emit gtk.RESPONSE_CANCEL.
+
+    Examples
+    --------
+
+    .. code-block:: python
+      from sugar.graphics.alert import ConfirmationAlert
+      ...
+        #### Method: _alert_confirmation, create a Confirmation alert (with ok and cancel buttons standard)
+        # and add it to the UI.
+        def _alert_confirmation(self):
+            alert = ConfirmationAlert()
+            alert.props.title=_('Title of Alert Goes Here')
+            alert.props.msg = _('Text message of alert goes here')
+            alert.connect('response', self._alert_response_cb)
+            self.add_alert(alert)
+
+
+        #### Method: _alert_response_cb, called when an alert object throws a response event.
+        def _alert_response_cb(self, alert, response_id):
+            #remove the alert from the screen, since either a response button was clicked or
+            #there was a timeout
+            self.remove_alert(alert)
+
+            #Do any work that is specific to the type of button clicked.
+            if response_id is gtk.RESPONSE_OK:
+                print 'Ok Button was clicked. Do any work upon ok here ...'
+            elif response_id is gtk.RESPONSE_CANCEL:
+                print 'Cancel Button was clicked.'
+
+    """
 
     def __init__(self, **kwargs):
         Alert.__init__(self, **kwargs)
