@@ -20,8 +20,8 @@ create a simple alert message.
         # Populate the title and text body of the alert.
         alert.props.title=_('Title of Alert Goes Here')
         alert.props.msg = _('Text message of alert goes here')
-        # Call the add_alert() method (inherited via the sugar.graphics.Window superclass of Activity)
-        # to add this alert to the activity window.
+        # Call the add_alert() method (inherited via the sugar.graphics.Window
+        # superclass of Activity) to add this alert to the activity window.
         self.add_alert(alert)
         alert.show()
 
@@ -183,8 +183,8 @@ class Alert(gtk.EventBox):
         Parameters
         ----------
         response_id :
-            will be emitted with the response signal a response ID should one of the
-            pre-defined GTK Response Type Constants or a positive number
+            will be emitted with the response signal a response ID should one
+            of the pre-defined GTK Response Type Constants or a positive number
         label :
             that will occure right to the buttom
 
@@ -254,7 +254,8 @@ class ConfirmationAlert(Alert):
     .. code-block:: python
       from sugar.graphics.alert import ConfirmationAlert
       ...
-        #### Method: _alert_confirmation, create a Confirmation alert (with ok and cancel buttons standard)
+        #### Method: _alert_confirmation, create a Confirmation alert (with ok
+                     and cancel buttons standard)
         # and add it to the UI.
         def _alert_confirmation(self):
             alert = ConfirmationAlert()
@@ -264,10 +265,11 @@ class ConfirmationAlert(Alert):
             self.add_alert(alert)
 
 
-        #### Method: _alert_response_cb, called when an alert object throws a response event.
+        #### Method: _alert_response_cb, called when an alert object throws a
+                     response event.
         def _alert_response_cb(self, alert, response_id):
-            #remove the alert from the screen, since either a response button was clicked or
-            #there was a timeout
+            #remove the alert from the screen, since either a response button
+            #was clicked or there was a timeout
             self.remove_alert(alert)
 
             #Do any work that is specific to the type of button clicked.
@@ -326,21 +328,23 @@ class TimeoutAlert(Alert):
     .. code-block:: python
       from sugar.graphics.alert import TimeoutAlert
       ...
-        #### Method: _alert_timeout, create a Timeout alert (with ok and cancel buttons standard)
+        #### Method: _alert_timeout, create a Timeout alert (with ok and cancel
+                     buttons standard)
         # and add it to the UI.
         def _alert_timeout(self):
-            #Notice that for a TimeoutAlert, you pass the number of seconds in which to timeout. By
-            #default, this is 5.
+            #Notice that for a TimeoutAlert, you pass the number of seconds in
+            #which to timeout. By default, this is 5.
             alert = TimeoutAlert(10)
             alert.props.title=_('Title of Alert Goes Here')
             alert.props.msg = _('Text message of timeout alert goes here')
             alert.connect('response', self._alert_response_cb)
             self.add_alert(alert)
 
-        #### Method: _alert_response_cb, called when an alert object throws a response event.
+        #### Method: _alert_response_cb, called when an alert object throws a
+                     response event.
         def _alert_response_cb(self, alert, response_id):
-            #remove the alert from the screen, since either a response button was clicked or
-            #there was a timeout
+            #remove the alert from the screen, since either a response button
+            #was clicked or there was a timeout
             self.remove_alert(alert)
 
             #Do any work that is specific to the type of button clicked.
@@ -392,11 +396,12 @@ class NotifyAlert(Alert):
     .. code-block:: python
       from sugar.graphics.alert import NotifyAlert
       ...
-        #### Method: _alert_notify, create a Notify alert (with only an 'OK' button)
+        #### Method: _alert_notify, create a Notify alert (with only an 'OK'
+                     button)
         # and add it to the UI.
         def _alert_notify(self):
-            #Notice that for a NotifyAlert, you pass the number of seconds in which to notify. By
-            #default, this is 5.
+            #Notice that for a NotifyAlert, you pass the number of seconds in
+            #which to notify. By default, this is 5.
             alert = NotifyAlert(10)
             alert.props.title=_('Title of Alert Goes Here')
             alert.props.msg = _('Text message of notify alert goes here')
