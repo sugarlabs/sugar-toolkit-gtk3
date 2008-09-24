@@ -7,17 +7,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-08-28 04:31-0400\n"
+"PO-Revision-Date: 2008-08-28 07:53-0400\n"
 "Last-Translator: abdullah kocabas <abdullah.kocabas@abcdizustu.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Pootle 1.1.0rc2\n"
 
 #: ../src/sugar/activity/activity.py:120
 msgid "Share with:"
-msgstr "paylaşınız:"
+msgstr "paylaşınız."
 
 #: ../src/sugar/activity/activity.py:122
 msgid "Private"
@@ -33,7 +34,7 @@ msgstr "kaydediniz."
 
 #: ../src/sugar/activity/activity.py:136
 msgid "Stop"
-msgstr "durunuz."
+msgstr "durdurunuz."
 
 #: ../src/sugar/activity/activity.py:251
 msgid "Undo"
@@ -78,7 +79,7 @@ msgstr "mutlaka durunuz."
 
 #: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
 msgid "Cancel"
-msgstr "vazgeçiniz."
+msgstr "iptal ediniz."
 
 #: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
 msgid "Ok"
@@ -113,34 +114,41 @@ msgstr "%s önce"
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "%d yıl%d yıllar"
+msgstr[0] "%d yıl"
+msgstr[1] "%d yıllar"
 
 #: ../src/sugar/util.py:203
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "%d ay%d aylar"
+msgstr[0] "%d ay"
+msgstr[1] "%d aylar"
 
 #: ../src/sugar/util.py:204
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "%d hafta%d haftalar"
+msgstr[0] "%d hafta"
+msgstr[1] "%d haftalar"
 
 #: ../src/sugar/util.py:205
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d gün%d günler"
+msgstr[0] "%d gün"
+msgstr[1] "%d günler"
 
 #: ../src/sugar/util.py:206
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] "%d saat%d saatler"
+msgstr[0] "%d saat"
+msgstr[1] "%d saatler"
 
 #: ../src/sugar/util.py:207
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d dakika%d dakikalar"
+msgstr[0] "%d dakika"
+msgstr[1] "%d dakikalar"
+
