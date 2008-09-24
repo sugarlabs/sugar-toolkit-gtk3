@@ -55,7 +55,7 @@ sugar_grid_add_weight(SugarGrid *grid, GdkRectangle *rect)
 
     for (k = rect->y; k < rect->y + rect->height; k++) {
         for (i = rect->x; i < rect->x + rect->width; i++) {
-            grid->weights[i + k * rect->width] += 1;
+            grid->weights[i + k * grid->width] += 1;
         }
     }
 }
@@ -72,7 +72,7 @@ sugar_grid_remove_weight(SugarGrid *grid, GdkRectangle *rect)
 
     for (k = rect->y; k < rect->y + rect->height; k++) {
         for (i = rect->x; i < rect->x + rect->width; i++) {
-            grid->weights[i + k * rect->width] -= 1;
+            grid->weights[i + k * grid->width] -= 1;
         }
     }
 }
@@ -89,7 +89,7 @@ sugar_grid_compute_weight(SugarGrid *grid, GdkRectangle *rect)
 
     for (k = rect->y; k < rect->y + rect->height; k++) {
         for (i = rect->x; i < rect->x + rect->width; i++) {
-            sum += grid->weights[i + k * rect->width];
+            sum += grid->weights[i + k * grid->width];
         }
     }
 
