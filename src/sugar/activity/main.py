@@ -89,8 +89,11 @@ def main():
 
     gtk.icon_theme_get_default().append_search_path(bundle.get_icons_path())
 
-    gettext.bindtextdomain(bundle.get_bundle_id(),
-                           bundle.get_locale_path())
+    locale_path = None
+    if 'SUGAR_LOCALEDIR' in os.environ:
+        locale_path = os.environ['SUGAR_LOCALEDIR']
+
+    gettext.bindtextdomain(bundle.get_bundle_id(), locale_path)
     gettext.textdomain(bundle.get_bundle_id())
 
     splitted_module = args[0].rsplit('.', 1)
