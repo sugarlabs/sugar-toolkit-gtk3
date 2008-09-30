@@ -31,13 +31,6 @@ from errno import EEXIST, ENOSPC
 
 import os
 
-# #3903 - this constant can be removed and assumed to be 1 when dbus-python
-# 0.82.3 is the only version used
-if dbus.version >= (0, 82, 3):
-    DBUS_PYTHON_TIMEOUT_UNITS_PER_SECOND = 1
-else:
-    DBUS_PYTHON_TIMEOUT_UNITS_PER_SECOND = 1000
-
 _SHELL_SERVICE = "org.laptop.Shell"
 _SHELL_PATH = "/org/laptop/Shell"
 _SHELL_IFACE = "org.laptop.Shell"
@@ -279,7 +272,7 @@ class ActivityCreationHandler(gobject.GObject):
                         command,
                         environ['SUGAR_BUNDLE_PATH'],
                         environ['SUGAR_BUNDLE_ID'],
-                        timeout=30 * DBUS_PYTHON_TIMEOUT_UNITS_PER_SECOND,
+                        timeout=30,
                         reply_handler=self._create_reply_handler,
                         error_handler=self._create_error_handler,
                         dbus_interface=_RAINBOW_ACTIVITY_FACTORY_INTERFACE)
