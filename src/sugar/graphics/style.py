@@ -17,19 +17,14 @@
 
 """
 All the constants are expressed in pixels. They are defined for the XO screen
-and are usually adapted to different resolution by applying a zoom factor. The
-factor for traditional 96 dpi screen is currently 0.72 which is the inverse
-of the one we are using to adapt web pages to the XO screen. It should be
-considered a reference value rather then a scale constant which has to be
-automatically applied and always respected.
+and are usually adapted to different resolution by applying a zoom factor.
 """
 
 import os
+import logging
 
 import gtk
 import pango
-
-_XO_DPI = 200.0
 
 _FOCUS_LINE_WIDTH = 2
 _TAB_CURVATURE = 1
@@ -110,7 +105,7 @@ MEDIUM_ICON_SIZE = zoom(55 * 1.5)
 LARGE_ICON_SIZE = zoom(55 * 2.0)
 XLARGE_ICON_SIZE = zoom(55 * 2.75)
 
-FONT_SIZE = zoom(7 * _XO_DPI / _get_screen_dpi())
+FONT_SIZE = zoom(7)
 FONT_NORMAL = Font('Bitstream Vera Sans %d' % FONT_SIZE)
 FONT_BOLD = Font('Bitstream Vera Sans bold %d' % FONT_SIZE)
 FONT_NORMAL_H = zoom(24)
