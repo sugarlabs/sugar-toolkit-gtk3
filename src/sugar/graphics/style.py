@@ -34,15 +34,13 @@ _XO_DPI = 200.0
 _FOCUS_LINE_WIDTH = 2
 _TAB_CURVATURE = 1
 
-def _get_screen_dpi():
-    xft_dpi = gtk.settings_get_default().get_property('gtk-xft-dpi')
-    return float(xft_dpi / 1024)
-
 def _compute_zoom_factor():
-    if _get_screen_dpi() == 96.0:
-        if not os.environ.has_key('SUGAR_XO_STYLE') or \
-           not os.environ['SUGAR_XO_STYLE'] == 'yes':
-            return 0.72
+    if os.environ.has_key('SUGAR_SCALING'):
+        try:
+            scaling = int(os.environ['SUGAR_SCALING'])
+            return scaling / 100.0
+        except ValueError:
+            logging.error('Invalid SUGAR_SCALING.')
 
     return 1.0
 
