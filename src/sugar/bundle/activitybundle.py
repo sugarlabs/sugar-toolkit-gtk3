@@ -259,7 +259,6 @@ class ActivityBundle(Bundle):
 
         return command
 
-
     def get_mime_types(self):
         """Get the MIME types supported by the activity"""
         return self._mime_types
@@ -268,22 +267,7 @@ class ActivityBundle(Bundle):
         """Get whether there should be a visible launcher for the activity"""
         return self._show_launcher
 
-    def is_installed(self):
-        if activity.get_registry().get_activity(self._bundle_id):
-            return True
-        else:
-            return False
-
-    def need_upgrade(self):
-        """Returns True if installing this activity bundle is meaningful -
-        that is, if an identical version of this activity is not
-        already installed.
-
-        Until we have cryptographic hashes to check identity, returns
-        True always. See http://dev.laptop.org/ticket/7534."""
-        return True
-    
-    def unpack(self, install_dir, strict_manifest=False):
+    def install(self, install_dir, strict_manifest=False):
         self._unzip(install_dir)
 
         install_path = os.path.join(install_dir, self._zip_root_dir)
@@ -352,35 +336,7 @@ class ActivityBundle(Bundle):
                                             os.path.basename(info_file)))
         return install_path
 
-    def install(self):
-        activities_path = env.get_user_activities_path()
-        act = activity.get_registry().get_activity(self._bundle_id)
-        if act is not None and act.path.startswith(activities_path):
-            raise AlreadyInstalledException
-
-        install_dir = env.get_user_activities_path()
-        install_path = self.unpack(install_dir)
-        
-        if not activity.get_registry().add_bundle(install_path):
-            raise RegistrationException
-
-    def uninstall(self, force=False):        
-        if self._zip_file is None:
-            install_path = self._path
-        else:
-            if not self.is_installed():
-                raise NotInstalledException
-
-            act = activity.get_registry().get_activity(self._bundle_id)
-            if not force and act.version != self._activity_version:
-                logging.warning('Not uninstalling, different bundle present')
-                return
-            elif not act.path.startswith(env.get_user_activities_path()):
-                logging.warning('Not uninstalling system activity')
-                return
-
-            install_path = act.path
-
+    def uninstall(self, install_path, force=False):
         xdg_data_home = os.getenv('XDG_DATA_HOME',
                                   os.path.expanduser('~/.local/share'))
 
@@ -404,23 +360,3 @@ class ActivityBundle(Bundle):
                         os.remove(path)
 
         self._uninstall(install_path)
-        
-        if not activity.get_registry().remove_bundle(install_path):
-            raise RegistrationException
-
-    def upgrade(self):
-        act = activity.get_registry().get_activity(self._bundle_id)
-        if act is None:
-            logging.warning('Activity not installed')
-        elif act.path.startswith(env.get_user_activities_path()):
-            try:
-                self.uninstall(force=True)
-            except Exception, e:
-                logging.warning('Uninstall failed (%s), still trying ' \
-                                'to install newer bundle', e)
-        else:
-            logging.warning('Unable to uninstall system activity, ' \
-                            'installing upgraded version in user activities')
-
-        self.install()
-
