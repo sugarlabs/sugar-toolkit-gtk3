@@ -22,11 +22,8 @@ import locale
 import os
 import tempfile
 
-from sugar.bundle.bundle import Bundle, MalformedBundleException, \
-    AlreadyInstalledException, RegistrationException, NotInstalledException
-
-from sugar import activity
-from sugar import env
+from sugar.bundle.bundle import Bundle, \
+    MalformedBundleException, NotInstalledException
 
 import logging
 
