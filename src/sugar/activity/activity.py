@@ -55,7 +55,7 @@ import traceback
 import gtk, gobject
 import dbus
 import dbus.service
-import json
+import cjson
 
 from sugar import util        
 from sugar.presence import presenceservice
@@ -776,8 +776,8 @@ class Activity(Window, gtk.Container):
 
         buddies_dict = self._get_buddies()
         if buddies_dict:
-            self.metadata['buddies_id'] = json.write(buddies_dict.keys())
-            self.metadata['buddies'] = json.write(self._get_buddies())
+            self.metadata['buddies_id'] = cjson.encode(buddies_dict.keys())
+            self.metadata['buddies'] = cjson.encode(self._get_buddies())
 
         preview = self._get_preview()
         if self._preview:
