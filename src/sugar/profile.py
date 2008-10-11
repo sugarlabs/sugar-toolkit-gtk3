@@ -16,6 +16,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import gconf
 import os
 import logging
 from ConfigParser import ConfigParser
@@ -24,147 +25,36 @@ from sugar import env
 from sugar import util
 from sugar.graphics.xocolor import XoColor
 
-DEFAULT_JABBER_SERVER = ''
-DEFAULT_VOLUME = 81
-DEFAULT_TIMEZONE = 'UTC'
-DEFAULT_HOT_CORNERS_DELAY = 0.0
-DEFAULT_WARM_EDGES_DELAY = 1000.0
-
-RING_LAYOUT = 'ring-layout'
-RANDOM_LAYOUT = 'random-layout'
-DEFAULT_FAVORITES_LAYOUT = RING_LAYOUT
-
 _profile = None
-
-def _set_key(cp, section, key, value):
-    if not cp.has_section(section):
-        cp.add_section(section)
-    cp.set(section, key, value)
 
 class Profile(object):
     """Local user's current options/profile information
     
-    User settings are stored in an INI-style configuration
-    file.  This object uses the ConfigParser module to load 
-    the settings. (We only very rarely set keys, so we don't
-    keep the ConfigParser around between calls.)
-    
+    User settings were previously stored in an INI-style 
+    configuration file. We moved to gconf now. The deprected 
+    API is kept around to not break activities still using it.
+
     The profile is also responsible for loading the user's
     public and private ssh keys from disk.
     
     Attributes:
-    
-        name -- child's name 
-        color -- XoColor for the child's icon
-        server -- school server with which the child is 
-            associated 
-        server_registered -- whether the child has registered 
-            with the school server or not
-        backup1 -- temporary backup info key for Trial-2
         
         pubkey -- public ssh key
         privkey_hash -- SHA has of the child's public key 
     """
     def __init__(self, path):
-        self.nick_name = None
-        self.color = None
-        self.jabber_server = DEFAULT_JABBER_SERVER
-        self.jabber_registered = False
-        self.timezone = DEFAULT_TIMEZONE
-        self.backup1 = None
-        self.sound_volume = DEFAULT_VOLUME
-        self.hot_corners_delay = DEFAULT_HOT_CORNERS_DELAY
-        self.warm_edges_delay = DEFAULT_WARM_EDGES_DELAY
-        self.automatic_pm = False
-        self.extreme_pm = False
-        self.favorites_layout = DEFAULT_FAVORITES_LAYOUT
-
         self._pubkey = None
         self._privkey_hash = None
-        self._config_path = path
-
-        self._load_config()
 
     def is_valid(self):
-        return self.nick_name is not None and \
-               self.color is not None and \
+        client = gconf.client_get_default()
+        nick = client.get_string("/desktop/sugar/user/nick")
+        color = client.get_string("/desktop/sugar/user/color")
+
+        return nick is not '' and \
+               color is not '' and \
                self.pubkey is not None and \
                self.privkey_hash is not None
-
-    def is_registered(self):
-        return self.backup1 is not None
-
-    def save(self):
-        cp = ConfigParser()
-        cp.read([self._config_path])
-
-        if self.nick_name:
-            _set_key(cp, 'Buddy', 'NickName', self.nick_name.encode('utf8'))
-        if self.color:
-            _set_key(cp, 'Buddy', 'Color', self.color.to_string())
-        if self.backup1:
-            _set_key(cp, 'Server', 'Backup1', self.backup1)
-        if self.jabber_server is not None:
-            _set_key(cp, 'Jabber', 'Server', self.jabber_server)
-
-        _set_key(cp, 'Date', 'Timezone', self.timezone)
-        
-        _set_key(cp, 'Frame', 'HotCorners', self.hot_corners_delay)
-
-        _set_key(cp, 'Frame', 'WarmEdges', self.warm_edges_delay)
-
-        _set_key(cp, 'Jabber', 'Registered', self.jabber_registered)
-
-        _set_key(cp, 'Sound', 'Volume', self.sound_volume)
-
-        _set_key(cp, 'Power', 'AutomaticPM', self.automatic_pm)
-
-        _set_key(cp, 'Power', 'ExtremePM', self.extreme_pm)
-
-        _set_key(cp, 'Shell', 'FavoritesLayout', self.favorites_layout)
-
-        f = open(self._config_path, 'w')
-        cp.write(f)
-        f.close()
-
-    def _load_config(self):
-        cp = ConfigParser()
-        cp.read([self._config_path])
-
-        if cp.has_option('Buddy', 'NickName'):
-            name = cp.get('Buddy', 'NickName')
-            # decode nickname from ascii-safe chars to unicode
-            self.nick_name = name.decode("utf-8")
-        if cp.has_option('Buddy', 'Color'):
-            self.color = XoColor(cp.get('Buddy', 'Color'))
-        if cp.has_option('Jabber', 'Server'):
-            self.jabber_server = cp.get('Jabber', 'Server')
-        if cp.has_option('Jabber', 'Registered'):
-            registered = cp.get('Jabber', 'Registered')
-            if registered.lower() == "true":
-                self.jabber_registered = True
-        if cp.has_option('Date', 'Timezone'):
-            self.timezone = cp.get('Date', 'Timezone')
-        if cp.has_option('Frame', 'HotCorners'):
-            self.hot_corners_delay = float(cp.get('Frame', 'HotCorners'))
-        if cp.has_option('Frame', 'WarmEdges'):
-            self.warm_edges_delay = float(cp.get('Frame', 'WarmEdges'))
-        if cp.has_option('Server', 'Backup1'):
-            self.backup1 = cp.get('Server', 'Backup1')
-        if cp.has_option('Sound', 'Volume'):
-            self.sound_volume = float(cp.get('Sound', 'Volume'))
-        if cp.has_option('Power', 'AutomaticPM'):
-            state = cp.get('Power', 'AutomaticPM')
-            if state.lower() == "true":
-                self.automatic_pm = True
-        if cp.has_option('Power', 'ExtremePM'):
-            state = cp.get('Power', 'ExtremePM')
-            if state.lower() == "true":
-                self.extreme_pm = True
-        if cp.has_option('Shell', 'FavoritesLayout'):
-            self.favorites_layout = cp.get('Shell', 'FavoritesLayout')
-
-        del cp
 
     def _load_pubkey(self):
         key_path = os.path.join(env.get_profile_path(), 'owner.key.pub')
@@ -227,6 +117,63 @@ class Profile(object):
     privkey_hash = property(_get_privkey_hash)
     pubkey = property(_get_pubkey)
 
+    def convert_profile(self):
+        cp = ConfigParser()
+        path = os.path.join(env.get_profile_path(), 'config')
+        cp.read([path])
+
+        client = gconf.client_get_default()
+
+        if cp.has_option('Buddy', 'NickName'):
+            name = cp.get('Buddy', 'NickName')
+            # decode nickname from ascii-safe chars to unicode
+            nick = name.decode("utf-8")
+            client.set_string("/desktop/sugar/user/nick", nick)
+        if cp.has_option('Buddy', 'Color'):
+            color = cp.get('Buddy', 'Color')
+            client.set_string("/desktop/sugar/user/color", color)
+        if cp.has_option('Jabber', 'Server'):
+            server = cp.get('Jabber', 'Server')
+            client.set_string("/desktop/sugar/collaboration/jabber_server", 
+                              server)
+        if cp.has_option('Jabber', 'Registered'):
+            registered = cp.get('Jabber', 'Registered')
+            if registered.lower() == "true":
+                client.set_bool(\
+                    "/desktop/sugar/collaboration/jabber_registered", True)
+        if cp.has_option('Date', 'Timezone'):
+            timezone = cp.get('Date', 'Timezone')
+            client.set_string("/desktop/sugar/date/timezone", timezone)
+        if cp.has_option('Frame', 'HotCorners'):
+            delay = float(cp.get('Frame', 'HotCorners'))
+            client.set_int("/desktop/sugar/frame/corner_delay", int(delay))
+        if cp.has_option('Frame', 'WarmEdges'):
+            delay = float(cp.get('Frame', 'WarmEdges'))
+            client.set_int("/desktop/sugar/frame/edge_delay", int(delay))
+        if cp.has_option('Server', 'Backup1'):
+            backup1 = cp.get('Server', 'Backup1')
+            client.set_string("/desktop/sugar/backup_url", backup1)
+        if cp.has_option('Sound', 'Volume'):
+            volume = int(cp.get('Sound', 'Volume'))
+            client.set_int("/desktop/sugar/sound/volume", volume)
+        if cp.has_option('Power', 'AutomaticPM'):
+            state = cp.get('Power', 'AutomaticPM')
+            if state.lower() == "true":
+                client.set_bool("/desktop/sugar/power/automatic", True)
+        if cp.has_option('Power', 'ExtremePM'):
+            state = cp.get('Power', 'ExtremePM')
+            if state.lower() == "true":
+                client.set_bool("/desktop/sugar/power/extreme", True)
+        if cp.has_option('Shell', 'FavoritesLayout'):
+            layout = cp.get('Shell', 'FavoritesLayout')
+            client.set_string("/desktop/sugar/desktop/favorites_layout", 
+                              layout)
+        del cp
+        try:
+            os.unlink(path)
+        except OSError:
+            logging.error('Error removing old profile.')
+
 def get_profile():
     global _profile
 
@@ -236,13 +183,14 @@ def get_profile():
 
     return _profile
 
-# Convenience methods for frequently used properties
-
 def get_nick_name():
-    return get_profile().nick_name
+    client = gconf.client_get_default()
+    return client.get_string("/desktop/sugar/user/nick")    
 
 def get_color():
-    return get_profile().color
+    client = gconf.client_get_default()
+    color = client.get_string("/desktop/sugar/user/color")    
+    return XoColor(color)
 
 def get_pubkey():
     return get_profile().pubkey

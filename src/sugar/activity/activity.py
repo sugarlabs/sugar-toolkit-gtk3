@@ -51,6 +51,7 @@ import os
 import time
 from hashlib import sha1
 import traceback
+import gconf
 
 import gtk, gobject
 import dbus
@@ -67,10 +68,10 @@ from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toolcombobox import ToolComboBox
 from sugar.graphics.alert import Alert
 from sugar.graphics.icon import Icon
+from sugar.graphics.xocolor import XoColor
 from sugar.datastore import datastore
 from sugar.session import XSMPClient
 from sugar import wm
-from sugar import profile
 from sugar import _sugarext
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -127,8 +128,9 @@ class ActivityToolbar(gtk.Toolbar):
         self._update_share()
 
         self.keep = ToolButton(tooltip=_('Keep'))
-        keep_icon = Icon(icon_name='document-save', 
-                         xo_color=profile.get_color())
+        client = gconf.client_get_default()
+        color = XoColor(client.get_string('/desktop/sugar/user/color'))
+        keep_icon = Icon(icon_name='document-save', xo_color=color)
         self.keep.set_icon_widget(keep_icon)
         keep_icon.show()
         self.keep.props.accelerator = '<Ctrl>S'
@@ -560,7 +562,8 @@ class Activity(Window, gtk.Container):
             if self.shared_activity is not None:
                 icon_color = self.shared_activity.props.color
             else:
-                icon_color = profile.get_color().to_string()
+                client = gconf.client_get_default()
+                icon_color = client.get_string('/desktop/sugar/user/color')
             self._jobject.metadata['icon-color'] = icon_color
 
             self._jobject.file_path = ''
