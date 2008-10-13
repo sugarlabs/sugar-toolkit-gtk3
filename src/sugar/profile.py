@@ -154,8 +154,8 @@ class Profile(object):
             backup1 = cp.get('Server', 'Backup1')
             client.set_string("/desktop/sugar/backup_url", backup1)
         if cp.has_option('Sound', 'Volume'):
-            volume = int(cp.get('Sound', 'Volume'))
-            client.set_int("/desktop/sugar/sound/volume", volume)
+            volume = float(cp.get('Sound', 'Volume'))
+            client.set_int("/desktop/sugar/sound/volume", int(volume))
         if cp.has_option('Power', 'AutomaticPM'):
             state = cp.get('Power', 'AutomaticPM')
             if state.lower() == "true":
