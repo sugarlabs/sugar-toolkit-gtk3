@@ -212,7 +212,8 @@ class ActivityCreationHandler(gobject.GObject):
                     bus.get_object(_DS_SERVICE, _DS_PATH), _DS_INTERFACE)
             datastore.find({ 'activity_id': self._handle.activity_id }, [],
                            reply_handler=self._find_object_reply_handler,
-                           error_handler=self._find_object_error_handler)
+                           error_handler=self._find_object_error_handler,
+                           byte_arrays=True)
         else:
             self._launch_activity()
 
