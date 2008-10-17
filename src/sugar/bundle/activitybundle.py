@@ -21,11 +21,10 @@ from ConfigParser import ConfigParser
 import locale
 import os
 import tempfile
+import logging
 
 from sugar.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
-
-import logging
 
 class ActivityBundle(Bundle):
     """A Sugar activity bundle
@@ -52,6 +51,7 @@ class ActivityBundle(Bundle):
         self._show_launcher = True
         self._activity_version = 0
         self._installation_time = os.stat(path).st_mtime
+        self._manifest = None
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
@@ -62,8 +62,15 @@ class ActivityBundle(Bundle):
         if linfo_file:
             self._parse_linfo(linfo_file)
 
-        self.manifest = None # This should be replaced by following function
-        self.read_manifest()
+    def _get_manifest(self):
+        if self._manifest is None:
+            self._manifest = self._read_manifest()
+        return self._manifest
+
+    manifest = property(_get_manifest, None, None,
+        "NOTICE: this property is potentially quite slow, so better make sure "
+        "that it's not called at performance-critical points like shell or "
+        "activity startup.")
 
     def _raw_manifest(self):
         f = self.get_file("MANIFEST")
@@ -75,14 +82,15 @@ class ActivityBundle(Bundle):
         f.close()
         return ret
         
-    def read_manifest(self):
-        """read_manifest: sets self.manifest to list of lines in MANIFEST, 
-        with invalid lines replaced by empty lines.
+    def _read_manifest(self):
+        """return a list with the lines in MANIFEST, with invalid lines replaced
+        by empty lines.
         
         Since absolute order carries information on file history, it should 
         be preserved. For instance, when renaming a file, you should leave
         the new name on the same line as the old one.
         """
+        logging.debug('STARTUP: Reading manifest')
         lines = self._raw_manifest()
 
         # Remove trailing newlines, they do not help keep absolute position.
@@ -112,7 +120,7 @@ class ActivityBundle(Bundle):
                 logging.warning("Bundle %s: invalid entry in MANIFEST: %s"
                                 % (self._name,line))
 
-        self.manifest = lines
+        return lines
     
     def get_files(self, manifest = None):
         files = [line for line in (manifest or self.manifest) if line]
