@@ -312,20 +312,18 @@ class VTray(gtk.VBox):
 
         gobject.GObject.__init__(self, **kwargs)
 
-        # FIXME we need a go-up icon
-        scroll_left = _TrayScrollButton('go-left', _PREVIOUS_PAGE)
-        self.pack_start(scroll_left, False)
+        scroll_up = _TrayScrollButton('go-up', _PREVIOUS_PAGE)
+        self.pack_start(scroll_up, False)
 
         self._viewport = _TrayViewport(gtk.ORIENTATION_VERTICAL)
         self.pack_start(self._viewport)
         self._viewport.show()
 
-        # FIXME we need a go-down icon
-        scroll_right = _TrayScrollButton('go-right', _NEXT_PAGE)
-        self.pack_start(scroll_right, False)
+        scroll_down = _TrayScrollButton('go-down', _NEXT_PAGE)
+        self.pack_start(scroll_down, False)
 
-        scroll_left.viewport = self._viewport
-        scroll_right.viewport = self._viewport
+        scroll_up.viewport = self._viewport
+        scroll_down.viewport = self._viewport
 
         if self.align == ALIGN_TO_END:
             spacer = gtk.SeparatorToolItem()
