@@ -211,7 +211,19 @@ ALIGN_TO_START = 0
 ALIGN_TO_END = 1
 
 class HTray(gtk.HBox):
+    __gtype_name__ = 'SugarHTray'
+
+    __gproperties__ = {
+        'align'         : (int, None, None, 0, 1, ALIGN_TO_START,
+                           gobject.PARAM_READWRITE |
+                           gobject.PARAM_CONSTRUCT_ONLY),
+        'drag-active'   : (bool, None, None, False,
+                           gobject.PARAM_READWRITE)
+    }
     def __init__(self, **kwargs):
+        self._drag_active = False
+        self.align = ALIGN_TO_START
+
         gobject.GObject.__init__(self, **kwargs)
 
         scroll_left = _TrayScrollButton('go-left', _PREVIOUS_PAGE)
@@ -235,9 +247,30 @@ class HTray(gtk.HBox):
             self._viewport.traybar.insert(spacer, 0)
             spacer.show()
 
-    align = gobject.property(
-            flags=gobject.PARAM_CONSTRUCT_ONLY | gobject.PARAM_READWRITE,
-            default=ALIGN_TO_START, type=int)
+    def do_set_property(self, pspec, value):
+        if pspec.name == 'align':
+            self.align = value
+        elif pspec.name == 'drag-active':
+            self._set_drag_active(value)
+        else:
+            raise AssertionError
+
+    def do_get_property(self, pspec):
+        if pspec.name == 'align':
+            return self.align
+        elif pspec.name == 'drag-active':
+            return self._drag_active
+        else:
+            raise AssertionError
+
+    def _set_drag_active(self, active):
+        if self._drag_active != active:
+            self._drag_active = active
+            if self._drag_active:
+                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL,
+                        style.COLOR_BLACK.get_gdk_color())
+            else:
+                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL, None)
 
     def get_children(self):
         children = self._viewport.traybar.get_children()[:]
@@ -263,7 +296,20 @@ class HTray(gtk.HBox):
         self._viewport.scroll_to_item(item)
 
 class VTray(gtk.VBox):
+    __gtype_name__ = 'SugarVTray'
+
+    __gproperties__ = {
+        'align'         : (int, None, None, 0, 1, ALIGN_TO_START,
+                           gobject.PARAM_READWRITE |
+                           gobject.PARAM_CONSTRUCT_ONLY),
+        'drag-active'   : (bool, None, None, False,
+                           gobject.PARAM_READWRITE)
+    }
+
     def __init__(self, **kwargs):
+        self._drag_active = False
+        self.align = ALIGN_TO_START
+
         gobject.GObject.__init__(self, **kwargs)
 
         # FIXME we need a go-up icon
@@ -289,9 +335,30 @@ class VTray(gtk.VBox):
             self._viewport.traybar.insert(spacer, 0)
             spacer.show()
 
-    align = gobject.property(
-            flags=gobject.PARAM_CONSTRUCT_ONLY | gobject.PARAM_READWRITE,
-            default=ALIGN_TO_START, type=int)
+    def do_set_property(self, pspec, value):
+        if pspec.name == 'align':
+            self.align = value
+        elif pspec.name == 'drag-active':
+            self._set_drag_active(value)
+        else:
+            raise AssertionError
+
+    def do_get_property(self, pspec):
+        if pspec.name == 'align':
+            return self.align
+        elif pspec.name == 'drag-active':
+            return self._drag_active
+        else:
+            raise AssertionError
+
+    def _set_drag_active(self, active):
+        if self._drag_active != active:
+            self._drag_active = active
+            if self._drag_active:
+                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL,
+                        style.COLOR_BLACK.get_gdk_color())
+            else:
+                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL, None)
 
     def get_children(self):
         children = self._viewport.traybar.get_children()[:]
