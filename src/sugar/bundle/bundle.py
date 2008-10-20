@@ -41,7 +41,7 @@ class RegistrationException(Exception):
 class MalformedBundleException(Exception):
     pass
 
-class Bundle:
+class Bundle(object):
     """A Sugar activity, content module, etc.
     
     The bundle itself may be either a zip file or a directory
