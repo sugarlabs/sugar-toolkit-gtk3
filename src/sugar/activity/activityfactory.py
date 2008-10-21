@@ -131,6 +131,11 @@ def get_command(activity, activity_id=None, object_id=None, uri=None):
     if uri is not None:
         command.extend(['-u', uri])
 
+    bin_path = os.path.join(activity.get_path(), 'bin')
+    absolute_path = os.path.join(bin_path, command[0])
+    if os.path.exists(absolute_path):
+        command[0] = absolute_path
+
     logging.debug('launching: %r' % command)
 
     return command
