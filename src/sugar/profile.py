@@ -136,11 +136,6 @@ class Profile(object):
             server = cp.get('Jabber', 'Server')
             client.set_string("/desktop/sugar/collaboration/jabber_server", 
                               server)
-        if cp.has_option('Jabber', 'Registered'):
-            registered = cp.get('Jabber', 'Registered')
-            if registered.lower() == "true":
-                client.set_bool(\
-                    "/desktop/sugar/collaboration/jabber_registered", True)
         if cp.has_option('Date', 'Timezone'):
             timezone = cp.get('Date', 'Timezone')
             client.set_string("/desktop/sugar/date/timezone", timezone)
