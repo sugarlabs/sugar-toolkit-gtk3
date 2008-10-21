@@ -131,10 +131,13 @@ def get_command(activity, activity_id=None, object_id=None, uri=None):
     if uri is not None:
         command.extend(['-u', uri])
 
-    bin_path = os.path.join(activity.get_path(), 'bin')
-    absolute_path = os.path.join(bin_path, command[0])
-    if os.path.exists(absolute_path):
-        command[0] = absolute_path
+    # if the command is in $BUNDLE_ROOT/bin, execute the absolute path so there
+    # is no need to mangle with the shell's PATH
+    if '/' not in command[0]:
+        bin_path = os.path.join(activity.get_path(), 'bin')
+        absolute_path = os.path.join(bin_path, command[0])
+        if os.path.exists(absolute_path):
+            command[0] = absolute_path
 
     logging.debug('launching: %r' % command)
 
