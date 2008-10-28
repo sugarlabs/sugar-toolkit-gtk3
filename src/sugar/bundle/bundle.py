@@ -15,7 +15,10 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""Sugar bundle file handler"""
+"""Sugar bundle file handler
+
+UNSTABLE.
+"""
 
 import os
 import logging

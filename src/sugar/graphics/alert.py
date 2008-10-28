@@ -25,6 +25,7 @@ create a simple alert message.
         self.add_alert(alert)
         alert.show()
 
+STABLE.
 """
 # Copyright (C) 2007, One Laptop Per Child
 #

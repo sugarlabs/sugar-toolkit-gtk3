@@ -1,4 +1,3 @@
-"""User settings/configuration loading"""
 # Copyright (C) 2006-2007, Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -15,6 +14,11 @@
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+
+"""User settings/configuration loading.
+
+DEPRECATED. We are using GConf now to store preferences.
+"""
 
 import gconf
 import os

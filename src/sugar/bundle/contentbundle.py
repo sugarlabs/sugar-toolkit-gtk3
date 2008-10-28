@@ -15,7 +15,10 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""Sugar content bundles"""
+"""Sugar content bundles
+
+UNSTABLE.
+"""
 
 from ConfigParser import ConfigParser
 import os

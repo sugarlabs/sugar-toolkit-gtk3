@@ -18,6 +18,8 @@
 """
 All the constants are expressed in pixels. They are defined for the XO screen
 and are usually adapted to different resolution by applying a zoom factor.
+
+STABLE.
 """
 
 import os

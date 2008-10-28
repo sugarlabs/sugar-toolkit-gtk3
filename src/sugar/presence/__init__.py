@@ -1,11 +1,3 @@
-"""Client-code's interface to the PresenceService
-
-Provides a simplified API for accessing the dbus service
-which coordinates native network presence and sharing
-information.  This includes both "buddies" and "shared 
-activities".
-"""
-
 # Copyright (C) 2006-2007, Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -22,3 +14,11 @@ activities".
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+
+"""Client-code's interface to the PresenceService
+
+Provides a simplified API for accessing the dbus service
+which coordinates native network presence and sharing
+information.  This includes both "buddies" and "shared 
+activities".
+"""

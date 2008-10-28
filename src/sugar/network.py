@@ -15,6 +15,10 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+"""
+STABLE.
+"""
+
 import os
 import threading
 import urllib
@@ -24,7 +28,6 @@ import tempfile
 import gobject
 import SimpleHTTPServer
 import SocketServer
-
 
 __authinfos = {}
 

@@ -1,4 +1,3 @@
-"""Subclass of TubeConnection that converts handles to Sugar Buddies"""
 # Copyright (C) 2008 One Laptop Per Child
 #
 # This program is free software; you can redistribute it and/or modify
@@ -15,6 +14,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+"""Subclass of TubeConnection that converts handles to Sugar Buddies
+
+STABLE.
+"""
 
 from telepathy.constants import (
     CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES)

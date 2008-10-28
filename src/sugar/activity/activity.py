@@ -26,6 +26,8 @@ interesting buttons for the user, like for example 'exit activity'
 
 See the methods of the Activity class below for more information on what you
 will need for a real activity.
+
+STABLE.
 """
 # Copyright (C) 2006-2007 Red Hat, Inc.
 # Copyright (C) 2007-2008 One Laptop Per Child

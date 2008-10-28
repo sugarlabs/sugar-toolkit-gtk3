@@ -1,7 +1,3 @@
-"""
-A small fixed size picture, typically used to decorate components.
-
-"""
 # Copyright (C) 2006-2007 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -18,6 +14,12 @@ A small fixed size picture, typically used to decorate components.
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+
+"""
+A small fixed size picture, typically used to decorate components.
+
+STABLE.
+"""
 
 import re
 import math

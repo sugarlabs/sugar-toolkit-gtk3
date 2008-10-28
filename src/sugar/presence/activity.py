@@ -1,4 +1,3 @@
-"""UI interface to an activity in the presence service"""
 # Copyright (C) 2007, Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -15,6 +14,11 @@
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+
+"""UI interface to an activity in the presence service
+
+STABLE.
+"""
 
 import logging
 
