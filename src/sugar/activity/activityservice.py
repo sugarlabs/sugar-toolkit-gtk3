@@ -68,3 +68,15 @@ class ActivityService(dbus.service.Object):
     def Invite(self, buddy_key):
         self._activity.invite(buddy_key)
 
+    @dbus.service.method(_ACTIVITY_INTERFACE)
+    def HandleViewSource(self):
+        self._activity.handle_view_source()
+
+    @dbus.service.method(_ACTIVITY_INTERFACE,
+                         async_callbacks=('async_cb', 'async_err_cb'))
+    def GetDocumentPath(self, async_cb, async_err_cb):
+        try:
+            self._activity.get_document_path(async_cb, async_err_cb)
+        except Exception, e:
+            async_err_cb(e)
+

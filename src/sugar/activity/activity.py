@@ -1029,6 +1029,12 @@ class Activity(Window, gtk.Container):
 
     metadata = property(get_metadata, None)
 
+    def handle_view_source(self):
+        raise NotImplementedError
+
+    def get_document_path(self, async_cb, async_err_cb):
+        async_err_cb(NotImplementedError())
+
     # DEPRECATED
     _shared_activity = property(lambda self: self.shared_activity, None)
 
