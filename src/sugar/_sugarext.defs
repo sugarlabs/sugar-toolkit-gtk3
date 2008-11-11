@@ -29,13 +29,6 @@
   (gtype-id "SUGAR_TYPE_GRID")
 )
 
-(define-object Preview
-  (in-module "Sugar")
-  (parent "GObject")
-  (c-name "SugarPreview")
-  (gtype-id "SUGAR_TYPE_PREVIEW")
-)
-
 (define-object IconEntry
   (in-module "Sexy")
   (parent "GtkEntry")
@@ -246,44 +239,6 @@
   (of-object "SexyIconEntry")
   (c-name "sexy_icon_entry_add_clear_button")
   (return-type "none")
-)
-
-;; From sugar-preview.h
-
-(define-function sugar_preview_get_type
-  (c-name "sugar_preview_get_type")
-  (return-type "GType")
-)
-
-(define-method take_screenshot
-  (of-object "SugarPreview")
-  (c-name "sugar_preview_take_screenshot")
-  (return-type "none")
-  (parameters
-    '("GtkWidget" "widget")
-  )
-)
-
-(define-method set_size
-  (of-object "SugarPreview")
-  (c-name "sugar_preview_set_size")
-  (return-type "none")
-  (parameters
-    '("int" "width")
-    '("int" "height")
-  )
-)
-
-(define-method clear
-  (of-object "SugarPreview")
-  (c-name "sugar_preview_clear")
-  (return-type "none")
-)
-
-(define-method get_pixbuf
-  (of-object "SugarPreview")
-  (c-name "sugar_preview_get_pixbuf")
-  (return-type "GdkPixbuf*")
 )
 
 ;; From eggsmclient.h
