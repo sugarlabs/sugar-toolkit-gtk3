@@ -27,8 +27,6 @@ import os
 import gobject
 
 from sugar.datastore import dbus_helpers
-from sugar.bundle.contentbundle import ContentBundle
-from sugar.bundle.activitybundle import ActivityBundle
 from sugar import mime
 
 class DSMetadata(gobject.GObject):
@@ -117,16 +115,6 @@ class DSObject(object):
             self._file_path = file_path
 
     file_path = property(get_file_path, set_file_path)
-
-    def is_activity_bundle(self):
-        return self.metadata['mime_type'] in \
-               [ActivityBundle.MIME_TYPE, ActivityBundle.DEPRECATED_MIME_TYPE]
-
-    def is_content_bundle(self):
-        return self.metadata['mime_type'] == ContentBundle.MIME_TYPE
-
-    def is_bundle(self):
-        return self.is_activity_bundle() or self.is_content_bundle()
 
     def destroy(self):
         if self._destroyed:
