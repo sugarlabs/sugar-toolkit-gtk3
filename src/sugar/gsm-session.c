@@ -373,6 +373,8 @@ session_shutdown (GsmSession *session)
   /* FIXME: do this in reverse phase order */
   for (cl = session->clients; cl; cl = cl->next)
     gsm_client_die (cl->data);
+
+  g_signal_emit (session, signals[SHUTDOWN_COMPLETED], 0);
 }
 
 static void
@@ -485,9 +487,6 @@ client_disconnected (GsmClient *client, gpointer data)
     }
 
   g_object_unref (client);
-
-  if (session->phase == GSM_SESSION_PHASE_SHUTDOWN && !session->clients)
-    g_signal_emit (session, signals[SHUTDOWN_COMPLETED], 0);
 }
 
 GsmSession *
