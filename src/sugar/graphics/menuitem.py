@@ -28,7 +28,8 @@ import gtk
 from sugar.graphics.icon import Icon
 
 class MenuItem(gtk.ImageMenuItem):
-    def __init__(self, text_label=None, icon_name=None, text_maxlen=0):
+    def __init__(self, text_label=None, icon_name=None, text_maxlen=0,
+                 xo_color=None):
         gobject.GObject.__init__(self)
         self._accelerator = None
 
@@ -43,6 +44,8 @@ class MenuItem(gtk.ImageMenuItem):
 
         if icon_name:
             icon = Icon(icon_name=icon_name, icon_size=gtk.ICON_SIZE_MENU)
+            if xo_color is not None:
+                icon.props.xo_color = xo_color
             self.set_image(icon)
             icon.show()
 
