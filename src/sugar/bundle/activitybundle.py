@@ -26,6 +26,7 @@ import os
 import tempfile
 import logging
 
+from sugar import env
 from sugar.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
 
@@ -275,7 +276,10 @@ class ActivityBundle(Bundle):
         """Get whether there should be a visible launcher for the activity"""
         return self._show_launcher
 
-    def install(self, install_dir, strict_manifest=False):
+    def install(self, install_dir=None, strict_manifest=False):
+        if install_dir is None:
+            install_dir = env.get_user_activities_path()
+
         self._unzip(install_dir)
 
         install_path = os.path.join(install_dir, self._zip_root_dir)
