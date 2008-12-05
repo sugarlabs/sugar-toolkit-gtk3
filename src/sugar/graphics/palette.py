@@ -230,6 +230,10 @@ class Palette(gtk.Window):
         # Just assume xthickness and ythickness are the same
         self.set_border_width(self.get_style().xthickness)
 
+        accel_group = gtk.AccelGroup()
+        self.set_data('sugar-accel-group', accel_group)
+        self.add_accel_group(accel_group)
+
         primary_box.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE)
                                      - 2 * self.get_border_width())
 
