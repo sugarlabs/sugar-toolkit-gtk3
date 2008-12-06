@@ -184,8 +184,8 @@ class ActivityToolbar(gtk.Toolbar):
 
     def __title_changed_cb(self, entry):
         if not self._update_title_sid:
-            self._update_title_sid = gobject.timeout_add(
-                                                1000, self.__update_title_cb)
+            self._update_title_sid = gobject.timeout_add_seconds(
+                                                1, self.__update_title_cb)
 
     def __update_title_cb(self):
         title = self.title.get_text()

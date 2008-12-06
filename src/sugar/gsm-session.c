@@ -203,7 +203,7 @@ start_phase (GsmSession *session)
     {
       if (session->phase < GSM_SESSION_PHASE_APPLICATION)
 	{
-	  session->timeout = g_timeout_add (GSM_SESSION_PHASE_TIMEOUT * 1000,
+	  session->timeout = g_timeout_add_seconds (GSM_SESSION_PHASE_TIMEOUT,
 					    phase_timeout, session);
 	}
     }

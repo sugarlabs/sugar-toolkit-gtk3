@@ -292,7 +292,7 @@ bail:
 static void
 acme_volume_alsa_close (AcmeVolumeAlsa *self)
 {
-	self->_priv->timer_id = g_timeout_add (4000,
+	self->_priv->timer_id = g_timeout_add_seconds (4,
 			(GSourceFunc) acme_volume_alsa_close_real, self);
 }
 

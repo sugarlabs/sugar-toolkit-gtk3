@@ -955,7 +955,7 @@ end_startup_notification (GdkDisplay *display,
 					     NULL);
 }
 
-#define EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH (30 /* seconds */ * 1000)
+#define EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH 30 /* seconds */
 
 typedef struct {
   GdkDisplay *display;
@@ -985,7 +985,7 @@ set_startup_notification_timeout (GdkDisplay *display,
   sn_data->display = g_object_ref (display);
   sn_data->startup_id = g_strdup (startup_id);
 
-  g_timeout_add (EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH,
+  g_timeout_add_seconds (EGG_DESKTOP_FILE_SN_TIMEOUT_LENGTH,
 		 startup_notification_timeout, sn_data);
 }
 #endif /* HAVE_GDK_X11_DISPLAY_BROADCAST_STARTUP_MESSAGE */
