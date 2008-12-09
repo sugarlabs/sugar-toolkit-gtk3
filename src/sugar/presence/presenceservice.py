@@ -21,6 +21,7 @@ STABLE.
 """
 
 import logging
+import traceback
 
 import dbus
 import dbus.exceptions
@@ -520,6 +521,7 @@ class PresenceService(gobject.GObject):
         try:
             bus_name, object_path = self._ps.GetPreferredConnection()
         except dbus.exceptions.DBusException:
+            logging.error(traceback.format_exc())
             return None
 
         return bus_name, object_path
