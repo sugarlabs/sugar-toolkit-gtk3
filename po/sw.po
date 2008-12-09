@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-24 00:07+0530\n"
+"PO-Revision-Date: 2008-11-21 14:10-0500\n"
+"Last-Translator: Fanuel Kalugendo <fanosbert@yahoo.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0rc2\n"
+
+#: ../src/sugar/activity/activity.py:120
+msgid "Share with:"
+msgstr "Shirikina pamoja"
+
+#: ../src/sugar/activity/activity.py:122
+msgid "Private"
+msgstr "Binafsi"
+
+#: ../src/sugar/activity/activity.py:123
+msgid "My Neighborhood"
+msgstr "Jirani yangu"
+
+#: ../src/sugar/activity/activity.py:130
+msgid "Keep"
+msgstr "Hifadhi/ibakishe"
+
+#: ../src/sugar/activity/activity.py:136
+msgid "Stop"
+msgstr "Simama"
+
+#: ../src/sugar/activity/activity.py:251
+msgid "Undo"
+msgstr "rudi kabla"
+
+#: ../src/sugar/activity/activity.py:256
+msgid "Redo"
+msgstr "Rudia kufanya"
+
+#: ../src/sugar/activity/activity.py:266
+msgid "Copy"
+msgstr "nakili"
+
+#: ../src/sugar/activity/activity.py:271
+msgid "Paste"
+msgstr "bandika"
+
+#: ../src/sugar/activity/activity.py:297
+msgid "Activity"
+msgstr "Kazi"
+
+#: ../src/sugar/activity/activity.py:469
+#, python-format
+msgid "%s Activity"
+msgstr "%s Kazi"
+
+#: ../src/sugar/activity/activity.py:856
+msgid "Keep error"
+msgstr "hifadhi kosa"
+
+#: ../src/sugar/activity/activity.py:857
+msgid "Keep error: all changes will be lost"
+msgstr "hifadhi kosa: mabadiliko yote yatapotea"
+
+#: ../src/sugar/activity/activity.py:860
+msgid "Don't stop"
+msgstr "Usisimame"
+
+#: ../src/sugar/activity/activity.py:863
+msgid "Stop anyway"
+msgstr "Simama hata hiyo"
+
+#: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
+msgid "Cancel"
+msgstr "Ghahiri"
+
+#: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
+msgid "Ok"
+msgstr "Sawa"
+
+#: ../src/sugar/graphics/alert.py:219
+msgid "Continue"
+msgstr "Endelea"
+
+#: ../src/sugar/util.py:181
+msgid " and "
+msgstr "na_"
+
+#: ../src/sugar/util.py:182
+msgid ", "
+msgstr ",_"
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar/util.py:185
+msgid "Seconds ago"
+msgstr "Dakika zilizopita"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar/util.py:189
+#, python-format
+msgid "%s ago"
+msgstr "%s zilizopita"
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar/util.py:202
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d mwaka"
+msgstr[1] "%d miaka"
+
+#: ../src/sugar/util.py:203
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d mwezi"
+msgstr[1] "%d miezi"
+
+#: ../src/sugar/util.py:204
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d wiki"
+msgstr[1] "%d wiki"
+
+#: ../src/sugar/util.py:205
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d siku"
+msgstr[1] "%d siku"
+
+#: ../src/sugar/util.py:206
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d saa"
+msgstr[1] "%d masaa"
+
+#: ../src/sugar/util.py:207
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d dakika"
+msgstr[1] "%d dakika"
