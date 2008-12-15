@@ -7,12 +7,13 @@ msgstr ""
 "Project-Id-Version: olpc-sugar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-06-19 03:16-0400\n"
-"Last-Translator: Maria del Pilar Saenz Rodriguez <mapisaro@gmail.com>\n"
+"PO-Revision-Date: 2008-07-20 14:39-0400\n"
+"Last-Translator: Chema Q <jameson.quinn@gmail.com>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Pootle 1.1.0rc2\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -69,11 +70,11 @@ msgstr "Actividad %s"
 
 #: ../src/sugar/activity/activity.py:856
 msgid "Keep error"
-msgstr "Error de guardado"
+msgstr "Error al guardar"
 
 #: ../src/sugar/activity/activity.py:857
 msgid "Keep error: all changes will be lost"
-msgstr "Error de guardado: todos los cambios se perderán"
+msgstr "Error al guardar: todos los cambios se perderán"
 
 #: ../src/sugar/activity/activity.py:860
 msgid "Don't stop"
@@ -106,57 +107,60 @@ msgstr ", "
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar/util.py:185
 msgid "Seconds ago"
-msgstr ""
+msgstr "Segundos atrás"
 
+# I used an expression, not a literal translation, but I think it's OK.
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar/util.py:189
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s atrás"
 
+# No entiendo porque colocaron el plural igual que el singular.
+# Traduction: I don't know why somebody wrote the same for plural and singular traduction.
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar/util.py:202
-#, fuzzy, python-format
+#, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d año"
-msgstr[1] "%d año"
+msgstr[1] "%d años"
 
 #: ../src/sugar/util.py:203
-#, fuzzy, python-format
+#, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d mes"
-msgstr[1] "%d mes"
+msgstr[1] "%d meses"
 
 #: ../src/sugar/util.py:204
-#, fuzzy, python-format
+#, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d semana"
-msgstr[1] "%d semana"
+msgstr[1] "%d semanas"
 
 #: ../src/sugar/util.py:205
-#, fuzzy, python-format
+#, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d día"
-msgstr[1] "%d día"
+msgstr[1] "%d días"
 
 #: ../src/sugar/util.py:206
-#, fuzzy, python-format
+#, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d hora"
-msgstr[1] "%d hora"
+msgstr[1] "%d horas"
 
 #: ../src/sugar/util.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minuto"
-msgstr[1] "%d minuto"
+msgstr[1] "%d minutos"
 
 #~ msgid "Name:"
 #~ msgstr "Nombre:"
@@ -621,24 +625,6 @@ msgstr[1] "%d minuto"
 
 #~ msgid "OK"
 #~ msgstr "OK"
-
-#~ msgid "%d years"
-#~ msgstr "%d años"
-
-#~ msgid "%d months"
-#~ msgstr "%d meses"
-
-#~ msgid "%d weeks"
-#~ msgstr "%d semanas"
-
-#~ msgid "%d days"
-#~ msgstr "%d días"
-
-#~ msgid "%d hours"
-#~ msgstr "%d horas"
-
-#~ msgid "%d minutes"
-#~ msgstr "%d minutos"
 
 #~ msgid "%d second"
 #~ msgstr "%d segundo"
