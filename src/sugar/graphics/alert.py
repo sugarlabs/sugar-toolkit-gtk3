@@ -376,7 +376,7 @@ class TimeoutAlert(Alert):
         canvas.show()                       
         self.add_button(gtk.RESPONSE_OK, _('Continue'), canvas)
 
-        gobject.timeout_add(1000, self.__timeout)
+        gobject.timeout_add_seconds(1, self.__timeout)
         
     def __timeout(self):
         self._timeout -= 1

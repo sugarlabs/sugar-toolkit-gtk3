@@ -184,8 +184,8 @@ class ActivityToolbar(gtk.Toolbar):
 
     def __title_changed_cb(self, entry):
         if not self._update_title_sid:
-            self._update_title_sid = gobject.timeout_add(
-                                                1000, self.__update_title_cb)
+            self._update_title_sid = gobject.timeout_add_seconds(
+                                                1, self.__update_title_cb)
 
     def __update_title_cb(self):
         title = self.title.get_text()
@@ -507,13 +507,7 @@ class Activity(Window, gtk.Container):
         share_scope = SCOPE_PRIVATE
 
         if handle.object_id:
-            self._jobject = datastore.get(handle.object_id)
-            # TODO: Don't create so many objects until we have versioning
-            # support in the datastore
-            #self._jobject.object_id = ''
-            #del self._jobject.metadata['ctime']
-            del self._jobject.metadata['mtime']
-            
+            self._jobject = datastore.get(handle.object_id)            
             self.set_title(self._jobject.metadata['title'])
                 
             if self._jobject.metadata.has_key('share-scope'):

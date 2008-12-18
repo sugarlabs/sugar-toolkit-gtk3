@@ -110,7 +110,7 @@ gsm_client_xsmp_new (IceConn ice_conn)
 				   client_iochannel_watch, xsmp);
   g_io_channel_unref (channel);
 
-  xsmp->protocol_timeout = g_timeout_add (5000, client_protocol_timeout, xsmp);
+  xsmp->protocol_timeout = g_timeout_add_seconds (5, client_protocol_timeout, xsmp);
 
   set_description (xsmp);
   g_debug ("New client '%s'", xsmp->description);
