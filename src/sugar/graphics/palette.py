@@ -546,8 +546,13 @@ class Palette(gtk.Window):
 
         self.move(position.x, position.y)
 
-    def popup(self, immediate=False):
+    def popup(self, immediate=False, state=None):
         logging.debug('Palette.popup immediate %r' % immediate)
+
+        if state is None:
+            state = self.PRIMARY
+        self.set_state(state)
+
         if self._invoker is not None:
             self._update_full_request()
             self._alignment = self._invoker.get_alignment(self._full_request)
@@ -602,8 +607,6 @@ class Palette(gtk.Window):
         if self._group_id:
             group = palettegroup.get_group(self._group_id)
             if group and group.is_up():
-                self.set_state(self.PRIMARY)
-
                 immediate = True
                 group.popdown()
 
@@ -620,11 +623,7 @@ class Palette(gtk.Window):
         self.popdown()
 
     def _invoker_right_click_cb(self, invoker):
-        self._popup_anim.stop()
-        self._secondary_anim.stop()
-        self._popdown_anim.stop()
-        self.set_state(self.SECONDARY)
-        self.show()
+        self.popup(immediate=True, state=self.SECONDARY)
 
     def __enter_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
@@ -713,7 +712,6 @@ class _PopupAnimation(animator.Animation):
 
     def next_frame(self, current):
         if current == 1.0:
-            self._palette.set_state(Palette.PRIMARY)
             self._palette.show()
 
 class _SecondaryAnimation(animator.Animation):
