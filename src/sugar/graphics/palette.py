@@ -1003,23 +1003,25 @@ class WidgetInvoker(Invoker):
         return True
 
     def draw_rectangle(self, event, palette):
+        if self._widget.flags() & gtk.NO_WINDOW:
+            x, y = self._widget.allocation.x, self._widget.allocation.y
+        else:
+            x = y = 0
+
         wstyle = self._widget.get_style()
         gap = _calculate_gap(self.get_rect(), palette.get_rect())
+
         if gap:
             wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
                                  gtk.SHADOW_IN, event.area, self._widget,
-                                 "palette-invoker",
-                                 self._widget.allocation.x,
-                                 self._widget.allocation.y,
+                                 "palette-invoker", x, y,
                                  self._widget.allocation.width,
                                  self._widget.allocation.height,
                                  gap[0], gap[1], gap[2])
         else:
             wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
                              gtk.SHADOW_IN, event.area, self._widget,
-                             "palette-invoker",
-                             self._widget.allocation.x,
-                             self._widget.allocation.y,
+                             "palette-invoker", x, y,
                              self._widget.allocation.width,
                              self._widget.allocation.height)
 
