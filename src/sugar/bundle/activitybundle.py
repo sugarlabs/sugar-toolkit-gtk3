@@ -27,6 +27,7 @@ import tempfile
 import logging
 
 from sugar import env
+from sugar import util
 from sugar.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
 
@@ -253,7 +254,7 @@ class ActivityBundle(Bundle):
             temp_file, temp_file_path = tempfile.mkstemp(self._icon)
             os.write(temp_file, icon_data)
             os.close(temp_file)
-            return temp_file_path
+            return util.TempFilePath(temp_file_path)
 
     def get_activity_version(self):
         """Get the activity version"""
