@@ -268,7 +268,7 @@ class TempFilePath(str):
     def __new__(cls, path=None):
         if path is None:
             fd, path = tempfile.mkstemp()
-            os.remove(fd)
+            os.close(fd)
         logging.debug('TempFilePath created %r' % path)
         return str.__new__(cls, path)
 
