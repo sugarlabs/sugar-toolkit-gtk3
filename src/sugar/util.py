@@ -26,6 +26,8 @@ import sha
 import random
 import binascii
 import gettext
+import tempfile
+import logging
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
@@ -260,4 +262,20 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
         return NOW
 
     return ELAPSED % time_period
+
+class TempFilePath(str):
+
+    def __new__(cls, path=None):
+        if path is None:
+            fd, path = tempfile.mkstemp()
+            os.remove(fd)
+        logging.debug('TempFilePath created %r' % path)
+        return str.__new__(cls, path)
+
+    def __del__(self):
+        if os.path.exists(self):
+            os.unlink(self)
+            logging.debug('TempFilePath deleted %r' % self)
+        else:
+            logging.warning('TempFilePath already deleted %r' % self)
 
