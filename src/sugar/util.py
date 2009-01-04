@@ -263,19 +263,31 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
 
     return ELAPSED % time_period
 
-class TempFilePath(str):
+_tracked_paths = {}
 
+class TempFilePath(str):
     def __new__(cls, path=None):
         if path is None:
             fd, path = tempfile.mkstemp()
             os.close(fd)
         logging.debug('TempFilePath created %r' % path)
+
+        if path in _tracked_paths:
+            _tracked_paths[path] += 1
+        else:
+            _tracked_paths[path] = 1
+
         return str.__new__(cls, path)
 
     def __del__(self):
-        if os.path.exists(self):
-            os.unlink(self)
-            logging.debug('TempFilePath deleted %r' % self)
+        if _tracked_paths[self] == 1:
+            del _tracked_paths[self]
+            
+            if os.path.exists(self):
+                os.unlink(self)
+                logging.debug('TempFilePath deleted %r' % self)
+            else:
+                logging.warning('TempFilePath already deleted %r' % self)
         else:
-            logging.warning('TempFilePath already deleted %r' % self)
+            _tracked_paths[self] -= 1
 
