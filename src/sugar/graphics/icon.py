@@ -534,7 +534,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         return self._buffer.file_name
 
     file_name = gobject.property(
-        type=str, getter=get_file_name, setter=set_file_name)
+        type=object, getter=get_file_name, setter=set_file_name)
 
     def set_icon_name(self, value):
         """
@@ -565,7 +565,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         return self._buffer.icon_name
 
     icon_name = gobject.property(
-        type=str, getter=get_icon_name, setter=set_icon_name)
+        type=object, getter=get_icon_name, setter=set_icon_name)
 
     def set_xo_color(self, value):
         """
@@ -770,7 +770,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         return self._buffer.badge_name
 
     badge_name = gobject.property(
-        type=str, getter=get_badge_name, setter=set_badge_name)
+        type=object, getter=get_badge_name, setter=set_badge_name)
 
     def do_paint_below_children(self, cr, damaged_box):
         """
