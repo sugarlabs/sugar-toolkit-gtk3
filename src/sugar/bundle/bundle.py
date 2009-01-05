@@ -191,5 +191,9 @@ class Bundle(object):
             for name in files:
                 os.remove(os.path.join(root, name))
             for name in dirs:
-                os.rmdir(os.path.join(root, name))
+                path = os.path.join(root, name)
+                if os.path.islink(path):
+                    os.remove(path)
+                else:
+                    os.rmdir(path)
         os.rmdir(install_path)
