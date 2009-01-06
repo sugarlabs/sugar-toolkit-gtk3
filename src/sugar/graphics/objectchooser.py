@@ -33,7 +33,7 @@ J_DBUS_PATH = '/org/laptop/Journal'
 
 class ObjectChooser(object):
     def __init__(self, title=None, parent=None, flags=None, buttons=None,
-                 data_type=None):
+                 what_filter=None):
         # For backwards compatibility:
         # - We ignore title, flags and buttons.
         # - 'parent' can be a xid or a gtk.Window
@@ -55,7 +55,7 @@ class ObjectChooser(object):
         self._bus = None
         self._chooser_id = None
         self._response_code = gtk.RESPONSE_NONE
-        self._data_type = data_type
+        self._what_filter = what_filter
         
     def run(self):
         self._object_id = None
@@ -76,12 +76,12 @@ class ObjectChooser(object):
         journal.connect_to_signal('ObjectChooserCancelled',
                                   self.__chooser_cancelled_cb)
 
-        if self._data_type is None:
-            data_type = ''
+        if self._what_filter is None:
+            what_filter = ''
         else:
-            data_type = self._data_type
+            what_filter = self._what_filter
 
-        self._chooser_id = journal.ChooseObject(self._parent_xid, data_type)
+        self._chooser_id = journal.ChooseObject(self._parent_xid, what_filter)
 
         gtk.gdk.threads_leave()
         try:
