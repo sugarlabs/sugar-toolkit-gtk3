@@ -43,7 +43,8 @@ class MenuItem(gtk.ImageMenuItem):
         label.show()
 
         if icon_name is not None:
-            icon = Icon(icon_name=icon_name, icon_size=gtk.ICON_SIZE_SMALL_TOOLBAR)
+            icon = Icon(icon_name=icon_name,
+                        icon_size=gtk.ICON_SIZE_SMALL_TOOLBAR)
             if xo_color is not None:
                 icon.props.xo_color = xo_color
             self.set_image(icon)
