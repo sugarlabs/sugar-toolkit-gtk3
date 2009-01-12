@@ -133,21 +133,6 @@ class Palette(gtk.Window):
 
     __gtype_name__ = 'SugarPalette'
 
-    __gproperties__ = {
-        'invoker'        : (object, None, None,
-                            gobject.PARAM_READWRITE),
-        'primary-text'   : (str, None, None, None,
-                            gobject.PARAM_READWRITE),
-        'secondary-text' : (str, None, None, None,
-                            gobject.PARAM_READWRITE),
-        'icon'           : (object, None, None,
-                            gobject.PARAM_READWRITE),
-        'icon-visible'   : (bool, None, None, True,
-                            gobject.PARAM_READWRITE),
-        'group-id'       : (str, None, None, None,
-                            gobject.PARAM_READWRITE)
-    }
-
     __gsignals__ = {
         'popup' :   (gobject.SIGNAL_RUN_FIRST,
                      gobject.TYPE_NONE, ([])),
@@ -323,7 +308,7 @@ class Palette(gtk.Window):
         
         return gtk.gdk.Rectangle(x, y, width, height)
 
-    def _set_invoker(self, invoker):
+    def set_invoker(self, invoker):
         for hid in self._invoker_hids[:]: 
             self._invoker.disconnect(hid)
             self._invoker_hids.remove(hid)
@@ -342,6 +327,13 @@ class Palette(gtk.Window):
                 self._invoker_hids.append(self._invoker.connect(
                     'notify::widget', self._invoker_widget_changed_cb))
 
+    def get_invoker(self):
+        return self._invoker
+
+    invoker = gobject.property(type=object,
+                               getter=get_invoker,
+                               setter=set_invoker)
+
     def _update_accel_widget(self):
         assert self.props.invoker is not None
         self._label.props.accel_widget = self.props.invoker.props.widget
@@ -353,7 +345,14 @@ class Palette(gtk.Window):
             self._label.set_markup('<b>%s</b>' % label)
             self._label.show()
 
-    def _set_secondary_text(self, label):
+    def get_primary_text(self):
+        return self._primary_text
+
+    primary_text = gobject.property(type=str,
+                                    getter=get_primary_text,
+                                    setter=set_primary_text)
+
+    def set_secondary_text(self, label):
         self._secondary_text = label
 
         if label is None:
@@ -362,6 +361,13 @@ class Palette(gtk.Window):
             self._secondary_label.set_text(label)
             self._secondary_label.show()
 
+    def get_secondary_text(self):
+        return self._secondary_text
+
+
+    secondary_text = gobject.property(type=str,
+                                      getter=get_secondary_text,
+                                      setter=set_secondary_text)
     def _show_icon(self):
         self._label_alignment.set_padding(0, 0, 0, style.DEFAULT_SPACING)
         self._icon_box.show()
@@ -371,7 +377,7 @@ class Palette(gtk.Window):
         self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING,
                                           style.DEFAULT_SPACING)
 
-    def _set_icon(self, icon):        
+    def set_icon(self, icon):        
         if icon is None:
             self._icon = None
             self._hide_icon()
@@ -385,13 +391,26 @@ class Palette(gtk.Window):
             self._icon.show()
             self._show_icon()
 
-    def _set_icon_visible(self, visible):
+    def get_icon(self):
+        return self._icon
+
+    icon = gobject.property(type=object, getter=get_icon, setter=set_icon)
+
+    def set_icon_visible(self, visible):
         self._icon_visible = visible
 
         if visible and self._icon is not None:
             self._show_icon()
         else:
             self._hide_icon()
+
+    def get_icon_visible(self):
+        return self._icon_visilbe
+
+    icon_visible = gobject.property(type=bool,
+                                    default=True,
+                                    getter=get_icon_visible,
+                                    setter=set_icon_visible)
 
     def set_content(self, widget):
         if len(self._content.get_children()) > 0:
@@ -415,37 +434,12 @@ class Palette(gtk.Window):
             group = palettegroup.get_group(group_id)
             group.add(self)
 
-    def do_set_property(self, pspec, value):
-        if pspec.name == 'invoker':
-            self._set_invoker(value)
-        elif pspec.name == 'primary-text':
-            self.set_primary_text(value, None)
-        elif pspec.name == 'secondary-text':
-            self._set_secondary_text(value)
-        elif pspec.name == 'icon':
-            self._set_icon(value)
-        elif pspec.name == 'icon-visible':
-            self._set_icon_visible(value)
-        elif pspec.name == 'group-id':
-            self.set_group_id(value)
-        else:
-            raise AssertionError
+    def get_group_id(self):
+        return self._group_id
 
-    def do_get_property(self, pspec):
-        if pspec.name == 'invoker':
-            return self._invoker
-        elif pspec.name == 'primary-text':
-            return self._primary_text
-        elif pspec.name == 'secondary-text':
-            return self._secondary_text
-        elif pspec.name == 'icon':
-            return self._icon
-        elif pspec.name == 'icon-visible':
-            return self._icon_visible
-        elif pspec.name == 'group-id':
-            return self._group_id
-        else:
-            raise AssertionError
+    group_id = gobject.property(type=str,
+                                getter=get_group_id,
+                                setter=set_group_id)
 
     def do_size_request(self, requisition):
         gtk.Window.do_size_request(self, requisition)
