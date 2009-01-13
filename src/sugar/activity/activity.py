@@ -356,6 +356,8 @@ class _ActivitySession(gobject.GObject):
 class TitleAlert(gtk.Window):
     __gtype_name__ = 'SugarTitleAlert'
 
+    _BACKGROUND_COLOR = style.COLOR_BLACK.get_gdk_color()
+
     def __init__(self, activity):
         gtk.Window.__init__(self)
 
@@ -372,25 +374,32 @@ class TitleAlert(gtk.Window):
 
         self._activity = activity
 
+        alignment = gtk.Alignment(xalign=0.5, yalign=0.5)
+        self.add(alignment)
+        alignment.show()
+
         vbox = gtk.VBox()
-        vbox.modify_bg(gtk.STATE_NORMAL, style.COLOR_BLACK.get_gdk_color())
-        self.add(vbox)
+        vbox.set_spacing(style.DEFAULT_PADDING)
+        alignment.add(vbox)
         vbox.show()
 
         self._entry = gtk.Entry()
         self._entry.props.text=self._activity.metadata['title']
-        vbox.pack_start(self._entry, expand=True, fill=False)
+        self._entry.modify_bg(gtk.STATE_INSENSITIVE, self._BACKGROUND_COLOR)
+        self._entry.modify_base(gtk.STATE_INSENSITIVE, self._BACKGROUND_COLOR)
+        vbox.pack_start(self._entry)
         self._entry.show()
         self._entry.connect('activate', self.__activate_cb)
 
         button = gtk.Button(_('Keep'))
-        vbox.pack_start(button, expand=True, fill=False)
+        vbox.pack_start(button)
         button.show()
         button.connect('activate', self.__activate_cb)
 
     def __realize_cb(self, widget):
         self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self.window.set_accept_focus(True)
+        self.modify_bg(gtk.STATE_NORMAL, self._BACKGROUND_COLOR)
 
     def __activate_cb(self, widget):
         self._activity.metadata['title'] = self._entry.props.text
