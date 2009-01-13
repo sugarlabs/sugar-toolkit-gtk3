@@ -353,6 +353,50 @@ class _ActivitySession(gobject.GObject):
     def __sm_quit_cb(self, client):
         self.emit('quit')
 
+class TitleAlert(gtk.Window):
+    __gtype_name__ = 'SugarTitleAlert'
+
+    def __init__(self, activity):
+        gtk.Window.__init__(self)
+
+        self.set_border_width(style.LINE_WIDTH)
+        offset = style.GRID_CELL_SIZE
+        width = gtk.gdk.screen_width() - offset * 2
+        height = gtk.gdk.screen_height() - offset * 2
+        self.set_size_request(width, height)
+        self.set_position(gtk.WIN_POS_CENTER_ALWAYS) 
+        self.set_decorated(False)
+        self.set_resizable(False)
+        self.set_modal(True)
+        self.connect('realize', self.__realize_cb)
+
+        self._activity = activity
+
+        vbox = gtk.VBox()
+        vbox.modify_bg(gtk.STATE_NORMAL, style.COLOR_BLACK.get_gdk_color())
+        self.add(vbox)
+        vbox.show()
+
+        self._entry = gtk.Entry()
+        self._entry.props.text=self._activity.metadata['title']
+        vbox.pack_start(self._entry, expand=True, fill=False)
+        self._entry.show()
+        self._entry.connect('activate', self.__activate_cb)
+
+        button = gtk.Button(_('Keep'))
+        vbox.pack_start(button, expand=True, fill=False)
+        button.show()
+        button.connect('activate', self.__activate_cb)
+
+    def __realize_cb(self, widget):
+        self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        self.window.set_accept_focus(True)
+
+    def __activate_cb(self, widget):
+        self._activity.metadata['title'] = self._entry.props.text
+        self._activity.metadata['title_set_by_user'] = '1'
+        self._activity.close()
+
 class Activity(Window, gtk.Container):
     """This is the base Activity class that all other Activities derive from.
        This is where your activity starts.
@@ -966,12 +1010,17 @@ class Activity(Window, gtk.Container):
         if not self.can_close():
             return
 
-        if not self._closing:
-            if not self._prepare_close(skip_save):
-                return
+        if skip_save or self.metadata.get('title_set_by_user', '0') == '1':
+            if not self._closing:
+                if not self._prepare_close(skip_save):
+                    return
 
-        if not self._updating_jobject:
-            self._complete_close()
+            if not self._updating_jobject:
+                self._complete_close()
+        else:
+            title_alert = TitleAlert(self)
+            title_alert.set_transient_for(self.get_toplevel())
+            title_alert.show()
 
     def __realize_cb(self, window):
         wm.set_bundle_id(window.window, self.get_bundle_id())
