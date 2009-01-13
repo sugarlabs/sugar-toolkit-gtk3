@@ -4,6 +4,7 @@ sugar_PYTHON =			\
         alert.py                \
 	animator.py		\
 	combobox.py		\
+	colorbutton.py		\
 	entry.py		\
 	icon.py			\
 	iconentry.py          	\
