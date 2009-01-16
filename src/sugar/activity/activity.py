@@ -394,7 +394,7 @@ class TitleAlert(gtk.Window):
         button = gtk.Button(_('Keep'))
         vbox.pack_start(button)
         button.show()
-        button.connect('activate', self.__activate_cb)
+        button.connect('clicked', self.__activate_cb)
 
     def __realize_cb(self, widget):
         self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
