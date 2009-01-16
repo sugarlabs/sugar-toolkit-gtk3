@@ -20,6 +20,7 @@ import gettext
 import gtk
 import gobject
 import struct
+import logging
 
 from sugar.graphics import style
 from sugar.graphics.icon import Icon
@@ -28,7 +29,8 @@ from sugar.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 def get_svg_color_string(color):
-    return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257, color.blue / 257)
+    return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257, 
+                              color.blue / 257)
 
 class _ColorButton(gtk.Button):
     """This is a ColorButton for Sugar. It is similar to the gtk.ColorButton,
@@ -187,7 +189,7 @@ class _ColorButton(gtk.Button):
 
     # Drag and Drop
     def __drag_begin_cb(self, widget, context):
-        pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, TRUE, 8,
+        pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8,
                                 style.SMALL_ICON_SIZE,
                                 style.SMALL_ICON_SIZE)
 
@@ -207,7 +209,7 @@ class _ColorButton(gtk.Button):
     def __drag_data_received_cb(self, widget, context, x, y, selection_data, \
                                info, time):
         if len(selection_data.data) != 8:
-             return
+            return
 
         dropped = selection_data.data
         red = struct.unpack_from('=H', dropped, 0)[0]
