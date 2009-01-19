@@ -62,8 +62,8 @@ class NamingToolbar(gtk.Toolbar):
         
         self._add_separator(True)
 
-        self._keep_button = ToolButton('dialog-ok')
-        self._keep_button.set_tooltip(_('Keep'))
+        self._keep_button = ToolButton('dialog-ok', tooltip=_('Keep'))
+        self._keep_button.props.accelerator = 'Return'
         self._keep_button.connect('clicked', self.__keep_button_clicked_cb)
         self.insert(self._keep_button, -1)
         self._keep_button.show()
@@ -142,6 +142,10 @@ class NamingAlert(gtk.Window):
         self._description = None
         self._tags = None
 
+        accel_group = gtk.AccelGroup()
+        self.set_data('sugar-accel-group', accel_group)
+        self.add_accel_group(accel_group)
+
         self.set_border_width(style.LINE_WIDTH)
         offset = style.GRID_CELL_SIZE
         width = gtk.gdk.screen_width() - offset * 2
@@ -173,6 +177,9 @@ class NamingAlert(gtk.Window):
 
         body = self._create_body()
         self._root.append(body, hippo.PACK_EXPAND)
+
+        widget = self._title.get_property('widget')
+        widget.grab_focus()
 
     def _create_body(self):
         body = hippo.CanvasBox()
@@ -240,7 +247,7 @@ class NamingAlert(gtk.Window):
         title.set_background(style.COLOR_WHITE.get_html())
         title.props.text = self._activity.metadata.get('title', _('Untitled'))
         return title
-    
+
     def _create_description(self):
         vbox = hippo.CanvasBox()
         vbox.props.spacing = style.DEFAULT_SPACING
