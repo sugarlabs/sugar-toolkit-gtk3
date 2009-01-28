@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-06-25 15:47-0400\n"
+"POT-Creation-Date: 2009-01-20 00:31-0500\n"
+"PO-Revision-Date: 2009-01-28 15:04-0500\n"
 "Last-Translator: Myckel Habets <myckel@sdf.lonestar.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,136 +15,173 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Pootle 1.1.0rc2\n"
 
-#: ../src/sugar/activity/activity.py:120
+#: ../src/sugar/activity/activity.py:123
 msgid "Share with:"
 msgstr "Delen met:"
 
-#: ../src/sugar/activity/activity.py:122
+#: ../src/sugar/activity/activity.py:125
 msgid "Private"
 msgstr "Privé"
 
-#: ../src/sugar/activity/activity.py:123
+#: ../src/sugar/activity/activity.py:126
 msgid "My Neighborhood"
 msgstr "Mijn omgeving"
 
-#: ../src/sugar/activity/activity.py:130
+#: ../src/sugar/activity/activity.py:133
+#: ../src/sugar/activity/namingalert.py:65
 msgid "Keep"
 msgstr "Behouden"
 
-#: ../src/sugar/activity/activity.py:136
+#: ../src/sugar/activity/activity.py:144
 msgid "Stop"
 msgstr "Stop"
 
-#: ../src/sugar/activity/activity.py:251
+#: ../src/sugar/activity/activity.py:258
 msgid "Undo"
 msgstr "Ongedaan maken"
 
-#: ../src/sugar/activity/activity.py:256
+#: ../src/sugar/activity/activity.py:263
 msgid "Redo"
 msgstr "Herhalen"
 
-#: ../src/sugar/activity/activity.py:266
+#: ../src/sugar/activity/activity.py:273
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: ../src/sugar/activity/activity.py:271
+#: ../src/sugar/activity/activity.py:278
 msgid "Paste"
 msgstr "Plakken"
 
-#: ../src/sugar/activity/activity.py:297
+#: ../src/sugar/activity/activity.py:304
 msgid "Activity"
 msgstr "Activiteit"
 
-#: ../src/sugar/activity/activity.py:469
+#: ../src/sugar/activity/activity.py:542
 #, python-format
 msgid "%s Activity"
 msgstr "%s activiteit"
 
-#: ../src/sugar/activity/activity.py:856
+#: ../src/sugar/activity/activity.py:910
 msgid "Keep error"
 msgstr "Bewaarfout"
 
-#: ../src/sugar/activity/activity.py:857
+#: ../src/sugar/activity/activity.py:911
 msgid "Keep error: all changes will be lost"
 msgstr "Bewaarfout: alle veranderingen zijn verloren gegaan"
 
-#: ../src/sugar/activity/activity.py:860
+#: ../src/sugar/activity/activity.py:914
 msgid "Don't stop"
 msgstr "Niet stoppen"
 
-#: ../src/sugar/activity/activity.py:863
+#: ../src/sugar/activity/activity.py:917
 msgid "Stop anyway"
 msgstr "Toch stoppen"
 
-#: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
+#: ../src/sugar/activity/namingalert.py:60
+msgid "Name this entry"
+msgstr "Benoem deze ingang"
+
+#: ../src/sugar/activity/namingalert.py:248
+msgid "Untitled"
+msgstr "Naamloos"
+
+#: ../src/sugar/activity/namingalert.py:255
+msgid "Description:"
+msgstr "Beschrijving:"
+
+#: ../src/sugar/activity/namingalert.py:279
+msgid "Tags:"
+msgstr "Labels:"
+
+#: ../src/sugar/graphics/alert.py:288 ../src/sugar/graphics/alert.py:367
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
+#: ../src/sugar/graphics/alert.py:292 ../src/sugar/graphics/alert.py:426
 msgid "Ok"
 msgstr "Ok"
 
-#: ../src/sugar/graphics/alert.py:219
+#: ../src/sugar/graphics/alert.py:377
 msgid "Continue"
 msgstr "Doorgaan"
 
-#: ../src/sugar/util.py:181
+#: ../src/sugar/graphics/colorbutton.py:49
+msgid "Choose a color"
+msgstr "Kies een kleur"
+
+#: ../src/sugar/graphics/colorbutton.py:262
+msgid "Red"
+msgstr "Rood"
+
+#: ../src/sugar/graphics/colorbutton.py:264
+msgid "Green"
+msgstr "Groen"
+
+#: ../src/sugar/graphics/colorbutton.py:266
+msgid "Blue"
+msgstr "Blauw"
+
+#: ../src/sugar/util.py:194
 msgid " and "
 msgstr " en "
 
-#: ../src/sugar/util.py:182
+#: ../src/sugar/util.py:195
 msgid ", "
 msgstr ", "
 
+# TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: ../src/sugar/util.py:185
+#: ../src/sugar/util.py:198
 msgid "Seconds ago"
 msgstr "Seconden geleden"
 
+# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+# "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: ../src/sugar/util.py:189
+#: ../src/sugar/util.py:202
 #, python-format
 msgid "%s ago"
 msgstr "%s geleden"
 
+# TRANS: Relative dates (eg. 1 month and 5 days).
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: ../src/sugar/util.py:202
+#: ../src/sugar/util.py:215
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d jaar"
 msgstr[1] "%d jaren"
 
-#: ../src/sugar/util.py:203
+#: ../src/sugar/util.py:216
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d maand"
 msgstr[1] "%d maanden"
 
-#: ../src/sugar/util.py:204
+#: ../src/sugar/util.py:217
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d week"
 msgstr[1] "%d weken"
 
-#: ../src/sugar/util.py:205
+#: ../src/sugar/util.py:218
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dag"
 msgstr[1] "%d dagen"
 
-#: ../src/sugar/util.py:206
+#: ../src/sugar/util.py:219
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d uur"
 msgstr[1] "%d uren"
 
-#: ../src/sugar/util.py:207
+#: ../src/sugar/util.py:220
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
