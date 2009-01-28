@@ -317,3 +317,4 @@ class NamingAlert(gtk.Window):
 
         self._activity.metadata['title_set_by_user'] = '1'
         self._activity.close()
+        self.destroy()
