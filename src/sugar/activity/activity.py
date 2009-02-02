@@ -978,6 +978,7 @@ class Activity(Window, gtk.Container):
             title_alert = NamingAlert(self, get_bundle_path())
             title_alert.set_transient_for(self.get_toplevel())
             title_alert.show()
+            self.present()
 
     def __realize_cb(self, window):
         wm.set_bundle_id(window.window, self.get_bundle_id())
