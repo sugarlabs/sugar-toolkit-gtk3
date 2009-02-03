@@ -836,7 +836,17 @@ class Invoker(gobject.GObject):
 
     def get_position(self, palette_dim):
         alignment = self.get_alignment(palette_dim)
-        return self._get_position_for_alignment(alignment, palette_dim)
+        rect = self._get_position_for_alignment(alignment, palette_dim)
+
+        # In case our efforts to find an optimum place inside the screen failed,
+        # just make sure the palette fits inside the screen if at all possible.
+        rect.x = max(0, rect.x)
+        rect.y = max(0, rect.y)
+
+        rect.x = min(rect.x, self._screen_area.width - rect.width)
+        rect.y = min(rect.y, self._screen_area.height - rect.height)
+
+        return rect
 
     def get_alignment(self, palette_dim):
         best_alignment = None
@@ -877,7 +887,7 @@ class Invoker(gobject.GObject):
                 pv = -float(palette_dim[1] - dbottom - rect.height) \
                         / palette_dim[1]
 
-        else:
+        elif best_alignment in self.TOP or best_alignment in self.BOTTOM:
             dleft = rect.x - screen_area.x
             dright = screen_area.x + screen_area.width - rect.x - rect.width
 
