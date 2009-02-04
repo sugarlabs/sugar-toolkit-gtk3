@@ -920,7 +920,7 @@ class Invoker(gobject.GObject):
     def _ensure_palette_exists(self):
         if self.parent and self.palette is None:
             palette = self.parent.create_palette()
-            if palette:
+            if palette is not None:
                 self.palette = palette
 
     def notify_mouse_enter(self):
