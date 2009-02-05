@@ -774,14 +774,16 @@ class Activity(Window, gtk.Container):
         if preview is not None:
             self.metadata['preview'] = dbus.ByteArray(preview)
 
+        file_path = os.path.join(self.get_activity_root(), 'instance',
+                                 '%i' % time.time())
         try:
-            file_path = os.path.join(self.get_activity_root(), 'instance',
-                                        '%i' % time.time())
             self.write_file(file_path)
-            self._owns_file = True
-            self._jobject.file_path = file_path
         except NotImplementedError:
             logging.debug('Activity.write_file is not implemented.')
+        else:
+            if os.path.exists(file_path):
+                self._owns_file = True
+                self._jobject.file_path = file_path
 
         # Cannot call datastore.write async for creates:
         # https://dev.laptop.org/ticket/3071
