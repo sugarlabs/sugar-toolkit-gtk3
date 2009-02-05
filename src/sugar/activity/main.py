@@ -25,6 +25,7 @@ import dbus
 import dbus.service
 import dbus.glib
 
+import sugar
 from sugar.activity import activityhandle
 from sugar.bundle.activitybundle import ActivityBundle
 from sugar import logger
@@ -94,6 +95,7 @@ def main():
         locale_path = os.environ['SUGAR_LOCALEDIR']
 
     gettext.bindtextdomain(bundle.get_bundle_id(), locale_path)
+    gettext.bindtextdomain('sugar-toolkit', sugar.locale_path)
     gettext.textdomain(bundle.get_bundle_id())
 
     splitted_module = args[0].rsplit('.', 1)
