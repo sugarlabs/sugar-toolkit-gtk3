@@ -137,7 +137,9 @@ class Palette(gtk.Window):
         'popup' :   (gobject.SIGNAL_RUN_FIRST,
                      gobject.TYPE_NONE, ([])),
         'popdown' : (gobject.SIGNAL_RUN_FIRST,
-                     gobject.TYPE_NONE, ([]))
+                     gobject.TYPE_NONE, ([])),
+        'activate' : (gobject.SIGNAL_RUN_FIRST,
+                      gobject.TYPE_NONE, ([]))
     }
 
     # DEPRECATED: label is passed with the primary-text property, accel_path 
@@ -377,17 +379,23 @@ class Palette(gtk.Window):
         self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING,
                                           style.DEFAULT_SPACING)
 
-    def set_icon(self, icon):        
+    def set_icon(self, icon):
         if icon is None:
             self._icon = None
             self._hide_icon()
         else:
             if self._icon:
-                self._icon_box.remove(self._icon)
+                self._icon_box.remove(self._icon_box.get_children()[0])
+
+            event_box = gtk.EventBox()
+            event_box.connect('button-release-event',
+                              self.__icon_button_release_event_cb)
+            self._icon_box.pack_start(event_box)
+            event_box.show()
 
             self._icon = icon
             self._icon.props.icon_size = gtk.ICON_SIZE_LARGE_TOOLBAR
-            self._icon_box.pack_start(self._icon)
+            event_box.add(self._icon)
             self._icon.show()
             self._show_icon()
 
@@ -395,6 +403,9 @@ class Palette(gtk.Window):
         return self._icon
 
     icon = gobject.property(type=object, getter=get_icon, setter=set_icon)
+
+    def __icon_button_release_event_cb(self, icon, event):
+        self.emit('activate')
 
     def set_icon_visible(self, visible):
         self._icon_visible = visible
