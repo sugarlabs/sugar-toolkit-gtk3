@@ -2,188 +2,185 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-20 00:31-0500\n"
-"PO-Revision-Date: 2009-01-27 14:21-0500\n"
-"Last-Translator: Γιάννης Κασκαμανίδης <ttnfy17@yahoo.gr>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"X-Generator: Translate Toolkit 1.1.1rc4\n"
 
 #: ../src/sugar/activity/activity.py:123
 msgid "Share with:"
-msgstr "Διαμοιρασμός με:"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:125
 msgid "Private"
-msgstr "Ιδιωτικό"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:126
 msgid "My Neighborhood"
-msgstr "Η γειτονιά μου"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:133
 #: ../src/sugar/activity/namingalert.py:65
 msgid "Keep"
-msgstr "Διατήρηση"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:144
 msgid "Stop"
-msgstr "Κλείσιμο"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:258
 msgid "Undo"
-msgstr "Αναίρεση"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:263
 msgid "Redo"
-msgstr "Ακύρωση αναίρεσης"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:273
 msgid "Copy"
-msgstr "Αντιγραφή"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:278
 msgid "Paste"
-msgstr "Επικόλληση"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:304
 msgid "Activity"
-msgstr "Δραστηριότητα"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:542
 #, python-format
 msgid "%s Activity"
-msgstr "%s Δραστηριότητα"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:910
 msgid "Keep error"
-msgstr "Το σφάλμα εξακολουθεί να υφίσταται"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:911
 msgid "Keep error: all changes will be lost"
-msgstr "Το σφάλμα εξακολουθεί να υφίσταται: όλες οι αλλαγές θα χαθούν"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:914
 msgid "Don't stop"
-msgstr "Αδυναμία κλεισίματος"
+msgstr ""
 
 #: ../src/sugar/activity/activity.py:917
 msgid "Stop anyway"
-msgstr "Κλείσιμο παρ' όλα αυτά"
+msgstr ""
 
 #: ../src/sugar/activity/namingalert.py:60
 msgid "Name this entry"
-msgstr "Ονομάστε αυτή την καταχώρηση"
+msgstr ""
 
 #: ../src/sugar/activity/namingalert.py:248
 msgid "Untitled"
-msgstr "Χωρίς τίτλο"
+msgstr ""
 
 #: ../src/sugar/activity/namingalert.py:255
 msgid "Description:"
-msgstr "Περιγραφή"
+msgstr ""
 
 #: ../src/sugar/activity/namingalert.py:279
 msgid "Tags:"
-msgstr "Ετικέτες:"
+msgstr ""
 
 #: ../src/sugar/graphics/alert.py:288 ../src/sugar/graphics/alert.py:367
 msgid "Cancel"
-msgstr "Άκυρο"
+msgstr ""
 
 #: ../src/sugar/graphics/alert.py:292 ../src/sugar/graphics/alert.py:426
 msgid "Ok"
-msgstr "Εντάξει"
+msgstr ""
 
 #: ../src/sugar/graphics/alert.py:377
 msgid "Continue"
-msgstr "Συνέχεια"
+msgstr ""
 
 #: ../src/sugar/graphics/colorbutton.py:49
 msgid "Choose a color"
-msgstr "Επιλογή χρώματος"
+msgstr ""
 
 #: ../src/sugar/graphics/colorbutton.py:262
 msgid "Red"
-msgstr "Κόκκινο"
+msgstr ""
 
 #: ../src/sugar/graphics/colorbutton.py:264
 msgid "Green"
-msgstr "Πράσινο"
+msgstr ""
 
 #: ../src/sugar/graphics/colorbutton.py:266
 msgid "Blue"
-msgstr "Μπλε"
+msgstr ""
 
 #: ../src/sugar/util.py:194
 msgid " and "
-msgstr " και "
+msgstr ""
 
 #: ../src/sugar/util.py:195
 msgid ", "
-msgstr ", "
+msgstr ""
 
-# TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar/util.py:198
 msgid "Seconds ago"
-msgstr "Δευτερόλεπτα πριν"
+msgstr ""
 
-# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
-# "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar/util.py:202
 #, python-format
 msgid "%s ago"
-msgstr "%s πριν"
+msgstr ""
 
-# TRANS: Relative dates (eg. 1 month and 5 days).
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar/util.py:215
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "%d έτος"
-msgstr[1] "%d  έτη"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/sugar/util.py:216
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "%d μήνας"
-msgstr[1] "%d μήνες"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/sugar/util.py:217
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "%d εβδομάδα"
-msgstr[1] "%d εβδομάδες"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/sugar/util.py:218
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d ημέρα"
-msgstr[1] "%d ημέρες"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/sugar/util.py:219
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] "%d ώρα"
-msgstr[1] "%d ώρες"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/sugar/util.py:220
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d λεπτό"
-msgstr[1] "%d λεπτά"
+msgstr[0] ""
+msgstr[1] ""
