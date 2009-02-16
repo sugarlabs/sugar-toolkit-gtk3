@@ -926,3 +926,13 @@ def get_icon_state(base_name, perc, step=5):
             return icon_name
 
         strength = strength + step
+
+def get_icon_file_name(icon_name):
+    icon_theme = gtk.icon_theme_get_default()
+    info = icon_theme.lookup_icon(icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR, 0)
+    if not info:
+        return None
+    filename = info.get_filename()
+    del info
+    return filename
+

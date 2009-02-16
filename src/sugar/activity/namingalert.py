@@ -16,7 +16,9 @@
 # Boston, MA 02111-1307, USA.
 
 import gettext
+import os
 
+import gio
 import gtk
 import gobject
 import hippo
@@ -26,6 +28,7 @@ from sugar.graphics import style
 from sugar.graphics.icon import Icon
 from sugar.graphics.xocolor import XoColor
 from sugar.graphics.icon import CanvasIcon
+from sugar.graphics.icon import get_icon_file_name
 from sugar.graphics.entry import CanvasEntry
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.canvastextview import CanvasTextView
@@ -33,6 +36,22 @@ from sugar.graphics.canvastextview import CanvasTextView
 from sugar.bundle.activitybundle import ActivityBundle
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+
+def _get_icon_name(metadata):
+    file_name = None
+
+    mime_type = metadata.get('mime_type', '')
+    if not file_name and mime_type:
+        icons = gio.content_type_get_icon(mime_type)
+        for icon_name in icons.props.names:
+            file_name = get_icon_file_name(icon_name)
+            if file_name is not None:
+                break
+
+    if file_name is None or not os.path.exists(file_name):
+        file_name = get_icon_file_name('application-octet-stream')
+
+    return file_name
 
 class NamingToolbar(gtk.Toolbar):
     """ Toolbar of the naming alert
@@ -212,8 +231,8 @@ class NamingAlert(gtk.Window):
         self._favorite_icon = self._create_favorite_icon()
         header.append(self._favorite_icon)
         
-        activity_icon = self._create_activity_icon()
-        header.append(activity_icon)
+        entry_icon = self._create_entry_icon()
+        header.append(entry_icon)
         
         self._title = self._create_title()
         header.append(self._title, hippo.PACK_EXPAND)
@@ -233,14 +252,22 @@ class NamingAlert(gtk.Window):
         favorite_icon = FavoriteIcon(False)
         return favorite_icon
     
-    def _create_activity_icon(self):
-        activity_bundle = ActivityBundle(self._bundle_path)
-        activity_icon = CanvasIcon(file_name=activity_bundle.get_icon())
+    def _create_entry_icon(self):
+        bundle_id = self._activity.metadata.get('activity', '')
+        if not bundle_id:
+            bundle_id = self._activity.metadata.get('bundle_id', '')
+
+        if bundle_id == '':
+            file_name = _get_icon_name(self._activity.metadata)
+        else:    
+            activity_bundle = ActivityBundle(self._bundle_path)
+            file_name = activity_bundle.get_icon()
+        entry_icon = CanvasIcon(file_name=file_name)
         if self._activity.metadata.has_key('icon-color') and \
                 self._activity.metadata['icon-color']:
-            activity_icon.props.xo_color = XoColor( \
+            entry_icon.props.xo_color = XoColor( \
                 self._activity.metadata['icon-color'])
-        return activity_icon
+        return entry_icon
     
     def _create_title(self):
         title = CanvasEntry()
