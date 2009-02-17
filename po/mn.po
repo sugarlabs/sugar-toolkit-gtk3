@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-20 00:31-0500\n"
-"PO-Revision-Date: 2008-06-27 06:28-0400\n"
+"PO-Revision-Date: 2009-02-17 16:39-0500\n"
 "Last-Translator: Odontsetseg Bat-Erdene <obat-erdene@suffolk.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,7 @@ msgstr "%s үйл ажиллагаа"
 
 #: ../src/sugar/activity/activity.py:910
 msgid "Keep error"
-msgstr "Хадгалахын алдаа "
+msgstr "Хадгалахын алдаа"
 
 #: ../src/sugar/activity/activity.py:911
 msgid "Keep error: all changes will be lost"
@@ -124,11 +124,11 @@ msgstr ""
 
 #: ../src/sugar/util.py:194
 msgid " and "
-msgstr " ба_"
+msgstr " ба "
 
 #: ../src/sugar/util.py:195
 msgid ", "
-msgstr " ,_"
+msgstr ", "
 
 # TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
