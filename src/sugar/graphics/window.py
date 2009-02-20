@@ -192,7 +192,7 @@ class Window(gtk.Window):
     def __key_press_cb(self, widget, event):
         key = gtk.gdk.keyval_name(event.keyval)
         if event.state & gtk.gdk.MOD1_MASK:
-            if key == 'space':
+            if self.tray is not None and key == 'space':
                 self.tray.props.visible = not self.tray.props.visible
                 return True
         elif key == 'Escape' and self._is_fullscreen and \
