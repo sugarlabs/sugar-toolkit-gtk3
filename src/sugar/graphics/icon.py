@@ -884,8 +884,11 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         return size, size
 
     def do_button_press_event(self, event):
-        self.emit_activated()
-        return True
+        if event.button == 1:
+            self.emit_activated()
+            return True
+        else:
+            return False
 
     def create_palette(self):
         return None
