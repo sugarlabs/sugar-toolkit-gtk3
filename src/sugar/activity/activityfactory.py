@@ -320,11 +320,11 @@ class ActivityCreationHandler(gobject.GObject):
             if count > 1:
                 logging.debug("Multiple objects has the same activity_id.")
             self._handle.object_id = jobjects[0]['uid']
-        self._create_activity()
+        self._launch_activity()
 
     def _find_object_error_handler(self, err):
         logging.error("Datastore find failed %s" % err)
-        self._create_activity()
+        self._launch_activity()
 
 def create(bundle, activity_handle=None):
     """Create a new activity from its name."""
