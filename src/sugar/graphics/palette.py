@@ -188,7 +188,7 @@ class Palette(gtk.Window):
 
         if text_maxlen > 0:
             self._secondary_label.set_max_width_chars(text_maxlen)
-            self._secondary_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+            self._secondary_label.set_ellipsize(pango.ELLIPSIZE_END)
 
         labels_box.pack_start(self._secondary_label, expand=True)
 
@@ -355,6 +355,7 @@ class Palette(gtk.Window):
                                     setter=set_primary_text)
 
     def set_secondary_text(self, label):
+        label = label.split('\n', 1)[0]
         self._secondary_text = label
 
         if label is None:
