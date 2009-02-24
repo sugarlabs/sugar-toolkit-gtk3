@@ -102,7 +102,12 @@ class _ColorButton(gtk.Button):
 
     def do_clicked(self):
         if self._palette:
-            self._palette.popup(immediate=True)
+            if not self._palette.is_up():
+                self._palette.popup(immediate=True,
+                                    state=self._palette.SECONDARY)
+            else:
+                self._palette.popdown(immediate=True)
+            return True
 
     def set_color(self, color):
         assert isinstance(color, gtk.gdk.Color)
