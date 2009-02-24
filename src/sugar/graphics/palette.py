@@ -355,7 +355,8 @@ class Palette(gtk.Window):
                                     setter=set_primary_text)
 
     def set_secondary_text(self, label):
-        label = label.split('\n', 1)[0]
+        if label is not None:
+            label = label.split('\n', 1)[0]
         self._secondary_text = label
 
         if label is None:
