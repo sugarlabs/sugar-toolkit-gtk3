@@ -713,8 +713,14 @@ class Activity(Window, gtk.Container):
             self._jobject.destroy()
             self._jobject = None
 
-    def _get_preview(self):
+    def get_preview(self):
+        """Returns an image representing the state of the activity. Generally
+        this is what the user is seeing in this moment.
 
+        Activities can override this method, which should return a str with the
+        binary content of a png image with a width of 300 and a height of 225
+        pixels.
+        """
         if self.canvas is None or not hasattr(self.canvas, 'get_snapshot'):
             return None
         pixmap = self.canvas.get_snapshot((-1, -1, 0, 0))
@@ -770,7 +776,7 @@ class Activity(Window, gtk.Container):
             self.metadata['buddies_id'] = cjson.encode(buddies_dict.keys())
             self.metadata['buddies'] = cjson.encode(self._get_buddies())
 
-        preview = self._get_preview()
+        preview = self.get_preview()
         if preview is not None:
             self.metadata['preview'] = dbus.ByteArray(preview)
 
