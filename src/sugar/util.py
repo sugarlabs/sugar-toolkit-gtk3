@@ -28,6 +28,8 @@ import binascii
 import gettext
 import tempfile
 import logging
+import atexit
+import traceback
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
@@ -290,4 +292,14 @@ class TempFilePath(str):
                 logging.warning('TempFilePath already deleted %r' % self)
         else:
             _tracked_paths[self] -= 1
+
+def _cleanup_temp_files():
+    logging.debug('_cleanup_temp_files')
+    for path in _tracked_paths.keys():
+        try:
+            os.unlink(path)
+        except:
+            logging.error(traceback.format_exc())
+
+atexit.register(_cleanup_temp_files)
 
