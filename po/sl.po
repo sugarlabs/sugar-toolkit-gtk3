@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-20 00:31-0500\n"
-"PO-Revision-Date: 2008-07-11 00:46-0400\n"
+"PO-Revision-Date: 2009-01-29 08:25-0500\n"
 "Last-Translator: Denis Oštir <denis.ostir@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -79,19 +79,19 @@ msgstr "Vseeno ustavi"
 
 #: ../src/sugar/activity/namingalert.py:60
 msgid "Name this entry"
-msgstr ""
+msgstr "Poimenuj ta vnos"
 
 #: ../src/sugar/activity/namingalert.py:248
 msgid "Untitled"
-msgstr ""
+msgstr "Neimenovan"
 
 #: ../src/sugar/activity/namingalert.py:255
 msgid "Description:"
-msgstr ""
+msgstr "Opis:"
 
 #: ../src/sugar/activity/namingalert.py:279
 msgid "Tags:"
-msgstr ""
+msgstr "Oznake:"
 
 #: ../src/sugar/graphics/alert.py:288 ../src/sugar/graphics/alert.py:367
 msgid "Cancel"
@@ -107,20 +107,19 @@ msgstr "Nadaljuj"
 
 #: ../src/sugar/graphics/colorbutton.py:49
 msgid "Choose a color"
-msgstr ""
+msgstr "Izberi barvo"
 
 #: ../src/sugar/graphics/colorbutton.py:262
-#, fuzzy
 msgid "Red"
-msgstr "Ponovi"
+msgstr "Rdeca"
 
 #: ../src/sugar/graphics/colorbutton.py:264
 msgid "Green"
-msgstr ""
+msgstr "Zelena"
 
 #: ../src/sugar/graphics/colorbutton.py:266
 msgid "Blue"
-msgstr ""
+msgstr "Modra"
 
 #: ../src/sugar/util.py:194
 msgid " and "
