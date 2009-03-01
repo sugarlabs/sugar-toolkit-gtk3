@@ -251,7 +251,7 @@ class ActivityBundle(Bundle):
             return os.path.join(self._path, icon_path)
         else:
             icon_data = self.get_file(icon_path).read()
-            temp_file, temp_file_path = tempfile.mkstemp(self._icon)
+            temp_file, temp_file_path = tempfile.mkstemp(prefix=self._icon, suffix='.svg')
             os.write(temp_file, icon_data)
             os.close(temp_file)
             return util.TempFilePath(temp_file_path)
