@@ -350,6 +350,12 @@ class ActivityBundle(Bundle):
         return install_path
 
     def uninstall(self, install_path, force=False):
+        if os.path.islink(install_path):
+            # Don't remove the actual activity dir if it's a symbolic link
+            # because we may be removing user data.
+            os.unlink(install_path)
+            return
+
         xdg_data_home = os.getenv('XDG_DATA_HOME',
                                   os.path.expanduser('~/.local/share'))
 
