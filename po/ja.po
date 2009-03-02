@@ -5,145 +5,179 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-10-10 12:45+0530\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2009-01-20 00:31-0500\n"
+"PO-Revision-Date: 2009-01-30 10:09-0500\n"
+"Last-Translator: korakurider <korakurider@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 1.1.0rc2\n"
 
-#: ../src/sugar/activity/activity.py:120
+#: ../src/sugar/activity/activity.py:123
 msgid "Share with:"
 msgstr "次の人と共有:"
 
-#: ../src/sugar/activity/activity.py:122
+#: ../src/sugar/activity/activity.py:125
 msgid "Private"
 msgstr "（共有しない）"
 
-#: ../src/sugar/activity/activity.py:123
+#: ../src/sugar/activity/activity.py:126
 msgid "My Neighborhood"
 msgstr "私のお隣さん"
 
-#: ../src/sugar/activity/activity.py:130
+#: ../src/sugar/activity/activity.py:133
+#: ../src/sugar/activity/namingalert.py:65
 msgid "Keep"
 msgstr "ジャーナルに保存"
 
-#: ../src/sugar/activity/activity.py:136
+#: ../src/sugar/activity/activity.py:144
 msgid "Stop"
 msgstr "停止"
 
-#: ../src/sugar/activity/activity.py:251
+#: ../src/sugar/activity/activity.py:258
 msgid "Undo"
 msgstr "元に戻す"
 
-#: ../src/sugar/activity/activity.py:256
+#: ../src/sugar/activity/activity.py:263
 msgid "Redo"
 msgstr "やり直し"
 
-#: ../src/sugar/activity/activity.py:266
+#: ../src/sugar/activity/activity.py:273
 msgid "Copy"
 msgstr "コピー"
 
-#: ../src/sugar/activity/activity.py:271
+#: ../src/sugar/activity/activity.py:278
 msgid "Paste"
 msgstr "貼り付け"
 
-#: ../src/sugar/activity/activity.py:297
+#: ../src/sugar/activity/activity.py:304
 msgid "Activity"
 msgstr "アクティビティ"
 
-#: ../src/sugar/activity/activity.py:469
+#: ../src/sugar/activity/activity.py:542
 #, python-format
 msgid "%s Activity"
 msgstr "%s アクティビティ"
 
-#: ../src/sugar/activity/activity.py:856
+#: ../src/sugar/activity/activity.py:910
 msgid "Keep error"
 msgstr "保存エラー"
 
-#: ../src/sugar/activity/activity.py:857
+#: ../src/sugar/activity/activity.py:911
 msgid "Keep error: all changes will be lost"
 msgstr "保存エラー: 全ての変更は失われてしまいます"
 
-#: ../src/sugar/activity/activity.py:860
+#: ../src/sugar/activity/activity.py:914
 msgid "Don't stop"
 msgstr "やめない"
 
-#: ../src/sugar/activity/activity.py:863
+#: ../src/sugar/activity/activity.py:917
 msgid "Stop anyway"
 msgstr "とにかくやめる"
 
-#: ../src/sugar/graphics/alert.py:166
-#: ../src/sugar/graphics/alert.py:209
+#: ../src/sugar/activity/namingalert.py:60
+msgid "Name this entry"
+msgstr "これに名前をつける"
+
+#: ../src/sugar/activity/namingalert.py:248
+msgid "Untitled"
+msgstr "タイトル無し"
+
+#: ../src/sugar/activity/namingalert.py:255
+msgid "Description:"
+msgstr "説明:"
+
+#: ../src/sugar/activity/namingalert.py:279
+msgid "Tags:"
+msgstr "タグ:"
+
+#: ../src/sugar/graphics/alert.py:288 ../src/sugar/graphics/alert.py:367
 msgid "Cancel"
 msgstr "中止"
 
-#: ../src/sugar/graphics/alert.py:170
-#: ../src/sugar/graphics/alert.py:247
+#: ../src/sugar/graphics/alert.py:292 ../src/sugar/graphics/alert.py:426
 msgid "Ok"
 msgstr "了解"
 
-#: ../src/sugar/graphics/alert.py:219
+#: ../src/sugar/graphics/alert.py:377
 msgid "Continue"
 msgstr "続ける"
 
-#: ../src/sugar/util.py:181
+#: ../src/sugar/graphics/colorbutton.py:49
+msgid "Choose a color"
+msgstr "色を選ぶ"
+
+#: ../src/sugar/graphics/colorbutton.py:262
+msgid "Red"
+msgstr "赤"
+
+#: ../src/sugar/graphics/colorbutton.py:264
+msgid "Green"
+msgstr "緑"
+
+#: ../src/sugar/graphics/colorbutton.py:266
+msgid "Blue"
+msgstr "青"
+
+#: ../src/sugar/util.py:194
 msgid " and "
 msgstr " そして "
 
-#: ../src/sugar/util.py:182
+#: ../src/sugar/util.py:195
 msgid ", "
 msgstr ", "
 
+# TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: ../src/sugar/util.py:185
+#: ../src/sugar/util.py:198
 msgid "Seconds ago"
 msgstr "ちょっと前"
 
+# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+# "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: ../src/sugar/util.py:189
+#: ../src/sugar/util.py:202
 #, python-format
 msgid "%s ago"
 msgstr "%s前"
 
+# TRANS: Relative dates (eg. 1 month and 5 days).
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: ../src/sugar/util.py:202
+#: ../src/sugar/util.py:215
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d 年"
 
-#: ../src/sugar/util.py:203
+#: ../src/sugar/util.py:216
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d 月"
 
-#: ../src/sugar/util.py:204
+#: ../src/sugar/util.py:217
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d 週"
 
-#: ../src/sugar/util.py:205
+#: ../src/sugar/util.py:218
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 日"
 
-#: ../src/sugar/util.py:206
+#: ../src/sugar/util.py:219
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d 時間"
 
-#: ../src/sugar/util.py:207
+#: ../src/sugar/util.py:220
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d 分"
-

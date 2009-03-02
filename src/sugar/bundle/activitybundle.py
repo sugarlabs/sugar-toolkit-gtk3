@@ -251,7 +251,7 @@ class ActivityBundle(Bundle):
             return os.path.join(self._path, icon_path)
         else:
             icon_data = self.get_file(icon_path).read()
-            temp_file, temp_file_path = tempfile.mkstemp(self._icon)
+            temp_file, temp_file_path = tempfile.mkstemp(prefix=self._icon, suffix='.svg')
             os.write(temp_file, icon_data)
             os.close(temp_file)
             return util.TempFilePath(temp_file_path)
@@ -350,6 +350,12 @@ class ActivityBundle(Bundle):
         return install_path
 
     def uninstall(self, install_path, force=False):
+        if os.path.islink(install_path):
+            # Don't remove the actual activity dir if it's a symbolic link
+            # because we may be removing user data.
+            os.unlink(install_path)
+            return
+
         xdg_data_home = os.getenv('XDG_DATA_HOME',
                                   os.path.expanduser('~/.local/share'))
 
