@@ -107,7 +107,7 @@ MEDIUM_ICON_SIZE = zoom(55 * 1.5)
 LARGE_ICON_SIZE = zoom(55 * 2.0)
 XLARGE_ICON_SIZE = zoom(55 * 2.75)
 
-FONT_SIZE = zoom(7)
+FONT_SIZE = 10
 FONT_NORMAL = Font('Bitstream Vera Sans %d' % FONT_SIZE)
 FONT_BOLD = Font('Bitstream Vera Sans bold %d' % FONT_SIZE)
 FONT_NORMAL_H = zoom(24)
