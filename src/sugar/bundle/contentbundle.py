@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
+# Copyright (C) 2009 Aleksey Lim
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -197,17 +198,32 @@ class ContentBundle(Bundle):
     def get_start_uri(self):
         return "file://" + urllib.pathname2url(self.get_start_path())
 
+    # TODO treat ContentBundle in special way
+    # needs rethinking while fixing ContentBundle support
+    def get_bundle_id(self):
+        return self._bundle_class
+
+    # TODO treat ContentBundle in special way
+    # needs rethinking while fixing ContentBundle support
+    def get_activity_version(self):
+        return self._library_version
+
     def is_installed(self):
         if self._zip_file is None:
             return True
         elif os.path.isdir(self.get_root_dir()):
-            return True
+            return ContentBundle(self.get_root_dir()).get_library_version() \
+                    == self.get_library_version()
         else:
             return False
 
-    def install(self):
-        self._unzip(env.get_user_library_path())
+    def install(self, install_path):
+        # TODO ignore passed install_path argument
+        # needs rethinking while fixing ContentBundle support
+        install_path = env.get_user_library_path()
+        self._unzip(install_path)
         self._run_indexer()
+        return self.get_root_dir()
 
     def uninstall(self):
         if self._zip_file is None:
