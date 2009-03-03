@@ -945,7 +945,7 @@ class Activity(Window, gtk.Container):
         if not skip_save:
             try:
                 self.save()
-            except Exception:
+            except:
                 logging.info(traceback.format_exc())
                 self._show_keep_failed_dialog()
                 return False
