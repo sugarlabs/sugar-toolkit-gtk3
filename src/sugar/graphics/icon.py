@@ -733,7 +733,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         return self._buffer.width
 
     size = gobject.property(
-        type=int, getter=get_size, setter=set_size)
+        type=object, getter=get_size, setter=set_size)
 
     def set_scale(self, value):
         """
