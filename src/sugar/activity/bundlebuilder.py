@@ -207,12 +207,13 @@ class SourcePackager(Packager):
     def get_files(self):
         git_ls = subprocess.Popen('git-ls-files', stdout=subprocess.PIPE, 
                                   cwd=self.config.source_dir)
-        if git_ls.wait():
+        stdout, _ = git_ls.communicate()
+        if git_ls.returncode :
             # Fall back to filtered list
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
         
-        return [path.strip() for path in git_ls.stdout.readlines()]
+        return [path.strip() for path in '\n'.split(stdout)]
 
     def package(self):
         tar = tarfile.open(self.package_path, 'w:bz2')
