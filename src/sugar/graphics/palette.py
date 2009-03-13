@@ -162,7 +162,7 @@ class Palette(gtk.Window):
         primary_box.show()
 
         self._icon_box = gtk.HBox()
-        self._icon_box.set_size_request(style.zoom(style.GRID_CELL_SIZE), -1)
+        self._icon_box.set_size_request(style.GRID_CELL_SIZE, -1)
         primary_box.pack_start(self._icon_box, expand=False)
 
         labels_box = gtk.VBox()
@@ -221,7 +221,7 @@ class Palette(gtk.Window):
         self.set_data('sugar-accel-group', accel_group)
         self.add_accel_group(accel_group)
 
-        primary_box.set_size_request(-1, style.zoom(style.GRID_CELL_SIZE)
+        primary_box.set_size_request(-1, style.GRID_CELL_SIZE
                                      - 2 * self.get_border_width())
 
 
@@ -463,7 +463,7 @@ class Palette(gtk.Window):
                       2 * self.get_border_width()
 
         requisition.width = max(requisition.width,
-                                style.zoom(style.GRID_CELL_SIZE * 2),
+                                style.GRID_CELL_SIZE * 2,
                                 label_width,
                                 self._full_request[0])
 
