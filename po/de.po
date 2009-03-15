@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: sugar-toolkit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-20 00:31-0500\n"
-"PO-Revision-Date: 2009-02-28 19:13+0100\n"
+"PO-Revision-Date: 2009-03-15 13:05-0400\n"
 "Last-Translator: Markus Schlager <m.slg@gmx.de>\n"
 "Language-Team: OLPC-German <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,14 +28,15 @@ msgstr "Privat"
 msgid "My Neighborhood"
 msgstr "Meine Umgebung"
 
+# (Markus S.) war 'Behalten'
 #: ../src/sugar/activity/activity.py:133
 #: ../src/sugar/activity/namingalert.py:65
 msgid "Keep"
-msgstr "Behalten"
+msgstr "Speichern"
 
 #: ../src/sugar/activity/activity.py:144
 msgid "Stop"
-msgstr "Stopp"
+msgstr "Beenden"
 
 #: ../src/sugar/activity/activity.py:258
 msgid "Undo"
@@ -72,14 +73,13 @@ msgstr "Fehler beim Speichern: Alle Änderungen gehen verloren"
 
 #: ../src/sugar/activity/activity.py:914
 msgid "Don't stop"
-msgstr "Nicht stoppen"
+msgstr "Nicht beenden"
 
 #: ../src/sugar/activity/activity.py:917
 msgid "Stop anyway"
-msgstr "Trotzdem stoppen"
+msgstr "Trotzdem beenden"
 
 #: ../src/sugar/activity/namingalert.py:60
-#, fuzzy
 msgid "Name this entry"
 msgstr "Diesen Eintrag benennen"
 
@@ -92,7 +92,6 @@ msgid "Description:"
 msgstr "Beschreibung:"
 
 #: ../src/sugar/activity/namingalert.py:279
-#, fuzzy
 msgid "Tags:"
 msgstr "Stichwörter:"
 
@@ -112,12 +111,11 @@ msgstr "Weitermachen"
 
 #: ../src/sugar/graphics/colorbutton.py:49
 msgid "Choose a color"
-msgstr "Wähle eine Farbe"
+msgstr "Farbe wählen"
 
 #: ../src/sugar/graphics/colorbutton.py:262
-#, fuzzy
 msgid "Red"
-msgstr "Wiederholen"
+msgstr "Rot"
 
 #: ../src/sugar/graphics/colorbutton.py:264
 msgid "Green"
