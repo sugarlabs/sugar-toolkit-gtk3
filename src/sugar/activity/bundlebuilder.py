@@ -213,7 +213,7 @@ class SourcePackager(Packager):
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
         
-        return [path.strip() for path in '\n'.split(stdout)]
+        return [path.strip() for path in stdout.strip('\n').split('\n')]
 
     def package(self):
         tar = tarfile.open(self.package_path, 'w:bz2')
