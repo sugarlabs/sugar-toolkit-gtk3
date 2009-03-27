@@ -560,8 +560,6 @@ class Activity(Window, gtk.Container):
             # https://dev.laptop.org/ticket/3071
             datastore.write(self._jobject)
 
-        self.connect('map', self.__map_cb)
-
     def get_active(self):
         return self._active
 
@@ -605,6 +603,7 @@ class Activity(Window, gtk.Container):
         One commonly used canvas is gtk.ScrolledWindow
         """
         Window.set_canvas(self, canvas)
+        canvas.connect('map', self.__canvas_map_cb)
 
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
@@ -617,7 +616,7 @@ class Activity(Window, gtk.Container):
     def __session_quit_cb(self, client):
         self._complete_close()
 
-    def __map_cb(self, canvas):
+    def __canvas_map_cb(self, canvas):
         if self._jobject and self._jobject.file_path:
             self.read_file(self._jobject.file_path)
 
