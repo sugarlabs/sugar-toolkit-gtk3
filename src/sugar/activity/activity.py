@@ -483,6 +483,7 @@ class Activity(Window, gtk.Container):
         self._max_participants = 0
         self._invites_queue = []
         self._jobject = None
+        self._read_file_called = False
 
         self._session = _get_session()
         self._session.register(self)
@@ -603,7 +604,8 @@ class Activity(Window, gtk.Container):
         One commonly used canvas is gtk.ScrolledWindow
         """
         Window.set_canvas(self, canvas)
-        canvas.connect('map', self.__canvas_map_cb)
+        if not self._read_file_called:
+            canvas.connect('map', self.__canvas_map_cb)
 
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
@@ -617,8 +619,12 @@ class Activity(Window, gtk.Container):
         self._complete_close()
 
     def __canvas_map_cb(self, canvas):
-        if self._jobject and self._jobject.file_path:
+        logging.debug('Activity.__canvas_map_cb')
+        if self._jobject and self._jobject.file_path and \
+                not self._read_file_called:
             self.read_file(self._jobject.file_path)
+            self._read_file_called = True
+        canvas.disconnect_by_func(self.__canvas_map_cb)
 
     def __jobject_create_cb(self):
         pass
