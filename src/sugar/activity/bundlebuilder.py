@@ -207,7 +207,7 @@ class SourcePackager(Packager):
                                          self.config.tar_name)
 
     def get_files(self):
-        git_ls = subprocess.Popen('git-ls-files', stdout=subprocess.PIPE, 
+        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE, 
                                   cwd=self.config.source_dir)
         stdout, _ = git_ls.communicate()
         if git_ls.returncode :
