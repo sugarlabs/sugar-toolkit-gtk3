@@ -40,6 +40,8 @@ IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
 def list_files(base_dir, ignore_dirs=None, ignore_files=None):
     result = []
 
+    base_dir = os.path.abspath(base_dir)
+
     for root, dirs, files in os.walk(base_dir):
         if ignore_files:
             for pattern in ignore_files:
