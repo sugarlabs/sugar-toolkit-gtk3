@@ -95,13 +95,11 @@ msgstr "Beschreibung:"
 msgid "Tags:"
 msgstr "Stichwörter:"
 
-#: ../src/sugar/graphics/alert.py:288
-#: ../src/sugar/graphics/alert.py:367
+#: ../src/sugar/graphics/alert.py:288 ../src/sugar/graphics/alert.py:367
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: ../src/sugar/graphics/alert.py:292
-#: ../src/sugar/graphics/alert.py:426
+#: ../src/sugar/graphics/alert.py:292 ../src/sugar/graphics/alert.py:426
 msgid "Ok"
 msgstr "Ok"
 
