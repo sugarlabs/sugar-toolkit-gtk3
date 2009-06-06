@@ -922,6 +922,10 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 class CellRendererIcon(gtk.CellRendererPixbuf):
     __gtype_name__ = 'SugarCellRendererIcon'
 
+    __gsignals__ = {
+        'activate': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [object])
+    }
+
     def __init__(self):
         gobject.GObject.__init__(self)
         self._buffer = _IconBuffer()
@@ -982,6 +986,9 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
             self.props.pixbuf = loader.get_pixbuf()
 
         gtk.CellRendererPixbuf.do_render(self, window, widget, background_area, cell_area, expose_area, flags)
+
+    def do_activate(self, event, widget, path, background_area, cell_area, flags):
+        self.emit('activate', path)
 
 def get_icon_state(base_name, perc, step=5):
     strength = round(perc / step) * step
