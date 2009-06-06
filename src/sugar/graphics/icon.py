@@ -919,6 +919,70 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     
     palette = property(get_palette, set_palette)
 
+class CellRendererIcon(gtk.CellRendererPixbuf):
+    __gtype_name__ = 'SugarCellRendererIcon'
+
+    def __init__(self):
+        gobject.GObject.__init__(self)
+        self._buffer = _IconBuffer()
+
+    def set_file_name(self, value):
+        if self._buffer.file_name != value:
+            self._buffer.file_name = value
+
+    file_name = gobject.property(type=str, setter=set_file_name)
+
+    def set_icon_name(self, value):
+        if self._buffer.icon_name != value:
+            self._buffer.icon_name = value
+
+    icon_name = gobject.property(type=object, setter=set_icon_name)
+
+    def set_xo_color(self, value):
+        if self._buffer.xo_color != value:
+            self._buffer.xo_color = value
+
+    xo_color = gobject.property(type=object, setter=set_xo_color)
+
+    def set_fill_color(self, value):
+        if self._buffer.fill_color != value:
+            self._buffer.fill_color = value
+
+    fill_color = gobject.property(type=object, setter=set_fill_color)
+
+    def set_stroke_color(self, value):
+        if self._buffer.stroke_color != value:
+            self._buffer.stroke_color = value
+
+    stroke_color = gobject.property(type=object, setter=set_stroke_color)
+
+    def set_background_color(self, value):
+        if self._buffer.background_color != value:
+            self._buffer.background_color = value
+
+    background_color = gobject.property(type=object, setter=set_background_color)
+
+    def set_size(self, value):
+        if self._buffer.width != value:
+            self._buffer.width = value
+            self._buffer.height = value
+
+    size = gobject.property(type=object, setter=set_size)
+
+    def do_render(self, window, widget, background_area, cell_area, expose_area, flags):
+        surface = self._buffer.get_surface()
+        if surface is None:
+            self.props.pixbuf = None
+        else:
+            #FIXME: Do we really want to transform to PNG, then create a pixbuf from it?
+            # Maybe we should just draw with cairo.
+            loader = gtk.gdk.pixbuf_loader_new_with_mime_type('image/png')
+            surface.write_to_png(loader)
+            loader.close()
+            self.props.pixbuf = loader.get_pixbuf()
+
+        gtk.CellRendererPixbuf.do_render(self, window, widget, background_area, cell_area, expose_area, flags)
+
 def get_icon_state(base_name, perc, step=5):
     strength = round(perc / step) * step
     icon_theme = gtk.icon_theme_get_default()
