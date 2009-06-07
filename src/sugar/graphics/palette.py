@@ -1200,7 +1200,8 @@ class CellRendererInvoker(Invoker):
         if self._point_in_cell_renderer(event.x, event.y):
 
             tree_view = self._tree_view
-            path, column_, x_, y_ = tree_view.get_path_at_pos(event.x, event.y)
+            path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
+                                                              int(event.y))
             if path != self.path:
                 if self.palette is not None:
                     self.palette.popdown(immediate=True)
@@ -1223,9 +1224,8 @@ class CellRendererInvoker(Invoker):
             return False
 
     def _point_in_cell_renderer(self, event_x, event_y):
-        pos = self._tree_view.get_path_at_pos(event_x, event_y)
+        pos = self._tree_view.get_path_at_pos(int(event_x), int(event_y))
         if pos is None:
-            logging.debug('No path at coords %r %r' % (event_x, event_y))
             return False
 
         path, column, x, y = pos
@@ -1237,7 +1237,6 @@ class CellRendererInvoker(Invoker):
                     return True
                 return False
 
-        logging.debug('No cell renderer at position %r' % (pos,))
         return False
 
     def get_toplevel(self):
