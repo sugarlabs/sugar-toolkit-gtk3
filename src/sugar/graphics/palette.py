@@ -1145,3 +1145,111 @@ class ToolInvoker(WidgetInvoker):
             return self.BOTTOM + self.TOP
         else:
             return self.LEFT + self.RIGHT
+
+class CellRendererInvoker(Invoker):
+    def __init__(self):
+        Invoker.__init__(self)
+
+        self._position_hint = self.AT_CURSOR
+        self._tree_view = None
+        self._cell_renderer = None
+        self._motion_hid = None
+        self._leave_hid = None
+        self._release_hid = None
+        self.path = None
+
+    def attach_cell_renderer(self, tree_view, cell_renderer):
+        self._tree_view = tree_view
+        self._cell_renderer = cell_renderer
+
+        self._motion_hid = tree_view.connect('motion-notify-event',
+                                             self.__motion_notify_event_cb)
+        self._leave_hid = tree_view.connect('leave-notify-event',
+                                            self.__leave_notify_event_cb)
+        self._release_hid = tree_view.connect('button-release-event',
+                                              self.__button_release_event_cb)
+
+        self.attach(cell_renderer)
+
+    def detach(self):
+        Invoker.detach(self)
+        self._tree_view.disconnect(self._motion_hid)
+        self._tree_view.disconnect(self._leave_hid)
+        self._tree_view.disconnect(self._release_hid)
+
+    def get_rect(self):
+        allocation = self._tree_view.get_allocation()
+        if self._tree_view.window is not None:
+            x, y = self._tree_view.window.get_origin()
+        else:
+            logging.warning(
+                "Trying to position palette with invoker that's not realized.")
+            x = 0
+            y = 0
+
+        if self._tree_view.flags() & gtk.NO_WINDOW:
+            x += allocation.x
+            y += allocation.y
+
+        width = allocation.width
+        height = allocation.height
+
+        return gtk.gdk.Rectangle(x, y, width, height)
+
+    def __motion_notify_event_cb(self, widget, event):
+        if self._point_in_cell_renderer(event.x, event.y):
+
+            tree_view = self._tree_view
+            path, column_, x_, y_ = tree_view.get_path_at_pos(event.x, event.y)
+            if path != self.path:
+                if self.palette is not None:
+                    self.palette.popdown(immediate=True)
+                    self.palette = None
+                self.path = path
+
+            self.notify_mouse_enter()
+        else:
+            self.path = None
+            self.notify_mouse_leave()
+
+    def __leave_notify_event_cb(self, widget, event):
+        self.notify_mouse_leave()
+
+    def __button_release_event_cb(self, widget, event):
+        if event.button == 3 and self._point_in_cell_renderer(event.x, event.y):
+            self.notify_right_click()
+            return True
+        else:
+            return False
+
+    def _point_in_cell_renderer(self, event_x, event_y):
+        pos = self._tree_view.get_path_at_pos(event_x, event_y)
+        if pos is None:
+            logging.debug('No path at coords %r %r' % (event_x, event_y))
+            return False
+
+        path, column, x, y = pos
+
+        for cell_renderer in column.get_cell_renderers():
+            if cell_renderer == self._cell_renderer:
+                cell_x, cell_width = column.cell_get_position(cell_renderer)
+                if x > cell_x and x < (cell_x + cell_width):
+                    return True
+                return False
+
+        logging.debug('No cell renderer at position %r' % (pos,))
+        return False
+
+    def get_toplevel(self):
+        return self._tree_view.get_toplevel()
+
+    def notify_popup(self):
+        Invoker.notify_popup(self)
+
+    def notify_popdown(self):
+        Invoker.notify_popdown(self)
+        self.palette = None
+
+    def get_default_position(self):
+        return self.AT_CURSOR
+

@@ -926,9 +926,28 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
         'activate': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [object])
     }
 
-    def __init__(self):
-        gobject.GObject.__init__(self)
+    def __init__(self, tree_view):
+        from sugar.graphics.palette import CellRendererInvoker
+
         self._buffer = _IconBuffer()
+        self._palette_invoker = CellRendererInvoker()
+
+        gobject.GObject.__init__(self)
+
+        self._palette_invoker.attach_cell_renderer(tree_view, self)
+
+        self.connect('destroy', self.__destroy_cb)
+
+    def __destroy_cb(self, icon):
+        self._palette_invoker.detach()
+
+    def create_palette(self):
+        return None
+
+    def get_palette_invoker(self):
+        return self._palette_invoker
+
+    palette_invoker = gobject.property(type=object, getter=get_palette_invoker)
 
     def set_file_name(self, value):
         if self._buffer.file_name != value:
