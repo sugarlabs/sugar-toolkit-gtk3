@@ -1203,6 +1203,10 @@ class CellRendererInvoker(Invoker):
             path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
                                                               int(event.y))
             if path != self.path:
+                if self.path is not None:
+                    self._redraw_path(self.path)
+                if path is not None:
+                    self._redraw_path(path)
                 if self.palette is not None:
                     self.palette.popdown(immediate=True)
                     self.palette = None
@@ -1210,8 +1214,18 @@ class CellRendererInvoker(Invoker):
 
             self.notify_mouse_enter()
         else:
+            if self.path is not None:
+                self._redraw_path(self.path)
             self.path = None
             self.notify_mouse_leave()
+
+    def _redraw_path(self, path):
+        for column in self._tree_view.get_columns():
+            if self._cell_renderer in column.get_cell_renderers():
+                break
+        area = self._tree_view.get_background_area(path, column)
+        x, y = self._tree_view.convert_tree_to_widget_coords(area.x, area.y)
+        self._tree_view.queue_draw_area(x, y, area.width, area.height)
 
     def __leave_notify_event_cb(self, widget, event):
         self.notify_mouse_leave()
