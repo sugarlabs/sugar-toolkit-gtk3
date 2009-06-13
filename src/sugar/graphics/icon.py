@@ -930,6 +930,10 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
         from sugar.graphics.palette import CellRendererInvoker
 
         self._buffer = _IconBuffer()
+        self._fill_color = None
+        self._stroke_color = None
+        self._prelit_fill_color = None
+        self._prelit_stroke_color = None
         self._palette_invoker = CellRendererInvoker()
 
         gobject.GObject.__init__(self)
@@ -962,22 +966,36 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
     icon_name = gobject.property(type=object, setter=set_icon_name)
 
     def set_xo_color(self, value):
-        if self._buffer.xo_color != value:
-            self._buffer.xo_color = value
+        self._stroke_color = value.get_stroke_color()
+        self._fill_color = value.get_fill_color()
 
     xo_color = gobject.property(type=object, setter=set_xo_color)
 
     def set_fill_color(self, value):
-        if self._buffer.fill_color != value:
-            self._buffer.fill_color = value
+        if self._fill_color != value:
+            self._fill_color = value
 
     fill_color = gobject.property(type=object, setter=set_fill_color)
 
     def set_stroke_color(self, value):
-        if self._buffer.stroke_color != value:
-            self._buffer.stroke_color = value
+        if self._stroke_color != value:
+            self._stroke_color = value
 
     stroke_color = gobject.property(type=object, setter=set_stroke_color)
+
+    def set_prelit_fill_color(self, value):
+        if self._prelit_fill_color != value:
+            self._prelit_fill_color = value
+
+    prelit_fill_color = gobject.property(type=object,
+                                         setter=set_prelit_fill_color)
+
+    def set_prelit_stroke_color(self, value):
+        if self._prelit_stroke_color != value:
+            self._prelit_stroke_color = value
+
+    prelit_stroke_color = gobject.property(type=object,
+                                           setter=set_prelit_stroke_color)
 
     def set_background_color(self, value):
         if self._buffer.background_color != value:
@@ -992,7 +1010,36 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
 
     size = gobject.property(type=object, setter=set_size)
 
+    def _is_prelit(self, tree_view):
+        x, y = tree_view.get_pointer()
+        x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
+        pos = tree_view.get_path_at_pos(x, y)
+        if pos is None:
+            return False
+
+        path, column, x, y = pos
+
+        for cell_renderer in column.get_cell_renderers():
+            if cell_renderer == self:
+                cell_x, cell_width = column.cell_get_position(cell_renderer)
+                if x > cell_x and x < (cell_x + cell_width):
+                    return True
+                return False
+
+        return False
+
     def do_render(self, window, widget, background_area, cell_area, expose_area, flags):
+        has_prelit_colors = None not in [self._prelit_fill_color,
+                                         self._prelit_stroke_color]
+        if flags & gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
+                self._is_prelit(widget):
+
+            self._buffer.fill_color = self._prelit_fill_color
+            self._buffer.stroke_color = self._prelit_stroke_color
+        else:
+            self._buffer.fill_color = self._fill_color
+            self._buffer.stroke_color = self._stroke_color
+
         surface = self._buffer.get_surface()
         if surface is None:
             self.props.pixbuf = None
