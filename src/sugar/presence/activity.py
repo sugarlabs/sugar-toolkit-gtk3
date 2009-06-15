@@ -68,7 +68,7 @@ class Activity(gobject.GObject):
     def __init__(self, bus, new_obj_cb, del_obj_cb, object_path):
         """Initialse the activity interface, connecting to service"""
         gobject.GObject.__init__(self)
-        self._telepathy_room_handle = None
+        self.telepathy_room_handle = None
         self._object_path = object_path
         self._ps_new_object = new_obj_cb
         self._ps_del_object = del_obj_cb
@@ -307,7 +307,7 @@ class Activity(gobject.GObject):
             found_text_channel = False
             found_tubes_channel = False
 
-            for chan_path, chan_iface, handle_type, handle_ in chans:
+            for chan_path, chan_iface, handle_type, handle in chans:
                 if handle_type != telepathy.HANDLE_TYPE_ROOM:
                     return
 
@@ -317,6 +317,7 @@ class Activity(gobject.GObject):
                             ready_handler=text_chan_ready,
                             error_handler=error_handler)
                     found_text_channel = True
+                    self.telepathy_room_handle = handle
 
                 elif chan_iface == telepathy.CHANNEL_TYPE_TUBES:
                     telepathy.client.Channel(
