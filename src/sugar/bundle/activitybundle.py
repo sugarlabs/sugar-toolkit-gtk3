@@ -54,6 +54,7 @@ class ActivityBundle(Bundle):
         self._bundle_id = None
         self._mime_types = None
         self._show_launcher = True
+        self._tags = None
         self._activity_version = 0
         self._installation_time = os.stat(path).st_mtime
         self._manifest = None
@@ -175,6 +176,10 @@ class ActivityBundle(Bundle):
             if cp.get(section, 'show_launcher') == 'no':
                 self._show_launcher = False
 
+        if cp.has_option(section, 'tags'):
+            tag_list = cp.get(section, 'tags').strip(';')
+            self._tags = [tag.strip() for tag in tag_list.split(';')]
+
         if cp.has_option(section, 'icon'):
             self._icon = cp.get(section, 'icon')
 
@@ -212,6 +217,10 @@ class ActivityBundle(Bundle):
 
         if cp.has_option(section, 'name'):
             self._name = cp.get(section, 'name')
+
+        if cp.has_option(section, 'tags'):
+            tag_list = cp.get(section, 'tags').strip(';')
+            self._tags = [tag.strip() for tag in tag_list.split(';')]
 
     def get_locale_path(self):
         """Get the locale path inside the (installed) activity bundle."""
@@ -272,6 +281,10 @@ class ActivityBundle(Bundle):
     def get_mime_types(self):
         """Get the MIME types supported by the activity"""
         return self._mime_types
+
+    def get_tags(self):
+        """Get the tags that describe the activity"""
+        return self._tags
 
     def get_show_launcher(self):
         """Get whether there should be a visible launcher for the activity"""
