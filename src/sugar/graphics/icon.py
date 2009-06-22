@@ -963,7 +963,7 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
         if self._buffer.icon_name != value:
             self._buffer.icon_name = value
 
-    icon_name = gobject.property(type=object, setter=set_icon_name)
+    icon_name = gobject.property(type=str, setter=set_icon_name)
 
     def set_xo_color(self, value):
         self._stroke_color = value.get_stroke_color()
