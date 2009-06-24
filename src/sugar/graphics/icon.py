@@ -919,7 +919,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     
     palette = property(get_palette, set_palette)
 
-class CellRendererIcon(gtk.CellRendererPixbuf):
+class CellRendererIcon(gtk.GenericCellRenderer):
     __gtype_name__ = 'SugarCellRendererIcon'
 
     __gsignals__ = {
@@ -930,6 +930,7 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
         from sugar.graphics.palette import CellRendererInvoker
 
         self._buffer = _IconBuffer()
+        self._buffer.cache = True
         self._fill_color = None
         self._stroke_color = None
         self._prelit_fill_color = None
@@ -966,8 +967,12 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
     icon_name = gobject.property(type=str, setter=set_icon_name)
 
     def set_xo_color(self, value):
-        self._stroke_color = value.get_stroke_color()
-        self._fill_color = value.get_fill_color()
+        if value is not None:
+            self._stroke_color = value.get_stroke_color()
+            self._fill_color = value.get_fill_color()
+        else:
+            self._stroke_color = None
+            self._fill_color = None
 
     xo_color = gobject.property(type=object, setter=set_xo_color)
 
@@ -1010,6 +1015,30 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
 
     size = gobject.property(type=object, setter=set_size)
 
+    def on_get_size(self, widget, cell_area):
+        width = self._buffer.width + self.props.xpad * 2
+        height = self._buffer.height + self.props.ypad * 2
+        xoffset = 0
+        yoffset = 0
+
+        if width > 0 and height > 0 and cell_area is not None:
+
+            if widget.get_direction() == gtk.TEXT_DIR_RTL:
+                xoffset = 1.0 - self.props.xalign
+            else:
+                xoffset = self.props.xalign
+
+            xoffset = max(xoffset * (cell_area.width - width), 0)
+            yoffset = max(self.props.yalign * (cell_area.height - height), 0)
+
+        return xoffset, yoffset, width, height
+
+    def on_activate(self, event, widget, path, background_area, cell_area, flags):
+        self.emit('activate', path)
+
+    def on_start_editing(self, event, widget, path, background_area, cell_area, flags):
+        pass
+
     def _is_prelit(self, tree_view):
         x, y = tree_view.get_pointer()
         x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
@@ -1028,7 +1057,7 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
 
         return False
 
-    def do_render(self, window, widget, background_area, cell_area, expose_area, flags):
+    def on_render(self, window, widget, background_area, cell_area, expose_area, flags):
         has_prelit_colors = None not in [self._prelit_fill_color,
                                          self._prelit_stroke_color]
         if flags & gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
@@ -1042,19 +1071,17 @@ class CellRendererIcon(gtk.CellRendererPixbuf):
 
         surface = self._buffer.get_surface()
         if surface is None:
-            self.props.pixbuf = None
-        else:
-            #FIXME: Do we really want to transform to PNG, then create a pixbuf from it?
-            # Maybe we should just draw with cairo.
-            loader = gtk.gdk.pixbuf_loader_new_with_mime_type('image/png')
-            surface.write_to_png(loader)
-            loader.close()
-            self.props.pixbuf = loader.get_pixbuf()
+            return
 
-        gtk.CellRendererPixbuf.do_render(self, window, widget, background_area, cell_area, expose_area, flags)
+        xoffset, yoffset, width_, height_ = self.on_get_size(widget, cell_area)
 
-    def do_activate(self, event, widget, path, background_area, cell_area, flags):
-        self.emit('activate', path)
+        x = cell_area.x + xoffset
+        y = cell_area.y + yoffset
+
+        cr = window.cairo_create()
+        cr.set_source_surface(surface, math.floor(x), math.floor(y))
+        cr.rectangle(expose_area)
+        cr.paint()
 
 def get_icon_state(base_name, perc, step=5):
     strength = round(perc / step) * step
