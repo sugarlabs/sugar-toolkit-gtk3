@@ -1230,6 +1230,13 @@ class CellRendererInvoker(Invoker):
         self.notify_mouse_leave()
 
     def __button_release_event_cb(self, widget, event):
+        if event.button == 1 and self._point_in_cell_renderer(event.x, event.y):
+            tree_view = self._tree_view
+            path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
+                                                              int(event.y))
+            self._cell_renderer.emit('activate', path)
+            # So the treeview receives it and knows a drag isn't going on
+            return False
         if event.button == 3 and self._point_in_cell_renderer(event.x, event.y):
             self.notify_right_click()
             return True

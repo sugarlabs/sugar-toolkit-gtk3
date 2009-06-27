@@ -1033,10 +1033,12 @@ class CellRendererIcon(gtk.GenericCellRenderer):
 
         return xoffset, yoffset, width, height
 
-    def on_activate(self, event, widget, path, background_area, cell_area, flags):
-        self.emit('activate', path)
+    def on_activate(self, event, widget, path, background_area, cell_area,
+                    flags):
+        pass
 
-    def on_start_editing(self, event, widget, path, background_area, cell_area, flags):
+    def on_start_editing(self, event, widget, path, background_area, cell_area,
+                         flags):
         pass
 
     def _is_prelit(self, tree_view):
