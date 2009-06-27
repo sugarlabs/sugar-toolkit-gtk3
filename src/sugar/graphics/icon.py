@@ -1057,7 +1057,8 @@ class CellRendererIcon(gtk.GenericCellRenderer):
 
         return False
 
-    def on_render(self, window, widget, background_area, cell_area, expose_area, flags):
+    def on_render(self, window, widget, background_area, cell_area, expose_area,
+                  flags):
         has_prelit_colors = None not in [self._prelit_fill_color,
                                          self._prelit_stroke_color]
         if flags & gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \

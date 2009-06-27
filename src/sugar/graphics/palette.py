@@ -1197,6 +1197,8 @@ class CellRendererInvoker(Invoker):
         return gtk.gdk.Rectangle(x, y, width, height)
 
     def __motion_notify_event_cb(self, widget, event):
+        if event.window != widget.get_bin_window():
+            return
         if self._point_in_cell_renderer(event.x, event.y):
 
             tree_view = self._tree_view
