@@ -923,7 +923,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
     __gtype_name__ = 'SugarCellRendererIcon'
 
     __gsignals__ = {
-        'activate': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [object])
+        'clicked': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [object])
     }
 
     def __init__(self, tree_view):

@@ -1234,7 +1234,7 @@ class CellRendererInvoker(Invoker):
             tree_view = self._tree_view
             path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
                                                               int(event.y))
-            self._cell_renderer.emit('activate', path)
+            self._cell_renderer.emit('clicked', path)
             # So the treeview receives it and knows a drag isn't going on
             return False
         if event.button == 3 and self._point_in_cell_renderer(event.x, event.y):
