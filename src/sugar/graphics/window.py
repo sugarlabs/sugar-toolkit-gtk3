@@ -85,7 +85,7 @@ class Window(gtk.Window):
         
         self.toolbox = None
         self._alerts = []
-        self.canvas = None
+        self._canvas = None
         self.tray = None
         
         self._vbox = gtk.VBox()
@@ -107,13 +107,18 @@ class Window(gtk.Window):
             self.__unfullscreen_button_pressed)
 
     def set_canvas(self, canvas):
-        if self.canvas:
-            self._event_box.remove(self.canvas)
+        if self._canvas:
+            self._event_box.remove(self._canvas)
 
         if canvas:
             self._event_box.add(canvas)
         
-        self.canvas = canvas
+        self._canvas = canvas
+
+    def get_canvas(self):
+        return self._canvas
+
+    canvas = property(get_canvas, set_canvas)
 
     def set_toolbox(self, toolbox):
         if self.toolbox:
