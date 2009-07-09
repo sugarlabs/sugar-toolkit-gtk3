@@ -54,6 +54,7 @@ class ContentBundle(Bundle):
         self._library_version = None
         self._bundle_class = None
         self._activity_start = None
+        self._global_name = None
 
         info_file = self.get_file('library/library.info')
         if info_file is None:
@@ -126,6 +127,11 @@ class ContentBundle(Bundle):
             raise MalformedBundleException(
                 'Content bundle %s does not specify a category' % self._path)
 
+        if cp.has_option(section, 'global_name'):
+            self._global_name = cp.get(section, 'global_name')
+        else:
+            self._global_name = None
+
         if cp.has_option(section, 'category_icon'):
             self._category_icon = cp.get(section, 'category_icon')
         else:
@@ -150,6 +156,11 @@ class ContentBundle(Bundle):
             self._activity_start = cp.get(section, 'activity_start')
         else:
             self._activity_start = 'index.html'
+
+        if self._bundle_class is None and self._global_name is None:
+            raise MalformedBundleException(
+                'Content bundle %s must specify either global_name or '
+                'bundle_class' % self._path)
 
     def get_name(self):
         return self._name
@@ -201,7 +212,10 @@ class ContentBundle(Bundle):
     # TODO treat ContentBundle in special way
     # needs rethinking while fixing ContentBundle support
     def get_bundle_id(self):
-        return self._bundle_class
+        if self._bundle_class is not None:
+            return self._bundle_class
+        else:
+            return self._global_name
 
     # TODO treat ContentBundle in special way
     # needs rethinking while fixing ContentBundle support
