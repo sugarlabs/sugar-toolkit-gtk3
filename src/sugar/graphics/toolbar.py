@@ -50,7 +50,7 @@ class ToolbarButton(ToolButton):
             return
         if value:
             expanded = self._bar._expanded_page()
-            if expanded:
+            if expanded and expanded._toolitem.window:
                 expanded._toolitem.window.invalidate_rect(None, True)
             self._page._toolitem_alloc = self.allocation
             self._bar._expand_page(self._page)
@@ -104,7 +104,14 @@ class Toolbar(gtk.VBox):
         self._notebook.connect('notify::page', lambda notebook, pspec:
                 self.emit('current-toolbar-changed', notebook.props.page))
 
+        self._bar.connect('remove', self._remove_cb)
+
     top = property(lambda self: self._bar)
+
+    def _remove_cb(self, sender, widget):
+        if not isinstance(widget, ToolbarButton):
+            return
+        widget.expanded = False
 
     def _remove_page(self, page):
         page = self._notebook.page_num(page)
