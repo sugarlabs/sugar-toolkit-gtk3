@@ -22,7 +22,7 @@ UNSTABLE. We have been adding helpers randomly to this module.
 
 import os
 import time
-import sha
+import hashlib
 import random
 import binascii
 import gettext
@@ -42,7 +42,7 @@ def printable_hash(in_hash):
 
 def sha_data(data):
     """sha1 hash some bytes."""
-    sha_hash = sha.new()
+    sha_hash = hashlib.sha1()
     sha_hash.update(data)
     return sha_hash.digest()
 
