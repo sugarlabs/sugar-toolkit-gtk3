@@ -22,14 +22,14 @@ from sugar.graphics import style
 from sugar.graphics.toolbutton import ToolButton
 
 class ToolbarButton(ToolButton):
-    def __init__(self, bar, page, **kwargs):
+    def __init__(self, bar, page, expand_bg=style.TOOLBAR_COLOR, **kwargs):
         ToolButton.__init__(self, **kwargs)
 
-        self.modify_bg(gtk.STATE_NORMAL, style.TOOLBAR_COLOR.get_gdk_color())
+        self.modify_bg(gtk.STATE_NORMAL, expand_bg.get_gdk_color())
 
         self._bar = bar
-        self._page = _align(_Box, page, style._FOCUS_LINE_WIDTH*3,
-                style.TOOLBAR_COLOR)
+        self._page = _align(_Box, page, bar._hpad, style._FOCUS_LINE_WIDTH*3,
+                expand_bg)
         self._page._toolitem = self
         page.show()
 
@@ -87,11 +87,13 @@ class Toolbar(gtk.VBox):
         'current-toolbar-changed': (SIGNAL_RUN_FIRST, TYPE_NONE, ([int]))
         }
 
-    def __init__(self):
+    def __init__(self, hpad=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
 
         self._bar = gtk.Toolbar()
-        toolbar = _align(gtk.EventBox, self._bar, 0, style.COLOR_TOOLBAR_GREY)
+        self._hpad = hpad
+        toolbar = _align(gtk.EventBox, self._bar, hpad, 0,
+                style.COLOR_TOOLBAR_GREY)
         self.pack_start(toolbar)
 
         self._notebook = gtk.Notebook()
@@ -127,12 +129,7 @@ class Toolbar(gtk.VBox):
 class _Box(gtk.EventBox):
     def __init__(self):
         gtk.EventBox.__init__(self)
-
         self._toolitem_alloc = gtk.gdk.Rectangle()
-
-        self.modify_bg(gtk.STATE_PRELIGHT, style.TOOLBAR_COLOR.get_gdk_color())
-        self.modify_bg(gtk.STATE_ACTIVE,style.COLOR_BUTTON_GREY.get_gdk_color())
-
         self.connect('expose-event', self.do_expose_event)
         self.set_app_paintable(True)
 
@@ -148,18 +145,23 @@ class _Box(gtk.EventBox):
                 self._toolitem_alloc.width - style._FOCUS_LINE_WIDTH*2,
                 style._FOCUS_LINE_WIDTH)
 
-def _align(box_class, widget, vpad, color):
-    top_pad = vpad
-    bottom_pad = vpad and vpad - style._FOCUS_LINE_WIDTH
+def _align(box_class, widget, hpad, vpad, color):
+    widget.modify_bg(gtk.STATE_NORMAL, color.get_gdk_color())
 
-    alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
-    alignment.set_padding(top_pad, bottom_pad, style.TOOLBOX_HORIZONTAL_PADDING,
-            style.TOOLBOX_HORIZONTAL_PADDING)
-    alignment.add(widget)
-    alignment.show()
+    if hpad or vpad:
+        top_pad = vpad
+        bottom_pad = vpad and vpad - style._FOCUS_LINE_WIDTH
+        alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
+        alignment.set_padding(top_pad, bottom_pad, hpad, hpad)
+        alignment.add(widget)
+        alignment.show()
+    else:
+        alignment = widget
 
     box = box_class()
     box.modify_bg(gtk.STATE_NORMAL, color.get_gdk_color())
+    box.modify_bg(gtk.STATE_PRELIGHT, color.get_gdk_color())
+    box.modify_bg(gtk.STATE_ACTIVE, style.COLOR_BUTTON_GREY.get_gdk_color())
     box.add(alignment)
     box.show()
 
