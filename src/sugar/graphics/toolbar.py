@@ -20,42 +20,65 @@ from gobject import SIGNAL_RUN_FIRST, TYPE_NONE
 
 from sugar.graphics import style
 from sugar.graphics.toolbutton import ToolButton
+from sugar.graphics.palette import _PopupAnimation, _PopdownAnimation
+from sugar.graphics.palette import MouseSpeedDetector, Invoker
+from sugar.graphics import animator
 
 class ToolbarButton(ToolButton):
-    def __init__(self, bar, page, expand_bg=style.TOOLBAR_COLOR, **kwargs):
+    def __init__(self, **kwargs):
+        self._page = None
+
         ToolButton.__init__(self, **kwargs)
 
-        self.modify_bg(gtk.STATE_NORMAL, expand_bg.get_gdk_color())
-
-        self._bar = bar
-        self._page = _align(_Box, page, bar._hpad, style._FOCUS_LINE_WIDTH*3,
-                expand_bg)
-        self._page._toolitem = self
-        page.show()
-
-        bar._notebook.append_page(self._page)
+        if self.palette is None:
+            self.palette = _Palette(self)
 
         self.connect('clicked',
                 lambda widget: self.set_expanded(not self.expanded))
-        self.connect('destroy', self.__destroy_cb)
 
-    def __destroy_cb(self, widget):
-        self._bar._remove_page(self._page)
+    def get_toolbar(self):
+        if not hasattr(self.parent, 'owner'):
+            return None
+        return self.parent.owner
+
+    toolbar = property(get_toolbar)
+
+    def get_page(self):
+        return self._page.get_child()
+
+    def set_page(self, page):
+        self._page = _align(_Box, page, 0, style._FOCUS_LINE_WIDTH*3)
+        self._page._toolitem = self
+        page.show()
+
+    page = gobject.property(type=object, getter=get_page, setter=set_page)
 
     def get_expanded(self):
-        return self._bar._expanded_page() == self._page
+        return bool(self.toolbar) and bool(self._page) and \
+                self.toolbar._expanded_page() == self._page
 
     def set_expanded(self, value):
-        if self.get_expanded() == value:
+        if not self.toolbar or not self._page or self.get_expanded() == value:
             return
-        if value:
-            expanded = self._bar._expanded_page()
-            if expanded and expanded._toolitem.window:
-                expanded._toolitem.window.invalidate_rect(None, True)
-            self._page._toolitem_alloc = self.allocation
-            self._bar._expand_page(self._page)
-        else:
-            self._bar._shrink_page()
+
+        if isinstance(self.palette, _Palette) and self.palette.is_up():
+            self.palette.popdown(immediate=True)
+
+        if not value:
+            self.toolbar._shrink_page(self._page)
+            return
+
+        expanded = self.toolbar._expanded_page()
+        if expanded and expanded._toolitem.window:
+            expanded._toolitem.window.invalidate_rect(None, True)
+
+        if self._page.parent:
+            self.palette.remove(self._page)
+
+        self.modify_bg(gtk.STATE_NORMAL, self.toolbar._bg)
+
+        self._page._toolitem_alloc = self.allocation
+        self.toolbar._expand_page(self._page)
 
     expanded = property(get_expanded, set_expanded)
 
@@ -65,18 +88,21 @@ class ToolbarButton(ToolButton):
 
         if not self.expanded or self.palette and self.palette.is_up():
             ToolButton.do_expose_event(self, event)
-            _paint_arrow(self, event, gtk.ARROW_UP)
+            if self.palette and self.palette.is_up():
+                _paint_arrow(self, event, gtk.ARROW_DOWN)
+            else:
+                _paint_arrow(self, event, gtk.ARROW_UP)
             return
 
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
-                'palette-invoker', alloc.x, -style._FOCUS_LINE_WIDTH,
-                alloc.width, alloc.height + style._FOCUS_LINE_WIDTH*2)
+                'palette-invoker', alloc.x, 0,
+                alloc.width, alloc.height + style._FOCUS_LINE_WIDTH)
 
         if child.state != gtk.STATE_PRELIGHT:
             self.get_style().paint_box(event.window,
                     gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self, None,
-                    alloc.x + style._FOCUS_LINE_WIDTH, 0,
+                    alloc.x + style._FOCUS_LINE_WIDTH, style._FOCUS_LINE_WIDTH,
                     alloc.width - style._FOCUS_LINE_WIDTH*2, alloc.height)
 
         gtk.ToolButton.do_expose_event(self, event)
@@ -90,11 +116,13 @@ class Toolbar(gtk.VBox):
     def __init__(self, hpad=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
 
-        self._bar = gtk.Toolbar()
-        self._hpad = hpad
-        toolbar = _align(gtk.EventBox, self._bar, hpad, 0,
-                style.COLOR_TOOLBAR_GREY)
-        self.pack_start(toolbar)
+        self._top = gtk.Toolbar()
+        self._top.owner = self
+        self._top_widget = _align(gtk.EventBox, self._top, hpad, 0)
+        self.pack_start(self._top_widget)
+
+        self.modify_bg(gtk.STATE_NORMAL,
+                style.COLOR_TOOLBAR_GREY.get_gdk_color())
 
         self._notebook = gtk.Notebook()
         self._notebook.set_show_border(False)
@@ -104,18 +132,22 @@ class Toolbar(gtk.VBox):
         self._notebook.connect('notify::page', lambda notebook, pspec:
                 self.emit('current-toolbar-changed', notebook.props.page))
 
-        self._bar.connect('remove', self._remove_cb)
+        self._top.connect('remove', self._remove_cb)
 
-    top = property(lambda self: self._bar)
+    top = property(lambda self: self._top)
+
+    def modify_bg(self, state, color):
+        if state == gtk.STATE_NORMAL:
+            self._bg = color
+        self._top_widget.modify_bg(state, color)
+        self._top.modify_bg(state, color)
 
     def _remove_cb(self, sender, widget):
         if not isinstance(widget, ToolbarButton):
             return
-        widget.expanded = False
-
-    def _remove_page(self, page):
-        page = self._notebook.page_num(page)
-        self._notebook.remove_page(page)
+        page_no = self._notebook.page_num(widget._page)
+        if page_no != -1:
+            self._notebook.remove_page(page_no)
 
     def _expanded_page(self):
         if self._notebook.parent is None:
@@ -123,13 +155,18 @@ class Toolbar(gtk.VBox):
         page_no = self._notebook.get_current_page()
         return self._notebook.get_nth_page(page_no)
 
-    def _shrink_page(self):
+    def _shrink_page(self, page):
+        page_no = self._notebook.page_num(page)
+        if page_no == -1:
+            return
+        self._notebook.remove_page(page_no)
         self.remove(self._notebook)
 
     def _expand_page(self, page):
-        page_no = self._notebook.page_num(page)
-        self._notebook.set_current_page(page_no)
-
+        for i in range(self._notebook.get_n_pages()):
+            self._notebook.remove_page(0)
+        _modify_bg(page, self._bg)
+        self._notebook.append_page(page)
         if self._notebook.parent is None:
             self.pack_start(self._notebook)
 
@@ -152,9 +189,164 @@ class _Box(gtk.EventBox):
                 self._toolitem_alloc.width - style._FOCUS_LINE_WIDTH*2,
                 style._FOCUS_LINE_WIDTH)
 
-def _align(box_class, widget, hpad, vpad, color):
-    widget.modify_bg(gtk.STATE_NORMAL, color.get_gdk_color())
+class _Palette(gtk.Window):
+    def __init__(self, toolitem, **kwargs):
+        gobject.GObject.__init__(self, **kwargs)
 
+        self.set_decorated(False)
+        self.set_resizable(False)
+        self.set_border_width(0)
+
+        self._toolitem = toolitem
+        self._invoker = None
+        self._up = False
+        self._invoker_hids = []
+
+        self._popup_anim = animator.Animator(.5, 10)
+        self._popup_anim.add(_PopupAnimation(self))
+
+        self._popdown_anim = animator.Animator(0.6, 10)
+        self._popdown_anim.add(_PopdownAnimation(self))
+
+        accel_group = gtk.AccelGroup()
+        self.set_data('sugar-accel-group', accel_group)
+        self.add_accel_group(accel_group)
+
+        self.connect('show', self.__show_cb)
+        self.connect('hide', self.__hide_cb)
+        self.connect('realize', self.__realize_cb)
+        self.connect('enter-notify-event', self.__enter_notify_event_cb)
+        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+
+        self._mouse_detector = MouseSpeedDetector(self, 200, 5)
+        self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
+
+    def is_up(self):
+        return self._up
+
+    def get_rect(self):
+        win_x, win_y = self.window.get_origin()
+        rectangle = self.get_allocation()
+
+        x = win_x + rectangle.x
+        y = win_y + rectangle.y
+        width = rectangle.width
+        height = rectangle.height
+
+        return gtk.gdk.Rectangle(x, y, width, height)
+
+    def set_invoker(self, invoker):
+        for hid in self._invoker_hids[:]:
+            self._invoker.disconnect(hid)
+            self._invoker_hids.remove(hid)
+
+        self._invoker = invoker
+        if invoker is not None:
+            self._invoker_hids.append(self._invoker.connect(
+                'mouse-enter', self._invoker_mouse_enter_cb))
+            self._invoker_hids.append(self._invoker.connect(
+                'mouse-leave', self._invoker_mouse_leave_cb))
+            self._invoker_hids.append(self._invoker.connect(
+                'right-click', self._invoker_right_click_cb))
+
+    def get_invoker(self):
+        return self._invoker
+
+    invoker = gobject.property(type=object,
+                               getter=get_invoker,
+                               setter=set_invoker)
+
+    def do_size_request(self, requisition):
+        gtk.Window.do_size_request(self, requisition)
+        if self._toolitem.toolbar:
+            requisition.width = self._toolitem.toolbar.allocation.width
+
+    def __realize_cb(self, widget):
+        self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        #accept_focus = len(self._content.get_children())
+        #if self.window:
+        #    self.window.set_accept_focus(accept_focus)
+
+
+    def popup(self, immediate=False):
+        self._popdown_anim.stop()
+
+        toolbar = self._toolitem.toolbar
+        page = self._toolitem._page
+
+        if not self._invoker or self._toolitem.expanded or not toolbar:
+            return
+
+        page._toolitem_alloc = self._toolitem.allocation
+        _modify_bg(page, style.COLOR_BLACK.get_gdk_color())
+        if self.get_child() is None:
+            self.add(page)
+
+        x, y = toolbar.window.get_origin()
+        self.move(x + toolbar.allocation.x, y + toolbar.top.allocation.height)
+        self.set_transient_for(self._invoker.get_toplevel())
+
+        if not immediate:
+            self._popup_anim.start()
+        else:
+            self.show()
+
+    def popdown(self, immediate=False):
+        self._popup_anim.stop()
+        self._mouse_detector.stop()
+
+        if not immediate:
+            self._popdown_anim.start()
+        else:
+            self.hide()
+
+    def _mouse_slow_cb(self, widget):
+        self._mouse_detector.stop()
+
+        if self.is_up():
+            self._popdown_anim.stop()
+            return
+
+        self.popup(immediate=False)
+
+    def _invoker_mouse_enter_cb(self, invoker):
+        self._mouse_detector.start()
+
+    def _invoker_mouse_leave_cb(self, invoker):
+        self._mouse_detector.stop()
+        self.popdown()
+
+    def _invoker_right_click_cb(self, invoker):
+        self.popup(immediate=True)
+
+    def __enter_notify_event_cb(self, widget, event):
+        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
+                event.mode == gtk.gdk.CROSSING_NORMAL:
+            self._popdown_anim.stop()
+
+    def __leave_notify_event_cb(self, widget, event):
+        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
+                event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.popdown()
+
+    def __show_cb(self, widget):
+        self._invoker.notify_popup()
+        self._up = True
+
+    def __hide_cb(self, widget):
+        if self._invoker:
+            self._invoker.notify_popdown()
+        self._up = False
+
+def _modify_bg(page, color):
+    child = page.get_child()
+    if isinstance(child, gtk.Alignment):
+        child = child.get_child()
+    child.modify_bg(gtk.STATE_NORMAL, color)
+    page.modify_bg(gtk.STATE_NORMAL, color)
+    page.modify_bg(gtk.STATE_PRELIGHT, color)
+
+def _align(box_class, widget, hpad, vpad):
     if hpad or vpad:
         top_pad = vpad
         bottom_pad = vpad and vpad - style._FOCUS_LINE_WIDTH
@@ -162,14 +354,11 @@ def _align(box_class, widget, hpad, vpad, color):
         alignment.set_padding(top_pad, bottom_pad, hpad, hpad)
         alignment.add(widget)
         alignment.show()
-    else:
-        alignment = widget
+        widget = alignment
 
     box = box_class()
-    box.modify_bg(gtk.STATE_NORMAL, color.get_gdk_color())
-    box.modify_bg(gtk.STATE_PRELIGHT, color.get_gdk_color())
     box.modify_bg(gtk.STATE_ACTIVE, style.COLOR_BUTTON_GREY.get_gdk_color())
-    box.add(alignment)
+    box.add(widget)
     box.show()
 
     return box
