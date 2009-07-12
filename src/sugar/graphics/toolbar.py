@@ -44,10 +44,10 @@ class ToolbarButton(ToolButton):
     toolbar = property(get_toolbar)
 
     def get_page(self):
-        return self._page.get_child()
+        return self._page.child.child
 
     def set_page(self, page):
-        self._page = _align(_Box, page, 0, style._FOCUS_LINE_WIDTH*3)
+        self._page = _align(_Box, page)
         self._page._toolitem = self
         page.show()
 
@@ -77,15 +77,11 @@ class ToolbarButton(ToolButton):
 
         self.modify_bg(gtk.STATE_NORMAL, self.toolbar._bg)
 
-        self._page._toolitem_alloc = self.allocation
         self.toolbar._expand_page(self._page)
 
     expanded = property(get_expanded, set_expanded)
 
     def do_expose_event(self, event):
-        child = self.get_child()
-        alloc = self.allocation
-
         if not self.expanded or self.palette and self.palette.is_up():
             ToolButton.do_expose_event(self, event)
             if self.palette and self.palette.is_up():
@@ -94,12 +90,14 @@ class ToolbarButton(ToolButton):
                 _paint_arrow(self, event, gtk.ARROW_UP)
             return
 
+        alloc = self.allocation
+
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 'palette-invoker', alloc.x, 0,
                 alloc.width, alloc.height + style._FOCUS_LINE_WIDTH)
 
-        if child.state != gtk.STATE_PRELIGHT:
+        if self.child.state != gtk.STATE_PRELIGHT:
             self.get_style().paint_box(event.window,
                     gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self, None,
                     alloc.x + style._FOCUS_LINE_WIDTH, style._FOCUS_LINE_WIDTH,
@@ -113,14 +111,16 @@ class Toolbar(gtk.VBox):
         'current-toolbar-changed': (SIGNAL_RUN_FIRST, TYPE_NONE, ([int]))
         }
 
-    def __init__(self, hpad=style.TOOLBOX_HORIZONTAL_PADDING):
+    def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
 
         self._top = gtk.Toolbar()
         self._top.owner = self
-        self._top_widget = _align(gtk.EventBox, self._top, hpad, 0)
-        self.pack_start(self._top_widget)
 
+        top_widget = _align(gtk.EventBox, self._top)
+        self.pack_start(top_widget)
+
+        self.props.padding = padding
         self.modify_bg(gtk.STATE_NORMAL,
                 style.COLOR_TOOLBAR_GREY.get_gdk_color())
 
@@ -136,10 +136,19 @@ class Toolbar(gtk.VBox):
 
     top = property(lambda self: self._top)
 
+    def get_padding(self):
+        return self._top.parent.props.left_padding
+
+    def set_padding(self, pad):
+        self._top.parent.set_padding(0, 0, pad, pad)
+
+    padding = gobject.property(type=object,
+            getter=get_padding, setter=set_padding)
+
     def modify_bg(self, state, color):
         if state == gtk.STATE_NORMAL:
             self._bg = color
-        self._top_widget.modify_bg(state, color)
+        self._top.parent.parent.modify_bg(state, color)
         self._top.modify_bg(state, color)
 
     def _remove_cb(self, sender, widget):
@@ -165,19 +174,21 @@ class Toolbar(gtk.VBox):
     def _expand_page(self, page):
         for i in range(self._notebook.get_n_pages()):
             self._notebook.remove_page(0)
-        _modify_bg(page, self._bg)
+
+        _setup_page(page, self._bg, self.props.padding)
         self._notebook.append_page(page)
+
         if self._notebook.parent is None:
             self.pack_start(self._notebook)
 
 class _Box(gtk.EventBox):
     def __init__(self):
         gtk.EventBox.__init__(self)
-        self._toolitem_alloc = gtk.gdk.Rectangle()
         self.connect('expose-event', self.do_expose_event)
         self.set_app_paintable(True)
 
     def do_expose_event(self, widget, event):
+        a = self._toolitem.allocation
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 'palette-invoker', -style._FOCUS_LINE_WIDTH, 0,
@@ -185,9 +196,8 @@ class _Box(gtk.EventBox):
                 self.allocation.height + style._FOCUS_LINE_WIDTH)
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self, None,
-                self._toolitem_alloc.x + style._FOCUS_LINE_WIDTH, 0,
-                self._toolitem_alloc.width - style._FOCUS_LINE_WIDTH*2,
-                style._FOCUS_LINE_WIDTH)
+                a.x + style._FOCUS_LINE_WIDTH, 0,
+                a.width - style._FOCUS_LINE_WIDTH*2, style._FOCUS_LINE_WIDTH)
 
 class _Palette(gtk.Window):
     def __init__(self, toolitem, **kwargs):
@@ -277,9 +287,9 @@ class _Palette(gtk.Window):
         if not self._invoker or self._toolitem.expanded or not toolbar:
             return
 
-        page._toolitem_alloc = self._toolitem.allocation
-        _modify_bg(page, style.COLOR_BLACK.get_gdk_color())
-        if self.get_child() is None:
+        _setup_page(page, style.COLOR_BLACK.get_gdk_color(),
+                toolbar.props.padding)
+        if self.child is None:
             self.add(page)
 
         x, y = toolbar.window.get_origin()
@@ -338,29 +348,22 @@ class _Palette(gtk.Window):
             self._invoker.notify_popdown()
         self._up = False
 
-def _modify_bg(page, color):
-    child = page.get_child()
-    if isinstance(child, gtk.Alignment):
-        child = child.get_child()
-    child.modify_bg(gtk.STATE_NORMAL, color)
+def _setup_page(page, color, hpad):
+    vpad = style._FOCUS_LINE_WIDTH*3
+    page.child.set_padding(vpad, vpad, hpad, hpad)
+    page.child.child.modify_bg(gtk.STATE_NORMAL, color)
     page.modify_bg(gtk.STATE_NORMAL, color)
     page.modify_bg(gtk.STATE_PRELIGHT, color)
 
-def _align(box_class, widget, hpad, vpad):
-    if hpad or vpad:
-        top_pad = vpad
-        bottom_pad = vpad and vpad - style._FOCUS_LINE_WIDTH
-        alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
-        alignment.set_padding(top_pad, bottom_pad, hpad, hpad)
-        alignment.add(widget)
-        alignment.show()
-        widget = alignment
-
+def _align(box_class, widget):
+    widget.show()
+    alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
+    alignment.add(widget)
+    alignment.show()
     box = box_class()
     box.modify_bg(gtk.STATE_ACTIVE, style.COLOR_BUTTON_GREY.get_gdk_color())
-    box.add(widget)
+    box.add(alignment)
     box.show()
-
     return box
 
 def _paint_arrow(widget, event, type):
