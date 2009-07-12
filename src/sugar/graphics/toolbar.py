@@ -157,6 +157,8 @@ class Toolbar(gtk.VBox):
         page_no = self._notebook.page_num(widget._page)
         if page_no != -1:
             self._notebook.remove_page(page_no)
+        if widget.palette:
+            widget.palette.popdown(immediate=True)
 
     def _expanded_page(self):
         if self._notebook.parent is None:
