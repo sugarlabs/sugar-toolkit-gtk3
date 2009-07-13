@@ -73,6 +73,7 @@ from sugar.graphics.toolcombobox import ToolComboBox
 from sugar.graphics.alert import Alert
 from sugar.graphics.icon import Icon
 from sugar.graphics.xocolor import XoColor
+from sugar.graphics.toolbar import Toolbar, ToolbarButton
 from sugar.datastore import datastore
 from sugar.session import XSMPClient
 from sugar import wm
@@ -94,7 +95,7 @@ class ActivityToolbar(gtk.Toolbar):
     All activities should have this toolbar. It is easiest to add it to your
     Activity by using the ActivityToolbox.
     """
-    def __init__(self, activity):
+    def __init__(self, activity, hide_stop=False):
         gtk.Toolbar.__init__(self)
 
         self._activity = activity
@@ -141,11 +142,9 @@ class ActivityToolbar(gtk.Toolbar):
         self.insert(self.keep, -1)
         self.keep.show()
 
-        self.stop = ToolButton('activity-stop', tooltip=_('Stop'))
-        self.stop.props.accelerator = '<Ctrl>Q'
-        self.stop.connect('clicked', self.__stop_clicked_cb)
-        self.insert(self.stop, -1)
-        self.stop.show()
+        if not hide_stop:
+            stop = stop_button(activity)
+            self.insert(stop, -1)
 
         self._update_title_sid = None
 
@@ -176,9 +175,6 @@ class ActivityToolbar(gtk.Toolbar):
 
     def __keep_clicked_cb(self, button):
         self._activity.copy()
-
-    def __stop_clicked_cb(self, button):
-        self._activity.close()
 
     def __jobject_updated_cb(self, jobject):
         self.title.set_text(jobject['title'])
@@ -254,30 +250,20 @@ class EditToolbar(gtk.Toolbar):
     def __init__(self):
         gtk.Toolbar.__init__(self)
 
-        self.undo = ToolButton('edit-undo')
-        self.undo.set_tooltip(_('Undo'))
+        self.undo = undo_button()
         self.insert(self.undo, -1)
-        self.undo.show()
 
-        self.redo = ToolButton('edit-redo')
-        self.redo.set_tooltip(_('Redo'))
+        self.redo = redo_button()
         self.insert(self.redo, -1)
-        self.redo.show()
 
-        self.separator = gtk.SeparatorToolItem()
-        self.separator.set_draw(True)
+        self.separator = separator()
         self.insert(self.separator, -1)
-        self.separator.show()
 
-        self.copy = ToolButton('edit-copy')
-        self.copy.set_tooltip(_('Copy'))
+        self.copy = copy_button()
         self.insert(self.copy, -1)
-        self.copy.show()
 
-        self.paste = ToolButton('edit-paste')
-        self.paste.set_tooltip(_('Paste'))
+        self.paste = paste_button()
         self.insert(self.paste, -1)
-        self.paste.show()
 
 class ActivityToolbox(Toolbox):
     """Creates the Toolbox for the Activity
@@ -1061,3 +1047,54 @@ def show_object_in_journal(object_id):
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
     journal.ShowObject(object_id)
+
+def toolbar(activity):
+    activity_button = ToolbarButton(
+            page=ActivityToolbar(activity, hide_stop=True),
+            icon_name='computer-xo')
+    activity_button.show()
+    return activity_button
+
+def expander():
+    separator = gtk.SeparatorToolItem()
+    separator.props.draw = False
+    separator.set_expand(True)
+    separator.show()
+    return separator
+
+def stop_button(activity, **kwargs):
+    stop = ToolButton('activity-stop', tooltip=_('Stop'), **kwargs)
+    stop.props.accelerator = '<Ctrl>Q'
+    stop.connect('clicked', lambda button: activity.close())
+    stop.show()
+    return stop
+
+def undo_button(**kwargs):
+    undo = ToolButton('edit-undo', **kwargs)
+    undo.set_tooltip(_('Undo'))
+    undo.show()
+    return undo
+
+def redo_button(**kwargs):
+    redo = ToolButton('edit-redo', **kwargs)
+    redo.set_tooltip(_('Redo'))
+    redo.show()
+    return redo
+
+def separator(**kwargs):
+    separator = gtk.SeparatorToolItem(**kwargs)
+    separator.set_draw(True)
+    separator.show()
+    return separator
+
+def copy_button(**kwargs):
+    copy = ToolButton('edit-copy', **kwargs)
+    copy.set_tooltip(_('Copy'))
+    copy.show()
+    return copy
+
+def paste_button(**kwargs):
+    paste = ToolButton('edit-paste', **kwargs)
+    paste.set_tooltip(_('Paste'))
+    paste.show()
+    return paste

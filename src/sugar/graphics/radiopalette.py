@@ -107,6 +107,8 @@ class RadioPalette(Palette):
         if not children:
             self.__toggled_cb(button, True)
 
+        return button
+
     def update_button(self):
         for i in self.top.get_children():
             self.__toggled_cb(i, True)
