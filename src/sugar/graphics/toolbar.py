@@ -351,7 +351,7 @@ class _Palette(gtk.Window):
         self._up = False
 
 def _setup_page(page, color, hpad):
-    vpad = style._FOCUS_LINE_WIDTH*3
+    vpad = style._FOCUS_LINE_WIDTH
     page.child.set_padding(vpad, vpad, hpad, hpad)
     page.child.child.modify_bg(gtk.STATE_NORMAL, color)
     page.modify_bg(gtk.STATE_NORMAL, color)
