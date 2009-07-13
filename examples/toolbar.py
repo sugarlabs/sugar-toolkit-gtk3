@@ -1,5 +1,6 @@
 import gtk
 
+from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toolbar import Toolbar, ToolbarButton
 from sugar.graphics import style
 
@@ -32,6 +33,18 @@ tollbarbutton_3 = ToolbarButton(
         page=del_b,
         icon_name='activity-journal')
 toolbar.top.insert(tollbarbutton_3, -1)
+
+subbar = gtk.Toolbar()
+subbutton = ToolButton(
+        icon_name='document-send',
+        tooltip='document-send')
+subbar.insert(subbutton, -1)
+subbar.show_all()
+
+tollbarbutton_4 = ToolbarButton(
+        page=subbar,
+        icon_name='document-save')
+toolbar.top.insert(tollbarbutton_4, -1)
 
 window.show_all()
 gtk.main()

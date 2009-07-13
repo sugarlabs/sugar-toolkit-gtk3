@@ -23,6 +23,7 @@ from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.palette import _PopupAnimation, _PopdownAnimation
 from sugar.graphics.palette import MouseSpeedDetector, Invoker
 from sugar.graphics import animator
+from sugar.graphics import palettegroup
 
 class ToolbarButton(ToolButton):
     def __init__(self, **kwargs):
@@ -213,6 +214,7 @@ class _Palette(gtk.Window):
         self._invoker = None
         self._up = False
         self._invoker_hids = []
+        self.__focus = 0
 
         self._popup_anim = animator.Animator(.5, 10)
         self._popup_anim.add(_PopupAnimation(self))
@@ -232,6 +234,9 @@ class _Palette(gtk.Window):
 
         self._mouse_detector = MouseSpeedDetector(self, 200, 5)
         self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
+
+        group = palettegroup.get_group('default')
+        group.connect('popdown', self.__group_popdown_cb)
 
     def is_up(self):
         return self._up
@@ -255,11 +260,11 @@ class _Palette(gtk.Window):
         self._invoker = invoker
         if invoker is not None:
             self._invoker_hids.append(self._invoker.connect(
-                'mouse-enter', self._invoker_mouse_enter_cb))
+                'mouse-enter', self.__invoker_mouse_enter_cb))
             self._invoker_hids.append(self._invoker.connect(
-                'mouse-leave', self._invoker_mouse_leave_cb))
+                'mouse-leave', self.__invoker_mouse_leave_cb))
             self._invoker_hids.append(self._invoker.connect(
-                'right-click', self._invoker_right_click_cb))
+                'right-click', self.__invoker_right_click_cb))
 
     def get_invoker(self):
         return self._invoker
@@ -321,25 +326,41 @@ class _Palette(gtk.Window):
 
         self.popup(immediate=False)
 
-    def _invoker_mouse_enter_cb(self, invoker):
+    def __handle_focus(self, delta):
+        self.__focus += delta
+        if self.__focus not in (0, 1):
+            logging.error('_Palette.__focus=%s not in (0, 1)' % self.__focus)
+
+        if self.__focus == 0:
+            group = palettegroup.get_group('default')
+            if not group.is_up():
+                self.popdown()
+
+    def __group_popdown_cb(self, group):
+        if self.__focus == 0:
+            self.popdown(immediate=True)
+
+    def __invoker_mouse_enter_cb(self, invoker):
         self._mouse_detector.start()
+        self.__handle_focus(+1)
 
-    def _invoker_mouse_leave_cb(self, invoker):
+    def __invoker_mouse_leave_cb(self, invoker):
         self._mouse_detector.stop()
-        self.popdown()
+        self.__handle_focus(-1)
 
-    def _invoker_right_click_cb(self, invoker):
+    def __invoker_right_click_cb(self, invoker):
         self.popup(immediate=True)
 
     def __enter_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
                 event.mode == gtk.gdk.CROSSING_NORMAL:
             self._popdown_anim.stop()
+            self.__handle_focus(+1)
 
     def __leave_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
                 event.mode == gtk.gdk.CROSSING_NORMAL:
-            self.popdown()
+            self.__handle_focus(-1)
 
     def __show_cb(self, widget):
         self._invoker.notify_popup()
