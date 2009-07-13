@@ -143,8 +143,8 @@ class ActivityToolbar(gtk.Toolbar):
         self.keep.show()
 
         if not hide_stop:
-            stop = stop_button(activity)
-            self.insert(stop, -1)
+            self.stop = stop_button(activity)
+            self.insert(self.stop, -1)
 
         self._update_title_sid = None
 
