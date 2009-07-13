@@ -115,74 +115,84 @@ class Toolbar(gtk.VBox):
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
 
-        self._top = gtk.Toolbar()
-        self._top.owner = self
+        self.__top = gtk.Toolbar()
+        self.__top.owner = self
 
-        top_widget = _align(gtk.EventBox, self._top)
+        top_widget = _align(gtk.EventBox, self.__top)
         self.pack_start(top_widget)
 
         self.props.padding = padding
         self.modify_bg(gtk.STATE_NORMAL,
                 style.COLOR_TOOLBAR_GREY.get_gdk_color())
 
-        self._notebook = gtk.Notebook()
-        self._notebook.set_show_border(False)
-        self._notebook.set_show_tabs(False)
-        self._notebook.show()
+        self.__notebook = gtk.Notebook()
+        self.__notebook.set_show_border(False)
+        self.__notebook.set_show_tabs(False)
+        self.__notebook.show()
 
-        self._notebook.connect('notify::page', lambda notebook, pspec:
+        self.__notebook.connect('notify::page', lambda notebook, pspec:
                 self.emit('current-toolbar-changed', notebook.props.page))
 
-        self._top.connect('remove', self._remove_cb)
+        self.__top.connect('remove', self.__remove_cb)
 
-    top = property(lambda self: self._top)
+    top = property(lambda self: self.__top)
 
     def get_padding(self):
-        return self._top.parent.props.left_padding
+        return self.__top.parent.props.left_padding
 
     def set_padding(self, pad):
-        self._top.parent.set_padding(0, 0, pad, pad)
+        self.__top.parent.set_padding(0, 0, pad, pad)
 
     padding = gobject.property(type=object,
             getter=get_padding, setter=set_padding)
 
+    def get_subs(self):
+        out = []
+        for i in range(self.top.get_n_items()):
+            page = self.top.get_nth_item(i)
+            if isinstance(page, ToolbarButton):
+                out.append(page)
+        return out
+
+    subs = property(get_subs)
+
     def modify_bg(self, state, color):
         if state == gtk.STATE_NORMAL:
             self._bg = color
-        self._top.parent.parent.modify_bg(state, color)
-        self._top.modify_bg(state, color)
+        self.__top.parent.parent.modify_bg(state, color)
+        self.__top.modify_bg(state, color)
 
-    def _remove_cb(self, sender, widget):
+    def __remove_cb(self, sender, widget):
         if not isinstance(widget, ToolbarButton):
             return
-        page_no = self._notebook.page_num(widget._page)
+        page_no = self.__notebook.page_num(widget._page)
         if page_no != -1:
-            self._notebook.remove_page(page_no)
+            self.__notebook.remove_page(page_no)
         if widget.palette:
             widget.palette.popdown(immediate=True)
 
     def _expanded_page(self):
-        if self._notebook.parent is None:
+        if self.__notebook.parent is None:
             return None
-        page_no = self._notebook.get_current_page()
-        return self._notebook.get_nth_page(page_no)
+        page_no = self.__notebook.get_current_page()
+        return self.__notebook.get_nth_page(page_no)
 
     def _shrink_page(self, page):
-        page_no = self._notebook.page_num(page)
+        page_no = self.__notebook.page_num(page)
         if page_no == -1:
             return
-        self._notebook.remove_page(page_no)
-        self.remove(self._notebook)
+        self.__notebook.remove_page(page_no)
+        self.remove(self.__notebook)
 
     def _expand_page(self, page):
-        for i in range(self._notebook.get_n_pages()):
-            self._notebook.remove_page(0)
+        for i in range(self.__notebook.get_n_pages()):
+            self.__notebook.remove_page(0)
 
         _setup_page(page, self._bg, self.props.padding)
-        self._notebook.append_page(page)
+        self.__notebook.append_page(page)
 
-        if self._notebook.parent is None:
-            self.pack_start(self._notebook)
+        if self.__notebook.parent is None:
+            self.pack_start(self.__notebook)
 
 class _Box(gtk.EventBox):
     def __init__(self):
@@ -283,7 +293,6 @@ class _Palette(gtk.Window):
         #accept_focus = len(self._content.get_children())
         #if self.window:
         #    self.window.set_accept_focus(accept_focus)
-
 
     def popup(self, immediate=False):
         self._popdown_anim.stop()
