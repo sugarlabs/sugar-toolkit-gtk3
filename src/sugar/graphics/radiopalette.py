@@ -23,6 +23,9 @@ from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.palette import Palette
 from sugar.graphics.radiotoolbutton import RadioToolButton
 
+ARROW_SIZE = hasattr(style, 'TOOLBAR_ARROW_SIZE') and style.TOOLBAR_ARROW_SIZE \
+        or 8
+
 class RadioPaletteButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, **kwargs)
@@ -70,10 +73,9 @@ class RadioMenuButton(RadioPaletteButton):
         self.get_style().paint_arrow(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 None, type,  True,
-                a.x + a.width/2 - style.TOOLBAR_ARROW_SIZE/2,
-                a.y + a.height - style.TOOLBAR_ARROW_SIZE - \
-                        style._FOCUS_LINE_WIDTH,
-                style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)
+                a.x + a.width/2 - ARROW_SIZE/2,
+                a.y + a.height - ARROW_SIZE - style._FOCUS_LINE_WIDTH,
+                ARROW_SIZE, ARROW_SIZE)
 
 class RadioToolsButton(RadioPaletteButton):
     def __init__(self, **kwargs):
