@@ -325,6 +325,13 @@ class ActivityBundle(Bundle):
             else:
                 logging.warning(err)
 
+        self.install_mime_type(install_path)
+
+        return install_path
+
+    def install_mime_type(self, install_path):
+        ''' Update the mime type database and install the mime type icon
+        '''
         xdg_data_home = os.getenv('XDG_DATA_HOME',
                                   os.path.expanduser('~/.local/share'))
 
@@ -360,7 +367,6 @@ class ActivityBundle(Bundle):
                     os.symlink(info_file,
                                os.path.join(installed_icons_dir,
                                             os.path.basename(info_file)))
-        return install_path
 
     def uninstall(self, install_path, force=False):
         if os.path.islink(install_path):
