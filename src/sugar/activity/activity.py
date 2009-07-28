@@ -1019,7 +1019,7 @@ def _get_session():
 def get_bundle_name():
     """Return the bundle name for the current process' bundle"""
     return os.environ['SUGAR_BUNDLE_NAME']
-    
+
 def get_bundle_path():
     """Return the bundle path for the current process' bundle"""
     return os.environ['SUGAR_BUNDLE_PATH']
@@ -1039,10 +1039,18 @@ def show_object_in_journal(object_id):
     journal.ShowObject(object_id)
 
 def toolbar(activity):
+    from jarabe.journal.misc import get_icon_name
+
     activity_button = ToolbarButton(
-            page=ActivityToolbar(activity, hide_stop=True),
-            icon_name='computer-xo')
+            page=ActivityToolbar(activity, hide_stop=True))
     activity_button.show()
+
+    client = gconf.client_get_default()
+    color = XoColor(client.get_string('/desktop/sugar/user/color'))
+    icon = Icon(file=get_icon_name(activity.metadata), xo_color=color)
+    icon.show()
+    activity_button.set_icon_widget(icon)
+
     return activity_button
 
 def expander():
@@ -1123,7 +1131,10 @@ def share_button(activity, **kwargs):
     activity.connect('shared', lambda activity: update_share())
     activity.connect('joined', lambda activity: update_share())
 
-    return RadioMenuButton(palette=palette)
+    share = RadioMenuButton(palette=palette)
+    share.show()
+
+    return share
 
 def keep_button(activity, **kwargs):
     client = gconf.client_get_default()
@@ -1131,7 +1142,7 @@ def keep_button(activity, **kwargs):
     keep_icon = Icon(icon_name='document-save', xo_color=color)
     keep_icon.show()
 
-    keep = ToolButton(tooltip=_('Keep'))
+    keep = ToolButton(tooltip=_('Keep'), **kwargs)
     keep.set_icon_widget(keep_icon)
     keep.props.accelerator = '<Ctrl>S'
     keep.connect('clicked', lambda button: activity.copy())
