@@ -132,16 +132,8 @@ class ActivityToolbar(gtk.Toolbar):
 
         self._update_share()
 
-        self.keep = ToolButton(tooltip=_('Keep'))
-        client = gconf.client_get_default()
-        color = XoColor(client.get_string('/desktop/sugar/user/color'))
-        keep_icon = Icon(icon_name='document-save', xo_color=color)
-        self.keep.set_icon_widget(keep_icon)
-        keep_icon.show()
-        self.keep.props.accelerator = '<Ctrl>S'
-        self.keep.connect('clicked', self.__keep_clicked_cb)
+        self.keep = keep_button(activity)
         self.insert(self.keep, -1)
-        self.keep.show()
 
         if not hide_stop:
             self.stop = stop_button(activity)
@@ -173,9 +165,6 @@ class ActivityToolbar(gtk.Toolbar):
         (scope, ) = model.get(it, 0)
         if scope == SCOPE_NEIGHBORHOOD:
             self._activity.share()
-
-    def __keep_clicked_cb(self, button):
-        self._activity.copy()
 
     def __jobject_updated_cb(self, jobject):
         self.title.set_text(jobject['title'])
@@ -1120,13 +1109,10 @@ def share_button(activity, **kwargs):
     def update_share():
         quiet_trigger.append(True)
 
-        logging.error(private.props.sensitive)
-
         if activity.get_shared():
             private.props.sensitive = False
             neighborhood.props.sensitive = False
             neighborhood.props.active = True
-            logging.error(private.props.sensitive)
         else:
             private.props.sensitive = True
             neighborhood.props.sensitive = True
@@ -1138,3 +1124,17 @@ def share_button(activity, **kwargs):
     activity.connect('joined', lambda activity: update_share())
 
     return RadioMenuButton(palette=palette)
+
+def keep_button(activity, **kwargs):
+    client = gconf.client_get_default()
+    color = XoColor(client.get_string('/desktop/sugar/user/color'))
+    keep_icon = Icon(icon_name='document-save', xo_color=color)
+    keep_icon.show()
+
+    keep = ToolButton(tooltip=_('Keep'))
+    keep.set_icon_widget(keep_icon)
+    keep.props.accelerator = '<Ctrl>S'
+    keep.connect('clicked', lambda button: activity.copy())
+    keep.show()
+
+    return keep
