@@ -61,7 +61,7 @@ import dbus
 import dbus.service
 import cjson
 
-from sugar import util        
+from sugar import util
 from sugar.presence import presenceservice
 from sugar.activity.activityservice import ActivityService
 from sugar.activity.namingalert import NamingAlert
@@ -74,6 +74,7 @@ from sugar.graphics.alert import Alert
 from sugar.graphics.icon import Icon
 from sugar.graphics.xocolor import XoColor
 from sugar.graphics.toolbar import Toolbar, ToolbarButton
+from sugar.graphics.radiopalette import RadioPalette, RadioMenuButton
 from sugar.datastore import datastore
 from sugar.session import XSMPClient
 from sugar import wm
@@ -1098,3 +1099,42 @@ def paste_button(**kwargs):
     paste.set_tooltip(_('Paste'))
     paste.show()
     return paste
+
+def share_button(activity, **kwargs):
+    quiet_trigger = []
+
+    def neighborhood_cb():
+        if quiet_trigger:
+            return
+        activity.share()
+
+    palette = RadioPalette()
+    private = palette.append(
+            icon_name='zoom-home',
+            tooltip=_('Private'))
+    neighborhood = palette.append(
+            icon_name='zoom-neighborhood',
+            tooltip=_('My Neighborhood'),
+            toggled_cb=neighborhood_cb)
+
+    def update_share():
+        quiet_trigger.append(True)
+
+        logging.error(private.props.sensitive)
+
+        if activity.get_shared():
+            private.props.sensitive = False
+            neighborhood.props.sensitive = False
+            neighborhood.props.active = True
+            logging.error(private.props.sensitive)
+        else:
+            private.props.sensitive = True
+            neighborhood.props.sensitive = True
+            private.props.active = True
+
+        quiet_trigger.pop()
+
+    activity.connect('shared', lambda activity: update_share())
+    activity.connect('joined', lambda activity: update_share())
+
+    return RadioMenuButton(palette=palette)
