@@ -24,6 +24,8 @@ import gtk
 
 from sugar.graphics.icon import Icon
 
+_UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT = 2
+
 class UnfullscreenButton(gtk.Window):
 
     def __init__(self):
@@ -82,7 +84,7 @@ class Window(gtk.Window):
         self.connect('realize', self.__window_realize_cb)
         self.connect('window-state-event', self.__window_state_event_cb)
         self.connect('key-press-event', self.__key_press_cb)
-        
+
         self.toolbox = None
         self._alerts = []
         self._canvas = None
@@ -96,7 +98,9 @@ class Window(gtk.Window):
         self._event_box = gtk.EventBox()
         self._hbox.pack_start(self._event_box)
         self._event_box.show()
-        
+        self._event_box.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK | gtk.gdk.POINTER_MOTION_MASK)
+        self._event_box.connect('motion-notify-event', self.__motion_notify_cb)
+
         self.add(self._vbox)
         self._vbox.show()
 
@@ -105,6 +109,7 @@ class Window(gtk.Window):
         self._unfullscreen_button.set_transient_for(self)
         self._unfullscreen_button.connect_button_press(
             self.__unfullscreen_button_pressed)
+        self._unfullscreen_button_timeout_id = None
 
     def set_canvas(self, canvas):
         if self._canvas:
@@ -184,6 +189,15 @@ class Window(gtk.Window):
             if self.props.enable_fullscreen_mode:
                 self._unfullscreen_button.show()
 
+                if self._unfullscreen_button_timeout_id is not None:
+                    gobject.source_remove(self._unfullscreen_button_timeout_id)
+                    self._unfullscreen_button_timeout_id = None
+
+                self._unfullscreen_button_timeout_id = \
+                    gobject.timeout_add_seconds( \
+                        _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
+                        self.__unfullscreen_button_timeout_cb)
+
         else:
             if self.toolbox is not None:
                 self.toolbox.show()
@@ -193,6 +207,10 @@ class Window(gtk.Window):
             self._is_fullscreen = False
             if self.props.enable_fullscreen_mode:
                 self._unfullscreen_button.hide()
+
+                if self._unfullscreen_button_timeout_id:
+                    gobject.source_remove(self._unfullscreen_button_timeout_id)
+                    self._unfullscreen_button_timeout_id = None
 
     def __key_press_cb(self, widget, event):
         key = gtk.gdk.keyval_name(event.keyval)
@@ -208,6 +226,27 @@ class Window(gtk.Window):
 
     def __unfullscreen_button_pressed(self, widget, event):
         self.unfullscreen()
+
+    def __motion_notify_cb(self, widget, event):
+        if self._is_fullscreen and self.props.enable_fullscreen_mode:
+            if not self._unfullscreen_button.props.visible:
+                self._unfullscreen_button.show()
+            else:
+                # Reset the timer
+                if self._unfullscreen_button_timeout_id is not None:
+                    gobject.source_remove(self._unfullscreen_button_timeout_id)
+                    self._unfullscreen_button_timeout_id = None
+
+                self._unfullscreen_button_timeout_id = \
+                    gobject.timeout_add_seconds( \
+                        _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
+                        self.__unfullscreen_button_timeout_cb)
+        return True
+
+    def __unfullscreen_button_timeout_cb(self):
+        self._unfullscreen_button.hide()
+        self._unfullscreen_button_timeout_id = None
+        return False
 
     def set_enable_fullscreen_mode(self, enable_fullscreen_mode):
         self._enable_fullscreen_mode = enable_fullscreen_mode
