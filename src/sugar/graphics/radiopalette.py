@@ -88,12 +88,16 @@ class RadioPalette(Palette):
         self.top.show()
         self.set_content(self.top)
 
-    def append(self, button):
+    def append(self, button, label):
         children = self.top.get_children()
+
+        # palette's button should not have sub-palettes
+        button.palette = None
 
         button.show()
         button.connect('clicked', self.__clicked_cb)
         self.top.pack_start(button, fill=False)
+        button.__palette_label = label
 
         if not children:
             self.__clicked_cb(button, True)
@@ -106,7 +110,7 @@ class RadioPalette(Palette):
         if not button.get_active():
             return
 
-        self.set_primary_text(button.props.tooltip)
+        self.set_primary_text(button.__palette_label)
         if not quiet:
             self.popdown(immediate=True)
 

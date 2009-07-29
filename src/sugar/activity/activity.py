@@ -1061,16 +1061,14 @@ def share_button(activity, **kwargs):
     palette = RadioPalette()
 
     private = RadioToolButton(
-            icon_name='zoom-home',
-            tooltip=_('Private'))
-    palette.append(private)
+            icon_name='zoom-home')
+    palette.append(private, _('Private'))
 
     neighborhood = RadioToolButton(
             icon_name='zoom-neighborhood',
-            group=private,
-            tooltip=_('My Neighborhood'))
+            group=private)
     neighborhood.connect('clicked', neighborhood_cb)
-    palette.append(neighborhood)
+    palette.append(neighborhood, _('My Neighborhood'))
 
     def update_share():
         neighborhood.handler_block_by_func(neighborhood_cb)

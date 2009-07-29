@@ -30,21 +30,21 @@ group = RadioToolButton(
         icon_name='document-open',
         tooltip='menu.document-open')
 group.connect('clicked', lambda button: echo(button))
-palette.append(group)
+palette.append(group, 'menu.document-open')
 
 button = RadioToolButton(
         icon_name='document-save',
         group=group,
         tooltip='menu.document-save')
 button.connect('clicked', lambda button: echo(button))
-palette.append(button)
+palette.append(button, 'menu.document-save')
 
 button = RadioToolButton(
         icon_name='document-send',
         group=group,
         tooltip='menu.document-send')
 button.connect('clicked', lambda button: echo(button))
-palette.append(button)
+palette.append(button, 'menu.document-send')
 
 button = RadioMenuButton(palette=palette)
 toolbar.insert(button, -1)
@@ -57,21 +57,21 @@ group = RadioToolButton(
         icon_name='document-open',
         tooltip='menu.document-open')
 group.connect('clicked', lambda button: echo(button))
-palette.append(group)
+palette.append(group, 'menu.document-open')
 
 button = RadioToolButton(
         icon_name='document-save',
         group=group,
         tooltip='menu.document-save')
 button.connect('clicked', lambda button: echo(button))
-palette.append(button)
+palette.append(button, 'menu.document-save')
 
 button = RadioToolButton(
         icon_name='document-send',
         group=group,
         tooltip='menu.document-send')
 button.connect('clicked', lambda button: echo(button))
-palette.append(button)
+palette.append(button, 'menu.document-send')
 
 button = RadioToolsButton(palette=palette)
 toolbar.insert(button, -1)
