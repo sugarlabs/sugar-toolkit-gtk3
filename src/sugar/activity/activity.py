@@ -100,12 +100,6 @@ class ActivityToolbar(gtk.Toolbar):
         gtk.Toolbar.__init__(self)
 
         self._activity = activity
-        self._updating_share = False
-
-        activity.connect('shared', self.__activity_shared_cb)
-        activity.connect('joined', self.__activity_shared_cb)
-        activity.connect('notify::max_participants',
-                         self.__max_participants_changed_cb)
 
         if activity.metadata:
             self.title = gtk.Entry()
@@ -122,15 +116,8 @@ class ActivityToolbar(gtk.Toolbar):
         self.insert(separator, -1)
         separator.show()
 
-        self.share = ToolComboBox(label_text=_('Share with:'))
-        self.share.combo.connect('changed', self.__share_changed_cb)
-        self.share.combo.append_item(SCOPE_PRIVATE, _('Private'), 'zoom-home')
-        self.share.combo.append_item(SCOPE_NEIGHBORHOOD, _('My Neighborhood'),
-                                     'zoom-neighborhood')
+        self.share = share_button(activity)
         self.insert(self.share, -1)
-        self.share.show()
-
-        self._update_share()
 
         self.keep = keep_button(activity)
         self.insert(self.keep, -1)
@@ -140,31 +127,6 @@ class ActivityToolbar(gtk.Toolbar):
             self.insert(self.stop, -1)
 
         self._update_title_sid = None
-
-    def _update_share(self):
-        self._updating_share = True
-
-        if self._activity.props.max_participants == 1:
-            self.share.hide()
-
-        if self._activity.get_shared():
-            self.share.set_sensitive(False)
-            self.share.combo.set_active(1)
-        else:
-            self.share.set_sensitive(True)
-            self.share.combo.set_active(0)
-
-        self._updating_share = False
-    
-    def __share_changed_cb(self, combo):
-        if self._updating_share:
-            return
-
-        model = self.share.combo.get_model()
-        it = self.share.combo.get_active_iter()
-        (scope, ) = model.get(it, 0)
-        if scope == SCOPE_NEIGHBORHOOD:
-            self._activity.share()
 
     def __jobject_updated_cb(self, jobject):
         self.title.set_text(jobject['title'])
@@ -198,15 +160,9 @@ class ActivityToolbar(gtk.Toolbar):
         self.insert(tool_item, -1)
         tool_item.show()
 
-    def __activity_shared_cb(self, activity):
-        self._update_share()
-
-    def __max_participants_changed_cb(self, activity, pspec):
-        self._update_share()
-
 class EditToolbar(gtk.Toolbar):
     """Provides the standard edit toolbar for Activities.
- 
+
     Members:
         undo  -- the undo button
         redo  -- the redo button
