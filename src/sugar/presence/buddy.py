@@ -58,7 +58,8 @@ class Buddy(gobject.GObject):
         'color'            : (str, None, None, None, gobject.PARAM_READABLE),
         'current-activity' : (object, None, None, gobject.PARAM_READABLE),
         'owner'            : (bool, None, None, False, gobject.PARAM_READABLE),
-        'ip4-address'      : (str, None, None, None, gobject.PARAM_READABLE)
+        'ip4-address'      : (str, None, None, None, gobject.PARAM_READABLE),
+        'tags'             : (str, None, None, None, gobject.PARAM_READABLE),
     }
 
     _PRESENCE_SERVICE = "org.laptop.Sugar.Presence"
@@ -124,6 +125,8 @@ class Buddy(gobject.GObject):
             return self._properties["nick"]
         elif pspec.name == "color":
             return self._properties["color"]
+        elif pspec.name == "tags":
+            return self._properties["tags"]
         elif pspec.name == "current-activity":
             if not self._properties.has_key("current-activity"):
                 return None
