@@ -2,6 +2,7 @@ import gtk
 
 from sugar.graphics.radiopalette import RadioPalette, RadioMenuButton, \
                                         RadioToolsButton
+from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics import style
 
@@ -16,39 +17,61 @@ box.pack_start(toolbar, False)
 text_view = gtk.TextView()
 box.pack_start(text_view)
 
-def echo(text):
-    text_view.props.buffer.props.text += "\n" +  text
+def echo(button):
+    if not button.props.active:
+        return
+    text_view.props.buffer.props.text += "\n" + button.props.tooltip
+
+# RadioMenuButton
 
 palette = RadioPalette()
-palette.append(
+
+group = RadioToolButton(
         icon_name='document-open',
-        tooltip='menu.document-open',
-        toggled_cb=lambda: echo('menu.document-open'))
-palette.append(
+        tooltip='menu.document-open')
+group.connect('clicked', lambda button: echo(button))
+palette.append(group)
+
+button = RadioToolButton(
         icon_name='document-save',
-        tooltip='menu.document-save',
-        toggled_cb=lambda: echo('menu.document-save'))
-palette.append(
+        group=group,
+        tooltip='menu.document-save')
+button.connect('clicked', lambda button: echo(button))
+palette.append(button)
+
+button = RadioToolButton(
         icon_name='document-send',
-        tooltip='menu.document-send',
-        toggled_cb=lambda: echo('menu.document-send'))
+        group=group,
+        tooltip='menu.document-send')
+button.connect('clicked', lambda button: echo(button))
+palette.append(button)
 
 button = RadioMenuButton(palette=palette)
 toolbar.insert(button, -1)
 
+# RadioToolsButton
+
 palette = RadioPalette()
-palette.append(
+
+group = RadioToolButton(
         icon_name='document-open',
-        tooltip='tools.document-open',
-        toggled_cb=lambda: echo('tools.document-open'))
-palette.append(
+        tooltip='menu.document-open')
+group.connect('clicked', lambda button: echo(button))
+palette.append(group)
+
+button = RadioToolButton(
         icon_name='document-save',
-        tooltip='tools.document-save',
-        toggled_cb=lambda: echo('tools.document-save'))
-palette.append(
+        group=group,
+        tooltip='menu.document-save')
+button.connect('clicked', lambda button: echo(button))
+palette.append(button)
+
+button = RadioToolButton(
         icon_name='document-send',
-        tooltip='tools.document-send',
-        toggled_cb=lambda: echo('tools.document-send'))
+        group=group,
+        tooltip='menu.document-send')
+button.connect('clicked', lambda button: echo(button))
+palette.append(button)
 
 button = RadioToolsButton(palette=palette)
 toolbar.insert(button, -1)

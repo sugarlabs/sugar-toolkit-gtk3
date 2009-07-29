@@ -18,21 +18,16 @@
 import gtk
 import gobject
 import logging
-from gobject import SIGNAL_RUN_FIRST, TYPE_NONE
+from gobject import SIGNAL_RUN_FIRST, TYPE_NONE, TYPE_PYOBJECT
 
 from sugar.graphics import style
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.palette import Palette
-from sugar.graphics.radiotoolbutton import RadioToolButton
-
-ARROW_SIZE = hasattr(style, 'TOOLBAR_ARROW_SIZE') and style.TOOLBAR_ARROW_SIZE \
-        or 8
 
 class RadioPaletteButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, **kwargs)
-
-        self._button_cb = None
+        self.selected_button = None
 
         if self.props.palette:
             self.__palette_cb(None, None)
@@ -43,10 +38,6 @@ class RadioPaletteButton(ToolButton):
         if not isinstance(self.props.palette, RadioPalette):
             return
         self.props.palette.update_button()
-
-    def _set_current_button(self, button):
-        self.set_icon(button.rp_icon_name)
-        self._button_cb = button.rp_toggled_cb
 
 class RadioMenuButton(RadioPaletteButton):
     def __init__(self, **kwargs):
@@ -75,18 +66,19 @@ class RadioMenuButton(RadioPaletteButton):
         self.get_style().paint_arrow(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 None, type,  True,
-                a.x + a.width/2 - ARROW_SIZE/2,
-                a.y + a.height - ARROW_SIZE - style._FOCUS_LINE_WIDTH,
-                ARROW_SIZE, ARROW_SIZE)
+                a.x + a.width/2 - style.TOOLBAR_ARROW_SIZE/2,
+                a.y + a.height - style.TOOLBAR_ARROW_SIZE - \
+                        style._FOCUS_LINE_WIDTH,
+                style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)
 
 class RadioToolsButton(RadioPaletteButton):
     def __init__(self, **kwargs):
         RadioPaletteButton.__init__(self, **kwargs)
 
     def do_clicked(self):
-        if not self._button_cb:
+        if not self.selected_button:
             return
-        self._button_cb()
+        self.selected_button.emit('clicked')
 
 class RadioPalette(Palette):
     def __init__(self, **kwargs):
@@ -96,39 +88,31 @@ class RadioPalette(Palette):
         self.top.show()
         self.set_content(self.top)
 
-    def append(self, icon_name, tooltip=None, toggled_cb=None):
+    def append(self, button):
         children = self.top.get_children()
-        button = RadioToolButton(icon_name=icon_name,
-                group=children and children[0] or None)
+
         button.show()
-        button.connect('toggled', self.__toggled_cb)
+        button.connect('clicked', self.__clicked_cb)
         self.top.pack_start(button, fill=False)
 
-        button.rp_icon_name = icon_name
-        button.rp_tooltip = tooltip
-        button.rp_toggled_cb = toggled_cb
-
         if not children:
-            self.__toggled_cb(button, True)
-
-        return button
+            self.__clicked_cb(button, True)
 
     def update_button(self):
         for i in self.top.get_children():
-            self.__toggled_cb(i, True)
+            self.__clicked_cb(i, True)
 
-    def __toggled_cb(self, button, quiet=False):
+    def __clicked_cb(self, button, quiet=False):
         if not button.get_active():
             return
 
-        self.set_primary_text(button.rp_tooltip)
+        self.set_primary_text(button.props.tooltip)
         if not quiet:
-            if button.rp_toggled_cb:
-                button.rp_toggled_cb()
             self.popdown(immediate=True)
 
-        if not self.invoker or \
-                not isinstance(self.invoker.parent, RadioPaletteButton):
+        parent = self.invoker and self.invoker.parent
+        if not isinstance(parent, RadioPaletteButton):
             return
 
-        self.invoker.parent._set_current_button(button)
+        parent.set_icon(button.props.icon_name)
+        parent.selected_button = button

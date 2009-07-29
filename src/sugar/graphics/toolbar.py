@@ -27,9 +27,6 @@ from sugar.graphics.palette import MouseSpeedDetector, Invoker
 from sugar.graphics import animator
 from sugar.graphics import palettegroup
 
-ARROW_SIZE = hasattr(style, 'TOOLBAR_ARROW_SIZE') and style.TOOLBAR_ARROW_SIZE \
-        or 8
-
 class ToolbarButton(ToolButton):
     def __init__(self, **kwargs):
         self._page = None
@@ -401,6 +398,6 @@ def _paint_arrow(widget, event, type):
     widget.get_style().paint_arrow(event.window,
             gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, widget,
             None, type,  True,
-            a.x + a.width/2 - ARROW_SIZE/2,
-            a.y + a.height - ARROW_SIZE - style._FOCUS_LINE_WIDTH,
-            ARROW_SIZE, ARROW_SIZE)
+            a.x + a.width/2 - style.TOOLBAR_ARROW_SIZE/2,
+            a.y + a.height - style.TOOLBAR_ARROW_SIZE - style._FOCUS_LINE_WIDTH,
+            style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)

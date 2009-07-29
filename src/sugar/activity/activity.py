@@ -75,6 +75,7 @@ from sugar.graphics.icon import Icon
 from sugar.graphics.xocolor import XoColor
 from sugar.graphics.toolbar import Toolbar, ToolbarButton
 from sugar.graphics.radiopalette import RadioPalette, RadioMenuButton
+from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.datastore import datastore
 from sugar.session import XSMPClient
 from sugar import wm
@@ -1054,35 +1055,36 @@ def paste_button(**kwargs):
     return paste
 
 def share_button(activity, **kwargs):
-    quiet_trigger = []
-
-    def neighborhood_cb():
-        if quiet_trigger:
-            return
+    def neighborhood_cb(button):
         activity.share()
 
     palette = RadioPalette()
-    private = palette.append(
+
+    private = RadioToolButton(
             icon_name='zoom-home',
             tooltip=_('Private'))
-    neighborhood = palette.append(
+    palette.append(private)
+
+    neighborhood = RadioToolButton(
             icon_name='zoom-neighborhood',
-            tooltip=_('My Neighborhood'),
-            toggled_cb=neighborhood_cb)
+            group=private,
+            tooltip=_('My Neighborhood'))
+    neighborhood.connect('clicked', neighborhood_cb)
+    palette.append(neighborhood)
 
     def update_share():
-        quiet_trigger.append(True)
-
-        if activity.get_shared():
-            private.props.sensitive = False
-            neighborhood.props.sensitive = False
-            neighborhood.props.active = True
-        else:
-            private.props.sensitive = True
-            neighborhood.props.sensitive = True
-            private.props.active = True
-
-        quiet_trigger.pop()
+        neighborhood.handler_block_by_func(neighborhood_cb)
+        try:
+            if activity.get_shared():
+                private.props.sensitive = False
+                neighborhood.props.sensitive = False
+                neighborhood.props.active = True
+            else:
+                private.props.sensitive = True
+                neighborhood.props.sensitive = True
+                private.props.active = True
+        finally:
+            neighborhood.handler_unblock_by_func(neighborhood_cb)
 
     activity.connect('shared', lambda activity: update_share())
     activity.connect('joined', lambda activity: update_share())
