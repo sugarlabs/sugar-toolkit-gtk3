@@ -96,7 +96,7 @@ class ActivityToolbar(gtk.Toolbar):
     All activities should have this toolbar. It is easiest to add it to your
     Activity by using the ActivityToolbox.
     """
-    def __init__(self, activity, hide_stop=False):
+    def __init__(self, activity):
         gtk.Toolbar.__init__(self)
 
         self._activity = activity
@@ -122,9 +122,8 @@ class ActivityToolbar(gtk.Toolbar):
         self.keep = keep_button(activity)
         self.insert(self.keep, -1)
 
-        if not hide_stop:
-            self.stop = stop_button(activity)
-            self.insert(self.stop, -1)
+        self.stop = stop_button(activity)
+        self.insert(self.stop, -1)
 
         self._update_title_sid = None
 
@@ -997,8 +996,9 @@ def show_object_in_journal(object_id):
 def toolbar(activity):
     from jarabe.journal.misc import get_icon_name
 
-    activity_button = ToolbarButton(
-            page=ActivityToolbar(activity, hide_stop=True))
+    toolbar = ActivityToolbar(activity)
+    toolbar.stop.hide()
+    activity_button = ToolbarButton(page=toolbar)
     activity_button.show()
 
     client = gconf.client_get_default()
