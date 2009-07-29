@@ -111,10 +111,6 @@ class ToolbarButton(ToolButton):
         _paint_arrow(self, event, gtk.ARROW_DOWN)
 
 class Toolbar(gtk.VBox):
-    __gsignals__ = {
-        'current-toolbar-changed': (SIGNAL_RUN_FIRST, TYPE_NONE, ([int]))
-        }
-
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
 
@@ -132,9 +128,6 @@ class Toolbar(gtk.VBox):
         self.__notebook.set_show_border(False)
         self.__notebook.set_show_tabs(False)
         self.__notebook.show()
-
-        self.__notebook.connect('notify::page', lambda notebook, pspec:
-                self.emit('current-toolbar-changed', notebook.props.page))
 
         self.__top.connect('remove', self.__remove_cb)
 
