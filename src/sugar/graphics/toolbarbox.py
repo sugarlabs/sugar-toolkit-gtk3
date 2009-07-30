@@ -113,10 +113,10 @@ class ToolbarBox(gtk.VBox):
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
 
-        self.__bar = gtk.Toolbar()
-        self.__bar.owner = self
+        self.__toolbar = gtk.Toolbar()
+        self.__toolbar.owner = self
 
-        top_widget = _align(gtk.EventBox, self.__bar)
+        top_widget = _align(gtk.EventBox, self.__toolbar)
         self.pack_start(top_widget)
 
         self.props.padding = padding
@@ -128,23 +128,23 @@ class ToolbarBox(gtk.VBox):
         self.__notebook.set_show_tabs(False)
         self.__notebook.show()
 
-        self.__bar.connect('remove', self.__remove_cb)
+        self.__toolbar.connect('remove', self.__remove_cb)
 
-    bar = property(lambda self: self.__bar)
+    toolbar = property(lambda self: self.__toolbar)
 
     def get_padding(self):
-        return self.bar.parent.props.left_padding
+        return self.toolbar.parent.props.left_padding
 
     def set_padding(self, pad):
-        self.bar.parent.set_padding(0, 0, pad, pad)
+        self.toolbar.parent.set_padding(0, 0, pad, pad)
 
     padding = gobject.property(type=object,
             getter=get_padding, setter=set_padding)
 
     def get_subs(self):
         out = []
-        for i in range(self.bar.get_n_items()):
-            page = self.bar.get_nth_item(i)
+        for i in range(self.toolbar.get_n_items()):
+            page = self.toolbar.get_nth_item(i)
             if isinstance(page, ToolbarButton):
                 out.append(page)
         return out
@@ -154,8 +154,8 @@ class ToolbarBox(gtk.VBox):
     def modify_bg(self, state, color):
         if state == gtk.STATE_NORMAL:
             self._bg = color
-        self.bar.parent.parent.modify_bg(state, color)
-        self.bar.modify_bg(state, color)
+        self.toolbar.parent.parent.modify_bg(state, color)
+        self.toolbar.modify_bg(state, color)
 
     def __remove_cb(self, sender, widget):
         if not isinstance(widget, ToolbarButton):
@@ -304,7 +304,8 @@ class _Palette(gtk.Window):
             self.add(page)
 
         x, y = toolbar.window.get_origin()
-        self.move(x + toolbar.allocation.x, y + toolbar.bar.allocation.height)
+        self.move(x + toolbar.allocation.x,
+                y + toolbar.toolbar.allocation.height)
         self.set_transient_for(self._invoker.get_toplevel())
 
         if not immediate:
