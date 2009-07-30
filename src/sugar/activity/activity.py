@@ -1055,9 +1055,6 @@ def paste_button(**kwargs):
     return paste
 
 def share_button(activity, **kwargs):
-    def neighborhood_cb(button):
-        activity.share()
-
     palette = RadioPalette()
 
     private = RadioToolButton(
@@ -1067,11 +1064,12 @@ def share_button(activity, **kwargs):
     neighborhood = RadioToolButton(
             icon_name='zoom-neighborhood',
             group=private)
-    neighborhood.connect('clicked', neighborhood_cb)
+    neighborhood_handle = neighborhood.connect('clicked',
+            lambda button: activity.share())
     palette.append(neighborhood, _('My Neighborhood'))
 
     def update_share():
-        neighborhood.handler_block_by_func(neighborhood_cb)
+        neighborhood.handler_block(neighborhood_handle)
         try:
             if activity.get_shared():
                 private.props.sensitive = False
@@ -1082,7 +1080,7 @@ def share_button(activity, **kwargs):
                 neighborhood.props.sensitive = True
                 private.props.active = True
         finally:
-            neighborhood.handler_unblock_by_func(neighborhood_cb)
+            neighborhood.handler_unblock(neighborhood_handle)
 
     activity.connect('shared', lambda activity: update_share())
     activity.connect('joined', lambda activity: update_share())
