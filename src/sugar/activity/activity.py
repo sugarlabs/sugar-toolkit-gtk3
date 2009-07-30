@@ -76,6 +76,7 @@ from sugar.graphics.xocolor import XoColor
 from sugar.graphics.toolbar import Toolbar, ToolbarButton
 from sugar.graphics.radiopalette import RadioPalette, RadioMenuButton
 from sugar.graphics.radiotoolbutton import RadioToolButton
+from sugar.bundle.activitybundle import ActivityBundle
 from sugar.datastore import datastore
 from sugar.session import XSMPClient
 from sugar import wm
@@ -1035,27 +1036,18 @@ class Activity(Window, gtk.Container):
 
 class ActivityToolbarButton(ToolbarButton):
     def __init__(self, activity, **kwargs):
-        from jarabe.journal.misc import get_icon_name
-
         toolbar = ActivityToolbar(activity)
         toolbar.stop.hide()
 
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
-
         self.activity = activity
 
+        bundle = ActivityBundle(get_bundle_path())
         client = gconf.client_get_default()
         color = XoColor(client.get_string('/desktop/sugar/user/color'))
-        icon = Icon(file=get_icon_name(activity.metadata), xo_color=color)
+        icon = Icon(file=bundle.get_icon(), xo_color=color)
         icon.show()
         self.set_icon_widget(icon)
-
-    def expander(self):
-        separator = gtk.SeparatorToolItem()
-        separator.props.draw = False
-        separator.set_expand(True)
-        separator.show()
-        return separator
 
     def stop_button(self, **kwargs):
         stop = ToolButton('activity-stop', tooltip=_('Stop'), **kwargs)
@@ -1078,12 +1070,6 @@ class ActivityToolbarButton(ToolbarButton):
         redo.set_tooltip(_('Redo'))
         redo.show()
         return redo
-
-    def separator(self, **kwargs):
-        separator = gtk.SeparatorToolItem(**kwargs)
-        separator.set_draw(True)
-        separator.show()
-        return separator
 
     def copy_button(self, **kwargs):
         copy = ToolButton('edit-copy', **kwargs)
