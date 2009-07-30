@@ -1,7 +1,7 @@
 import gtk
 
 from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toolbar import Toolbar, ToolbarButton
+from sugar.graphics.toolbarbox import ToolbarBox, ToolbarButton
 from sugar.graphics import style
 
 window = gtk.Window()
@@ -9,7 +9,7 @@ window = gtk.Window()
 box = gtk.VBox()
 window.add(box)
 
-toolbar = Toolbar()
+toolbar = ToolbarBox()
 box.pack_start(toolbar, False)
 
 tollbarbutton_1 = ToolbarButton(

@@ -806,6 +806,10 @@ class Activity(Window, gtk.Container):
     def get_document_path(self, async_cb, async_err_cb):
         async_err_cb(NotImplementedError())
 
+    def set_toolbar_box(self, toolbar_box):
+        # make more consistent using ToolbarBox instead of Toolbox
+        self.set_toolbox(toolbar_box)
+
     # DEPRECATED
     _shared_activity = property(lambda self: self.shared_activity, None)
 

@@ -22,7 +22,7 @@ import gettext
 import gconf
 
 from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toolbar import Toolbar, ToolbarButton
+from sugar.graphics.toolbarbox import ToolbarButton
 from sugar.graphics.radiopalette import RadioPalette, RadioMenuButton
 from sugar.graphics.radiotoolbutton import RadioToolButton
 from sugar.graphics.toolbox import Toolbox

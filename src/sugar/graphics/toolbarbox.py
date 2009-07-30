@@ -109,7 +109,7 @@ class ToolbarButton(ToolButton):
         gtk.ToolButton.do_expose_event(self, event)
         _paint_arrow(self, event, gtk.ARROW_UP)
 
-class Toolbar(gtk.VBox):
+class ToolbarBox(gtk.VBox):
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
 
