@@ -20,7 +20,7 @@ sugar_PYTHON =              \
 	roundbox.py             \
 	style.py                \
 	toggletoolbutton.py     \
-	toolbar.py              \
+	toolbarbox.py           \
 	toolbox.py              \
 	toolbutton.py           \
 	toolcombobox.py         \
