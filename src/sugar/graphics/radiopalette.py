@@ -33,14 +33,17 @@ class RadioMenuButton(ToolButton):
             self.__palette_cb(None, None)
 
         self.connect('notify::palette', self.__palette_cb)
+        self.connect('clicked', self.__clicked_cb)
+
+    def __clicked_cb(self, button):
+        self._clicked()
 
     def __palette_cb(self, widget, pspec):
         if not isinstance(self.props.palette, RadioPalette):
             return
         self.props.palette.update_button()
 
-    # We use do_clicked to have a chance to override it in RadioToolsButton
-    def do_clicked(self):
+    def _clicked(self):
         if not self.palette:
             return
         if self.palette.is_up() and \
@@ -71,7 +74,7 @@ class RadioToolsButton(RadioMenuButton):
     def __init__(self, **kwargs):
         RadioMenuButton.__init__(self, **kwargs)
 
-    def do_clicked(self):
+    def _clicked(self):
         if not self.selected_button:
             return
         self.selected_button.emit('clicked')
