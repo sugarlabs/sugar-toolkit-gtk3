@@ -141,16 +141,6 @@ class ToolbarBox(gtk.VBox):
     padding = gobject.property(type=object,
             getter=get_padding, setter=set_padding)
 
-    def get_subs(self):
-        out = []
-        for i in range(self.toolbar.get_n_items()):
-            page = self.toolbar.get_nth_item(i)
-            if isinstance(page, ToolbarButton):
-                out.append(page)
-        return out
-
-    subs = property(get_subs)
-
     def modify_bg(self, state, color):
         if state == gtk.STATE_NORMAL:
             self._bg = color
