@@ -88,9 +88,9 @@ class ToolbarButton(ToolButton):
         if not self.expanded or self.palette and self.palette.is_up():
             ToolButton.do_expose_event(self, event)
             if self.palette and self.palette.is_up():
-                _paint_arrow(self, event, gtk.ARROW_DOWN)
-            else:
                 _paint_arrow(self, event, gtk.ARROW_UP)
+            else:
+                _paint_arrow(self, event, gtk.ARROW_DOWN)
             return
 
         alloc = self.allocation
@@ -107,7 +107,7 @@ class ToolbarButton(ToolButton):
                     alloc.width - style._FOCUS_LINE_WIDTH*2, alloc.height)
 
         gtk.ToolButton.do_expose_event(self, event)
-        _paint_arrow(self, event, gtk.ARROW_DOWN)
+        _paint_arrow(self, event, gtk.ARROW_UP)
 
 class Toolbar(gtk.VBox):
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
@@ -394,10 +394,11 @@ def _align(box_class, widget):
     return box
 
 def _paint_arrow(widget, event, type):
-    a = widget.allocation
+    alloc = widget.allocation
+    x = alloc.x + alloc.width / 2 - style.TOOLBAR_ARROW_SIZE / 2
+    y = alloc.y + alloc.height - int(style.TOOLBAR_ARROW_SIZE * .85)
+
     widget.get_style().paint_arrow(event.window,
-            gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, widget,
+            gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, widget,
             None, type,  True,
-            a.x + a.width/2 - style.TOOLBAR_ARROW_SIZE/2,
-            a.y + a.height - style.TOOLBAR_ARROW_SIZE - style._FOCUS_LINE_WIDTH,
-            style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)
+            x, y, style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)

@@ -24,7 +24,7 @@ from sugar.graphics import style
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.palette import Palette
 
-class RadioPaletteButton(ToolButton):
+class RadioMenuButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, **kwargs)
         self.selected_button = None
@@ -39,10 +39,7 @@ class RadioPaletteButton(ToolButton):
             return
         self.props.palette.update_button()
 
-class RadioMenuButton(RadioPaletteButton):
-    def __init__(self, **kwargs):
-        RadioPaletteButton.__init__(self, **kwargs)
-
+    # We use do_clicked to have a chance to override it in RadioToolsButton
     def do_clicked(self):
         if not self.palette:
             return
@@ -58,22 +55,21 @@ class RadioMenuButton(RadioPaletteButton):
             return
 
         if self.palette.is_up():
-            type = gtk.ARROW_DOWN
-        else:
             type = gtk.ARROW_UP
+        else:
+            type = gtk.ARROW_DOWN
 
-        a = self.allocation
+        alloc = self.allocation
+        x = alloc.x + alloc.width / 2 - style.TOOLBAR_ARROW_SIZE / 2
+        y = alloc.y + alloc.height - int(style.TOOLBAR_ARROW_SIZE * .85)
         self.get_style().paint_arrow(event.window,
-                gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
+                gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self,
                 None, type,  True,
-                a.x + a.width/2 - style.TOOLBAR_ARROW_SIZE/2,
-                a.y + a.height - style.TOOLBAR_ARROW_SIZE - \
-                        style._FOCUS_LINE_WIDTH,
-                style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)
+                x, y, style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)
 
-class RadioToolsButton(RadioPaletteButton):
+class RadioToolsButton(RadioMenuButton):
     def __init__(self, **kwargs):
-        RadioPaletteButton.__init__(self, **kwargs)
+        RadioMenuButton.__init__(self, **kwargs)
 
     def do_clicked(self):
         if not self.selected_button:
@@ -84,26 +80,26 @@ class RadioPalette(Palette):
     def __init__(self, **kwargs):
         Palette.__init__(self, **kwargs)
 
-        self.top = gtk.HBox()
-        self.top.show()
-        self.set_content(self.top)
+        self.button_box = gtk.HBox()
+        self.button_box.show()
+        self.set_content(self.button_box)
 
     def append(self, button, label):
-        children = self.top.get_children()
+        children = self.button_box.get_children()
 
-        # palette's button should not have sub-palettes
-        button.palette = None
+        if button.palette is not None:
+            raise RuntimeError("Palette's button should not have sub-palettes")
 
         button.show()
         button.connect('clicked', self.__clicked_cb)
-        self.top.pack_start(button, fill=False)
+        self.button_box.pack_start(button, fill=False)
         button.__palette_label = label
 
         if not children:
             self.__clicked_cb(button, True)
 
     def update_button(self):
-        for i in self.top.get_children():
+        for i in self.button_box.get_children():
             self.__clicked_cb(i, True)
 
     def __clicked_cb(self, button, quiet=False):
@@ -114,8 +110,11 @@ class RadioPalette(Palette):
         if not quiet:
             self.popdown(immediate=True)
 
-        parent = self.invoker and self.invoker.parent
-        if not isinstance(parent, RadioPaletteButton):
+        if self.invoker is not None:
+            parent = self.invoker.parent
+        else:
+            parent = None
+        if not isinstance(parent, RadioMenuButton):
             return
 
         parent.set_icon(button.props.icon_name)

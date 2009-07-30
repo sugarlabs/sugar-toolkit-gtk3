@@ -61,7 +61,7 @@ import dbus
 import dbus.service
 import cjson
 
-from sugar import util
+from sugar import util        
 from sugar.presence import presenceservice
 from sugar.activity.activityservice import ActivityService
 from sugar.activity.namingalert import NamingAlert
@@ -101,6 +101,12 @@ class ActivityToolbar(gtk.Toolbar):
         gtk.Toolbar.__init__(self)
 
         self._activity = activity
+        self._updating_share = False
+
+        activity.connect('shared', self.__activity_shared_cb)
+        activity.connect('joined', self.__activity_shared_cb)
+        activity.connect('notify::max_participants',
+                         self.__max_participants_changed_cb)
 
         if activity.metadata:
             self.title = gtk.Entry()
@@ -117,16 +123,65 @@ class ActivityToolbar(gtk.Toolbar):
         self.insert(separator, -1)
         separator.show()
 
-        self.share = share_button(activity)
+        self.share = ToolComboBox(label_text=_('Share with:'))
+        self.share.combo.connect('changed', self.__share_changed_cb)
+        self.share.combo.append_item(SCOPE_PRIVATE, _('Private'), 'zoom-home')
+        self.share.combo.append_item(SCOPE_NEIGHBORHOOD, _('My Neighborhood'),
+                                     'zoom-neighborhood')
         self.insert(self.share, -1)
+        self.share.show()
 
-        self.keep = keep_button(activity)
+        self._update_share()
+
+        self.keep = ToolButton(tooltip=_('Keep'))
+        client = gconf.client_get_default()
+        color = XoColor(client.get_string('/desktop/sugar/user/color'))
+        keep_icon = Icon(icon_name='document-save', xo_color=color)
+        self.keep.set_icon_widget(keep_icon)
+        keep_icon.show()
+        self.keep.props.accelerator = '<Ctrl>S'
+        self.keep.connect('clicked', self.__keep_clicked_cb)
         self.insert(self.keep, -1)
+        self.keep.show()
 
-        self.stop = stop_button(activity)
+        self.stop = ToolButton('activity-stop', tooltip=_('Stop'))
+        self.stop.props.accelerator = '<Ctrl>Q'
+        self.stop.connect('clicked', self.__stop_clicked_cb)
         self.insert(self.stop, -1)
+        self.stop.show()
 
         self._update_title_sid = None
+
+    def _update_share(self):
+        self._updating_share = True
+
+        if self._activity.props.max_participants == 1:
+            self.share.hide()
+
+        if self._activity.get_shared():
+            self.share.set_sensitive(False)
+            self.share.combo.set_active(1)
+        else:
+            self.share.set_sensitive(True)
+            self.share.combo.set_active(0)
+
+        self._updating_share = False
+    
+    def __share_changed_cb(self, combo):
+        if self._updating_share:
+            return
+
+        model = self.share.combo.get_model()
+        it = self.share.combo.get_active_iter()
+        (scope, ) = model.get(it, 0)
+        if scope == SCOPE_NEIGHBORHOOD:
+            self._activity.share()
+
+    def __keep_clicked_cb(self, button):
+        self._activity.copy()
+
+    def __stop_clicked_cb(self, button):
+        self._activity.close()
 
     def __jobject_updated_cb(self, jobject):
         self.title.set_text(jobject['title'])
@@ -160,9 +215,15 @@ class ActivityToolbar(gtk.Toolbar):
         self.insert(tool_item, -1)
         tool_item.show()
 
+    def __activity_shared_cb(self, activity):
+        self._update_share()
+
+    def __max_participants_changed_cb(self, activity, pspec):
+        self._update_share()
+
 class EditToolbar(gtk.Toolbar):
     """Provides the standard edit toolbar for Activities.
-
+ 
     Members:
         undo  -- the undo button
         redo  -- the redo button
@@ -196,20 +257,30 @@ class EditToolbar(gtk.Toolbar):
     def __init__(self):
         gtk.Toolbar.__init__(self)
 
-        self.undo = undo_button()
+        self.undo = ToolButton('edit-undo')
+        self.undo.set_tooltip(_('Undo'))
         self.insert(self.undo, -1)
+        self.undo.show()
 
-        self.redo = redo_button()
+        self.redo = ToolButton('edit-redo')
+        self.redo.set_tooltip(_('Redo'))
         self.insert(self.redo, -1)
+        self.redo.show()
 
-        self.separator = separator()
+        self.separator = gtk.SeparatorToolItem()
+        self.separator.set_draw(True)
         self.insert(self.separator, -1)
+        self.separator.show()
 
-        self.copy = copy_button()
+        self.copy = ToolButton('edit-copy')
+        self.copy.set_tooltip(_('Copy'))
         self.insert(self.copy, -1)
+        self.copy.show()
 
-        self.paste = paste_button()
+        self.paste = ToolButton('edit-paste')
+        self.paste.set_tooltip(_('Paste'))
         self.insert(self.paste, -1)
+        self.paste.show()
 
 class ActivityToolbox(Toolbox):
     """Creates the Toolbox for the Activity
@@ -962,6 +1033,126 @@ class Activity(Window, gtk.Container):
     # DEPRECATED
     _shared_activity = property(lambda self: self.shared_activity, None)
 
+class ActivityToolbarButton(ToolbarButton):
+    def __init__(self, activity, **kwargs):
+        from jarabe.journal.misc import get_icon_name
+
+        toolbar = ActivityToolbar(activity)
+        toolbar.stop.hide()
+
+        ToolbarButton.__init__(self, page=toolbar, **kwargs)
+
+        self.activity = activity
+
+        client = gconf.client_get_default()
+        color = XoColor(client.get_string('/desktop/sugar/user/color'))
+        icon = Icon(file=get_icon_name(activity.metadata), xo_color=color)
+        icon.show()
+        self.set_icon_widget(icon)
+
+    def expander(self):
+        separator = gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        separator.show()
+        return separator
+
+    def stop_button(self, **kwargs):
+        stop = ToolButton('activity-stop', tooltip=_('Stop'), **kwargs)
+        stop.props.accelerator = '<Ctrl>Q'
+        stop.connect('clicked', self.__stop_button_clicked_cb)
+        stop.show()
+        return stop
+
+    def __stop_button_clicked_cb(self, button):
+        self.activity.close()
+
+    def undo_button(self, **kwargs):
+        undo = ToolButton('edit-undo', **kwargs)
+        undo.set_tooltip(_('Undo'))
+        undo.show()
+        return undo
+
+    def redo_button(self, **kwargs):
+        redo = ToolButton('edit-redo', **kwargs)
+        redo.set_tooltip(_('Redo'))
+        redo.show()
+        return redo
+
+    def separator(self, **kwargs):
+        separator = gtk.SeparatorToolItem(**kwargs)
+        separator.set_draw(True)
+        separator.show()
+        return separator
+
+    def copy_button(self, **kwargs):
+        copy = ToolButton('edit-copy', **kwargs)
+        copy.set_tooltip(_('Copy'))
+        copy.show()
+        return copy
+
+    def paste_button(self, **kwargs):
+        paste = ToolButton('edit-paste', **kwargs)
+        paste.set_tooltip(_('Paste'))
+        paste.show()
+        return paste
+
+    def share_button(self):
+        palette = RadioPalette()
+
+        private = RadioToolButton(
+                icon_name='zoom-home')
+        palette.append(private, _('Private'))
+
+        neighborhood = RadioToolButton(
+                icon_name='zoom-neighborhood',
+                group=private)
+        neighborhood_handle = neighborhood.connect('clicked',
+                self.__neighborhood_clicked_cb)
+        palette.append(neighborhood, _('My Neighborhood'))
+
+        self.activity.connect('shared', self.__update_share)
+        self.activity.connect('joined', self.__update_share)
+
+        share = RadioMenuButton(palette=palette)
+        share.show()
+
+        return share
+
+    def __neighborhood_clicked_cb(self, button):
+        self.activity.share()
+
+    def __update_share(self, activity):
+        neighborhood.handler_block(neighborhood_handle)
+        try:
+            if self.activity.get_shared():
+                private.props.sensitive = False
+                neighborhood.props.sensitive = False
+                neighborhood.props.active = True
+            else:
+                private.props.sensitive = True
+                neighborhood.props.sensitive = True
+                private.props.active = True
+        finally:
+            neighborhood.handler_unblock(neighborhood_handle)
+
+    def keep_button(self, **kwargs):
+        client = gconf.client_get_default()
+        color = XoColor(client.get_string('/desktop/sugar/user/color'))
+        keep_icon = Icon(icon_name='document-save', xo_color=color)
+        keep_icon.show()
+
+        keep = ToolButton(tooltip=_('Keep'), **kwargs)
+        keep.set_icon_widget(keep_icon)
+        keep.props.accelerator = '<Ctrl>S'
+        keep.connect('clicked', self.__keep_button_clicked)
+        keep.show()
+
+        return keep
+
+    def __keep_button_clicked(self, button):
+        self.activity.copy()
+
 _session = None
 
 def _get_session():
@@ -975,7 +1166,7 @@ def _get_session():
 def get_bundle_name():
     """Return the bundle name for the current process' bundle"""
     return os.environ['SUGAR_BUNDLE_NAME']
-
+    
 def get_bundle_path():
     """Return the bundle path for the current process' bundle"""
     return os.environ['SUGAR_BUNDLE_PATH']
@@ -993,113 +1184,3 @@ def show_object_in_journal(object_id):
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
     journal.ShowObject(object_id)
-
-def toolbar(activity):
-    from jarabe.journal.misc import get_icon_name
-
-    toolbar = ActivityToolbar(activity)
-    toolbar.stop.hide()
-    activity_button = ToolbarButton(page=toolbar)
-    activity_button.show()
-
-    client = gconf.client_get_default()
-    color = XoColor(client.get_string('/desktop/sugar/user/color'))
-    icon = Icon(file=get_icon_name(activity.metadata), xo_color=color)
-    icon.show()
-    activity_button.set_icon_widget(icon)
-
-    return activity_button
-
-def expander():
-    separator = gtk.SeparatorToolItem()
-    separator.props.draw = False
-    separator.set_expand(True)
-    separator.show()
-    return separator
-
-def stop_button(activity, **kwargs):
-    stop = ToolButton('activity-stop', tooltip=_('Stop'), **kwargs)
-    stop.props.accelerator = '<Ctrl>Q'
-    stop.connect('clicked', lambda button: activity.close())
-    stop.show()
-    return stop
-
-def undo_button(**kwargs):
-    undo = ToolButton('edit-undo', **kwargs)
-    undo.set_tooltip(_('Undo'))
-    undo.show()
-    return undo
-
-def redo_button(**kwargs):
-    redo = ToolButton('edit-redo', **kwargs)
-    redo.set_tooltip(_('Redo'))
-    redo.show()
-    return redo
-
-def separator(**kwargs):
-    separator = gtk.SeparatorToolItem(**kwargs)
-    separator.set_draw(True)
-    separator.show()
-    return separator
-
-def copy_button(**kwargs):
-    copy = ToolButton('edit-copy', **kwargs)
-    copy.set_tooltip(_('Copy'))
-    copy.show()
-    return copy
-
-def paste_button(**kwargs):
-    paste = ToolButton('edit-paste', **kwargs)
-    paste.set_tooltip(_('Paste'))
-    paste.show()
-    return paste
-
-def share_button(activity, **kwargs):
-    palette = RadioPalette()
-
-    private = RadioToolButton(
-            icon_name='zoom-home')
-    palette.append(private, _('Private'))
-
-    neighborhood = RadioToolButton(
-            icon_name='zoom-neighborhood',
-            group=private)
-    neighborhood_handle = neighborhood.connect('clicked',
-            lambda button: activity.share())
-    palette.append(neighborhood, _('My Neighborhood'))
-
-    def update_share():
-        neighborhood.handler_block(neighborhood_handle)
-        try:
-            if activity.get_shared():
-                private.props.sensitive = False
-                neighborhood.props.sensitive = False
-                neighborhood.props.active = True
-            else:
-                private.props.sensitive = True
-                neighborhood.props.sensitive = True
-                private.props.active = True
-        finally:
-            neighborhood.handler_unblock(neighborhood_handle)
-
-    activity.connect('shared', lambda activity: update_share())
-    activity.connect('joined', lambda activity: update_share())
-
-    share = RadioMenuButton(palette=palette)
-    share.show()
-
-    return share
-
-def keep_button(activity, **kwargs):
-    client = gconf.client_get_default()
-    color = XoColor(client.get_string('/desktop/sugar/user/color'))
-    keep_icon = Icon(icon_name='document-save', xo_color=color)
-    keep_icon.show()
-
-    keep = ToolButton(tooltip=_('Keep'), **kwargs)
-    keep.set_icon_widget(keep_icon)
-    keep.props.accelerator = '<Ctrl>S'
-    keep.connect('clicked', lambda button: activity.copy())
-    keep.show()
-
-    return keep
