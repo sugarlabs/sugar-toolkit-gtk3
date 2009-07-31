@@ -46,7 +46,5 @@ tollbarbutton_4 = ToolbarButton(
         icon_name='document-save')
 toolbar.toolbar.insert(tollbarbutton_4, -1)
 
-print [i.props.page for i in toolbar.subs]
-
 window.show_all()
 gtk.main()

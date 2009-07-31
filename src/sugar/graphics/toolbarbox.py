@@ -22,9 +22,8 @@ from gobject import SIGNAL_RUN_FIRST, TYPE_NONE
 
 from sugar.graphics import style
 from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.palette import _PopupAnimation, _PopdownAnimation
 from sugar.graphics.palette import MouseSpeedDetector, Invoker
-from sugar.graphics import animator
+from sugar.graphics.animator import Animator, Animation
 from sugar.graphics import palettegroup
 
 class ToolbarButton(ToolButton):
@@ -37,55 +36,56 @@ class ToolbarButton(ToolButton):
             self.palette = _Palette(self)
 
         self.connect('clicked',
-                lambda widget: self.set_expanded(not self.expanded))
+                lambda widget: self.set_expanded(not self.expanded_page))
 
-    def get_toolbar(self):
+    def get_toolbar_box(self):
         if not hasattr(self.parent, 'owner'):
             return None
         return self.parent.owner
 
-    toolbar = property(get_toolbar)
+    toolbar_box = property(get_toolbar_box)
 
     def get_page(self):
         return self._page.child.child
 
     def set_page(self, page):
-        self._page = _align(_Box, page)
+        self._page = _embody_page(_Box, page)
         self._page._toolitem = self
         page.show()
 
     page = gobject.property(type=object, getter=get_page, setter=set_page)
 
     def get_expanded(self):
-        return bool(self.toolbar) and bool(self._page) and \
-                self.toolbar._expanded_page() == self._page
+        return self.toolbar_box is not None and self._page is not None and \
+                self.toolbar_box._expanded_page() == self._page
 
     def set_expanded(self, value):
-        if not self.toolbar or not self._page or self.get_expanded() == value:
+        if not self.toolbar_box or not self._page or \
+                self.get_expanded() == value:
             return
 
         if isinstance(self.palette, _Palette) and self.palette.is_up():
             self.palette.popdown(immediate=True)
 
         if not value:
-            self.toolbar._shrink_page(self._page)
+            self.toolbar_box.shrink_page(self._page)
             return
 
-        expanded = self.toolbar._expanded_page()
+        expanded = self.toolbar_box._expanded_page()
         if expanded and expanded._toolitem.window:
             expanded._toolitem.window.invalidate_rect(None, True)
 
         if self._page.parent:
             self.palette.remove(self._page)
 
-        self.modify_bg(gtk.STATE_NORMAL, self.toolbar._bg)
+        self.modify_bg(gtk.STATE_NORMAL, self.toolbar_box._bg)
 
-        self.toolbar._expand_page(self._page)
+        self.toolbar_box._expand_page(self._page)
 
-    expanded = property(get_expanded, set_expanded)
+    expanded_page = property(get_expanded, set_expanded)
 
     def do_expose_event(self, event):
-        if not self.expanded or self.palette and self.palette.is_up():
+        if not self.expanded_page or self.palette and self.palette.is_up():
             ToolButton.do_expose_event(self, event)
             if self.palette and self.palette.is_up():
                 _paint_arrow(self, event, gtk.ARROW_UP)
@@ -116,7 +116,7 @@ class ToolbarBox(gtk.VBox):
         self.__toolbar = gtk.Toolbar()
         self.__toolbar.owner = self
 
-        top_widget = _align(gtk.EventBox, self.__toolbar)
+        top_widget = _embody_page(gtk.EventBox, self.__toolbar)
         self.pack_start(top_widget)
 
         self.props.padding = padding
@@ -162,7 +162,7 @@ class ToolbarBox(gtk.VBox):
         page_no = self.__notebook.get_current_page()
         return self.__notebook.get_nth_page(page_no)
 
-    def _shrink_page(self, page):
+    def shrink_page(self, page):
         page_no = self.__notebook.page_num(page)
         if page_no == -1:
             return
@@ -211,10 +211,10 @@ class _Palette(gtk.Window):
         self._invoker_hids = []
         self.__focus = 0
 
-        self._popup_anim = animator.Animator(.5, 10)
+        self._popup_anim = Animator(.5, 10)
         self._popup_anim.add(_PopupAnimation(self))
 
-        self._popdown_anim = animator.Animator(0.6, 10)
+        self._popdown_anim = Animator(0.6, 10)
         self._popdown_anim.add(_PopdownAnimation(self))
 
         accel_group = gtk.AccelGroup()
@@ -270,8 +270,8 @@ class _Palette(gtk.Window):
 
     def do_size_request(self, requisition):
         gtk.Window.do_size_request(self, requisition)
-        if self._toolitem.toolbar:
-            requisition.width = self._toolitem.toolbar.allocation.width
+        if self._toolitem.toolbar_box:
+            requisition.width = self._toolitem.toolbar_box.allocation.width
 
     def __realize_cb(self, widget):
         self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
@@ -282,10 +282,10 @@ class _Palette(gtk.Window):
     def popup(self, immediate=False):
         self._popdown_anim.stop()
 
-        toolbar = self._toolitem.toolbar
+        toolbar = self._toolitem.toolbar_box
         page = self._toolitem._page
 
-        if not self._invoker or self._toolitem.expanded or not toolbar:
+        if not self._invoker or self._toolitem.expanded_page or not toolbar:
             return
 
         _setup_page(page, style.COLOR_BLACK.get_gdk_color(),
@@ -366,6 +366,24 @@ class _Palette(gtk.Window):
             self._invoker.notify_popdown()
         self._up = False
 
+class _PopupAnimation(Animation):
+    def __init__(self, palette):
+        Animation.__init__(self, 0.0, 1.0)
+        self._palette = palette
+
+    def next_frame(self, current):
+        if current == 1.0:
+            self._palette.show()
+
+class _PopdownAnimation(Animation):
+    def __init__(self, palette):
+        Animation.__init__(self, 0.0, 1.0)
+        self._palette = palette
+
+    def next_frame(self, current):
+        if current == 1.0:
+            self._palette.hide()
+
 def _setup_page(page, color, hpad):
     vpad = style._FOCUS_LINE_WIDTH
     page.child.set_padding(vpad, vpad, hpad, hpad)
@@ -373,7 +391,7 @@ def _setup_page(page, color, hpad):
     page.modify_bg(gtk.STATE_NORMAL, color)
     page.modify_bg(gtk.STATE_PRELIGHT, color)
 
-def _align(box_class, widget):
+def _embody_page(box_class, widget):
     widget.show()
     alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
     alignment.add(widget)

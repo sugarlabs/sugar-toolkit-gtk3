@@ -50,10 +50,9 @@ class ActivityToolbarButton(ToolbarButton):
 
 class StopButton(ToolButton):
     def __init__(self, activity, **kwargs):
-        ToolButton.__init__(self, 'activity-stop',
-                tooltip=_('Stop'),
-                accelerator='<Ctrl>Q',
-                **kwargs)
+        ToolButton.__init__(self, 'activity-stop', **kwargs)
+        self.props.tooltip = _('Stop')
+        self.props.accelerator = '<Ctrl>Q'
         self.connect('clicked', self.__stop_button_clicked_cb, activity)
 
     def __stop_button_clicked_cb(self, button, activity):
@@ -61,72 +60,68 @@ class StopButton(ToolButton):
 
 class UndoButton(ToolButton):
     def __init__(self, **kwargs):
-        ToolButton.__init__(self, 'edit-undo',
-                tooltip=_('Undo'),
-                accelerator='<Ctrl>Q',
-                **kwargs)
+        ToolButton.__init__(self, 'edit-undo', **kwargs)
+        self.props.tooltip = _('Undo')
+        self.props.accelerator = '<Ctrl>Q'
 
 class RedoButton(ToolButton):
     def __init__(self, **kwargs):
-        ToolButton.__init__(self, 'edit-redo',
-                tooltip=_('Redo'),
-                **kwargs)
+        ToolButton.__init__(self, 'edit-redo', **kwargs)
+        self.props.tooltip = _('Redo')
 
 class CopyButton(ToolButton):
     def __init__(self, **kwargs):
-        ToolButton.__init__(self, 'edit-copy',
-                tooltip=_('Copy'),
-                **kwargs)
+        ToolButton.__init__(self, 'edit-copy', **kwargs)
+        self.props.tooltip = _('Copy')
 
 class PasteButton(ToolButton):
     def __init__(self, **kwargs):
-        ToolButton.__init__(self, 'edit-paste',
-                tooltip=_('Paste'),
-                **kwargs)
+        ToolButton.__init__(self, 'edit-paste', **kwargs)
+        self.props.tooltip = _('Paste')
 
 class ShareButton(RadioMenuButton):
     def __init__(self, activity, **kwargs):
         palette = RadioPalette()
 
-        self.__private = RadioToolButton(
+        self.private = RadioToolButton(
                 icon_name='zoom-home')
-        palette.append(self.__private, _('Private'))
+        palette.append(self.private, _('Private'))
 
-        self.__neighborhood = RadioToolButton(
+        self.neighborhood = RadioToolButton(
                 icon_name='zoom-neighborhood',
-                group=self.__private)
-        self.__neighborhood_handle = self.__neighborhood.connect(
+                group=self.private)
+        self.__neighborhood_handle = self.neighborhood.connect(
                 'clicked', self.__neighborhood_clicked_cb, activity)
-        palette.append(self.__neighborhood, _('My Neighborhood'))
+        palette.append(self.neighborhood, _('My Neighborhood'))
 
-        activity.connect('shared', self.__update_share)
-        activity.connect('joined', self.__update_share)
+        activity.connect('shared', self.__update_share_cb)
+        activity.connect('joined', self.__update_share_cb)
 
-        RadioMenuButton.__init__(self, palette=palette, **kwargs)
+        RadioMenuButton.__init__(self, **kwargs)
+        self.props.palette = palette
 
     def __neighborhood_clicked_cb(self, button, activity):
         activity.share()
 
-    def __update_share(self, activity):
-        self.__neighborhood.handler_block(self.__neighborhood_handle)
+    def __update_share_cb(self, activity):
+        self.neighborhood.handler_block(self.__neighborhood_handle)
         try:
             if activity.get_shared():
-                self.__private.props.sensitive = False
-                self.__neighborhood.props.sensitive = False
-                self.__neighborhood.props.active = True
+                self.private.props.sensitive = False
+                self.neighborhood.props.sensitive = False
+                self.neighborhood.props.active = True
             else:
-                self.__private.props.sensitive = True
-                self.__neighborhood.props.sensitive = True
-                self.__private.props.active = True
+                self.private.props.sensitive = True
+                self.neighborhood.props.sensitive = True
+                self.private.props.active = True
         finally:
-            self.__neighborhood.handler_unblock(self.__neighborhood_handle)
+            self.neighborhood.handler_unblock(self.__neighborhood_handle)
 
 class KeepButton(ToolButton):
     def __init__(self, activity, **kwargs):
-        ToolButton.__init__(self,
-                tooltip=_('Keep'),
-                accelerator='<Ctrl>S',
-                **kwargs)
+        ToolButton.__init__(self, **kwargs)
+        self.props.tooltip = _('Keep')
+        self.props.accelerator = '<Ctrl>S'
 
         client = gconf.client_get_default()
         color = XoColor(client.get_string('/desktop/sugar/user/color'))
@@ -166,7 +161,7 @@ class TitleEntry(gtk.Entry):
         activity.save()
 
         shared_activity = activity.get_shared_activity()
-        if shared_activity:
+        if shared_activity is None:
             shared_activity.props.name = title
 
         self.__update_title_sid = None
@@ -252,13 +247,11 @@ class EditToolbar(gtk.Toolbar):
     def __init__(self):
         gtk.Toolbar.__init__(self)
 
-        self.undo = ToolButton('edit-undo')
-        self.undo.set_tooltip(_('Undo'))
+        self.undo = UndoButton()
         self.insert(self.undo, -1)
         self.undo.show()
 
-        self.redo = ToolButton('edit-redo')
-        self.redo.set_tooltip(_('Redo'))
+        self.redo = RedoButton()
         self.insert(self.redo, -1)
         self.redo.show()
 
@@ -267,13 +260,11 @@ class EditToolbar(gtk.Toolbar):
         self.insert(self.separator, -1)
         self.separator.show()
 
-        self.copy = ToolButton('edit-copy')
-        self.copy.set_tooltip(_('Copy'))
+        self.copy = CopyButton()
         self.insert(self.copy, -1)
         self.copy.show()
 
-        self.paste = ToolButton('edit-paste')
-        self.paste.set_tooltip(_('Paste'))
+        self.paste = PasteButton()
         self.insert(self.paste, -1)
         self.paste.show()
 
