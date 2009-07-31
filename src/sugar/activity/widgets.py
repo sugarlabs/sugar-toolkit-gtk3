@@ -134,19 +134,28 @@ class KeepButton(ToolButton):
     def __keep_button_clicked_cb(self, button, activity):
         activity.copy()
 
-class TitleEntry(gtk.Entry):
+class TitleEntry(gtk.ToolItem):
     def __init__(self, activity, **kwargs):
-        gtk.Entry.__init__(self, **kwargs)
+        gtk.ToolItem.__init__(self)
+        self.set_expand(False)
         self._update_title_sid = None
 
-        self.set_size_request(int(gtk.gdk.screen_width() / 3), -1)
-        self.set_text(activity.metadata['title'])
-        self.connect('changed', self.__title_changed_cb, activity)
+        self.entry = gtk.Entry(**kwargs)
+        self.entry.set_size_request(int(gtk.gdk.screen_width() / 3), -1)
+        self.entry.set_text(activity.metadata['title'])
+        self.entry.connect('changed', self.__title_changed_cb, activity)
+        self.entry.show()
+        self.add(self.entry)
 
         activity.metadata.connect('updated', self.__jobject_updated_cb)
 
+    def modify_bg(self, state, color):
+        gtk.ToolItem.modify_bg(self, state, color)
+        if state == gtk.STATE_NORMAL:
+            self.entry.modify_bg(gtk.STATE_INSENSITIVE, color)
+
     def __jobject_updated_cb(self, jobject):
-        self.set_text(jobject['title'])
+        self.entry.set_text(jobject['title'])
 
     def __title_changed_cb(self, entry, activity):
         if not self._update_title_sid:
@@ -154,7 +163,7 @@ class TitleEntry(gtk.Entry):
                     1, self.__update_title_cb, activity)
 
     def __update_title_cb(self, activity):
-        title = self.get_text()
+        title = self.entry.get_text()
 
         activity.metadata['title'] = title
         activity.metadata['title_set_by_user'] = '1'
@@ -180,8 +189,10 @@ class ActivityToolbar(gtk.Toolbar):
         self._activity = activity
 
         if activity.metadata:
-            self.title = TitleEntry(activity)
-            self._add_widget(self.title)
+            title_button = TitleEntry(activity)
+            title_button.show()
+            self.insert(title_button, -1)
+            self.title = title_button.entry
 
         separator = gtk.SeparatorToolItem()
         separator.props.draw = False
@@ -200,16 +211,6 @@ class ActivityToolbar(gtk.Toolbar):
         self.stop = StopButton(activity)
         self.insert(self.stop, -1)
         self.stop.show()
-
-    def _add_widget(self, widget, expand=False):
-        tool_item = gtk.ToolItem()
-        tool_item.set_expand(expand)
-
-        tool_item.add(widget)
-        widget.show()
-
-        self.insert(tool_item, -1)
-        tool_item.show()
 
 class EditToolbar(gtk.Toolbar):
     """Provides the standard edit toolbar for Activities.

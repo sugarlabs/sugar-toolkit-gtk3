@@ -210,12 +210,18 @@ class _Box(gtk.EventBox):
                 alloc.width - style._FOCUS_LINE_WIDTH*2,
                     style._FOCUS_LINE_WIDTH)
 
-def _setup_page(page, color, hpad):
+def _setup_page(page_widget, color, hpad):
     vpad = style._FOCUS_LINE_WIDTH
-    page.child.set_padding(vpad, vpad, hpad, hpad)
-    page.child.child.modify_bg(gtk.STATE_NORMAL, color)
+    page_widget.child.set_padding(vpad, vpad, hpad, hpad)
+
+    page = page_widget.child.child
     page.modify_bg(gtk.STATE_NORMAL, color)
-    page.modify_bg(gtk.STATE_PRELIGHT, color)
+    if isinstance(page, gtk.Container):
+        for i in page.get_children():
+            i.modify_bg(gtk.STATE_NORMAL, color)
+
+    page_widget.modify_bg(gtk.STATE_NORMAL, color)
+    page_widget.modify_bg(gtk.STATE_PRELIGHT, color)
 
 def _embody_page(box_class, widget):
     widget.show()
