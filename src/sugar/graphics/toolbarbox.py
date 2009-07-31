@@ -87,10 +87,7 @@ class ToolbarButton(ToolButton):
     def do_expose_event(self, event):
         if not self.expanded_page or self.palette and self.palette.is_up():
             ToolButton.do_expose_event(self, event)
-            if self.palette and self.palette.is_up():
-                _paint_arrow(self, event, gtk.ARROW_UP)
-            else:
-                _paint_arrow(self, event, gtk.ARROW_DOWN)
+            _paint_arrow(self, event, gtk.ARROW_DOWN)
             return
 
         alloc = self.allocation
