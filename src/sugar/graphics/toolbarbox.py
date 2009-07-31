@@ -28,7 +28,7 @@ from sugar.graphics import palettegroup
 
 class ToolbarButton(ToolButton):
     def __init__(self, **kwargs):
-        self._page = None
+        self.page_widget = None
 
         ToolButton.__init__(self, **kwargs)
 
@@ -36,7 +36,7 @@ class ToolbarButton(ToolButton):
             self.palette = _Palette(self)
 
         self.connect('clicked',
-                lambda widget: self.set_expanded(not self.expanded_page))
+                lambda widget: self.set_expanded(not self.is_expanded()))
 
     def get_toolbar_box(self):
         if not hasattr(self.parent, 'owner'):
@@ -46,46 +46,54 @@ class ToolbarButton(ToolButton):
     toolbar_box = property(get_toolbar_box)
 
     def get_page(self):
-        return self._page.child.child
+        if self.page_widget is None:
+            return None
+        return self.page_widget.child.child
 
     def set_page(self, page):
-        self._page = _embody_page(_Box, page)
-        self._page._toolitem = self
+        self.page_widget = _embody_page(_Box, page)
+        self.page_widget.toolbar_button = self
         page.show()
 
     page = gobject.property(type=object, getter=get_page, setter=set_page)
 
-    def get_expanded(self):
-        return self.toolbar_box is not None and self._page is not None and \
-                self.toolbar_box._expanded_page() == self._page
+    def is_expanded(self):
+        return self.toolbar_box is not None and self.page_widget is not None \
+                and self.toolbar_box.expanded_button == self
 
-    def set_expanded(self, value):
-        if not self.toolbar_box or not self._page or \
-                self.get_expanded() == value:
-            return
-
+    def popdown(self):
         if isinstance(self.palette, _Palette) and self.palette.is_up():
             self.palette.popdown(immediate=True)
 
-        if not value:
-            self.toolbar_box.shrink_page(self._page)
+    def set_expanded(self, expanded):
+        self.popdown()
+
+        box = self.toolbar_box
+
+        if not box or not self.page_widget or self.is_expanded() == expanded:
             return
 
-        expanded = self.toolbar_box._expanded_page()
-        if expanded and expanded._toolitem.window:
-            expanded._toolitem.window.invalidate_rect(None, True)
+        if not expanded:
+            box.remove(self.page_widget)
+            box.expanded_button = None
+            return
 
-        if self._page.parent:
-            self.palette.remove(self._page)
+        if box.expanded_button is not None:
+            expanded_toolitem = box.expanded_button.page_widget.toolbar_button
+            if expanded_toolitem.window:
+                expanded_toolitem.window.invalidate_rect(None, True)
+            box.expanded_button.set_expanded(False)
 
-        self.modify_bg(gtk.STATE_NORMAL, self.toolbar_box._bg)
+        if self.page_widget.parent:
+            self.palette.remove(self.page_widget)
 
-        self.toolbar_box._expand_page(self._page)
-
-    expanded_page = property(get_expanded, set_expanded)
+        self.modify_bg(gtk.STATE_NORMAL, box.background)
+        _setup_page(self.page_widget, box.background, box.props.padding)
+        box.pack_start(self.page_widget)
+        box.expanded_button = self
 
     def do_expose_event(self, event):
-        if not self.expanded_page or self.palette and self.palette.is_up():
+        if not self.is_expanded() or self.palette and self.palette.is_up():
             ToolButton.do_expose_event(self, event)
             _paint_arrow(self, event, gtk.ARROW_DOWN)
             return
@@ -109,9 +117,11 @@ class ToolbarButton(ToolButton):
 class ToolbarBox(gtk.VBox):
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
+        self.expanded_button = None
 
         self.__toolbar = gtk.Toolbar()
         self.__toolbar.owner = self
+        self.__toolbar.connect('remove', self.__remove_cb)
 
         top_widget = _embody_page(gtk.EventBox, self.__toolbar)
         self.pack_start(top_widget)
@@ -120,12 +130,13 @@ class ToolbarBox(gtk.VBox):
         self.modify_bg(gtk.STATE_NORMAL,
                 style.COLOR_TOOLBAR_GREY.get_gdk_color())
 
-        self.__notebook = gtk.Notebook()
-        self.__notebook.set_show_border(False)
-        self.__notebook.set_show_tabs(False)
-        self.__notebook.show()
-
-        self.__toolbar.connect('remove', self.__remove_cb)
+    def __remove_cb(self, sender, button):
+        if not isinstance(button, ToolbarButton):
+            return
+        button.popdown()
+        if self.expanded_button == button:
+            self.remove(button.page_widget)
+            self.expanded_button = None
 
     toolbar = property(lambda self: self.__toolbar)
 
@@ -140,41 +151,9 @@ class ToolbarBox(gtk.VBox):
 
     def modify_bg(self, state, color):
         if state == gtk.STATE_NORMAL:
-            self._bg = color
+            self.background = color
         self.toolbar.parent.parent.modify_bg(state, color)
         self.toolbar.modify_bg(state, color)
-
-    def __remove_cb(self, sender, widget):
-        if not isinstance(widget, ToolbarButton):
-            return
-        page_no = self.__notebook.page_num(widget._page)
-        if page_no != -1:
-            self.__notebook.remove_page(page_no)
-        if widget.palette:
-            widget.palette.popdown(immediate=True)
-
-    def _expanded_page(self):
-        if self.__notebook.parent is None:
-            return None
-        page_no = self.__notebook.get_current_page()
-        return self.__notebook.get_nth_page(page_no)
-
-    def shrink_page(self, page):
-        page_no = self.__notebook.page_num(page)
-        if page_no == -1:
-            return
-        self.__notebook.remove_page(page_no)
-        self.remove(self.__notebook)
-
-    def _expand_page(self, page):
-        for i in range(self.__notebook.get_n_pages()):
-            self.__notebook.remove_page(0)
-
-        _setup_page(page, self._bg, self.props.padding)
-        self.__notebook.append_page(page)
-
-        if self.__notebook.parent is None:
-            self.pack_start(self.__notebook)
 
 class _Box(gtk.EventBox):
     def __init__(self):
@@ -183,7 +162,7 @@ class _Box(gtk.EventBox):
         self.set_app_paintable(True)
 
     def do_expose_event(self, widget, event):
-        a = self._toolitem.allocation
+        a = self.toolbar_button.allocation
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 'palette-invoker', -style._FOCUS_LINE_WIDTH, 0,
@@ -280,9 +259,9 @@ class _Palette(gtk.Window):
         self._popdown_anim.stop()
 
         toolbar = self._toolitem.toolbar_box
-        page = self._toolitem._page
+        page = self._toolitem.page_widget
 
-        if not self._invoker or self._toolitem.expanded_page or not toolbar:
+        if not self._invoker or self._toolitem.is_expanded() or not toolbar:
             return
 
         _setup_page(page, style.COLOR_BLACK.get_gdk_color(),
