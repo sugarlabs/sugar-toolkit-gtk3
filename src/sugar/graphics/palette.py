@@ -128,6 +128,9 @@ class MouseSpeedDetector(gobject.GObject):
         return True
 
 class PaletteWindow(gtk.Window):
+    PRIMARY = 0
+    SECONDARY = 1
+
     __gtype_name__ = 'SugarPaletteWindow'
 
     __gsignals__ = {
@@ -148,6 +151,7 @@ class PaletteWindow(gtk.Window):
         self._alignment = None
         self._up = False
         self._old_alloc = None
+        self._palette_state = self.PRIMARY
 
         self._popup_anim = animator.Animator(.5, 10)
         self._popup_anim.add(_PopupAnimation(self))
@@ -314,7 +318,7 @@ class PaletteWindow(gtk.Window):
     def get_full_size_request(self):
         return self.size_request()
 
-    def popup(self, immediate=False):
+    def popup(self, immediate=False, state=None):
         if self._invoker is not None:
             full_size_request = self.get_full_size_request()
             self._alignment = self._invoker.get_alignment(full_size_request)
@@ -361,7 +365,7 @@ class PaletteWindow(gtk.Window):
         self.on_invoker_leave()
 
     def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True)
+        self.popup(immediate=True, state=self.SECONDARY)
 
     def __enter_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
@@ -400,18 +404,24 @@ class PaletteWindow(gtk.Window):
 
         return gtk.gdk.Rectangle(x, y, width, height)
 
-class Palette(PaletteWindow):
-    PRIMARY = 0
-    SECONDARY = 1
+    def get_palette_state(self):
+        return self._palette_state
 
+    def _set_palette_state(self, state):
+        self._palette_state = state
+
+    def set_palette_state(self, state):
+        self._set_palette_state(state)
+
+    palette_state = property(get_palette_state)
+
+class Palette(PaletteWindow):
     __gtype_name__ = 'SugarPalette'
 
     # DEPRECATED: label is passed with the primary-text property, accel_path 
     # is set via the invoker property, and menu_after_content is not used
     def __init__(self, label=None, accel_path=None, menu_after_content=False,
                  text_maxlen=60, **kwargs):
-
-        self.palette_state = self.PRIMARY
 
         self._primary_text = None
         self._secondary_text = None
@@ -549,7 +559,7 @@ class Palette(PaletteWindow):
 
         if state is None:
             state = self.PRIMARY
-        self.set_state(state)
+        self.set_palette_state(state)
 
         self._secondary_anim.start()
         
@@ -696,18 +706,18 @@ class Palette(PaletteWindow):
         self._update_accept_focus()
 
     def _update_full_request(self):
-        if self.palette_state == self.PRIMARY:
+        if self._palette_state == self.PRIMARY:
             self.menu.embed(self._menu_box)
             self._secondary_box.show()
 
         self._full_request = self.size_request()
 
-        if self.palette_state == self.PRIMARY:
+        if self._palette_state == self.PRIMARY:
             self.menu.unembed()
             self._secondary_box.hide()
 
-    def set_state(self, state):
-        if self.palette_state == state:
+    def _set_palette_state(self, state):
+        if self._palette_state == state:
             return
 
         if state == self.PRIMARY:
@@ -718,7 +728,7 @@ class Palette(PaletteWindow):
             self._secondary_box.show()
             self.update_position()
 
-        self.palette_state = state
+        self._palette_state = state
 
 class PaletteActionBar(gtk.HButtonBox):
     def add_action(self, label, icon_name=None):
@@ -784,7 +794,7 @@ class _SecondaryAnimation(animator.Animation):
 
     def next_frame(self, current):
         if current == 1.0:
-            self._palette.set_state(Palette.SECONDARY)
+            self._palette.set_palette_state(Palette.SECONDARY)
 
 class _PopdownAnimation(animator.Animation):
     def __init__(self, palette):

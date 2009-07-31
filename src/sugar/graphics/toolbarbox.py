@@ -214,14 +214,14 @@ class _ToolbarPalette(PaletteWindow):
         requisition.width = max(requisition.width,
                                 gtk.gdk.screen_width())
 
-    def popup(self, immediate=False):
+    def popup(self, immediate=False, state=None):
         button = self.toolbar_button
         if button.is_expanded():
             return
         box = button.toolbar_box
         _setup_page(button.page_widget, style.COLOR_BLACK.get_gdk_color(),
                 box.props.padding)
-        PaletteWindow.popup(self, immediate)
+        PaletteWindow.popup(self, immediate, state)
 
     def __group_popdown_cb(self, group):
         if self._focus == 0:
