@@ -70,7 +70,8 @@ class ToolbarButton(ToolButton):
 
         box = self.toolbar_box
 
-        if not box or not self.page_widget or self.is_expanded() == expanded:
+        if box is None or self.page_widget is None or \
+                self.is_expanded() == expanded:
             return
 
         if not expanded:
@@ -80,11 +81,11 @@ class ToolbarButton(ToolButton):
 
         if box.expanded_button is not None:
             expanded_toolitem = box.expanded_button.page_widget.toolbar_button
-            if expanded_toolitem.window:
+            if expanded_toolitem.window is not None:
                 expanded_toolitem.window.invalidate_rect(None, True)
             box.expanded_button.set_expanded(False)
 
-        if self.page_widget.parent:
+        if self.page_widget.parent is not None:
             self.palette.remove(self.page_widget)
 
         self.modify_bg(gtk.STATE_NORMAL, box.background)
@@ -93,7 +94,8 @@ class ToolbarButton(ToolButton):
         box.expanded_button = self
 
     def do_expose_event(self, event):
-        if not self.is_expanded() or self.palette and self.palette.is_up():
+        if not self.is_expanded() or self.palette is not None and \
+                self.palette.is_up():
             ToolButton.do_expose_event(self, event)
             _paint_arrow(self, event, gtk.ARROW_DOWN)
             return
@@ -247,7 +249,7 @@ class _Palette(gtk.Window):
 
     def do_size_request(self, requisition):
         gtk.Window.do_size_request(self, requisition)
-        if self._toolitem.toolbar_box:
+        if self._toolitem.toolbar_box is not None:
             requisition.width = self._toolitem.toolbar_box.allocation.width
 
     def __realize_cb(self, widget):
