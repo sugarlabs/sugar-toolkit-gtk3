@@ -119,11 +119,11 @@ class ToolbarBox(gtk.VBox):
         gtk.VBox.__init__(self)
         self.expanded_button = None
 
-        self.__toolbar = gtk.Toolbar()
-        self.__toolbar.owner = self
-        self.__toolbar.connect('remove', self.__remove_cb)
+        self._toolbar = gtk.Toolbar()
+        self._toolbar.owner = self
+        self._toolbar.connect('remove', self.__remove_cb)
 
-        top_widget = _embody_page(gtk.EventBox, self.__toolbar)
+        top_widget = _embody_page(gtk.EventBox, self._toolbar)
         self.pack_start(top_widget)
 
         self.props.padding = padding
@@ -138,7 +138,7 @@ class ToolbarBox(gtk.VBox):
             self.remove(button.page_widget)
             self.expanded_button = None
 
-    toolbar = property(lambda self: self.__toolbar)
+    toolbar = property(lambda self: self._toolbar)
 
     def get_padding(self):
         return self.toolbar.parent.props.left_padding
@@ -162,7 +162,7 @@ class _Box(gtk.EventBox):
         self.set_app_paintable(True)
 
     def do_expose_event(self, widget, event):
-        a = self.toolbar_button.allocation
+        alloc = self.toolbar_button.allocation
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 'palette-invoker', -style._FOCUS_LINE_WIDTH, 0,
@@ -170,8 +170,9 @@ class _Box(gtk.EventBox):
                 self.allocation.height + style._FOCUS_LINE_WIDTH)
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self, None,
-                a.x + style._FOCUS_LINE_WIDTH, 0,
-                a.width - style._FOCUS_LINE_WIDTH*2, style._FOCUS_LINE_WIDTH)
+                alloc.x + style._FOCUS_LINE_WIDTH, 0,
+                alloc.width - style._FOCUS_LINE_WIDTH*2,
+                    style._FOCUS_LINE_WIDTH)
 
 class _Palette(gtk.Window):
     def __init__(self, toolitem, **kwargs):
@@ -185,7 +186,7 @@ class _Palette(gtk.Window):
         self._invoker = None
         self._up = False
         self._invoker_hids = []
-        self.__focus = 0
+        self._focus = 0
 
         self._popup_anim = Animator(.5, 10)
         self._popup_anim.add(_PopupAnimation(self))
@@ -297,27 +298,27 @@ class _Palette(gtk.Window):
 
         self.popup(immediate=False)
 
-    def __handle_focus(self, delta):
-        self.__focus += delta
-        if self.__focus not in (0, 1):
-            logging.error('_Palette.__focus=%s not in (0, 1)' % self.__focus)
+    def _handle_focus(self, delta):
+        self._focus += delta
+        if self._focus not in (0, 1):
+            logging.error('_Palette._focus=%s not in (0, 1)' % self._focus)
 
-        if self.__focus == 0:
+        if self._focus == 0:
             group = palettegroup.get_group('default')
             if not group.is_up():
                 self.popdown()
 
     def __group_popdown_cb(self, group):
-        if self.__focus == 0:
+        if self._focus == 0:
             self.popdown(immediate=True)
 
     def __invoker_mouse_enter_cb(self, invoker):
         self._mouse_detector.start()
-        self.__handle_focus(+1)
+        self._handle_focus(+1)
 
     def __invoker_mouse_leave_cb(self, invoker):
         self._mouse_detector.stop()
-        self.__handle_focus(-1)
+        self._handle_focus(-1)
 
     def __invoker_right_click_cb(self, invoker):
         self.popup(immediate=True)
@@ -326,12 +327,12 @@ class _Palette(gtk.Window):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
                 event.mode == gtk.gdk.CROSSING_NORMAL:
             self._popdown_anim.stop()
-            self.__handle_focus(+1)
+            self._handle_focus(+1)
 
     def __leave_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
                 event.mode == gtk.gdk.CROSSING_NORMAL:
-            self.__handle_focus(-1)
+            self._handle_focus(-1)
 
     def __show_cb(self, widget):
         self._invoker.notify_popup()

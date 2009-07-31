@@ -90,7 +90,7 @@ class ShareButton(RadioMenuButton):
         self.neighborhood = RadioToolButton(
                 icon_name='zoom-neighborhood',
                 group=self.private)
-        self.__neighborhood_handle = self.neighborhood.connect(
+        self._neighborhood_handle = self.neighborhood.connect(
                 'clicked', self.__neighborhood_clicked_cb, activity)
         palette.append(self.neighborhood, _('My Neighborhood'))
 
@@ -104,7 +104,7 @@ class ShareButton(RadioMenuButton):
         activity.share()
 
     def __update_share_cb(self, activity):
-        self.neighborhood.handler_block(self.__neighborhood_handle)
+        self.neighborhood.handler_block(self._neighborhood_handle)
         try:
             if activity.get_shared():
                 self.private.props.sensitive = False
@@ -115,7 +115,7 @@ class ShareButton(RadioMenuButton):
                 self.neighborhood.props.sensitive = True
                 self.private.props.active = True
         finally:
-            self.neighborhood.handler_unblock(self.__neighborhood_handle)
+            self.neighborhood.handler_unblock(self._neighborhood_handle)
 
 class KeepButton(ToolButton):
     def __init__(self, activity, **kwargs):
@@ -129,15 +129,15 @@ class KeepButton(ToolButton):
         keep_icon.show()
 
         self.set_icon_widget(keep_icon)
-        self.connect('clicked', self.__keep_button_clicked, activity)
+        self.connect('clicked', self.__keep_button_clicked_cb, activity)
 
-    def __keep_button_clicked(self, button, activity):
+    def __keep_button_clicked_cb(self, button, activity):
         activity.copy()
 
 class TitleEntry(gtk.Entry):
     def __init__(self, activity, **kwargs):
         gtk.Entry.__init__(self, **kwargs)
-        self.__update_title_sid = None
+        self._update_title_sid = None
 
         self.set_size_request(int(gtk.gdk.screen_width() / 3), -1)
         self.set_text(activity.metadata['title'])
@@ -149,8 +149,8 @@ class TitleEntry(gtk.Entry):
         self.set_text(jobject['title'])
 
     def __title_changed_cb(self, entry, activity):
-        if not self.__update_title_sid:
-            self.__update_title_sid = gobject.timeout_add_seconds(
+        if not self._update_title_sid:
+            self._update_title_sid = gobject.timeout_add_seconds(
                     1, self.__update_title_cb, activity)
 
     def __update_title_cb(self, activity):
@@ -164,7 +164,7 @@ class TitleEntry(gtk.Entry):
         if shared_activity is None:
             shared_activity.props.name = title
 
-        self.__update_title_sid = None
+        self._update_title_sid = None
         return False
 
 class ActivityToolbar(gtk.Toolbar):
