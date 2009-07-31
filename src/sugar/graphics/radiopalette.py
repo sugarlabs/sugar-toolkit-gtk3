@@ -48,24 +48,6 @@ class RadioMenuButton(ToolButton):
         else:
             self.palette.popup(immediate=True, state=Palette.SECONDARY)
 
-    def do_expose_event(self, event):
-        ToolButton.do_expose_event(self, event)
-        if not self.palette:
-            return
-
-        if self.palette.is_up():
-            type = gtk.ARROW_UP
-        else:
-            type = gtk.ARROW_DOWN
-
-        alloc = self.allocation
-        x = alloc.x + alloc.width / 2 - style.TOOLBAR_ARROW_SIZE / 2
-        y = alloc.y + alloc.height - int(style.TOOLBAR_ARROW_SIZE * .85)
-        self.get_style().paint_arrow(event.window,
-                gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self,
-                None, type,  True,
-                x, y, style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)
-
 class RadioToolsButton(RadioMenuButton):
     def __init__(self, **kwargs):
         RadioMenuButton.__init__(self, **kwargs)
