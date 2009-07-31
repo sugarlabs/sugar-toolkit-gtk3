@@ -340,12 +340,25 @@ class PaletteWindow(gtk.Window):
         else:
             self.hide()
 
-    def _invoker_mouse_enter_cb(self, invoker):
+    def on_invoker_enter(self):
         self._mouse_detector.start()
 
-    def _invoker_mouse_leave_cb(self, invoker):
+    def on_invoker_leave(self):
         self._mouse_detector.stop()
         self.popdown()
+
+    def on_enter(self, event):
+        self._popdown_anim.stop()
+        self._secondary_anim.start()
+
+    def on_leave(self, event):
+        self.popdown()
+
+    def _invoker_mouse_enter_cb(self, invoker):
+        self.on_invoker_enter()
+
+    def _invoker_mouse_leave_cb(self, invoker):
+        self.on_invoker_leave()
 
     def _invoker_right_click_cb(self, invoker):
         self.popup(immediate=True)
@@ -353,13 +366,12 @@ class PaletteWindow(gtk.Window):
     def __enter_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
                 event.mode == gtk.gdk.CROSSING_NORMAL:
-            self._popdown_anim.stop()
-            self._secondary_anim.start()
+            self.on_enter(event)
 
     def __leave_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
                 event.mode == gtk.gdk.CROSSING_NORMAL:
-            self.popdown()
+            self.on_leave(event)
 
     def __show_cb(self, widget):
         self._invoker.notify_popup()
@@ -385,7 +397,7 @@ class PaletteWindow(gtk.Window):
         y = win_y + rectangle.y
         width = rectangle.width
         height = rectangle.height
-        
+
         return gtk.gdk.Rectangle(x, y, width, height)
 
 class Palette(PaletteWindow):

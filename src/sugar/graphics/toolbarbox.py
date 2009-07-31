@@ -24,6 +24,7 @@ import gtk
 from sugar.graphics import style
 from sugar.graphics.palette import PaletteWindow, ToolInvoker
 from sugar.graphics.toolbutton import ToolButton
+from sugar.graphics import palettegroup
 
 class ToolbarButton(ToolButton):
     def __init__(self, page=None, **kwargs):
@@ -68,7 +69,7 @@ class ToolbarButton(ToolButton):
                 self.page_widget in self.toolbar_box.get_children():
             self.toolbar_box.remove(self.page_widget)
 
-        if self.props.palette is not None:
+        if isinstance(self.props.palette, _ToolbarPalette):
             self.props.palette.add(self.page_widget)
 
     def is_expanded(self):
@@ -176,6 +177,37 @@ class _ToolbarPalette(PaletteWindow):
         PaletteWindow.__init__(self, **kwargs)
         self.toolbar_box = None
         self.set_border_width(0)
+        self._focus = 0
+
+        group = palettegroup.get_group('default')
+        group.connect('popdown', self.__group_popdown_cb)
+        self.set_group_id('toolbar_box')
+
+    def on_invoker_enter(self):
+        PaletteWindow.on_invoker_enter(self)
+        self._handle_focus(+1)
+
+    def on_invoker_leave(self):
+        PaletteWindow.on_invoker_leave(self)
+        self._handle_focus(-1)
+
+    def on_enter(self, event):
+        PaletteWindow.on_enter(self, event)
+        self._handle_focus(+1)
+
+    def on_leave(self, event):
+        PaletteWindow.on_enter(self, event)
+        self._handle_focus(-1)
+
+    def _handle_focus(self, delta):
+        self._focus += delta
+        if self._focus not in (0, 1):
+            logging.error('_Palette._focus=%s not in (0, 1)' % self._focus)
+
+        if self._focus == 0:
+            group = palettegroup.get_group('default')
+            if not group.is_up():
+                self.popdown()
 
     def do_size_request(self, requisition):
         gtk.Window.do_size_request(self, requisition)
@@ -190,6 +222,10 @@ class _ToolbarPalette(PaletteWindow):
         _setup_page(button.page_widget, style.COLOR_BLACK.get_gdk_color(),
                 box.props.padding)
         PaletteWindow.popup(self, immediate)
+
+    def __group_popdown_cb(self, group):
+        if self._focus == 0:
+            self.popdown(immediate=True)
 
 class _Box(gtk.EventBox):
     def __init__(self):
