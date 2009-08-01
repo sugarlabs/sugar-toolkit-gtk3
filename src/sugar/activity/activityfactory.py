@@ -206,11 +206,10 @@ class ActivityCreationHandler(gobject.GObject):
         self._handle = handle
 
         self._use_rainbow = os.path.exists('/etc/olpc-security')
-        if self._service_name in [ 'org.laptop.JournalActivity',
-                                   'org.laptop.Terminal',
-                                   'org.laptop.Log',
-                                   'org.laptop.Analyze'
-                                 ]:
+        if self._service_name in ['org.laptop.JournalActivity',
+                                  'org.laptop.Terminal',
+                                  'org.laptop.Log',
+                                  'org.laptop.Analyze']:
             self._use_rainbow = False                    
     
         bus = dbus.SessionBus()
@@ -218,11 +217,11 @@ class ActivityCreationHandler(gobject.GObject):
         bus_object = bus.get_object(_SHELL_SERVICE, _SHELL_PATH)
         self._shell = dbus.Interface(bus_object, _SHELL_IFACE)
 
-        if handle.activity_id is not None and \
-           handle.object_id is None:
+        if handle.activity_id is not None and handle.object_id is None:
             datastore = dbus.Interface(
                     bus.get_object(_DS_SERVICE, _DS_PATH), _DS_INTERFACE)
-            datastore.find({ 'activity_id': self._handle.activity_id }, [],
+            datastore.find({'activity_id': self._handle.activity_id},
+                           [],
                            reply_handler=self._find_object_reply_handler,
                            error_handler=self._find_object_error_handler,
                            byte_arrays=True)
@@ -252,9 +251,9 @@ class ActivityCreationHandler(gobject.GObject):
                               self._handle.object_id,
                               self._handle.uri)
 
-        envdir = None
+        environment_dir = None
         if self._use_rainbow:
-            envdir = tempfile.mkdtemp()
+            environment_dir = tempfile.mkdtemp()
             command = ['/usr/bin/sudo', '-E', '--',
                        '/usr/bin/rainbow-run',
                        '-v', '-v',
@@ -265,34 +264,45 @@ class ActivityCreationHandler(gobject.GObject):
                        '-c', self._bundle.get_path(),
                        '-u', pwd.getpwuid(os.getuid()).pw_name,
                        '-i', environ['SUGAR_BUNDLE_ID'],
-                       '-e', envdir,
+                       '-e', environment_dir,
                        '--'
                       ] + command
-            for k, v in environ.items():
-                open(os.path.join(envdir, str(k)), 'w').write(str(v))
+
+            for key, value in environ.items():
+                file_path = os.path.join(environment_dir, str(key))
+                open(file_path, 'w').write(str(value))
+
             log_file.write(' '.join(command) + '\n\n')
 
-        def handler(pid, condition, user_data):
-            if envdir: subprocess.call(['/bin/rm', '-rf', envdir])
-            try:
-                log_file.write('Activity died: pid %s condition %s data %s\n' %
-                    (pid, condition, user_data))
-            finally:
-                log_file.close()
-
-            # try to reap zombies in case SIGCHLD has not been set to SIG_IGN
-            try :
-              os.waitpid(pid, 0)
-            except OSError:
-              # SIGCHLD = SIG_IGN, no zombies
-              pass
-
-        devnull = file("/dev/null", "r")
-        child = subprocess.Popen([str(s) for s in command], env=environ,
-            cwd=str(self._bundle.get_path()), close_fds=True,
-            stdin=devnull.fileno(), stdout=log_file.fileno(),
+        dev_null = file('/dev/null', 'r')
+        child = subprocess.Popen([str(s) for s in command],
+            env=environ,
+            cwd=str(self._bundle.get_path()),
+            close_fds=True,
+            stdin=dev_null.fileno(),
+            stdout=log_file.fileno(),
             stderr=log_file.fileno())
-        gobject.child_watch_add(child.pid, handler, self._handle.activity_id)
+
+        gobject.child_watch_add(child.pid,
+                                self.__child_watch_cb,
+                                (environment_dir, log_file))
+
+    def __child_watch_cb(self, pid, condition, user_data):
+        environment_dir, log_file = user_data
+        if environment_dir is not None:
+            subprocess.call(['/bin/rm', '-rf', environment_dir])
+        try:
+            log_file.write('Activity died: pid %s condition %s data %s\n' %
+                (pid, condition, user_data))
+        finally:
+            log_file.close()
+
+        # try to reap zombies in case SIGCHLD has not been set to SIG_IGN
+        try:
+            os.waitpid(pid, 0)
+        except OSError:
+            # SIGCHLD = SIG_IGN, no zombies
+            pass
 
     def _no_reply_handler(self, *args):
         pass
