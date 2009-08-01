@@ -16,9 +16,6 @@
 # Boston, MA 02111-1307, USA.
 
 import gtk
-import gobject
-import logging
-from gobject import SIGNAL_RUN_FIRST, TYPE_NONE, TYPE_PYOBJECT
 
 from sugar.graphics import style
 from sugar.graphics.toolbutton import ToolButton

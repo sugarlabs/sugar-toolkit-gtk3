@@ -15,11 +15,9 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-import logging
-
-import gobject
-from gobject import SIGNAL_RUN_FIRST, TYPE_NONE
 import gtk
+import gobject
+import logging
 
 from sugar.graphics import style
 from sugar.graphics.palette import PaletteWindow, ToolInvoker
@@ -120,13 +118,13 @@ class ToolbarButton(ToolButton):
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 'palette-invoker', alloc.x, 0,
-                alloc.width, alloc.height + style._FOCUS_LINE_WIDTH)
+                alloc.width, alloc.height + style.FOCUS_LINE_WIDTH)
 
         if self.child.state != gtk.STATE_PRELIGHT:
             self.get_style().paint_box(event.window,
                     gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self, None,
-                    alloc.x + style._FOCUS_LINE_WIDTH, style._FOCUS_LINE_WIDTH,
-                    alloc.width - style._FOCUS_LINE_WIDTH*2, alloc.height)
+                    alloc.x + style.FOCUS_LINE_WIDTH, style.FOCUS_LINE_WIDTH,
+                    alloc.width - style.FOCUS_LINE_WIDTH*2, alloc.height)
 
         gtk.ToolButton.do_expose_event(self, event)
         _paint_arrow(self, event, gtk.ARROW_UP)
@@ -135,6 +133,7 @@ class ToolbarBox(gtk.VBox):
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
         self.expanded_button = None
+        self.background = None
 
         self._toolbar = gtk.Toolbar()
         self._toolbar.owner = self
@@ -155,7 +154,10 @@ class ToolbarBox(gtk.VBox):
             self.remove(button.page_widget)
             self.expanded_button = None
 
-    toolbar = property(lambda self: self._toolbar)
+    def get_toolbar(self):
+        return self._toolbar
+
+    toolbar = property(get_toolbar)
 
     def get_padding(self):
         return self.toolbar.parent.props.left_padding
@@ -270,12 +272,12 @@ def _embody_page(box_class, widget):
     box.show()
     return box
 
-def _paint_arrow(widget, event, type):
+def _paint_arrow(widget, event, arrow_type):
     alloc = widget.allocation
     x = alloc.x + alloc.width / 2 - style.TOOLBAR_ARROW_SIZE / 2
     y = alloc.y + alloc.height - int(style.TOOLBAR_ARROW_SIZE * .85)
 
     widget.get_style().paint_arrow(event.window,
             gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, widget,
-            None, type,  True,
+            None, arrow_type, True,
             x, y, style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)

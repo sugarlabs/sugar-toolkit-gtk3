@@ -17,7 +17,6 @@
 
 import gtk
 import gobject
-import logging
 import gettext
 import gconf
 
@@ -179,7 +178,7 @@ class TitleEntry(gtk.ToolItem):
 class ActivityToolbar(gtk.Toolbar):
     """The Activity toolbar with the Journal entry title, sharing,
        Keep and Stop buttons
-    
+
     All activities should have this toolbar. It is easiest to add it to your
     Activity by using the ActivityToolbox.
     """
@@ -214,18 +213,18 @@ class ActivityToolbar(gtk.Toolbar):
 
 class EditToolbar(gtk.Toolbar):
     """Provides the standard edit toolbar for Activities.
- 
+
     Members:
         undo  -- the undo button
         redo  -- the redo button
         copy  -- the copy button
         paste -- the paste button
         separator -- A separator between undo/redo and copy/paste
-    
+
     This class only provides the 'edit' buttons in a standard layout,
     your activity will need to either hide buttons which make no sense for your
     Activity, or you need to connect the button events to your own callbacks:
-    
+
         ## Example from Read.activity:
         # Create the edit toolbar:
         self._edit_toolbar = EditToolbar(self._view)
@@ -234,12 +233,12 @@ class EditToolbar(gtk.Toolbar):
         self._edit_toolbar.redo.props.visible = False
         # Hide the separator too:
         self._edit_toolbar.separator.props.visible = False
-        
+
         # As long as nothing is selected, copy needs to be insensitive:
         self._edit_toolbar.copy.set_sensitive(False)
         # When the user clicks the button, call _edit_toolbar_copy_cb()
         self._edit_toolbar.copy.connect('clicked', self._edit_toolbar_copy_cb)
-        
+
         # Add the edit toolbar:
         toolbox.add_toolbar(_('Edit'), self._edit_toolbar)
         # And make it visible:
@@ -271,17 +270,17 @@ class EditToolbar(gtk.Toolbar):
 
 class ActivityToolbox(Toolbox):
     """Creates the Toolbox for the Activity
-    
+
     By default, the toolbox contains only the ActivityToolbar. After creating
     the toolbox, you can add your activity specific toolbars, for example the
     EditToolbar.
-    
+
     To add the ActivityToolbox to your Activity in MyActivity.__init__() do:
-    
-        # Create the Toolbar with the ActivityToolbar: 
+
+        # Create the Toolbar with the ActivityToolbar:
         toolbox = activity.ActivityToolbox(self)
         ... your code, inserting all other toolbars you need, like EditToolbar
-        
+
         # Add the toolbox to the activity frame:
         self.set_toolbox(toolbox)
         # And make it visible:
@@ -289,7 +288,7 @@ class ActivityToolbox(Toolbox):
     """
     def __init__(self, activity):
         Toolbox.__init__(self)
-        
+
         self._activity_toolbar = ActivityToolbar(activity)
         self.add_toolbar(_('Activity'), self._activity_toolbar)
         self._activity_toolbar.show()
