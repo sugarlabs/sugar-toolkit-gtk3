@@ -74,19 +74,18 @@ class RadioPalette(Palette):
         button.palette_label = label
 
         if not children:
-            self.__clicked_cb(button, True)
+            self.__clicked_cb(button)
 
     def update_button(self):
         for i in self.button_box.get_children():
-            self.__clicked_cb(i, True)
+            self.__clicked_cb(i)
 
-    def __clicked_cb(self, button, quiet=False):
+    def __clicked_cb(self, button):
         if not button.get_active():
             return
 
         self.set_primary_text(button.palette_label)
-        if not quiet:
-            self.popdown(immediate=True)
+        self.popdown(immediate=True)
 
         if self.invoker is not None:
             parent = self.invoker.parent
