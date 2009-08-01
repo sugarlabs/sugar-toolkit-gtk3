@@ -124,7 +124,7 @@ class ToolbarButton(ToolButton):
             self.get_style().paint_box(event.window,
                     gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self, None,
                     alloc.x + style.FOCUS_LINE_WIDTH, style.FOCUS_LINE_WIDTH,
-                    alloc.width - style.FOCUS_LINE_WIDTH*2, alloc.height)
+                    alloc.width - style.FOCUS_LINE_WIDTH * 2, alloc.height)
 
         gtk.ToolButton.do_expose_event(self, event)
         _paint_arrow(self, event, gtk.ARROW_UP)
@@ -239,17 +239,17 @@ class _Box(gtk.EventBox):
         alloc = self.toolbar_button.allocation
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
-                'palette-invoker', -style._FOCUS_LINE_WIDTH, 0,
-                self.allocation.width + style._FOCUS_LINE_WIDTH*2,
-                self.allocation.height + style._FOCUS_LINE_WIDTH)
+                'palette-invoker', -style.FOCUS_LINE_WIDTH, 0,
+                self.allocation.width + style.FOCUS_LINE_WIDTH * 2,
+                self.allocation.height + style.FOCUS_LINE_WIDTH)
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_NONE, event.area, self, None,
-                alloc.x + style._FOCUS_LINE_WIDTH, 0,
-                alloc.width - style._FOCUS_LINE_WIDTH*2,
-                    style._FOCUS_LINE_WIDTH)
+                alloc.x + style.FOCUS_LINE_WIDTH, 0,
+                alloc.width - style.FOCUS_LINE_WIDTH * 2,
+                    style.FOCUS_LINE_WIDTH)
 
 def _setup_page(page_widget, color, hpad):
-    vpad = style._FOCUS_LINE_WIDTH
+    vpad = style.FOCUS_LINE_WIDTH
     page_widget.child.set_padding(vpad, vpad, hpad, hpad)
 
     page = page_widget.child.child
