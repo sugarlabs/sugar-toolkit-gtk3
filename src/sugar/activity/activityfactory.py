@@ -204,16 +204,8 @@ class ActivityCreationHandler(gobject.GObject):
         self._bundle = bundle
         self._service_name = bundle.get_bundle_id()
         self._handle = handle
-
-        self._use_rainbow = os.path.exists('/etc/olpc-security')
-        if self._service_name in ['org.laptop.JournalActivity',
-                                  'org.laptop.Terminal',
-                                  'org.laptop.Log',
-                                  'org.laptop.Analyze']:
-            self._use_rainbow = False                    
     
         bus = dbus.SessionBus()
-
         bus_object = bus.get_object(_SHELL_SERVICE, _SHELL_PATH)
         self._shell = dbus.Interface(bus_object, _SHELL_IFACE)
 
@@ -252,7 +244,7 @@ class ActivityCreationHandler(gobject.GObject):
                               self._handle.uri)
 
         environment_dir = None
-        if self._use_rainbow:
+        if os.path.exists('/etc/olpc-security'):
             environment_dir = tempfile.mkdtemp()
             command = ['/usr/bin/sudo', '-E', '--',
                        '/usr/bin/rainbow-run',
