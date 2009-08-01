@@ -127,11 +127,11 @@ class MouseSpeedDetector(gobject.GObject):
 
         return True
 
-class Palette(gtk.Window):
+class PaletteWindow(gtk.Window):
     PRIMARY = 0
     SECONDARY = 1
 
-    __gtype_name__ = 'SugarPalette'
+    __gtype_name__ = 'SugarPaletteWindow'
 
     __gsignals__ = {
         'popup' :   (gobject.SIGNAL_RUN_FIRST,
@@ -142,18 +142,291 @@ class Palette(gtk.Window):
                       gobject.TYPE_NONE, ([]))
     }
 
+    def __init__(self, **kwargs):
+        self._group_id = None
+        self._invoker = None
+        self._invoker_hids = []
+        self._cursor_x = 0
+        self._cursor_y = 0
+        self._alignment = None
+        self._up = False
+        self._old_alloc = None
+        self._palette_state = self.PRIMARY
+
+        self._popup_anim = animator.Animator(.5, 10)
+        self._popup_anim.add(_PopupAnimation(self))
+
+        self._secondary_anim = animator.Animator(2.0, 10)
+        self._secondary_anim.add(_SecondaryAnimation(self))
+
+        self._popdown_anim = animator.Animator(0.6, 10)
+        self._popdown_anim.add(_PopdownAnimation(self))
+
+        gobject.GObject.__init__(self, **kwargs)
+
+        self.set_decorated(False)
+        self.set_resizable(False)
+        # Just assume xthickness and ythickness are the same
+        self.set_border_width(self.get_style().xthickness)
+
+        accel_group = gtk.AccelGroup()
+        self.set_data('sugar-accel-group', accel_group)
+        self.add_accel_group(accel_group)
+
+        self.set_group_id("default")
+
+        self.connect('show', self.__show_cb)
+        self.connect('hide', self.__hide_cb)
+        self.connect('realize', self.__realize_cb)
+        self.connect('destroy', self.__destroy_cb)
+        self.connect('enter-notify-event', self.__enter_notify_event_cb)
+        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+
+        self._mouse_detector = MouseSpeedDetector(self, 200, 5)
+        self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
+
+    def __destroy_cb(self, palette):
+        self.set_group_id(None)
+
+    def set_invoker(self, invoker):
+        for hid in self._invoker_hids[:]: 
+            self._invoker.disconnect(hid)
+            self._invoker_hids.remove(hid)
+
+        self._invoker = invoker
+        if invoker is not None:
+            self._invoker_hids.append(self._invoker.connect(
+                'mouse-enter', self._invoker_mouse_enter_cb))
+            self._invoker_hids.append(self._invoker.connect(
+                'mouse-leave', self._invoker_mouse_leave_cb))
+            self._invoker_hids.append(self._invoker.connect(
+                'right-click', self._invoker_right_click_cb))
+
+        logging.debug('         Invoker set to %r' % self._invoker)
+
+    def get_invoker(self):
+        return self._invoker
+
+    invoker = gobject.property(type=object,
+                               getter=get_invoker,
+                               setter=set_invoker)
+
+    def __realize_cb(self, widget):
+        self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+
+    def _mouse_slow_cb(self, widget):
+        self._mouse_detector.stop()
+        self._palette_do_popup()
+
+    def _palette_do_popup(self):
+        immediate = False
+
+        if self.is_up():
+            self._popdown_anim.stop() 
+            return
+
+        if self._group_id:
+            group = palettegroup.get_group(self._group_id)
+            if group and group.is_up():
+                immediate = True
+                group.popdown()
+
+        self.popup(immediate=immediate)
+
+    def is_up(self):
+        return self._up
+
+    def set_group_id(self, group_id):
+        if self._group_id:
+            group = palettegroup.get_group(self._group_id)
+            group.remove(self)
+        if group_id:
+            self._group_id = group_id
+            group = palettegroup.get_group(group_id)
+            group.add(self)
+
+    def get_group_id(self):
+        return self._group_id
+
+    group_id = gobject.property(type=str,
+                                getter=get_group_id,
+                                setter=set_group_id)
+
+    def do_size_request(self, requisition):
+        gtk.Window.do_size_request(self, requisition)
+        requisition.width = max(requisition.width, style.GRID_CELL_SIZE * 2)
+
+    def do_size_allocate(self, allocation):
+        gtk.Window.do_size_allocate(self, allocation)
+
+        if self._old_alloc is None or \
+           self._old_alloc.x != allocation.x or \
+           self._old_alloc.y != allocation.y or \
+           self._old_alloc.width != allocation.width or \
+           self._old_alloc.height != allocation.height:
+            self.queue_draw()
+
+        # We need to store old allocation because when size_allocate
+        # is called widget.allocation is already updated.
+        # gtk.Window resizing is different from normal containers:
+        # the X window is resized, widget.allocation is updated from
+        # the configure request handler and finally size_allocate is called.
+        self._old_alloc = allocation
+
+    def do_expose_event(self, event):
+        # We want to draw a border with a beautiful gap
+        if self._invoker is not None and self._invoker.has_rectangle_gap():
+            invoker = self._invoker.get_rect()
+            palette = self.get_rect()
+
+            gap = _calculate_gap(palette, invoker)
+        else:
+            gap = False
+
+        allocation = self.get_allocation()
+        wstyle = self.get_style()
+
+        if gap:
+            wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
+                                 gtk.SHADOW_IN, event.area, self, "palette",
+                                 0, 0, allocation.width, allocation.height,
+                                 gap[0], gap[1], gap[2])
+        else:
+            wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
+                             gtk.SHADOW_IN, event.area, self, "palette",
+                             0, 0, allocation.width, allocation.height)
+
+        # Fall trough to the container expose handler.
+        # (Leaving out the window expose handler which redraws everything)
+        gtk.Bin.do_expose_event(self, event)
+
+    def update_position(self):
+        logging.debug('    update_position    1 %r %r' % (self._invoker, self._alignment))
+        invoker = self._invoker
+        if invoker is None or self._alignment is None:
+            logging.error('Cannot update the palette position.')
+            return
+
+        rect = self.size_request()
+        position = invoker.get_position_for_alignment(self._alignment, rect)
+        if position is None:
+            position = invoker.get_position(rect)
+
+        logging.debug('    update_position    %r %r' % (position.x, position.y))
+        self.move(position.x, position.y)
+
+    def get_full_size_request(self):
+        return self.size_request()
+
+    def popup(self, immediate=False):
+        if self._invoker is not None:
+            full_size_request = self.get_full_size_request()
+            self._alignment = self._invoker.get_alignment(full_size_request)
+
+            self.update_position()
+            self.set_transient_for(self._invoker.get_toplevel())
+
+        self._popdown_anim.stop()
+
+        if not immediate:
+            self._popup_anim.start()
+        else:
+            self.show()
+
+    def popdown(self, immediate=False):
+        logging.debug('Palette.popdown immediate %r' % immediate)
+        self._popup_anim.stop()
+
+        self._mouse_detector.stop()
+
+        if not immediate:
+            self._popdown_anim.start()
+        else:
+            self.hide()
+
+    def on_invoker_enter(self):
+        self._mouse_detector.start()
+
+    def on_invoker_leave(self):
+        self._mouse_detector.stop()
+        self.popdown()
+
+    def on_enter(self, event):
+        self._popdown_anim.stop()
+        self._secondary_anim.start()
+
+    def on_leave(self, event):
+        self.popdown()
+
+    def _invoker_mouse_enter_cb(self, invoker):
+        self.on_invoker_enter()
+
+    def _invoker_mouse_leave_cb(self, invoker):
+        self.on_invoker_leave()
+
+    def _invoker_right_click_cb(self, invoker):
+        self.popup(immediate=True)
+
+    def __enter_notify_event_cb(self, widget, event):
+        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
+                event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.on_enter(event)
+
+    def __leave_notify_event_cb(self, widget, event):
+        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
+                event.mode == gtk.gdk.CROSSING_NORMAL:
+            self.on_leave(event)
+
+    def __show_cb(self, widget):
+        self._invoker.notify_popup()
+
+        self._up = True
+        self.emit('popup')
+
+    def __hide_cb(self, widget):
+        logging.debug('__hide_cb')
+        self._secondary_anim.stop()
+
+        if self._invoker:
+            self._invoker.notify_popdown()
+
+        self._up = False
+        self.emit('popdown')
+
+    def get_rect(self):
+        win_x, win_y = self.window.get_origin()
+        rectangle = self.get_allocation()
+
+        x = win_x + rectangle.x
+        y = win_y + rectangle.y
+        width = rectangle.width
+        height = rectangle.height
+
+        return gtk.gdk.Rectangle(x, y, width, height)
+
+    def get_palette_state(self):
+        return self._palette_state
+
+    def _set_palette_state(self, state):
+        self._palette_state = state
+
+    def set_palette_state(self, state):
+        self._set_palette_state(state)
+
+    palette_state = property(get_palette_state)
+
+class Palette(PaletteWindow):
+    __gtype_name__ = 'SugarPalette'
+
     # DEPRECATED: label is passed with the primary-text property, accel_path 
     # is set via the invoker property, and menu_after_content is not used
     def __init__(self, label=None, accel_path=None, menu_after_content=False,
                  text_maxlen=60, **kwargs):
 
-        self.palette_state = self.PRIMARY
-
         self._primary_text = None
         self._secondary_text = None
         self._icon = None
         self._icon_visible = True
-        self._group_id = None
 
         palette_box = gtk.VBox()
 
@@ -200,49 +473,18 @@ class Palette(gtk.Window):
 
         self._menu_content_separator = gtk.HSeparator()
 
-        self._popup_anim = animator.Animator(.5, 10)
-        self._popup_anim.add(_PopupAnimation(self))
-
         self._secondary_anim = animator.Animator(2.0, 10)
         self._secondary_anim.add(_SecondaryAnimation(self))
 
-        self._popdown_anim = animator.Animator(0.6, 10)
-        self._popdown_anim.add(_PopdownAnimation(self))
-
         # we init after initializing all of our containers
-        gobject.GObject.__init__(self, **kwargs)
-
-        self.set_decorated(False)
-        self.set_resizable(False)
-        # Just assume xthickness and ythickness are the same
-        self.set_border_width(self.get_style().xthickness)
-
-        accel_group = gtk.AccelGroup()
-        self.set_data('sugar-accel-group', accel_group)
-        self.add_accel_group(accel_group)
+        PaletteWindow.__init__(self, **kwargs)
 
         primary_box.set_size_request(-1, style.GRID_CELL_SIZE
                                      - 2 * self.get_border_width())
 
-
-        self.connect('show', self.__show_cb)
-        self.connect('hide', self.__hide_cb)
-        self.connect('realize', self.__realize_cb)
-        self.connect('destroy', self.__destroy_cb)
-
-        self._alignment = None
-        self._old_alloc = None
         self._full_request = [0, 0]
-        self._cursor_x = 0
-        self._cursor_y = 0
-        self._invoker = None
-        self._group_id = None
-        self._up = False
         self._menu_box = None
         self._content = None
-        self._invoker_hids = []
-        
-        self.set_group_id("default")
 
         # we set these for backward compatibility
         if label is not None:
@@ -263,21 +505,63 @@ class Palette(gtk.Window):
         self.menu = _Menu(self)
         self.menu.connect('item-inserted', self.__menu_item_inserted_cb)
 
-        self.connect('enter-notify-event', self.__enter_notify_event_cb)
-        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+        self.connect('realize', self.__realize_cb)
+        self.connect('show', self.__show_cb)
+        self.connect('hide', self.__hide_cb)
+        self.connect('notify::invoker', self.__notify_invoker_cb)
+        self.connect('destroy', self.__destroy_cb)
 
-        self._mouse_detector = MouseSpeedDetector(self, 200, 5)
-        self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
+    def _invoker_right_click_cb(self, invoker):
+        self.popup(immediate=True, state=self.SECONDARY)
+
+    def do_style_set(self, previous_style):
+        # Prevent a warning from pygtk
+        if previous_style is not None:
+            gtk.Window.do_style_set(self, previous_style)
+        self.set_border_width(self.get_style().xthickness)
 
     def __menu_item_inserted_cb(self, menu):
         self._update_separators()
 
     def __destroy_cb(self, palette):
-        self.set_group_id(None)
-
         # Break the reference cycle. It looks like the gc is not able to free
         # it, possibly because gtk.Menu memory handling is very special.
         self.menu = None
+
+    def __show_cb(self, widget):
+        self.menu.set_active(True)
+
+    def __hide_cb(self, widget):
+        logging.debug('__hide_cb')
+        self.menu.set_active(False)
+
+    def __notify_invoker_cb(self, palette, pspec):
+        invoker = self.props.invoker
+        if invoker is not None and hasattr(invoker.props, 'widget'):
+            logging.debug(('Setup widget', invoker.props.widget))
+            self._update_accel_widget()
+            self._invoker.connect('notify::widget',
+                                  self.__invoker_widget_changed_cb)
+
+    def __invoker_widget_changed_cb(self, invoker, spec):
+        self._update_accel_widget()
+
+    def get_full_size_request(self):
+        return self._full_request
+
+    def popup(self, immediate=False, state=None):
+        logging.debug('Palette.popup immediate %r' % immediate)
+
+        if self._invoker is not None:
+            self._update_full_request()
+    
+        PaletteWindow.popup(self, immediate)
+
+        if state is None:
+            state = self.PRIMARY
+        self.set_palette_state(state)
+
+        self._secondary_anim.start()
         
     def _add_menu(self):
         self._menu_box = gtk.VBox()
@@ -289,52 +573,6 @@ class Palette(gtk.Window):
         self._content = gtk.VBox()
         self._content.set_border_width(style.DEFAULT_SPACING)
         self._secondary_box.pack_start(self._content)
-
-    def do_style_set(self, previous_style):
-        # Prevent a warning from pygtk
-        if previous_style is not None:
-            gtk.Window.do_style_set(self, previous_style)
-        self.set_border_width(self.get_style().xthickness)
-
-    def is_up(self):
-        return self._up
-
-    def get_rect(self):
-        win_x, win_y = self.window.get_origin()
-        rectangle = self.get_allocation()
-
-        x = win_x + rectangle.x
-        y = win_y + rectangle.y
-        width = rectangle.width
-        height = rectangle.height
-        
-        return gtk.gdk.Rectangle(x, y, width, height)
-
-    def set_invoker(self, invoker):
-        for hid in self._invoker_hids[:]: 
-            self._invoker.disconnect(hid)
-            self._invoker_hids.remove(hid)
-
-        self._invoker = invoker
-        if invoker is not None:
-            self._invoker_hids.append(self._invoker.connect(
-                'mouse-enter', self._invoker_mouse_enter_cb))
-            self._invoker_hids.append(self._invoker.connect(
-                'mouse-leave', self._invoker_mouse_leave_cb))
-            self._invoker_hids.append(self._invoker.connect(
-                'right-click', self._invoker_right_click_cb))
-            if hasattr(invoker.props, 'widget'):
-                self._update_accel_widget()
-                logging.debug(('Setup widget', invoker.props.widget))
-                self._invoker_hids.append(self._invoker.connect(
-                    'notify::widget', self._invoker_widget_changed_cb))
-
-    def get_invoker(self):
-        return self._invoker
-
-    invoker = gobject.property(type=object,
-                               getter=get_invoker,
-                               setter=set_invoker)
 
     def _update_accel_widget(self):
         assert self.props.invoker is not None
@@ -438,24 +676,8 @@ class Palette(gtk.Window):
         self._update_accept_focus()
         self._update_separators()
 
-    def set_group_id(self, group_id):
-        if self._group_id:
-            group = palettegroup.get_group(self._group_id)
-            group.remove(self)
-        if group_id:
-            self._group_id = group_id
-            group = palettegroup.get_group(group_id)
-            group.add(self)
-
-    def get_group_id(self):
-        return self._group_id
-
-    group_id = gobject.property(type=str,
-                                getter=get_group_id,
-                                setter=set_group_id)
-
     def do_size_request(self, requisition):
-        gtk.Window.do_size_request(self, requisition)
+        PaletteWindow.do_size_request(self, requisition)
 
         # gtk.AccelLabel request doesn't include the accelerator.
         label_width = self._label_alignment.size_request()[0] + \
@@ -463,53 +685,8 @@ class Palette(gtk.Window):
                       2 * self.get_border_width()
 
         requisition.width = max(requisition.width,
-                                style.GRID_CELL_SIZE * 2,
                                 label_width,
                                 self._full_request[0])
-
-    def do_size_allocate(self, allocation):
-        gtk.Window.do_size_allocate(self, allocation)
-
-        if self._old_alloc is None or \
-           self._old_alloc.x != allocation.x or \
-           self._old_alloc.y != allocation.y or \
-           self._old_alloc.width != allocation.width or \
-           self._old_alloc.height != allocation.height:
-            self.queue_draw()
-
-        # We need to store old allocation because when size_allocate
-        # is called widget.allocation is already updated.
-        # gtk.Window resizing is different from normal containers:
-        # the X window is resized, widget.allocation is updated from
-        # the configure request handler and finally size_allocate is called.
-        self._old_alloc = allocation
-
-    def do_expose_event(self, event):
-        # We want to draw a border with a beautiful gap
-        if self._invoker is not None and self._invoker.has_rectangle_gap():
-            invoker = self._invoker.get_rect()
-            palette = self.get_rect()
-
-            gap = _calculate_gap(palette, invoker)
-        else:
-            gap = False
-
-        allocation = self.get_allocation()
-        wstyle = self.get_style()
-
-        if gap:
-            wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
-                                 gtk.SHADOW_IN, event.area, self, "palette",
-                                 0, 0, allocation.width, allocation.height,
-                                 gap[0], gap[1], gap[2])
-        else:
-            wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
-                             gtk.SHADOW_IN, event.area, self, "palette",
-                             0, 0, allocation.width, allocation.height)
-
-        # Fall trough to the container expose handler.
-        # (Leaving out the window expose handler which redraws everything)
-        gtk.Bin.do_expose_event(self, event)
 
     def _update_separators(self):
         visible = len(self.menu.get_children()) > 0 or  \
@@ -526,68 +703,21 @@ class Palette(gtk.Window):
             self.window.set_accept_focus(accept_focus)
 
     def __realize_cb(self, widget):
-        self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self._update_accept_focus()
 
     def _update_full_request(self):
-        if self.palette_state == self.PRIMARY:
+        if self._palette_state == self.PRIMARY:
             self.menu.embed(self._menu_box)
             self._secondary_box.show()
 
         self._full_request = self.size_request()
 
-        if self.palette_state == self.PRIMARY:
+        if self._palette_state == self.PRIMARY:
             self.menu.unembed()
             self._secondary_box.hide()
 
-    def _update_position(self):
-        invoker = self._invoker
-        if invoker is None or self._alignment is None:
-            logging.error('Cannot update the palette position.')
-            return
-
-        rect = self.size_request()
-        position = invoker.get_position_for_alignment(self._alignment, rect)
-        if position is None:
-            position = invoker.get_position(rect)
-
-        self.move(position.x, position.y)
-
-    def popup(self, immediate=False, state=None):
-        logging.debug('Palette.popup immediate %r' % immediate)
-
-        if state is None:
-            state = self.PRIMARY
-        self.set_state(state)
-
-        if self._invoker is not None:
-            self._update_full_request()
-            self._alignment = self._invoker.get_alignment(self._full_request)
-            self._update_position()
-            self.set_transient_for(self._invoker.get_toplevel())
-
-        self._popdown_anim.stop()
-
-        if not immediate:
-            self._popup_anim.start()
-        else:
-            self.show()
-
-        self._secondary_anim.start()
-
-    def popdown(self, immediate=False):
-        logging.debug('Palette.popdown immediate %r' % immediate)
-        self._popup_anim.stop()
-
-        self._mouse_detector.stop()
-
-        if not immediate:
-            self._popdown_anim.start()
-        else:
-            self.hide()
-
-    def set_state(self, state):
-        if self.palette_state == state:
+    def _set_palette_state(self, state):
+        if self._palette_state == state:
             return
 
         if state == self.PRIMARY:
@@ -596,73 +726,9 @@ class Palette(gtk.Window):
         elif state == self.SECONDARY:
             self.menu.embed(self._menu_box)
             self._secondary_box.show()
-            self._update_position()
+            self.update_position()
 
-        self.palette_state = state
-
-    def _mouse_slow_cb(self, widget):
-        self._mouse_detector.stop()
-        self._palette_do_popup()
-
-    def _palette_do_popup(self):
-        immediate = False
-
-        if self.is_up():
-            self._popdown_anim.stop() 
-            return
-
-        if self._group_id:
-            group = palettegroup.get_group(self._group_id)
-            if group and group.is_up():
-                immediate = True
-                group.popdown()
-
-        self.popup(immediate=immediate)
-
-    def _invoker_widget_changed_cb(self, invoker, spec):
-        self._update_accel_widget()
-
-    def _invoker_mouse_enter_cb(self, invoker):
-        self._mouse_detector.start()
-
-    def _invoker_mouse_leave_cb(self, invoker):
-        self._mouse_detector.stop()
-        self.popdown()
-
-    def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True, state=self.SECONDARY)
-
-    def __enter_notify_event_cb(self, widget, event):
-        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
-                event.mode == gtk.gdk.CROSSING_NORMAL:
-            self._popdown_anim.stop()
-            self._secondary_anim.start()
-
-    def __leave_notify_event_cb(self, widget, event):
-        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
-                event.mode == gtk.gdk.CROSSING_NORMAL:
-            self.popdown()
-
-    def __show_cb(self, widget):
-        self.menu.set_active(True)
-
-        self._invoker.notify_popup()
-
-        self._up = True
-        self.emit('popup')
-
-    def __hide_cb(self, widget):
-        logging.debug('__hide_cb')
-        self.menu.set_active(False)
-
-        self._secondary_anim.stop()
-
-        if self._invoker:
-            self._invoker.notify_popdown()
-
-        self._up = False
-        self.emit('popdown')
-
+        self._palette_state = state
 
 class PaletteActionBar(gtk.HButtonBox):
     def add_action(self, label, icon_name=None):
@@ -728,7 +794,7 @@ class _SecondaryAnimation(animator.Animation):
 
     def next_frame(self, current):
         if current == 1.0:
-            self._palette.set_state(Palette.SECONDARY)
+            self._palette.set_palette_state(Palette.SECONDARY)
 
 class _PopdownAnimation(animator.Animation):
     def __init__(self, palette):

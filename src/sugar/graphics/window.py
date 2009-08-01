@@ -21,6 +21,8 @@ STABLE.
 
 import gobject
 import gtk
+import logging
+import warnings
 
 from sugar.graphics.icon import Icon
 
@@ -84,8 +86,8 @@ class Window(gtk.Window):
         self.connect('realize', self.__window_realize_cb)
         self.connect('window-state-event', self.__window_state_event_cb)
         self.connect('key-press-event', self.__key_press_cb)
-
-        self.toolbox = None
+        
+        self.__toolbar_box = None
         self._alerts = []
         self._canvas = None
         self.tray = None
@@ -125,14 +127,19 @@ class Window(gtk.Window):
 
     canvas = property(get_canvas, set_canvas)
 
-    def set_toolbox(self, toolbox):
-        if self.toolbox:
-            self._vbox.remove(self.toolbox)
-            
-        self._vbox.pack_start(toolbox, False)
-        self._vbox.reorder_child(toolbox, 0)
-        
-        self.toolbox = toolbox
+    def get_toolbar_box(self):
+        return self.__toolbar_box
+
+    def set_toolbar_box(self, toolbar_box):
+        if self.__toolbar_box:
+            self._vbox.remove(self.__toolbar_box)
+
+        self._vbox.pack_start(toolbar_box, False)
+        self._vbox.reorder_child(toolbar_box, 0)
+
+        self.__toolbar_box = toolbar_box
+
+    toolbar_box = property(get_toolbar_box, set_toolbar_box)
 
     def set_tray(self, tray, position):
         if self.tray:
@@ -152,7 +159,7 @@ class Window(gtk.Window):
         self._alerts.append(alert)
         if len(self._alerts) == 1:
             self._vbox.pack_start(alert, False)
-            if self.toolbox is not None:
+            if self.__toolbar_box is not None:
                 self._vbox.reorder_child(alert, 1)
             else:   
                 self._vbox.reorder_child(alert, 0)
@@ -165,7 +172,7 @@ class Window(gtk.Window):
                 self._vbox.remove(alert)
                 if len(self._alerts) >= 1:
                     self._vbox.pack_start(self._alerts[0], False)
-                    if self.toolbox is not None:
+                    if self.__toolbar_box is not None:
                         self._vbox.reorder_child(self._alerts[0], 1)
                     else:
                         self._vbox.reorder_child(self._alert[0], 0)
@@ -180,8 +187,8 @@ class Window(gtk.Window):
             return False
 
         if event.new_window_state & gtk.gdk.WINDOW_STATE_FULLSCREEN:
-            if self.toolbox is not None:
-                self.toolbox.hide()
+            if self.__toolbar_box is not None:
+                self.__toolbar_box.hide()
             if self.tray is not None:
                 self.tray.hide()
 
@@ -199,8 +206,8 @@ class Window(gtk.Window):
                         self.__unfullscreen_button_timeout_cb)
 
         else:
-            if self.toolbox is not None:
-                self.toolbox.show()
+            if self.__toolbar_box is not None:
+                self.__toolbar_box.show()
             if self.tray is not None:
                 self.tray.show()
 
@@ -258,3 +265,14 @@ class Window(gtk.Window):
                                               setter=set_enable_fullscreen_mode,
                                               getter=get_enable_fullscreen_mode)
 
+    # DEPRECATED
+
+    def set_toolbox(self, toolbar_box):
+        warnings.warn('use toolbar_box instead of toolbox', DeprecationWarning)
+        self.set_toolbar_box(toolbar_box)
+
+    def get_toolbox(self):
+        warnings.warn('use toolbar_box instead of toolbox', DeprecationWarning)
+        return self.__toolbar_box
+
+    toolbox = property(get_toolbox, set_toolbox)

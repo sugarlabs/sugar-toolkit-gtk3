@@ -68,7 +68,6 @@ class ToolButton(gtk.ToolButton):
         if icon_name:
             self.set_icon(icon_name)
 
-        self.connect('clicked', self.__button_clicked_cb)
         self.get_child().connect('can-activate-accel',
                                  self.__button_can_activate_accel_cb)
 
@@ -151,8 +150,7 @@ class ToolButton(gtk.ToolButton):
                                   allocation.width, allocation.height)
 
         gtk.ToolButton.do_expose_event(self, event)
-    
-    def __button_clicked_cb(self, widget):
+
+    def do_clicked(self):
         if self.palette:
             self.palette.popdown(True)
-
