@@ -318,7 +318,7 @@ class PaletteWindow(gtk.Window):
     def get_full_size_request(self):
         return self.size_request()
 
-    def popup(self, immediate=False, state=None):
+    def popup(self, immediate=False):
         if self._invoker is not None:
             full_size_request = self.get_full_size_request()
             self._alignment = self._invoker.get_alignment(full_size_request)
@@ -365,7 +365,7 @@ class PaletteWindow(gtk.Window):
         self.on_invoker_leave()
 
     def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True, state=self.SECONDARY)
+        self.popup(immediate=True)
 
     def __enter_notify_event_cb(self, widget, event):
         if event.detail != gtk.gdk.NOTIFY_INFERIOR and \

@@ -93,6 +93,7 @@ class ToolbarButton(ToolButton):
             return
 
         if box.expanded_button is not None:
+            # need to redraw it to erase arrow
             expanded_toolitem = box.expanded_button.page_widget.toolbar_button
             if expanded_toolitem.window is not None:
                 expanded_toolitem.window.invalidate_rect(None, True)
@@ -216,14 +217,14 @@ class _ToolbarPalette(PaletteWindow):
         requisition.width = max(requisition.width,
                                 gtk.gdk.screen_width())
 
-    def popup(self, immediate=False, state=None):
+    def popup(self, immediate=False):
         button = self.toolbar_button
         if button.is_expanded():
             return
         box = button.toolbar_box
         _setup_page(button.page_widget, style.COLOR_BLACK.get_gdk_color(),
                 box.props.padding)
-        PaletteWindow.popup(self, immediate, state)
+        PaletteWindow.popup(self, immediate)
 
     def __group_popdown_cb(self, group):
         if self._focus == 0:
