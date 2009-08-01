@@ -34,6 +34,9 @@ from sugar import env
 from errno import EEXIST, ENOSPC
 
 import os
+import tempfile
+import subprocess
+import pwd
 
 _SHELL_SERVICE = "org.laptop.Shell"
 _SHELL_PATH = "/org/laptop/Shell"
@@ -44,10 +47,6 @@ _DS_INTERFACE = "org.laptop.sugar.DataStore"
 _DS_PATH = "/org/laptop/sugar/DataStore"
 
 _ACTIVITY_FACTORY_INTERFACE = "org.laptop.ActivityFactory"
-
-_RAINBOW_SERVICE_NAME = "org.laptop.security.Rainbow"
-_RAINBOW_ACTIVITY_FACTORY_PATH = "/"
-_RAINBOW_ACTIVITY_FACTORY_INTERFACE = "org.laptop.security.Rainbow"
 
 # helper method to close all filedescriptors
 # borrowed from subprocess.py
@@ -253,40 +252,47 @@ class ActivityCreationHandler(gobject.GObject):
                               self._handle.object_id,
                               self._handle.uri)
 
-        if not self._use_rainbow:
-            # use gobject spawn functionality, so that zombies are
-            # automatically reaped by the gobject event loop.
-            def child_setup():
-                # clone logfile.fileno() onto stdout/stderr
-                os.dup2(log_file.fileno(), 1)
-                os.dup2(log_file.fileno(), 2)
-                # close all other fds
-                _close_fds()
-            # we need to sanitize and str-ize the various bits which
-            # dbus gives us.
-            gobject.spawn_async([str(s) for s in command],
-                                envp=['%s=%s' % (k, str(v))
-                                        for k, v in environ.items()],
-                                working_directory=str(self._bundle.get_path()),
-                                child_setup=child_setup,
-                                flags=(gobject.SPAWN_SEARCH_PATH |
-                                        gobject.SPAWN_LEAVE_DESCRIPTORS_OPEN))
-            log_file.close()
-        else:
-            log_file.close()
-            system_bus = dbus.SystemBus()
-            factory = system_bus.get_object(_RAINBOW_SERVICE_NAME,
-                                            _RAINBOW_ACTIVITY_FACTORY_PATH)
-            factory.CreateActivity(
-                    log_path,
-                    environ,
-                    command,
-                    environ['SUGAR_BUNDLE_PATH'],
-                    environ['SUGAR_BUNDLE_ID'],
-                    timeout=30,
-                    reply_handler=self._create_reply_handler,
-                    error_handler=self._create_error_handler,
-                    dbus_interface=_RAINBOW_ACTIVITY_FACTORY_INTERFACE)
+        envdir = None
+        if self._use_rainbow:
+            envdir = tempfile.mkdtemp()
+            command = ['/usr/bin/sudo', '-E', '--',
+                       '/usr/bin/rainbow-run',
+                       '-v', '-v',
+                       '-a', '/usr/bin/rainbow-sugarize',
+                       '-s', '/var/spool/rainbow/2',
+                       '-f', '1',
+                       '-f', '2',
+                       '-c', self._bundle.get_path(),
+                       '-u', pwd.getpwuid(os.getuid()).pw_name,
+                       '-i', environ['SUGAR_BUNDLE_ID'],
+                       '-e', envdir,
+                       '--'
+                      ] + command
+            for k, v in environ.items():
+                open(os.path.join(envdir, str(k)), 'w').write(str(v))
+            log_file.write(' '.join(command) + '\n\n')
+
+        def handler(pid, condition, user_data):
+            if envdir: subprocess.call(['/bin/rm', '-rf', envdir])
+            try:
+                log_file.write('Activity died: pid %s condition %s data %s\n' %
+                    (pid, condition, user_data))
+            finally:
+                log_file.close()
+
+            # try to reap zombies in case SIGCHLD has not been set to SIG_IGN
+            try :
+              os.waitpid(pid, 0)
+            except OSError:
+              # SIGCHLD = SIG_IGN, no zombies
+              pass
+
+        devnull = file("/dev/null", "r")
+        child = subprocess.Popen([str(s) for s in command], env=environ,
+            cwd=str(self._bundle.get_path()), close_fds=True,
+            stdin=devnull.fileno(), stdout=log_file.fileno(),
+            stderr=log_file.fileno())
+        gobject.child_watch_add(child.pid, handler, self._handle.activity_id)
 
     def _no_reply_handler(self, *args):
         pass
