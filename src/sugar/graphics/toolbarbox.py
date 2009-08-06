@@ -257,7 +257,7 @@ def _setup_page(page_widget, color, hpad):
     page.modify_bg(gtk.STATE_NORMAL, color)
     if isinstance(page, gtk.Container):
         for i in page.get_children():
-            i.modify_bg(gtk.STATE_NORMAL, color)
+            i.modify_bg(gtk.STATE_INSENSITIVE, color)
 
     page_widget.modify_bg(gtk.STATE_NORMAL, color)
     page_widget.modify_bg(gtk.STATE_PRELIGHT, color)

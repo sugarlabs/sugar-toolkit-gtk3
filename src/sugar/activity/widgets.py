@@ -150,8 +150,7 @@ class TitleEntry(gtk.ToolItem):
 
     def modify_bg(self, state, color):
         gtk.ToolItem.modify_bg(self, state, color)
-        if state == gtk.STATE_NORMAL:
-            self.entry.modify_bg(gtk.STATE_INSENSITIVE, color)
+        self.entry.modify_bg(state, color)
 
     def __jobject_updated_cb(self, jobject):
         self.entry.set_text(jobject['title'])
