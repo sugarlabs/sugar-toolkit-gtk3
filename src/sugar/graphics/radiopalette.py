@@ -94,5 +94,6 @@ class RadioPalette(Palette):
         if not isinstance(parent, RadioMenuButton):
             return
 
+        parent.props.label = button.palette_label
         parent.set_icon(button.props.icon_name)
         parent.selected_button = button

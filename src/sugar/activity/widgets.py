@@ -37,6 +37,7 @@ class ActivityToolbarButton(ToolbarButton):
         toolbar.stop.hide()
 
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
+        self.props.label = _('Activity toolbar')
 
         from sugar.activity.activity import get_bundle_path
         bundle = ActivityBundle(get_bundle_path())
