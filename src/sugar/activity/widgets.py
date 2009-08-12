@@ -1,4 +1,4 @@
-# Copyright (C) 2009, Aleksey Lim
+# Copyright (C) 2009, Aleksey Lim, Simon Schampijer
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -99,6 +99,8 @@ class ShareButton(RadioMenuButton):
 
         RadioMenuButton.__init__(self, **kwargs)
         self.props.palette = palette
+        if activity.max_participants == 1:
+            self.props.sensitive = False
 
     def __neighborhood_clicked_cb(self, button, activity):
         activity.share()
