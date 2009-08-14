@@ -314,8 +314,20 @@ class Icon(gtk.Image):
 
     def __init__(self, **kwargs):
         self._buffer = _IconBuffer()
+        self._file = None
 
         gobject.GObject.__init__(self, **kwargs)
+
+    def get_file(self):
+        return self._file
+
+    def set_file(self, file_name):
+        self._file = file_name
+        self._buffer.file_name = file_name
+
+    # XXX we need to override file property to support auto_ptr objects
+    # that used to represent temporaly unzipped icons from bundles, see #1175
+    file = gobject.property(type=object, setter=set_file, getter=get_file)
 
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
