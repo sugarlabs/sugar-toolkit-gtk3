@@ -182,10 +182,10 @@ class Profile(object):
             '#export LM_DEBUG=net\n' \
             '#export GABBLE_DEBUG=all\n' \
             '#export ' \
-            'GABBLE_LOGFILE=~/.sugar/default/logs/telepathy-gabble.log\n' \
+            'GABBLE_LOGFILE=$HOME/.sugar/default/logs/telepathy-gabble.log\n' \
             '#export SALUT_DEBUG=all\n' \
             '#export ' \
-            'SALUT_LOGFILE=~/.sugar/default/logs/telepathy-salut.log\n' \
+            'SALUT_LOGFILE=$HOME/.sugar/default/logs/telepathy-salut.log\n' \
             '#export GIBBER_DEBUG=all\n' \
             '#export PRESENCESERVICE_DEBUG=1\n' \
             '#export SUGAR_LOGGER_LEVEL=debug\n\n' \
