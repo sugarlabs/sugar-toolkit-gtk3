@@ -57,7 +57,7 @@ class ActivityButton(ToolButton):
 
 class ActivityToolbarButton(ToolbarButton):
     def __init__(self, activity, **kwargs):
-        toolbar = ActivityToolbar(activity)
+        toolbar = ActivityToolbar(activity, orientation_left=True)
         toolbar.stop.hide()
 
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
@@ -202,7 +202,7 @@ class ActivityToolbar(gtk.Toolbar):
     All activities should have this toolbar. It is easiest to add it to your
     Activity by using the ActivityToolbox.
     """
-    def __init__(self, activity):
+    def __init__(self, activity, orientation_left=False):
         gtk.Toolbar.__init__(self)
 
         self._activity = activity
@@ -213,11 +213,12 @@ class ActivityToolbar(gtk.Toolbar):
             self.insert(title_button, -1)
             self.title = title_button.entry
 
-        separator = gtk.SeparatorToolItem()
-        separator.props.draw = False
-        separator.set_expand(True)
-        self.insert(separator, -1)
-        separator.show()
+        if orientation_left == False:
+            separator = gtk.SeparatorToolItem()
+            separator.props.draw = False
+            separator.set_expand(True)
+            self.insert(separator, -1)
+            separator.show()
 
         self.share = ShareButton(activity)
         self.share.show()
