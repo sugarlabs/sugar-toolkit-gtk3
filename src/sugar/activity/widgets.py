@@ -189,7 +189,7 @@ class TitleEntry(gtk.ToolItem):
         activity.save()
 
         shared_activity = activity.get_shared_activity()
-        if shared_activity is None:
+        if shared_activity is not None:
             shared_activity.props.name = title
 
         self._update_title_sid = None
