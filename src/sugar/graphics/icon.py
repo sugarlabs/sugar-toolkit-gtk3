@@ -314,6 +314,9 @@ class Icon(gtk.Image):
 
     def __init__(self, **kwargs):
         self._buffer = _IconBuffer()
+        # HACK: need to keep a reference to the path so it doesn't get garbage
+        # collected while it's still used if it's a sugar.util.TempFilePath.
+        # See #1175
         self._file = None
 
         gobject.GObject.__init__(self, **kwargs)
@@ -325,8 +328,6 @@ class Icon(gtk.Image):
         self._file = file_name
         self._buffer.file_name = file_name
 
-    # XXX we need to override file property to support auto_ptr objects
-    # that used to represent temporaly unzipped icons from bundles, see #1175
     file = gobject.property(type=object, setter=set_file, getter=get_file)
 
     def _sync_image_properties(self):
