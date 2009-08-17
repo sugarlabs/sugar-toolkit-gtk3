@@ -31,22 +31,40 @@ from sugar.bundle.activitybundle import ActivityBundle
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
+
+def _create_activity_icon():
+    from sugar.activity.activity import get_bundle_path
+    bundle = ActivityBundle(get_bundle_path())
+
+    client = gconf.client_get_default()
+    color = XoColor(client.get_string('/desktop/sugar/user/color'))
+    icon = Icon(file=bundle.get_icon(), xo_color=color)
+    return icon
+
+class ActivityButton(ToolButton):
+    def __init__(self, activity, **kwargs):
+        ToolButton.__init__(self, **kwargs)
+
+        icon = _create_activity_icon()
+        self.set_icon_widget(icon)
+        icon.show()
+
+        self.props.tooltip = activity.metadata['title']
+        activity.metadata.connect('updated', self.__jobject_updated_cb)
+
+    def __jobject_updated_cb(self, jobject):
+        self.props.tooltip = jobject['title']
+
 class ActivityToolbarButton(ToolbarButton):
     def __init__(self, activity, **kwargs):
         toolbar = ActivityToolbar(activity)
         toolbar.stop.hide()
 
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
-        self.props.label = _('Activity toolbar')
 
-        from sugar.activity.activity import get_bundle_path
-        bundle = ActivityBundle(get_bundle_path())
-
-        client = gconf.client_get_default()
-        color = XoColor(client.get_string('/desktop/sugar/user/color'))
-        icon = Icon(file=bundle.get_icon(), xo_color=color)
-        icon.show()
+        icon = _create_activity_icon()
         self.set_icon_widget(icon)
+        icon.show()
 
 class StopButton(ToolButton):
     def __init__(self, activity, **kwargs):
