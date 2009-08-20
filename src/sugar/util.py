@@ -303,3 +303,15 @@ def _cleanup_temp_files():
 
 atexit.register(_cleanup_temp_files)
 
+
+def format_size(size):
+    if not size:
+        return _('Empty')
+    elif size < 1024:
+        return _('%d B') % size
+    elif size < 1024**2:
+        return _('%d KB') % (size / 1024)
+    elif size < 1024**3:
+        return _('%d MB') % (size / 1024**2)
+    else:
+        return _('%d GB') % (size / 1024**3)
