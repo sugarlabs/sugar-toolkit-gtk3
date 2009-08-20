@@ -168,7 +168,6 @@ class Palette(PaletteWindow):
     def __notify_invoker_cb(self, palette, pspec):
         invoker = self.props.invoker
         if invoker is not None and hasattr(invoker.props, 'widget'):
-            logging.debug(('Setup widget', invoker.props.widget))
             self._update_accel_widget()
             self._invoker.connect('notify::widget',
                                   self.__invoker_widget_changed_cb)

@@ -197,8 +197,6 @@ class PaletteWindow(gtk.Window):
             self._invoker_hids.append(self._invoker.connect(
                 'right-click', self._invoker_right_click_cb))
 
-        logging.debug('         Invoker set to %r' % self._invoker)
-
     def get_invoker(self):
         return self._invoker
 
@@ -296,7 +294,6 @@ class PaletteWindow(gtk.Window):
         gtk.Bin.do_expose_event(self, event)
 
     def update_position(self):
-        logging.debug('    update_position    1 %r %r' % (self._invoker, self._alignment))
         invoker = self._invoker
         if invoker is None or self._alignment is None:
             logging.error('Cannot update the palette position.')
@@ -307,7 +304,6 @@ class PaletteWindow(gtk.Window):
         if position is None:
             position = invoker.get_position(rect)
 
-        logging.debug('    update_position    %r %r' % (position.x, position.y))
         self.move(position.x, position.y)
 
     def get_full_size_request(self):
@@ -329,7 +325,7 @@ class PaletteWindow(gtk.Window):
             self.show()
 
     def popdown(self, immediate=False):
-        logging.debug('Palette.popdown immediate %r' % immediate)
+        logging.debug('PaletteWindow.popdown immediate %r' % immediate)
         self._popup_anim.stop()
 
         self._mouse_detector.stop()
