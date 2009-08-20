@@ -109,16 +109,9 @@ def get_environment(activity):
     environ['SUGAR_BUNDLE_ID']   = activity.get_bundle_id()
     environ['SUGAR_ACTIVITY_ROOT'] = activity_root
     environ['PATH'] = bin_path + ':' + environ['PATH']
-    #environ['RAINBOW_STRACE_LOG'] = '1'
 
     if activity.get_path().startswith(env.get_user_activities_path()):
         environ['SUGAR_LOCALEDIR'] = os.path.join(activity.get_path(), 'locale')
-
-    if activity.get_bundle_id() in [ 'org.laptop.WebActivity', 
-                                     'org.laptop.GmailActivity',
-                                     'org.laptop.WikiBrowseActivity'
-                                   ]:
-        environ['RAINBOW_CONSTANT_UID'] = 'yes'
 
     return environ
 
