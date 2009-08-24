@@ -305,8 +305,8 @@ class Activity(Window, gtk.Container):
             else:
                 self.__joined_cb(self.shared_activity, True, None)
         elif share_scope != SCOPE_PRIVATE:
-            logging.debug("*** Act %s no existing mesh instance, but used to " \
-                          "be shared, will share" % self._activity_id)
+            logging.debug('*** Act %s no existing mesh instance, but used to '
+                'be shared, will share', self._activity_id)
             # no existing mesh instance, but activity used to be shared, so
             # restart the share
             if share_scope == SCOPE_INVITE_ONLY:
@@ -314,7 +314,7 @@ class Activity(Window, gtk.Container):
             elif share_scope == SCOPE_NEIGHBORHOOD:
                 self.share(private=False)
             else:
-                logging.debug("Unknown share scope %r" % share_scope)
+                logging.debug('Unknown share scope %r', share_scope)
 
         if handle.object_id is None and create_jobject:
             logging.debug('Creating a jobject.')
@@ -409,7 +409,7 @@ class Activity(Window, gtk.Container):
         pass
 
     def __jobject_error_cb(self, err):
-        logging.debug("Error creating activity datastore object: %s" % err)
+        logging.debug('Error creating activity datastore object: %s', err)
 
     def get_activity_root(self):
         """ FIXME: Deprecated. This part of the API has been moved 
@@ -486,13 +486,13 @@ class Activity(Window, gtk.Container):
         if self._closing:
             self._show_keep_failed_dialog()
             self._closing = False
-        logging.debug("Error saving activity object to datastore: %s" % err)
+        logging.debug('Error saving activity object to datastore: %s', err)
 
     def _cleanup_jobject(self):
         if self._jobject:
             if self._owns_file and os.path.isfile(self._jobject.file_path):
-                logging.debug('_cleanup_jobject: removing %r' %
-                              self._jobject.file_path)
+                logging.debug('_cleanup_jobject: removing %r',
+                    self._jobject.file_path)
                 os.remove(self._jobject.file_path)
             self._owns_file = False
             self._jobject.destroy()
@@ -550,7 +550,7 @@ class Activity(Window, gtk.Container):
             logging.debug('Cannot save, no journal object.')
             return
 
-        logging.debug('Activity.save: %r' % self._jobject.object_id)
+        logging.debug('Activity.save: %r', self._jobject.object_id)
 
         if self._updating_jobject:
             logging.info('Activity.save: still processing a previous request.')
@@ -594,7 +594,7 @@ class Activity(Window, gtk.Container):
         Activities should not override this method. Instead, like save() do any
         copy work that needs to be done in write_file()
         """
-        logging.debug('Activity.copy: %r' % self._jobject.object_id)
+        logging.debug('Activity.copy: %r', self._jobject.object_id)
         self.save()
         self._jobject.object_id = None
 
@@ -609,7 +609,7 @@ class Activity(Window, gtk.Container):
         self.shared_activity.disconnect(self._join_id)
         self._join_id = None
         if not success:
-            logging.debug("Failed to join activity: %s" % err)
+            logging.debug('Failed to join activity: %s', err)
             return
 
         self.present()
@@ -633,8 +633,8 @@ class Activity(Window, gtk.Container):
         self._pservice.disconnect(self._share_id)
         self._share_id = None
         if not success:
-            logging.debug('Share of activity %s failed: %s.' %
-                          (self._activity_id, err))
+            logging.debug('Share of activity %s failed: %s.',
+                self._activity_id, err)
             return
 
         logging.debug('Share of activity %s successful, PS activity is %r.',
@@ -652,7 +652,7 @@ class Activity(Window, gtk.Container):
 
     def _invite_response_cb(self, error):
         if error:
-            logging.error('Invite failed: %s' % error)
+            logging.error('Invite failed: %s', error)
 
     def _send_invites(self):
         while self._invites_queue:
@@ -662,7 +662,7 @@ class Activity(Window, gtk.Container):
                 self.shared_activity.invite(
                             buddy, '', self._invite_response_cb)
             else:
-                logging.error('Cannot invite %s, no such buddy.' % buddy_key)
+                logging.error('Cannot invite %s, no such buddy.', buddy_key)
 
     def invite(self, buddy_key):
         """Invite a buddy to join this Activity.
@@ -692,8 +692,8 @@ class Activity(Window, gtk.Container):
             raise RuntimeError("Activity %s already shared." %
                                self._activity_id)
         verb = private and 'private' or 'public'
-        logging.debug('Requesting %s share of activity %s.' %
-                      (verb, self._activity_id))
+        logging.debug('Requesting %s share of activity %s.', verb,
+            self._activity_id)
         self._share_id = self._pservice.connect("activity-shared", 
                                                 self.__share_cb)
         self._pservice.share_activity(self, private=private)

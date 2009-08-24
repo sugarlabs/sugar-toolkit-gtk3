@@ -66,8 +66,8 @@ class Profile(object):
             f = open(key_path, "r")
             lines = f.readlines()
             f.close()
-        except IOError, e:
-            logging.error("Error reading public key: %s" % e)
+        except IOError:
+            logging.exception('Error reading public key')
             return None
 
         magic = "ssh-dss "
@@ -92,8 +92,8 @@ class Profile(object):
             f = open(key_path, "r")
             lines = f.readlines()
             f.close()
-        except IOError, e:
-            logging.error("Error reading private key: %s" % e)
+        except IOError:
+            logging.exception('Error reading private key')
             return None
 
         key = ""

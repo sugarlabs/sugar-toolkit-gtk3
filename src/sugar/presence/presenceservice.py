@@ -473,8 +473,8 @@ class PresenceService(gobject.GObject):
 
     def _share_activity_error_cb(self, activity, err):
         """Notify with GObject event of unsuccessful sharing of activity"""
-        _logger.debug("Error sharing activity %s: %s" %
-                      (activity.get_id(), err))
+        _logger.debug('Error sharing activity %s: %s', activity.get_id(),
+            err)
         self.emit("activity-shared", False, None, err)
 
     def share_activity(self, activity, properties=None, private=True):

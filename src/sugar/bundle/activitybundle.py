@@ -110,21 +110,21 @@ class ActivityBundle(Bundle):
             # Remove duplicates
             if line in lines[0:num]:
                 lines[num] = ""
-                logging.warning("Bundle %s: duplicate entry in MANIFEST: %s"
-                                % (self._name,line))
+                logging.warning('Bundle %s: duplicate entry in MANIFEST: %s',
+                    self._name, line)
                 continue
             
             # Remove MANIFEST
             if line == "MANIFEST":
                 lines[num] = ""
-                logging.warning("Bundle %s: MANIFEST includes itself: %s"
-                                % (self._name,line))
+                logging.warning('Bundle %s: MANIFEST includes itself: %s',
+                    self._name, line)
                 
             # Remove invalid files
             if not self.is_file(line):
                 lines[num] = ""
-                logging.warning("Bundle %s: invalid entry in MANIFEST: %s"
-                                % (self._name,line))
+                logging.warning('Bundle %s: invalid entry in MANIFEST: %s',
+                    self._name, line)
 
         return lines
     
@@ -311,8 +311,8 @@ class ActivityBundle(Bundle):
             if path in manifestfiles:
                 manifestfiles.remove(path)
             elif path != "MANIFEST":
-                logging.warning("Bundle %s: %s not in MANIFEST"%
-                                (self._name,path))
+                logging.warning('Bundle %s: %s not in MANIFEST', self._name,
+                    path)
                 if strict_manifest:
                     os.remove(os.path.join(install_path, path))
                     

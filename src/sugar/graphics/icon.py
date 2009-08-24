@@ -143,8 +143,8 @@ class _IconBuffer(object):
 
                 del info
             else:
-                logging.warning('No icon with the name %s '
-                                'was found in the theme.' % self.icon_name)
+                logging.warning('No icon with the name %s was found in the '
+                    'theme.', self.icon_name)
 
         return icon_info
 

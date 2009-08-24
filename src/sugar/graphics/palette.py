@@ -179,7 +179,7 @@ class Palette(PaletteWindow):
         return self._full_request
 
     def popup(self, immediate=False, state=None):
-        logging.debug('Palette.popup immediate %r' % immediate)
+        logging.debug('Palette.popup immediate %r', immediate)
 
         if self._invoker is not None:
             self._update_full_request()

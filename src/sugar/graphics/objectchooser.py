@@ -110,7 +110,7 @@ class ObjectChooser(object):
     def __chooser_response_cb(self, chooser_id, object_id):
         if chooser_id != self._chooser_id:
             return
-        logging.debug('ObjectChooser.__chooser_response_cb: %r' % object_id)
+        logging.debug('ObjectChooser.__chooser_response_cb: %r', object_id)
         self._response_code = gtk.RESPONSE_ACCEPT
         self._object_id = object_id
         self._cleanup()
@@ -118,7 +118,7 @@ class ObjectChooser(object):
     def __chooser_cancelled_cb(self, chooser_id):
         if chooser_id != self._chooser_id:
             return
-        logging.debug('ObjectChooser.__chooser_cancelled_cb: %r' % chooser_id)
+        logging.debug('ObjectChooser.__chooser_cancelled_cb: %r', chooser_id)
         self._response_code = gtk.RESPONSE_CANCEL
         self._cleanup()
 

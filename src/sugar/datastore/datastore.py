@@ -183,7 +183,7 @@ def write(ds_object, update_mtime=True, transfer_ownership=False,
                                                   transfer_ownership)
         ds_object.metadata['uid'] = ds_object.object_id
         # TODO: register the object for updates
-    logging.debug('Written object %s to the datastore.' % ds_object.object_id)
+    logging.debug('Written object %s to the datastore.', ds_object.object_id)
 
 def delete(object_id):
     logging.debug('datastore.delete')

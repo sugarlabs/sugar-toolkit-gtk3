@@ -272,7 +272,7 @@ class TempFilePath(str):
         if path is None:
             fd, path = tempfile.mkstemp()
             os.close(fd)
-        logging.debug('TempFilePath created %r' % path)
+        logging.debug('TempFilePath created %r', path)
 
         if path in _tracked_paths:
             _tracked_paths[path] += 1
@@ -287,9 +287,9 @@ class TempFilePath(str):
             
             if os.path.exists(self):
                 os.unlink(self)
-                logging.debug('TempFilePath deleted %r' % self)
+                logging.debug('TempFilePath deleted %r', self)
             else:
-                logging.warning('TempFilePath already deleted %r' % self)
+                logging.warning('TempFilePath already deleted %r', self)
         else:
             _tracked_paths[self] -= 1
 

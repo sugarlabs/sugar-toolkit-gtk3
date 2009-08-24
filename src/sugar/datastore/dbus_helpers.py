@@ -52,8 +52,8 @@ def update(uid, properties, filename, transfer_ownership=False,
     debug_props = properties.copy()
     if debug_props.has_key("preview"):
         debug_props["preview"] = "<omitted>"
-    logging.debug('dbus_helpers.update: %s, %s, %s, %s' %
-                  (uid, filename, debug_props, transfer_ownership))
+    logging.debug('dbus_helpers.update: %s, %s, %s, %s', uid, filename,
+        debug_props, transfer_ownership)
     if reply_handler and error_handler:
         _get_data_store().update(uid, dbus.Dictionary(properties), filename,
                 transfer_ownership,
@@ -65,20 +65,20 @@ def update(uid, properties, filename, transfer_ownership=False,
                                  filename, transfer_ownership)
 
 def delete(uid):
-    logging.debug('dbus_helpers.delete: %r' % uid)
+    logging.debug('dbus_helpers.delete: %r', uid)
     _get_data_store().delete(uid)
         
 def get_properties(uid):
-    logging.debug('dbus_helpers.get_properties: %s' % uid)
+    logging.debug('dbus_helpers.get_properties: %s', uid)
     return _get_data_store().get_properties(uid, byte_arrays=True)
 
 def get_filename(uid):
     filename = _get_data_store().get_filename(uid)
-    logging.debug('dbus_helpers.get_filename: %s, %s' % (uid, filename))
+    logging.debug('dbus_helpers.get_filename: %s, %s', uid, filename)
     return filename
 
 def find(query, properties, reply_handler, error_handler):
-    logging.debug('dbus_helpers.find: %r %r' % (query, properties))
+    logging.debug('dbus_helpers.find: %r %r', query, properties)
     if reply_handler and error_handler:
         return _get_data_store().find(query, properties,
                 reply_handler=reply_handler, error_handler=error_handler,

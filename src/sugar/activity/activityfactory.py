@@ -143,7 +143,7 @@ def get_command(activity, activity_id=None, object_id=None, uri=None):
         if os.path.exists(absolute_path):
             command[0] = absolute_path
 
-    logging.debug('launching: %r' % command)
+    logging.debug('launching: %r', command)
 
     return command
 
@@ -300,25 +300,25 @@ class ActivityCreationHandler(gobject.GObject):
         pass
 
     def _notify_launch_failure_error_handler(self, err):
-        logging.error('Notify launch failure failed %s' % err)
+        logging.error('Notify launch failure failed %s', err)
 
     def _notify_launch_error_handler(self, err):
-        logging.debug('Notify launch failed %s' % err)
+        logging.debug('Notify launch failed %s', err)
 
     def _activate_reply_handler(self, activated):
         if not activated:
             self._create_activity()
 
     def _activate_error_handler(self, err):
-        logging.error("Activity activation request failed %s" % err)
+        logging.error('Activity activation request failed %s', err)
 
     def _create_reply_handler(self):
-        logging.debug("Activity created %s (%s)." %
-            (self._handle.activity_id, self._service_name))
+        logging.debug('Activity created %s (%s).',
+            self._handle.activity_id, self._service_name)
 
     def _create_error_handler(self, err):
-        logging.error("Couldn't create activity %s (%s): %s" %
-            (self._handle.activity_id, self._service_name, err))
+        logging.error("Couldn't create activity %s (%s): %s",
+            self._handle.activity_id, self._service_name, err)
         self._shell.NotifyLaunchFailure(
             self._handle.activity_id, reply_handler=self._no_reply_handler,
             error_handler=self._notify_launch_failure_error_handler)
@@ -331,7 +331,7 @@ class ActivityCreationHandler(gobject.GObject):
         self._launch_activity()
 
     def _find_object_error_handler(self, err):
-        logging.error("Datastore find failed %s" % err)
+        logging.error('Datastore find failed %s', err)
         self._launch_activity()
 
 def create(bundle, activity_handle=None):

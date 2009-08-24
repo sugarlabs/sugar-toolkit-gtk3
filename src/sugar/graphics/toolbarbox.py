@@ -205,7 +205,7 @@ class _ToolbarPalette(PaletteWindow):
     def _handle_focus(self, delta):
         self._focus += delta
         if self._focus not in (0, 1):
-            logging.error('_Palette._focus=%s not in (0, 1)' % self._focus)
+            logging.error('_Palette._focus=%s not in (0, 1)', self._focus)
 
         if self._focus == 0:
             group = palettegroup.get_group('default')

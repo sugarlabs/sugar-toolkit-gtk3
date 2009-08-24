@@ -325,7 +325,7 @@ class PaletteWindow(gtk.Window):
             self.show()
 
     def popdown(self, immediate=False):
-        logging.debug('PaletteWindow.popdown immediate %r' % immediate)
+        logging.debug('PaletteWindow.popdown immediate %r', immediate)
         self._popup_anim.stop()
 
         self._mouse_detector.stop()
