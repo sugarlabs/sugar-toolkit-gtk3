@@ -17,7 +17,6 @@
 
 import gtk
 
-from sugar.graphics import style
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.palette import Palette
 

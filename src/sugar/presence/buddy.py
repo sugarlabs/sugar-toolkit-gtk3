@@ -153,9 +153,9 @@ class Buddy(gobject.GObject):
         """Retrieve our dbus object path"""
         return self._object_path
 
-    def _emit_icon_changed_signal(self, bytes):
+    def _emit_icon_changed_signal(self, icon_data):
         """Emit GObject signal when icon has changed"""
-        self._icon = str(bytes)
+        self._icon = str(icon_data)
         self.emit('icon-changed')
         return False
 

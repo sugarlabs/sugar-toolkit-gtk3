@@ -1019,7 +1019,8 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         if self._buffer.background_color != value:
             self._buffer.background_color = value
 
-    background_color = gobject.property(type=object, setter=set_background_color)
+    background_color = gobject.property(type=object, 
+                                        setter=set_background_color)
 
     def set_size(self, value):
         if self._buffer.width != value:
@@ -1061,7 +1062,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         if pos is None:
             return False
 
-        path, column, x, y = pos
+        path_, column, x, y = pos
 
         for cell_renderer in column.get_cell_renderers():
             if cell_renderer == self:

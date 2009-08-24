@@ -22,7 +22,6 @@ STABLE.
 
 import gobject
 import gtk
-import logging
 import warnings
 
 from sugar.graphics.icon import Icon
@@ -101,7 +100,8 @@ class Window(gtk.Window):
         self._event_box = gtk.EventBox()
         self._hbox.pack_start(self._event_box)
         self._event_box.show()
-        self._event_box.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK | gtk.gdk.POINTER_MOTION_MASK)
+        self._event_box.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK 
+                                   | gtk.gdk.POINTER_MOTION_MASK)
         self._event_box.connect('motion-notify-event', self.__motion_notify_cb)
 
         self.add(self._vbox)

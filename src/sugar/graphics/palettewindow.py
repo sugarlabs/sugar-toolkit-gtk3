@@ -26,13 +26,10 @@ import logging
 import gtk
 import gobject
 import hippo
-import pango
 
 from sugar.graphics import palettegroup
 from sugar.graphics import animator
 from sugar.graphics import style
-from sugar.graphics.icon import Icon
-from sugar import _sugarext
 
 # Helper function to find the gap position and size of widget a
 def _calculate_gap(a, b):
@@ -906,8 +903,8 @@ class CellRendererInvoker(Invoker):
 
     def _redraw_path(self, path):
         model = self._tree_view.get_model()
-        iter = model.get_iter(path)
-        model.row_changed(path, iter)
+        iterator = model.get_iter(path)
+        model.row_changed(path, iterator)
 
     def __leave_notify_event_cb(self, widget, event):
         self.notify_mouse_leave()
@@ -931,7 +928,7 @@ class CellRendererInvoker(Invoker):
         if pos is None:
             return False
 
-        path, column, x, y = pos
+        path_, column, x, y_ = pos
 
         for cell_renderer in column.get_cell_renderers():
             if cell_renderer == self._cell_renderer:
