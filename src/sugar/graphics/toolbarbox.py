@@ -27,6 +27,8 @@ from sugar.graphics import palettegroup
 class ToolbarButton(ToolButton):
     def __init__(self, page=None, **kwargs):
         ToolButton.__init__(self, **kwargs)
+        
+        self.page_widget = None
 
         self.set_page(page)
 

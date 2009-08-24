@@ -25,7 +25,6 @@ import logging
 
 import gtk
 import gobject
-import hippo
 import pango
 
 from sugar.graphics import palettegroup
