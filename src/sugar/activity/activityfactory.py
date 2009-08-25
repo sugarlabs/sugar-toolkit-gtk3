@@ -269,7 +269,7 @@ class ActivityCreationHandler(gobject.GObject):
             stderr=log_file.fileno())
 
         gobject.child_watch_add(child.pid,
-                                __child_watch_cb,
+                                _child_watch_cb,
                                 (environment_dir, log_file))
 
     def _no_reply_handler(self, *args):
@@ -328,7 +328,7 @@ def create_with_object_id(bundle, object_id):
 
 # FIXME we use standalone method here instead of ActivityCreationHandler's
 # member to have workaround code, see #1123
-def __child_watch_cb(pid, condition, user_data):
+def _child_watch_cb(pid, condition, user_data):
     environment_dir, log_file = user_data
     if environment_dir is not None:
         subprocess.call(['/bin/rm', '-rf', environment_dir])
