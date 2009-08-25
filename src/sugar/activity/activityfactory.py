@@ -269,25 +269,8 @@ class ActivityCreationHandler(gobject.GObject):
             stderr=log_file.fileno())
 
         gobject.child_watch_add(child.pid,
-                                self.__child_watch_cb,
+                                __child_watch_cb,
                                 (environment_dir, log_file))
-
-    def __child_watch_cb(self, pid, condition, user_data):
-        environment_dir, log_file = user_data
-        if environment_dir is not None:
-            subprocess.call(['/bin/rm', '-rf', environment_dir])
-        try:
-            log_file.write('Activity died: pid %s condition %s data %s\n' %
-                (pid, condition, user_data))
-        finally:
-            log_file.close()
-
-        # try to reap zombies in case SIGCHLD has not been set to SIG_IGN
-        try:
-            os.waitpid(pid, 0)
-        except OSError:
-            # SIGCHLD = SIG_IGN, no zombies
-            pass
 
     def _no_reply_handler(self, *args):
         pass
@@ -342,3 +325,22 @@ def create_with_object_id(bundle, object_id):
     """Create a new activity and pass the object id as handle."""
     activity_handle = ActivityHandle(object_id=object_id)
     return ActivityCreationHandler(bundle, activity_handle)
+
+# FIXME we use standalone method here instead of ActivityCreationHandler's
+# member to have workaround code, see #1123
+def __child_watch_cb(pid, condition, user_data):
+    environment_dir, log_file = user_data
+    if environment_dir is not None:
+        subprocess.call(['/bin/rm', '-rf', environment_dir])
+    try:
+        log_file.write('Activity died: pid %s condition %s data %s\n' %
+            (pid, condition, user_data))
+    finally:
+        log_file.close()
+
+    # try to reap zombies in case SIGCHLD has not been set to SIG_IGN
+    try:
+        os.waitpid(pid, 0)
+    except OSError:
+        # SIGCHLD = SIG_IGN, no zombies
+        pass
