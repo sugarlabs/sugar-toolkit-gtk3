@@ -29,11 +29,11 @@ class CanvasTextView(hippo.CanvasWidget):
         self.text_view_widget.props.right_margin = style.DEFAULT_SPACING
         self.text_view_widget.props.wrap_mode = gtk.WRAP_WORD
         self.text_view_widget.show()
-        
+
         # TODO: These fields should expand vertically instead of scrolling
         scrolled_window = gtk.ScrolledWindow()
         scrolled_window.set_shadow_type(gtk.SHADOW_OUT)
         scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         scrolled_window.add(self.text_view_widget)
-        
+
         self.props.widget = scrolled_window

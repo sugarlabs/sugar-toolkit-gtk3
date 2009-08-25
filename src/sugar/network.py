@@ -124,7 +124,7 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.wfile.flush()
         self.wfile.close()
         self.rfile.close()
-        
+
     def finish(self):
         """Close the sockets when we're done, not before"""
         pass

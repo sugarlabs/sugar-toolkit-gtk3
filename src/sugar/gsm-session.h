@@ -39,25 +39,25 @@ extern GsmSession *global_session;
 typedef enum {
   /* gsm's own startup/initialization phase */
   GSM_SESSION_PHASE_STARTUP,
-  
+
   /* xrandr setup, gnome-settings-daemon, etc */
   GSM_SESSION_PHASE_INITIALIZATION,
-  
+
   /* window/compositing managers */
   GSM_SESSION_PHASE_WINDOW_MANAGER,
-  
+
   /* apps that will create _NET_WM_WINDOW_TYPE_PANEL windows */
   GSM_SESSION_PHASE_PANEL,
-  
+
   /* apps that will create _NET_WM_WINDOW_TYPE_DESKTOP windows */
   GSM_SESSION_PHASE_DESKTOP,
-  
+
   /* everything else */
   GSM_SESSION_PHASE_APPLICATION,
-  
+
   /* done launching */
   GSM_SESSION_PHASE_RUNNING,
-  
+
   /* shutting down */
   GSM_SESSION_PHASE_SHUTDOWN
 } GsmSessionPhase;

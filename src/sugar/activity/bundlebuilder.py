@@ -36,7 +36,7 @@ from sugar.bundle.activitybundle import ActivityBundle
 
 IGNORE_DIRS = ['dist', '.git']
 IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
-        
+
 def list_files(base_dir, ignore_dirs=None, ignore_files=None):
     result = []
 
@@ -46,7 +46,7 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
         if ignore_files:
             for pattern in ignore_files:
                 files = [f for f in files if not fnmatch(f, pattern)]
-                
+
         rel_path = root[len(base_dir) + 1:]
         for f in files:
             result.append(os.path.join(rel_path, f))
@@ -83,7 +83,7 @@ class Config(object):
         self.bundle_name = reduce(lambda x, y:x+y, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%d' % (self.bundle_name, self.version)
-            
+
         if self.dist_name:
             self.xo_name = self.tar_name = self.dist_name
         else:
@@ -103,7 +103,7 @@ class Builder(object):
         if not self.config.bundle.is_dir(po_dir):
             logging.warn("Missing po/ dir, cannot build_locale")
             return
-        
+
         locale_dir = os.path.join(self.config.source_dir, 'locale')
 
         if os.path.exists(locale_dir):
@@ -154,15 +154,15 @@ class Builder(object):
                 missing_files.append(path)
 
         return missing_files
-        
+
     def fix_manifest(self):
         self.build()
 
         manifest = self.config.bundle.manifest
-        
+
         for path in self.check_manifest():
             manifest.append(path)
-        
+
         f = open(os.path.join(self.config.source_dir, "MANIFEST"), "wb")
         for line in manifest:
             f.write(line + "\n")
@@ -186,7 +186,7 @@ class XOPackager(Packager):
     def package(self):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
-        
+
         missing_files = self.builder.check_manifest()
         if missing_files:
             logging.warn('These files are not included in the manifest ' \
@@ -207,14 +207,14 @@ class SourcePackager(Packager):
                                          self.config.tar_name)
 
     def get_files(self):
-        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE, 
+        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
                                   cwd=self.config.source_dir)
         stdout, _ = git_ls.communicate()
         if git_ls.returncode :
             # Fall back to filtered list
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
-        
+
         return [path.strip() for path in stdout.strip('\n').split('\n')]
 
     def package(self):
@@ -286,7 +286,7 @@ def cmd_dist_xo(config, args):
     if args:
         print 'Usage: %prog dist_xo'
         return
-   
+
     packager = XOPackager(Builder(config))
     packager.package()
 

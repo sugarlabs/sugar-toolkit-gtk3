@@ -50,7 +50,7 @@ import gtk
 import gobject
 import hippo
 import math
-        
+
 from sugar.graphics import style
 from sugar.graphics.icon import Icon
 
@@ -111,24 +111,24 @@ class Alert(gtk.EventBox):
         self._msg_label.set_alignment(0, 0.5)
         self._msg_box.pack_start(self._msg_label, False)
         self._hbox.pack_start(self._msg_box, False)
-        
+
         self._buttons_box = gtk.HButtonBox()
         self._buttons_box.set_layout(gtk.BUTTONBOX_END)
         self._buttons_box.set_spacing(style.DEFAULT_SPACING)
         self._hbox.pack_start(self._buttons_box)
-        
+
         gobject.GObject.__init__(self, **kwargs)
 
-        self.set_visible_window(True)        
-        self.add(self._hbox)        
+        self.set_visible_window(True)
+        self.add(self._hbox)
         self._title_label.show()
         self._msg_label.show()
         self._buttons_box.show()
         self._msg_box.show()
         self._hbox.show()
         self.show()
-        
-    def do_set_property(self, pspec, value):        
+
+    def do_set_property(self, pspec, value):
         """
         Set alert property
 
@@ -299,21 +299,21 @@ class _TimeoutIcon(hippo.CanvasText, hippo.CanvasItem):
 
     def __init__(self, **kwargs):
         hippo.CanvasText.__init__(self, **kwargs)
-        
+
         self.props.orientation = hippo.ORIENTATION_HORIZONTAL
         self.props.border_left = style.DEFAULT_SPACING
         self.props.border_right = style.DEFAULT_SPACING
-            
+
     def do_paint_background(self, cr, damaged_box):
         [width, height] = self.get_allocation()
-        
+
         xval = width * 0.5
         yval = height * 0.5
-        radius = min(width * 0.5, height * 0.5)         
-        
+        radius = min(width * 0.5, height * 0.5)
+
         hippo.cairo_set_source_rgba32(cr, self.props.background_color)
-        cr.arc(xval, yval, radius, 0, 2*math.pi)        
-        cr.fill_preserve()    
+        cr.arc(xval, yval, radius, 0, 2*math.pi)
+        cr.fill_preserve()
 
 
 class TimeoutAlert(Alert):
@@ -362,22 +362,22 @@ class TimeoutAlert(Alert):
         Alert.__init__(self, **kwargs)
 
         self._timeout = timeout
-        
+
         icon = Icon(icon_name='dialog-cancel')
         self.add_button(gtk.RESPONSE_CANCEL, _('Cancel'), icon)
         icon.show()
-        
+
         self._timeout_text = _TimeoutIcon(
             text=self._timeout,
             color=style.COLOR_BUTTON_GREY.get_int(),
-            background_color=style.COLOR_WHITE.get_int())    
+            background_color=style.COLOR_WHITE.get_int())
         canvas = hippo.Canvas()
         canvas.set_root(self._timeout_text)
-        canvas.show()                       
+        canvas.show()
         self.add_button(gtk.RESPONSE_OK, _('Continue'), canvas)
 
         gobject.timeout_add_seconds(1, self.__timeout)
-        
+
     def __timeout(self):
         self._timeout -= 1
         self._timeout_text.props.text = self._timeout

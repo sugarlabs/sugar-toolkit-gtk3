@@ -43,7 +43,7 @@ def get_single_process_path(bundle_id):
 class SingleProcess(dbus.service.Object):
     def __init__(self, name_service, constructor):
         self.constructor = constructor
-    
+
         bus = dbus.SessionBus()
         bus_name = dbus.service.BusName(name_service, bus=bus)
         object_path = get_single_process_path(name_service)
@@ -77,7 +77,7 @@ def main():
 
     if len(args) == 0:
         print 'A python class must be specified as first argument.'
-        sys.exit(1)    
+        sys.exit(1)
 
     bundle_path = os.environ['SUGAR_BUNDLE_PATH']
     sys.path.append(bundle_path)
@@ -102,7 +102,7 @@ def main():
     module_name = splitted_module[0]
     class_name = splitted_module[1]
 
-    module = __import__(module_name)        
+    module = __import__(module_name)
     for comp in module_name.split('.')[1:]:
         module = getattr(module, comp)
 

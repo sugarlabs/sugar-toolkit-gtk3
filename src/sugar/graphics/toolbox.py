@@ -36,7 +36,7 @@ class Toolbox(gtk.VBox):
 
     def __init__(self):
         gtk.VBox.__init__(self)
-        
+
         self._notebook = gtk.Notebook()
         self._notebook.set_tab_pos(gtk.POS_BOTTOM)
         self._notebook.set_show_border(False)
@@ -55,12 +55,12 @@ class Toolbox(gtk.VBox):
                     border_bottom=style.LINE_WIDTH)
         self._separator.set_root(box)
         self.pack_start(self._separator, False)
-        
+
         self._notebook.connect('notify::page', self._notify_page_cb)
 
     def _notify_page_cb(self, notebook, pspec):
         self.emit('current-toolbar-changed', notebook.props.page)
-        
+
     def add_toolbar(self, name, toolbar):
         label = gtk.Label(name)
         width, height_ = label.size_request()
@@ -68,7 +68,7 @@ class Toolbox(gtk.VBox):
         label.set_alignment(0.0, 0.5)
 
         event_box = gtk.EventBox()
-        
+
         alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
         alignment.set_padding(0, 0, style.TOOLBOX_HORIZONTAL_PADDING,
                               style.TOOLBOX_HORIZONTAL_PADDING)
@@ -83,7 +83,7 @@ class Toolbox(gtk.VBox):
         if self._notebook.get_n_pages() > 1:
             self._notebook.set_show_tabs(True)
             self._separator.show()
-                    
+
     def remove_toolbar(self, index):
         self._notebook.remove_page(index)
 
@@ -96,6 +96,6 @@ class Toolbox(gtk.VBox):
 
     def get_current_toolbar(self):
         return self._notebook.get_current_page()
-    
+
     current_toolbar = property(get_current_toolbar, set_current_toolbar)
 

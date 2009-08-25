@@ -315,7 +315,7 @@ gsm_app_provides (GsmApp *app, const char *service)
   return FALSE;
 }
 
-static void 
+static void
 app_exited (GPid pid, gint status, gpointer data)
 {
   if (WIFEXITED (status))

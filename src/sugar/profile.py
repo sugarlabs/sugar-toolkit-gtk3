@@ -33,18 +33,18 @@ _profile = None
 
 class Profile(object):
     """Local user's current options/profile information
-    
-    User settings were previously stored in an INI-style 
-    configuration file. We moved to gconf now. The deprected 
+
+    User settings were previously stored in an INI-style
+    configuration file. We moved to gconf now. The deprected
     API is kept around to not break activities still using it.
 
     The profile is also responsible for loading the user's
     public and private ssh keys from disk.
-    
+
     Attributes:
-        
+
         pubkey -- public ssh key
-        privkey_hash -- SHA has of the child's public key 
+        privkey_hash -- SHA has of the child's public key
     """
     def __init__(self, path):
         self._pubkey = None
@@ -138,7 +138,7 @@ class Profile(object):
             client.set_string("/desktop/sugar/user/color", color)
         if cp.has_option('Jabber', 'Server'):
             server = cp.get('Jabber', 'Server')
-            client.set_string("/desktop/sugar/collaboration/jabber_server", 
+            client.set_string("/desktop/sugar/collaboration/jabber_server",
                               server)
         if cp.has_option('Date', 'Timezone'):
             timezone = cp.get('Date', 'Timezone')
@@ -165,7 +165,7 @@ class Profile(object):
                 client.set_bool("/desktop/sugar/power/extreme", True)
         if cp.has_option('Shell', 'FavoritesLayout'):
             layout = cp.get('Shell', 'FavoritesLayout')
-            client.set_string("/desktop/sugar/desktop/favorites_layout", 
+            client.set_string("/desktop/sugar/desktop/favorites_layout",
                               layout)
         del cp
         try:
@@ -191,7 +191,7 @@ class Profile(object):
             '#export SUGAR_LOGGER_LEVEL=debug\n\n' \
             '# Uncomment the following line to enable core dumps\n' \
             '#ulimit -c unlimited\n'
-        fd.write(text)        
+        fd.write(text)
         fd.close()
 
 def get_profile():
@@ -205,11 +205,11 @@ def get_profile():
 
 def get_nick_name():
     client = gconf.client_get_default()
-    return client.get_string("/desktop/sugar/user/nick")    
+    return client.get_string("/desktop/sugar/user/nick")
 
 def get_color():
     client = gconf.client_get_default()
-    color = client.get_string("/desktop/sugar/user/color")    
+    color = client.get_string("/desktop/sugar/user/color")
     return XoColor(color)
 
 def get_pubkey():

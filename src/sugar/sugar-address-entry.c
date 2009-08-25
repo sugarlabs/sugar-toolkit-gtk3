@@ -87,14 +87,14 @@ gtk_entry_get_pixel_ranges (GtkEntry  *entry,
       if (ranges)
 	{
 	  gint *r = *ranges;
-	  
+
 	  for (i = 0; i < real_n_ranges; ++i)
 	    {
 	      r[2 * i + 1] = (r[2 * i + 1] - r[2 * i]) / PANGO_SCALE;
 	      r[2 * i] = r[2 * i] / PANGO_SCALE;
 	    }
 	}
-      
+
       if (n_ranges)
 	*n_ranges = real_n_ranges;
     }
@@ -117,7 +117,7 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
     {
       if (strong_x)
 	*strong_x = 0;
-      
+
       if (weak_x)
 	*weak_x = 0;
     }
@@ -128,7 +128,7 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
       const gchar *text = pango_layout_get_text (layout);
       PangoRectangle strong_pos, weak_pos;
       gint index;
-  
+
       if (type == CURSOR_STANDARD)
 	{
 	  index = g_utf8_offset_to_pointer (text, entry->current_pos + entry->preedit_cursor) - text;
@@ -148,12 +148,12 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
 		}
 	    }
 	}
-      
+
       pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
-      
+
       if (strong_x)
 	*strong_x = strong_pos.x / PANGO_SCALE;
-      
+
       if (weak_x)
 	*weak_x = weak_pos.x / PANGO_SCALE;
     }
@@ -165,7 +165,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 {
   GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
-  
+
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       GtkWidget *widget = GTK_WIDGET (entry);
@@ -186,7 +186,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       xoffset = inner_border.left - entry->scroll_offset;
 
       gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
-      
+
       gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
 
       g_object_get (gtk_widget_get_settings (widget),
@@ -194,7 +194,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 		    NULL);
 
       dir1 = entry->resolved_dir;
-      
+
       if (split_cursor)
 	{
 	  x1 = strong_x;
@@ -221,7 +221,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       draw_insertion_cursor (entry,
 			     &cursor_location, TRUE, dir1,
 			     dir2 != PANGO_DIRECTION_NEUTRAL);
-      
+
       if (dir2 != PANGO_DIRECTION_NEUTRAL)
 	{
 	  cursor_location.x = xoffset + x2;
@@ -243,7 +243,7 @@ get_layout_position (GtkEntry *entry,
   GtkBorder inner_border;
   gint y_pos;
   PangoLayoutLine *line;
-  
+
 //  layout = gtk_entry_ensure_layout (entry, TRUE);
   layout = gtk_entry_get_layout(entry);
 
@@ -254,11 +254,11 @@ get_layout_position (GtkEntry *entry,
 
   line = pango_layout_get_lines (layout)->data;
   pango_layout_line_get_extents (line, NULL, &logical_rect);
-  
+
   /* Align primarily for locale's ascent/descent */
-  y_pos = ((area_height - entry->ascent - entry->descent) / 2 + 
+  y_pos = ((area_height - entry->ascent - entry->descent) / 2 +
            entry->ascent + logical_rect.y);
-  
+
   /* Now see if we need to adjust to fit in actual drawn string */
   if (logical_rect.height > area_height)
     y_pos = (area_height - logical_rect.height) / 2;
@@ -266,7 +266,7 @@ get_layout_position (GtkEntry *entry,
     y_pos = 0;
   else if (y_pos + logical_rect.height > area_height)
     y_pos = area_height - logical_rect.height;
-  
+
   y_pos = inner_border.top + y_pos / PANGO_SCALE;
 
   if (x)
@@ -306,10 +306,10 @@ static void
 gtk_entry_draw_text (GtkEntry *entry)
 {
   GtkWidget *widget;
-  
+
   if (!entry->visible && entry->invisible_char == 0)
     return;
-  
+
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       //PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
@@ -317,9 +317,9 @@ gtk_entry_draw_text (GtkEntry *entry)
       cairo_t *cr;
       gint x, y;
       gint start_pos, end_pos;
-      
+
       widget = GTK_WIDGET (entry);
-      
+
       get_layout_position (entry, &x, &y);
 
       cr = gdk_cairo_create (entry->text_area);
@@ -360,14 +360,14 @@ gtk_entry_draw_text (GtkEntry *entry)
 			     logical_rect.height);
 
 	  cairo_clip (cr);
-	  
+
 	  gdk_cairo_set_source_color (cr, selection_color);
 	  cairo_paint (cr);
 
 	  cairo_move_to (cr, x, y);
 	  gdk_cairo_set_source_color (cr, text_color);
 	  pango_cairo_show_layout (cr, layout);
-	  
+
 	  g_free (ranges);
 	}
 
@@ -427,7 +427,7 @@ get_text_area_size (GtkEntry *entry,
 
   if (y)
     *y = yborder;
-  
+
   if (width)
     *width = GTK_WIDGET (entry)->allocation.width - xborder * 2;
 
@@ -471,7 +471,7 @@ sugar_address_entry_expose(GtkWidget      *widget,
 			cairo_fill(cr);
 			cairo_destroy (cr);
 		}
-	
+
 
       if ((entry->visible || entry->invisible_char != 0) &&
           GTK_WIDGET_HAS_FOCUS (widget) &&

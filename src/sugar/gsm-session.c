@@ -120,8 +120,8 @@ gsm_session_class_init (GsmSessionClass *klass)
 
 /**
  * gsm_session_set_name:
- * @session: session instance 
- * @name: name of the session 
+ * @session: session instance
+ * @name: name of the session
  *
  * Sets the name of a running session.
  **/
@@ -231,7 +231,7 @@ gsm_session_register_client (GsmSession *session,
 			     const char *id)
 {
   GSList *a;
-  char *client_id = NULL; 
+  char *client_id = NULL;
 
   /* If we're shutting down, we don't accept any new session
      clients. */
@@ -252,7 +252,7 @@ gsm_session_register_client (GsmSession *session,
               return NULL;
             }
         }
-      
+
       client_id = g_strdup (id);
     }
 
@@ -438,7 +438,7 @@ client_save_yourself_done (GsmClient *client, gpointer data)
   session->phase2_clients =
     g_slist_remove (session->phase2_clients, client);
 
-  if (session->phase == GSM_SESSION_PHASE_SHUTDOWN && 
+  if (session->phase == GSM_SESSION_PHASE_SHUTDOWN &&
       !session->shutdown_clients)
     {
       if (session->phase2_clients)
@@ -471,7 +471,7 @@ client_disconnected (GsmClient *client, gpointer data)
       is_condition_client = TRUE;
     }
 
-  if (session->phase != GSM_SESSION_PHASE_SHUTDOWN && 
+  if (session->phase != GSM_SESSION_PHASE_SHUTDOWN &&
       gsm_client_get_autorestart (client) &&
       !is_condition_client)
     {

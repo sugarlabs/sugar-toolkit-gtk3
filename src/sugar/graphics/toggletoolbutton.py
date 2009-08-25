@@ -59,7 +59,7 @@ class ToggleToolButton(gtk.ToggleToolButton):
 
     def get_palette_invoker(self):
         return self._palette_invoker
-    
+
     def set_palette_invoker(self, palette_invoker):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
@@ -69,7 +69,7 @@ class ToggleToolButton(gtk.ToggleToolButton):
 
     def set_tooltip(self, text):
         self.set_palette(Palette(text))
-    
+
     def do_expose_event(self, event):
         allocation = self.get_allocation()
         child = self.get_child()
@@ -85,5 +85,5 @@ class ToggleToolButton(gtk.ToggleToolButton):
                                   allocation.width, allocation.height)
 
         gtk.ToggleToolButton.do_expose_event(self, event)
-    
+
     palette = property(get_palette, set_palette)

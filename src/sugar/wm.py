@@ -16,7 +16,7 @@
 # Boston, MA 02111-1307, USA.
 
 """
-UNSTABLE. Used only internally by Activity and jarabe. 
+UNSTABLE. Used only internally by Activity and jarabe.
 """
 
 import gtk

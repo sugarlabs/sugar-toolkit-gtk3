@@ -64,7 +64,7 @@ class _TrayViewport(gtk.Viewport):
             adj = self.get_vadjustment()
         adj.connect('changed', self._adjustment_changed_cb)
         adj.connect('value-changed', self._adjustment_changed_cb)
-            
+
     def scroll(self, direction):
         if direction == _PREVIOUS_PAGE:
             self._scroll_previous()
@@ -447,7 +447,7 @@ class TrayIcon(gtk.ToolItem):
 
     def get_palette_invoker(self):
         return self._palette_invoker
-    
+
     def set_palette_invoker(self, palette_invoker):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker

@@ -47,7 +47,7 @@ def _calculate_gap(a, b):
         gap_side = gtk.POS_TOP
     else:
         gap = False
-    
+
     if gap:
         if gap_side == gtk.POS_BOTTOM or gap_side == gtk.POS_TOP:
             gap_start = min(a.width, max(0, b.x - a.x))
@@ -181,7 +181,7 @@ class PaletteWindow(gtk.Window):
         self.set_group_id(None)
 
     def set_invoker(self, invoker):
-        for hid in self._invoker_hids[:]: 
+        for hid in self._invoker_hids[:]:
             self._invoker.disconnect(hid)
             self._invoker_hids.remove(hid)
 
@@ -212,7 +212,7 @@ class PaletteWindow(gtk.Window):
         immediate = False
 
         if self.is_up():
-            self._popdown_anim.stop() 
+            self._popdown_anim.stop()
             return
 
         if self._group_id:
@@ -629,7 +629,7 @@ class Invoker(gobject.GObject):
 
     def get_palette(self):
         return self._palette
-    
+
     def set_palette(self, palette):
         if self._palette:
             self._palette.props.invoker = None
@@ -787,7 +787,7 @@ class CanvasInvoker(Invoker):
             return gtk.gdk.Rectangle(x, y, width, height)
         else:
             return gtk.gdk.Rectangle()
-        
+
     def __motion_notify_event_cb(self, button, event):
         if event.detail == hippo.MOTION_DETAIL_ENTER:
             self.notify_mouse_enter()

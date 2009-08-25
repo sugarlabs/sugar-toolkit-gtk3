@@ -69,7 +69,7 @@ class NamingToolbar(gtk.Toolbar):
         client = gconf.client_get_default()
         color = XoColor(client.get_string('/desktop/sugar/user/color'))
         icon = Icon()
-        icon.set_from_icon_name('activity-journal', 
+        icon.set_from_icon_name('activity-journal',
                                 gtk.ICON_SIZE_LARGE_TOOLBAR)
         icon.props.xo_color = color
         self._add_widget(icon)
@@ -78,7 +78,7 @@ class NamingToolbar(gtk.Toolbar):
 
         self._title = gtk.Label(_('Name this entry'))
         self._add_widget(self._title)
-        
+
         self._add_separator(True)
 
         self._keep_button = ToolButton('dialog-ok', tooltip=_('Keep'))
@@ -170,7 +170,7 @@ class NamingAlert(gtk.Window):
         width = gtk.gdk.screen_width() - offset * 2
         height = gtk.gdk.screen_height() - offset * 2
         self.set_size_request(width, height)
-        self.set_position(gtk.WIN_POS_CENTER_ALWAYS) 
+        self.set_position(gtk.WIN_POS_CENTER_ALWAYS)
         self.set_decorated(False)
         self.set_resizable(False)
         self.set_modal(True)
@@ -230,13 +230,13 @@ class NamingAlert(gtk.Window):
 
         self._favorite_icon = self._create_favorite_icon()
         header.append(self._favorite_icon)
-        
+
         entry_icon = self._create_entry_icon()
         header.append(entry_icon)
-        
+
         self._title = self._create_title()
         header.append(self._title, hippo.PACK_EXPAND)
-        
+
         if gtk.widget_get_default_direction() == gtk.TEXT_DIR_RTL:
             header.reverse()
 
@@ -251,7 +251,7 @@ class NamingAlert(gtk.Window):
     def _create_favorite_icon(self):
         favorite_icon = FavoriteIcon(False)
         return favorite_icon
-    
+
     def _create_entry_icon(self):
         bundle_id = self._activity.metadata.get('activity', '')
         if not bundle_id:
@@ -259,7 +259,7 @@ class NamingAlert(gtk.Window):
 
         if bundle_id == '':
             file_name = _get_icon_name(self._activity.metadata)
-        else:    
+        else:
             activity_bundle = ActivityBundle(self._bundle_path)
             file_name = activity_bundle.get_icon()
         entry_icon = CanvasIcon(file_name=file_name)
@@ -268,7 +268,7 @@ class NamingAlert(gtk.Window):
             entry_icon.props.xo_color = XoColor( \
                 self._activity.metadata['icon-color'])
         return entry_icon
-    
+
     def _create_title(self):
         title = CanvasEntry()
         title.set_background(style.COLOR_WHITE.get_html())
@@ -302,7 +302,7 @@ class NamingAlert(gtk.Window):
     def _create_tags(self):
         vbox = hippo.CanvasBox()
         vbox.props.spacing = style.DEFAULT_SPACING
-        
+
         text = hippo.CanvasText(text=_('Tags:'),
                                 font_desc=style.FONT_NORMAL.get_pango_desc())
         text.props.color = style.COLOR_BUTTON_GREY.get_int()
@@ -313,7 +313,7 @@ class NamingAlert(gtk.Window):
             text.props.xalign = hippo.ALIGNMENT_START
 
         vbox.append(text)
-        
+
         tags = self._activity.metadata.get('tags', '')
         text_view = CanvasTextView(tags, box_height=style.GRID_CELL_SIZE * 2)
         vbox.append(text_view, hippo.PACK_EXPAND)

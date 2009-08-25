@@ -337,10 +337,10 @@ class Icon(gtk.Image):
         if self._buffer.file_name != self.props.file:
             self._buffer.file_name = self.props.file
 
-        if self.props.pixel_size == -1:    
+        if self.props.pixel_size == -1:
             width, height = gtk.icon_size_lookup(self.props.icon_size)
         else:
-            width = height = self.props.pixel_size 
+            width = height = self.props.pixel_size
         if self._buffer.width != width or self._buffer.height != height:
             self._buffer.width = width
             self._buffer.height = height
@@ -917,7 +917,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 
     def get_palette_invoker(self):
         return self._palette_invoker
-    
+
     def set_palette_invoker(self, palette_invoker):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
@@ -929,7 +929,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         from sugar.graphics.palette import Palette
 
         self.set_palette(Palette(text))
-    
+
     palette = property(get_palette, set_palette)
 
 class CellRendererIcon(gtk.GenericCellRenderer):
@@ -1019,7 +1019,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         if self._buffer.background_color != value:
             self._buffer.background_color = value
 
-    background_color = gobject.property(type=object, 
+    background_color = gobject.property(type=object,
                                         setter=set_background_color)
 
     def set_size(self, value):

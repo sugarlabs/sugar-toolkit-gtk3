@@ -26,17 +26,17 @@ import dbus
 
 class Buddy(gobject.GObject):
     """UI interface for a Buddy in the presence service
-    
+
     Each buddy interface tracks a set of activities and properties
-    that can be queried to provide UI controls for manipulating 
+    that can be queried to provide UI controls for manipulating
     the presence interface.
-    
+
     Properties Dictionary:
-        'key': public key, 
-        'nick': nickname , 
-        'color': color (XXX what format), 
-        'current-activity': (XXX dbus path?), 
-        'owner': (XXX dbus path?), 
+        'key': public key,
+        'nick': nickname ,
+        'color': color (XXX what format),
+        'current-activity': (XXX dbus path?),
+        'owner': (XXX dbus path?),
         'icon': (XXX pixel data for an icon?)
     See __gproperties__
     """
@@ -67,11 +67,11 @@ class Buddy(gobject.GObject):
 
     def __init__(self, bus, new_obj_cb, del_obj_cb, object_path):
         """Initialise the reference to the buddy
-        
-        bus -- dbus bus object 
-        new_obj_cb -- callback to call when this buddy joins an activity 
-        del_obj_cb -- callback to call when this buddy leaves an activity 
-        object_path -- path to the buddy object 
+
+        bus -- dbus bus object
+        new_obj_cb -- callback to call when this buddy joins an activity
+        del_obj_cb -- callback to call when this buddy leaves an activity
+        object_path -- path to the buddy object
         """
         gobject.GObject.__init__(self)
         self._object_path = object_path
@@ -104,7 +104,7 @@ class Buddy(gobject.GObject):
         self._joined_activity_signal.remove()
         self._left_activity_signal.remove()
         self._property_changed_signal.remove()
-        
+
     def _get_properties_helper(self):
         """Retrieve the Buddy's property dictionary from the service object
         """
@@ -114,8 +114,8 @@ class Buddy(gobject.GObject):
         return props
 
     def do_get_property(self, pspec):
-        """Retrieve a particular property from our property dictionary 
-        
+        """Retrieve a particular property from our property dictionary
+
         pspec -- XXX some sort of GTK specifier object with attributes
             including 'name', 'active' and 'icon-name'
         """
@@ -170,7 +170,7 @@ class Buddy(gobject.GObject):
 
     def _joined_activity_cb(self, object_path):
         """Handle dbus signal by emitting a GObject signal
-        
+
         Stores the activity in activities dictionary as well
         """
         if not self._activities.has_key(object_path):
@@ -179,7 +179,7 @@ class Buddy(gobject.GObject):
 
     def _emit_left_activity_signal(self, object_path):
         """Emit activity left signal with Activity object
-        
+
         XXX this calls self._ps_new_object instead of self._ps_del_object,
             which would seem to be the incorrect callback?
         """
@@ -188,7 +188,7 @@ class Buddy(gobject.GObject):
 
     def _left_activity_cb(self, object_path):
         """Handle dbus signal by emitting a GObject signal
-        
+
         Also removes from the activities dictionary
         """
         if self._activities.has_key(object_path):
@@ -196,9 +196,9 @@ class Buddy(gobject.GObject):
         gobject.idle_add(self._emit_left_activity_signal, object_path)
 
     def _handle_property_changed_signal(self, prop_list):
-        """Emit property-changed signal with property dictionary 
-        
-        Generates a property-changed signal with the results of 
+        """Emit property-changed signal with property dictionary
+
+        Generates a property-changed signal with the results of
         _get_properties_helper()
         """
         self._properties = self._get_properties_helper()
@@ -212,7 +212,7 @@ class Buddy(gobject.GObject):
 
     def get_icon_pixbuf(self):
         """Retrieve Buddy's icon as a GTK pixel buffer
-        
+
         XXX Why aren't the icons coming in as SVG?
         """
         if self.props.icon and len(self.props.icon):
@@ -224,12 +224,12 @@ class Buddy(gobject.GObject):
             return None
 
     def get_joined_activities(self):
-        """Retrieve the set of all activities which this buddy has joined 
-        
-        Uses the GetJoinedActivities method on the service 
-        object to produce object paths, wraps each in an 
-        Activity object.  
-        
+        """Retrieve the set of all activities which this buddy has joined
+
+        Uses the GetJoinedActivities method on the service
+        object to produce object paths, wraps each in an
+        Activity object.
+
         returns list of presence Activity objects
         """
         try:

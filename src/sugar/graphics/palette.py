@@ -45,7 +45,7 @@ class Palette(PaletteWindow):
 
     __gtype_name__ = 'SugarPalette'
 
-    # DEPRECATED: label is passed with the primary-text property, accel_path 
+    # DEPRECATED: label is passed with the primary-text property, accel_path
     # is set via the invoker property, and menu_after_content is not used
     def __init__(self, label=None, accel_path=None, menu_after_content=False,
                  text_maxlen=60, **kwargs):
@@ -67,9 +67,9 @@ class Palette(PaletteWindow):
         primary_box.pack_start(self._icon_box, expand=False)
 
         labels_box = gtk.VBox()
-        self._label_alignment = gtk.Alignment(xalign=0, yalign=0.5, 
+        self._label_alignment = gtk.Alignment(xalign=0, yalign=0.5,
                                               xscale=1, yscale=0.33)
-        self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING, 
+        self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING,
                                           style.DEFAULT_SPACING)
         self._label_alignment.add(labels_box)
         self._label_alignment.show()
@@ -182,7 +182,7 @@ class Palette(PaletteWindow):
 
         if self._invoker is not None:
             self._update_full_request()
-    
+
         PaletteWindow.popup(self, immediate)
 
         if state is None:
@@ -194,7 +194,7 @@ class Palette(PaletteWindow):
     def on_enter(self, event):
         PaletteWindow.on_enter(self, event)
         self._secondary_anim.start()
-        
+
     def _add_menu(self):
         self._menu_box = gtk.VBox()
         self._secondary_box.pack_start(self._menu_box)

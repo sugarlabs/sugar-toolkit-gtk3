@@ -154,7 +154,7 @@ class RadioToolButton(gtk.RadioToolButton):
 
     def get_palette_invoker(self):
         return self._palette_invoker
-    
+
     def set_palette_invoker(self, palette_invoker):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker

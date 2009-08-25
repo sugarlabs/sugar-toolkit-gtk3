@@ -74,7 +74,7 @@ _sugarext.c: _sugarext.defs _sugarext.override
 	    --prefix py$* $*.defs) > gen-$*.c \
 	&& cp gen-$*.c $*.c \
 	&& rm -f gen-$*.c
-	
+
 sugar-marshal.c: sugar-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=sugar_marshal \
 		$(srcdir)/sugar-marshal.list --header --body > sugar-marshal.c

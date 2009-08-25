@@ -67,7 +67,7 @@ def update(uid, properties, filename, transfer_ownership=False,
 def delete(uid):
     logging.debug('dbus_helpers.delete: %r', uid)
     _get_data_store().delete(uid)
-        
+
 def get_properties(uid):
     logging.debug('dbus_helpers.get_properties: %s', uid)
     return _get_data_store().get_properties(uid, byte_arrays=True)

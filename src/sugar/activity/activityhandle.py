@@ -25,25 +25,25 @@ class ActivityHandle(object):
         self, activity_id=None, object_id=None, uri=None
     ):
         """Initialise the handle from activity_id
-        
+
         activity_id -- unique id for the activity to be
             created
-        object_id -- identity of the journal object 
-            associated with the activity. It was used by 
-            the journal prototype implementation, might 
-            change when we do the real one. 
-            
-            When you resume an activity from the journal 
-            the object_id will be passed in. It's optional 
-            since new activities does not have an 
+        object_id -- identity of the journal object
+            associated with the activity. It was used by
+            the journal prototype implementation, might
+            change when we do the real one.
+
+            When you resume an activity from the journal
+            the object_id will be passed in. It's optional
+            since new activities does not have an
             associated object (yet).
-            
+
             XXX Not clear how this relates to the activity
             id yet, i.e. not sure we really need both. TBF
-        uri -- URI associated with the activity. Used when 
-            opening an external file or resource in the 
-            activity, rather than a journal object 
-            (downloads stored on the file system for 
+        uri -- URI associated with the activity. Used when
+            opening an external file or resource in the
+            activity, rather than a journal object
+            (downloads stored on the file system for
             example or web pages)
         """
         self.activity_id = activity_id

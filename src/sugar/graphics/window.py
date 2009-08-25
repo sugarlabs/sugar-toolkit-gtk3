@@ -86,12 +86,12 @@ class Window(gtk.Window):
         self.connect('realize', self.__window_realize_cb)
         self.connect('window-state-event', self.__window_state_event_cb)
         self.connect('key-press-event', self.__key_press_cb)
-        
+
         self._toolbar_box = None
         self._alerts = []
         self._canvas = None
         self.tray = None
-        
+
         self._vbox = gtk.VBox()
         self._hbox = gtk.HBox()
         self._vbox.pack_start(self._hbox)
@@ -100,7 +100,7 @@ class Window(gtk.Window):
         self._event_box = gtk.EventBox()
         self._hbox.pack_start(self._event_box)
         self._event_box.show()
-        self._event_box.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK 
+        self._event_box.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK
                                    | gtk.gdk.POINTER_MOTION_MASK)
         self._event_box.connect('motion-notify-event', self.__motion_notify_cb)
 
@@ -120,7 +120,7 @@ class Window(gtk.Window):
 
         if canvas:
             self._event_box.add(canvas)
-        
+
         self._canvas = canvas
 
     def get_canvas(self):
@@ -144,16 +144,16 @@ class Window(gtk.Window):
 
     def set_tray(self, tray, position):
         if self.tray:
-            box = self.tray.get_parent() 
+            box = self.tray.get_parent()
             box.remove(self.tray)
-                
+
         if position == gtk.POS_LEFT:
             self._hbox.pack_start(tray, False)
         elif position == gtk.POS_RIGHT:
             self._hbox.pack_end(tray, False)
         elif position == gtk.POS_BOTTOM:
             self._vbox.pack_end(tray, False)
-                    
+
         self.tray = tray
 
     def add_alert(self, alert):
@@ -162,14 +162,14 @@ class Window(gtk.Window):
             self._vbox.pack_start(alert, False)
             if self._toolbar_box is not None:
                 self._vbox.reorder_child(alert, 1)
-            else:   
+            else:
                 self._vbox.reorder_child(alert, 0)
-                
+
     def remove_alert(self, alert):
         if alert in self._alerts:
             self._alerts.remove(alert)
             # if the alert is the visible one on top of the queue
-            if alert.get_parent() is not None:                            
+            if alert.get_parent() is not None:
                 self._vbox.remove(alert)
                 if len(self._alerts) >= 1:
                     self._vbox.pack_start(self._alerts[0], False)
@@ -177,7 +177,7 @@ class Window(gtk.Window):
                         self._vbox.reorder_child(self._alerts[0], 1)
                     else:
                         self._vbox.reorder_child(self._alert[0], 0)
-                    
+
     def __window_realize_cb(self, window):
         group = gtk.Window()
         group.realize()

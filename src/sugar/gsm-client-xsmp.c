@@ -192,7 +192,7 @@ register_client_callback (SmsConn    conn,
   GsmClientXSMP *xsmp = manager_data;
   char *id;
 
-  g_debug ("Client '%s' received RegisterClient(%s)", 
+  g_debug ("Client '%s' received RegisterClient(%s)",
            xsmp->description,
 	   previous_id ? previous_id : "NULL");
 
@@ -319,8 +319,8 @@ save_yourself_request_callback (SmsConn   conn,
   if (shutdown && global)
     {
       g_debug ("  initiating shutdown");
-/*      gsm_session_initiate_shutdown (global_session, 
-                                     !fast, 
+/*      gsm_session_initiate_shutdown (global_session,
+                                     !fast,
                                      GSM_SESSION_LOGOUT_TYPE_LOGOUT);
 */
     }
@@ -333,7 +333,7 @@ save_yourself_request_callback (SmsConn   conn,
     g_debug ("  ignoring");
 }
 
-static void 
+static void
 xsmp_restart (GsmClient *client, GError **error)
 {
   char *restart_cmd = gsm_client_get_restart_command (client);
@@ -555,7 +555,7 @@ delete_property (GsmClientXSMP *client, const char *name)
 
   prop = find_property (client, name, &index);
   if (!prop)
-    return;	
+    return;
 
 #if 0
   /* This is wrong anyway; we can't unconditionally run the current

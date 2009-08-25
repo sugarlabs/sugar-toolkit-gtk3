@@ -30,20 +30,20 @@ _ACTIVITY_INTERFACE = "org.laptop.Activity"
 
 class ActivityService(dbus.service.Object):
     """Base dbus service object that each Activity uses to export dbus methods.
-    
+
     The dbus service is separate from the actual Activity object so that we can
     tightly control what stuff passes through the dbus python bindings."""
 
     def __init__(self, activity):
         """Initialise the service for the given activity
-        
+
         activity -- sugar.activity.activity.Activity instance
-        
+
         Creates dbus services that use the instance's activity_id
-        as discriminants among all active services 
-        of this type.  That is, the services are all available 
+        as discriminants among all active services
+        of this type.  That is, the services are all available
         as names/paths derived from the instance's activity_id.
-        
+
         The various methods exposed on dbus are just forwarded
         to the client Activity object's equally-named methods.
         """

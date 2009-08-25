@@ -29,7 +29,7 @@ from sugar.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 def get_svg_color_string(color):
-    return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257, 
+    return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257,
                               color.blue / 257)
 
 class _ColorButton(gtk.Button):
@@ -40,11 +40,11 @@ class _ColorButton(gtk.Button):
     As a preview an sugar.graphics.Icon is used. The fill color will be set to
     the current color, and the stroke color is set to the font color.
     """
-    
+
     __gtype_name__ = 'SugarColorButton'
     __gsignals__ = { 'color-set' : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                                      tuple())}
-    
+
     def __init__(self, **kwargs):
         self._title = _('Choose a color')
         self._color = gtk.gdk.Color(0, 0, 0)
@@ -92,10 +92,10 @@ class _ColorButton(gtk.Button):
 
     def __palette_color_set_cb(self, palette):
         self.emit('color-set')
-    
+
     def __palette_color_changed(self, palette, pspec):
         self.color = self._palette.color
-    
+
     def do_style_set(self, previous_style):
         self._preview.stroke_color = \
             get_svg_color_string(self.style.fg[gtk.STATE_NORMAL])
@@ -111,12 +111,12 @@ class _ColorButton(gtk.Button):
 
     def set_color(self, color):
         assert isinstance(color, gtk.gdk.Color)
-        
+
         if self._color.red == color.red and \
            self._color.green == color.green and \
            self._color.blue == color.blue:
             return
-        
+
         self._color = gtk.gdk.Color(color.red, color.green, color.blue)
         self._preview.fill_color = get_svg_color_string(self._color)
         if self._palette:
@@ -201,9 +201,9 @@ class _ColorButton(gtk.Button):
         red = self._color.red / 257
         green = self._color.green / 257
         blue = self._color.blue / 257
-        
+
         pixbuf.fill(red << 24 + green << 16 + blue << 8 + 0xff)
-        
+
         context.set_icon_pixbuf(pixbuf)
 
     def __drag_data_get_cb(self, widget, context, selection_data, info, time):
@@ -258,7 +258,7 @@ class _ColorPalette(Palette):
         self._picker_hbox.pack_start(self._swatch_tray)
         self._picker_hbox.pack_start(gtk.VSeparator(),
                                      padding=style.DEFAULT_SPACING)
-        
+
         self._chooser_table = gtk.Table(3, 2)
         self._chooser_table.set_col_spacing(0, style.DEFAULT_PADDING)
 
@@ -271,7 +271,7 @@ class _ColorPalette(Palette):
             self._create_color_scale(_('Blue'), self._BLUE, 2))
 
         self._picker_hbox.add(self._chooser_table)
-        
+
         self._picker_hbox.show_all()
 
         self._build_swatches()
@@ -300,7 +300,7 @@ class _ColorPalette(Palette):
 
         return scale
 
-        
+
 
     def _build_swatches(self):
         for child in self._swatch_tray.get_children():
@@ -370,12 +370,12 @@ class _ColorPalette(Palette):
             return
 
         self._color = color.copy()
-        
+
         if self._scales:
             self._scales[self._RED].set_value(self._color.red / 65535.0)
             self._scales[self._GREEN].set_value(self._color.green / 65535.0)
             self._scales[self._BLUE].set_value(self._color.blue / 65535.0)
-        
+
         self.notify('color')
 
     def get_color(self):

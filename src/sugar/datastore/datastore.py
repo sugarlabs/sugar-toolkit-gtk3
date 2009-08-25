@@ -41,7 +41,7 @@ class DSMetadata(gobject.GObject):
             self._props = {}
         else:
             self._props = props
-        
+
         default_keys = ['activity', 'activity_id',
                         'mime_type', 'title_set_by_user']
         for key in default_keys:
@@ -61,13 +61,13 @@ class DSMetadata(gobject.GObject):
 
     def __contains__(self, key):
         return self._props.__contains__(key)
-    
+
     def has_key(self, key):
         return self._props.has_key(key)
 
     def keys(self):
         return self._props.keys()
-    
+
     def get_dictionary(self):
         return self._props
 
@@ -93,7 +93,7 @@ class DSObject(object):
             metadata = DSMetadata(dbus_helpers.get_properties(self.object_id))
             self._metadata = metadata
         return self._metadata
-    
+
     def set_metadata(self, metadata):
         if self._metadata != metadata:
             self._metadata = metadata
@@ -105,7 +105,7 @@ class DSObject(object):
             self.set_file_path(dbus_helpers.get_filename(self.object_id))
             self._owns_file = True
         return self._file_path
-    
+
     def set_file_path(self, file_path):
         if self._file_path != file_path:
             if self._file_path and self._owns_file:
@@ -203,10 +203,10 @@ def find(query, sorting=None, limit=None, offset=None, properties=None,
         query['limit'] = limit
     if offset:
         query['offset'] = offset
-    
+
     props_list, total_count = dbus_helpers.find(query, properties,
                                                 reply_handler, error_handler)
-    
+
     objects = []
     for props in props_list:
         object_id = props['uid']

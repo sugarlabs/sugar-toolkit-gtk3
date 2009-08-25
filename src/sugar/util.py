@@ -48,16 +48,16 @@ def sha_data(data):
 
 def unique_id(data = ''):
     """Generate a likely-unique ID for whatever purpose
-    
+
     data -- suffix appended to working data before hashing
-    
+
     Returns a 40-character string with hexidecimal digits
-    representing an SHA hash of the time, a random digit 
+    representing an SHA hash of the time, a random digit
     within a constrained range and the data passed.
-    
-    Note: these are *not* crypotographically secure or 
-        globally unique identifiers.  While they are likely 
-        to be unique-enough, no attempt is made to make 
+
+    Note: these are *not* crypotographically secure or
+        globally unique identifiers.  While they are likely
+        to be unique-enough, no attempt is made to make
         perfectly unique values.
     """
     data_string = "%s%s%s" % (time.time(), random.randint(10000, 100000), data)
@@ -72,7 +72,7 @@ def is_hex(s):
     except ValueError:
         return False
 
-    return True 
+    return True
 
 def validate_activity_id(actid):
     """Validate an activity ID."""
@@ -90,7 +90,7 @@ def set_proc_title(title):
        and only the first 15 characters will be shown.
 
        title -- the title you wish to change the process
-                title to 
+                title to
 
        Returns True on success.  We don't raise exceptions
        because if something goes wrong here it is not a big
@@ -284,7 +284,7 @@ class TempFilePath(str):
     def __del__(self):
         if _tracked_paths[self] == 1:
             del _tracked_paths[self]
-            
+
             if os.path.exists(self):
                 os.unlink(self)
                 logging.debug('TempFilePath deleted %r', self)

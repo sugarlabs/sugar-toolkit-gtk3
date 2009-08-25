@@ -197,7 +197,7 @@ class ActivityCreationHandler(gobject.GObject):
         self._bundle = bundle
         self._service_name = bundle.get_bundle_id()
         self._handle = handle
-    
+
         bus = dbus.SessionBus()
         bus_object = bus.get_object(_SHELL_SERVICE, _SHELL_PATH)
         self._shell = dbus.Interface(bus_object, _SHELL_IFACE)

@@ -31,7 +31,7 @@ class Animator(gobject.GObject):
         'completed': (gobject.SIGNAL_RUN_FIRST,
                       gobject.TYPE_NONE, ([])),
     }
-    
+
     def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO):
         gobject.GObject.__init__(self)
         self._animations = []

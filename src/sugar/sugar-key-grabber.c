@@ -153,7 +153,7 @@ sugar_key_grabber_init(SugarKeyGrabber *grabber)
 	gdk_window_add_filter(grabber->root, filter_events, grabber);
 }
 
-/* grab_key and grab_key_real are from 
+/* grab_key and grab_key_real are from
  * gnome-control-center/gnome-settings-daemon/gnome-settings-multimedia-keys.c
  */
 
@@ -213,7 +213,7 @@ sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber, const char **keys)
     while (*cur != NULL) {
         key = *cur;
         cur += 1;
-        
+
         keyinfo = g_new0 (Key, 1);
         keyinfo->key = g_strdup(key);
 
@@ -279,9 +279,9 @@ sugar_key_grabber_is_modifier(SugarKeyGrabber *grabber, guint keycode, guint mas
 			break;
 		}
 	}
-	
+
 	XFreeModifiermap (modmap);
-	
+
 	return is_modifier;
 }
 

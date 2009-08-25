@@ -33,7 +33,7 @@ from sugar.bundle.bundle import Bundle, \
 
 class ActivityBundle(Bundle):
     """A Sugar activity bundle
-    
+
     See http://wiki.laptop.org/go/Activity_bundles for details
     """
 
@@ -48,7 +48,7 @@ class ActivityBundle(Bundle):
         Bundle.__init__(self, path)
         self.activity_class = None
         self.bundle_exec = None
-        
+
         self._name = None
         self._icon = None
         self._bundle_id = None
@@ -83,16 +83,16 @@ class ActivityBundle(Bundle):
         if not f:
             logging.warning("Activity directory lacks a MANIFEST file.")
             return []
-        
-        ret = [line.strip() for line in f.readlines()] 
+
+        ret = [line.strip() for line in f.readlines()]
         f.close()
         return ret
-        
+
     def _read_manifest(self):
         """return a list with the lines in MANIFEST, with invalid lines replaced
         by empty lines.
-        
-        Since absolute order carries information on file history, it should 
+
+        Since absolute order carries information on file history, it should
         be preserved. For instance, when renaming a file, you should leave
         the new name on the same line as the old one.
         """
@@ -113,13 +113,13 @@ class ActivityBundle(Bundle):
                 logging.warning('Bundle %s: duplicate entry in MANIFEST: %s',
                     self._name, line)
                 continue
-            
+
             # Remove MANIFEST
             if line == "MANIFEST":
                 lines[num] = ""
                 logging.warning('Bundle %s: MANIFEST includes itself: %s',
                     self._name, line)
-                
+
             # Remove invalid files
             if not self.is_file(line):
                 lines[num] = ""
@@ -127,7 +127,7 @@ class ActivityBundle(Bundle):
                     self._name, line)
 
         return lines
-    
+
     def get_files(self, manifest = None):
         files = [line for line in (manifest or self.manifest) if line]
 
@@ -135,7 +135,7 @@ class ActivityBundle(Bundle):
             files.append('MANIFEST')
 
         return files
-      
+
     def _parse_info(self, info_file):
         cp = ConfigParser()
         cp.readfp(info_file)
@@ -260,7 +260,7 @@ class ActivityBundle(Bundle):
             return os.path.join(self._path, icon_path)
         else:
             icon_data = self.get_file(icon_path).read()
-            temp_file, temp_file_path = tempfile.mkstemp(prefix=self._icon, 
+            temp_file, temp_file_path = tempfile.mkstemp(prefix=self._icon,
                                                          suffix='.svg')
             os.write(temp_file, icon_data)
             os.close(temp_file)
@@ -298,7 +298,7 @@ class ActivityBundle(Bundle):
         self._unzip(install_dir)
 
         install_path = os.path.join(install_dir, self._zip_root_dir)
-        
+
         # List installed files
         manifestfiles = self.get_files(self._raw_manifest())
         paths  = []
@@ -306,7 +306,7 @@ class ActivityBundle(Bundle):
             rel_path = root[len(install_path) + 1:]
             for f in files:
                 paths.append(os.path.join(rel_path, f))
-                
+
         # Check the list against the MANIFEST
         for path in paths:
             if path in manifestfiles:
@@ -316,7 +316,7 @@ class ActivityBundle(Bundle):
                     path)
                 if strict_manifest:
                     os.remove(os.path.join(install_path, path))
-                    
+
         # Is anything in MANIFEST left over after accounting for all files?
         if manifestfiles:
             err = ("Bundle %s: files in MANIFEST not included: %s"%

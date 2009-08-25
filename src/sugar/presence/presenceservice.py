@@ -40,8 +40,8 @@ _logger = logging.getLogger('sugar.presence.presenceservice')
 
 
 class PresenceService(gobject.GObject):
-    """UI-side interface to the dbus presence service 
-    
+    """UI-side interface to the dbus presence service
+
     This class provides UI programmers with simplified access
     to the dbus service of the same name.  It allows for observing
     various events from the presence service as GObject events,
@@ -68,7 +68,7 @@ class PresenceService(gobject.GObject):
 
     _PS_BUDDY_OP = DBUS_PATH + "/Buddies/"
     _PS_ACTIVITY_OP = DBUS_PATH + "/Activities/"
-    
+
 
     def __init__(self, allow_offline_iface=True):
         """Initialise the service and attempt to connect to events
@@ -99,30 +99,30 @@ class PresenceService(gobject.GObject):
 
     _ps_ = None
     def _get_ps(self):
-        """Retrieve dbus interface to PresenceService 
-        
-        Also registers for updates from various dbus events on the 
+        """Retrieve dbus interface to PresenceService
+
+        Also registers for updates from various dbus events on the
         interface.
-        
-        If unable to retrieve the interface, we will temporarily 
-        return an _OfflineInterface object to allow the calling 
-        code to continue functioning as though it had accessed a 
+
+        If unable to retrieve the interface, we will temporarily
+        return an _OfflineInterface object to allow the calling
+        code to continue functioning as though it had accessed a
         real presence service.
-        
-        If successful, caches the presence service interface 
+
+        If successful, caches the presence service interface
         for use by other methods and returns that interface
         """
         if not self._ps_:
             try:
                 # NOTE: We need to follow_name_owner_changes here
-                #       because we can not connect to a signal unless 
+                #       because we can not connect to a signal unless
                 #       we follow the changes or we start the service
                 #       before we connect.  Starting the service here
                 #       causes a major bottleneck during startup
                 ps = dbus.Interface(
                     self._bus.get_object(DBUS_SERVICE,
                                          DBUS_PATH,
-                                         follow_name_owner_changes=True), 
+                                         follow_name_owner_changes=True),
                     DBUS_INTERFACE
                 )
             except dbus.exceptions.DBusException, err:
@@ -135,7 +135,7 @@ class PresenceService(gobject.GObject):
                     return _OfflineInterface()
                 raise RuntimeError("Failed to connect to the presence service.")
             else:
-                self._ps_ = ps 
+                self._ps_ = ps
                 ps.connect_to_signal('BuddyAppeared',
                                      self._buddy_appeared_cb)
                 ps.connect_to_signal('BuddyDisappeared',
@@ -149,7 +149,7 @@ class PresenceService(gobject.GObject):
                 ps.connect_to_signal('PrivateInvitation',
                                      self._private_invitation_cb)
         return self._ps_
-        
+
     _ps = property(
         _get_ps, None, None,
         """DBUS interface to the PresenceService
@@ -158,16 +158,16 @@ class PresenceService(gobject.GObject):
 
     def _new_object(self, object_path):
         """Turn new object path into (cached) Buddy/Activity instance
-        
+
         object_path -- full dbus path of the new object, must be
             prefixed with either of _PS_BUDDY_OP or _PS_ACTIVITY_OP
-        
+
         Note that this method is called throughout the class whenever
-        the representation of the object is required, it is not only 
+        the representation of the object is required, it is not only
         called when the object is first discovered.  The point is to only have
         _one_ Python object for any D-Bus object represented by an object path,
         effectively wrapping the D-Bus object in a single Python GObject.
-        
+
         returns presence Buddy or Activity representation
         """
         obj = None
@@ -225,7 +225,7 @@ class PresenceService(gobject.GObject):
             # we could use a LRU cache limited to some value.
             del self._objcache[object_path]
             obj.destroy()
-            
+
         return False
 
     def _buddy_disappeared_cb(self, object_path):
@@ -282,7 +282,7 @@ class PresenceService(gobject.GObject):
 
     def get_activities(self):
         """Retrieve set of all activities from service
-        
+
         returns list of Activity objects for all object paths
             the service reports exist (using GetActivities)
         """
@@ -317,12 +317,12 @@ class PresenceService(gobject.GObject):
             )
 
     def get_activities_async(self, reply_handler=None, error_handler=None):
-        """Retrieve set of all activities from service asyncronously 
+        """Retrieve set of all activities from service asyncronously
         """
 
         if not reply_handler:
             logging.error('Function get_activities_async called without' \
-                          'a reply handler. Can not run.') 
+                          'a reply handler. Can not run.')
             return
 
         self._ps.GetActivities(
@@ -351,7 +351,7 @@ class PresenceService(gobject.GObject):
 
     def get_buddies(self):
         """Retrieve set of all buddies from service
-        
+
         returns list of Buddy objects for all object paths
             the service reports exist (using GetBuddies)
         """
@@ -386,12 +386,12 @@ class PresenceService(gobject.GObject):
             )
 
     def get_buddies_async(self, reply_handler=None, error_handler=None):
-        """Retrieve set of all buddies from service asyncronously 
+        """Retrieve set of all buddies from service asyncronously
         """
 
         if not reply_handler:
             logging.error('Function get_buddies_async called without' \
-                          'a reply handler. Can not run.') 
+                          'a reply handler. Can not run.')
             return
 
         self._ps.GetBuddies(
@@ -402,11 +402,11 @@ class PresenceService(gobject.GObject):
 
     def get_buddy(self, key):
         """Retrieve single Buddy object for the given public key
-        
+
         key -- buddy's public encryption key
-        
-        returns single Buddy object or None if the activity 
-            is not found using GetBuddyByPublicKey on the 
+
+        returns single Buddy object or None if the activity
+            is not found using GetBuddyByPublicKey on the
             service
         """
         try:
@@ -479,15 +479,15 @@ class PresenceService(gobject.GObject):
 
     def share_activity(self, activity, properties=None, private=True):
         """Ask presence service to ask the activity to share itself publicly.
-        
-        Uses the AdvertiseActivity method on the service to ask for the 
-        sharing of the given activity.  Arranges to emit activity-shared 
+
+        Uses the AdvertiseActivity method on the service to ask for the
+        sharing of the given activity.  Arranges to emit activity-shared
         event with:
-        
+
             (success, Activity, err)
-        
+
         on success/failure.
-        
+
         returns None
         """
         actid = activity.get_id()
@@ -528,16 +528,16 @@ class PresenceService(gobject.GObject):
 
 class _OfflineInterface( object ):
     """Offline-presence-service interface
-    
+
     Used to mimic the behaviour of a real PresenceService sufficiently
     to avoid crashing client code that expects the given interface.
-    
-    XXX we could likely return a "MockOwner" object reasonably 
+
+    XXX we could likely return a "MockOwner" object reasonably
     easily, but would it be worth it?
     """
     def raiseException( self, *args, **named ):
         """Raise dbus.exceptions.DBusException"""
-        raise dbus.exceptions.DBusException( 
+        raise dbus.exceptions.DBusException(
             """PresenceService Interface not available"""
         )
     GetActivities = raiseException
@@ -546,7 +546,7 @@ class _OfflineInterface( object ):
     GetBuddyByPublicKey = raiseException
     GetOwner = raiseException
     GetPreferredConnection = raiseException
-    def ShareActivity( 
+    def ShareActivity(
         self, actid, atype, name, properties,
         reply_handler, error_handler,
     ):
@@ -559,7 +559,7 @@ class _OfflineInterface( object ):
 
 class _MockPresenceService(gobject.GObject):
     """Test fixture allowing testing of items that use PresenceService
-    
+
     See PresenceService for usage and purpose
     """
     __gsignals__ = {

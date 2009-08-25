@@ -56,7 +56,7 @@ class ObjectChooser(object):
         self._chooser_id = None
         self._response_code = gtk.RESPONSE_NONE
         self._what_filter = what_filter
-        
+
     def run(self):
         self._object_id = None
 
