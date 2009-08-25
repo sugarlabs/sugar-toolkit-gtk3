@@ -27,13 +27,14 @@ STABLE.
 import gtk
 import gobject
 
+
 class Notebook(gtk.Notebook):
+
     __gtype_name__ = 'SugarNotebook'
 
     __gproperties__ = {
         'can-close-tabs': (bool, None, None, False,
-                           gobject.PARAM_READWRITE |
-                           gobject.PARAM_CONSTRUCT_ONLY)
+            gobject.PARAM_READWRITE | gobject.PARAM_CONSTRUCT_ONLY),
     }
 
     def __init__(self, **kwargs):

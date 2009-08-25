@@ -25,6 +25,7 @@ from sugar.graphics.icon import _SVGLoader
 ICON_ENTRY_PRIMARY = _sugarext.ICON_ENTRY_PRIMARY
 ICON_ENTRY_SECONDARY = _sugarext.ICON_ENTRY_SECONDARY
 
+
 class IconEntry(_sugarext.IconEntry):
 
     def __init__(self):
@@ -103,4 +104,3 @@ class IconEntry(_sugarext.IconEntry):
             self.hide_clear_button()
         else:
             self.show_clear_button()
-

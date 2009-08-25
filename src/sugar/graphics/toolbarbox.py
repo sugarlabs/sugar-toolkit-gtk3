@@ -24,7 +24,9 @@ from sugar.graphics.palette import PaletteWindow, ToolInvoker
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics import palettegroup
 
+
 class ToolbarButton(ToolButton):
+
     def __init__(self, page=None, **kwargs):
         ToolButton.__init__(self, **kwargs)
 
@@ -132,7 +134,9 @@ class ToolbarButton(ToolButton):
         gtk.ToolButton.do_expose_event(self, event)
         _paint_arrow(self, event, gtk.ARROW_UP)
 
+
 class ToolbarBox(gtk.VBox):
+
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
         self.expanded_button = None
@@ -177,7 +181,9 @@ class ToolbarBox(gtk.VBox):
         self.toolbar.parent.parent.modify_bg(state, color)
         self.toolbar.modify_bg(state, color)
 
+
 class _ToolbarPalette(PaletteWindow):
+
     def __init__(self, **kwargs):
         PaletteWindow.__init__(self, **kwargs)
         self.toolbar_box = None
@@ -232,7 +238,9 @@ class _ToolbarPalette(PaletteWindow):
         if self._focus == 0:
             self.popdown(immediate=True)
 
+
 class _Box(gtk.EventBox):
+
     def __init__(self):
         gtk.EventBox.__init__(self)
         self.connect('expose-event', self.do_expose_event)
@@ -251,6 +259,7 @@ class _Box(gtk.EventBox):
                 alloc.width - style.FOCUS_LINE_WIDTH * 2,
                     style.FOCUS_LINE_WIDTH)
 
+
 def _setup_page(page_widget, color, hpad):
     vpad = style.FOCUS_LINE_WIDTH
     page_widget.child.set_padding(vpad, vpad, hpad, hpad)
@@ -264,6 +273,7 @@ def _setup_page(page_widget, color, hpad):
     page_widget.modify_bg(gtk.STATE_NORMAL, color)
     page_widget.modify_bg(gtk.STATE_PRELIGHT, color)
 
+
 def _embody_page(box_class, widget):
     widget.show()
     alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
@@ -274,6 +284,7 @@ def _embody_page(box_class, widget):
     box.add(alignment)
     box.show()
     return box
+
 
 def _paint_arrow(widget, event, arrow_type):
     alloc = widget.allocation

@@ -27,7 +27,9 @@ import gtk
 
 from sugar.graphics.icon import Icon
 
+
 class MenuItem(gtk.ImageMenuItem):
+
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
                  xo_color=None, file_name=None):
         gobject.GObject.__init__(self)
@@ -91,4 +93,3 @@ class MenuItem(gtk.ImageMenuItem):
 
     accelerator = gobject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)
-

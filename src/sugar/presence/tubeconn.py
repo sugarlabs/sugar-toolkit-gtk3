@@ -20,7 +20,7 @@
 STABLE.
 """
 
-__all__ = ('TubeConnection',)
+__all__ = ('TubeConnection', )
 __docformat__ = 'reStructuredText'
 
 
@@ -34,10 +34,10 @@ logger = logging.getLogger('telepathy.tubeconn')
 
 class TubeConnection(Connection):
 
-    # pylint: disable-msg=W0212
-    # Confused by __new__
     def __new__(cls, conn, tubes_iface, tube_id, address=None,
                 group_iface=None, mainloop=None):
+        # pylint: disable-msg=W0212
+        # Confused by __new__
         if address is None:
             address = tubes_iface.GetDBusTubeAddress(tube_id)
         self = super(TubeConnection, cls).__new__(cls, address,
@@ -58,9 +58,9 @@ class TubeConnection(Connection):
 
         return self
 
-    # pylint: disable-msg=W0201
-    # Confused by __new__
     def _on_get_self_handle_reply(self, handle):
+        # pylint: disable-msg=W0201
+        # Confused by __new__
         self.self_handle = handle
         match = self._tubes_iface.connect_to_signal('DBusNamesChanged',
                 self._on_dbus_names_changed)

@@ -33,9 +33,12 @@ import cairo
 from sugar.graphics.xocolor import XoColor
 from sugar.util import LRU
 
+
 _BADGE_SIZE = 0.45
 
+
 class _SVGLoader(object):
+
     def __init__(self):
         self._cache = LRU(50)
 
@@ -61,20 +64,26 @@ class _SVGLoader(object):
         import rsvg # XXX this is very slow!  why?
         return rsvg.Handle(data=icon)
 
+
 class _IconInfo(object):
+
     def __init__(self):
         self.file_name = None
         self.attach_x = 0
         self.attach_y = 0
 
+
 class _BadgeInfo(object):
+
     def __init__(self):
         self.attach_x = 0
         self.attach_y = 0
         self.size = 0
         self.icon_padding = 0
 
+
 class _IconBuffer(object):
+
     _surface_cache = LRU(50)
     _loader = _SVGLoader()
 
@@ -219,7 +228,7 @@ class _IconBuffer(object):
             self.stroke_color = None
             self.fill_color = None
 
-    def _get_insensitive_pixbuf (self, pixbuf, widget):
+    def _get_insensitive_pixbuf(self, pixbuf, widget):
         if not (widget and widget.style):
             return pixbuf
 
@@ -309,7 +318,9 @@ class _IconBuffer(object):
 
     xo_color = property(_get_xo_color, _set_xo_color)
 
+
 class Icon(gtk.Image):
+
     __gtype_name__ = 'SugarIcon'
 
     def __init__(self, **kwargs):
@@ -510,7 +521,9 @@ class Icon(gtk.Image):
     badge_name = gobject.property(
         type=str, getter=get_badge_name, setter=set_badge_name)
 
+
 class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
+
     __gtype_name__ = 'CanvasIcon'
 
     def __init__(self, **kwargs):
@@ -932,11 +945,13 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 
     palette = property(get_palette, set_palette)
 
+
 class CellRendererIcon(gtk.GenericCellRenderer):
+
     __gtype_name__ = 'SugarCellRendererIcon'
 
     __gsignals__ = {
-        'clicked': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [object])
+        'clicked': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [object]),
     }
 
     def __init__(self, tree_view):
@@ -1073,8 +1088,8 @@ class CellRendererIcon(gtk.GenericCellRenderer):
 
         return False
 
-    def on_render(self, window, widget, background_area, cell_area, expose_area,
-                  flags):
+    def on_render(self, window, widget, background_area, cell_area,
+        expose_area, flags):
         has_prelit_colors = None not in [self._prelit_fill_color,
                                          self._prelit_stroke_color]
         if flags & gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
@@ -1100,6 +1115,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         cr.rectangle(expose_area)
         cr.paint()
 
+
 def get_icon_state(base_name, perc, step=5):
     strength = round(perc / step) * step
     icon_theme = gtk.icon_theme_get_default()
@@ -1111,6 +1127,7 @@ def get_icon_state(base_name, perc, step=5):
 
         strength = strength + step
 
+
 def get_icon_file_name(icon_name):
     icon_theme = gtk.icon_theme_get_default()
     info = icon_theme.lookup_icon(icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR, 0)
@@ -1119,4 +1136,3 @@ def get_icon_file_name(icon_name):
     filename = info.get_filename()
     del info
     return filename
-

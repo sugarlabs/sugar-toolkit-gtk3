@@ -27,11 +27,13 @@ from sugar.graphics.icon import Icon
 from sugar.graphics.palette import Palette, ToolInvoker
 from sugar.graphics import toolbutton
 
+
 class RadioToolButton(gtk.RadioToolButton):
     """
     An implementation of a "push" button.
 
     """
+
     __gtype_name__ = 'SugarRadioToolButton'
 
     def __init__(self, **kwargs):
@@ -76,7 +78,8 @@ class RadioToolButton(gtk.RadioToolButton):
     def get_tooltip(self):
         return self._tooltip
 
-    tooltip = gobject.property(type=str, setter=set_tooltip, getter=get_tooltip)
+    tooltip = gobject.property(type=str, setter=set_tooltip,
+        getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
         """
@@ -177,4 +180,3 @@ class RadioToolButton(gtk.RadioToolButton):
                                   allocation.width, allocation.height)
 
         gtk.RadioToolButton.do_expose_event(self, event)
-

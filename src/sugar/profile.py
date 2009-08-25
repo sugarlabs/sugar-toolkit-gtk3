@@ -29,7 +29,9 @@ from sugar import env
 from sugar import util
 from sugar.graphics.xocolor import XoColor
 
+
 _profile = None
+
 
 class Profile(object):
     """Local user's current options/profile information
@@ -46,6 +48,7 @@ class Profile(object):
         pubkey -- public ssh key
         privkey_hash -- SHA has of the child's public key
     """
+
     def __init__(self, path):
         self._pubkey = None
         self._privkey_hash = None
@@ -194,6 +197,7 @@ class Profile(object):
         fd.write(text)
         fd.close()
 
+
 def get_profile():
     global _profile
 
@@ -203,14 +207,17 @@ def get_profile():
 
     return _profile
 
+
 def get_nick_name():
     client = gconf.client_get_default()
     return client.get_string("/desktop/sugar/user/nick")
+
 
 def get_color():
     client = gconf.client_get_default()
     color = client.get_string("/desktop/sugar/user/color")
     return XoColor(color)
+
 
 def get_pubkey():
     return get_profile().pubkey

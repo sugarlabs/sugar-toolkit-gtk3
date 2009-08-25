@@ -31,6 +31,7 @@ DS_DBUS_PATH = "/org/laptop/sugar/DataStore"
 
 _data_store = None
 
+
 def _get_data_store():
     global _data_store
 
@@ -41,11 +42,13 @@ def _get_data_store():
                                      DS_DBUS_INTERFACE)
     return _data_store
 
+
 def create(properties, filename, transfer_ownership=False):
     object_id = _get_data_store().create(dbus.Dictionary(properties), filename,
                     transfer_ownership)
     logging.debug('dbus_helpers.create: ' + object_id)
     return object_id
+
 
 def update(uid, properties, filename, transfer_ownership=False,
         reply_handler=None, error_handler=None, timeout=-1):
@@ -64,18 +67,22 @@ def update(uid, properties, filename, transfer_ownership=False,
         _get_data_store().update(uid, dbus.Dictionary(properties),
                                  filename, transfer_ownership)
 
+
 def delete(uid):
     logging.debug('dbus_helpers.delete: %r', uid)
     _get_data_store().delete(uid)
+
 
 def get_properties(uid):
     logging.debug('dbus_helpers.get_properties: %s', uid)
     return _get_data_store().get_properties(uid, byte_arrays=True)
 
+
 def get_filename(uid):
     filename = _get_data_store().get_filename(uid)
     logging.debug('dbus_helpers.get_filename: %s, %s', uid, filename)
     return filename
+
 
 def find(query, properties, reply_handler, error_handler):
     logging.debug('dbus_helpers.find: %r %r', query, properties)
@@ -86,19 +93,23 @@ def find(query, properties, reply_handler, error_handler):
     else:
         return _get_data_store().find(query, properties, byte_arrays=True)
 
+
 def mount(uri, options, timeout=-1):
     return _get_data_store().mount(uri, options, timeout=timeout)
+
 
 def unmount(mount_point_id):
     _get_data_store().unmount(mount_point_id)
 
+
 def mounts():
     return _get_data_store().mounts()
+
 
 def get_unique_values(key):
     return _get_data_store().get_uniquevaluesfor(
                                 key, dbus.Dictionary({}, signature='ss'))
 
+
 def complete_indexing():
     return _get_data_store().complete_indexing()
-

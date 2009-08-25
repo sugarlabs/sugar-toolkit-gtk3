@@ -24,9 +24,11 @@ import logging
 import dbus
 import dbus.service
 
+
 _ACTIVITY_SERVICE_NAME = "org.laptop.Activity"
 _ACTIVITY_SERVICE_PATH = "/org/laptop/Activity"
 _ACTIVITY_INTERFACE = "org.laptop.Activity"
+
 
 class ActivityService(dbus.service.Object):
     """Base dbus service object that each Activity uses to export dbus methods.
@@ -51,7 +53,7 @@ class ActivityService(dbus.service.Object):
 
         activity_id = activity.get_id()
         service_name = _ACTIVITY_SERVICE_NAME + activity_id
-        object_path  = _ACTIVITY_SERVICE_PATH + "/" + activity_id
+        object_path = _ACTIVITY_SERVICE_PATH + '/' + activity_id
 
         bus = dbus.SessionBus()
         bus_name = dbus.service.BusName(service_name, bus=bus)
@@ -79,4 +81,3 @@ class ActivityService(dbus.service.Object):
             self._activity.get_document_path(async_cb, async_err_cb)
         except Exception, e:
             async_err_cb(e)
-

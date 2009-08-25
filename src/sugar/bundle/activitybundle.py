@@ -31,6 +31,7 @@ from sugar import util
 from sugar.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
 
+
 class ActivityBundle(Bundle):
     """A Sugar activity bundle
 
@@ -89,8 +90,8 @@ class ActivityBundle(Bundle):
         return ret
 
     def _read_manifest(self):
-        """return a list with the lines in MANIFEST, with invalid lines replaced
-        by empty lines.
+        """return a list with the lines in MANIFEST, with invalid lines
+        replaced by empty lines.
 
         Since absolute order carries information on file history, it should
         be preserved. For instance, when renaming a file, you should leave
@@ -170,7 +171,7 @@ class ActivityBundle(Bundle):
 
         if cp.has_option(section, 'mime_types'):
             mime_list = cp.get(section, 'mime_types').strip(';')
-            self._mime_types = [ mime.strip() for mime in mime_list.split(';') ]
+            self._mime_types = [mime.strip() for mime in mime_list.split(';')]
 
         if cp.has_option(section, 'show_launcher'):
             if cp.get(section, 'show_launcher') == 'no':
@@ -251,10 +252,10 @@ class ActivityBundle(Bundle):
         """Get the activity bundle id"""
         return self._bundle_id
 
-    # FIXME: this should return the icon data, not a filename, so that
-    # we don't need to create a temp file in the zip case
     def get_icon(self):
         """Get the activity icon name"""
+        # FIXME: this should return the icon data, not a filename, so that
+        # we don't need to create a temp file in the zip case
         icon_path = os.path.join('activity', self._icon + '.svg')
         if self._zip_file is None:
             return os.path.join(self._path, icon_path)
@@ -301,7 +302,7 @@ class ActivityBundle(Bundle):
 
         # List installed files
         manifestfiles = self.get_files(self._raw_manifest())
-        paths  = []
+        paths = []
         for root, dirs_, files in os.walk(install_path):
             rel_path = root[len(install_path) + 1:]
             for f in files:
@@ -320,7 +321,7 @@ class ActivityBundle(Bundle):
         # Is anything in MANIFEST left over after accounting for all files?
         if manifestfiles:
             err = ("Bundle %s: files in MANIFEST not included: %s"%
-                   (self._name,str(manifestfiles)))
+                   (self._name, str(manifestfiles)))
             if strict_manifest:
                 raise MalformedBundleException(err)
             else:
@@ -351,7 +352,7 @@ class ActivityBundle(Bundle):
         mime_types = self.get_mime_types()
         if mime_types is not None:
             installed_icons_dir = os.path.join(xdg_data_home,
-                                               'icons/sugar/scalable/mimetypes')
+                'icons/sugar/scalable/mimetypes')
             if not os.path.isdir(installed_icons_dir):
                 os.makedirs(installed_icons_dir)
 
@@ -390,7 +391,7 @@ class ActivityBundle(Bundle):
         mime_types = self.get_mime_types()
         if mime_types is not None:
             installed_icons_dir = os.path.join(xdg_data_home,
-                                               'icons/sugar/scalable/mimetypes')
+                'icons/sugar/scalable/mimetypes')
             if os.path.isdir(installed_icons_dir):
                 for f in os.listdir(installed_icons_dir):
                     path = os.path.join(installed_icons_dir, f)

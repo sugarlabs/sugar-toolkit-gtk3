@@ -29,6 +29,7 @@ from sugar import env
 from sugar.bundle.bundle import Bundle, NotInstalledException, \
     MalformedBundleException
 
+
 class ContentBundle(Bundle):
     """A Sugar content bundle
 
@@ -78,8 +79,8 @@ class ContentBundle(Bundle):
             try:
                 if int(version) != 1:
                     raise MalformedBundleException(
-                        'Content bundle %s has unknown host_version number %s' %
-                        (self._path, version))
+                        'Content bundle %s has unknown host_version '
+                        'number %s' % (self._path, version))
             except ValueError:
                 raise MalformedBundleException(
                     'Content bundle %s has invalid host_version number %s' %
@@ -209,17 +210,17 @@ class ContentBundle(Bundle):
     def get_start_uri(self):
         return "file://" + urllib.pathname2url(self.get_start_path())
 
-    # TODO treat ContentBundle in special way
-    # needs rethinking while fixing ContentBundle support
     def get_bundle_id(self):
+        # TODO treat ContentBundle in special way
+        # needs rethinking while fixing ContentBundle support
         if self._bundle_class is not None:
             return self._bundle_class
         else:
             return self._global_name
 
-    # TODO treat ContentBundle in special way
-    # needs rethinking while fixing ContentBundle support
     def get_activity_version(self):
+        # TODO treat ContentBundle in special way
+        # needs rethinking while fixing ContentBundle support
         return self._library_version
 
     def is_installed(self):

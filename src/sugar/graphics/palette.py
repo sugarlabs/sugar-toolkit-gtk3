@@ -39,16 +39,18 @@ from sugar import _sugarext
 from sugar.graphics.palettewindow import MouseSpeedDetector, Invoker, \
         WidgetInvoker, CanvasInvoker, ToolInvoker, CellRendererInvoker
 
+
 class Palette(PaletteWindow):
     PRIMARY = 0
     SECONDARY = 1
 
     __gtype_name__ = 'SugarPalette'
 
-    # DEPRECATED: label is passed with the primary-text property, accel_path
-    # is set via the invoker property, and menu_after_content is not used
     def __init__(self, label=None, accel_path=None, menu_after_content=False,
                  text_maxlen=60, **kwargs):
+        # DEPRECATED: label is passed with the primary-text property,
+        # accel_path is set via the invoker property, and menu_after_content
+        # is not used
 
         self._primary_text = None
         self._secondary_text = None
@@ -238,10 +240,9 @@ class Palette(PaletteWindow):
     def get_secondary_text(self):
         return self._secondary_text
 
+    secondary_text = gobject.property(type=str, getter=get_secondary_text,
+        setter=set_secondary_text)
 
-    secondary_text = gobject.property(type=str,
-                                      getter=get_secondary_text,
-                                      setter=set_secondary_text)
     def _show_icon(self):
         self._label_alignment.set_padding(0, 0, 0, style.DEFAULT_SPACING)
         self._icon_box.show()
@@ -362,7 +363,9 @@ class Palette(PaletteWindow):
 
         self._palette_state = state
 
+
 class PaletteActionBar(gtk.HButtonBox):
+
     def add_action(self, label, icon_name=None):
         button = gtk.Button(label)
 
@@ -374,11 +377,13 @@ class PaletteActionBar(gtk.HButtonBox):
         self.pack_start(button)
         button.show()
 
+
 class _Menu(_sugarext.Menu):
+
     __gtype_name__ = 'SugarPaletteMenu'
 
     __gsignals__ = {
-        'item-inserted': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([]))
+        'item-inserted': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
     def __init__(self, palette):
@@ -410,7 +415,9 @@ class _Menu(_sugarext.Menu):
     def do_deactivate(self):
         self._palette.hide()
 
+
 class _SecondaryAnimation(animator.Animation):
+
     def __init__(self, palette):
         animator.Animation.__init__(self, 0.0, 1.0)
         self._palette = palette
@@ -418,4 +425,3 @@ class _SecondaryAnimation(animator.Animation):
     def next_frame(self, current):
         if current == 1.0:
             self._palette.set_palette_state(Palette.SECONDARY)
-

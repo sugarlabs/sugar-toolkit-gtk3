@@ -30,17 +30,22 @@ from sugar.activity import activityhandle
 from sugar.bundle.activitybundle import ActivityBundle
 from sugar import logger
 
+
 def create_activity_instance(constructor, handle):
     activity = constructor(handle)
     activity.show()
 
+
 def get_single_process_name(bundle_id):
     return bundle_id
+
 
 def get_single_process_path(bundle_id):
     return '/' + bundle_id.replace('.', '/')
 
+
 class SingleProcess(dbus.service.Object):
+
     def __init__(self, name_service, constructor):
         self.constructor = constructor
 
@@ -53,6 +58,7 @@ class SingleProcess(dbus.service.Object):
     def create(self, handle_dict):
         handle = activityhandle.create_from_dict(handle_dict)
         create_activity_instance(self.constructor, handle)
+
 
 def main():
     parser = OptionParser()

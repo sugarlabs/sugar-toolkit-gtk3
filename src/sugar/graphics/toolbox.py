@@ -25,13 +25,14 @@ import hippo
 
 from sugar.graphics import style
 
+
 class Toolbox(gtk.VBox):
+
     __gtype_name__ = 'SugarToolbox'
 
     __gsignals__ = {
         'current-toolbar-changed': (gobject.SIGNAL_RUN_FIRST,
-                                    gobject.TYPE_NONE,
-                                    ([int]))
+            gobject.TYPE_NONE, ([int])),
     }
 
     def __init__(self):
@@ -98,4 +99,3 @@ class Toolbox(gtk.VBox):
         return self._notebook.get_current_page()
 
     current_toolbar = property(get_current_toolbar, set_current_toolbar)
-

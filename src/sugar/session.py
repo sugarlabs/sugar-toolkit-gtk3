@@ -23,11 +23,15 @@ import os
 
 from sugar import _sugarext
 
+
 class XSMPClient(_sugarext.SMClientXSMP):
+
     def __init__(self):
         _sugarext.SMClientXSMP.__init__(self)
 
+
 class SessionManager(object):
+
     def __init__(self):
         address = _sugarext.xsmp_init()
         os.environ['SESSION_MANAGER'] = address

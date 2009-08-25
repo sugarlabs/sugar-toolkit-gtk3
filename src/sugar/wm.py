@@ -21,6 +21,7 @@ UNSTABLE. Used only internally by Activity and jarabe.
 
 import gtk
 
+
 def get_activity_id(wnck_window):
     window = gtk.gdk.window_foreign_new(wnck_window.get_xid())
     prop_info = window.property_get('_SUGAR_ACTIVITY_ID', 'STRING')
@@ -28,6 +29,7 @@ def get_activity_id(wnck_window):
         return None
     else:
         return prop_info[2]
+
 
 def get_bundle_id(wnck_window):
     window = gtk.gdk.window_foreign_new(wnck_window.get_xid())
@@ -37,9 +39,11 @@ def get_bundle_id(wnck_window):
     else:
         return prop_info[2]
 
+
 def set_activity_id(window, activity_id):
     window.property_change('_SUGAR_ACTIVITY_ID', 'STRING', 8,
                            gtk.gdk.PROP_MODE_REPLACE, activity_id)
+
 
 def set_bundle_id(window, bundle_id):
     window.property_change('_SUGAR_BUNDLE_ID', 'STRING', 8,

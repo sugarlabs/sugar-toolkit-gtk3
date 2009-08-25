@@ -29,13 +29,17 @@ import gobject
 import SimpleHTTPServer
 import SocketServer
 
+
 __authinfos = {}
+
 
 def _add_authinfo(authinfo):
     __authinfos[threading.currentThread()] = authinfo
 
+
 def get_authinfo():
     return __authinfos.get(threading.currentThread())
+
 
 def _del_authinfo():
     del __authinfos[threading.currentThread()]
@@ -172,16 +176,17 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.end_headers()
         return f
 
+
 class GlibURLDownloader(gobject.GObject):
     """Grabs a URL in chunks, returning to the mainloop after each chunk"""
 
     __gsignals__ = {
         'finished': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT])),
-        'error':    (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT])),
+            ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT])),
+        'error': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+            ([gobject.TYPE_PYOBJECT])),
         'progress': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT]))
+            ([gobject.TYPE_PYOBJECT])),
     }
 
     CHUNK_SIZE = 4096

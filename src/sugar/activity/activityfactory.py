@@ -54,6 +54,8 @@ try:
     MAXFD = os.sysconf("SC_OPEN_MAX")
 except ValueError:
     MAXFD = 256
+
+
 def _close_fds():
     for i in xrange(3, MAXFD):
         try:
@@ -61,6 +63,7 @@ def _close_fds():
         # pylint: disable-msg=W0704
         except Exception:
             pass
+
 
 def create_activity_id():
     """Generate a new, unique ID for this activity"""
@@ -84,6 +87,7 @@ def create_activity_id():
             return act_id
     raise RuntimeError("Cannot generate unique activity id.")
 
+
 def get_environment(activity):
     environ = os.environ.copy()
 
@@ -106,14 +110,16 @@ def get_environment(activity):
         os.mkdir(tmp_dir)
 
     environ['SUGAR_BUNDLE_PATH'] = activity.get_path()
-    environ['SUGAR_BUNDLE_ID']   = activity.get_bundle_id()
+    environ['SUGAR_BUNDLE_ID'] = activity.get_bundle_id()
     environ['SUGAR_ACTIVITY_ROOT'] = activity_root
     environ['PATH'] = bin_path + ':' + environ['PATH']
 
     if activity.get_path().startswith(env.get_user_activities_path()):
-        environ['SUGAR_LOCALEDIR'] = os.path.join(activity.get_path(), 'locale')
+        environ['SUGAR_LOCALEDIR'] = os.path.join(activity.get_path(),
+            'locale')
 
     return environ
+
 
 def get_command(activity, activity_id=None, object_id=None, uri=None):
     if not activity_id:
@@ -140,6 +146,7 @@ def get_command(activity, activity_id=None, object_id=None, uri=None):
 
     return command
 
+
 def open_log_file(activity):
     i = 1
     while True:
@@ -154,9 +161,10 @@ def open_log_file(activity):
                 i += 1
             elif e.errno == ENOSPC:
                 # not the end of the world; let's try to keep going.
-                return ('/dev/null', open('/dev/null','w'))
+                return ('/dev/null', open('/dev/null', 'w'))
             else:
                 raise e
+
 
 class ActivityCreationHandler(gobject.GObject):
     """Sugar-side activity creation interface
@@ -250,7 +258,7 @@ class ActivityCreationHandler(gobject.GObject):
                        '-u', pwd.getpwuid(os.getuid()).pw_name,
                        '-i', environ['SUGAR_BUNDLE_ID'],
                        '-e', environment_dir,
-                       '--'
+                       '--',
                       ] + command
 
             for key, value in environ.items():
@@ -310,25 +318,29 @@ class ActivityCreationHandler(gobject.GObject):
         logging.error('Datastore find failed %s', err)
         self._launch_activity()
 
+
 def create(bundle, activity_handle=None):
     """Create a new activity from its name."""
     if not activity_handle:
         activity_handle = ActivityHandle()
     return ActivityCreationHandler(bundle, activity_handle)
 
+
 def create_with_uri(bundle, uri):
     """Create a new activity and pass the uri as handle."""
     activity_handle = ActivityHandle(uri=uri)
     return ActivityCreationHandler(bundle, activity_handle)
+
 
 def create_with_object_id(bundle, object_id):
     """Create a new activity and pass the object id as handle."""
     activity_handle = ActivityHandle(object_id=object_id)
     return ActivityCreationHandler(bundle, activity_handle)
 
-# FIXME we use standalone method here instead of ActivityCreationHandler's
-# member to have workaround code, see #1123
+
 def _child_watch_cb(pid, condition, user_data):
+    # FIXME we use standalone method here instead of ActivityCreationHandler's
+    # member to have workaround code, see #1123
     environment_dir, log_file = user_data
     if environment_dir is not None:
         subprocess.call(['/bin/rm', '-rf', environment_dir])

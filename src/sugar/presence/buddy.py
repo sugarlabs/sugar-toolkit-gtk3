@@ -24,6 +24,7 @@ import gobject
 import gtk
 import dbus
 
+
 class Buddy(gobject.GObject):
     """UI interface for a Buddy in the presence service
 
@@ -40,26 +41,26 @@ class Buddy(gobject.GObject):
         'icon': (XXX pixel data for an icon?)
     See __gproperties__
     """
+
     __gsignals__ = {
-        'icon-changed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([])),
+        'icon-changed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
         'joined-activity': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT])),
+            ([gobject.TYPE_PYOBJECT])),
         'left-activity': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT])),
+            ([gobject.TYPE_PYOBJECT])),
         'property-changed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT])),
+            ([gobject.TYPE_PYOBJECT])),
     }
 
     __gproperties__ = {
-        'key'              : (str, None, None, None, gobject.PARAM_READABLE),
-        'icon'             : (str, None, None, None, gobject.PARAM_READABLE),
-        'nick'             : (str, None, None, None, gobject.PARAM_READABLE),
-        'color'            : (str, None, None, None, gobject.PARAM_READABLE),
-        'current-activity' : (object, None, None, gobject.PARAM_READABLE),
-        'owner'            : (bool, None, None, False, gobject.PARAM_READABLE),
-        'ip4-address'      : (str, None, None, None, gobject.PARAM_READABLE),
-        'tags'             : (str, None, None, None, gobject.PARAM_READABLE),
+        'key': (str, None, None, None, gobject.PARAM_READABLE),
+        'icon': (str, None, None, None, gobject.PARAM_READABLE),
+        'nick': (str, None, None, None, gobject.PARAM_READABLE),
+        'color': (str, None, None, None, gobject.PARAM_READABLE),
+        'current-activity': (object, None, None, gobject.PARAM_READABLE),
+        'owner': (bool, None, None, False, gobject.PARAM_READABLE),
+        'ip4-address': (str, None, None, None, gobject.PARAM_READABLE),
+        'tags': (str, None, None, None, gobject.PARAM_READABLE),
     }
 
     _PRESENCE_SERVICE = "org.laptop.Sugar.Presence"

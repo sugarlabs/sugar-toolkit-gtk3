@@ -25,10 +25,11 @@ import gobject
 from sugar.graphics.combobox import ComboBox
 from sugar.graphics import style
 
+
 class ToolComboBox(gtk.ToolItem):
+
     __gproperties__ = {
-        'label-text' : (str, None, None, None,
-                        gobject.PARAM_WRITABLE),
+        'label-text': (str, None, None, None, gobject.PARAM_WRITABLE),
     }
 
     def __init__(self, combo=None, **kwargs):

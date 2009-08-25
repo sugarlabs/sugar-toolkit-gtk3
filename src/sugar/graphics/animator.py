@@ -24,12 +24,13 @@ import time
 import gobject
 
 EASE_OUT_EXPO = 0
-EASE_IN_EXPO  = 1
+EASE_IN_EXPO = 1
+
 
 class Animator(gobject.GObject):
+
     __gsignals__ = {
-        'completed': (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, ([])),
+        'completed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
     def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO):
@@ -111,7 +112,9 @@ class Animator(gobject.GObject):
         else:
             return True
 
+
 class Animation(object):
+
     def __init__(self, start, end):
         self.start = start
         self.end = end

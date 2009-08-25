@@ -22,11 +22,13 @@ STABLE.
 
 import os
 
+
 def is_emulator():
     if os.environ.has_key('SUGAR_EMULATOR'):
         if os.environ['SUGAR_EMULATOR'] == 'yes':
             return True
     return False
+
 
 def get_profile_path(path=None):
     if os.environ.has_key('SUGAR_PROFILE'):
@@ -46,6 +48,7 @@ def get_profile_path(path=None):
     else:
         return base
 
+
 def get_logs_path(path=None):
     base = os.environ.get('SUGAR_LOGS_DIR', get_profile_path('logs'))
     if path != None:
@@ -53,8 +56,10 @@ def get_logs_path(path=None):
     else:
         return base
 
+
 def get_user_activities_path():
     return os.path.expanduser('~/Activities')
+
 
 def get_user_library_path():
     return os.path.expanduser('~/Library')

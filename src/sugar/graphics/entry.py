@@ -22,7 +22,9 @@ STABLE.
 import gtk
 import hippo
 
+
 class CanvasEntry(hippo.CanvasEntry):
+
     def set_background(self, color_spec):
         """
         Parameters

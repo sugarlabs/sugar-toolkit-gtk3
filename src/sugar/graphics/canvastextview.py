@@ -20,7 +20,9 @@ import hippo
 
 from sugar.graphics import style
 
+
 class CanvasTextView(hippo.CanvasWidget):
+
     def __init__(self, text, **kwargs):
         hippo.CanvasWidget.__init__(self, **kwargs)
         self.text_view_widget = gtk.TextView()

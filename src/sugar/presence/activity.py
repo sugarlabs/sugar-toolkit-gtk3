@@ -26,7 +26,9 @@ import dbus
 import gobject
 import telepathy
 
+
 _logger = logging.getLogger('sugar.presence.activity')
+
 
 class Activity(gobject.GObject):
     """UI interface for an Activity in the presence service
@@ -43,23 +45,23 @@ class Activity(gobject.GObject):
     """
     __gsignals__ = {
         'buddy-joined': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT])),
-        'buddy-left':   (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT])),
-        'new-channel':  (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT])),
-        'joined':       (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT])),
+            ([gobject.TYPE_PYOBJECT])),
+        'buddy-left': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+            ([gobject.TYPE_PYOBJECT])),
+        'new-channel': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+            ([gobject.TYPE_PYOBJECT])),
+        'joined': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+            ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT])),
     }
 
     __gproperties__ = {
-        'id'        : (str, None, None, None, gobject.PARAM_READABLE),
-        'name'      : (str, None, None, None, gobject.PARAM_READWRITE),
-        'tags'      : (str, None, None, None, gobject.PARAM_READWRITE),
-        'color'     : (str, None, None, None, gobject.PARAM_READWRITE),
-        'type'      : (str, None, None, None, gobject.PARAM_READABLE),
-        'private'   : (bool, None, None, True, gobject.PARAM_READWRITE),
-        'joined'    : (bool, None, None, False, gobject.PARAM_READABLE),
+        'id': (str, None, None, None, gobject.PARAM_READABLE),
+        'name': (str, None, None, None, gobject.PARAM_READWRITE),
+        'tags': (str, None, None, None, gobject.PARAM_READWRITE),
+        'color': (str, None, None, None, gobject.PARAM_READWRITE),
+        'type': (str, None, None, None, gobject.PARAM_READABLE),
+        'private': (bool, None, None, True, gobject.PARAM_READWRITE),
+        'joined': (bool, None, None, False, gobject.PARAM_READABLE),
     }
 
     _PRESENCE_SERVICE = "org.laptop.Sugar.Presence"
@@ -175,10 +177,10 @@ class Activity(gobject.GObject):
         elif pspec.name == "private":
             return self._private
 
-    # FIXME: need an asynchronous API to set these properties, particularly
-    # 'private'
     def do_set_property(self, pspec, val):
         """Set a particular property in our property dictionary"""
+        # FIXME: need an asynchronous API to set these properties,
+        # particularly 'private'
         if pspec.name == "name":
             self._activity.SetProperties({'name': val})
             self._name = val

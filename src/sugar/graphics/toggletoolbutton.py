@@ -25,7 +25,9 @@ import gtk
 from sugar.graphics.icon import Icon
 from sugar.graphics.palette import Palette, ToolInvoker
 
+
 class ToggleToolButton(gtk.ToggleToolButton):
+
     __gtype_name__ = "SugarToggleToolButton"
 
     def __init__(self, named_icon=None):

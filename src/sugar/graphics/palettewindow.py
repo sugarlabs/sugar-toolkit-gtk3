@@ -31,8 +31,9 @@ from sugar.graphics import palettegroup
 from sugar.graphics import animator
 from sugar.graphics import style
 
-# Helper function to find the gap position and size of widget a
+
 def _calculate_gap(a, b):
+    """Helper function to find the gap position and size of widget a"""
     # Test for each side if the palette and invoker are
     # adjacent to each other.
     gap = True
@@ -62,6 +63,7 @@ def _calculate_gap(a, b):
         return (gap_side, gap_start, gap_size)
     else:
         return False
+
 
 class MouseSpeedDetector(gobject.GObject):
 
@@ -125,17 +127,15 @@ class MouseSpeedDetector(gobject.GObject):
 
         return True
 
+
 class PaletteWindow(gtk.Window):
 
     __gtype_name__ = 'SugarPaletteWindow'
 
     __gsignals__ = {
-        'popup' :   (gobject.SIGNAL_RUN_FIRST,
-                     gobject.TYPE_NONE, ([])),
-        'popdown' : (gobject.SIGNAL_RUN_FIRST,
-                     gobject.TYPE_NONE, ([])),
-        'activate' : (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, ([]))
+        'popup': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'popdown': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'activate': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
     def __init__(self, **kwargs):
@@ -401,7 +401,9 @@ class PaletteWindow(gtk.Window):
 
     palette_state = property(get_palette_state)
 
+
 class _PopupAnimation(animator.Animation):
+
     def __init__(self, palette):
         animator.Animation.__init__(self, 0.0, 1.0)
         self._palette = palette
@@ -410,7 +412,9 @@ class _PopupAnimation(animator.Animation):
         if current == 1.0:
             self._palette.show()
 
+
 class _PopdownAnimation(animator.Animation):
+
     def __init__(self, palette):
         animator.Animation.__init__(self, 0.0, 1.0)
         self._palette = palette
@@ -419,27 +423,25 @@ class _PopdownAnimation(animator.Animation):
         if current == 1.0:
             self._palette.hide()
 
+
 class Invoker(gobject.GObject):
+
     __gtype_name__ = 'SugarPaletteInvoker'
 
     __gsignals__ = {
         'mouse-enter': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
         'mouse-leave': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
         'right-click': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'focus-out':   (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([]))
+        'focus-out': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
     ANCHORED = 0
     AT_CURSOR = 1
 
-    BOTTOM = [(0.0, 0.0, 0.0, 1.0),
-              (-1.0, 0.0, 1.0, 1.0)]
-    RIGHT  = [(0.0, 0.0, 1.0, 0.0),
-              (0.0, -1.0, 1.0, 1.0)]
-    TOP    = [(0.0, -1.0, 0.0, 0.0),
-              (-1.0, -1.0, 1.0, 0.0)]
-    LEFT   = [(-1.0, 0.0, 0.0, 0.0),
-              (-1.0, -1.0, 0.0, 1.0)]
+    BOTTOM = [(0.0, 0.0, 0.0, 1.0), (-1.0, 0.0, 1.0, 1.0)]
+    RIGHT = [(0.0, 0.0, 1.0, 0.0), (0.0, -1.0, 1.0, 1.0)]
+    TOP = [(0.0, -1.0, 0.0, 0.0), (-1.0, -1.0, 1.0, 0.0)]
+    LEFT = [(-1.0, 0.0, 0.0, 0.0), (-1.0, -1.0, 0.0, 1.0)]
 
     def __init__(self):
         gobject.GObject.__init__(self)
@@ -531,8 +533,9 @@ class Invoker(gobject.GObject):
         alignment = self.get_alignment(palette_dim)
         rect = self._get_position_for_alignment(alignment, palette_dim)
 
-        # In case our efforts to find an optimum place inside the screen failed,
-        # just make sure the palette fits inside the screen if at all possible.
+        # In case our efforts to find an optimum place inside the screen
+        # failed, just make sure the palette fits inside the screen if at all
+        # possible.
         rect.x = max(0, rect.x)
         rect.y = max(0, rect.y)
 
@@ -642,7 +645,9 @@ class Invoker(gobject.GObject):
     palette = gobject.property(
         type=object, setter=set_palette, getter=get_palette)
 
+
 class WidgetInvoker(Invoker):
+
     def __init__(self, parent=None, widget=None):
         Invoker.__init__(self)
 
@@ -663,11 +668,11 @@ class WidgetInvoker(Invoker):
         self.notify('widget')
 
         self._enter_hid = self._widget.connect('enter-notify-event',
-                                               self.__enter_notify_event_cb)
+            self.__enter_notify_event_cb)
         self._leave_hid = self._widget.connect('leave-notify-event',
-                                               self.__leave_notify_event_cb)
+            self.__leave_notify_event_cb)
         self._release_hid = self._widget.connect('button-release-event',
-                                                 self.__button_release_event_cb)
+            self.__button_release_event_cb)
 
         self.attach(parent)
 
@@ -750,7 +755,9 @@ class WidgetInvoker(Invoker):
         return self._widget
     widget = gobject.property(type=object, getter=_get_widget, setter=None)
 
+
 class CanvasInvoker(Invoker):
+
     def __init__(self, parent=None):
         Invoker.__init__(self)
 
@@ -806,7 +813,9 @@ class CanvasInvoker(Invoker):
     def get_toplevel(self):
         return hippo.get_canvas_for_item(self._item).get_toplevel()
 
+
 class ToolInvoker(WidgetInvoker):
+
     def __init__(self, parent=None):
         WidgetInvoker.__init__(self)
 
@@ -826,7 +835,9 @@ class ToolInvoker(WidgetInvoker):
         else:
             return self.LEFT + self.RIGHT
 
+
 class CellRendererInvoker(Invoker):
+
     def __init__(self):
         Invoker.__init__(self)
 
@@ -910,14 +921,16 @@ class CellRendererInvoker(Invoker):
         self.notify_mouse_leave()
 
     def __button_release_event_cb(self, widget, event):
-        if event.button == 1 and self._point_in_cell_renderer(event.x, event.y):
+        if event.button == 1 and self._point_in_cell_renderer(event.x,
+            event.y):
             tree_view = self._tree_view
             path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
                                                               int(event.y))
             self._cell_renderer.emit('clicked', path)
             # So the treeview receives it and knows a drag isn't going on
             return False
-        if event.button == 3 and self._point_in_cell_renderer(event.x, event.y):
+        if event.button == 3 and self._point_in_cell_renderer(event.x,
+            event.y):
             self.notify_right_click()
             return True
         else:
@@ -951,4 +964,3 @@ class CellRendererInvoker(Invoker):
 
     def get_default_position(self):
         return self.AT_CURSOR
-

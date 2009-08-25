@@ -27,11 +27,14 @@ import dbus
 
 from sugar.datastore import datastore
 
+
 J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 
+
 class ObjectChooser(object):
+
     def __init__(self, title=None, parent=None, flags=None, buttons=None,
                  what_filter=None):
         # For backwards compatibility:
@@ -127,4 +130,3 @@ class ObjectChooser(object):
         # Journal service disappeared from the bus
         self._response_code = gtk.RESPONSE_CANCEL
         self._cleanup()
-

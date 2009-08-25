@@ -26,11 +26,14 @@ from sugar.graphics import style
 from sugar.graphics.icon import Icon
 from sugar.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 
+
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+
 
 def get_svg_color_string(color):
     return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257,
                               color.blue / 257)
+
 
 class _ColorButton(gtk.Button):
     """This is a ColorButton for Sugar. It is similar to the gtk.ColorButton,
@@ -42,8 +45,8 @@ class _ColorButton(gtk.Button):
     """
 
     __gtype_name__ = 'SugarColorButton'
-    __gsignals__ = { 'color-set' : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                                     tuple())}
+    __gsignals__ = {'color-set': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+        tuple())}
 
     def __init__(self, **kwargs):
         self._title = _('Choose a color')
@@ -78,7 +81,7 @@ class _ColorButton(gtk.Button):
         if self._has_palette and self._has_invoker:
             self._invoker = WidgetInvoker(self)
             # FIXME: This is a hack.
-            self._invoker.has_rectangle_gap = lambda : False
+            self._invoker.has_rectangle_gap = lambda: False
             self._invoker.palette = self._palette
 
     def create_palette(self):
@@ -86,7 +89,8 @@ class _ColorButton(gtk.Button):
             self._palette = _ColorPalette(color=self._color,
                                           primary_text=self._title)
             self._palette.connect('color-set', self.__palette_color_set_cb)
-            self._palette.connect('notify::color', self.__palette_color_changed)
+            self._palette.connect('notify::color', self.
+                __palette_color_changed)
 
         return self._palette
 
@@ -192,8 +196,8 @@ class _ColorButton(gtk.Button):
                                    getter=_get_accept_drag,
                                    setter=_set_accept_drag)
 
-    # Drag and Drop
     def __drag_begin_cb(self, widget, context):
+        # Drag and Drop
         pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8,
                                 style.SMALL_ICON_SIZE,
                                 style.SMALL_ICON_SIZE)
@@ -235,10 +239,11 @@ class _ColorPalette(Palette):
     _BLUE = 2
 
     __gtype_name__ = 'SugarColorPalette'
+
     # The color-set signal is emitted when the user is finished selecting
     # a color.
-    __gsignals__ = { 'color-set' : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                                     tuple())}
+    __gsignals__ = {'color-set': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+        tuple())}
 
     def __init__(self, **kwargs):
         self._color = gtk.gdk.Color(0, 0, 0)
@@ -299,8 +304,6 @@ class _ColorPalette(Palette):
         self._chooser_table.attach(scale, 1, 2, row, row + 1)
 
         return scale
-
-
 
     def _build_swatches(self):
         for child in self._swatch_tray.get_children():
@@ -384,7 +387,6 @@ class _ColorPalette(Palette):
     color = gobject.property(type=object, getter=get_color, setter=set_color)
 
 
-
 def _add_accelerator(tool_button):
     if not tool_button.props.accelerator or not tool_button.get_toplevel() or \
             not tool_button.child:
@@ -403,20 +405,24 @@ def _add_accelerator(tool_button):
     tool_button.child.add_accelerator('clicked', accel_group, keyval, mask,
                                       gtk.ACCEL_LOCKED | gtk.ACCEL_VISIBLE)
 
+
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
     _add_accelerator(tool_button)
+
 
 def setup_accelerator(tool_button):
     _add_accelerator(tool_button)
     tool_button.connect('hierarchy-changed', _hierarchy_changed_cb)
 
-# This not ideal. It would be better to subclass gtk.ToolButton, however
-# the python bindings do not seem to be powerfull enough for that.
-# (As we need to change a variable in the class structure.)
+
 class ColorToolButton(gtk.ToolItem):
+    # This not ideal. It would be better to subclass gtk.ToolButton, however
+    # the python bindings do not seem to be powerfull enough for that.
+    # (As we need to change a variable in the class structure.)
+
     __gtype_name__ = 'SugarColorToolButton'
-    __gsignals__ = { 'color-set' : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                                     tuple())}
+    __gsignals__ = {'color-set': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+        tuple())}
 
     def __init__(self, icon_name='color-preview', **kwargs):
         self._accelerator = None
@@ -528,4 +534,3 @@ class ColorToolButton(gtk.ToolItem):
 
     def __color_set_cb(self, widget):
         self.emit('color-set')
-

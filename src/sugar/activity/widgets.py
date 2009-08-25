@@ -29,6 +29,7 @@ from sugar.graphics.xocolor import XoColor
 from sugar.graphics.icon import Icon
 from sugar.bundle.activitybundle import ActivityBundle
 
+
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 
@@ -41,7 +42,9 @@ def _create_activity_icon():
     icon = Icon(file=bundle.get_icon(), xo_color=color)
     return icon
 
+
 class ActivityButton(ToolButton):
+
     def __init__(self, activity, **kwargs):
         ToolButton.__init__(self, **kwargs)
 
@@ -55,7 +58,9 @@ class ActivityButton(ToolButton):
     def __jobject_updated_cb(self, jobject):
         self.props.tooltip = jobject['title']
 
+
 class ActivityToolbarButton(ToolbarButton):
+
     def __init__(self, activity, **kwargs):
         toolbar = ActivityToolbar(activity, orientation_left=True)
         toolbar.stop.hide()
@@ -66,7 +71,9 @@ class ActivityToolbarButton(ToolbarButton):
         self.set_icon_widget(icon)
         icon.show()
 
+
 class StopButton(ToolButton):
+
     def __init__(self, activity, **kwargs):
         ToolButton.__init__(self, 'activity-stop', **kwargs)
         self.props.tooltip = _('Stop')
@@ -76,28 +83,38 @@ class StopButton(ToolButton):
     def __stop_button_clicked_cb(self, button, activity):
         activity.close()
 
+
 class UndoButton(ToolButton):
+
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-undo', **kwargs)
         self.props.tooltip = _('Undo')
         self.props.accelerator = '<Ctrl>Q'
 
+
 class RedoButton(ToolButton):
+
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-redo', **kwargs)
         self.props.tooltip = _('Redo')
 
+
 class CopyButton(ToolButton):
+
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-copy', **kwargs)
         self.props.tooltip = _('Copy')
 
+
 class PasteButton(ToolButton):
+
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-paste', **kwargs)
         self.props.tooltip = _('Paste')
 
+
 class ShareButton(RadioMenuButton):
+
     def __init__(self, activity, **kwargs):
         palette = RadioPalette()
 
@@ -137,7 +154,9 @@ class ShareButton(RadioMenuButton):
         finally:
             self.neighborhood.handler_unblock(self._neighborhood_handle)
 
+
 class KeepButton(ToolButton):
+
     def __init__(self, activity, **kwargs):
         ToolButton.__init__(self, **kwargs)
         self.props.tooltip = _('Keep')
@@ -154,7 +173,9 @@ class KeepButton(ToolButton):
     def __keep_button_clicked_cb(self, button, activity):
         activity.copy()
 
+
 class TitleEntry(gtk.ToolItem):
+
     def __init__(self, activity, **kwargs):
         gtk.ToolItem.__init__(self)
         self.set_expand(False)
@@ -195,6 +216,7 @@ class TitleEntry(gtk.ToolItem):
         self._update_title_sid = None
         return False
 
+
 class ActivityToolbar(gtk.Toolbar):
     """The Activity toolbar with the Journal entry title, sharing,
        Keep and Stop buttons
@@ -202,6 +224,7 @@ class ActivityToolbar(gtk.Toolbar):
     All activities should have this toolbar. It is easiest to add it to your
     Activity by using the ActivityToolbox.
     """
+
     def __init__(self, activity, orientation_left=False):
         gtk.Toolbar.__init__(self)
 
@@ -231,6 +254,7 @@ class ActivityToolbar(gtk.Toolbar):
         self.stop = StopButton(activity)
         self.insert(self.stop, -1)
         self.stop.show()
+
 
 class EditToolbar(gtk.Toolbar):
     """Provides the standard edit toolbar for Activities.
@@ -265,6 +289,7 @@ class EditToolbar(gtk.Toolbar):
         # And make it visible:
         self._edit_toolbar.show()
     """
+
     def __init__(self):
         gtk.Toolbar.__init__(self)
 
@@ -289,6 +314,7 @@ class EditToolbar(gtk.Toolbar):
         self.insert(self.paste, -1)
         self.paste.show()
 
+
 class ActivityToolbox(Toolbox):
     """Creates the Toolbox for the Activity
 
@@ -307,6 +333,7 @@ class ActivityToolbox(Toolbox):
         # And make it visible:
         toolbox.show()
     """
+
     def __init__(self, activity):
         Toolbox.__init__(self)
 

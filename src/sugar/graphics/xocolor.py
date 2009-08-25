@@ -204,6 +204,7 @@ colors = [
 ['#BCCDFF', '#AC32FF'], \
 ]
 
+
 def _parse_string(color_string):
     if color_string == 'white':
         return ['#ffffff', '#414141']
@@ -216,10 +217,13 @@ def _parse_string(color_string):
     else:
         return None
 
+
 def is_valid(color_string):
     return (_parse_string(color_string) != None)
 
+
 class XoColor:
+
     def __init__(self, color_string=None):
         if color_string == None or not is_valid(color_string):
             n = int(random.random() * (len(colors) - 1))
@@ -241,6 +245,7 @@ class XoColor:
 
     def to_string(self):
         return '%s,%s' % (self.stroke, self.fill)
+
 
 if __name__ == "__main__":
     import sys

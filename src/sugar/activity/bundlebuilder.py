@@ -34,8 +34,10 @@ from fnmatch import fnmatch
 from sugar import env
 from sugar.bundle.activitybundle import ActivityBundle
 
+
 IGNORE_DIRS = ['dist', '.git']
 IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
+
 
 def list_files(base_dir, ignore_dirs=None, ignore_files=None):
     result = []
@@ -58,7 +60,9 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 
     return result
 
+
 class Config(object):
+
     def __init__(self, source_dir=None, dist_dir = None, dist_name = None):
         self.source_dir = source_dir or os.getcwd()
         self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
@@ -80,7 +84,7 @@ class Config(object):
         self.version = bundle.get_activity_version()
         self.activity_name = bundle.get_name()
         self.bundle_id = bundle.get_bundle_id()
-        self.bundle_name = reduce(lambda x, y:x+y, self.activity_name.split())
+        self.bundle_name = reduce(lambda x, y: x+y, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%d' % (self.bundle_name, self.version)
 
@@ -90,7 +94,9 @@ class Config(object):
             self.xo_name = '%s-%d.xo' % (self.bundle_name, self.version)
             self.tar_name = '%s-%d.tar.bz2' % (self.bundle_name, self.version)
 
+
 class Builder(object):
+
     def __init__(self, config):
         self.config = config
 
@@ -167,7 +173,9 @@ class Builder(object):
         for line in manifest:
             f.write(line + "\n")
 
+
 class Packager(object):
+
     def __init__(self, config):
         self.config = config
         self.package_path = None
@@ -175,7 +183,9 @@ class Packager(object):
         if not os.path.exists(self.config.dist_dir):
             os.mkdir(self.config.dist_dir)
 
+
 class XOPackager(Packager):
+
     def __init__(self, builder):
         Packager.__init__(self, builder.config)
 
@@ -200,7 +210,9 @@ class XOPackager(Packager):
 
         bundle_zip.close()
 
+
 class SourcePackager(Packager):
+
     def __init__(self, config):
         Packager.__init__(self, config)
         self.package_path = os.path.join(self.config.dist_dir,
@@ -210,7 +222,7 @@ class SourcePackager(Packager):
         git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
                                   cwd=self.config.source_dir)
         stdout, _ = git_ls.communicate()
-        if git_ls.returncode :
+        if git_ls.returncode:
             # Fall back to filtered list
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
@@ -224,8 +236,9 @@ class SourcePackager(Packager):
                     os.path.join(self.config.tar_root_dir, f))
         tar.close()
 
+
 class Installer(object):
-    IGNORES = [ 'po/*', 'MANIFEST', 'AUTHORS' ]
+    IGNORES = ['po/*', 'MANIFEST', 'AUTHORS']
 
     def __init__(self, builder):
         self.config = builder.config
@@ -261,6 +274,7 @@ class Installer(object):
 
             shutil.copy(source, dest)
 
+
 def cmd_dev(config, args):
     '''Setup for development'''
 
@@ -280,6 +294,7 @@ def cmd_dev(config, args):
         else:
             print 'ERROR - A bundle with the same name is already installed.'
 
+
 def cmd_dist_xo(config, args):
     '''Create a xo bundle package'''
 
@@ -289,6 +304,7 @@ def cmd_dist_xo(config, args):
 
     packager = XOPackager(Builder(config))
     packager.package()
+
 
 def cmd_fix_manifest(config, args):
     '''Add missing files to the manifest'''
@@ -300,6 +316,7 @@ def cmd_fix_manifest(config, args):
     builder = Builder(config)
     builder.fix_manifest()
 
+
 def cmd_dist_source(config, args):
     '''Create a tar source package'''
 
@@ -309,6 +326,7 @@ def cmd_dist_source(config, args):
 
     packager = SourcePackager(config)
     packager.package()
+
 
 def cmd_install(config, args):
     '''Install the activity in the system'''
@@ -323,6 +341,7 @@ def cmd_install(config, args):
 
     installer = Installer(Builder(config))
     installer.install(suboptions.prefix)
+
 
 def cmd_genpot(config, args):
     '''Generate the gettext pot file'''
@@ -354,13 +373,14 @@ def cmd_genpot(config, args):
     f.write('msgstr ""\n')
     f.close()
 
-    args = [ 'xgettext', '--join-existing', '--language=Python',
-             '--keyword=_', '--add-comments=TRANS:', '--output=%s' % pot_file ]
+    args = ['xgettext', '--join-existing', '--language=Python',
+        '--keyword=_', '--add-comments=TRANS:', '--output=%s' % pot_file]
 
     args += python_files
     retcode = subprocess.call(args)
     if retcode:
         print 'ERROR - xgettext failed with return code %i.' % retcode
+
 
 def cmd_build(config, args):
     '''Build generated files'''
@@ -372,6 +392,7 @@ def cmd_build(config, args):
     builder = Builder(config)
     builder.build()
 
+
 def print_commands():
     print 'Available commands:\n'
 
@@ -381,6 +402,7 @@ def print_commands():
 
     print '\n(Type "./setup.py <command> --help" for help about a ' \
           'particular command\'s options.'
+
 
 def start(bundle_name=None):
     if bundle_name:
@@ -396,6 +418,7 @@ def start(bundle_name=None):
         globals()['cmd_' + args[0]](config, args[1:])
     except (KeyError, IndexError):
         print_commands()
+
 
 if __name__ == '__main__':
     start()

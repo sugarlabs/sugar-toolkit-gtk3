@@ -31,7 +31,9 @@ import logging
 import atexit
 import traceback
 
+
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+
 
 def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
@@ -40,11 +42,13 @@ def printable_hash(in_hash):
         printable = printable + binascii.b2a_hex(char)
     return printable
 
+
 def sha_data(data):
     """sha1 hash some bytes."""
     sha_hash = hashlib.sha1()
     sha_hash.update(data)
     return sha_hash.digest()
+
 
 def unique_id(data = ''):
     """Generate a likely-unique ID for whatever purpose
@@ -66,6 +70,7 @@ def unique_id(data = ''):
 
 ACTIVITY_ID_LEN = 40
 
+
 def is_hex(s):
     try:
         int(s, 16)
@@ -73,6 +78,7 @@ def is_hex(s):
         return False
 
     return True
+
 
 def validate_activity_id(actid):
     """Validate an activity ID."""
@@ -83,6 +89,7 @@ def validate_activity_id(actid):
     if not is_hex(actid):
         return False
     return True
+
 
 def set_proc_title(title):
     """Sets the process title so ps and top show more
@@ -106,12 +113,16 @@ def set_proc_title(title):
     except Exception:
         return False
 
+
 class Node(object):
+
     __slots__ = ['prev', 'next', 'me']
+
     def __init__(self, prev, me):
         self.prev = prev
         self.me = me
         self.next = None
+
 
 class LRU:
     """
@@ -120,20 +131,24 @@ class LRU:
     http://pype.sourceforge.net
     Copyright 2003 Josiah Carlson.
     """
-    # pylint: disable-msg=W0102,W0612
+
     def __init__(self, count, pairs=[]):
+        # pylint: disable-msg=W0102,W0612
         self.count = max(count, 1)
         self.d = {}
         self.first = None
         self.last = None
         for key, value in pairs:
             self[key] = value
+
     def __contains__(self, obj):
         return obj in self.d
+
     def __getitem__(self, obj):
         a = self.d[obj].me
         self[a[0]] = a[1]
         return a[1]
+
     def __setitem__(self, obj, val):
         if obj in self.d:
             del self[obj]
@@ -155,6 +170,7 @@ class LRU:
             a.next = None
             del self.d[a.me[0]]
             del a
+
     def __delitem__(self, obj):
         nobj = self.d[obj]
         if nobj.prev:
@@ -166,31 +182,37 @@ class LRU:
         else:
             self.last = nobj.prev
         del self.d[obj]
+
     def __iter__(self):
         cur = self.first
         while cur != None:
             cur2 = cur.next
             yield cur.me[1]
             cur = cur2
+
     def iteritems(self):
         cur = self.first
         while cur != None:
             cur2 = cur.next
             yield cur.me
             cur = cur2
+
     def iterkeys(self):
         return iter(self.d)
+
     def itervalues(self):
         for i, j in self.iteritems():
             yield j
+
     def keys(self):
         return self.d.keys()
 
-units = [['%d year',   '%d years',   356 * 24 * 60 * 60],
-         ['%d month',  '%d months',  30 * 24 * 60 * 60],
-         ['%d week',   '%d weeks',   7 * 24 * 60 * 60],
-         ['%d day',    '%d days',    24 * 60 * 60],
-         ['%d hour',   '%d hours',   60 * 60],
+
+units = [['%d year', '%d years', 356 * 24 * 60 * 60],
+         ['%d month', '%d months', 30 * 24 * 60 * 60],
+         ['%d week', '%d weeks', 7 * 24 * 60 * 60],
+         ['%d day', '%d days', 24 * 60 * 60],
+         ['%d hour', '%d hours', 60 * 60],
          ['%d minute', '%d minutes', 60]]
 
 AND = _(' and ')
@@ -210,23 +232,27 @@ ELAPSED = _('%s ago')
 # strings need to be used, then we need to call ngettext() in a fake way so
 # xgettext will pick them up as plurals.
 
+
 def ngettext(singular, plural, n):
     pass
 
+
 # TRANS: Relative dates (eg. 1 month and 5 days).
-ngettext('%d year',   '%d years',   1)
-ngettext('%d month',  '%d months',  1)
-ngettext('%d week',   '%d weeks',   1)
-ngettext('%d day',    '%d days',    1)
-ngettext('%d hour',   '%d hours',   1)
+ngettext('%d year', '%d years', 1)
+ngettext('%d month', '%d months', 1)
+ngettext('%d week', '%d weeks', 1)
+ngettext('%d day', '%d days', 1)
+ngettext('%d hour', '%d hours', 1)
 ngettext('%d minute', '%d minutes', 1)
 
 del ngettext
 
 # End of plurals hack
 
+
 # gettext perfs hack (#7959)
 _i18n_timestamps_cache = LRU(60)
+
 
 def timestamp_to_elapsed_string(timestamp, max_levels=2):
     levels = 0
@@ -265,9 +291,12 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
 
     return ELAPSED % time_period
 
+
 _tracked_paths = {}
 
+
 class TempFilePath(str):
+
     def __new__(cls, path=None):
         if path is None:
             fd, path = tempfile.mkstemp()
@@ -292,6 +321,7 @@ class TempFilePath(str):
                 logging.warning('TempFilePath already deleted %r', self)
         else:
             _tracked_paths[self] -= 1
+
 
 def _cleanup_temp_files():
     logging.debug('_cleanup_temp_files')

@@ -28,6 +28,7 @@ import gobject
 from sugar.graphics.icon import Icon
 from sugar.graphics.palette import Palette, ToolInvoker
 
+
 def _add_accelerator(tool_button):
     if not tool_button.props.accelerator or not tool_button.get_toplevel() or \
             not tool_button.child:
@@ -46,14 +47,18 @@ def _add_accelerator(tool_button):
     tool_button.child.add_accelerator('clicked', accel_group, keyval, mask,
                                       gtk.ACCEL_LOCKED | gtk.ACCEL_VISIBLE)
 
+
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
     _add_accelerator(tool_button)
+
 
 def setup_accelerator(tool_button):
     _add_accelerator(tool_button)
     tool_button.connect('hierarchy-changed', _hierarchy_changed_cb)
 
+
 class ToolButton(gtk.ToolButton):
+
     __gtype_name__ = "SugarToolButton"
 
     def __init__(self, icon_name=None, **kwargs):
@@ -97,7 +102,8 @@ class ToolButton(gtk.ToolButton):
     def get_tooltip(self):
         return self._tooltip
 
-    tooltip = gobject.property(type=str, setter=set_tooltip, getter=get_tooltip)
+    tooltip = gobject.property(type=str, setter=set_tooltip,
+        getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
         self._accelerator = accelerator

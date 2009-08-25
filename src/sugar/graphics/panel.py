@@ -21,7 +21,10 @@ STABLE.
 
 import gtk
 
+
 class Panel(gtk.VBox):
+
     __gtype_name__ = 'SugarPanel'
+
     def __init__(self):
         gtk.VBox.__init__(self)

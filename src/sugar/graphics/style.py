@@ -28,8 +28,10 @@ import logging
 import gtk
 import pango
 
+
 FOCUS_LINE_WIDTH = 2
 _TAB_CURVATURE = 1
+
 
 def _compute_zoom_factor():
     if os.environ.has_key('SUGAR_SCALING'):
@@ -41,7 +43,9 @@ def _compute_zoom_factor():
 
     return 1.0
 
+
 class Font(object):
+
     def __init__(self, desc):
         self._desc = desc
 
@@ -51,7 +55,9 @@ class Font(object):
     def get_pango_desc(self):
         return pango.FontDescription(self._desc)
 
+
 class Color(object):
+
     def __init__(self, color, alpha=1.0):
         self._r, self._g, self._b = self._html_to_rgb(color)
         self._a = alpha
@@ -91,8 +97,10 @@ class Color(object):
         else:
             return self.get_html()
 
+
 def zoom(units):
     return int(ZOOM_FACTOR * units)
+
 
 ZOOM_FACTOR = _compute_zoom_factor()
 

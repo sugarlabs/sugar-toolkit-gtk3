@@ -27,17 +27,17 @@ from sugar.graphics.palette import ToolInvoker
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.icon import Icon
 
+
 _PREVIOUS_PAGE = 0
 _NEXT_PAGE = 1
 
+
 class _TrayViewport(gtk.Viewport):
+
     __gproperties__ = {
-        'scrollable'      : (bool, None, None, False,
-                             gobject.PARAM_READABLE),
-        'can-scroll-prev' : (bool, None, None, False,
-                             gobject.PARAM_READABLE),
-        'can-scroll-next' : (bool, None, None, False,
-                             gobject.PARAM_READABLE),
+        'scrollable': (bool, None, None, False, gobject.PARAM_READABLE),
+        'can-scroll-prev': (bool, None, None, False, gobject.PARAM_READABLE),
+        'can-scroll-next': (bool, None, None, False, gobject.PARAM_READABLE),
     }
 
     def __init__(self, orientation):
@@ -161,6 +161,7 @@ class _TrayViewport(gtk.Viewport):
 
 
 class _TrayScrollButton(ToolButton):
+
     def __init__(self, icon_name, scroll_direction):
         ToolButton.__init__(self)
         self._viewport = None
@@ -194,7 +195,6 @@ class _TrayScrollButton(ToolButton):
                                    self._viewport_can_scroll_dir_changed_cb)
             self.set_sensitive(self._viewport.props.can_scroll_next)
 
-
     def _viewport_scrollable_changed_cb(self, viewport, pspec):
         self.props.visible = self._viewport.props.scrollable
 
@@ -211,19 +211,21 @@ class _TrayScrollButton(ToolButton):
 
     viewport = property(fset=set_viewport)
 
+
 ALIGN_TO_START = 0
 ALIGN_TO_END = 1
 
+
 class HTray(gtk.HBox):
+
     __gtype_name__ = 'SugarHTray'
 
     __gproperties__ = {
-        'align'         : (int, None, None, 0, 1, ALIGN_TO_START,
-                           gobject.PARAM_READWRITE |
-                           gobject.PARAM_CONSTRUCT_ONLY),
-        'drag-active'   : (bool, None, None, False,
-                           gobject.PARAM_READWRITE)
+        'align': (int, None, None, 0, 1, ALIGN_TO_START,
+            gobject.PARAM_READWRITE | gobject.PARAM_CONSTRUCT_ONLY),
+        'drag-active': (bool, None, None, False, gobject.PARAM_READWRITE),
     }
+
     def __init__(self, **kwargs):
         self._drag_active = False
         self.align = ALIGN_TO_START
@@ -299,15 +301,15 @@ class HTray(gtk.HBox):
     def scroll_to_item(self, item):
         self._viewport.scroll_to_item(item)
 
+
 class VTray(gtk.VBox):
+
     __gtype_name__ = 'SugarVTray'
 
     __gproperties__ = {
-        'align'         : (int, None, None, 0, 1, ALIGN_TO_START,
-                           gobject.PARAM_READWRITE |
-                           gobject.PARAM_CONSTRUCT_ONLY),
-        'drag-active'   : (bool, None, None, False,
-                           gobject.PARAM_READWRITE)
+        'align': (int, None, None, 0, 1, ALIGN_TO_START,
+            gobject.PARAM_READWRITE | gobject.PARAM_CONSTRUCT_ONLY),
+        'drag-active': (bool, None, None, False, gobject.PARAM_READWRITE),
     }
 
     def __init__(self, **kwargs):
@@ -385,11 +387,15 @@ class VTray(gtk.VBox):
     def scroll_to_item(self, item):
         self._viewport.scroll_to_item(item)
 
+
 class TrayButton(ToolButton):
+
     def __init__(self, **kwargs):
         ToolButton.__init__(self, **kwargs)
 
+
 class _IconWidget(gtk.EventBox):
+
     __gtype_name__ = "SugarTrayIconWidget"
 
     def __init__(self, icon_name=None, xo_color=None):
@@ -413,7 +419,9 @@ class _IconWidget(gtk.EventBox):
     def get_icon(self):
         return self._icon
 
+
 class TrayIcon(gtk.ToolItem):
+
     __gtype_name__ = "SugarTrayIcon"
 
     def __init__(self, icon_name=None, xo_color=None):
@@ -458,4 +466,3 @@ class TrayIcon(gtk.ToolItem):
     def get_icon(self):
         return self._icon_widget.get_icon()
     icon = property(get_icon, None)
-

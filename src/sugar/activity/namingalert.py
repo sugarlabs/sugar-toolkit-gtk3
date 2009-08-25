@@ -35,7 +35,9 @@ from sugar.graphics.canvastextview import CanvasTextView
 
 from sugar.bundle.activitybundle import ActivityBundle
 
+
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+
 
 def _get_icon_name(metadata):
     file_name = None
@@ -53,16 +55,17 @@ def _get_icon_name(metadata):
 
     return file_name
 
+
 class NamingToolbar(gtk.Toolbar):
     """ Toolbar of the naming alert
     """
+
     __gtype_name__ = 'SugarNamingToolbar'
 
     __gsignals__ = {
-        'keep-clicked': (gobject.SIGNAL_RUN_FIRST,
-                         gobject.TYPE_NONE,
-                         ([]))
+        'keep-clicked': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
+
     def __init__(self):
         gtk.Toolbar.__init__(self)
 
@@ -110,7 +113,9 @@ class NamingToolbar(gtk.Toolbar):
     def __keep_button_clicked_cb(self, widget, data=None):
         self.emit('keep-clicked')
 
+
 class FavoriteIcon(CanvasIcon):
+
     def __init__(self, favorite):
         CanvasIcon.__init__(self, icon_name='emblem-favorite',
                             box_width=style.GRID_CELL_SIZE * 3 / 5,
@@ -149,7 +154,9 @@ class FavoriteIcon(CanvasIcon):
             elif event.detail == hippo.MOTION_DETAIL_LEAVE:
                 icon.props.fill_color = style.COLOR_TRANSPARENT.get_svg()
 
+
 class NamingAlert(gtk.Window):
+
     __gtype_name__ = 'SugarNamingAlert'
 
     def __init__(self, activity, bundle_path):
@@ -212,11 +219,12 @@ class NamingAlert(gtk.Window):
                                  spacing=style.DEFAULT_SPACING)
         body.append(header)
 
-        descriptions = hippo.CanvasBox(orientation=hippo.ORIENTATION_HORIZONTAL,
-                               spacing=style.DEFAULT_SPACING * 3,
-                               padding_left=style.GRID_CELL_SIZE,
-                               padding_right=style.GRID_CELL_SIZE,
-                               padding_top=style.DEFAULT_SPACING * 3)
+        descriptions = hippo.CanvasBox(
+            orientation=hippo.ORIENTATION_HORIZONTAL,
+            spacing=style.DEFAULT_SPACING * 3,
+            padding_left=style.GRID_CELL_SIZE,
+            padding_right=style.GRID_CELL_SIZE,
+            padding_top=style.DEFAULT_SPACING * 3)
 
         body.append(descriptions, hippo.PACK_EXPAND)
 

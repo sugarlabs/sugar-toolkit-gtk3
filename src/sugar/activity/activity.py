@@ -74,7 +74,9 @@ from sugar.session import XSMPClient
 from sugar import wm
 
 # support deprecated imports
-from sugar.activity.widgets import ActivityToolbar, EditToolbar, ActivityToolbox
+from sugar.activity.widgets import ActivityToolbar, EditToolbar
+from sugar.activity.widgets import ActivityToolbox
+
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
@@ -86,17 +88,20 @@ J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 
+
 class _ActivitySession(gobject.GObject):
+
     __gsignals__ = {
         'quit-requested': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'quit':           (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([]))
+        'quit': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
     def __init__(self):
         gobject.GObject.__init__(self)
 
         self._xsmp_client = XSMPClient()
-        self._xsmp_client.connect('quit-requested', self.__sm_quit_requested_cb)
+        self._xsmp_client.connect('quit-requested',
+            self.__sm_quit_requested_cb)
         self._xsmp_client.connect('quit', self.__sm_quit_cb)
         self._xsmp_client.startup()
 
@@ -133,6 +138,7 @@ class _ActivitySession(gobject.GObject):
     def __sm_quit_cb(self, client):
         self.emit('quit')
 
+
 class Activity(Window, gtk.Container):
     """This is the base Activity class that all other Activities derive from.
        This is where your activity starts.
@@ -160,12 +166,12 @@ class Activity(Window, gtk.Container):
 
         2. Implement read_file() and write_file()
            Most activities revolve around creating and storing Journal entries.
-           For example, Write: You create a document, it is saved to the Journal
-           and then later you resume working on the document.
+           For example, Write: You create a document, it is saved to the
+           Journal and then later you resume working on the document.
 
            read_file() and write_file() will be called by sugar to tell your
-           Activity that it should load or save the document the user is working
-           on.
+           Activity that it should load or save the document the user is
+           working on.
 
         3. Implement our Activity Toolbars.
            The Toolbars are added to your Activity in step 1 (the toolbox), but
@@ -177,9 +183,9 @@ class Activity(Window, gtk.Container):
            okay, but you should really stop and think about why not!) You do
            this with the ActivityToolbox(self) call in step 1.
 
-           Usually, you will also need the standard EditToolbar. This is the one
-           which has the standard copy and paste buttons. You need to derive
-           your own EditToolbar class from sugar.EditToolbar:
+           Usually, you will also need the standard EditToolbar. This is the
+           one which has the standard copy and paste buttons. You need to
+           derive your own EditToolbar class from sugar.EditToolbar:
                 class EditToolbar(activity.EditToolbar):
                     ...
 
@@ -200,11 +206,12 @@ class Activity(Window, gtk.Container):
     Hint: A good and simple Activity to learn from is the Read activity. To
     create your own activity, you may want to copy it and use it as a template.
     """
+
     __gtype_name__ = 'SugarActivity'
 
     __gsignals__ = {
         'shared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'joined': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([]))
+        'joined': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
     def __init__(self, handle, create_jobject=True):
@@ -368,8 +375,8 @@ class Activity(Window, gtk.Container):
         The activity id is sort-of-like the unix process id (PID). However,
         unlike PIDs it is only different for each new instance (with
         create_jobject = True set) and stays the same everytime a user
-        resumes an activity. This is also the identity of your Activity to other
-        XOs for use when sharing.
+        resumes an activity. This is also the identity of your Activity to
+        other XOs for use when sharing.
         """
         return self._activity_id
 
@@ -378,7 +385,8 @@ class Activity(Window, gtk.Container):
         return os.environ['SUGAR_BUNDLE_ID']
 
     def set_canvas(self, canvas):
-        """Sets the 'work area' of your activity with the canvas of your choice.
+        """Sets the 'work area' of your activity with the canvas of your
+        choice.
 
         One commonly used canvas is gtk.ScrolledWindow
         """
@@ -425,8 +433,8 @@ class Activity(Window, gtk.Container):
         ~/.sugar/default/MyActivityName/
 
         Activities should ONLY save settings, user preferences and other data
-        which isn't specific to a journal item here. If (meta-)data is in anyway
-        specific to a journal entry, it MUST be stored in the DataStore.
+        which isn't specific to a journal item here. If (meta-)data is in
+        anyway specific to a journal entry, it MUST be stored in the DataStore.
         """
         if os.environ.has_key('SUGAR_ACTIVITY_ROOT') and \
            os.environ['SUGAR_ACTIVITY_ROOT']:
@@ -446,9 +454,10 @@ class Activity(Window, gtk.Container):
         close it.
 
         Although not required, this is also a good time to read all meta-data:
-        the file itself cannot be changed externally, but the title, description
-        and other metadata['tags'] may change. So if it is important for you to
-        notice changes, this is the time to record the originals.
+        the file itself cannot be changed externally, but the title,
+        description and other metadata['tags'] may change. So if it is
+        important for you to notice changes, this is the time to record the
+        originals.
         """
         raise NotImplementedError
 
@@ -461,12 +470,13 @@ class Activity(Window, gtk.Container):
         all document data to it.
 
         Additionally, you should also write any metadata needed to resume your
-        activity. For example, the Read activity saves the current page and zoom
-        level, so it can display the page.
+        activity. For example, the Read activity saves the current page and
+        zoom level, so it can display the page.
 
         Note: Currently, the file_path *WILL* be different from the one you
-        received in file_read(). Even if you kept the file_path from file_read()
-        open until now, you must still write the entire file to this file_path.
+        received in file_read(). Even if you kept the file_path from
+        file_read() open until now, you must still write the entire file to
+        this file_path.
         """
         raise NotImplementedError
 
@@ -518,6 +528,7 @@ class Activity(Window, gtk.Container):
                                      gtk.gdk.INTERP_BILINEAR)
 
         preview_data = []
+
         def save_func(buf, data):
             data.append(buf)
 
@@ -809,7 +820,9 @@ class Activity(Window, gtk.Container):
     # DEPRECATED
     _shared_activity = property(lambda self: self.shared_activity, None)
 
+
 _session = None
+
 
 def _get_session():
     global _session
@@ -819,13 +832,16 @@ def _get_session():
 
     return _session
 
+
 def get_bundle_name():
     """Return the bundle name for the current process' bundle"""
     return os.environ['SUGAR_BUNDLE_NAME']
 
+
 def get_bundle_path():
     """Return the bundle path for the current process' bundle"""
     return os.environ['SUGAR_BUNDLE_PATH']
+
 
 def get_activity_root():
     """Returns a path for saving Activity specific preferences, etc."""
@@ -834,6 +850,7 @@ def get_activity_root():
         return os.environ['SUGAR_ACTIVITY_ROOT']
     else:
         raise RuntimeError("No SUGAR_ACTIVITY_ROOT set.")
+
 
 def show_object_in_journal(object_id):
     bus = dbus.SessionBus()

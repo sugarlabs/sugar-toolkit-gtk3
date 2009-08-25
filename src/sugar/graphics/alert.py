@@ -54,7 +54,9 @@ import math
 from sugar.graphics import style
 from sugar.graphics.icon import Icon
 
+
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+
 
 class Alert(gtk.EventBox):
     """
@@ -78,18 +80,14 @@ class Alert(gtk.EventBox):
     __gtype_name__ = 'SugarAlert'
 
     __gsignals__ = {
-        'response': (gobject.SIGNAL_RUN_FIRST,
-                        gobject.TYPE_NONE, ([object]))
-        }
+        'response': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([object])),
+    }
 
     __gproperties__ = {
-        'title'  : (str, None, None, None,
-                    gobject.PARAM_READWRITE),
-        'msg'    : (str, None, None, None,
-                    gobject.PARAM_READWRITE),
-        'icon'   : (object, None, None,
-                    gobject.PARAM_WRITABLE)
-        }
+        'title': (str, None, None, None, gobject.PARAM_READWRITE),
+        'msg': (str, None, None, None, gobject.PARAM_READWRITE),
+        'icon': (object, None, None, gobject.PARAM_WRITABLE),
+    }
 
     def __init__(self, **kwargs):
 

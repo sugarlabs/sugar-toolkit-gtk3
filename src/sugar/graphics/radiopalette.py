@@ -20,7 +20,9 @@ import gtk
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.palette import Palette
 
+
 class RadioMenuButton(ToolButton):
+
     def __init__(self, **kwargs):
         ToolButton.__init__(self, **kwargs)
         self.selected_button = None
@@ -44,7 +46,9 @@ class RadioMenuButton(ToolButton):
         else:
             self.palette.popup(immediate=True, state=Palette.SECONDARY)
 
+
 class RadioToolsButton(RadioMenuButton):
+
     def __init__(self, **kwargs):
         RadioMenuButton.__init__(self, **kwargs)
 
@@ -53,7 +57,9 @@ class RadioToolsButton(RadioMenuButton):
             return
         self.selected_button.emit('clicked')
 
+
 class RadioPalette(Palette):
+
     def __init__(self, **kwargs):
         Palette.__init__(self, **kwargs)
 

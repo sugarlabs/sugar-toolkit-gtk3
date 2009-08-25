@@ -25,6 +25,7 @@ import hippo
 
 from sugar.graphics import style
 
+
 class CanvasRoundBox(hippo.CanvasBox, hippo.CanvasItem):
     __gtype_name__ = 'SugarRoundBox'
 

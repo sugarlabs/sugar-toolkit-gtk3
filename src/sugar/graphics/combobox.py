@@ -22,7 +22,9 @@ STABLE.
 import gobject
 import gtk
 
+
 class ComboBox(gtk.ComboBox):
+
     __gtype_name__ = 'SugarComboBox'
 
     def __init__(self):

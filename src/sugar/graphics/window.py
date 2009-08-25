@@ -26,7 +26,9 @@ import warnings
 
 from sugar.graphics.icon import Icon
 
+
 _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT = 2
+
 
 class UnfullscreenButton(gtk.Window):
 
@@ -77,7 +79,9 @@ class UnfullscreenButton(gtk.Window):
     def _screen_size_changed_cb(self, screen):
         self._reposition()
 
+
 class Window(gtk.Window):
+
     def __init__(self, **args):
         self._enable_fullscreen_mode = True
 
@@ -263,8 +267,7 @@ class Window(gtk.Window):
         return self._enable_fullscreen_mode
 
     enable_fullscreen_mode = gobject.property(type=object,
-                                              setter=set_enable_fullscreen_mode,
-                                              getter=get_enable_fullscreen_mode)
+        setter=set_enable_fullscreen_mode, getter=get_enable_fullscreen_mode)
 
     # DEPRECATED
 
