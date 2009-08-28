@@ -29,7 +29,7 @@ def _property_get_trapped(window, prop, prop_type):
 
     # We just log a message
     error = gtk.gdk.error_trap_pop()
-    if gtk.gdk.error_trap_pop():
+    if error:
         logging.debug('Received X Error (%i) while getting '
                       'a property on a window' % error)
 
