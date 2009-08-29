@@ -959,6 +959,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
 
         self._buffer = _IconBuffer()
         self._buffer.cache = True
+        self._xo_color = None
         self._fill_color = None
         self._stroke_color = None
         self._prelit_fill_color = None
@@ -994,15 +995,14 @@ class CellRendererIcon(gtk.GenericCellRenderer):
 
     icon_name = gobject.property(type=str, setter=set_icon_name)
 
-    def set_xo_color(self, value):
-        if value is not None:
-            self._stroke_color = value.get_stroke_color()
-            self._fill_color = value.get_fill_color()
-        else:
-            self._stroke_color = None
-            self._fill_color = None
+    def get_xo_color(self):
+        return self._xo_color
 
-    xo_color = gobject.property(type=object, setter=set_xo_color)
+    def set_xo_color(self, value):
+        self._xo_color = value
+
+    xo_color = gobject.property(type=object,
+            getter=get_xo_color, setter=set_xo_color)
 
     def set_fill_color(self, value):
         if self._fill_color != value:
@@ -1089,17 +1089,29 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         return False
 
     def on_render(self, window, widget, background_area, cell_area,
-        expose_area, flags):
-        has_prelit_colors = None not in [self._prelit_fill_color,
-                                         self._prelit_stroke_color]
+            expose_area, flags):
+        if self._xo_color is not None:
+            stroke_color = self._xo_color.get_stroke_color()
+            fill_color = self._xo_color.get_fill_color()
+            prelit_fill_color = stroke_color
+            prelit_stroke_color = fill_color
+        else:
+            stroke_color = self._stroke_color
+            fill_color = self._fill_color
+            prelit_fill_color = self._prelit_fill_color
+            prelit_stroke_color = self._prelit_stroke_color
+
+        has_prelit_colors = None not in [prelit_fill_color,
+                                         prelit_stroke_color]
+
         if flags & gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
                 self._is_prelit(widget):
 
-            self._buffer.fill_color = self._prelit_fill_color
-            self._buffer.stroke_color = self._prelit_stroke_color
+            self._buffer.fill_color = prelit_fill_color
+            self._buffer.stroke_color = prelit_stroke_color
         else:
-            self._buffer.fill_color = self._fill_color
-            self._buffer.stroke_color = self._stroke_color
+            self._buffer.fill_color = fill_color
+            self._buffer.stroke_color = stroke_color
 
         surface = self._buffer.get_surface()
         if surface is None:
