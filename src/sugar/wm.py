@@ -25,7 +25,7 @@ import logging
 def _property_get_trapped(window, prop, prop_type):
     gtk.gdk.error_trap_push()
 
-    prop_info = window.property_get('_SUGAR_ACTIVITY_ID', 'STRING')
+    prop_info = window.property_get(prop, prop_type)
 
     # We just log a message
     error = gtk.gdk.error_trap_pop()
