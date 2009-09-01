@@ -400,3 +400,6 @@ class ActivityBundle(Bundle):
                         os.remove(path)
 
         self._uninstall(install_path)
+
+    def is_user_activity(self):
+        return self.get_path().startswith(env.get_user_activities_path())
