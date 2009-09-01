@@ -66,6 +66,15 @@ def get_bundle_id(wnck_window):
         return prop_info[2]
 
 
+def get_sugar_window_type(wnck_window):
+    window = gtk.gdk.window_foreign_new(wnck_window.get_xid())
+    prop_info = _property_get_trapped(window, '_SUGAR_WINDOW_TYPE', 'STRING')
+    if prop_info is None:
+        return None
+    else:
+        return prop_info[2]
+
+
 def set_activity_id(window, activity_id):
     _property_change_trapped(window, '_SUGAR_ACTIVITY_ID', 'STRING', 8,
                              gtk.gdk.PROP_MODE_REPLACE, activity_id)
