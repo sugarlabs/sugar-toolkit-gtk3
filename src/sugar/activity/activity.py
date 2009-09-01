@@ -246,6 +246,14 @@ class Activity(Window, gtk.Container):
         """
         Window.__init__(self)
 
+        if os.environ.has_key('SUGAR_ACTIVITY_ROOT'):
+            # If this activity runs inside Sugar, we want it to take all the
+            # screen. Would be better if it was the shell to do this, but we
+            # haven't found yet a good way to do it there.
+            screen = gtk.gdk.screen_get_default()
+            screen.connect('size-changed', self.__screen_size_changed_cb)
+            self._adapt_window_to_screen()
+
         # process titles will only show 15 characters
         # but they get truncated anyway so if more characters
         # are supported in the future we will get a better view
@@ -393,6 +401,17 @@ class Activity(Window, gtk.Container):
         Window.set_canvas(self, canvas)
         if not self._read_file_called:
             canvas.connect('map', self.__canvas_map_cb)
+
+    def __screen_size_changed_cb(self, screen):
+        self._adapt_window_to_screen()
+
+    def _adapt_window_to_screen(self):
+        screen = gtk.gdk.screen_get_default()
+        self.set_geometry_hints(None,
+                                screen.get_width(), screen.get_height(),
+                                screen.get_width(), screen.get_height(),
+                                screen.get_width(), screen.get_height(),
+                                1, 1, 1, 1)
 
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
