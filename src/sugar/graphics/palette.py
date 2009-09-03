@@ -154,6 +154,8 @@ class Palette(PaletteWindow):
         self._update_separators()
 
     def __destroy_cb(self, palette):
+        self._secondary_anim.stop()
+        self.popdown(immediate=True)
         # Break the reference cycle. It looks like the gc is not able to free
         # it, possibly because gtk.Menu memory handling is very special.
         self.menu = None

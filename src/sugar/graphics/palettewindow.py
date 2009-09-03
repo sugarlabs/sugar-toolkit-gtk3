@@ -330,6 +330,7 @@ class PaletteWindow(gtk.Window):
         if not immediate:
             self._popdown_anim.start()
         else:
+            self._popdown_anim.stop()
             self.hide()
 
     def on_invoker_enter(self):
