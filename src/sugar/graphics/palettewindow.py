@@ -320,6 +320,9 @@ class PaletteWindow(gtk.Window):
             self._popup_anim.start()
         else:
             self.show()
+            # we have to invoke update_position() twice
+            # since WM could ignore first move() request
+            self.update_position()
 
     def popdown(self, immediate=False):
         logging.debug('PaletteWindow.popdown immediate %r', immediate)
@@ -412,6 +415,9 @@ class _PopupAnimation(animator.Animation):
     def next_frame(self, current):
         if current == 1.0:
             self._palette.show()
+            # we have to invoke update_position() twice
+            # since WM could ignore first move() request
+            self._palette.update_position()
 
 
 class _PopdownAnimation(animator.Animation):
