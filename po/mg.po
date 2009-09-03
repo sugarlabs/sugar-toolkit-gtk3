@@ -1,0 +1,210 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-26 00:33-0400\n"
+"PO-Revision-Date: 2009-06-05 07:50-0400\n"
+"Last-Translator: Rakoto Manassé <rakoto.manasse@auf.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: mg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Pootle 1.2.1\n"
+
+#: ../src/sugar/activity/activity.py:329
+#, python-format
+msgid "%s Activity"
+msgstr "%s sahanasa"
+
+#: ../src/sugar/activity/activity.py:714
+msgid "Keep error"
+msgstr ""
+
+#: ../src/sugar/activity/activity.py:715
+msgid "Keep error: all changes will be lost"
+msgstr ""
+
+#: ../src/sugar/activity/activity.py:718
+msgid "Don't stop"
+msgstr "Aza ajanona"
+
+#: ../src/sugar/activity/activity.py:721
+msgid "Stop anyway"
+msgstr "ajanony ihany"
+
+#: ../src/sugar/activity/namingalert.py:82
+msgid "Name this entry"
+msgstr "Omeo anarana ity"
+
+#: ../src/sugar/activity/namingalert.py:87
+#: ../src/sugar/activity/widgets.py:162
+msgid "Keep"
+msgstr "tano"
+
+#: ../src/sugar/activity/namingalert.py:283
+msgid "Untitled"
+msgstr "tsy manana lohateny"
+
+#: ../src/sugar/activity/namingalert.py:290
+msgid "Description:"
+msgstr "fitanisana"
+
+#: ../src/sugar/activity/namingalert.py:314
+msgid "Tags:"
+msgstr "Marika"
+
+#: ../src/sugar/activity/widgets.py:79
+msgid "Stop"
+msgstr "ajanony"
+
+#: ../src/sugar/activity/widgets.py:91
+msgid "Undo"
+msgstr "avereno"
+
+#: ../src/sugar/activity/widgets.py:99
+msgid "Redo"
+msgstr "avereno"
+
+#: ../src/sugar/activity/widgets.py:106
+msgid "Copy"
+msgstr "adikao"
+
+#: ../src/sugar/activity/widgets.py:113
+msgid "Paste"
+msgstr "apetaho"
+
+#: ../src/sugar/activity/widgets.py:123
+msgid "Private"
+msgstr "manokana"
+
+#: ../src/sugar/activity/widgets.py:130
+msgid "My Neighborhood"
+msgstr "ny manodidina ahy"
+
+#: ../src/sugar/activity/widgets.py:341
+msgid "Activity"
+msgstr "sahanasa"
+
+#: ../src/sugar/graphics/alert.py:286 ../src/sugar/graphics/alert.py:365
+msgid "Cancel"
+msgstr "foano"
+
+#: ../src/sugar/graphics/alert.py:290 ../src/sugar/graphics/alert.py:424
+msgid "Ok"
+msgstr "Ekena"
+
+#: ../src/sugar/graphics/alert.py:375
+msgid "Continue"
+msgstr "Tohizo"
+
+#: ../src/sugar/graphics/colorbutton.py:52
+msgid "Choose a color"
+msgstr "mifidiana loko"
+
+#: ../src/sugar/graphics/colorbutton.py:272
+msgid "Red"
+msgstr "Mena"
+
+#: ../src/sugar/graphics/colorbutton.py:274
+msgid "Green"
+msgstr "Maitso"
+
+#: ../src/sugar/graphics/colorbutton.py:276
+msgid "Blue"
+msgstr "Manga"
+
+#: ../src/sugar/util.py:218
+msgid " and "
+msgstr "ary_"
+
+#: ../src/sugar/util.py:219
+msgid ", "
+msgstr ",_"
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar/util.py:222
+msgid "Seconds ago"
+msgstr "Segondra lasa izay"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar/util.py:226
+#, python-format
+msgid "%s ago"
+msgstr "%s lasa izay"
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar/util.py:241
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d taona"
+msgstr[1] "%d taona"
+
+#: ../src/sugar/util.py:242
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d volana"
+msgstr[1] "% volana"
+
+#: ../src/sugar/util.py:243
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d herinandro"
+msgstr[1] "% herinandro"
+
+#: ../src/sugar/util.py:244
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d andro"
+msgstr[1] "%d andro"
+
+#: ../src/sugar/util.py:245
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d ora"
+msgstr[1] "%d ora"
+
+#: ../src/sugar/util.py:246
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minitra"
+msgstr[1] "%d minitra"
+
+#: ../src/sugar/util.py:339
+msgid "Empty"
+msgstr ""
+
+#: ../src/sugar/util.py:341
+#, python-format
+msgid "%d B"
+msgstr ""
+
+#: ../src/sugar/util.py:343
+#, python-format
+msgid "%d KB"
+msgstr ""
+
+#: ../src/sugar/util.py:345
+#, python-format
+msgid "%d MB"
+msgstr ""
+
+#: ../src/sugar/util.py:347
+#, python-format
+msgid "%d GB"
+msgstr ""
+
+#~ msgid "Share with:"
+#~ msgstr "zarao amin'i"
