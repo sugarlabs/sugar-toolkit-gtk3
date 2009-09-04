@@ -23,9 +23,10 @@ import logging
 import time
 from datetime import datetime
 import os
-
+import tempfile
 import gobject
 
+from sugar import env
 from sugar.datastore import dbus_helpers
 from sugar import mime
 
@@ -138,9 +139,53 @@ class DSObject(object):
     def copy(self):
         return DSObject(None, self._metadata.copy(), self._file_path)
 
+class RawObject(object):
+
+    def __init__(self, file_path):
+        self.object_id = file_path
+        self._metadata = DSMetadata()
+        self._file_path = None
+        self._destroyed = False
+
+    def get_metadata(self):
+        return self._metadata
+
+    metadata = property(get_metadata)
+
+    def get_file_path(self, fetch=True):
+        # we have to create symlink since its a common practice
+        # to create hardlinks to jobject files
+        if self._file_path is None:
+            self._file_path = tempfile.mktemp(
+                    prefix='rawobject',
+                    dir=os.path.join(env.get_profile_path(), 'data'))
+            os.symlink(self.object_id, self._file_path)
+        return self._file_path
+
+    file_path = property(get_file_path)
+
+    def destroy(self):
+        if self._destroyed:
+            logging.warning('This RawObject has already been destroyed!.')
+            return
+        self._destroyed = True
+        if self._file_path is not None:
+            os.remove(self._file_path)
+            self._file_path = None
+
+    def __del__(self):
+        if not self._destroyed:
+            logging.warning('RawObject was deleted without cleaning up. '
+                            'Call RawObject.destroy() before disposing it.')
+            self.destroy()
+
 
 def get(object_id):
     logging.debug('datastore.get')
+
+    if object_id.startswith('/'):
+        return RawObject(object_id)
+
     metadata = dbus_helpers.get_properties(object_id)
 
     ds_object = DSObject(object_id, DSMetadata(metadata), None)
