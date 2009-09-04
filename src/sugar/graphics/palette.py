@@ -195,6 +195,10 @@ class Palette(PaletteWindow):
 
         self._secondary_anim.start()
 
+    def on_popdown(self):
+        # to suppress glitches while later re-opening
+        self.set_palette_state(self.PRIMARY)
+
     def on_enter(self, event):
         PaletteWindow.on_enter(self, event)
         self._secondary_anim.start()
