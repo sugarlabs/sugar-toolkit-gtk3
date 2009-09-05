@@ -1,187 +1,248 @@
 # translation of sugar.po to Arabic
-# Khaled Hosny <khaledhosny@eglug.org>, 2007, 2008.
+# Khaled Hosny <khaledhosny@eglug.org>, 2007, 2008, 2009.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 msgid ""
 msgstr ""
 "Project-Id-Version: sugar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: 2008-08-07 17:03-0400\n"
-"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
+"POT-Creation-Date: 2009-08-26 00:33-0400\n"
+"PO-Revision-Date: 2009-09-01 13:48-0400\n"
+"Last-Translator: Muath Al-Badawi <mrbadaw@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && "
 "n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5;\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"X-Generator: Pootle 1.2.1\n"
 "Nplurals=6; Plural=N==0 ? 0: n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 "
 ": n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: ../src/sugar/activity/activity.py:120
-msgid "Share with:"
-msgstr "شارِك مع:"
+#: ../src/sugar/activity/activity.py:329
+#, python-format
+msgid "%s Activity"
+msgstr "نشاط %s"
 
-#: ../src/sugar/activity/activity.py:122
-msgid "Private"
-msgstr "خاص"
+#: ../src/sugar/activity/activity.py:714
+msgid "Keep error"
+msgstr "خطأ في الحفظ"
 
-#: ../src/sugar/activity/activity.py:123
-msgid "My Neighborhood"
-msgstr "جِوارِي"
+#: ../src/sugar/activity/activity.py:715
+msgid "Keep error: all changes will be lost"
+msgstr "خطأ في الحفظ: ستُفقد كل التغييرات"
+
+#: ../src/sugar/activity/activity.py:718
+msgid "Don't stop"
+msgstr "لا تتوقف"
+
+#: ../src/sugar/activity/activity.py:721
+msgid "Stop anyway"
+msgstr "توقف على أي حال"
+
+#: ../src/sugar/activity/namingalert.py:82
+msgid "Name this entry"
+msgstr "سمّ هذه المدخلة"
 
 # self._stop_item = MenuItem(_('Stop download'), 'stock-close')
 # TODO: Implement stopping downloads
 # self._stop_item.connect('activate', self._stop_item_activate_cb)
 # self.append_menu_item(self._stop_item)
-#: ../src/sugar/activity/activity.py:130
+#: ../src/sugar/activity/namingalert.py:87
+#: ../src/sugar/activity/widgets.py:162
 msgid "Keep"
 msgstr "احفظ"
 
-#: ../src/sugar/activity/activity.py:136
+#: ../src/sugar/activity/namingalert.py:283
+msgid "Untitled"
+msgstr "بدون عنوان"
+
+#: ../src/sugar/activity/namingalert.py:290
+msgid "Description:"
+msgstr "الوصف:"
+
+#: ../src/sugar/activity/namingalert.py:314
+msgid "Tags:"
+msgstr "الوُسوم:"
+
+#: ../src/sugar/activity/widgets.py:79
 msgid "Stop"
 msgstr "قف"
 
-#: ../src/sugar/activity/activity.py:251
+#: ../src/sugar/activity/widgets.py:91
 msgid "Undo"
 msgstr "تراجع"
 
-#: ../src/sugar/activity/activity.py:256
+#: ../src/sugar/activity/widgets.py:99
 msgid "Redo"
 msgstr "أعِد"
 
-#: ../src/sugar/activity/activity.py:266
+#: ../src/sugar/activity/widgets.py:106
 msgid "Copy"
 msgstr "انسخ"
 
-#: ../src/sugar/activity/activity.py:271
+#: ../src/sugar/activity/widgets.py:113
 msgid "Paste"
 msgstr "الصق"
 
-#: ../src/sugar/activity/activity.py:297
+#: ../src/sugar/activity/widgets.py:123
+msgid "Private"
+msgstr "خاص"
+
+#: ../src/sugar/activity/widgets.py:130
+msgid "My Neighborhood"
+msgstr "جِوارِي"
+
+#: ../src/sugar/activity/widgets.py:341
 msgid "Activity"
 msgstr "النشاط"
 
-#: ../src/sugar/activity/activity.py:469
-#, python-format
-msgid "%s Activity"
-msgstr "نشاط %s"
-
-#: ../src/sugar/activity/activity.py:856
-msgid "Keep error"
-msgstr "خطأ في الحفظ"
-
-#: ../src/sugar/activity/activity.py:857
-msgid "Keep error: all changes will be lost"
-msgstr "خطأ في الحفظ: ستُفقد كل التغييرات"
-
-#: ../src/sugar/activity/activity.py:860
-msgid "Don't stop"
-msgstr "لا تتوقف"
-
-#: ../src/sugar/activity/activity.py:863
-msgid "Stop anyway"
-msgstr "توقف على أي حال"
-
-#: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
+#: ../src/sugar/graphics/alert.py:286 ../src/sugar/graphics/alert.py:365
 msgid "Cancel"
 msgstr "ألغِ"
 
-#: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
+#: ../src/sugar/graphics/alert.py:290 ../src/sugar/graphics/alert.py:424
 msgid "Ok"
 msgstr "حسنا"
 
-#: ../src/sugar/graphics/alert.py:219
+#: ../src/sugar/graphics/alert.py:375
 msgid "Continue"
 msgstr "واصِل"
 
-#: ../src/sugar/util.py:181
+#: ../src/sugar/graphics/colorbutton.py:52
+msgid "Choose a color"
+msgstr "اختر لونا"
+
+#: ../src/sugar/graphics/colorbutton.py:272
+msgid "Red"
+msgstr "أحمر"
+
+#: ../src/sugar/graphics/colorbutton.py:274
+msgid "Green"
+msgstr "أخضر"
+
+#: ../src/sugar/graphics/colorbutton.py:276
+msgid "Blue"
+msgstr "أزرق"
+
+#: ../src/sugar/util.py:218
 msgid " and "
 msgstr " و "
 
-#: ../src/sugar/util.py:182
+#: ../src/sugar/util.py:219
 msgid ", "
 msgstr " و "
 
+# TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: ../src/sugar/util.py:185
+#: ../src/sugar/util.py:222
 msgid "Seconds ago"
 msgstr "منذ بضعة ثوان"
 
+# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",<br />
+# "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: ../src/sugar/util.py:189
+#: ../src/sugar/util.py:226
 #, python-format
 msgid "%s ago"
 msgstr "منذ %s"
 
+# TRANS: Relative dates (eg. 1 month and 5 days).
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: ../src/sugar/util.py:202
+#: ../src/sugar/util.py:241
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d سنة"
-msgstr[1] "%.sسنة"
-msgstr[2] "%.sسنتين"
+msgstr[1] "سنة"
+msgstr[2] "سنتين"
 msgstr[3] "%d سنوات"
 msgstr[4] "%d سنة"
 msgstr[5] "%d سنة"
 
-#: ../src/sugar/util.py:203
+#: ../src/sugar/util.py:242
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d شهر"
-msgstr[1] "%.0sشهر"
-msgstr[2] "%.0sشهرين"
+msgstr[1] "شهر"
+msgstr[2] "شهرين"
 msgstr[3] "%d شهور"
 msgstr[4] "%d شهرا"
 msgstr[5] "%d شهر"
 
-#: ../src/sugar/util.py:204
+#: ../src/sugar/util.py:243
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d أسبوع"
-msgstr[1] "%.0sأسبوع"
-msgstr[2] "%.0sأسبوعين"
+msgstr[1] "أسبوع"
+msgstr[2] "أسبوعين"
 msgstr[3] "%d أسابيع"
 msgstr[4] "%d أسبوعا"
 msgstr[5] "%d أسبوع"
 
-#: ../src/sugar/util.py:205
+#: ../src/sugar/util.py:244
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d يوم"
-msgstr[1] "%.0sيوم"
-msgstr[2] "%.0sيومين"
+msgstr[1] "يوم"
+msgstr[2] "يومين"
 msgstr[3] "%d أيام"
 msgstr[4] "%d يوما"
 msgstr[5] "%d يوم"
 
-#: ../src/sugar/util.py:206
+#: ../src/sugar/util.py:245
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d ساعة"
-msgstr[1] "%.0sساعة"
-msgstr[2] "%.0sساعتين"
+msgstr[1] "ساعة"
+msgstr[2] "ساعتين"
 msgstr[3] "%d ساعات"
 msgstr[4] "%d ساعة"
 msgstr[5] "%d ساعة"
 
-#: ../src/sugar/util.py:207
+#: ../src/sugar/util.py:246
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d دقيقة"
-msgstr[1] "%.0sدقيقة"
-msgstr[2] "%.0sدقيقتين"
+msgstr[1] "دقيقة"
+msgstr[2] "دقيقتين"
 msgstr[3] "%d دقائق"
 msgstr[4] "%d دقيقة"
 msgstr[5] "%d دقيقة"
+
+#: ../src/sugar/util.py:339
+msgid "Empty"
+msgstr "فارغ"
+
+#: ../src/sugar/util.py:341
+#, python-format
+msgid "%d B"
+msgstr "%d بايت "
+
+#: ../src/sugar/util.py:343
+#, python-format
+msgid "%d KB"
+msgstr "%d كيلو بايت "
+
+#: ../src/sugar/util.py:345
+#, python-format
+msgid "%d MB"
+msgstr "%d ميجا بايت "
+
+#: ../src/sugar/util.py:347
+#, python-format
+msgid "%d GB"
+msgstr "%d جيجا بايت "
+
+#~ msgid "Share with:"
+#~ msgstr "شارِك مع:"
 
 #~ msgid "Name:"
 #~ msgstr "الاسم:"
