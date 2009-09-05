@@ -249,7 +249,8 @@ class Activity(Window, gtk.Container):
         if os.environ.has_key('SUGAR_ACTIVITY_ROOT'):
             # If this activity runs inside Sugar, we want it to take all the
             # screen. Would be better if it was the shell to do this, but we
-            # haven't found yet a good way to do it there.
+            # haven't found yet a good way to do it there. See #1263.
+            self.connect('window-state-event', self.__window_state_event_cb)
             screen = gtk.gdk.screen_get_default()
             screen.connect('size-changed', self.__screen_size_changed_cb)
             self._adapt_window_to_screen()
@@ -404,6 +405,9 @@ class Activity(Window, gtk.Container):
 
     def __screen_size_changed_cb(self, screen):
         self._adapt_window_to_screen()
+
+    def __window_state_event_cb(self, window, event):
+        self.move(0, 0)
 
     def _adapt_window_to_screen(self):
         screen = gtk.gdk.screen_get_default()
