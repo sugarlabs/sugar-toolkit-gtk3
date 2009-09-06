@@ -393,8 +393,7 @@ class PaletteWindow(gtk.Window):
 
         x = win_x + rectangle.x
         y = win_y + rectangle.y
-        width = rectangle.width
-        height = rectangle.height
+        width, height = self.size_request()
 
         return gtk.gdk.Rectangle(x, y, width, height)
 
