@@ -25,6 +25,8 @@ from datetime import datetime
 import os
 import tempfile
 import gobject
+import gconf
+import gio
 
 from sugar import env
 from sugar.datastore import dbus_helpers
@@ -142,8 +144,21 @@ class DSObject(object):
 class RawObject(object):
 
     def __init__(self, file_path):
+        stat = os.stat(file_path)
+        client = gconf.client_get_default()
+        metadata = {
+                'uid': file_path,
+                'title': os.path.basename(file_path),
+                'timestamp': stat.st_mtime,
+                'mime_type': gio.content_type_guess(filename=file_path),
+                'activity': '',
+                'activity_id': '',
+                'icon-color': client.get_string('/desktop/sugar/user/color'),
+                'description': file_path,
+                }
+
         self.object_id = file_path
-        self._metadata = DSMetadata()
+        self._metadata = DSMetadata(metadata)
         self._file_path = None
         self._destroyed = False
 
