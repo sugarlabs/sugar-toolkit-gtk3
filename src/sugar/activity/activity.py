@@ -768,16 +768,17 @@ class Activity(Window, gtk.Container):
                 self._show_keep_failed_dialog()
                 return False
 
-        if self.shared_activity:
-            self.shared_activity.leave()
-
         self._closing = True
 
         return True
 
     def _complete_close(self):
-        self._cleanup_jobject()
         self.destroy()
+
+        if self.shared_activity:
+            self.shared_activity.leave()
+
+        self._cleanup_jobject()
 
         # Make the exported object inaccessible
         dbus.service.Object.remove_from_connection(self._bus)
