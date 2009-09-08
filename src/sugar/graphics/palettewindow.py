@@ -641,6 +641,9 @@ class Invoker(gobject.GObject):
         return self._palette
 
     def set_palette(self, palette):
+        if self._palette is not None:
+            self._palette.popdown(immediate=True)
+
         if self._palette:
             self._palette.props.invoker = None
 
