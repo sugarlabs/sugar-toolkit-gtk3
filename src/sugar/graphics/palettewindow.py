@@ -319,6 +319,7 @@ class PaletteWindow(gtk.Window):
         if not immediate:
             self._popup_anim.start()
         else:
+            self._popup_anim.stop()
             self.show()
             # we have to invoke update_position() twice
             # since WM could ignore first move() request
@@ -326,19 +327,16 @@ class PaletteWindow(gtk.Window):
 
     def popdown(self, immediate=False):
         logging.debug('PaletteWindow.popdown immediate %r', immediate)
-        self._popup_anim.stop()
 
+        self._popup_anim.stop()
         self._mouse_detector.stop()
 
         if not immediate:
             self._popdown_anim.start()
         else:
-            self.on_popdown()
+            self._popdown_anim.stop()
             self.size_request()
             self.hide()
-
-    def on_popdown(self):
-        self._popdown_anim.stop()
 
     def on_invoker_enter(self):
         self._mouse_detector.start()
