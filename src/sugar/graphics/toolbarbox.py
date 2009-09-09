@@ -54,6 +54,7 @@ class ToolbarButton(ToolButton):
             self.page_widget = None
             return
         self.page_widget = _embody_page(_Box, page)
+        self.page_widget.set_size_request(-1, style.GRID_CELL_SIZE)
         self.page_widget.toolbar_button = self
         page.show()
         if self.props.palette is None:
@@ -79,7 +80,8 @@ class ToolbarButton(ToolButton):
                 and self.toolbar_box.expanded_button == self
 
     def popdown(self):
-        self.props.palette.popdown(immediate=True)
+        if self.props.palette is not None:
+            self.props.palette.popdown(immediate=True)
 
     def set_expanded(self, expanded):
         self.popdown()
