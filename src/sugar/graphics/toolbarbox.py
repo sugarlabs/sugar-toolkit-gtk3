@@ -188,7 +188,7 @@ class _ToolbarPalette(PaletteWindow):
         PaletteWindow.__init__(self, **kwargs)
         self.toolbar_box = None
         self.set_border_width(0)
-        self._focus = 0
+        self._has_focus = False
 
         group = palettegroup.get_group('default')
         group.connect('popdown', self.__group_popdown_cb)
@@ -196,26 +196,23 @@ class _ToolbarPalette(PaletteWindow):
 
     def on_invoker_enter(self):
         PaletteWindow.on_invoker_enter(self)
-        self._handle_focus(+1)
+        self._set_focus(True)
 
     def on_invoker_leave(self):
         PaletteWindow.on_invoker_leave(self)
-        self._handle_focus(-1)
+        self._set_focus(False)
 
     def on_enter(self, event):
         PaletteWindow.on_enter(self, event)
-        self._handle_focus(+1)
+        self._set_focus(True)
 
     def on_leave(self, event):
         PaletteWindow.on_enter(self, event)
-        self._handle_focus(-1)
+        self._set_focus(False)
 
-    def _handle_focus(self, delta):
-        self._focus += delta
-        if self._focus not in (0, 1):
-            logging.error('_Palette._focus=%s not in (0, 1)', self._focus)
-
-        if self._focus == 0:
+    def _set_focus(self, new_focus):
+        self._has_focus = new_focus
+        if not self._has_focus:
             group = palettegroup.get_group('default')
             if not group.is_up():
                 self.popdown()
@@ -235,7 +232,7 @@ class _ToolbarPalette(PaletteWindow):
         PaletteWindow.popup(self, immediate)
 
     def __group_popdown_cb(self, group):
-        if self._focus == 0:
+        if not self._has_focus:
             self.popdown(immediate=True)
 
 
