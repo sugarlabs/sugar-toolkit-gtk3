@@ -339,6 +339,7 @@ class PaletteWindow(gtk.Window):
             self.hide()
 
     def on_invoker_enter(self):
+        self._popdown_anim.stop()
         self._mouse_detector.start()
 
     def on_invoker_leave(self):
