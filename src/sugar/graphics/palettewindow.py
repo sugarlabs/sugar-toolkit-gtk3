@@ -923,9 +923,13 @@ class CellRendererInvoker(Invoker):
             self.notify_mouse_leave()
 
     def _redraw_path(self, path):
-        model = self._tree_view.get_model()
-        iterator = model.get_iter(path)
-        model.row_changed(path, iterator)
+        for column in self._tree_view.get_columns():
+            if self._cell_renderer in column.get_cell_renderers():
+                break
+        area = self._tree_view.get_background_area(path, column)
+        x, y = \
+            self._tree_view.convert_bin_window_to_widget_coords(area.x, area.y)
+        self._tree_view.queue_draw_area(x, y, area.width, area.height)
 
     def __leave_notify_event_cb(self, widget, event):
         self.notify_mouse_leave()
