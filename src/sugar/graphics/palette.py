@@ -201,10 +201,17 @@ class Palette(PaletteWindow):
     def popdown(self, immediate=False):
         if immediate:
             self._secondary_anim.stop()
-            self.menu.popdown()
+            self._popdown_submenus()
             # to suppress glitches while later re-opening
             self.set_palette_state(self.PRIMARY)
         PaletteWindow.popdown(self, immediate)
+
+    def _popdown_submenus(self):
+        # TODO explicit hiding of subitems
+        # should be removed after fixing #1301
+        for menu_item in self.menu.get_children():
+            if menu_item.props.submenu is not None:
+                menu_item.props.submenu.popdown()
 
     def on_enter(self, event):
         PaletteWindow.on_enter(self, event)
