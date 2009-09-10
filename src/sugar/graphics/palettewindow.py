@@ -371,7 +371,8 @@ class PaletteWindow(gtk.Window):
             self.on_leave(event)
 
     def __show_cb(self, widget):
-        self._invoker.notify_popup()
+        if self._invoker is not None:
+            self._invoker.notify_popup()
 
         self._up = True
         self.emit('popup')

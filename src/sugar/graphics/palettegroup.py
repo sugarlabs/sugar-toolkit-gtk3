@@ -83,6 +83,9 @@ class Group(gobject.GObject):
                 palette.popdown(immediate=True)
 
     def _palette_popup_cb(self, palette):
+        for i in self._palettes:
+            if i != palette:
+                i.popdown(immediate=True)
         if not self._up:
             self.emit('popup')
             self._up = True
