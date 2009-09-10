@@ -1093,8 +1093,8 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         if self._xo_color is not None:
             stroke_color = self._xo_color.get_stroke_color()
             fill_color = self._xo_color.get_fill_color()
-            prelit_fill_color = stroke_color
-            prelit_stroke_color = fill_color
+            prelit_fill_color = None
+            prelit_stroke_color = None
         else:
             stroke_color = self._stroke_color
             fill_color = self._fill_color
