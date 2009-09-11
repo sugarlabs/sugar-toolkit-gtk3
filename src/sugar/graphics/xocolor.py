@@ -20,6 +20,7 @@ STABLE.
 """
 
 import random
+import logging
 
 colors = [
 ['#B20008', '#FF2B34'], \
@@ -225,7 +226,16 @@ def is_valid(color_string):
 class XoColor:
 
     def __init__(self, color_string=None):
-        if color_string == None or not is_valid(color_string):
+        if color_string == None:
+            randomize = True
+        elif not is_valid(color_string):
+            logging.error('Color string is not valid: %s, will generate a '
+                          'random color pair.', color_string)
+            randomize = True
+        else:
+            randomize = False
+
+        if randomize:
             n = int(random.random() * (len(colors) - 1))
             [self.stroke, self.fill] = colors[n]
         else:
