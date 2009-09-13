@@ -943,8 +943,6 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 
         self.set_palette(Palette(text))
 
-    palette = property(get_palette, set_palette)
-
 
 class CellRendererIcon(gtk.GenericCellRenderer):
 
