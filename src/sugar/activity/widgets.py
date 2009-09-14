@@ -89,7 +89,7 @@ class UndoButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-undo', **kwargs)
         self.props.tooltip = _('Undo')
-        self.props.accelerator = '<Ctrl>Q'
+        self.props.accelerator = '<Ctrl>Z'
 
 
 class RedoButton(ToolButton):
