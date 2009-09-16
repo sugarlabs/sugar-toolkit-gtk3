@@ -35,6 +35,11 @@ def get_group(group_id):
     return group
 
 
+def popdown_all():
+    for group in _groups.values():
+        group.popdown()
+
+
 class Group(gobject.GObject):
 
     __gsignals__ = {
