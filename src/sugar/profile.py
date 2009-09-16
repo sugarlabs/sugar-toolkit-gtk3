@@ -53,6 +53,9 @@ class Profile(object):
         self._pubkey = None
         self._privkey_hash = None
 
+        self.pubkey = self._load_pubkey()
+        self.privkey_hash = self._hash_private_key()
+
     def is_valid(self):
         client = gconf.client_get_default()
         nick = client.get_string("/desktop/sugar/user/nick")
@@ -65,6 +68,10 @@ class Profile(object):
 
     def _load_pubkey(self):
         key_path = os.path.join(env.get_profile_path(), 'owner.key.pub')
+
+        if not os.path.exists(key_path):
+            return None
+
         try:
             f = open(key_path, "r")
             lines = f.readlines()
@@ -83,14 +90,12 @@ class Profile(object):
             logging.error("Error parsing public key.")
             return None
 
-    def _get_pubkey(self):
-        # load on-demand.
-        if not self._pubkey:
-            self._pubkey = self._load_pubkey()
-        return self._pubkey
-
     def _hash_private_key(self):
         key_path = os.path.join(env.get_profile_path(), 'owner.key')
+
+        if not os.path.exists(key_path):
+            return None
+
         try:
             f = open(key_path, "r")
             lines = f.readlines()
@@ -114,15 +119,6 @@ class Profile(object):
         # hash it
         key_hash = util.sha_data(key)
         return util.printable_hash(key_hash)
-
-    def _get_privkey_hash(self):
-        # load on-demand.
-        if not self._privkey_hash:
-            self._privkey_hash = self._hash_private_key()
-        return self._privkey_hash
-
-    privkey_hash = property(_get_privkey_hash)
-    pubkey = property(_get_pubkey)
 
     def convert_profile(self):
         cp = ConfigParser()
