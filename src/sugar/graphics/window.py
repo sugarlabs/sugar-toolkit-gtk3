@@ -25,6 +25,7 @@ import gtk
 import warnings
 
 from sugar.graphics.icon import Icon
+from sugar.graphics import palettegroup
 
 
 _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT = 2
@@ -118,6 +119,7 @@ class Window(gtk.Window):
         self._unfullscreen_button_timeout_id = None
 
     def fullscreen(self):
+        palettegroup.popdown_all()
         if self._toolbar_box is not None:
             self._toolbar_box.hide()
         if self.tray is not None:
