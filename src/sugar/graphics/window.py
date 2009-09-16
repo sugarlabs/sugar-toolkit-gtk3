@@ -88,7 +88,6 @@ class Window(gtk.Window):
         gtk.Window.__init__(self, **args)
 
         self.connect('realize', self.__window_realize_cb)
-        self.connect('window-state-event', self.__window_state_event_cb)
         self.connect('key-press-event', self.__key_press_cb)
 
         self._toolbar_box = None
@@ -117,6 +116,41 @@ class Window(gtk.Window):
         self._unfullscreen_button.connect_button_press(
             self.__unfullscreen_button_pressed)
         self._unfullscreen_button_timeout_id = None
+
+    def fullscreen(self):
+        if self._toolbar_box is not None:
+            self._toolbar_box.hide()
+        if self.tray is not None:
+            self.tray.hide()
+
+        self._is_fullscreen = True
+
+        if self.props.enable_fullscreen_mode:
+            self._unfullscreen_button.show()
+
+            if self._unfullscreen_button_timeout_id is not None:
+                gobject.source_remove(self._unfullscreen_button_timeout_id)
+                self._unfullscreen_button_timeout_id = None
+
+            self._unfullscreen_button_timeout_id = \
+                gobject.timeout_add_seconds( \
+                    _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
+                    self.__unfullscreen_button_timeout_cb)
+
+    def unfullscreen(self):
+        if self._toolbar_box is not None:
+            self._toolbar_box.show()
+        if self.tray is not None:
+            self.tray.show()
+
+        self._is_fullscreen = False
+
+        if self.props.enable_fullscreen_mode:
+            self._unfullscreen_button.hide()
+
+            if self._unfullscreen_button_timeout_id:
+                gobject.source_remove(self._unfullscreen_button_timeout_id)
+                self._unfullscreen_button_timeout_id = None
 
     def set_canvas(self, canvas):
         if self._canvas:
@@ -187,43 +221,6 @@ class Window(gtk.Window):
         group = gtk.Window()
         group.realize()
         window.window.set_group(group.window)
-
-    def __window_state_event_cb(self, window, event):
-        if not (event.changed_mask & gtk.gdk.WINDOW_STATE_FULLSCREEN):
-            return False
-
-        if event.new_window_state & gtk.gdk.WINDOW_STATE_FULLSCREEN:
-            if self._toolbar_box is not None:
-                self._toolbar_box.hide()
-            if self.tray is not None:
-                self.tray.hide()
-
-            self._is_fullscreen = True
-            if self.props.enable_fullscreen_mode:
-                self._unfullscreen_button.show()
-
-                if self._unfullscreen_button_timeout_id is not None:
-                    gobject.source_remove(self._unfullscreen_button_timeout_id)
-                    self._unfullscreen_button_timeout_id = None
-
-                self._unfullscreen_button_timeout_id = \
-                    gobject.timeout_add_seconds( \
-                        _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
-                        self.__unfullscreen_button_timeout_cb)
-
-        else:
-            if self._toolbar_box is not None:
-                self._toolbar_box.show()
-            if self.tray is not None:
-                self.tray.show()
-
-            self._is_fullscreen = False
-            if self.props.enable_fullscreen_mode:
-                self._unfullscreen_button.hide()
-
-                if self._unfullscreen_button_timeout_id:
-                    gobject.source_remove(self._unfullscreen_button_timeout_id)
-                    self._unfullscreen_button_timeout_id = None
 
     def __key_press_cb(self, widget, event):
         key = gtk.gdk.keyval_name(event.keyval)
