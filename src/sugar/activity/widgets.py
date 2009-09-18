@@ -33,13 +33,17 @@ from sugar.bundle.activitybundle import ActivityBundle
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 
-def _create_activity_icon():
+def _create_activity_icon(metadata):
+    if 'icon-color' in metadata:
+        color = XoColor(metadata['icon-color'])
+    else:
+        client = gconf.client_get_default()
+        color = XoColor(client.get_string('/desktop/sugar/user/color'))
+
     from sugar.activity.activity import get_bundle_path
     bundle = ActivityBundle(get_bundle_path())
-
-    client = gconf.client_get_default()
-    color = XoColor(client.get_string('/desktop/sugar/user/color'))
     icon = Icon(file=bundle.get_icon(), xo_color=color)
+
     return icon
 
 
@@ -48,7 +52,7 @@ class ActivityButton(ToolButton):
     def __init__(self, activity, **kwargs):
         ToolButton.__init__(self, **kwargs)
 
-        icon = _create_activity_icon()
+        icon = _create_activity_icon(activity.metadata)
         self.set_icon_widget(icon)
         icon.show()
 
@@ -67,7 +71,7 @@ class ActivityToolbarButton(ToolbarButton):
 
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
 
-        icon = _create_activity_icon()
+        icon = _create_activity_icon(activity.metadata)
         self.set_icon_widget(icon)
         icon.show()
 
