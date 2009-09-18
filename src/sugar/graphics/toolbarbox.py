@@ -17,7 +17,6 @@
 
 import gtk
 import gobject
-import logging
 
 from sugar.graphics import style
 from sugar.graphics.palette import PaletteWindow, ToolInvoker
@@ -55,29 +54,28 @@ class ToolbarButton(ToolButton):
             return
         self.page_widget = _embody_page(_Box, page)
         self.page_widget.set_size_request(-1, style.GRID_CELL_SIZE)
-        self.page_widget.toolbar_button = self
         page.show()
         if self.props.palette is None:
             self.props.palette = _ToolbarPalette(invoker=ToolInvoker(self))
-            self.props.palette.toolbar_button = self
         self._move_page_to_palette()
 
     page = gobject.property(type=object, getter=get_page, setter=set_page)
 
     def _move_page_to_palette(self):
-        if self.page_widget is None:
+        if self.page_widget is None or \
+                self.page_widget.parent == self.props.palette:
             return
 
-        if self.toolbar_box is not None and \
-                self.page_widget in self.toolbar_box.get_children():
-            self.toolbar_box.remove(self.page_widget)
+        if self.page_widget.parent is not None:
+            self.page_widget.parent.remove(self.page_widget)
 
         if isinstance(self.props.palette, _ToolbarPalette):
             self.props.palette.add(self.page_widget)
 
     def is_expanded(self):
-        return self.toolbar_box is not None and self.page_widget is not None \
-                and self.toolbar_box.expanded_button == self
+        return self.page_widget is not None and \
+                self.page_widget.parent is not None and \
+                self.page_widget.parent != self.props.palette
 
     def popdown(self):
         if self.props.palette is not None:
@@ -86,24 +84,21 @@ class ToolbarButton(ToolButton):
     def set_expanded(self, expanded):
         self.popdown()
 
-        box = self.toolbar_box
-
-        if box is None or self.page_widget is None or \
-                self.is_expanded() == expanded:
+        if self.page_widget is None or self.is_expanded() == expanded:
             return
 
         if not expanded:
-            box.remove(self.page_widget)
-            box.expanded_button = None
             self._move_page_to_palette()
             return
 
+        box = self.toolbar_box
+
         if box.expanded_button is not None:
-            # need to redraw it to erase arrow
-            expanded_toolitem = box.expanded_button.page_widget.toolbar_button
-            if expanded_toolitem.window is not None:
-                expanded_toolitem.window.invalidate_rect(None, True)
+            if box.expanded_button.window is not None:
+                # need to redraw it to erase arrow
+                box.expanded_button.window.invalidate_rect(None, True)
             box.expanded_button.set_expanded(False)
+        box.expanded_button = self
 
         if self.page_widget.parent is not None:
             self.props.palette.remove(self.page_widget)
@@ -111,7 +106,6 @@ class ToolbarButton(ToolButton):
         self.modify_bg(gtk.STATE_NORMAL, box.background)
         _setup_page(self.page_widget, box.background, box.props.padding)
         box.pack_start(self.page_widget)
-        box.expanded_button = self
 
     def do_expose_event(self, event):
         if not self.is_expanded() or self.props.palette is not None and \
@@ -141,7 +135,7 @@ class ToolbarBox(gtk.VBox):
 
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         gtk.VBox.__init__(self)
-        self.expanded_button = None
+        self._expanded_button_index = -1
         self.background = None
 
         self._toolbar = gtk.Toolbar()
@@ -155,13 +149,26 @@ class ToolbarBox(gtk.VBox):
         self.modify_bg(gtk.STATE_NORMAL,
                 style.COLOR_TOOLBAR_GREY.get_gdk_color())
 
+    def get_expanded_button(self):
+        if self._expanded_button_index == -1:
+            return None
+        return self._toolbar.get_nth_item(self._expanded_button_index)
+
+    def set_expanded_button(self, button):
+        if not button in self._toolbar:
+            self._expanded_button_index = -1
+            return
+        self._expanded_button_index = self._toolbar.get_item_index(button)
+
+    expanded_button = property(get_expanded_button, set_expanded_button)
+
     def __remove_cb(self, sender, button):
         if not isinstance(button, ToolbarButton):
             return
         button.popdown()
-        if self.expanded_button == button:
+        if button == self.expanded_button:
             self.remove(button.page_widget)
-            self.expanded_button = None
+            self._expanded_button_index = -1
 
     def get_toolbar(self):
         return self._toolbar
@@ -188,13 +195,17 @@ class _ToolbarPalette(PaletteWindow):
 
     def __init__(self, **kwargs):
         PaletteWindow.__init__(self, **kwargs)
-        self.toolbar_box = None
         self.set_border_width(0)
         self._has_focus = False
 
         group = palettegroup.get_group('default')
         group.connect('popdown', self.__group_popdown_cb)
-        self.set_group_id('toolbar_box')
+        self.set_group_id('toolbarbox')
+
+    def get_expanded_button(self):
+        return self.invoker.parent
+
+    expanded_button = property(get_expanded_button)
 
     def on_invoker_enter(self):
         PaletteWindow.on_invoker_enter(self)
@@ -225,7 +236,7 @@ class _ToolbarPalette(PaletteWindow):
                                 gtk.gdk.screen_width())
 
     def popup(self, immediate=False):
-        button = self.toolbar_button
+        button = self.expanded_button
         if button.is_expanded():
             return
         box = button.toolbar_box
@@ -246,7 +257,9 @@ class _Box(gtk.EventBox):
         self.set_app_paintable(True)
 
     def do_expose_event(self, widget, event):
-        alloc = self.toolbar_button.allocation
+        if self.parent.expanded_button is None:
+            return
+        alloc = self.parent.expanded_button.allocation
         self.get_style().paint_box(event.window,
                 gtk.STATE_NORMAL, gtk.SHADOW_IN, event.area, self,
                 'palette-invoker', -style.FOCUS_LINE_WIDTH, 0,
@@ -273,16 +286,20 @@ def _setup_page(page_widget, color, hpad):
     page_widget.modify_bg(gtk.STATE_PRELIGHT, color)
 
 
-def _embody_page(box_class, widget):
-    widget.show()
+def _embody_page(box_class, page):
+    page.show()
+
     alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
-    alignment.add(widget)
+    alignment.add(page)
     alignment.show()
-    box = box_class()
-    box.modify_bg(gtk.STATE_ACTIVE, style.COLOR_BUTTON_GREY.get_gdk_color())
-    box.add(alignment)
-    box.show()
-    return box
+
+    page_widget = box_class()
+    page_widget.modify_bg(gtk.STATE_ACTIVE,
+            style.COLOR_BUTTON_GREY.get_gdk_color())
+    page_widget.add(alignment)
+    page_widget.show()
+
+    return page_widget
 
 
 def _paint_arrow(widget, event, arrow_type):
