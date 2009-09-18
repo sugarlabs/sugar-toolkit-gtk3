@@ -46,7 +46,7 @@ class ToolbarButton(ToolButton):
     def get_page(self):
         if self.page_widget is None:
             return None
-        return _unembed_page(self.page_widget)
+        return _get_embedded_page(self.page_widget)
 
     def set_page(self, page):
         if page is None:
@@ -61,13 +61,13 @@ class ToolbarButton(ToolButton):
 
     page = gobject.property(type=object, getter=get_page, setter=set_page)
 
-    def is_paletted(self):
+    def is_in_palette(self):
         return self.page is not None and \
                 self.page_widget.parent == self.props.palette
 
     def is_expanded(self):
         return self.page is not None and \
-                not self.is_paletted()
+                not self.is_in_palette()
 
     def popdown(self):
         if self.props.palette is not None:
@@ -99,7 +99,7 @@ class ToolbarButton(ToolButton):
         box.pack_start(self.page_widget)
 
     def _move_page_to_palette(self):
-        if self.is_paletted():
+        if self.is_in_palette():
             return
 
         self._unparent()
@@ -282,7 +282,7 @@ def _setup_page(page_widget, color, hpad):
     vpad = style.FOCUS_LINE_WIDTH
     page_widget.child.set_padding(vpad, vpad, hpad, hpad)
 
-    page = _unembed_page(page_widget)
+    page = _get_embedded_page(page_widget)
     page.modify_bg(gtk.STATE_NORMAL, color)
     if isinstance(page, gtk.Container):
         for i in page.get_children():
@@ -308,7 +308,7 @@ def _embed_page(box_class, page):
     return (page_widget, alignment)
 
 
-def _unembed_page(page_widget):
+def _get_embedded_page(page_widget):
     return page_widget.child.child
 
 
