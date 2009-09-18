@@ -166,6 +166,7 @@ class Palette(PaletteWindow):
     def __hide_cb(self, widget):
         logging.debug('__hide_cb')
         self.menu.set_active(False)
+        self.menu.cancel()
         self._secondary_anim.stop()
 
     def __notify_invoker_cb(self, palette, pspec):
