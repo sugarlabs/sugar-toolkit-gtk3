@@ -599,6 +599,9 @@ class Activity(Window, gtk.Container):
         if preview is not None:
             self.metadata['preview'] = dbus.ByteArray(preview)
 
+        if not self.metadata.get('activity_id', ''):
+            self.metadata['activity_id'] = self.get_id()
+
         file_path = os.path.join(self.get_activity_root(), 'instance',
                                  '%i' % time.time())
         try:
