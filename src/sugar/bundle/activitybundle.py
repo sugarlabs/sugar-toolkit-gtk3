@@ -345,7 +345,7 @@ class ActivityBundle(Bundle):
                 os.makedirs(mime_pkg_dir)
             installed_mime_path = os.path.join(mime_pkg_dir,
                                                '%s.xml' % self._bundle_id)
-            os.symlink(mime_path, installed_mime_path)
+            self._symlink(mime_path, installed_mime_path)
             os.spawnlp(os.P_WAIT, 'update-mime-database',
                        'update-mime-database', mime_dir)
 
@@ -361,14 +361,24 @@ class ActivityBundle(Bundle):
                                               mime_type.replace('/', '-'))
                 svg_file = mime_icon_base + '.svg'
                 info_file = mime_icon_base + '.icon'
-                if os.path.isfile(svg_file):
-                    os.symlink(svg_file,
-                               os.path.join(installed_icons_dir,
-                                            os.path.basename(svg_file)))
-                if os.path.isfile(info_file):
-                    os.symlink(info_file,
-                               os.path.join(installed_icons_dir,
-                                            os.path.basename(info_file)))
+                self._symlink(svg_file,
+                        os.path.join(installed_icons_dir,
+                            os.path.basename(svg_file)))
+                self._symlink(info_file,
+                        os.path.join(installed_icons_dir,
+                            os.path.basename(info_file)))
+
+    def _symlink(self, src, dst):
+        if not os.path.isfile(src):
+            return
+        if os.path.exists(dst) and not os.path.islink(dst):
+            raise RuntimeError('Do not remove %s if it was not '
+                               'installed by sugar', dst)
+        logging.debug('Link resource %s to %s', src, dst)
+        if os.path.exists(dst):
+            logging.debug('Rewrite %s', dst)
+            os.unlink(dst)
+        os.symlink(src, dst)
 
     def uninstall(self, install_path, force=False):
         if os.path.islink(install_path):
