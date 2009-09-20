@@ -371,12 +371,12 @@ class ActivityBundle(Bundle):
     def _symlink(self, src, dst):
         if not os.path.isfile(src):
             return
-        if os.path.exists(dst) and not os.path.islink(dst):
+        if not os.path.islink(dst) and os.path.exists(dst):
             raise RuntimeError('Do not remove %s if it was not '
                                'installed by sugar', dst)
         logging.debug('Link resource %s to %s', src, dst)
-        if os.path.exists(dst):
-            logging.debug('Rewrite %s', dst)
+        if os.path.lexists(dst):
+            logging.debug('Relink %s', dst)
             os.unlink(dst)
         os.symlink(src, dst)
 
