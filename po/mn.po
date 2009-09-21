@@ -6,133 +6,130 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-20 00:31-0500\n"
-"PO-Revision-Date: 2009-02-17 16:39-0500\n"
+"POT-Creation-Date: 2009-08-26 00:33-0400\n"
+"PO-Revision-Date: 2009-09-21 18:10-0400\n"
 "Last-Translator: Odontsetseg Bat-Erdene <obat-erdene@suffolk.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: mn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0rc2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.2.1\n"
 
-#: ../src/sugar/activity/activity.py:123
-msgid "Share with:"
-msgstr "Хуваалцах:"
-
-#: ../src/sugar/activity/activity.py:125
-msgid "Private"
-msgstr "Хувийн"
-
-#: ../src/sugar/activity/activity.py:126
-msgid "My Neighborhood"
-msgstr "Миний Хөршүүд"
-
-#: ../src/sugar/activity/activity.py:133
-#: ../src/sugar/activity/namingalert.py:65
-msgid "Keep"
-msgstr "Хадгалах"
-
-#: ../src/sugar/activity/activity.py:144
-msgid "Stop"
-msgstr "Хаах"
-
-#: ../src/sugar/activity/activity.py:258
-msgid "Undo"
-msgstr "Буцаах"
-
-#: ../src/sugar/activity/activity.py:263
-msgid "Redo"
-msgstr "Давтах"
-
-#: ../src/sugar/activity/activity.py:273
-msgid "Copy"
-msgstr "Хуулах"
-
-#: ../src/sugar/activity/activity.py:278
-msgid "Paste"
-msgstr "Тавих"
-
-#: ../src/sugar/activity/activity.py:304
-msgid "Activity"
-msgstr "Үйл ажиллагаа"
-
-#: ../src/sugar/activity/activity.py:542
+#: ../src/sugar/activity/activity.py:329
 #, python-format
 msgid "%s Activity"
 msgstr "%s үйл ажиллагаа"
 
-#: ../src/sugar/activity/activity.py:910
+#: ../src/sugar/activity/activity.py:714
 msgid "Keep error"
 msgstr "Хадгалахын алдаа"
 
-#: ../src/sugar/activity/activity.py:911
+#: ../src/sugar/activity/activity.py:715
 msgid "Keep error: all changes will be lost"
 msgstr "Хадгалахын алдаа: бүх өөрчлөлтүүд устгагдана"
 
-#: ../src/sugar/activity/activity.py:914
+#: ../src/sugar/activity/activity.py:718
 msgid "Don't stop"
 msgstr "Бүү хаа"
 
-#: ../src/sugar/activity/activity.py:917
+#: ../src/sugar/activity/activity.py:721
 msgid "Stop anyway"
 msgstr "Ямар ч нөхцөлд хаах"
 
-#: ../src/sugar/activity/namingalert.py:60
+#: ../src/sugar/activity/namingalert.py:82
 msgid "Name this entry"
 msgstr ""
 
-#: ../src/sugar/activity/namingalert.py:248
+#: ../src/sugar/activity/namingalert.py:87
+#: ../src/sugar/activity/widgets.py:162
+msgid "Keep"
+msgstr "Хадгалах"
+
+#: ../src/sugar/activity/namingalert.py:283
 msgid "Untitled"
 msgstr ""
 
-#: ../src/sugar/activity/namingalert.py:255
+#: ../src/sugar/activity/namingalert.py:290
 msgid "Description:"
 msgstr ""
 
-#: ../src/sugar/activity/namingalert.py:279
+#: ../src/sugar/activity/namingalert.py:314
 msgid "Tags:"
 msgstr ""
 
-#: ../src/sugar/graphics/alert.py:288 ../src/sugar/graphics/alert.py:367
+#: ../src/sugar/activity/widgets.py:79
+msgid "Stop"
+msgstr "Хаах"
+
+#: ../src/sugar/activity/widgets.py:91
+msgid "Undo"
+msgstr "Буцаах"
+
+#: ../src/sugar/activity/widgets.py:99
+msgid "Redo"
+msgstr "Давтах"
+
+#: ../src/sugar/activity/widgets.py:106
+msgid "Copy"
+msgstr "Хуулах"
+
+#: ../src/sugar/activity/widgets.py:113
+msgid "Paste"
+msgstr "Тавих"
+
+#: ../src/sugar/activity/widgets.py:123
+msgid "Private"
+msgstr "Хувийн"
+
+#: ../src/sugar/activity/widgets.py:130
+msgid "My Neighborhood"
+msgstr "Миний Хөршүүд"
+
+#: ../src/sugar/activity/widgets.py:341
+msgid "Activity"
+msgstr "Үйл ажиллагаа"
+
+#: ../src/sugar/graphics/alert.py:286 ../src/sugar/graphics/alert.py:365
 msgid "Cancel"
 msgstr "Болих"
 
-#: ../src/sugar/graphics/alert.py:292 ../src/sugar/graphics/alert.py:426
+#: ../src/sugar/graphics/alert.py:290 ../src/sugar/graphics/alert.py:424
 msgid "Ok"
 msgstr "Тийм"
 
-#: ../src/sugar/graphics/alert.py:377
+#: ../src/sugar/graphics/alert.py:375
 msgid "Continue"
 msgstr "Үргэлжлүүлэх"
 
-#: ../src/sugar/graphics/colorbutton.py:49
+#: ../src/sugar/graphics/colorbutton.py:52
 msgid "Choose a color"
-msgstr ""
+msgstr "Өнгө сонгох"
 
-#: ../src/sugar/graphics/colorbutton.py:262
-#, fuzzy
+#: ../src/sugar/graphics/colorbutton.py:272
 msgid "Red"
-msgstr "Давтах"
+msgstr "Улаан"
 
-#: ../src/sugar/graphics/colorbutton.py:264
+#: ../src/sugar/graphics/colorbutton.py:274
 msgid "Green"
-msgstr ""
+msgstr "Ногоон"
 
-#: ../src/sugar/graphics/colorbutton.py:266
+#: ../src/sugar/graphics/colorbutton.py:276
 msgid "Blue"
-msgstr ""
+msgstr "Цэнхэр"
 
-#: ../src/sugar/util.py:194
+#: ../src/sugar/util.py:218
 msgid " and "
 msgstr " ба "
 
-#: ../src/sugar/util.py:195
+#: ../src/sugar/util.py:219
 msgid ", "
 msgstr ", "
 
 # TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: ../src/sugar/util.py:198
+#: ../src/sugar/util.py:222
 msgid "Seconds ago"
 msgstr "Секундын өмнө"
 
@@ -140,51 +137,78 @@ msgstr "Секундын өмнө"
 # "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: ../src/sugar/util.py:202
+#: ../src/sugar/util.py:226
 #, python-format
 msgid "%s ago"
 msgstr "%s-ын өмнө"
 
 # TRANS: Relative dates (eg. 1 month and 5 days).
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: ../src/sugar/util.py:215
+#: ../src/sugar/util.py:241
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d жил"
 msgstr[1] "%d жил"
 
-#: ../src/sugar/util.py:216
+#: ../src/sugar/util.py:242
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d сар"
 msgstr[1] "%d сар"
 
-#: ../src/sugar/util.py:217
+#: ../src/sugar/util.py:243
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d долоо хоног"
 msgstr[1] "%d долоо хоног"
 
-#: ../src/sugar/util.py:218
+#: ../src/sugar/util.py:244
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d хоног"
 msgstr[1] "%d хоног"
 
-#: ../src/sugar/util.py:219
+#: ../src/sugar/util.py:245
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d цаг"
 msgstr[1] "%d цаг"
 
-#: ../src/sugar/util.py:220
+#: ../src/sugar/util.py:246
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d минут"
 msgstr[1] "%d минут"
+
+#: ../src/sugar/util.py:339
+msgid "Empty"
+msgstr "Хоосон"
+
+#: ../src/sugar/util.py:341
+#, python-format
+msgid "%d B"
+msgstr ""
+
+#: ../src/sugar/util.py:343
+#, python-format
+msgid "%d KB"
+msgstr ""
+
+#: ../src/sugar/util.py:345
+#, python-format
+msgid "%d MB"
+msgstr ""
+
+#: ../src/sugar/util.py:347
+#, python-format
+msgid "%d GB"
+msgstr ""
+
+#~ msgid "Share with:"
+#~ msgstr "Хуваалцах:"
