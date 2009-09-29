@@ -420,9 +420,7 @@ class Activity(Window, gtk.Container):
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
 
-        if not self._prepare_close():
-            session.will_quit(self, False)
-        elif not self._updating_jobject:
+        if self._prepare_close() and not self._updating_jobject:
             session.will_quit(self, True)
 
     def __session_quit_cb(self, client):
@@ -649,7 +647,7 @@ class Activity(Window, gtk.Container):
             logging.debug('Failed to join activity: %s', err)
             return
 
-        self.present()
+        self.reveal()
         self.emit('joined')
         self.__privacy_changed_cb(self.shared_activity, None)
 
@@ -749,12 +747,16 @@ class Activity(Window, gtk.Container):
         self.add_alert(alert)
         alert.connect('response', self._keep_failed_dialog_response_cb)
 
-        self.present()
+        self.reveal()
 
     def _keep_failed_dialog_response_cb(self, alert, response_id):
         self.remove_alert(alert)
         if response_id == gtk.RESPONSE_OK:
             self.close(skip_save=True)
+            if self._quit_requested:
+                self._session.will_quit(self, True)
+        elif self._quit_requested:
+            self._session.will_quit(self, False)
 
     def can_close(self):
         """Activities should override this function if they want to perform
@@ -809,7 +811,7 @@ class Activity(Window, gtk.Container):
             title_alert = NamingAlert(self, get_bundle_path())
             title_alert.set_transient_for(self.get_toplevel())
             title_alert.show()
-            self.present()
+            self.reveal()
 
     def __realize_cb(self, window):
         wm.set_bundle_id(window.window, self.get_bundle_id())

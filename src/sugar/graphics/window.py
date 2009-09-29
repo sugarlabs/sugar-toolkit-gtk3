@@ -118,6 +118,21 @@ class Window(gtk.Window):
             self.__unfullscreen_button_pressed)
         self._unfullscreen_button_timeout_id = None
 
+    def reveal(self):
+        """ Make window active
+
+        In contrast with present(), brings window to the top
+        even after invoking on response on non-gtk events.
+        See #1423.
+        """
+        if self.window is None:
+            self.show()
+            return
+        timestamp = gtk.get_current_event_time()
+        if not timestamp:
+            timestamp = gtk.gdk.x11_get_server_time(self.window)
+        self.window.focus(timestamp)
+
     def fullscreen(self):
         palettegroup.popdown_all()
         if self._toolbar_box is not None:
