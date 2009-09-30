@@ -344,6 +344,18 @@ session_cancel_shutdown (GsmSession *session)
     gsm_client_shutdown_cancelled (cl->data);
 }
 
+void
+gsm_session_cancel_shutdown (GsmSession *session)
+{
+  if (session == NULL || session->phase != GSM_SESSION_PHASE_SHUTDOWN)
+    {
+      g_warning ("Session is not in shutdown mode");
+      return;
+    }
+
+  session_cancel_shutdown (session);
+}
+
 static void
 initiate_shutdown (GsmSession *session)
 {

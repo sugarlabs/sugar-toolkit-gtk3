@@ -345,6 +345,12 @@
   (return-type "none")
 )
 
+(define-method cancel_shutdown
+  (of-object "GsmSession")
+  (c-name "gsm_session_cancel_shutdown")
+  (return-type "none")
+)
+
 (define-method register_client
   (of-object "GsmSession")
   (c-name "gsm_session_register_client")

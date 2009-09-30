@@ -84,6 +84,8 @@ GsmSessionPhase  gsm_session_get_phase         (GsmSession *session);
 
 void             gsm_session_initiate_shutdown (GsmSession *session);
 
+void             gsm_session_cancel_shutdown   (GsmSession *session);
+
 char            *gsm_session_register_client   (GsmSession *session,
                                                 GsmClient  *client,
                                                 const char *previous_id);
