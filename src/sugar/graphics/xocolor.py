@@ -22,6 +22,8 @@ STABLE.
 import random
 import logging
 
+import gconf
+
 colors = [
 ['#B20008', '#FF2B34'], \
 ['#FF2B34', '#B20008'], \
@@ -229,9 +231,11 @@ class XoColor:
         if color_string == None:
             randomize = True
         elif not is_valid(color_string):
-            logging.error('Color string is not valid: %s, will generate a '
-                          'random color pair.', color_string)
-            randomize = True
+            logging.debug('Color string is not valid: %s, '
+                          'fallback to default', color_string)
+            client = gconf.client_get_default()
+            color_string = client.get_string('/desktop/sugar/user/color')
+            randomize = False
         else:
             randomize = False
 
