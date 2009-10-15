@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: sugar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-26 00:33-0400\n"
-"PO-Revision-Date: 2009-09-01 13:48-0400\n"
-"Last-Translator: Muath Al-Badawi <mrbadaw@gmail.com>\n"
+"PO-Revision-Date: 2009-10-15 02:01-0400\n"
+"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -140,7 +140,7 @@ msgstr " و "
 msgid "Seconds ago"
 msgstr "منذ بضعة ثوان"
 
-# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",<br />
+# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",&lt;br /&gt;<br />
 # "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
@@ -224,22 +224,22 @@ msgstr "فارغ"
 #: ../src/sugar/util.py:341
 #, python-format
 msgid "%d B"
-msgstr "%d بايت "
+msgstr "%d بايت"
 
 #: ../src/sugar/util.py:343
 #, python-format
 msgid "%d KB"
-msgstr "%d كيلو بايت "
+msgstr "%d ك.بايت"
 
 #: ../src/sugar/util.py:345
 #, python-format
 msgid "%d MB"
-msgstr "%d ميجا بايت "
+msgstr "%d م.بايت"
 
 #: ../src/sugar/util.py:347
 #, python-format
 msgid "%d GB"
-msgstr "%d جيجا بايت "
+msgstr "%d ج.بايت"
 
 #~ msgid "Share with:"
 #~ msgstr "شارِك مع:"
