@@ -74,18 +74,6 @@ class ContentBundle(Bundle):
 
         section = 'Library'
 
-        if cp.has_option(section, 'host_version'):
-            version = cp.get(section, 'host_version')
-            try:
-                if int(version) != 1:
-                    raise MalformedBundleException(
-                        'Content bundle %s has unknown host_version '
-                        'number %s' % (self._path, version))
-            except ValueError:
-                raise MalformedBundleException(
-                    'Content bundle %s has invalid host_version number %s' %
-                    (self._path, version))
-
         if cp.has_option(section, 'name'):
             self._name = cp.get(section, 'name')
         else:
