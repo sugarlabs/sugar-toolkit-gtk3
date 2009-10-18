@@ -268,7 +268,7 @@ class Window(gtk.Window):
                     gobject.timeout_add_seconds( \
                         _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
                         self.__unfullscreen_button_timeout_cb)
-        return True
+        return False
 
     def __unfullscreen_button_timeout_cb(self):
         self._unfullscreen_button.hide()
