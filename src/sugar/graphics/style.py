@@ -27,6 +27,7 @@ import logging
 
 import gtk
 import pango
+import gconf
 
 
 FOCUS_LINE_WIDTH = 2
@@ -115,9 +116,12 @@ MEDIUM_ICON_SIZE = zoom(55 * 1.5)
 LARGE_ICON_SIZE = zoom(55 * 2.0)
 XLARGE_ICON_SIZE = zoom(55 * 2.75)
 
-FONT_SIZE = 10
-FONT_NORMAL = Font('Bitstream Vera Sans %d' % FONT_SIZE)
-FONT_BOLD = Font('Bitstream Vera Sans bold %d' % FONT_SIZE)
+client = gconf.client_get_default()
+FONT_SIZE = client.get_float('/desktop/sugar/font/default_size')
+FONT_FACE = client.get_string('/desktop/sugar/font/default_face')
+
+FONT_NORMAL = Font('%s %f' % (FONT_FACE, FONT_SIZE))
+FONT_BOLD = Font('%s %f' % (FONT_FACE, FONT_SIZE))
 FONT_NORMAL_H = zoom(24)
 FONT_BOLD_H = zoom(24)
 
