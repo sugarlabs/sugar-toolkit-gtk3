@@ -121,7 +121,7 @@ FONT_SIZE = client.get_float('/desktop/sugar/font/default_size')
 FONT_FACE = client.get_string('/desktop/sugar/font/default_face')
 
 FONT_NORMAL = Font('%s %f' % (FONT_FACE, FONT_SIZE))
-FONT_BOLD = Font('%s %f' % (FONT_FACE, FONT_SIZE))
+FONT_BOLD = Font('%s bold %f' % (FONT_FACE, FONT_SIZE))
 FONT_NORMAL_H = zoom(24)
 FONT_BOLD_H = zoom(24)
 
