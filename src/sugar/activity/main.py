@@ -28,6 +28,7 @@ import dbus.glib
 import sugar
 from sugar.activity import activityhandle
 from sugar.bundle.activitybundle import ActivityBundle
+from sugar.graphics import style
 from sugar import logger
 
 
@@ -95,6 +96,12 @@ def main():
     os.environ['SUGAR_BUNDLE_VERSION'] = str(bundle.get_activity_version())
 
     gtk.icon_theme_get_default().append_search_path(bundle.get_icons_path())
+
+    # This code can be removed when we grow an xsettings daemon (the GTK+
+    # init routines will then automatically figure out the font settings)
+    settings = gtk.settings_get_default()
+    settings.set_property('gtk-font-name',
+                          '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
 
     locale_path = None
     if 'SUGAR_LOCALEDIR' in os.environ:

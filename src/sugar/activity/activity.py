@@ -280,9 +280,6 @@ class Activity(Window, gtk.Container):
         self._jobject = None
         self._read_file_called = False
 
-        settings = gtk.settings_get_default()
-        settings.set_property("gtk-font-name", "%s %f" % (style.FONT_FACE, style.FONT_SIZE))
-
         self._session = _get_session()
         self._session.register(self)
         self._session.connect('quit-requested',
