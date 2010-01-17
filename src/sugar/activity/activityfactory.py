@@ -244,13 +244,17 @@ class ActivityCreationHandler(gobject.GObject):
                               self._handle.object_id,
                               self._handle.uri)
 
+        dev_null = file('/dev/null', 'w')
         environment_dir = None
-        if os.path.exists('/etc/olpc-security'):
+        rainbow_found = subprocess.call(['which', 'rainbow-run'],
+            stdout=dev_null, stderr=dev_null) == 0
+        use_rainbow = rainbow_found and os.path.exists('/etc/olpc-security')
+        if use_rainbow:
             environment_dir = tempfile.mkdtemp()
-            command = ['/usr/bin/sudo', '-E', '--',
-                       '/usr/bin/rainbow-run',
+            command = ['sudo', '-E', '--',
+                       'rainbow-run',
                        '-v', '-v',
-                       '-a', '/usr/bin/rainbow-sugarize',
+                       '-a', 'rainbow-sugarize',
                        '-s', '/var/spool/rainbow/2',
                        '-f', '1',
                        '-f', '2',
