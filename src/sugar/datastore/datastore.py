@@ -1,4 +1,5 @@
 # Copyright (C) 2007, One Laptop Per Child
+# Copyright (C) 2010, Simon Schampijer
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,7 +17,7 @@
 # Boston, MA 02111-1307, USA.
 
 """
-STABLE.
+STABLE
 """
 
 import logging
@@ -27,64 +28,86 @@ import tempfile
 import gobject
 import gconf
 import gio
+import dbus
+import dbus.glib
 
 from sugar import env
-from sugar.datastore import dbus_helpers
 from sugar import mime
+
+DS_DBUS_SERVICE = "org.laptop.sugar.DataStore"
+DS_DBUS_INTERFACE = "org.laptop.sugar.DataStore"
+DS_DBUS_PATH = "/org/laptop/sugar/DataStore"
+
+_data_store = None
+_data_store_listener = None
+
+
+def _get_data_store():
+    global _data_store
+
+    if not _data_store:
+        _bus = dbus.SessionBus()
+        _data_store = dbus.Interface(_bus.get_object(DS_DBUS_SERVICE,
+                                                     DS_DBUS_PATH),
+                                     DS_DBUS_INTERFACE)
+    return _data_store
 
 
 class DSMetadata(gobject.GObject):
+    """A representation of the metadata associated with a DS entry."""
     __gsignals__ = {
         'updated': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
-    def __init__(self, props=None):
+    def __init__(self, properties=None):
         gobject.GObject.__init__(self)
-        if not props:
-            self._props = {}
+        if not properties:
+            self._properties = {}
         else:
-            self._props = props
+            self._properties = properties
 
         default_keys = ['activity', 'activity_id',
                         'mime_type', 'title_set_by_user']
         for key in default_keys:
-            if not self._props.has_key(key):
-                self._props[key] = ''
+            if key not in self._properties:
+                self._properties[key] = ''
 
     def __getitem__(self, key):
-        return self._props[key]
+        return self._properties[key]
 
     def __setitem__(self, key, value):
-        if not self._props.has_key(key) or self._props[key] != value:
-            self._props[key] = value
+        if key not in self._properties or self._properties[key] != value:
+            self._properties[key] = value
             self.emit('updated')
 
     def __delitem__(self, key):
-        del self._props[key]
+        del self._properties[key]
 
     def __contains__(self, key):
-        return self._props.__contains__(key)
+        return self._properties.__contains__(key)
 
     def has_key(self, key):
-        return self._props.has_key(key)
+        logging.warning(".has_key() is deprecated, use 'in'")
+        return key in self._properties
 
     def keys(self):
-        return self._props.keys()
+        return self._properties.keys()
 
     def get_dictionary(self):
-        return self._props
+        return self._properties
 
     def copy(self):
-        return DSMetadata(self._props.copy())
+        return DSMetadata(self._properties.copy())
 
     def get(self, key, default=None):
-        if self._props.has_key(key):
-            return self._props[key]
+        if key in self._properties:
+            return self._properties[key]
         else:
             return default
 
 
 class DSObject(object):
+    """A representation of a DS entry."""
 
     def __init__(self, object_id, metadata=None, file_path=None):
         self.object_id = object_id
@@ -95,7 +118,8 @@ class DSObject(object):
 
     def get_metadata(self):
         if self._metadata is None and not self.object_id is None:
-            metadata = DSMetadata(dbus_helpers.get_properties(self.object_id))
+            properties = _get_data_store().get_properties(self.object_id)
+            metadata = DSMetadata(properties)
             self._metadata = metadata
         return self._metadata
 
@@ -107,7 +131,7 @@ class DSObject(object):
 
     def get_file_path(self, fetch=True):
         if fetch and self._file_path is None and not self.object_id is None:
-            self.set_file_path(dbus_helpers.get_filename(self.object_id))
+            self.set_file_path(_get_data_store().get_filename(self.object_id))
             self._owns_file = True
         return self._file_path
 
@@ -141,7 +165,12 @@ class DSObject(object):
     def copy(self):
         return DSObject(None, self._metadata.copy(), self._file_path)
 
+
 class RawObject(object):
+    """A representation for objects not in the DS but
+    in the file system.
+
+    """
 
     def __init__(self, file_path):
         stat = os.stat(file_path)
@@ -198,12 +227,20 @@ class RawObject(object):
 
 
 def get(object_id):
+    """Get the properties of the object with the ID given.
+
+    Keyword arguments:
+    object_id -- unique identifier of the object
+
+    Return: a DSObject
+
+    """
     logging.debug('datastore.get')
 
     if object_id.startswith('/'):
         return RawObject(object_id)
 
-    metadata = dbus_helpers.get_properties(object_id)
+    metadata = _get_data_store().get_properties(object_id, byte_arrays=True)
 
     ds_object = DSObject(object_id, DSMetadata(metadata), None)
     # TODO: register the object for updates
@@ -211,14 +248,59 @@ def get(object_id):
 
 
 def create():
+    """Create a new DSObject.
+
+    Return: a DSObject
+
+    """
     metadata = DSMetadata()
     metadata['mtime'] = datetime.now().isoformat()
     metadata['timestamp'] = int(time.time())
     return DSObject(object_id=None, metadata=metadata, file_path=None)
 
 
+def _update_ds_entry(uid, properties, filename, transfer_ownership=False,
+        reply_handler=None, error_handler=None, timeout=-1):
+    debug_properties = properties.copy()
+    if "preview" in debug_properties:
+        debug_properties["preview"] = "<omitted>"
+    logging.debug('dbus_helpers.update: %s, %s, %s, %s', uid, filename,
+        debug_properties, transfer_ownership)
+    if reply_handler and error_handler:
+        _get_data_store().update(uid, dbus.Dictionary(properties), filename,
+                transfer_ownership,
+                reply_handler=reply_handler,
+                error_handler=error_handler,
+                timeout=timeout)
+    else:
+        _get_data_store().update(uid, dbus.Dictionary(properties),
+                                 filename, transfer_ownership)
+
+
+def _create_ds_entry(properties, filename, transfer_ownership=False):
+    object_id = _get_data_store().create(dbus.Dictionary(properties), filename,
+    transfer_ownership)
+    return object_id
+
+
 def write(ds_object, update_mtime=True, transfer_ownership=False,
           reply_handler=None, error_handler=None, timeout=-1):
+    """Write the DSObject given to the datastore. Creates a new entry if
+    the entry does not exist yet.
+
+    Keyword arguments:
+    update_mtime -- boolean if the mtime of the entry should be regenerated
+                    (default True)
+    transfer_ownership -- set it to true if the ownership of the entry should
+                          be passed - who is responsible to delete the file
+                          when done with it (default False)
+    reply_handler -- will be called with the method's return values as
+                     arguments (default None)
+    error_handler -- will be called with an instance of a DBusException
+                     representing a remote exception (default None)
+    timeout -- dbus timeout for the caller to wait (default -1)
+
+    """
     logging.debug('datastore.write')
 
     properties = ds_object.metadata.get_dictionary().copy()
@@ -234,33 +316,71 @@ def write(ds_object, update_mtime=True, transfer_ownership=False,
     # FIXME: this func will be sync for creates regardless of the handlers
     # supplied. This is very bad API, need to decide what to do here.
     if ds_object.object_id:
-        dbus_helpers.update(ds_object.object_id,
-                            properties,
-                            file_path,
-                            transfer_ownership,
-                            reply_handler=reply_handler,
-                            error_handler=error_handler,
-                            timeout=timeout)
+        _update_ds_entry(ds_object.object_id,
+                         properties,
+                         file_path,
+                         transfer_ownership,
+                         reply_handler=reply_handler,
+                         error_handler=error_handler,
+                         timeout=timeout)
     else:
         if reply_handler or error_handler:
             logging.warning('datastore.write() cannot currently be called' \
                             'async for creates, see ticket 3071')
-        ds_object.object_id = dbus_helpers.create(properties,
-                                                  file_path,
-                                                  transfer_ownership)
+        ds_object.object_id = _create_ds_entry(properties, file_path,
+                                               transfer_ownership)
         ds_object.metadata['uid'] = ds_object.object_id
         # TODO: register the object for updates
     logging.debug('Written object %s to the datastore.', ds_object.object_id)
 
 
 def delete(object_id):
+    """Delete the datastore entry with the given uid.
+
+    Keyword arguments:
+    object_id -- uid of the datastore entry
+
+    """
     logging.debug('datastore.delete')
-    dbus_helpers.delete(object_id)
+    _get_data_store().delete(object_id)
 
 
 def find(query, sorting=None, limit=None, offset=None, properties=None,
          reply_handler=None, error_handler=None):
+    """Find DS entries that match the query provided.
 
+    Keyword arguments:
+    query -- a dictionary containing metadata key value pairs
+             for a fulltext search use the key 'query' e.g. {'query': 'blue*'}
+             other possible well-known properties are:
+             'activity':          'my.organization.MyActivity'
+             'activity_id':       '6f7f3acacca87886332f50bdd522d805f0abbf1f'
+             'title':             'My new project'
+             'title_set_by_user': '0'
+             'keep':              '0'
+             'ctime':             '1972-05-12T18:41:08'
+             'mtime':             '2007-06-16T03:42:33'
+             'timestamp':         1192715145
+             'preview':           ByteArray(png file data, 300x225 px)
+             'icon-color':        '#ff0000,#ffff00'
+             'mime_type':         'application/x-my-activity'
+             'share-scope':       # if shared
+             'buddies':           '{}'
+             'description':       'some longer text'
+             'tags':              'one two'
+    sorting -- key to order results by e.g. 'timestamp' (default None)
+    limit -- return only limit results (default None)
+    offset -- return only results starting at offset (default None)
+    properties -- you can specify here a list of metadata you want to be
+                  present in the result e.g. ['title, 'keep'] (default None)
+    reply_handler -- will be called with the method's return values as
+                     arguments (default None)
+    error_handler -- will be called with an instance of a DBusException
+                     representing a remote exception (default None)
+
+    Return: DSObjects matching the query, number of matches
+
+    """
     query = query.copy()
 
     if properties is None:
@@ -273,57 +393,103 @@ def find(query, sorting=None, limit=None, offset=None, properties=None,
     if offset:
         query['offset'] = offset
 
-    props_list, total_count = dbus_helpers.find(query, properties,
-                                                reply_handler, error_handler)
+    if reply_handler and error_handler:
+        _get_data_store().find(query, properties,
+                               reply_handler=reply_handler,
+                               error_handler=error_handler,
+                               byte_arrays=True)
+        return
+    else:
+        entries, total_count = _get_data_store().find(query, properties,
+                                                      byte_arrays=True)
+    ds_objects = []
+    for entry in entries:
+        object_id = entry['uid']
+        del entry['uid']
 
-    objects = []
-    for props in props_list:
-        object_id = props['uid']
-        del props['uid']
+        ds_object = DSObject(object_id, DSMetadata(entry), None)
+        ds_objects.append(ds_object)
 
-        ds_object = DSObject(object_id, DSMetadata(props), None)
-        objects.append(ds_object)
-
-    return objects, total_count
+    return ds_objects, total_count
 
 
-def copy(jobject, mount_point):
+def copy(ds_object, mount_point):
+    """Copy a datastore entry
 
-    new_jobject = jobject.copy()
-    new_jobject.metadata['mountpoint'] = mount_point
+    Keyword arguments:
+    ds_object -- DSObject to copy
+    mount_point -- mount point of the new datastore entry
 
-    if jobject.metadata.has_key('title'):
-        filename = jobject.metadata['title']
+    """
+    new_ds_object = ds_object.copy()
+    new_ds_object.metadata['mountpoint'] = mount_point
 
-        if jobject.metadata.has_key('mime_type'):
-            mime_type = jobject.metadata['mime_type']
+    if 'title' in ds_object.metadata:
+        filename = ds_object.metadata['title']
+
+        if 'mime_type' in ds_object.metadata:
+            mime_type = ds_object.metadata['mime_type']
             extension = mime.get_primary_extension(mime_type)
             if extension:
                 filename += '.' + extension
 
-        new_jobject.metadata['suggested_filename'] = filename
+        new_ds_object.metadata['suggested_filename'] = filename
 
     # this will cause the file be retrieved from the DS
-    new_jobject.file_path = jobject.file_path
+    new_ds_object.file_path = ds_object.file_path
 
-    write(new_jobject)
+    write(new_ds_object)
 
 
 def mount(uri, options, timeout=-1):
-    return dbus_helpers.mount(uri, options, timeout=timeout)
+    """Deprecated. API private to the shell. Mount a device.
+
+    Keyword arguments:
+    uri -- identifier of the device
+    options -- mount options
+    timeout -- dbus timeout for the caller to wait (default -1)
+
+    Return: empty string
+
+    """
+    return _get_data_store().mount(uri, options, timeout=timeout)
 
 
 def unmount(mount_point_id):
-    dbus_helpers.unmount(mount_point_id)
+    """Deprecated. API private to the shell.
+
+    Keyword arguments:
+    mount_point_id -- id of the mount point
+
+    Note: API private to the shell.
+
+    """
+    _get_data_store().unmount(mount_point_id)
 
 
 def mounts():
-    return dbus_helpers.mounts()
+    """Deprecated. Returns the mount point of the datastore. We get mount
+    points through gio now. API private to the shell.
+
+    Return: datastore mount point
+
+    """
+    return _get_data_store().mounts()
 
 
 def complete_indexing():
-    return dbus_helpers.complete_indexing()
+    """Deprecated. API private to the shell."""
+    logging.warning('The method complete_indexing has been deprecated.')
 
 
 def get_unique_values(key):
-    return dbus_helpers.get_unique_values(key)
+    """Retrieve an array of unique values for a field.
+
+    Keyword arguments:
+    key -- only the property activity is currently supported
+
+    Return: list of activities
+
+    """
+    return _get_data_store().get_uniquevaluesfor(
+                                key, dbus.Dictionary({}, signature='ss'))
