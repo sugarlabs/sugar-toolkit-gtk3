@@ -33,6 +33,7 @@ import dbus.glib
 
 from sugar import env
 from sugar import mime
+from sugar import dispatch
 
 DS_DBUS_SERVICE = "org.laptop.sugar.DataStore"
 DS_DBUS_INTERFACE = "org.laptop.sugar.DataStore"
@@ -50,7 +51,31 @@ def _get_data_store():
         _data_store = dbus.Interface(_bus.get_object(DS_DBUS_SERVICE,
                                                      DS_DBUS_PATH),
                                      DS_DBUS_INTERFACE)
+        _data_store.connect_to_signal('Created', __datastore_created_cb)
+        _data_store.connect_to_signal('Deleted', __datastore_deleted_cb)
+        _data_store.connect_to_signal('Updated', __datastore_updated_cb)
+
     return _data_store
+
+
+def __datastore_created_cb(object_id):
+    metadata = _get_data_store().get_properties(object_id, byte_arrays=True)
+    updated.send(None, object_id=object_id, metadata=metadata)
+
+
+def __datastore_updated_cb(object_id):
+    metadata = _get_data_store().get_properties(object_id, byte_arrays=True)
+    updated.send(None, object_id=object_id, metadata=metadata)
+
+
+def __datastore_deleted_cb(object_id):
+    deleted.send(None, object_id=object_id)
+
+created = dispatch.Signal()
+deleted = dispatch.Signal()
+updated = dispatch.Signal()
+
+_get_data_store()
 
 
 class DSMetadata(gobject.GObject):

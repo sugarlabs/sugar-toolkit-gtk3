@@ -30,6 +30,7 @@ from sugar.presence import presenceservice
 from sugar.activity.activityhandle import ActivityHandle
 from sugar import util
 from sugar import env
+from sugar.datastore import datastore
 
 from errno import EEXIST, ENOSPC
 
@@ -41,10 +42,6 @@ import pwd
 _SHELL_SERVICE = "org.laptop.Shell"
 _SHELL_PATH = "/org/laptop/Shell"
 _SHELL_IFACE = "org.laptop.Shell"
-
-_DS_SERVICE = "org.laptop.sugar.DataStore"
-_DS_INTERFACE = "org.laptop.sugar.DataStore"
-_DS_PATH = "/org/laptop/sugar/DataStore"
 
 _ACTIVITY_FACTORY_INTERFACE = "org.laptop.ActivityFactory"
 
@@ -211,13 +208,9 @@ class ActivityCreationHandler(gobject.GObject):
         self._shell = dbus.Interface(bus_object, _SHELL_IFACE)
 
         if handle.activity_id is not None and handle.object_id is None:
-            datastore = dbus.Interface(
-                    bus.get_object(_DS_SERVICE, _DS_PATH), _DS_INTERFACE)
             datastore.find({'activity_id': self._handle.activity_id},
-                           [],
                            reply_handler=self._find_object_reply_handler,
-                           error_handler=self._find_object_error_handler,
-                           byte_arrays=True)
+                           error_handler=self._find_object_error_handler)
         else:
             self._launch_activity()
 
