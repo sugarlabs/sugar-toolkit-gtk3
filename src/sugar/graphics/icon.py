@@ -1146,3 +1146,10 @@ def get_icon_file_name(icon_name):
     filename = info.get_filename()
     del info
     return filename
+
+
+def get_surface(**kwargs):
+    icon = _IconBuffer()
+    for key, value in kwargs.items():
+        icon.__setattr__(key, value)
+    return icon.get_surface()
