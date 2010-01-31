@@ -40,7 +40,6 @@ DS_DBUS_INTERFACE = "org.laptop.sugar.DataStore"
 DS_DBUS_PATH = "/org/laptop/sugar/DataStore"
 
 _data_store = None
-_data_store_listener = None
 
 
 def _get_data_store():
