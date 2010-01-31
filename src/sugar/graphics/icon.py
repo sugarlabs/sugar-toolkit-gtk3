@@ -1149,6 +1149,27 @@ def get_icon_file_name(icon_name):
 
 
 def get_surface(**kwargs):
+    """Get cached cairo surface.
+
+        Keyword arguments:
+        icon_name        -- name of icon to load, default None
+        file_name        -- path to image file, default None
+        fill_color       -- for svg images, change default fill color
+                            default None
+        stroke_color     -- for svg images, change default stroke color
+                            default None
+        background_color -- draw background or surface will be transparent
+                            default None
+        badge_name       -- name of icon which will be drawn on top of
+                            original image, default None
+        width            -- change image width, default None
+        height           -- change image height, default None
+        cache            -- if image is svg, keep svg file content for later
+        scale            -- scale image, default 1.0
+
+        Return: cairo surface or None if image was not found
+
+        """
     icon = _IconBuffer()
     for key, value in kwargs.items():
         icon.__setattr__(key, value)
