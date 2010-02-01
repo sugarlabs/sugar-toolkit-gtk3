@@ -94,6 +94,9 @@ def _extract_modification_time(filepath):
 def get_locale_path(bundle_id):
     """ Gets the locale path, the directory where the preferred 
         MO file is located.
+
+            bundle_id -- The bundle id of the activity in question
+
         The preferred MO file is the one with the latest 
         translation.
     """
