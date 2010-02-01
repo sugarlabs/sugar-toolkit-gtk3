@@ -26,7 +26,8 @@ import dbus.service
 import dbus.glib
 
 import sugar
-from sugar.activity import activityhandle, i18n
+from sugar.activity import activityhandle
+from sugar.activity import i18n
 from sugar.bundle.activitybundle import ActivityBundle
 from sugar.graphics import style
 from sugar import logger
