@@ -129,16 +129,38 @@ class DSMetadata(gobject.GObject):
         else:
             return default
 
+    def update(self, properties):
+        """Update all of the metadata"""
+        for (key, value) in properties.items():
+            self[key] = value
+
 
 class DSObject(object):
     """A representation of a DS entry."""
 
     def __init__(self, object_id, metadata=None, file_path=None):
-        self.object_id = object_id
+        self._object_id = object_id
         self._metadata = metadata
         self._file_path = file_path
         self._destroyed = False
         self._owns_file = False
+
+    def get_object_id(self):
+        return self._object_id
+
+    def set_object_id(self, object_id):
+        if object_id is not None:
+            _get_data_store().connect_to_signal('Updated',
+                                                self.__object_updated_cb,
+                                                arg0=object_id)
+        self._object_id = object_id
+
+    object_id = property(get_object_id, set_object_id)
+
+    def __object_updated_cb(self, object_id):
+        properties = _get_data_store().get_properties(self.object_id,
+                                                      byte_arrays=True)
+        self._metadata.update(properties)
 
     def get_metadata(self):
         if self._metadata is None and not self.object_id is None:
