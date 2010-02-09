@@ -95,13 +95,15 @@ def _extract_modification_time(filepath):
 
 
 def get_locale_path(bundle_id):
-    """ Gets the locale path, the directory where the preferred
+    """ Returns the locale path, which is the directory where the preferred
         MO file is located.
 
-            bundle_id -- The bundle id of the activity in question
+        The preferred MO file is the one with the latest translation.
 
-        The preferred MO file is the one with the latest
-        translation.
+        @type   bundle_id:      string
+        @param  bundle_id:      The bundle id of the activity in question
+        @rtype:                 string
+        @return:                the preferred locale path
     """
 
     # Note: We pre-assign weights to the directories so that if no translations
