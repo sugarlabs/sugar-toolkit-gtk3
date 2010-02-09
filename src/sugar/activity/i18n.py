@@ -138,6 +138,7 @@ def get_locale_path(bundle_id):
                     # Set lowest priority
                     candidate_dirs[candidate_dir] = -1
 
-    # Fancy way to sort the dictionary by value
-    return sorted(candidate_dirs.iteritems(), key=lambda (k, v): (v, k), \
-        reverse=True)[0][0]
+    sorted_dict = sorted(candidate_dirs.iteritems(), key=lambda (k, v): \
+        (v, k), reverse=True)
+
+    return sorted_dict[0][0]
