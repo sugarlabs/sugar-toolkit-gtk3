@@ -27,6 +27,7 @@ import dbus.glib
 
 import sugar
 from sugar.activity import activityhandle
+from sugar.activity import i18n
 from sugar.bundle.activitybundle import ActivityBundle
 from sugar.graphics import style
 from sugar import logger
@@ -103,9 +104,7 @@ def main():
     settings.set_property('gtk-font-name',
                           '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
 
-    locale_path = None
-    if 'SUGAR_LOCALEDIR' in os.environ:
-        locale_path = os.environ['SUGAR_LOCALEDIR']
+    locale_path = i18n.get_locale_path(bundle.get_bundle_id())
 
     gettext.bindtextdomain(bundle.get_bundle_id(), locale_path)
     gettext.bindtextdomain('sugar-toolkit', sugar.locale_path)
