@@ -31,40 +31,41 @@ _MO_BIG_ENDIAN = 0xde120495
 _MO_LITTLE_ENDIAN = 0x950412de
 
 
-def _read_bin(handle, fmt, bytecount):
-    read_bytes = handle.read(bytecount)
-    ret_value = struct.unpack(fmt, read_bytes)
-    if len(ret_value) == 1:
-        return ret_value[0]
+def _read_bin(handle, format_string, byte_count):
+    read_bytes = handle.read(byte_count)
+    return_value = struct.unpack(format_string, read_bytes)
+    if len(return_value) == 1:
+        return return_value[0]
     else:
-        return ret_value
+        return return_value
 
 
-def _extract_header(filepath):
+def _extract_header(file_path):
     header = ''
-    handle = open(filepath, 'rb')
+    handle = open(file_path, 'rb')
     magic_number = _read_bin(handle, '<I', 4)
 
     if magic_number == _MO_BIG_ENDIAN:
-        fmt = '>II'
+        format_string = '>II'
     elif magic_number == _MO_LITTLE_ENDIAN:
-        fmt = '<II'
+        format_string = '<II'
     else:
-        raise IOError('File does not seem to be valid MO file')
+        raise IOError('File does not seem to be a valid MO file')
 
-    version_, num_of_strings = _read_bin(handle, fmt, 8)
+    version_, num_of_strings = _read_bin(handle, format_string, 8)
 
-    msgids_hash_offset, msgstrs_hash_offset = _read_bin(handle, fmt, 8)
+    msgids_hash_offset, msgstrs_hash_offset = _read_bin(handle, \
+                                                        format_string, 8)
     handle.seek(msgids_hash_offset)
 
     msgids_index = []
     for i in range(num_of_strings):
-        msgids_index.append(_read_bin(handle, fmt, 8))
+        msgids_index.append(_read_bin(handle, format_string, 8))
     handle.seek(msgstrs_hash_offset)
 
     msgstrs_index = []
     for i in range(num_of_strings):
-        msgstrs_index.append(_read_bin(handle, fmt, 8))
+        msgstrs_index.append(_read_bin(handle, format_string, 8))
 
     for i in range(num_of_strings):
         handle.seek(msgids_index[i][1])
@@ -81,8 +82,8 @@ def _extract_header(filepath):
     return header
 
 
-def _extract_modification_time(filepath):
-    header = _extract_header(filepath)
+def _extract_modification_time(file_path):
+    header = _extract_header(file_path)
     items = header.split('\n')
     for item in items:
         if item.startswith('PO-Revision-Date:'):
@@ -90,8 +91,7 @@ def _extract_modification_time(filepath):
             parsed_time = dateutil.parser.parse(time_str)
             return time.mktime(parsed_time.timetuple())
 
-    raise ValueError('Could not find revision date')
-    return -1
+    raise ValueError('Could not find a revision date')
 
 
 def get_locale_path(bundle_id):
@@ -138,7 +138,7 @@ def get_locale_path(bundle_id):
                     # Set lowest priority
                     candidate_dirs[candidate_dir] = -1
 
-    sorted_dict = sorted(candidate_dirs.iteritems(), key=lambda (k, v): \
+    available_paths = sorted(candidate_dirs.iteritems(), key=lambda (k, v): \
         (v, k), reverse=True)
-
-    return sorted_dict[0][0]
+    preferred_path = available_paths[0][0]
+    return preferred_path
