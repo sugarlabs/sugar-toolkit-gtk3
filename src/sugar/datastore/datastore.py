@@ -139,7 +139,7 @@ class DSObject(object):
     """A representation of a DS entry."""
 
     def __init__(self, object_id, metadata=None, file_path=None):
-        self._object_id = object_id
+        self.set_object_id(object_id)
         self._metadata = metadata
         self._file_path = file_path
         self._destroyed = False
