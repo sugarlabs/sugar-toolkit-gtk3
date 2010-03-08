@@ -393,6 +393,9 @@ class Activity(Window, gtk.Container):
         """Returns the bundle_id from the activity.info file"""
         return os.environ['SUGAR_BUNDLE_ID']
 
+    def get_canvas(self):
+        return Window.get_canvas(self)
+
     def set_canvas(self, canvas):
         """Sets the 'work area' of your activity with the canvas of your
         choice.
@@ -402,6 +405,8 @@ class Activity(Window, gtk.Container):
         Window.set_canvas(self, canvas)
         if not self._read_file_called:
             canvas.connect('map', self.__canvas_map_cb)
+
+    canvas = property(get_canvas, set_canvas)
 
     def __screen_size_changed_cb(self, screen):
         self._adapt_window_to_screen()
