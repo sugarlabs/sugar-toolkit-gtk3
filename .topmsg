@@ -1,0 +1,7 @@
+From: Sascha Silbe <sascha-pgp@silbe.org>
+Subject: [PATCH] check syntax of private key (#1568)
+
+Check that header and footer of the private key are present in order to detect
+corrupted key files.
+
+Signed-off-by: Sascha Silbe <sascha-pgp@silbe.org>
