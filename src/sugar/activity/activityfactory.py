@@ -149,8 +149,7 @@ def open_log_file(activity):
     while True:
         path = env.get_logs_path('%s-%s.log' % (activity.get_bundle_id(), i))
         try:
-            fd = os.open(path, os.O_EXCL | os.O_CREAT \
-                             | os.O_SYNC | os.O_WRONLY, 0644)
+            fd = os.open(path, os.O_EXCL | os.O_CREAT | os.O_WRONLY, 0644)
             f = os.fdopen(fd, 'w', 0)
             return (path, f)
         except OSError, e:

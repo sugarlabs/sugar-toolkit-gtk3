@@ -393,6 +393,9 @@ class Activity(Window, gtk.Container):
         """Returns the bundle_id from the activity.info file"""
         return os.environ['SUGAR_BUNDLE_ID']
 
+    def get_canvas(self):
+        return Window.get_canvas(self)
+
     def set_canvas(self, canvas):
         """Sets the 'work area' of your activity with the canvas of your
         choice.
@@ -402,6 +405,8 @@ class Activity(Window, gtk.Container):
         Window.set_canvas(self, canvas)
         if not self._read_file_called:
             canvas.connect('map', self.__canvas_map_cb)
+
+    canvas = property(get_canvas, set_canvas)
 
     def __screen_size_changed_cb(self, screen):
         self._adapt_window_to_screen()
@@ -517,7 +522,7 @@ class Activity(Window, gtk.Container):
         if self._closing:
             self._show_keep_failed_dialog()
             self._closing = False
-        logging.debug('Error saving activity object to datastore: %s', err)
+        raise RuntimeError('Error saving activity object to datastore: %s', err)
 
     def _cleanup_jobject(self):
         if self._jobject:
@@ -769,7 +774,7 @@ class Activity(Window, gtk.Container):
             try:
                 self.save()
             except:
-                logging.info(traceback.format_exc())
+                logging.exception('Error saving activity object to datastore')
                 self._show_keep_failed_dialog()
                 return False
 
@@ -800,7 +805,8 @@ class Activity(Window, gtk.Container):
         if not self.can_close():
             return
 
-        if skip_save or self.metadata.get('title_set_by_user', '0') == '1':
+        if skip_save or self._jobject is None or \
+                self.metadata.get('title_set_by_user', '0') == '1':
             if not self._closing:
                 if not self._prepare_close(skip_save):
                     return
