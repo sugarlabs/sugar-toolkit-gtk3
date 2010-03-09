@@ -805,7 +805,8 @@ class Activity(Window, gtk.Container):
         if not self.can_close():
             return
 
-        if skip_save or self.metadata.get('title_set_by_user', '0') == '1':
+        if skip_save or self._jobject is None or \
+                self.metadata.get('title_set_by_user', '0') == '1':
             if not self._closing:
                 if not self._prepare_close(skip_save):
                     return
