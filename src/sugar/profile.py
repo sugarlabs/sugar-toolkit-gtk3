@@ -105,18 +105,14 @@ class Profile(object):
             return None
 
         key = ""
-        begin_found = False
-        end_found = False
         for l in lines:
             l = l.strip()
             if l.startswith("-----BEGIN DSA PRIVATE KEY-----"):
-                begin_found = True
                 continue
             if l.startswith("-----END DSA PRIVATE KEY-----"):
-                end_found = True
                 continue
             key += l
-        if not (len(key) and begin_found and end_found):
+        if not len(key):
             logging.error("Error parsing public key.")
             return None
 
