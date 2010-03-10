@@ -274,7 +274,8 @@ class ActivityCreationHandler(gobject.GObject):
 
         gobject.child_watch_add(child.pid,
                                 _child_watch_cb,
-                                (environment_dir, log_file))
+                                (environment_dir, log_file,
+                                    self._handle.activity_id))
 
     def _no_reply_handler(self, *args):
         pass
@@ -337,12 +338,25 @@ def create_with_object_id(bundle, object_id):
 def _child_watch_cb(pid, condition, user_data):
     # FIXME we use standalone method here instead of ActivityCreationHandler's
     # member to have workaround code, see #1123
-    environment_dir, log_file = user_data
+    environment_dir, log_file, activity_id = user_data
     if environment_dir is not None:
         subprocess.call(['/bin/rm', '-rf', environment_dir])
+
+    if os.WIFEXITED(condition):
+        status = os.WEXITSTATUS(condition)
+        signum = None
+        message = 'Exited with status %s' % status
+    elif os.WIFSIGNALED(condition):
+        status = None
+        signum = os.WTERMSIG(condition)
+        message = 'Terminated by signal %s' % signum
+    else:
+        status = None
+        signum = os.WTERMSIG(condition)
+        message = 'Undefined status with signal %s' % signum
+
     try:
-        log_file.write('Activity died: pid %s condition %s data %s\n' %
-            (pid, condition, user_data))
+        log_file.write('%s, pid %s data %s\n' % (message, pid, user_data))
     finally:
         log_file.close()
 
@@ -352,3 +366,23 @@ def _child_watch_cb(pid, condition, user_data):
     except OSError:
         # SIGCHLD = SIG_IGN, no zombies
         pass
+
+    if status or signum:
+        # XXX have to recreate dbus object since we can't reuse
+        # ActivityCreationHandler's one, see
+        # https://bugs.freedesktop.org/show_bug.cgi?id=23507
+        bus = dbus.SessionBus()
+        bus_object = bus.get_object(_SHELL_SERVICE, _SHELL_PATH)
+        shell = dbus.Interface(bus_object, _SHELL_IFACE)
+
+        def reply_handler_cb(*args):
+            pass
+
+        def error_handler_cb(error):
+            logging.error('Cannot send NotifyLaunchFailure to the shell')
+
+        # TODO send launching failure but activity could already show
+        # main window, see http://bugs.sugarlabs.org/ticket/1447#comment:19
+        shell.NotifyLaunchFailure(activity_id,
+                reply_handler=reply_handler_cb,
+                error_handler=error_handler_cb)
