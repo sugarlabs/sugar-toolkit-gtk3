@@ -52,7 +52,6 @@ import logging
 import os
 import time
 from hashlib import sha1
-import traceback
 import gconf
 
 import gtk
