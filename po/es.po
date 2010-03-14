@@ -6,38 +6,38 @@ msgid ""
 msgstr ""
 "Project-Id-Version: olpc-sugar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-26 00:33-0400\n"
-"PO-Revision-Date: 2009-09-02 18:26-0400\n"
-"Last-Translator: Rafael Ortiz <rafael@laptop.org>\n"
+"POT-Creation-Date: 2010-01-20 13:10-0500\n"
+"PO-Revision-Date: 2010-03-11 23:18+0200\n"
+"Last-Translator: Roger Orellana <rjorellana@gmail.com>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.1\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
 
-#: ../src/sugar/activity/activity.py:329
+#: ../src/sugar/activity/activity.py:338
 #, python-format
 msgid "%s Activity"
 msgstr "Actividad %s"
 
-#: ../src/sugar/activity/activity.py:714
+#: ../src/sugar/activity/activity.py:738
 msgid "Keep error"
 msgstr "Error al guardar"
 
-#: ../src/sugar/activity/activity.py:715
+#: ../src/sugar/activity/activity.py:739
 msgid "Keep error: all changes will be lost"
 msgstr "Error al guardar: todos los cambios se perderán"
 
-#: ../src/sugar/activity/activity.py:718
+#: ../src/sugar/activity/activity.py:742
 msgid "Don't stop"
 msgstr "No detener"
 
-#: ../src/sugar/activity/activity.py:721
+#: ../src/sugar/activity/activity.py:745
 msgid "Stop anyway"
 msgstr "Detener de todas formas"
 
@@ -50,7 +50,7 @@ msgstr "Nombre esta entrada"
 # self._stop_item.connect('activate', self._stop_item_activate_cb)
 # self.append_menu_item(self._stop_item)
 #: ../src/sugar/activity/namingalert.py:87
-#: ../src/sugar/activity/widgets.py:162
+#: ../src/sugar/activity/widgets.py:166
 msgid "Keep"
 msgstr "Guardar"
 
@@ -66,35 +66,35 @@ msgstr "Descripción:"
 msgid "Tags:"
 msgstr "Etiquetas:"
 
-#: ../src/sugar/activity/widgets.py:79
+#: ../src/sugar/activity/widgets.py:83
 msgid "Stop"
 msgstr "Parar"
 
-#: ../src/sugar/activity/widgets.py:91
+#: ../src/sugar/activity/widgets.py:95
 msgid "Undo"
 msgstr "Deshacer"
 
-#: ../src/sugar/activity/widgets.py:99
+#: ../src/sugar/activity/widgets.py:103
 msgid "Redo"
 msgstr "Rehacer"
 
-#: ../src/sugar/activity/widgets.py:106
+#: ../src/sugar/activity/widgets.py:110
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../src/sugar/activity/widgets.py:113
+#: ../src/sugar/activity/widgets.py:117
 msgid "Paste"
 msgstr "Pegar"
 
-#: ../src/sugar/activity/widgets.py:123
+#: ../src/sugar/activity/widgets.py:127
 msgid "Private"
 msgstr "Privado"
 
-#: ../src/sugar/activity/widgets.py:130
+#: ../src/sugar/activity/widgets.py:134
 msgid "My Neighborhood"
 msgstr "Mi Vecindario"
 
-#: ../src/sugar/activity/widgets.py:341
+#: ../src/sugar/activity/widgets.py:345
 msgid "Activity"
 msgstr "Actividad"
 
@@ -104,7 +104,7 @@ msgstr "Cancelar"
 
 #: ../src/sugar/graphics/alert.py:290 ../src/sugar/graphics/alert.py:424
 msgid "Ok"
-msgstr "Ok"
+msgstr "Aceptar"
 
 #: ../src/sugar/graphics/alert.py:375
 msgid "Continue"
