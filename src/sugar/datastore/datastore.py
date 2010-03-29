@@ -139,6 +139,7 @@ class DSObject(object):
     """A representation of a DS entry."""
 
     def __init__(self, object_id, metadata=None, file_path=None):
+        self._update_signal_match = None
         self.set_object_id(object_id)
         self._metadata = metadata
         self._file_path = file_path
@@ -149,16 +150,18 @@ class DSObject(object):
         return self._object_id
 
     def set_object_id(self, object_id):
+        if self._update_signal_match is not None: 
+            self._update_signal_match.remove()
         if object_id is not None:
-            _get_data_store().connect_to_signal('Updated',
-                                                self.__object_updated_cb,
-                                                arg0=object_id)
+            self._update_signal_match = _get_data_store().connect_to_signal(
+                    'Updated', self.__object_updated_cb, arg0=object_id)
+
         self._object_id = object_id
 
     object_id = property(get_object_id, set_object_id)
 
     def __object_updated_cb(self, object_id):
-        properties = _get_data_store().get_properties(self.object_id,
+        properties = _get_data_store().get_properties(self._object_id,
                                                       byte_arrays=True)
         self._metadata.update(properties)
 
