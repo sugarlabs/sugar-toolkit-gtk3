@@ -68,10 +68,9 @@ class Bundle(object):
     def __init__(self, path):
         self._path = path
         self._zip_root_dir = None
+        self._zip_file = None
 
-        if os.path.isdir(self._path):
-            self._zip_file = None
-        else:
+        if not os.path.isdir(self._path):
             self._zip_file = zipfile.ZipFile(self._path)
             self._check_zip_bundle()
 
