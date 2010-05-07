@@ -202,9 +202,10 @@ class TitleEntry(gtk.ToolItem):
         self.entry.set_text(jobject['title'])
 
     def __title_changed_cb(self, entry, activity):
-        if not self._update_title_sid:
-            self._update_title_sid = gobject.timeout_add_seconds(
-                    1, self.__update_title_cb, activity)
+        if self._update_title_sid is not None:
+            gobject.source_remove(self._update_title_sid)
+        self._update_title_sid = gobject.timeout_add_seconds(
+                1, self.__update_title_cb, activity)
 
     def __update_title_cb(self, activity):
         title = self.entry.get_text()
