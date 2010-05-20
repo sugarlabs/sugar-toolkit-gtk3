@@ -142,37 +142,9 @@ class Builder(object):
             f.close()
 
     def get_files(self):
-        files = self.config.bundle.get_files()
-
-        if not files:
-            logging.error('No files found, fixing the MANIFEST.')
-            self.fix_manifest()
-            files = self.config.bundle.get_files()
-
-        return files
-
-    def check_manifest(self):
-        missing_files = []
-
         allfiles = list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
-        for path in allfiles:
-            if path not in self.config.bundle.manifest:
-                missing_files.append(path)
-
-        return missing_files
-
-    def fix_manifest(self):
-        self.build()
-
-        manifest = self.config.bundle.manifest
-
-        for path in self.check_manifest():
-            manifest.append(path)
-
-        f = open(os.path.join(self.config.source_dir, 'MANIFEST'), 'wb')
-        for line in manifest:
-            f.write(line + '\n')
+        return allfiles
 
 
 class Packager(object):
@@ -197,13 +169,6 @@ class XOPackager(Packager):
     def package(self):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
-
-        missing_files = self.builder.check_manifest()
-        if missing_files:
-            logging.warn('These files are not included in the manifest ' \
-                         'and will not be present in the bundle:\n\n' +
-                         '\n'.join(missing_files) +
-                         '\n\nUse fix_manifest if you want to add them.')
 
         for f in self.builder.get_files():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
@@ -311,14 +276,11 @@ def cmd_dist_xo(config, args):
 
 
 def cmd_fix_manifest(config, args):
-    """Add missing files to the manifest"""
+    '''Add missing files to the manifest (OBSOLETE)'''
 
-    if args:
-        print 'Usage: %prog fix_manifest'
-        return
-
-    builder = Builder(config)
-    builder.fix_manifest()
+    print 'WARNING: The fix_manifest command is obsolete.'
+    print '         The MANIFEST file is no longer used in bundles,'
+    print '         please remove it.'
 
 
 def cmd_dist_source(config, args):

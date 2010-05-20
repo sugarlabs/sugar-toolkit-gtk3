@@ -78,14 +78,6 @@ class Bundle(object):
                                                '%s' % (self._path, exception))
             self._check_zip_bundle()
 
-        # manifest = self._get_file(self._infodir + '/contents')
-        # if manifest is None:
-        #     raise MalformedBundleException('No manifest file')
-
-        # signature = self._get_file(self._infodir + '/contents.sig')
-        # if signature is None:
-        #     raise MalformedBundleException('No signature file')
-
     def __del__(self):
         if self._zip_file is not None:
             self._zip_file.close()
@@ -174,7 +166,6 @@ class Bundle(object):
         # correctly by hand, but handling all the oddities of
         # Windows/UNIX mappings, extension attributes, deprecated
         # features, etc makes it impractical.
-        # FIXME: use manifest
         if os.spawnlp(os.P_WAIT, 'unzip', 'unzip', '-o', self._path,
                       '-x', 'mimetype', '-d', install_dir):
             # clean up install dir after failure
