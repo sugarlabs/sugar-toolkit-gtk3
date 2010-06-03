@@ -51,6 +51,7 @@ class ActivityBundle(Bundle):
         self.bundle_exec = None
 
         self._name = None
+        self._local_name = None
         self._icon = None
         self._bundle_id = None
         self._mime_types = None
@@ -68,6 +69,9 @@ class ActivityBundle(Bundle):
         linfo_file = self._get_linfo_file()
         if linfo_file:
             self._parse_linfo(linfo_file)
+
+        if self._local_name == None:
+           self._local_name = self._name
 
     def _get_manifest(self):
         if self._manifest is None:
@@ -217,7 +221,7 @@ class ActivityBundle(Bundle):
         section = 'Activity'
 
         if cp.has_option(section, 'name'):
-            self._name = cp.get(section, 'name')
+            self._local_name = cp.get(section, 'name')
 
         if cp.has_option(section, 'tags'):
             tag_list = cp.get(section, 'tags').strip(';')
@@ -240,7 +244,11 @@ class ActivityBundle(Bundle):
         return self._path
 
     def get_name(self):
-        """Get the activity user visible name."""
+        """Get the activity user-visible name."""
+        return self._local_name
+
+    def get_bundle_name(self):
+        """Get the activity bundle name."""
         return self._name
 
     def get_installation_time(self):
