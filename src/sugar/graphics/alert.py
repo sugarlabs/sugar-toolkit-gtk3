@@ -28,6 +28,7 @@ create a simple alert message.
 STABLE.
 """
 # Copyright (C) 2007, One Laptop Per Child
+# Copyright (C) 2010, Anish Mangal <anishmangal2002@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -290,6 +291,50 @@ class ConfirmationAlert(Alert):
         self.add_button(gtk.RESPONSE_OK, _('Ok'), icon)
         icon.show()
 
+class ErrorAlert(Alert):
+    """
+    This is a ready-made one button (Ok) alert.
+
+    An error alert is a nice shortcut from a standard Alert because it
+    comes with the 'OK' button already built-in. When clicked, the
+    'OK' button will emit a response with a response_id of gtk.RESPONSE_OK.
+
+    Examples
+    --------
+
+    .. code-block:: python
+      from sugar.graphics.alert import ErrorAlert
+      ...
+        #### Method: _alert_error, create a Error alert (with ok
+                     button standard)
+        # and add it to the UI.
+        def _alert_error(self):
+            alert = ErrorAlert()
+            alert.props.title=_('Title of Alert Goes Here')
+            alert.props.msg = _('Text message of alert goes here')
+            alert.connect('response', self._alert_response_cb)
+            self.add_alert(alert)
+
+
+        #### Method: _alert_response_cb, called when an alert object throws a
+                     response event.
+        def _alert_response_cb(self, alert, response_id):
+            #remove the alert from the screen, since either a response button
+            #was clicked or there was a timeout
+            self.remove_alert(alert)
+
+            #Do any work that is specific to the response_id.
+            if response_id is gtk.RESPONSE_OK:
+                print 'Ok Button was clicked. Do any work upon ok here ...'
+
+    """
+
+    def __init__(self, **kwargs):
+        Alert.__init__(self, **kwargs)
+
+        icon = Icon(icon_name='dialog-ok')
+        self.add_button(gtk.RESPONSE_OK, _('Ok'), icon)
+        icon.show()
 
 class _TimeoutIcon(hippo.CanvasText, hippo.CanvasItem):
     """An icon with a round border"""
