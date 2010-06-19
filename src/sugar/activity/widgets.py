@@ -336,7 +336,7 @@ class ActivityToolbox(Toolbox):
         ... your code, inserting all other toolbars you need, like EditToolbar
 
         # Add the toolbox to the activity frame:
-        self.set_toolbox(toolbox)
+        self.set_toolbar_box(toolbox)
         # And make it visible:
         toolbox.show()
     """
