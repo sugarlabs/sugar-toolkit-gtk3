@@ -108,6 +108,7 @@ class CopyButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-copy', **kwargs)
         self.props.tooltip = _('Copy')
+        self.props.accelerator = '<Ctrl>C'
 
 
 class PasteButton(ToolButton):
@@ -115,6 +116,7 @@ class PasteButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-paste', **kwargs)
         self.props.tooltip = _('Paste')
+        self.props.accelerator = '<Ctrl>V'
 
 
 class ShareButton(RadioMenuButton):
