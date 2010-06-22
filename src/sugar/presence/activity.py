@@ -25,7 +25,14 @@ import logging
 import dbus
 import gobject
 import telepathy
+from telepathy.client import Channel
+from telepathy.interfaces import CHANNEL, \
+                                 CHANNEL_TYPE_TUBES, \
+                                 CHANNEL_TYPE_TEXT, \
+                                 CONNECTION
+from telepathy.constants import HANDLE_TYPE_ROOM
 
+CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
 _logger = logging.getLogger('sugar.presence.activity')
 
@@ -64,34 +71,14 @@ class Activity(gobject.GObject):
         'joined': (bool, None, None, False, gobject.PARAM_READABLE),
     }
 
-    _PRESENCE_SERVICE = "org.laptop.Sugar.Presence"
-    _ACTIVITY_DBUS_INTERFACE = "org.laptop.Sugar.Presence.Activity"
-
-    def __init__(self, bus, new_obj_cb, del_obj_cb, object_path):
-        """Initialse the activity interface, connecting to service"""
+    def __init__(self, connection, room_handle):
         gobject.GObject.__init__(self)
-        self.telepathy_room_handle = None
-        self._object_path = object_path
-        self._ps_new_object = new_obj_cb
-        self._ps_del_object = del_obj_cb
-        bobj = bus.get_object(self._PRESENCE_SERVICE, object_path)
-        self._activity = dbus.Interface(bobj, self._ACTIVITY_DBUS_INTERFACE)
-        self._activity.connect_to_signal('BuddyHandleJoined',
-                                         self._buddy_handle_joined_cb)
-        self._activity.connect_to_signal('BuddyLeft',
-                                         self._buddy_left_cb)
-        self._activity.connect_to_signal('NewChannel', self._new_channel_cb)
-        self._activity.connect_to_signal('PropertiesChanged',
-                                         self._properties_changed_cb,
-                                         utf8_strings=True)
-        # FIXME: this *would* just use a normal proxy call, but I want the
-        # pending call object so I can block on it, and normal proxy methods
-        # don't return those as of dbus-python 0.82.1; so do it the hard way
-        self._get_properties_call = bus.call_async(self._PRESENCE_SERVICE,
-                object_path, self._ACTIVITY_DBUS_INTERFACE, 'GetProperties',
-                '', (), self._get_properties_reply_cb,
-                self._get_properties_error_cb, utf8_strings=True)
 
+        self.telepathy_conn = connection
+        self.telepathy_text_chan = None
+        self.telepathy_tubes_chan = None
+
+        self._room_handle = room_handle
         self._id = None
         self._color = None
         self._name = None
@@ -99,31 +86,32 @@ class Activity(gobject.GObject):
         self._tags = None
         self._private = True
         self._joined = False
-        # Cache for get_buddy_by_handle, maps handles to buddy object paths
-        self._handle_to_buddy_path = {}
-        self._buddy_path_to_handle = {}
 
-        # Set up by set_up_tubes()
-        self.telepathy_conn = None
-        self.telepathy_tubes_chan = None
-        self.telepathy_text_chan = None
-        self._telepathy_room = None
+        bus = dbus.SessionBus()
+        self._get_properties_call = bus.call_async(
+                connection.requested_bus_name,
+                connection.object_path,
+                CONN_INTERFACE_ACTIVITY_PROPERTIES,
+                'GetProperties',
+                'u',
+                (self._room_handle,),
+                reply_handler=self._got_properties_cb,
+                error_handler=self._error_handler_cb,
+                utf8_strings=True)
 
-    def __repr__(self):
-        return ('<proxy for %s at %x>' % (self._object_path, id(self)))
-
-    def _get_properties_reply_cb(self, new_props):
+    def _got_properties_cb(self, properties):
+        _logger.debug('_got_properties_cb', properties)
         self._get_properties_call = None
-        _logger.debug('%r: initial GetProperties returned', self)
-        self._properties_changed_cb(new_props)
+        self._update_properties(properties)
 
-    def _get_properties_error_cb(self, e):
-        self._get_properties_call = None
-        # FIXME: do something with the error
-        _logger.warning('%r: Error doing initial GetProperties: %s', self, e)
+    def _error_handler_cb(self, error):
+        _logger.debug('_error_handler_cb', error)
 
     def _properties_changed_cb(self, new_props):
         _logger.debug('%r: Activity properties changed to %r', self, new_props)
+        self._update_properties(new_props)
+
+    def _update_properties(self, new_props):
         val = new_props.get('name', self._name)
         if isinstance(val, str) and val != self._name:
             self._name = val
@@ -244,16 +232,8 @@ class Activity(gobject.GObject):
         returns list of presence Buddy objects that we can successfully
         create from the buddy object paths that PS has for this activity.
         """
-        resp = self._activity.GetJoinedBuddies()
-        buddies = []
-        for item in resp:
-            try:
-                buddies.append(self._ps_new_object(item))
-            except dbus.DBusException:
-                _logger.debug(
-                    'get_joined_buddies failed to get buddy object for %r',
-                    item)
-        return buddies
+        logging.info('KILL_PS return joined buddies')
+        return []
 
     def get_buddy_by_handle(self, handle):
         """Retrieve the Buddy object given a telepathy handle.
@@ -293,62 +273,38 @@ class Activity(gobject.GObject):
             _logger.debug('%r: finished setting up tubes', self)
             reply_handler()
 
-        def tubes_chan_ready(chan):
-            _logger.debug('%r: Tubes channel %r is ready', self, chan)
-            self.telepathy_tubes_chan = chan
+        def tubes_channel_ready_cb(channel):
+            _logger.debug('%r: Tubes channel %r is ready', self, channel)
+            self.telepathy_tubes_chan = channel
             tubes_ready()
 
-        def text_chan_ready(chan):
-            _logger.debug('%r: Text channel %r is ready', self, chan)
-            self.telepathy_text_chan = chan
+        def text_channel_ready_cb(channel):
+            _logger.debug('%r: Text channel %r is ready', self, channel)
+            self.telepathy_text_chan = channel
             tubes_ready()
 
-        def conn_ready(conn):
-            _logger.debug('%r: Connection %r is ready', self, conn)
-            self.telepathy_conn = conn
-            found_text_channel = False
-            found_tubes_channel = False
+        def create_text_channel_cb(channel_path):
+            Channel(self.telepathy_conn.requested_bus_name, channel_path,
+                    ready_handler=text_channel_ready_cb)
 
-            for chan_path, chan_iface, handle_type, handle in chans:
-                if handle_type != telepathy.HANDLE_TYPE_ROOM:
-                    return
+        def create_tubes_channel_cb(channel_path):
+            Channel(self.telepathy_conn.requested_bus_name, channel_path,
+                    ready_handler=tubes_channel_ready_cb)
 
-                if chan_iface == telepathy.CHANNEL_TYPE_TEXT:
-                    telepathy.client.Channel(
-                            conn.service_name, chan_path,
-                            ready_handler=text_chan_ready,
-                            error_handler=error_handler)
-                    found_text_channel = True
-                    self.telepathy_room_handle = handle
+        def error_handler_cb(error):
+            raise RuntimeError(error)
 
-                elif chan_iface == telepathy.CHANNEL_TYPE_TUBES:
-                    telepathy.client.Channel(
-                            conn.service_name, chan_path,
-                            ready_handler=tubes_chan_ready,
-                            error_handler=error_handler)
-                    found_tubes_channel = True
+        self.telepathy_conn.RequestChannel(CHANNEL_TYPE_TEXT,
+            HANDLE_TYPE_ROOM, self._room_handle, True,
+            reply_handler=create_text_channel_cb,
+            error_handler=error_handler_cb,
+            dbus_interface=CONNECTION)
 
-            if not found_text_channel:
-                error_handler(AssertionError("Presence Service didn't create "
-                    "a chatroom"))
-            elif not found_tubes_channel:
-                error_handler(AssertionError("Presence Service didn't create "
-                    "tubes channel"))
-
-        def channels_listed(bus_name, conn_path, channels):
-            _logger.debug('%r: Connection on %s at %s, channels: %r',
-                          self, bus_name, conn_path, channels)
-
-            # can't use assignment for this due to Python scoping
-            chans.extend(channels)
-
-            telepathy.client.Connection(bus_name, conn_path,
-                                        ready_handler=conn_ready,
-                                        error_handler=error_handler)
-
-
-        self._activity.ListChannels(reply_handler=channels_listed,
-                                   error_handler=error_handler)
+        self.telepathy_conn.RequestChannel(CHANNEL_TYPE_TUBES,
+            HANDLE_TYPE_ROOM, self._room_handle, True,
+            reply_handler=create_tubes_channel_cb,
+            error_handler=error_handler_cb,
+            dbus_interface=CONNECTION)
 
     def _join_cb(self):
         _logger.debug('%r: Join finished', self)
@@ -370,11 +326,7 @@ class Activity(gobject.GObject):
 
         _logger.debug('%r: joining', self)
 
-        def joined():
-            self.set_up_tubes(reply_handler=self._join_cb,
-                              error_handler=self._join_error_cb)
-
-        self._activity.Join(reply_handler=joined,
+        self.set_up_tubes(reply_handler=self._join_cb,
                             error_handler=self._join_error_cb)
 
     # GetChannels() wrapper

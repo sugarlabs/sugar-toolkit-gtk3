@@ -75,11 +75,14 @@ def create_activity_id():
 
         # check through network activities
         found = False
+        logging.info('KILL_PS check the activity_id is not used in the network')
+        """
         activities = pservice.get_activities()
         for act in activities:
             if act_id == act.props.id:
                 found = True
                 break
+        """
         if not found:
             return act_id
     raise RuntimeError("Cannot generate unique activity id.")

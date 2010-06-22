@@ -20,12 +20,21 @@
 STABLE.
 """
 
+import logging
+
 import gobject
 import gtk
 import dbus
+import gconf
+from telepathy.interfaces import CONNECTION_INTERFACE_ALIASING, \
+                                 CONNECTION_INTERFACE_CONTACTS
+
+CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
+
+_logger = logging.getLogger('sugar.presence.buddy')
 
 
-class Buddy(gobject.GObject):
+class BaseBuddy(gobject.GObject):
     """UI interface for a Buddy in the presence service
 
     Each buddy interface tracks a set of activities and properties
@@ -42,6 +51,8 @@ class Buddy(gobject.GObject):
     See __gproperties__
     """
 
+    __gtype_name__ = 'PresenceBaseBuddy'
+
     __gsignals__ = {
         'icon-changed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
         'joined-activity': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -52,53 +63,17 @@ class Buddy(gobject.GObject):
             ([gobject.TYPE_PYOBJECT])),
     }
 
-    __gproperties__ = {
-        'key': (str, None, None, None, gobject.PARAM_READABLE),
-        'icon': (str, None, None, None, gobject.PARAM_READABLE),
-        'nick': (str, None, None, None, gobject.PARAM_READABLE),
-        'color': (str, None, None, None, gobject.PARAM_READABLE),
-        'current-activity': (object, None, None, gobject.PARAM_READABLE),
-        'owner': (bool, None, None, False, gobject.PARAM_READABLE),
-        'ip4-address': (str, None, None, None, gobject.PARAM_READABLE),
-        'tags': (str, None, None, None, gobject.PARAM_READABLE),
-    }
-
-    _PRESENCE_SERVICE = "org.laptop.Sugar.Presence"
-    _BUDDY_DBUS_INTERFACE = "org.laptop.Sugar.Presence.Buddy"
-
-    def __init__(self, bus, new_obj_cb, del_obj_cb, object_path):
-        """Initialise the reference to the buddy
-
-        bus -- dbus bus object
-        new_obj_cb -- callback to call when this buddy joins an activity
-        del_obj_cb -- callback to call when this buddy leaves an activity
-        object_path -- path to the buddy object
-        """
+    def __init__(self):
         gobject.GObject.__init__(self)
-        self._object_path = object_path
-        self._ps_new_object = new_obj_cb
-        self._ps_del_object = del_obj_cb
-        self._properties = {}
-        self._activities = {}
 
-        bobj = bus.get_object(self._PRESENCE_SERVICE, object_path)
-        self._buddy = dbus.Interface(bobj, self._BUDDY_DBUS_INTERFACE)
-
-        self._icon_changed_signal = self._buddy.connect_to_signal(
-                'IconChanged', self._icon_changed_cb, byte_arrays=True)
-        self._joined_activity_signal = self._buddy.connect_to_signal(
-                'JoinedActivity', self._joined_activity_cb)
-        self._left_activity_signal = self._buddy.connect_to_signal(
-                'LeftActivity', self._left_activity_cb)
-        self._property_changed_signal = self._buddy.connect_to_signal(
-                'PropertyChanged', self._property_changed_cb)
-
-        self._properties = self._get_properties_helper()
-
-        activities = self._buddy.GetJoinedActivities()
-        for op in activities:
-            self._activities[op] = self._ps_new_object(op)
+        self._key = None
         self._icon = None
+        self._nick = None
+        self._color = None
+        self._current_activity = None
+        self._owner = False
+        self._ip4_address = None
+        self._tags = None
 
     def destroy(self):
         self._icon_changed_signal.remove()
@@ -114,41 +89,68 @@ class Buddy(gobject.GObject):
             return {}
         return props
 
-    def do_get_property(self, pspec):
-        """Retrieve a particular property from our property dictionary
+    def get_key(self):
+        return self._key
 
-        pspec -- XXX some sort of GTK specifier object with attributes
-            including 'name', 'active' and 'icon-name'
-        """
-        if pspec.name == "key":
-            return self._properties["key"]
-        elif pspec.name == "nick":
-            return self._properties["nick"]
-        elif pspec.name == "color":
-            return self._properties["color"]
-        elif pspec.name == "tags":
-            return self._properties["tags"]
-        elif pspec.name == "current-activity":
-            if not self._properties.has_key("current-activity"):
-                return None
-            curact = self._properties["current-activity"]
-            if not len(curact):
-                return None
-            for activity in self._activities.values():
-                if activity.props.id == curact:
-                    return activity
+    def set_key(self, key):
+        self._key = key
+
+    key = gobject.property(type=str, getter=get_key, setter=set_key)
+
+    def get_icon(self):
+        raise NotImplementedError()
+
+    icon = gobject.property(type=str, getter=get_icon)
+
+    def get_nick(self):
+        return self._nick
+
+    def set_nick(self, nick):
+        self._nick = nick
+
+    nick = gobject.property(type=str, getter=get_nick, setter=set_nick)
+
+    def get_color(self):
+        return self._color
+
+    def set_color(self, color):
+        self._color = color
+
+    color = gobject.property(type=str, getter=get_color, setter=set_color)
+
+    def get_current_activity(self):
+        if self._current_activity is None:
             return None
-        elif pspec.name == "owner":
-            return self._properties["owner"]
-        elif pspec.name == "icon":
-            if not self._icon:
-                self._icon = str(self._buddy.GetIcon(byte_arrays=True))
-            return self._icon
-        elif pspec.name == "ip4-address":
-            # IPv4 address will go away quite soon
-            if not self._properties.has_key("ip4-address"):
-                return None
-            return self._properties["ip4-address"]
+        for activity in self._activities.values():
+            if activity.props.id == self._current_activity:
+                return activity
+        return None
+
+    current_activity = gobject.property(type=object, getter=get_current_activity)
+
+    def get_owner(self):
+        return self._owner
+
+    def set_owner(self, owner):
+        self._owner = owner
+
+    owner = gobject.property(type=bool, getter=get_owner, setter=set_owner, default=False)
+
+    def get_ip4_address(self):
+        return self._ip4_address
+
+    def set_ip4_address(self, ip4_address):
+        self._ip4_address = ip4_address
+
+    ip4_address = gobject.property(type=str, getter=get_ip4_address, setter=set_ip4_address)
+
+    def get_tags(self):
+        return self._tags
+
+    def set_tags(self, tags):
+        self._tags = tags
+
+    tags = gobject.property(type=str, getter=get_tags, setter=set_tags)
 
     def object_path(self):
         """Retrieve our dbus object path"""
@@ -160,16 +162,16 @@ class Buddy(gobject.GObject):
         self.emit('icon-changed')
         return False
 
-    def _icon_changed_cb(self, icon_data):
+    def __icon_changed_cb(self, icon_data):
         """Handle dbus signal by emitting a GObject signal"""
         gobject.idle_add(self._emit_icon_changed_signal, icon_data)
 
-    def _emit_joined_activity_signal(self, object_path):
+    def __emit_joined_activity_signal(self, object_path):
         """Emit activity joined signal with Activity object"""
         self.emit('joined-activity', self._ps_new_object(object_path))
         return False
 
-    def _joined_activity_cb(self, object_path):
+    def __joined_activity_cb(self, object_path):
         """Handle dbus signal by emitting a GObject signal
 
         Stores the activity in activities dictionary as well
@@ -187,7 +189,7 @@ class Buddy(gobject.GObject):
         self.emit('left-activity', self._ps_new_object(object_path))
         return False
 
-    def _left_activity_cb(self, object_path):
+    def __left_activity_cb(self, object_path):
         """Handle dbus signal by emitting a GObject signal
 
         Also removes from the activities dictionary
@@ -207,7 +209,7 @@ class Buddy(gobject.GObject):
         self.emit('property-changed', prop_list)
         return False
 
-    def _property_changed_cb(self, prop_list):
+    def __property_changed_cb(self, prop_list):
         """Handle dbus signal by emitting a GObject signal"""
         gobject.idle_add(self._handle_property_changed_signal, prop_list)
 
@@ -241,3 +243,92 @@ class Buddy(gobject.GObject):
         for item in resp:
             acts.append(self._ps_new_object(item))
         return acts
+
+
+class Buddy(BaseBuddy):
+    __gtype_name__ = 'PresenceBuddy'
+    def __init__(self, connection, contact_handle):
+        BaseBuddy.__init__(self)
+
+        self._contact_handle = contact_handle
+
+        bus = dbus.SessionBus()
+        self._get_properties_call = bus.call_async(
+                connection.requested_bus_name,
+                connection.object_path,
+                CONN_INTERFACE_BUDDY_INFO,
+                'GetProperties',
+                'u',
+                (self._contact_handle,),
+                reply_handler=self.__got_properties_cb,
+                error_handler=self.__error_handler_cb,
+                utf8_strings=True,
+                byte_arrays=True)
+
+        self._get_attributes_call = bus.call_async(
+                connection.requested_bus_name,
+                connection.object_path,
+                CONNECTION_INTERFACE_CONTACTS,
+                'GetContactAttributes',
+                'auasb',
+                ([self._contact_handle], [CONNECTION_INTERFACE_ALIASING], False),
+                reply_handler=self.__got_attributes_cb,
+                error_handler=self.__error_handler_cb)
+
+    def __got_properties_cb(self, properties):
+        _logger.debug('__got_properties_cb', properties)
+        self._get_properties_call = None
+        self._update_properties(properties)
+
+    def __got_attributes_cb(self, attributes):
+        _logger.debug('__got_attributes_cb', attributes)
+        self._get_attributes_call = None
+        self._update_attributes(attributes[self._contact_handle])
+
+    def __error_handler_cb(self, error):
+        _logger.debug('__error_handler_cb', error)
+
+    def __properties_changed_cb(self, new_props):
+        _logger.debug('%r: Buddy properties changed to %r', self, new_props)
+        self._update_properties(new_props)
+
+    def _update_properties(self, properties):
+        if 'key' in properties:
+            self.props.key = properties['key']
+        if 'icon' in properties:
+            self.props.icon = properties['icon']
+        if 'color' in properties:
+            self.props.color = properties['color']
+        if 'current-activity' in properties:
+            self.props.current_activity = properties['current-activity']
+        if 'owner' in properties:
+            self.props.owner = properties['owner']
+        if 'ip4-address' in properties:
+            self.props.ip4_address = properties['ip4-address']
+        if 'tags' in properties:
+            self.props.tags = properties['tags']
+
+    def _update_attributes(self, attributes):
+        nick_key = CONNECTION_INTERFACE_ALIASING + '/alias'
+        if nick_key in attributes:
+            self.props.nick = attributes[nick_key]
+
+    def do_get_property(self, pspec):
+        if self._get_properties_call is not None:
+            _logger.debug('%r: Blocking on GetProperties() because someone '
+                          'wants property %s', self, pspec.name)
+            self._get_properties_call.block()
+
+        return BaseBuddy.do_get_property(self, pspec)
+
+
+class Owner(BaseBuddy):
+
+    __gtype_name__ = 'PresenceOwner'
+
+    def __init__(self):
+        BaseBuddy.__init__(self)
+
+        client = gconf.client_get_default()
+        self.props.nick = client.get_string("/desktop/sugar/user/nick")
+        self.props.color = client.get_string("/desktop/sugar/user/color")

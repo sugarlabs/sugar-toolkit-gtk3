@@ -70,6 +70,7 @@ from sugar.graphics.alert import Alert
 from sugar.graphics.icon import Icon
 from sugar.datastore import datastore
 from sugar.session import XSMPClient
+from sugar.presence import presenceservice
 from sugar import wm
 
 # support deprecated imports
@@ -266,7 +267,6 @@ class Activity(Window, gtk.Container):
 
         self._active = False
         self._activity_id = handle.activity_id
-        self._pservice = presenceservice.get_instance()
         self.shared_activity = None
         self._share_id = None
         self._join_id = None
@@ -302,8 +302,9 @@ class Activity(Window, gtk.Container):
                 share_scope = self._jobject.metadata['share-scope']
 
         # handle activity share/join
-        mesh_instance = self._pservice.get_activity(self._activity_id,
-                                                    warn_if_none=False)
+        pservice = presenceservice.get_instance()
+        mesh_instance = pservice.get_activity(self._activity_id,
+                                              warn_if_none=False)
         logging.debug("*** Act %s, mesh instance %r, scope %s",
                       self._activity_id, mesh_instance, share_scope)
         if mesh_instance is not None:

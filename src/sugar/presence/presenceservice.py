@@ -23,18 +23,15 @@ STABLE.
 import logging
 import traceback
 
+import gobject
 import dbus
 import dbus.exceptions
 import dbus.glib
-import gobject
 
-from sugar.presence.buddy import Buddy
+from sugar.presence.buddy import Buddy, Owner
 from sugar.presence.activity import Activity
+from sugar.presence.util import get_connection_manager
 
-
-DBUS_SERVICE = "org.laptop.Sugar.Presence"
-DBUS_INTERFACE = "org.laptop.Sugar.Presence"
-DBUS_PATH = "/org/laptop/Sugar/Presence"
 
 _logger = logging.getLogger('sugar.presence.presenceservice')
 
@@ -66,92 +63,12 @@ class PresenceService(gobject.GObject):
                           gobject.TYPE_PYOBJECT])),
     }
 
-    _PS_BUDDY_OP = DBUS_PATH + "/Buddies/"
-    _PS_ACTIVITY_OP = DBUS_PATH + "/Activities/"
-
-    def __init__(self, allow_offline_iface=True):
+    def __init__(self):
         """Initialise the service and attempt to connect to events
         """
         gobject.GObject.__init__(self)
-        self._objcache = {}
-        self._joined = None
 
-        # Get a connection to the session bus
-        self._bus = dbus.SessionBus()
-        self._bus.add_signal_receiver(self._name_owner_changed_cb,
-                                    signal_name="NameOwnerChanged",
-                                    dbus_interface="org.freedesktop.DBus")
-
-        # attempt to load the interface to the service...
-        self._allow_offline_iface = allow_offline_iface
-        self._get_ps()
-
-    def _name_owner_changed_cb(self, name, old, new):
-        if name != DBUS_SERVICE:
-            return
-        if (old and len(old)) and (not new and not len(new)):
-            # PS went away, clear out PS dbus service wrapper
-            self._ps_ = None
-        elif (not old and not len(old)) and (new and len(new)):
-            # PS started up
-            self._get_ps()
-
-    _ps_ = None
-
-    def _get_ps(self):
-        """Retrieve dbus interface to PresenceService
-
-        Also registers for updates from various dbus events on the
-        interface.
-
-        If unable to retrieve the interface, we will temporarily
-        return an _OfflineInterface object to allow the calling
-        code to continue functioning as though it had accessed a
-        real presence service.
-
-        If successful, caches the presence service interface
-        for use by other methods and returns that interface
-        """
-        if not self._ps_:
-            try:
-                # NOTE: We need to follow_name_owner_changes here
-                #       because we can not connect to a signal unless
-                #       we follow the changes or we start the service
-                #       before we connect.  Starting the service here
-                #       causes a major bottleneck during startup
-                ps = dbus.Interface(
-                    self._bus.get_object(DBUS_SERVICE,
-                                         DBUS_PATH,
-                                         follow_name_owner_changes=True),
-                    DBUS_INTERFACE)
-            except dbus.exceptions.DBusException, err:
-                _logger.error(
-                    """Failure retrieving %r interface from
-                       the D-BUS service %r %r: %s""",
-                    DBUS_INTERFACE, DBUS_SERVICE, DBUS_PATH, err)
-                if self._allow_offline_iface:
-                    return _OfflineInterface()
-                raise RuntimeError('Failed to connect to the presence '
-                    'service.')
-            else:
-                self._ps_ = ps
-                ps.connect_to_signal('BuddyAppeared',
-                                     self._buddy_appeared_cb)
-                ps.connect_to_signal('BuddyDisappeared',
-                                     self._buddy_disappeared_cb)
-                ps.connect_to_signal('ActivityAppeared',
-                                     self._activity_appeared_cb)
-                ps.connect_to_signal('ActivityDisappeared',
-                                     self._activity_disappeared_cb)
-                ps.connect_to_signal('ActivityInvitation',
-                                     self._activity_invitation_cb)
-                ps.connect_to_signal('PrivateInvitation',
-                                     self._private_invitation_cb)
-        return self._ps_
-
-    _ps = property(_get_ps, None, None,
-        """DBUS interface to the PresenceService
-           (services/presence/presenceservice)""")
+        self._buddy_cache = {}
 
     def _new_object(self, object_path):
         """Turn new object path into (cached) Buddy/Activity instance
@@ -289,17 +206,11 @@ class PresenceService(gobject.GObject):
         returns list of Activity objects for all object paths
             the service reports exist (using GetActivities)
         """
-        try:
-            resp = self._ps.GetActivities()
-        except dbus.exceptions.DBusException:
-            _logger.exception('Unable to retrieve activity list from '
-                'presence service')
-            return []
-        else:
-            acts = []
-            for item in resp:
-                acts.append(self._new_object(item))
-            return acts
+        resp = self._ps.GetActivities()
+        acts = []
+        for item in resp:
+            acts.append(self._new_object(item))
+        return acts
 
     def _get_activities_cb(self, reply_handler, resp):
         acts = []
@@ -338,14 +249,14 @@ class PresenceService(gobject.GObject):
         returns single Activity object or None if the activity
             is not found using GetActivityById on the service
         """
-        try:
-            act_op = self._ps.GetActivityById(activity_id)
-        except dbus.exceptions.DBusException, err:
-            if warn_if_none:
-                _logger.warn("Unable to retrieve activity handle for %r from "
-                             "presence service: %s", activity_id, err)
-            return None
-        return self._new_object(act_op)
+        for connection in get_connection_manager().connections:
+            try:
+                room_handle = connection.GetActivity(activity_id)
+                return Activity(connection, room_handle)
+            except:
+                pass
+
+        return None
 
     def get_buddies(self):
         """Retrieve set of all buddies from service
@@ -426,26 +337,19 @@ class PresenceService(gobject.GObject):
                 channel-specific handle.
         :Returns: the Buddy object, or None if the buddy is not found
         """
-        try:
-            buddy_op = self._ps.GetBuddyByTelepathyHandle(tp_conn_name,
-                                                          tp_conn_path,
-                                                          handle)
-        except dbus.exceptions.DBusException, err:
-            _logger.warn('Unable to retrieve buddy handle for handle %u at '
-                         'conn %s:%s from presence service: %s',
-                         handle, tp_conn_name, tp_conn_path, err)
-            return None
-        return self._new_object(buddy_op)
+        logging.info('KILL_PS decide how to invalidate this cache')
+        if (tp_conn_path, handle) in self._buddy_cache:
+            return self._buddy_cache[(tp_conn_path, handle)]
+        else:
+            bus = dbus.SessionBus()
+            connection = bus.get_object(tp_conn_name, tp_conn_path)
+            buddy = Buddy(connection, handle)
+            self._buddy_cache[(tp_conn_path, handle)] = buddy
+            return buddy
 
     def get_owner(self):
-        """Retrieves the laptop "owner" Buddy object."""
-        try:
-            owner_op = self._ps.GetOwner()
-        except dbus.exceptions.DBusException:
-            _logger.exception('Unable to retrieve local user/owner from '
-                'presence service')
-            raise RuntimeError("Could not get owner object.")
-        return self._new_object(owner_op)
+        """Retrieves the laptop Buddy object."""
+        return Owner()
 
     def _share_activity_cb(self, activity, op):
         """Finish sharing the activity
@@ -505,14 +409,11 @@ class PresenceService(gobject.GObject):
         should use when talking directly to telepathy
 
         returns the bus name and the object path of the Telepathy connection"""
-
-        try:
-            bus_name, object_path = self._ps.GetPreferredConnection()
-        except dbus.exceptions.DBusException:
-            logging.error(traceback.format_exc())
+        connection = get_connection_manager().get_preferred_connection()
+        if connection is None:
             return None
-
-        return bus_name, object_path
+        else:
+            return connection.requested_bus_name, connection.object_path
 
 
 class _OfflineInterface(object):
@@ -596,5 +497,5 @@ def get_instance(allow_offline_iface=False):
     """Retrieve this process' view of the PresenceService"""
     global _ps
     if not _ps:
-        _ps = PresenceService(allow_offline_iface)
+        _ps = PresenceService()
     return _ps
