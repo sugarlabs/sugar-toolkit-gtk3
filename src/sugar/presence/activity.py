@@ -21,6 +21,7 @@ STABLE.
 """
 
 import logging
+from functools import partial
 
 import dbus
 import gobject
@@ -33,6 +34,7 @@ from telepathy.interfaces import CHANNEL, \
 from telepathy.constants import HANDLE_TYPE_ROOM
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
+CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 
 _logger = logging.getLogger('sugar.presence.activity')
 
@@ -71,7 +73,13 @@ class Activity(gobject.GObject):
         'joined': (bool, None, None, False, gobject.PARAM_READABLE),
     }
 
-    def __init__(self, connection, room_handle):
+    def __init__(self, connection, room_handle=None, properties=None):
+        if room_handle is None and properties is None:
+            raise ValueError('Need to pass one of room_handle or properties')
+
+        if properties is None:
+            properties = {}
+
         gobject.GObject.__init__(self)
 
         self.telepathy_conn = connection
@@ -79,18 +87,23 @@ class Activity(gobject.GObject):
         self.telepathy_tubes_chan = None
 
         self._room_handle = room_handle
-        self._id = None
-        self._color = None
-        self._name = None
-        self._type = None
-        self._tags = None
-        self._private = True
-        self._joined = False
+        self._id = properties.get('id', None)
+        self._color = properties.get('color', None)
+        self._name = properties.get('name', None)
+        self._type = properties.get('type', None)
+        self._tags = properties.get('tags', None)
+        self._private = properties.get('private', True)
+        self._joined = properties.get('joined', False)
 
+        self._get_properties_call = None
+        if not self._room_handle is None:
+            self._start_tracking_properties()
+
+    def _start_tracking_properties(self):
         bus = dbus.SessionBus()
         self._get_properties_call = bus.call_async(
-                connection.requested_bus_name,
-                connection.object_path,
+                self.telepathy_conn.requested_bus_name,
+                self.telepathy_conn.object_path,
                 CONN_INTERFACE_ACTIVITY_PROPERTIES,
                 'GetProperties',
                 'u',
@@ -99,17 +112,24 @@ class Activity(gobject.GObject):
                 error_handler=self._error_handler_cb,
                 utf8_strings=True)
 
+        # As only one Activity instance is needed per activity process,
+        # we can afford listening to ActivityPropertiesChanged like this.
+        self.telepathy_conn.connect_to_signal(
+                'ActivityPropertiesChanged',
+                self.__activity_properties_changed_cb,
+                dbus_interface=CONN_INTERFACE_ACTIVITY_PROPERTIES)
+
+    def __activity_properties_changed_cb(self, room_handle, properties):
+        _logger.debug('%r: Activity properties changed to %r', self, properties)
+        self._update_properties(properties)
+
     def _got_properties_cb(self, properties):
-        _logger.debug('_got_properties_cb', properties)
+        _logger.debug('_got_properties_cb %r', properties)
         self._get_properties_call = None
         self._update_properties(properties)
 
     def _error_handler_cb(self, error):
-        _logger.debug('_error_handler_cb', error)
-
-    def _properties_changed_cb(self, new_props):
-        _logger.debug('%r: Activity properties changed to %r', self, new_props)
-        self._update_properties(new_props)
+        _logger.debug('_error_handler_cb %r', error)
 
     def _update_properties(self, new_props):
         val = new_props.get('name', self._name)
@@ -169,20 +189,22 @@ class Activity(gobject.GObject):
         """Set a particular property in our property dictionary"""
         # FIXME: need an asynchronous API to set these properties,
         # particularly 'private'
+
         if pspec.name == "name":
-            self._activity.SetProperties({'name': val})
             self._name = val
         elif pspec.name == "color":
-            self._activity.SetProperties({'color': val})
             self._color = val
         elif pspec.name == "tags":
-            self._activity.SetProperties({'tags': val})
             self._tags = val
         elif pspec.name == "private":
-            self._activity.SetProperties({'private': val})
             self._private = val
+        else:
+            raise ValueError('Unknown property "%s"', pspec.name)
+
+        self._publish_properties()
 
     def set_private(self, val, reply_handler, error_handler):
+        _logger.debug('set_private %r', val)
         self._activity.SetProperties({'private': bool(val)},
                                      reply_handler=reply_handler,
                                      error_handler=error_handler)
@@ -263,6 +285,9 @@ class Activity(gobject.GObject):
 
     def set_up_tubes(self, reply_handler, error_handler):
 
+        if self._room_handle is None:
+            raise ValueError("Don't have a handle for the room yet")
+
         chans = []
 
         def tubes_ready():
@@ -327,7 +352,71 @@ class Activity(gobject.GObject):
         _logger.debug('%r: joining', self)
 
         self.set_up_tubes(reply_handler=self._join_cb,
-                            error_handler=self._join_error_cb)
+                          error_handler=self._join_error_cb)
+
+    def share(self, share_activity_cb, share_activity_error_cb):
+        if not self._room_handle is None:
+            raise ValueError('Already have a room handle')
+
+        """ TODO: Check we don't need this
+        # We shouldn't have to do this, but Gabble sometimes finds the IRC
+        # transport and goes "that has chatrooms, that'll do nicely". Work
+        # around it til Gabble gets better at finding the MUC service.
+        return '%s@%s' % (activity_id,
+                          self._account['fallback-conference-server'])
+        """
+
+        self.telepathy_conn.RequestHandles(
+            HANDLE_TYPE_ROOM,
+            [self._id],
+            reply_handler=partial(self.__got_handles_cb, share_activity_cb, share_activity_error_cb),
+            error_handler=partial(self.__share_error_cb, share_activity_error_cb),
+            dbus_interface=CONNECTION)
+
+    def __got_handles_cb(self, share_activity_cb, share_activity_error_cb, handles):
+        logging.debug('__got_handles_cb %r', handles)
+        self._room_handle = handles[0]
+        self._joined = True
+
+        self.set_up_tubes(
+                partial(self.__tubes_set_up_cb, share_activity_cb, share_activity_error_cb),
+                share_activity_error_cb)
+
+    def __tubes_set_up_cb(self, share_activity_cb, share_activity_error_cb):
+        self.telepathy_conn.AddActivity(
+            self._id,
+            self._room_handle,
+            reply_handler=partial(self.__added_activity_cb, share_activity_cb),
+            error_handler=partial(self.__share_error_cb, share_activity_error_cb),
+            dbus_interface=CONN_INTERFACE_BUDDY_INFO)
+
+    def __added_activity_cb(self, share_activity_cb):
+        self._publish_properties()
+        self._start_tracking_properties()
+        share_activity_cb(self)
+
+    def _publish_properties(self):
+        properties = {}
+
+        if self._color is not None:
+            properties['color'] = self._color
+        if self._name is not None:
+            properties['name'] = self._name
+        if self._type is not None:
+            properties['type'] = self._type
+        if self._tags is not None:
+            properties['tags'] = self._tags
+        properties['private'] = self._private
+
+        logging.debug('_publish_properties calling SetProperties')
+        self.telepathy_conn.SetProperties(
+                self._room_handle,
+                properties,
+                dbus_interface=CONN_INTERFACE_ACTIVITY_PROPERTIES)
+
+    def __share_error_cb(self, share_activity_error_cb, error):
+        logging.debug('%r: Share failed because: %s', self, error)
+        share_activity_error_cb(self, error)
 
     # GetChannels() wrapper
 

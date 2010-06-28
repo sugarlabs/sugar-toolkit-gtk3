@@ -268,7 +268,6 @@ class Activity(Window, gtk.Container):
         self._active = False
         self._activity_id = handle.activity_id
         self.shared_activity = None
-        self._share_id = None
         self._join_id = None
         self._updating_jobject = False
         self._closing = False
@@ -639,6 +638,7 @@ class Activity(Window, gtk.Container):
         self._jobject.object_id = None
 
     def __privacy_changed_cb(self, shared_activity, param_spec):
+        logging.debug('__privacy_changed_cb %r', shared_activity.props.private)
         if shared_activity.props.private:
             self._jobject.metadata['share-scope'] = SCOPE_INVITE_ONLY
         else:
@@ -670,8 +670,6 @@ class Activity(Window, gtk.Container):
         return self.shared_activity.props.joined
 
     def __share_cb(self, ps, success, activity, err):
-        self._pservice.disconnect(self._share_id)
-        self._share_id = None
         if not success:
             logging.debug('Share of activity %s failed: %s.',
                 self._activity_id, err)
@@ -734,9 +732,9 @@ class Activity(Window, gtk.Container):
         verb = private and 'private' or 'public'
         logging.debug('Requesting %s share of activity %s.', verb,
             self._activity_id)
-        self._share_id = self._pservice.connect("activity-shared",
-                                                self.__share_cb)
-        self._pservice.share_activity(self, private=private)
+        pservice = presenceservice.get_instance()
+        pservice.connect('activity-shared', self.__share_cb)
+        pservice.share_activity(self, private=private)
 
     def _show_keep_failed_dialog(self):
         alert = Alert()

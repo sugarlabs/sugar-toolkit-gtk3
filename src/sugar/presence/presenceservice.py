@@ -68,6 +68,7 @@ class PresenceService(gobject.GObject):
         """
         gobject.GObject.__init__(self)
 
+        self._activity_cache = None
         self._buddy_cache = {}
 
     def _new_object(self, object_path):
@@ -249,12 +250,20 @@ class PresenceService(gobject.GObject):
         returns single Activity object or None if the activity
             is not found using GetActivityById on the service
         """
-        for connection in get_connection_manager().connections:
-            try:
-                room_handle = connection.GetActivity(activity_id)
-                return Activity(connection, room_handle)
-            except:
-                pass
+        if self._activity_cache is not None:
+            if self._activity_cache.props.id != activity_id:
+                raise RuntimeError('Activities can only access their own shared'
+                                   'instance')
+            return self._activity_cache
+        else:
+            for connection in get_connection_manager().connections:
+                try:
+                    room_handle = connection.GetActivity(activity_id)
+                    activity = Activity(connection, room_handle)
+                    self._activity_cache = activity
+                    return activity
+                except:
+                    pass
 
         return None
 
@@ -351,64 +360,56 @@ class PresenceService(gobject.GObject):
         """Retrieves the laptop Buddy object."""
         return Owner()
 
-    def _share_activity_cb(self, activity, op):
+    def __share_activity_cb(self, activity):
         """Finish sharing the activity
         """
-        # FIXME find a better way to shutup pylint
-        psact = self._new_object(op)
-        psact._joined = True
-        _logger.debug('%r: Just shared, setting up tubes', activity)
-        psact.set_up_tubes(reply_handler=lambda:
-                            self.emit("activity-shared", True, psact, None),
-                           error_handler=lambda e:
-                            self._share_activity_error_cb(activity, e))
+        self.emit("activity-shared", True, activity, None)
 
-    def _share_activity_error_cb(self, activity, err):
-        """Notify with GObject event of unsuccessful sharing of activity"""
-        _logger.debug('Error sharing activity %s: %s', activity.get_id(),
-            err)
-        self.emit("activity-shared", False, None, err)
+    def __share_activity_error_cb(self, activity, error):
+        """Notify with GObject event of unsuccessful sharing of activity
+        """
+        self.emit("activity-shared", False, activity, error)
 
     def share_activity(self, activity, properties=None, private=True):
-        """Ask presence service to ask the activity to share itself publicly.
-
-        Uses the AdvertiseActivity method on the service to ask for the
-        sharing of the given activity.  Arranges to emit activity-shared
-        event with:
-
-            (success, Activity, err)
-
-        on success/failure.
-
-        returns None
-        """
-        actid = activity.get_id()
-
         if properties is None:
             properties = {}
 
-        # Ensure the activity is not already shared/joined
-        for obj in self._objcache.values():
-            if not isinstance(object, Activity):
-                continue
-            if obj.props.id == actid or obj.props.joined:
-                raise RuntimeError("Activity %s is already shared." %
-                                   actid)
+        if 'id' not in properties:
+            properties['id'] = activity.get_id()
 
-        atype = activity.get_bundle_id()
-        name = activity.props.title
-        properties['private'] = bool(private)
-        self._ps.ShareActivity(actid, atype, name, properties,
-                reply_handler=lambda op: \
-                    self._share_activity_cb(activity, op),
-                error_handler=lambda e: \
-                    self._share_activity_error_cb(activity, e))
+        if 'type' not in properties:
+            properties['type'] = activity.get_bundle_id()
+
+        if 'name' not in properties:
+            properties['name'] = activity.metadata.get('title', None)
+
+        if 'color' not in properties:
+            properties['color'] = activity.metadata.get('icon-color', None)
+
+        properties['private'] = private
+
+        if self._activity_cache is not None:
+            raise ValueError('Activity %s is already tracked', activity.get_id())
+
+        connection = get_connection_manager().get_preferred_connection()
+        shared_activity = Activity(connection, properties=properties)
+        self._activity_cache = shared_activity
+
+        """
+        if shared_activity.props.joined:
+            raise RuntimeError('Activity %s is already shared.' %
+                               activity.get_id())
+        """
+
+        shared_activity.share(self.__share_activity_cb,
+                              self.__share_activity_error_cb)
 
     def get_preferred_connection(self):
         """Gets the preferred telepathy connection object that an activity
         should use when talking directly to telepathy
 
-        returns the bus name and the object path of the Telepathy connection"""
+        returns the bus name and the object path of the Telepathy connection
+        """
         connection = get_connection_manager().get_preferred_connection()
         if connection is None:
             return None
