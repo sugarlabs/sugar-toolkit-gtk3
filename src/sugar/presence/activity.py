@@ -28,10 +28,14 @@ import gobject
 import telepathy
 from telepathy.client import Channel
 from telepathy.interfaces import CHANNEL, \
+                                 CHANNEL_INTERFACE_GROUP, \
                                  CHANNEL_TYPE_TUBES, \
                                  CHANNEL_TYPE_TEXT, \
-                                 CONNECTION
-from telepathy.constants import HANDLE_TYPE_ROOM
+                                 CONNECTION, \
+                                 PROPERTIES_INTERFACE
+from telepathy.constants import CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES, \
+                                HANDLE_TYPE_ROOM, \
+                                PROPERTY_FLAG_WRITE
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
@@ -87,6 +91,7 @@ class Activity(gobject.GObject):
         self.telepathy_tubes_chan = None
 
         self._room_handle = room_handle
+        self._join_command = None
         self._id = properties.get('id', None)
         self._color = properties.get('color', None)
         self._name = properties.get('name', None)
@@ -94,6 +99,13 @@ class Activity(gobject.GObject):
         self._tags = properties.get('tags', None)
         self._private = properties.get('private', True)
         self._joined = properties.get('joined', False)
+        self._self_handle = None
+        self._text_channel_group_flags = 0
+
+        # The buddies really in the channel, which we can see directly because
+        # we've joined. If _joined is False, this will be incomplete.
+        # { member handle, possibly channel-specific => Buddy }
+        self._handle_to_buddy = {}
 
         self._get_properties_call = None
         if not self._room_handle is None:
@@ -281,119 +293,60 @@ class Activity(gobject.GObject):
                               reply_handler=lambda: response_cb(None),
                               error_handler=response_cb)
 
-    # Joining and sharing (FIXME: sharing is actually done elsewhere)
-
     def set_up_tubes(self, reply_handler, error_handler):
+        pass
 
-        if self._room_handle is None:
-            raise ValueError("Don't have a handle for the room yet")
-
-        chans = []
-
-        def tubes_ready():
-            if self.telepathy_text_chan is None or \
-               self.telepathy_tubes_chan is None:
-                return
-
-            _logger.debug('%r: finished setting up tubes', self)
-            reply_handler()
-
-        def tubes_channel_ready_cb(channel):
-            _logger.debug('%r: Tubes channel %r is ready', self, channel)
-            self.telepathy_tubes_chan = channel
-            tubes_ready()
-
-        def text_channel_ready_cb(channel):
-            _logger.debug('%r: Text channel %r is ready', self, channel)
-            self.telepathy_text_chan = channel
-            tubes_ready()
-
-        def create_text_channel_cb(channel_path):
-            Channel(self.telepathy_conn.requested_bus_name, channel_path,
-                    ready_handler=text_channel_ready_cb)
-
-        def create_tubes_channel_cb(channel_path):
-            Channel(self.telepathy_conn.requested_bus_name, channel_path,
-                    ready_handler=tubes_channel_ready_cb)
-
-        def error_handler_cb(error):
-            raise RuntimeError(error)
-
-        self.telepathy_conn.RequestChannel(CHANNEL_TYPE_TEXT,
-            HANDLE_TYPE_ROOM, self._room_handle, True,
-            reply_handler=create_text_channel_cb,
-            error_handler=error_handler_cb,
-            dbus_interface=CONNECTION)
-
-        self.telepathy_conn.RequestChannel(CHANNEL_TYPE_TUBES,
-            HANDLE_TYPE_ROOM, self._room_handle, True,
-            reply_handler=create_tubes_channel_cb,
-            error_handler=error_handler_cb,
-            dbus_interface=CONNECTION)
-
-    def _join_cb(self):
-        _logger.debug('%r: Join finished', self)
-        self._joined = True
-        self.emit("joined", True, None)
-
-    def _join_error_cb(self, err):
-        _logger.debug('%r: Join failed because: %s', self, err)
-        self.emit("joined", False, str(err))
+    def __joined_cb(self, join_command, error):
+        _logger.debug('%r: Join finished %r', self, error)
+        if error is None:
+            self._joined = True
+            self.telepathy_text_chan = join_command.text_channel
+            self.telepathy_tubes_chan = join_command.tubes_channel
+        self.emit('joined', error is None, str(error))
 
     def join(self):
         """Join this activity.
 
         Emits 'joined' and otherwise does nothing if we're already joined.
         """
+        if self._join_command is not None:
+            return
+
         if self._joined:
-            self.emit("joined", True, None)
+            self.emit('joined', True, None)
             return
 
         _logger.debug('%r: joining', self)
 
-        self.set_up_tubes(reply_handler=self._join_cb,
-                          error_handler=self._join_error_cb)
+        self._join_command = _JoinCommand(self.telepathy_conn,
+                                          self._room_handle)
+        self._join_command.connect('finished', self.__joined_cb)
+        self._join_command.run()
 
     def share(self, share_activity_cb, share_activity_error_cb):
         if not self._room_handle is None:
             raise ValueError('Already have a room handle')
 
-        """ TODO: Check we don't need this
-        # We shouldn't have to do this, but Gabble sometimes finds the IRC
-        # transport and goes "that has chatrooms, that'll do nicely". Work
-        # around it til Gabble gets better at finding the MUC service.
-        return '%s@%s' % (activity_id,
-                          self._account['fallback-conference-server'])
-        """
+        self._share_command = _ShareCommand(self.telepathy_conn, self._id)
+        self._share_command.connect('finished',
+                                    partial(self.__shared_cb,
+                                            share_activity_cb,
+                                            share_activity_error_cb))
+        self._share_command.run()
 
-        self.telepathy_conn.RequestHandles(
-            HANDLE_TYPE_ROOM,
-            [self._id],
-            reply_handler=partial(self.__got_handles_cb, share_activity_cb, share_activity_error_cb),
-            error_handler=partial(self.__share_error_cb, share_activity_error_cb),
-            dbus_interface=CONNECTION)
-
-    def __got_handles_cb(self, share_activity_cb, share_activity_error_cb, handles):
-        logging.debug('__got_handles_cb %r', handles)
-        self._room_handle = handles[0]
-        self._joined = True
-
-        self.set_up_tubes(
-                partial(self.__tubes_set_up_cb, share_activity_cb, share_activity_error_cb),
-                share_activity_error_cb)
-
-    def __tubes_set_up_cb(self, share_activity_cb, share_activity_error_cb):
-        self.telepathy_conn.AddActivity(
-            self._id,
-            self._room_handle,
-            reply_handler=partial(self.__added_activity_cb, share_activity_cb),
-            error_handler=partial(self.__share_error_cb, share_activity_error_cb),
-            dbus_interface=CONN_INTERFACE_BUDDY_INFO)
-
-    def __added_activity_cb(self, share_activity_cb):
-        self._publish_properties()
-        self._start_tracking_properties()
-        share_activity_cb(self)
+    def __shared_cb(self, share_activity_cb, share_activity_error_cb,
+                    share_command, error):
+        _logger.debug('%r: Share finished %r', self, error)
+        if error is None:
+            self._joined = True
+            self._room_handle = share_command.room_handle
+            self.telepathy_text_chan = share_command.text_channel
+            self.telepathy_tubes_chan = share_command.tubes_channel
+            self._publish_properties()
+            self._start_tracking_properties()
+            share_activity_cb(self)
+        else:
+            share_activity_error_cb(self, error)
 
     def _publish_properties(self):
         properties = {}
@@ -408,7 +361,7 @@ class Activity(gobject.GObject):
             properties['tags'] = self._tags
         properties['private'] = self._private
 
-        logging.debug('_publish_properties calling SetProperties')
+        logging.debug('_publish_properties calling SetProperties %r', properties)
         self.telepathy_conn.SetProperties(
                 self._room_handle,
                 properties,
@@ -452,3 +405,322 @@ class Activity(gobject.GObject):
         self._joined = False
         self._activity.Leave(reply_handler=self._leave_cb,
                              error_handler=self._leave_error_cb)
+
+class _BaseCommand(gobject.GObject):
+    __gsignals__ = {
+        'finished': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                     ([object])),
+    }
+    def __init__(self):
+        gobject.GObject.__init__(self)
+
+    def run(self):
+        raise NotImplementedError()
+
+
+class _ShareCommand(_BaseCommand):
+    def __init__(self, connection, activity_id):
+        _BaseCommand.__init__(self)
+
+        self._connection = connection
+        self._activity_id = activity_id
+        self._finished = False
+        self._join_command = None
+        self.text_channel = None
+        self.tubes_channel = None
+        self.room_handle = None
+
+    def run(self):
+        """ TODO: Check we don't need this
+        # We shouldn't have to do this, but Gabble sometimes finds the IRC
+        # transport and goes "that has chatrooms, that'll do nicely". Work
+        # around it til Gabble gets better at finding the MUC service.
+        return '%s@%s' % (activity_id,
+                          self._account['fallback-conference-server'])
+        """
+
+        self._connection.RequestHandles(
+            HANDLE_TYPE_ROOM,
+            [self._activity_id],
+            reply_handler=self.__got_handles_cb,
+            error_handler=self.__error_handler_cb,
+            dbus_interface=CONNECTION)
+
+    def __got_handles_cb(self, handles):
+        logging.debug('__got_handles_cb %r', handles)
+        self.room_handle = handles[0]
+
+        self._join_command = _JoinCommand(self._connection, self.room_handle)
+        self._join_command.connect('finished', self.__joined_cb)
+        self._join_command.run()
+
+    def __joined_cb(self, join_command, error):
+        _logger.debug('%r: Join finished %r', self, error)
+        if error is not None:
+            self._finished = True
+            self.emit('finished', error)
+            return
+
+        self.text_channel = join_command.text_channel
+        self.tubes_channel = join_command.tubes_channel
+
+        self._connection.AddActivity(
+            self._activity_id,
+            self.room_handle,
+            reply_handler=self.__added_activity_cb,
+            error_handler=self.__error_handler_cb,
+            dbus_interface=CONN_INTERFACE_BUDDY_INFO)
+
+    def __added_activity_cb(self):
+        self._finished = True
+        self.emit('finished', None)
+
+    def __error_handler_cb(self, error):
+        self._finished = True
+        self.emit('finished', error)
+
+class _JoinCommand(_BaseCommand):
+    def __init__(self, connection, room_handle):
+        _BaseCommand.__init__(self)
+
+        self._connection = connection
+        self._room_handle = room_handle
+        self._finished = False
+        self.text_channel = None
+        self.tubes_channel = None
+
+    def run(self):
+        if self._finished:
+            raise RuntimeError('This command has already finished')
+
+        self._connection.RequestChannel(CHANNEL_TYPE_TEXT,
+            HANDLE_TYPE_ROOM, self._room_handle, True,
+            reply_handler=self.__create_text_channel_cb,
+            error_handler=self.__error_handler_cb,
+            dbus_interface=CONNECTION)
+
+        self._connection.RequestChannel(CHANNEL_TYPE_TUBES,
+            HANDLE_TYPE_ROOM, self._room_handle, True,
+            reply_handler=self.__create_tubes_channel_cb,
+            error_handler=self.__error_handler_cb,
+            dbus_interface=CONNECTION)
+
+    def __create_text_channel_cb(self, channel_path):
+        Channel(self._connection.requested_bus_name, channel_path,
+                ready_handler=self.__text_channel_ready_cb)
+
+    def __create_tubes_channel_cb(self, channel_path):
+        Channel(self._connection.requested_bus_name, channel_path,
+                ready_handler=self.__tubes_channel_ready_cb)
+
+    def __error_handler_cb(self, error):
+        self._finished = True
+        self.emit('finished', error)
+
+    def __tubes_channel_ready_cb(self, channel):
+        _logger.debug('%r: Tubes channel %r is ready', self, channel)
+        self.tubes_channel = channel
+        self._tubes_ready()
+
+    def __text_channel_ready_cb(self, channel):
+        _logger.debug('%r: Text channel %r is ready', self, channel)
+        self.text_channel = channel
+        self._tubes_ready()
+
+    def _tubes_ready(self):
+        if self.text_channel is None or \
+            self.tubes_channel is None:
+            return
+
+        _logger.debug('%r: finished setting up tubes', self)
+
+        self._add_self_to_channel()
+
+    def __text_channel_group_flags_changed_cb(self, added, removed):
+        _logger.debug('__text_channel_group_flags_changed_cb %r %r', added, removed)
+        self._text_channel_group_flags |= added
+        self._text_channel_group_flags &= ~removed
+
+    def _add_self_to_channel(self):
+        _logger.info('KILL_PS Connect to the Closed signal of the text channel')
+
+        # FIXME: cope with non-Group channels here if we want to support
+        # non-OLPC-compatible IMs
+
+        group = self.text_channel[CHANNEL_INTERFACE_GROUP]
+
+        def got_all_members(members, local_pending, remote_pending):
+            _logger.debug('got_all_members local_pending %r members %r', members, local_pending)
+            if members:
+                self.__text_channel_members_changed_cb('', members, (),
+                                                       (), (), 0, 0)
+
+            _logger.info('KILL_PS Check that we pass the right self handle depending on the channel flags')
+
+            if self._self_handle in members:
+                _logger.debug('%r: I am already in the room', self)
+                assert self._finished  # set by _text_channel_members_changed_cb
+            else:
+                _logger.debug('%r: Not yet in the room - entering', self)
+                group.AddMembers([self._self_handle], '',
+                    reply_handler=lambda: None,
+                    error_handler=lambda e: self._join_failed_cb(e,
+                        'got_all_members AddMembers'))
+
+        def got_group_flags(flags):
+            self._text_channel_group_flags = flags
+            # by the time we hook this, we need to know the group flags
+            group.connect_to_signal('MembersChanged',
+                                    self.__text_channel_members_changed_cb)
+
+            # bootstrap by getting the current state. This is where we find
+            # out whether anyone was lying to us in their PEP info
+            group.GetAllMembers(reply_handler=got_all_members,
+                                error_handler=self.__error_handler_cb)
+
+        def got_self_handle(self_handle):
+            self._self_handle = self_handle
+            group.connect_to_signal('GroupFlagsChanged',
+                                    self.__text_channel_group_flags_changed_cb)
+            group.GetGroupFlags(reply_handler=got_group_flags,
+                                error_handler=self.__error_handler_cb)
+
+        group.GetSelfHandle(reply_handler=got_self_handle,
+                            error_handler=self.__error_handler_cb)
+
+    def __text_channel_members_changed_cb(self, message, added, removed,
+                                          local_pending, remote_pending,
+                                          actor, reason):
+        _logger.debug('__text_channel_members_changed_cb added %r', added)
+        if self._self_handle in added:
+            logging.info('KILL_PS Set the channel properties')
+            self._finished = True
+            self.emit('finished', None)
+
+        return
+
+        #_logger.debug('Activity %r text channel %u currently has %r',
+        #              self, self._room_handle, self._handle_to_buddy)
+        _logger.debug('Text channel %u members changed: + %r, - %r, LP %r, '
+                      'RP %r, message %r, actor %r, reason %r', self._room_handle,
+                      added, removed, local_pending, remote_pending,
+                      message, actor, reason)
+        # Note: D-Bus calls this with list arguments, but after GetMembers()
+        # we call it with set and tuple arguments; we cope with any iterable.
+        """
+        if (self._text_channel_group_flags &
+            CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES):
+            _logger.debug('This channel has channel-specific handles')
+            map_chan = self._text_channel
+        else:
+            # we have global handles here
+            _logger.debug('This channel has global handles')
+            map_chan = None
+
+        # Disregard any who are already there - however, if we're joining
+        # the channel, this will still consider everyone to have been added,
+        # because _handle_to_buddy was cleared. That's necessary, so we get
+        # the handle-to-buddy mapping for everyone.
+        added = set(added)
+        added -= frozenset(self._handle_to_buddy.iterkeys())
+        _logger.debug('After filtering for no-ops, we want to add %r', added)
+        added_buddies = self._ps.map_handles_to_buddies(self._tp,
+                                                        map_chan,
+                                                        added)
+        for handle, buddy in added_buddies.iteritems():
+            self._handle_to_buddy[handle] = buddy
+            self._buddy_to_handle[buddy] = handle
+        self._add_buddies(added_buddies.itervalues())
+
+        self._claimed_buddies |= set(added_buddies.itervalues())
+
+        # we treat all pending members as if they weren't there
+        removed = set(removed)
+        removed |= set(local_pending)
+        removed |= set(remote_pending)
+        # disregard any who aren't already there
+        removed &= frozenset(self._handle_to_buddy.iterkeys())
+
+        _logger.debug('After filtering for no-ops, we want to remove %r',
+                      removed)
+        removed_buddies = set()
+        for handle in removed:
+            buddy = self._handle_to_buddy.pop(handle, None)
+            self._buddy_to_handle.pop(buddy)
+            removed_buddies.add(buddy)
+        # If we're not in the room yet, the "removal" may be spurious -
+        # Gabble removes the inviter from members at the same time it adds
+        # us to local-pending. We'll catch up anyway when we join the room and
+        # do the apparent<->reality sync, so just don't remove anyone until
+        # we've joined.
+        if self._joined:
+            self._remove_buddies(removed_buddies)
+
+        # if we were among those removed, we'll have to start believing
+        # the spoofable PEP-based activity tracking again.
+        if self._self_handle not in self._handle_to_buddy and self._joined:
+            self._text_channel_closed_cb()
+        """
+        self._handle_to_buddy[self._self_handle] = None
+        if self._self_handle in self._handle_to_buddy and not self._joined:
+            # We've just joined
+            self._joined = True
+            """
+            _logger.debug('Syncing activity %r buddy list %r with reality %r',
+                          self, self._buddies, self._handle_to_buddy)
+            real_buddies = set(self._handle_to_buddy.itervalues())
+            added_buddies = real_buddies - self._buddies
+            if added_buddies:
+                _logger.debug('... %r are here although they claimed not',
+                              added_buddies)
+            removed_buddies = self._buddies - real_buddies
+            _logger.debug('... %r claimed to be here but are not',
+                          removed_buddies)
+            self._add_buddies(added_buddies)
+            self._remove_buddies(removed_buddies)
+
+            # Leave if the activity crashes
+            if self._activity_unique_name is not None:
+                _logger.debug('Watching unique name %s',
+                              self._activity_unique_name)
+                self._activity_unique_name_watch = dbus.Bus().watch_name_owner(
+                    self._activity_unique_name, self._activity_unique_name_cb)
+            """
+            # Finish the Join process
+            if PROPERTIES_INTERFACE not in self.text_channel:
+                self.__join_activity_channel_props_listed_cb(())
+            else:
+                self.text_channel[PROPERTIES_INTERFACE].ListProperties(
+                    reply_handler=self.__join_activity_channel_props_listed_cb,
+                    error_handler=lambda e: self._join_failed_cb(e,
+                        'Activity._text_channel_members_changed_cb'))
+
+    def __join_activity_channel_props_listed_cb(self, prop_specs):
+        # FIXME: invite-only ought to be set on private activities; but
+        # since only the owner can change invite-only, that would break
+        # activity scope changes.
+        props = {
+            'anonymous': False,   # otherwise buddy resolution breaks
+            'invite-only': False, # anyone who knows about the channel can join
+            'invite-restricted': False,     # so non-owners can invite others
+            'persistent': False,  # vanish when there are no members
+            'private': True,      # don't appear in server room lists
+        }
+        props_to_set = []
+        for ident, name, sig, flags in prop_specs:
+            value = props.pop(name, None)
+            if value is not None:
+                if flags & PROPERTY_FLAG_WRITE:
+                    props_to_set.append((ident, value))
+                # FIXME: else error, but only if we're creating the room?
+        # FIXME: if props is nonempty, then we want to set props that aren't
+        # supported here - raise an error?
+
+        if props_to_set:
+            self.text_channel[PROPERTIES_INTERFACE].SetProperties(
+                props_to_set, reply_handler=self._joined_cb,
+                error_handler=lambda e: self._join_failed_cb(e, 
+                    'Activity._join_activity_channel_props_listed_cb'))
+        else:
+            self._joined_cb()
+
