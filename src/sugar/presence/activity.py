@@ -37,6 +37,8 @@ from telepathy.constants import CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES, \
                                 HANDLE_TYPE_ROOM, \
                                 PROPERTY_FLAG_WRITE
 
+from sugar.presence.buddy import Buddy
+
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 
@@ -100,7 +102,6 @@ class Activity(gobject.GObject):
         self._private = properties.get('private', True)
         self._joined = properties.get('joined', False)
         self._self_handle = None
-        self._text_channel_group_flags = 0
 
         # The buddies really in the channel, which we can see directly because
         # we've joined. If _joined is False, this will be incomplete.
@@ -302,7 +303,22 @@ class Activity(gobject.GObject):
             self._joined = True
             self.telepathy_text_chan = join_command.text_channel
             self.telepathy_tubes_chan = join_command.tubes_channel
+            self._start_tracking_buddies()
         self.emit('joined', error is None, str(error))
+
+    def _start_tracking_buddies(self):
+        group = self.telepathy_text_chan[CHANNEL_INTERFACE_GROUP]
+        group.connect_to_signal('MembersChanged',
+                                self.__text_channel_members_changed_cb)
+
+    def __text_channel_members_changed_cb(self, message, added, removed,
+                                          local_pending, remote_pending,
+                                          actor, reason):
+        _logger.debug('__text_channel_members_changed_cb added %r',
+                      [added, message, added, removed, local_pending,
+                       remote_pending, actor, reason])
+        for contact_handle in added:
+            self.emit('buddy-joined', Buddy(self.telepathy_conn, contact_handle))
 
     def join(self):
         """Join this activity.
@@ -344,6 +360,7 @@ class Activity(gobject.GObject):
             self.telepathy_tubes_chan = share_command.tubes_channel
             self._publish_properties()
             self._start_tracking_properties()
+            self._start_tracking_buddies()
             share_activity_cb(self)
         else:
             share_activity_error_cb(self, error)
@@ -486,6 +503,7 @@ class _JoinCommand(_BaseCommand):
         self._connection = connection
         self._room_handle = room_handle
         self._finished = False
+        self._text_channel_group_flags = None
         self.text_channel = None
         self.tubes_channel = None
 
