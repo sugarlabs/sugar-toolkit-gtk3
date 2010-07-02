@@ -325,6 +325,9 @@ class Activity(gobject.GObject):
         for contact_handle in added:
             self.emit('buddy-joined', Buddy(self.telepathy_conn, contact_handle))
 
+        for contact_handle in removed:
+            self.emit('buddy-left', Buddy(self.telepathy_conn, contact_handle))
+
     def join(self):
         """Join this activity.
 
