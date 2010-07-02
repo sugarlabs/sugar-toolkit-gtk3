@@ -304,12 +304,17 @@ class Activity(gobject.GObject):
             self.telepathy_text_chan = join_command.text_channel
             self.telepathy_tubes_chan = join_command.tubes_channel
             self._start_tracking_buddies()
+            self._start_tracking_channel()
         self.emit('joined', error is None, str(error))
 
     def _start_tracking_buddies(self):
         group = self.telepathy_text_chan[CHANNEL_INTERFACE_GROUP]
         group.connect_to_signal('MembersChanged',
                                 self.__text_channel_members_changed_cb)
+
+    def _start_tracking_channel(self):
+        channel = self.telepathy_text_chan[CHANNEL]
+        channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
     def __text_channel_members_changed_cb(self, message, added, removed,
                                           local_pending, remote_pending,
@@ -361,6 +366,7 @@ class Activity(gobject.GObject):
             self._publish_properties()
             self._start_tracking_properties()
             self._start_tracking_buddies()
+            self._start_tracking_channel()
             share_activity_cb(self)
         else:
             share_activity_error_cb(self, error)
@@ -407,21 +413,14 @@ class Activity(gobject.GObject):
         return bus_name, connection, channels
 
     # Leaving
-
-    def _leave_cb(self):
-        """Callback for async action of leaving shared activity."""
+    def __text_channel_closed_cb(self):
+        self._joined = False
         self.emit("joined", False, "left activity")
-
-    def _leave_error_cb(self, err):
-        """Callback for error in async leaving of shared activity."""
-        _logger.debug('Failed to leave activity: %s', err)
 
     def leave(self):
         """Leave this shared activity"""
         _logger.debug('%r: leaving', self)
-        self._joined = False
-        self._activity.Leave(reply_handler=self._leave_cb,
-                             error_handler=self._leave_error_cb)
+        self.telepathy_text_chan.Close()
 
 class _BaseCommand(gobject.GObject):
     __gsignals__ = {
