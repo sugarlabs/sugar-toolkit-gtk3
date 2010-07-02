@@ -410,10 +410,14 @@ class Activity(gobject.GObject):
             - a list of D-Bus object paths representing the channels
               associated with this activity
         """
-        (bus_name, connection, channels) = self._activity.GetChannels()
+        bus_name = self.telepathy_conn.requested_bus_name
+        connection_path = self.telepathy_conn.object_path
+        channels = [self.telepathy_text_chan.object_path,
+                    self.telepathy_tubes_chan.object_path]
+
         _logger.debug('%r: bus name is %s, connection is %s, channels are %r',
-                      self, bus_name, connection, channels)
-        return bus_name, connection, channels
+                      self, bus_name, connection_path, channels)
+        return bus_name, connection_path, channels
 
     # Leaving
     def __text_channel_closed_cb(self):
