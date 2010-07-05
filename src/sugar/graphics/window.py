@@ -191,8 +191,9 @@ class Window(gtk.Window):
         if self._toolbar_box:
             self.__vbox.remove(self._toolbar_box)
 
-        self.__vbox.pack_start(toolbar_box, False)
-        self.__vbox.reorder_child(toolbar_box, 0)
+        if toolbar_box:
+            self.__vbox.pack_start(toolbar_box, False)
+            self.__vbox.reorder_child(toolbar_box, 0)
 
         self._toolbar_box = toolbar_box
 
