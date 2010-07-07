@@ -326,8 +326,6 @@ class PaletteWindow(gtk.Window):
             self.update_position()
 
     def popdown(self, immediate=False):
-        logging.debug('PaletteWindow.popdown immediate %r', immediate)
-
         self._popup_anim.stop()
         self._mouse_detector.stop()
 
@@ -379,8 +377,6 @@ class PaletteWindow(gtk.Window):
         self.emit('popup')
 
     def __hide_cb(self, widget):
-        logging.debug('__hide_cb')
-
         if self._invoker:
             self._invoker.notify_popdown()
 

@@ -164,7 +164,6 @@ class Palette(PaletteWindow):
         self.menu.set_active(True)
 
     def __hide_cb(self, widget):
-        logging.debug('__hide_cb')
         self.menu.set_active(False)
         self.menu.cancel()
         self._secondary_anim.stop()
@@ -183,8 +182,6 @@ class Palette(PaletteWindow):
         return self._full_request
 
     def popup(self, immediate=False, state=None):
-        logging.debug('Palette.popup immediate %r', immediate)
-
         if self._invoker is not None:
             self._update_full_request()
 
