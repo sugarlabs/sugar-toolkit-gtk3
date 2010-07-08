@@ -5,5 +5,6 @@ sugar_PYTHON =			\
 	buddy.py		\
 	sugartubeconn.py	\
 	tubeconn.py		\
-	presenceservice.py
+	presenceservice.py	\
+	util.py
 
