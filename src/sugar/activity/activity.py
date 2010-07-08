@@ -694,22 +694,23 @@ class Activity(Window, gtk.Container):
 
     def _send_invites(self):
         while self._invites_queue:
-            buddy_key = self._invites_queue.pop()
-            buddy = self._pservice.get_buddy(buddy_key)
+            account_path, contact_id = self._invites_queue.pop()
+            pservice = presenceservice.get_instance()
+            buddy = pservice.get_buddy(account_path, contact_id)
             if buddy:
                 self.shared_activity.invite(
                             buddy, '', self._invite_response_cb)
             else:
                 logging.error('Cannot invite %s, no such buddy.', buddy_key)
 
-    def invite(self, buddy_key):
+    def invite(self, account_path, contact_id):
         """Invite a buddy to join this Activity.
 
         Side Effects:
             Calls self.share(True) to privately share the activity if it wasn't
             shared before.
         """
-        self._invites_queue.append(buddy_key)
+        self._invites_queue.append((account_path, contact_id))
 
         if (self.shared_activity is None
             or not self.shared_activity.props.joined):

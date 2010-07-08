@@ -32,6 +32,7 @@ from sugar.presence.buddy import Buddy, Owner
 from sugar.presence.activity import Activity
 from sugar.presence.util import get_connection_manager
 
+from telepathy.constants import HANDLE_TYPE_CONTACT
 
 _logger = logging.getLogger('sugar.presence.presenceservice')
 
@@ -314,23 +315,16 @@ class PresenceService(gobject.GObject):
              error_handler=lambda e: \
                     self._get_buddies_error_cb(error_handler, e))
 
-    def get_buddy(self, key):
-        """Retrieve single Buddy object for the given public key
+    def get_buddy(self, account_path, contact_id):
+        logging.info('KILL_PS decide how to invalidate this cache')
+        if (account_path, contact_id) in self._buddy_cache:
+            return self._buddy_cache[(account_path, contact_id)]
 
-        key -- buddy's public encryption key
+        buddy = Buddy(account_path, contact_id)
+        self._buddy_cache[(account_path, contact_id)] = buddy
+        return buddy
 
-        returns single Buddy object or None if the activity
-            is not found using GetBuddyByPublicKey on the
-            service
-        """
-        try:
-            buddy_op = self._ps.GetBuddyByPublicKey(dbus.ByteArray(key))
-        except dbus.exceptions.DBusException:
-            _logger.exception('Unable to retrieve buddy handle for %r from '
-                'presence service', key)
-            return None
-        return self._new_object(buddy_op)
-
+    # DEPRECATED
     def get_buddy_by_telepathy_handle(self, tp_conn_name, tp_conn_path,
                                       handle):
         """Retrieve single Buddy object for the given public key
@@ -346,15 +340,22 @@ class PresenceService(gobject.GObject):
                 channel-specific handle.
         :Returns: the Buddy object, or None if the buddy is not found
         """
-        logging.info('KILL_PS decide how to invalidate this cache')
-        if (tp_conn_path, handle) in self._buddy_cache:
-            return self._buddy_cache[(tp_conn_path, handle)]
-        else:
-            bus = dbus.SessionBus()
-            connection = bus.get_object(tp_conn_name, tp_conn_path)
-            buddy = Buddy(connection, handle)
-            self._buddy_cache[(tp_conn_path, handle)] = buddy
-            return buddy
+
+        bus = dbus.Bus()
+        obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, ACCOUNT_MANAGER_PATH)
+        account_manager = dbus.Interface(obj, ACCOUNT_MANAGER)
+        account_paths = account_manager.Get(ACCOUNT_MANAGER, 'ValidAccounts',
+                                            dbus_interface=PROPERTIES_IFACE)
+        for account_path in account_paths:
+            obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
+            connection_path = obj.Get(ACCOUNT, 'Connection')
+            if connection_path == tp_conn_path:
+                connection_name = connection_path.replace('/', '.')[1:]
+                connection = bus.get_object(connection_name, connection_path)
+                contact_ids = connection.InspectHandles(HANDLE_TYPE_CONTACT, [handle])
+                return self.get_buddy(account_path, contact_ids[0])
+
+        raise ValueError('Unknown buddy in connection %s with handle %d', tp_conn_path, handle)
 
     def get_owner(self):
         """Retrieves the laptop Buddy object."""

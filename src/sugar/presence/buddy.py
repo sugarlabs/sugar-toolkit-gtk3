@@ -21,14 +21,19 @@ STABLE.
 """
 
 import logging
+from functools import partial
 
 import gobject
 import gtk
 import dbus
 import gconf
-from telepathy.interfaces import CONNECTION_INTERFACE_ALIASING, \
+from telepathy.interfaces import ACCOUNT, \
+                                 CONNECTION, \
+                                 CONNECTION_INTERFACE_ALIASING, \
                                  CONNECTION_INTERFACE_CONTACTS
+from telepathy.constants import HANDLE_TYPE_CONTACT
 
+ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 
 _logger = logging.getLogger('sugar.presence.buddy')
@@ -247,31 +252,45 @@ class BaseBuddy(gobject.GObject):
 
 class Buddy(BaseBuddy):
     __gtype_name__ = 'PresenceBuddy'
-    def __init__(self, connection, contact_handle):
+    def __init__(self, account_path, contact_id):
+        _logger.debug('Buddy.__init__')
         BaseBuddy.__init__(self)
 
-        self._contact_handle = contact_handle
+        self._account_path = account_path
+        self.contact_id = contact_id
+        self.contact_handle = None
 
-        bus = dbus.SessionBus()
+        _logger.info('KILL_PS Handle the connection going away and coming back')
+
+        bus = dbus.Bus()
+        obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
+        connection_path = obj.Get(ACCOUNT, 'Connection')
+        connection_name = connection_path.replace('/', '.')[1:]
+
+        obj = bus.get_object(connection_name, connection_path)
+        handles = obj.RequestHandles(HANDLE_TYPE_CONTACT, [self.contact_id],
+                                     dbus_interface=CONNECTION)
+        self.contact_handle = handles[0]
+
         self._get_properties_call = bus.call_async(
-                connection.requested_bus_name,
-                connection.object_path,
+                connection_name,
+                connection_path,
                 CONN_INTERFACE_BUDDY_INFO,
                 'GetProperties',
                 'u',
-                (self._contact_handle,),
+                (self.contact_handle,),
                 reply_handler=self.__got_properties_cb,
                 error_handler=self.__error_handler_cb,
                 utf8_strings=True,
                 byte_arrays=True)
 
         self._get_attributes_call = bus.call_async(
-                connection.requested_bus_name,
-                connection.object_path,
+                connection_name,
+                connection_path,
                 CONNECTION_INTERFACE_CONTACTS,
                 'GetContactAttributes',
                 'auasb',
-                ([self._contact_handle], [CONNECTION_INTERFACE_ALIASING], False),
+                ([self.contact_handle], [CONNECTION_INTERFACE_ALIASING], False),
                 reply_handler=self.__got_attributes_cb,
                 error_handler=self.__error_handler_cb)
 
@@ -283,7 +302,7 @@ class Buddy(BaseBuddy):
     def __got_attributes_cb(self, attributes):
         _logger.debug('__got_attributes_cb %r', attributes)
         self._get_attributes_call = None
-        self._update_attributes(attributes[self._contact_handle])
+        self._update_attributes(attributes[self.contact_handle])
 
     def __error_handler_cb(self, error):
         _logger.debug('__error_handler_cb %r', error)

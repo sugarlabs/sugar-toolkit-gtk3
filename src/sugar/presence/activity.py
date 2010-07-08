@@ -288,14 +288,19 @@ class Activity(gobject.GObject):
         The callback will be called with one parameter: None on success,
         or an exception on failure.
         """
-        op = buddy.object_path()
-        _logger.debug('%r: inviting %s', self, op)
-        self._activity.Invite(op, message,
-                              reply_handler=lambda: response_cb(None),
-                              error_handler=response_cb)
+        if not self._joined:
+            raise RuntimeError('Cannot invite a buddy to an activity that is'
+                               'not shared.')
+        self.telepathy_text_chan.AddMembers([buddy.contact_handle], message,
+                dbus_interface=CHANNEL_INTERFACE_GROUP,
+                reply_handler=partial(self.__invite_cb, response_cb),
+                error_handler=partial(self.__invite_cb, response_cb))
+
+    def __invite_cb(self, response_cb, error=None):
+        response_cb(error)
 
     def set_up_tubes(self, reply_handler, error_handler):
-        pass
+        raise NotImplementedError()
 
     def __joined_cb(self, join_command, error):
         _logger.debug('%r: Join finished %r', self, error)
@@ -378,9 +383,9 @@ class Activity(gobject.GObject):
         properties = {}
 
         if self._color is not None:
-            properties['color'] = self._color
+            properties['color'] = str(self._color)
         if self._name is not None:
-            properties['name'] = self._name
+            properties['name'] = str(self._name)
         if self._type is not None:
             properties['type'] = self._type
         if self._tags is not None:
