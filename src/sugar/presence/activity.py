@@ -324,7 +324,7 @@ class Activity(gobject.GObject):
     def __text_channel_members_changed_cb(self, message, added, removed,
                                           local_pending, remote_pending,
                                           actor, reason):
-        _logger.debug('__text_channel_members_changed_cb added %r',
+        _logger.debug('__text_channel_members_changed_cb %r',
                       [added, message, added, removed, local_pending,
                        remote_pending, actor, reason])
         for contact_handle in added:
@@ -579,7 +579,7 @@ class _JoinCommand(_BaseCommand):
         group = self.text_channel[CHANNEL_INTERFACE_GROUP]
 
         def got_all_members(members, local_pending, remote_pending):
-            _logger.debug('got_all_members local_pending %r members %r', members, local_pending)
+            _logger.debug('got_all_members members %r local_pending %r remote_pending %r', members, local_pending, remote_pending)
             if members:
                 self.__text_channel_members_changed_cb('', members, (),
                                                        (), (), 0, 0)
@@ -589,8 +589,8 @@ class _JoinCommand(_BaseCommand):
             if self._self_handle in members:
                 _logger.debug('%r: I am already in the room', self)
                 assert self._finished  # set by _text_channel_members_changed_cb
-            else:
-                _logger.debug('%r: Not yet in the room - entering', self)
+            elif self._self_handle in local_pending:
+                _logger.debug('%r: We are in local pending - entering', self)
                 group.AddMembers([self._self_handle], '',
                     reply_handler=lambda: None,
                     error_handler=lambda e: self._join_failed_cb(e,
@@ -620,7 +620,7 @@ class _JoinCommand(_BaseCommand):
     def __text_channel_members_changed_cb(self, message, added, removed,
                                           local_pending, remote_pending,
                                           actor, reason):
-        _logger.debug('__text_channel_members_changed_cb added %r', added)
+        _logger.debug('__text_channel_members_changed_cb added %r removed %r local_pending %r remote_pending %r', added, removed, local_pending, remote_pending)
         if self._self_handle in added:
             logging.info('KILL_PS Set the channel properties')
             self._finished = True
