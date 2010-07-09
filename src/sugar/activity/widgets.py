@@ -149,7 +149,8 @@ class ShareButton(RadioMenuButton):
     def __update_share_cb(self, activity):
         self.neighborhood.handler_block(self._neighborhood_handle)
         try:
-            if activity.get_shared():
+            if activity.shared_activity is not None and \
+                    not activity.shared_activity.props.private:
                 self.private.props.sensitive = False
                 self.neighborhood.props.sensitive = False
                 self.neighborhood.props.active = True
