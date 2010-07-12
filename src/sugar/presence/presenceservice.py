@@ -27,15 +27,21 @@ import gobject
 import dbus
 import dbus.exceptions
 import dbus.glib
+from dbus import PROPERTIES_IFACE
 
 from sugar.presence.buddy import Buddy, Owner
 from sugar.presence.activity import Activity
 from sugar.presence.util import get_connection_manager
 
+from telepathy.interfaces import ACCOUNT, \
+                                 ACCOUNT_MANAGER, \
+                                 CONNECTION
 from telepathy.constants import HANDLE_TYPE_CONTACT
 
 _logger = logging.getLogger('sugar.presence.presenceservice')
 
+ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
+ACCOUNT_MANAGER_PATH = '/org/freedesktop/Telepathy/AccountManager'
 
 class PresenceService(gobject.GObject):
     """UI-side interface to the dbus presence service
@@ -352,7 +358,9 @@ class PresenceService(gobject.GObject):
             if connection_path == tp_conn_path:
                 connection_name = connection_path.replace('/', '.')[1:]
                 connection = bus.get_object(connection_name, connection_path)
-                contact_ids = connection.InspectHandles(HANDLE_TYPE_CONTACT, [handle])
+                contact_ids = connection.InspectHandles(HANDLE_TYPE_CONTACT,
+                                                        [handle],
+                                                        dbus_interface=CONNECTION)
                 return self.get_buddy(account_path, contact_ids[0])
 
         raise ValueError('Unknown buddy in connection %s with handle %d', tp_conn_path, handle)
@@ -392,8 +400,9 @@ class PresenceService(gobject.GObject):
         if self._activity_cache is not None:
             raise ValueError('Activity %s is already tracked', activity.get_id())
 
-        connection = get_connection_manager().get_preferred_connection()
-        shared_activity = Activity(connection, properties=properties)
+        connection_manager = get_connection_manager()
+        account_path, connection = connection_manager.get_preferred_connection()
+        shared_activity = Activity(account_path, connection, properties=properties)
         self._activity_cache = shared_activity
 
         """
@@ -411,7 +420,8 @@ class PresenceService(gobject.GObject):
 
         returns the bus name and the object path of the Telepathy connection
         """
-        connection = get_connection_manager().get_preferred_connection()
+        connection_manager = get_connection_manager()
+        account_path, connection = connection_manager.get_preferred_connection()
         if connection is None:
             return None
         else:

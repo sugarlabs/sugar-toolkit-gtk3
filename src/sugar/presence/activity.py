@@ -35,6 +35,7 @@ from telepathy.interfaces import CHANNEL, \
                                  PROPERTIES_INTERFACE
 from telepathy.constants import CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES, \
                                 HANDLE_TYPE_ROOM, \
+                                HANDLE_TYPE_CONTACT, \
                                 PROPERTY_FLAG_WRITE
 
 from sugar.presence.buddy import Buddy
@@ -79,7 +80,7 @@ class Activity(gobject.GObject):
         'joined': (bool, None, None, False, gobject.PARAM_READABLE),
     }
 
-    def __init__(self, connection, room_handle=None, properties=None):
+    def __init__(self, account_path, connection, room_handle=None, properties=None):
         if room_handle is None and properties is None:
             raise ValueError('Need to pass one of room_handle or properties')
 
@@ -88,6 +89,7 @@ class Activity(gobject.GObject):
 
         gobject.GObject.__init__(self)
 
+        self._account_path = account_path
         self.telepathy_conn = connection
         self.telepathy_text_chan = None
         self.telepathy_tubes_chan = None
@@ -121,8 +123,8 @@ class Activity(gobject.GObject):
                 'GetProperties',
                 'u',
                 (self._room_handle,),
-                reply_handler=self._got_properties_cb,
-                error_handler=self._error_handler_cb,
+                reply_handler=self.__got_properties_cb,
+                error_handler=self.__error_handler_cb,
                 utf8_strings=True)
 
         # As only one Activity instance is needed per activity process,
@@ -136,13 +138,13 @@ class Activity(gobject.GObject):
         _logger.debug('%r: Activity properties changed to %r', self, properties)
         self._update_properties(properties)
 
-    def _got_properties_cb(self, properties):
-        _logger.debug('_got_properties_cb %r', properties)
+    def __got_properties_cb(self, properties):
+        _logger.debug('__got_properties_cb %r', properties)
         self._get_properties_call = None
         self._update_properties(properties)
 
-    def _error_handler_cb(self, error):
-        _logger.debug('_error_handler_cb %r', error)
+    def __error_handler_cb(self, error):
+        _logger.debug('__error_handler_cb %r', error)
 
     def _update_properties(self, new_props):
         val = new_props.get('name', self._name)
@@ -227,7 +229,7 @@ class Activity(gobject.GObject):
         self.emit('buddy-joined', self._ps_new_object(object_path))
         return False
 
-    def _buddy_handle_joined_cb(self, object_path, handle):
+    def __buddy_handle_joined_cb(self, object_path, handle):
         _logger.debug('%r: buddy %s joined with handle %u', self, object_path,
                       handle)
         gobject.idle_add(self._emit_buddy_joined_signal, object_path)
@@ -242,7 +244,7 @@ class Activity(gobject.GObject):
         self.emit('buddy-left', self._ps_new_object(object_path))
         return False
 
-    def _buddy_left_cb(self, object_path):
+    def __buddy_left_cb(self, object_path):
         _logger.debug('%r: buddy %s left', self, object_path)
         gobject.idle_add(self._emit_buddy_left_signal, object_path)
         handle = self._buddy_path_to_handle.pop(object_path, None)
@@ -257,7 +259,7 @@ class Activity(gobject.GObject):
         self.emit('new-channel', object_path)
         return False
 
-    def _new_channel_cb(self, object_path):
+    def __new_channel_cb(self, object_path):
         _logger.debug('%r: new channel created at %s', self, object_path)
         gobject.idle_add(self._emit_new_channel_signal, object_path)
 
@@ -327,11 +329,25 @@ class Activity(gobject.GObject):
         _logger.debug('__text_channel_members_changed_cb %r',
                       [added, message, added, removed, local_pending,
                        remote_pending, actor, reason])
-        for contact_handle in added:
-            self.emit('buddy-joined', Buddy(self.telepathy_conn, contact_handle))
+        if added:
+            self.telepathy_conn.InspectHandles(HANDLE_TYPE_CONTACT, added,
+                reply_handler=self.__members_added_cb,
+                error_handler=self.__error_handler_cb,
+                dbus_interface=CONNECTION)
 
-        for contact_handle in removed:
-            self.emit('buddy-left', Buddy(self.telepathy_conn, contact_handle))
+        if removed:
+            self.telepathy_conn.InspectHandles(HANDLE_TYPE_CONTACT, removed,
+                reply_handler=self.__members_removed_cb,
+                error_handler=self.__error_handler_cb,
+                dbus_interface=CONNECTION)
+
+    def __members_added_cb(self, contact_ids):
+        for contact_id in contact_ids:
+            self.emit('buddy-joined', Buddy(self._account_path, contact_id))
+
+    def __members_removed_cb(self, contact_ids):
+        for contact_id in contact_ids:
+            self.emit('buddy-left', Buddy(self._account_path, contact_id))
 
     def join(self):
         """Join this activity.

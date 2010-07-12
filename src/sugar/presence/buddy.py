@@ -33,6 +33,8 @@ from telepathy.interfaces import ACCOUNT, \
                                  CONNECTION_INTERFACE_CONTACTS
 from telepathy.constants import HANDLE_TYPE_CONTACT
 
+from sugar.presence.util import get_connection_manager
+
 ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 
@@ -261,20 +263,20 @@ class Buddy(BaseBuddy):
         self.contact_handle = None
 
         _logger.info('KILL_PS Handle the connection going away and coming back')
+        connection_manager = get_connection_manager()
+        connection = connection_manager.get_connection(account_path)
 
-        bus = dbus.Bus()
-        obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
-        connection_path = obj.Get(ACCOUNT, 'Connection')
-        connection_name = connection_path.replace('/', '.')[1:]
+        connection_name = connection.object_path.replace('/', '.')[1:]
 
-        obj = bus.get_object(connection_name, connection_path)
+        bus = dbus.SessionBus()
+        obj = bus.get_object(connection_name, connection.object_path)
         handles = obj.RequestHandles(HANDLE_TYPE_CONTACT, [self.contact_id],
                                      dbus_interface=CONNECTION)
         self.contact_handle = handles[0]
 
         self._get_properties_call = bus.call_async(
                 connection_name,
-                connection_path,
+                connection.object_path,
                 CONN_INTERFACE_BUDDY_INFO,
                 'GetProperties',
                 'u',
@@ -286,7 +288,7 @@ class Buddy(BaseBuddy):
 
         self._get_attributes_call = bus.call_async(
                 connection_name,
-                connection_path,
+                connection.object_path,
                 CONNECTION_INTERFACE_CONTACTS,
                 'GetContactAttributes',
                 'auasb',
