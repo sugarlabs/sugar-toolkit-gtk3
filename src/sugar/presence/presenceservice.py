@@ -267,13 +267,16 @@ class PresenceService(gobject.GObject):
             connection_manager = get_connection_manager()
             connections_per_account = connection_manager.get_connections_per_account()
             for account_path, connection in connections_per_account.items():
-                room_handles = connection.RequestHandles(HANDLE_TYPE_ROOM,
-                        [activity_id],
-                        dbus_interface=CONNECTION)
-                activity = Activity(account_path, connection,
-                                    room_handle=room_handles[0])
-                self._activity_cache = activity
-                return activity
+                try:
+                    room_handle = connection.GetActivity(activity_id)
+                except dbus.exceptions.DBusException, e:
+                    if e.get_dbus_name() != 'org.freedesktop.Telepathy.Error.NotAvailable':
+                        raise
+                else:
+                    activity = Activity(account_path, connection,
+                                        room_handle=room_handle)
+                    self._activity_cache = activity
+                    return activity
 
         return None
 
