@@ -36,7 +36,8 @@ from sugar.presence.util import get_connection_manager
 from telepathy.interfaces import ACCOUNT, \
                                  ACCOUNT_MANAGER, \
                                  CONNECTION
-from telepathy.constants import HANDLE_TYPE_CONTACT
+from telepathy.constants import HANDLE_TYPE_CONTACT, \
+                                HANDLE_TYPE_ROOM
 
 _logger = logging.getLogger('sugar.presence.presenceservice')
 
@@ -263,14 +264,16 @@ class PresenceService(gobject.GObject):
                                    'instance')
             return self._activity_cache
         else:
-            for connection in get_connection_manager().connections:
-                try:
-                    room_handle = connection.GetActivity(activity_id)
-                    activity = Activity(connection, room_handle)
-                    self._activity_cache = activity
-                    return activity
-                except:
-                    pass
+            connection_manager = get_connection_manager()
+            connections_per_account = connection_manager.get_connections_per_account()
+            for account_path, connection in connections_per_account.items():
+                room_handles = connection.RequestHandles(HANDLE_TYPE_ROOM,
+                        [activity_id],
+                        dbus_interface=CONNECTION)
+                activity = Activity(account_path, connection,
+                                    room_handle=room_handles[0])
+                self._activity_cache = activity
+                return activity
 
         return None
 

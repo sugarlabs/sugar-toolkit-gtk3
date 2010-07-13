@@ -47,10 +47,8 @@ class ConnectionManager(object):
     def get_connection(self, account_path):
         return self._connections_per_account[account_path]
 
-    def get_connections(self):
-        return self._connections_per_account.values()
-
-    connections = property(get_connections)
+    def get_connections_per_account(self):
+        return self._connections_per_account
 
 _connection_manager = None
 
