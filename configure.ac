@@ -1,4 +1,4 @@
-AC_INIT([sugar-toolkit],[0.88.1],[],[sugar-toolkit])
+AC_INIT([sugar-toolkit],[0.89.1],[],[sugar-toolkit])
 
 AC_PREREQ([2.59])
 
