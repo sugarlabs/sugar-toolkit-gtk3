@@ -75,6 +75,10 @@ def main():
     parser.add_option('-s', '--single-process', dest='single_process',
                       action='store_true',
                       help='start all the instances in the same process')
+    parser.add_option('-i', '--handle-invite', dest='handle_invite',
+                      action='store_true',
+                      help='the activity is being launched for handling an '
+                           'invite from the network')
     (options, args) = parser.parse_args()
 
     logger.start()
@@ -121,7 +125,8 @@ def main():
     activity_constructor = getattr(module, class_name)
     activity_handle = activityhandle.ActivityHandle(
             activity_id=options.activity_id,
-            object_id=options.object_id, uri=options.uri)
+            object_id=options.object_id, uri=options.uri,
+            handle_invite=options.handle_invite)
 
     if options.single_process is True:
         sessionbus = dbus.SessionBus()

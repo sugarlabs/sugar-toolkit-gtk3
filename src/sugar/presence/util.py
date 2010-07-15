@@ -50,6 +50,12 @@ class ConnectionManager(object):
     def get_connections_per_account(self):
         return self._connections_per_account
 
+    def get_account_for_connection(self, connection_path):
+        for account_path, connection in self._connections_per_account.items():
+            if connection.object_path == connection_path:
+                return account_path
+        return None
+
 _connection_manager = None
 
 def get_connection_manager():

@@ -94,7 +94,7 @@ class Activity(gobject.GObject):
         self.telepathy_text_chan = None
         self.telepathy_tubes_chan = None
 
-        self._room_handle = room_handle
+        self.room_handle = room_handle
         self._join_command = None
         self._id = properties.get('id', None)
         self._color = properties.get('color', None)
@@ -111,7 +111,7 @@ class Activity(gobject.GObject):
         self._handle_to_buddy = {}
 
         self._get_properties_call = None
-        if not self._room_handle is None:
+        if not self.room_handle is None:
             self._start_tracking_properties()
 
     def _start_tracking_properties(self):
@@ -122,7 +122,7 @@ class Activity(gobject.GObject):
                 CONN_INTERFACE_ACTIVITY_PROPERTIES,
                 'GetProperties',
                 'u',
-                (self._room_handle,),
+                (self.room_handle,),
                 reply_handler=self.__got_properties_cb,
                 error_handler=self.__error_handler_cb,
                 utf8_strings=True)
@@ -364,12 +364,12 @@ class Activity(gobject.GObject):
         _logger.debug('%r: joining', self)
 
         self._join_command = _JoinCommand(self.telepathy_conn,
-                                          self._room_handle)
+                                          self.room_handle)
         self._join_command.connect('finished', self.__joined_cb)
         self._join_command.run()
 
     def share(self, share_activity_cb, share_activity_error_cb):
-        if not self._room_handle is None:
+        if not self.room_handle is None:
             raise ValueError('Already have a room handle')
 
         self._share_command = _ShareCommand(self.telepathy_conn, self._id)
@@ -384,7 +384,7 @@ class Activity(gobject.GObject):
         _logger.debug('%r: Share finished %r', self, error)
         if error is None:
             self._joined = True
-            self._room_handle = share_command.room_handle
+            self.room_handle = share_command.room_handle
             self.telepathy_text_chan = share_command.text_channel
             self.telepathy_tubes_chan = share_command.tubes_channel
             self._publish_properties()
@@ -410,7 +410,7 @@ class Activity(gobject.GObject):
 
         logging.debug('_publish_properties calling SetProperties %r', properties)
         self.telepathy_conn.SetProperties(
-                self._room_handle,
+                self.room_handle,
                 properties,
                 dbus_interface=CONN_INTERFACE_ACTIVITY_PROPERTIES)
 
@@ -528,7 +528,7 @@ class _JoinCommand(_BaseCommand):
         _BaseCommand.__init__(self)
 
         self._connection = connection
-        self._room_handle = room_handle
+        self.room_handle = room_handle
         self._finished = False
         self._text_channel_group_flags = None
         self.text_channel = None
@@ -539,13 +539,13 @@ class _JoinCommand(_BaseCommand):
             raise RuntimeError('This command has already finished')
 
         self._connection.RequestChannel(CHANNEL_TYPE_TEXT,
-            HANDLE_TYPE_ROOM, self._room_handle, True,
+            HANDLE_TYPE_ROOM, self.room_handle, True,
             reply_handler=self.__create_text_channel_cb,
             error_handler=self.__error_handler_cb,
             dbus_interface=CONNECTION)
 
         self._connection.RequestChannel(CHANNEL_TYPE_TUBES,
-            HANDLE_TYPE_ROOM, self._room_handle, True,
+            HANDLE_TYPE_ROOM, self.room_handle, True,
             reply_handler=self.__create_tubes_channel_cb,
             error_handler=self.__error_handler_cb,
             dbus_interface=CONNECTION)
@@ -636,7 +636,7 @@ class _JoinCommand(_BaseCommand):
     def __text_channel_members_changed_cb(self, message, added, removed,
                                           local_pending, remote_pending,
                                           actor, reason):
-        _logger.debug('__text_channel_members_changed_cb added %r removed %r local_pending %r remote_pending %r', added, removed, local_pending, remote_pending)
+        _logger.debug('__text_channel_members_changed_cb added %r removed %r local_pending %r remote_pending %r self_handle %r', added, removed, local_pending, remote_pending, self._self_handle)
         if self._self_handle in added:
             logging.info('KILL_PS Set the channel properties')
             self._finished = True
@@ -645,9 +645,9 @@ class _JoinCommand(_BaseCommand):
         return
 
         #_logger.debug('Activity %r text channel %u currently has %r',
-        #              self, self._room_handle, self._handle_to_buddy)
+        #              self, self.room_handle, self._handle_to_buddy)
         _logger.debug('Text channel %u members changed: + %r, - %r, LP %r, '
-                      'RP %r, message %r, actor %r, reason %r', self._room_handle,
+                      'RP %r, message %r, actor %r, reason %r', self.room_handle,
                       added, removed, local_pending, remote_pending,
                       message, actor, reason)
         # Note: D-Bus calls this with list arguments, but after GetMembers()

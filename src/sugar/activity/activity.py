@@ -52,15 +52,25 @@ import logging
 import os
 import time
 from hashlib import sha1
-import gconf
+from functools import partial
 
+import gconf
 import gtk
 import gobject
 import dbus
 import dbus.service
+from dbus import PROPERTIES_IFACE
 import cjson
+from telepathy.server import DBusProperties
+from telepathy.interfaces import CONNECTION, \
+                                 CHANNEL, \
+                                 CHANNEL_TYPE_TEXT, \
+                                 CLIENT, \
+                                 CLIENT_HANDLER
+from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 
 from sugar import util
+from sugar import dispatch
 from sugar.presence import presenceservice
 from sugar.activity.activityservice import ActivityService
 from sugar.activity.namingalert import NamingAlert
@@ -88,6 +98,7 @@ J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 
+CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
 class _ActivitySession(gobject.GObject):
 
@@ -300,10 +311,50 @@ class Activity(Window, gtk.Container):
             if self._jobject.metadata.has_key('share-scope'):
                 share_scope = self._jobject.metadata['share-scope']
 
+        self.shared_activity = None
+        self._join_id = None
+
+        if handle.handle_invite:
+            wait_loop = gobject.MainLoop()
+            self._client_handler = _ClientHandler(
+                    self.get_bundle_id(),
+                    partial(self.__got_channel_cb, wait_loop))
+            # The current API requires that self.shared_activity is set before
+            # exiting from __init__, so we wait until we have got the shared
+            # activity.
+            wait_loop.run()
+        else:
+            pservice = presenceservice.get_instance()
+            mesh_instance = pservice.get_activity(self._activity_id,
+                                                  warn_if_none=False)
+            self._set_up_sharing(mesh_instance, share_scope)
+
+        if handle.object_id is None and create_jobject:
+            logging.debug('Creating a jobject.')
+            self._jobject = datastore.create()
+            title = _('%s Activity') % get_bundle_name()
+            self._jobject.metadata['title'] = title
+            self.set_title(self._jobject.metadata['title'])
+            self._jobject.metadata['title_set_by_user'] = '0'
+            self._jobject.metadata['activity'] = self.get_bundle_id()
+            self._jobject.metadata['activity_id'] = self.get_id()
+            self._jobject.metadata['keep'] = '0'
+            self._jobject.metadata['preview'] = ''
+            self._jobject.metadata['share-scope'] = SCOPE_PRIVATE
+            if self.shared_activity is not None:
+                icon_color = self.shared_activity.props.color
+            else:
+                client = gconf.client_get_default()
+                icon_color = client.get_string('/desktop/sugar/user/color')
+            self._jobject.metadata['icon-color'] = icon_color
+
+            self._jobject.file_path = ''
+            # Cannot call datastore.write async for creates:
+            # https://dev.laptop.org/ticket/3071
+            datastore.write(self._jobject)
+
+    def _set_up_sharing(self, mesh_instance, share_scope):
         # handle activity share/join
-        pservice = presenceservice.get_instance()
-        mesh_instance = pservice.get_activity(self._activity_id,
-                                              warn_if_none=False)
         logging.debug("*** Act %s, mesh instance %r, scope %s",
                       self._activity_id, mesh_instance, share_scope)
         if mesh_instance is not None:
@@ -331,29 +382,19 @@ class Activity(Window, gtk.Container):
             else:
                 logging.debug('Unknown share scope %r', share_scope)
 
-        if handle.object_id is None and create_jobject:
-            logging.debug('Creating a jobject.')
-            self._jobject = datastore.create()
-            title = _('%s Activity') % get_bundle_name()
-            self._jobject.metadata['title'] = title
-            self.set_title(self._jobject.metadata['title'])
-            self._jobject.metadata['title_set_by_user'] = '0'
-            self._jobject.metadata['activity'] = self.get_bundle_id()
-            self._jobject.metadata['activity_id'] = self.get_id()
-            self._jobject.metadata['keep'] = '0'
-            self._jobject.metadata['preview'] = ''
-            self._jobject.metadata['share-scope'] = SCOPE_PRIVATE
-            if self.shared_activity is not None:
-                icon_color = self.shared_activity.props.color
-            else:
-                client = gconf.client_get_default()
-                icon_color = client.get_string('/desktop/sugar/user/color')
-            self._jobject.metadata['icon-color'] = icon_color
+    def __got_channel_cb(self, wait_loop, connection_path, channel_path):
+        logging.debug('Activity.__got_channel_cb')
+        connection_name = connection_path.replace('/', '.')[1:]
 
-            self._jobject.file_path = ''
-            # Cannot call datastore.write async for creates:
-            # https://dev.laptop.org/ticket/3071
-            datastore.write(self._jobject)
+        bus = dbus.SessionBus()
+        channel = bus.get_object(connection_name, channel_path)
+        room_handle = channel.Get(CHANNEL, 'TargetHandle')
+
+        pservice = presenceservice.get_instance()
+        mesh_instance = pservice.get_activity_by_handle(connection_path,
+                                                        room_handle)
+        self._set_up_sharing(mesh_instance, SCOPE_PRIVATE)
+        wait_loop.quit()
 
     def get_active(self):
         return self._active
@@ -646,6 +687,7 @@ class Activity(Window, gtk.Container):
 
     def __joined_cb(self, activity, success, err):
         """Callback when join has finished"""
+        logging.debug('Activity.__joined_cb %r', success)
         self.shared_activity.disconnect(self._join_id)
         self._join_id = None
         if not success:
@@ -854,6 +896,50 @@ class Activity(Window, gtk.Container):
     # DEPRECATED
     _shared_activity = property(lambda self: self.shared_activity, None)
 
+SUGAR_CLIENT_PATH = '/org/freedesktop/Telepathy/Client/Sugar'
+
+class _ClientHandler(dbus.service.Object, DBusProperties):
+    def __init__(self, bundle_id, got_channel_cb):
+        self._interfaces = set([CLIENT, CLIENT_HANDLER, PROPERTIES_IFACE])
+        self._got_channel_cb = got_channel_cb
+
+        bus = dbus.Bus()
+        name = CLIENT + '.' + bundle_id
+        bus_name = dbus.service.BusName(name, bus=bus)
+
+        path = '/' + name.replace('.', '/')
+        dbus.service.Object.__init__(self, bus_name, path)
+        DBusProperties.__init__(self)
+
+        self._implement_property_get(CLIENT, {
+            'Interfaces': lambda: list(self._interfaces),
+          })
+        self._implement_property_get(CLIENT_HANDLER, {
+            'HandlerChannelFilter': self.__get_filters_cb,
+          })
+
+    def __get_filters_cb(self):
+        logging.debug('__get_filters_cb')
+        filters = {
+            CHANNEL + '.ChannelType'     : CHANNEL_TYPE_TEXT,
+            CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
+            }
+        filter_dict = dbus.Dictionary(filters, signature='sv')
+        logging.debug('__get_filters_cb %r', dbus.Array([filter_dict], signature='a{sv}'))
+        return dbus.Array([filter_dict], signature='a{sv}')
+
+    @dbus.service.method(dbus_interface=CLIENT_HANDLER,
+                         in_signature='ooa(oa{sv})aota{sv}', out_signature='')
+    def HandleChannels(self, account, connection, channels, requests_satisfied,
+                        user_action_time, handler_info):
+        logging.debug('HandleChannels\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r',
+                account, connection, channels, requests_satisfied,
+                user_action_time, handler_info)
+        try:
+            for channel in channels:
+                self._got_channel_cb(connection, channel[0])
+        except Exception, e:
+            logging.exception(e)
 
 _session = None
 

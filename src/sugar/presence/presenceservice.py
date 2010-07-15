@@ -280,6 +280,24 @@ class PresenceService(gobject.GObject):
 
         return None
 
+    def get_activity_by_handle(self, connection_path, room_handle):
+        if self._activity_cache is not None:
+            if self._activity_cache.room_handle != room_handle:
+                raise RuntimeError('Activities can only access their own shared'
+                                   'instance')
+            return self._activity_cache
+        else:
+            connection_manager = get_connection_manager()
+            account_path = connection_manager.get_account_for_connection(connection_path)
+
+            connection_name = connection_path.replace('/', '.')[1:]
+            bus = dbus.SessionBus()
+            connection = bus.get_object(connection_name, connection_path)
+            activity = Activity(account_path, connection,
+                                room_handle=room_handle)
+            self._activity_cache = activity
+            return activity
+
     def get_buddies(self):
         """Retrieve set of all buddies from service
 

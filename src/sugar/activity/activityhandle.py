@@ -23,7 +23,8 @@ STABLE.
 class ActivityHandle(object):
     """Data structure storing simple activity metadata"""
 
-    def __init__(self, activity_id=None, object_id=None, uri=None):
+    def __init__(self, activity_id=None, object_id=None, uri=None,
+                 handle_invite=False):
         """Initialise the handle from activity_id
 
         activity_id -- unique id for the activity to be
@@ -45,14 +46,18 @@ class ActivityHandle(object):
             activity, rather than a journal object
             (downloads stored on the file system for
             example or web pages)
+        handle_invite -- the activity is being launched for handling an invite
+                         from the network
         """
         self.activity_id = activity_id
         self.object_id = object_id
         self.uri = uri
+        self.handle_invite = handle_invite
 
     def get_dict(self):
         """Retrieve our settings as a dictionary"""
-        result = {'activity_id': self.activity_id}
+        result = {'activity_id': self.activity_id,
+                  'handle_invite': self.handle_invite}
         if self.object_id:
             result['object_id'] = self.object_id
         if self.uri:
@@ -65,5 +70,6 @@ def create_from_dict(handle_dict):
     """Create a handle from a dictionary of parameters"""
     result = ActivityHandle(handle_dict['activity_id'],
         object_id = handle_dict.get('object_id'),
-        uri = handle_dict.get('uri'))
+        uri = handle_dict.get('uri'),
+        handle_invite = handle_dict.get('handle_invite'))
     return result
