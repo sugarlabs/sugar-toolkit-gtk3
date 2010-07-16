@@ -104,11 +104,7 @@ class Activity(gobject.GObject):
         self._private = properties.get('private', True)
         self._joined = properties.get('joined', False)
         self._self_handle = None
-
-        # The buddies really in the channel, which we can see directly because
-        # we've joined. If _joined is False, this will be incomplete.
-        # { member handle, possibly channel-specific => Buddy }
-        self._handle_to_buddy = {}
+        self._buddies = {}
 
         self._get_properties_call = None
         if not self.room_handle is None:
@@ -224,53 +220,13 @@ class Activity(gobject.GObject):
                                      reply_handler=reply_handler,
                                      error_handler=error_handler)
 
-    def _emit_buddy_joined_signal(self, object_path):
-        """Generate buddy-joined GObject signal with presence Buddy object"""
-        self.emit('buddy-joined', self._ps_new_object(object_path))
-        return False
-
-    def __buddy_handle_joined_cb(self, object_path, handle):
-        _logger.debug('%r: buddy %s joined with handle %u', self, object_path,
-                      handle)
-        gobject.idle_add(self._emit_buddy_joined_signal, object_path)
-        self._handle_to_buddy_path[handle] = object_path
-        self._buddy_path_to_handle[object_path] = handle
-
-    def _emit_buddy_left_signal(self, object_path):
-        """Generate buddy-left GObject signal with presence Buddy object
-
-        XXX note use of _ps_new_object instead of _ps_del_object here
-        """
-        self.emit('buddy-left', self._ps_new_object(object_path))
-        return False
-
-    def __buddy_left_cb(self, object_path):
-        _logger.debug('%r: buddy %s left', self, object_path)
-        gobject.idle_add(self._emit_buddy_left_signal, object_path)
-        handle = self._buddy_path_to_handle.pop(object_path, None)
-        if handle:
-            self._handle_to_buddy_path.pop(handle, None)
-
-    def _emit_new_channel_signal(self, object_path):
-        """Generate new-channel GObject signal with channel object path
-
-        New telepathy-python communications channel has been opened
-        """
-        self.emit('new-channel', object_path)
-        return False
-
-    def __new_channel_cb(self, object_path):
-        _logger.debug('%r: new channel created at %s', self, object_path)
-        gobject.idle_add(self._emit_new_channel_signal, object_path)
-
     def get_joined_buddies(self):
         """Retrieve the set of Buddy objects attached to this activity
 
         returns list of presence Buddy objects that we can successfully
         create from the buddy object paths that PS has for this activity.
         """
-        logging.info('KILL_PS return joined buddies')
-        return []
+        return self._buddies.values()
 
     def get_buddy_by_handle(self, handle):
         """Retrieve the Buddy object given a telepathy handle.
@@ -306,16 +262,20 @@ class Activity(gobject.GObject):
 
     def __joined_cb(self, join_command, error):
         _logger.debug('%r: Join finished %r', self, error)
-        if error is None:
-            self._joined = True
-            self.telepathy_text_chan = join_command.text_channel
-            self.telepathy_tubes_chan = join_command.tubes_channel
-            self._start_tracking_buddies()
-            self._start_tracking_channel()
-        self.emit('joined', error is None, str(error))
+        if error is not None:
+            self.emit('joined', error is None, str(error))
+        self.telepathy_text_chan = join_command.text_channel
+        self.telepathy_tubes_chan = join_command.tubes_channel
+        self._self_handle = join_command.self_handle
+        self._start_tracking_buddies()
+        self._start_tracking_channel()
 
     def _start_tracking_buddies(self):
         group = self.telepathy_text_chan[CHANNEL_INTERFACE_GROUP]
+
+        group.GetAllMembers(reply_handler=self.__get_all_members_cb,
+                            error_handler=self.__error_handler_cb)
+
         group.connect_to_signal('MembersChanged',
                                 self.__text_channel_members_changed_cb)
 
@@ -323,18 +283,40 @@ class Activity(gobject.GObject):
         channel = self.telepathy_text_chan[CHANNEL]
         channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
+    def __get_all_members_cb(self, members, local_pending, remote_pending):
+        _logger.debug('__get_all_members_cb %r', members)
+        if self._self_handle in members:
+            members.remove(self._self_handle)
+        if members:
+            self.telepathy_conn.InspectHandles(HANDLE_TYPE_CONTACT, members,
+                reply_handler=self.__inspect_handles_cb,
+                error_handler=self.__error_handler_cb,
+                dbus_interface=CONNECTION)
+
+    def __inspect_handles_cb(self, contact_ids):
+        _logger.debug('__inspect_handles_cb %r', contact_ids)
+        for contact_id in contact_ids:
+            self._buddies[contact_id] = self._get_buddy(contact_id)
+        # Once we have the initial members, we can finish the join process
+        self._joined = True
+        self.emit('joined', True, None)
+
     def __text_channel_members_changed_cb(self, message, added, removed,
                                           local_pending, remote_pending,
                                           actor, reason):
         _logger.debug('__text_channel_members_changed_cb %r',
                       [added, message, added, removed, local_pending,
                        remote_pending, actor, reason])
+        if self._self_handle in added:
+            added.remove(self._self_handle)
         if added:
             self.telepathy_conn.InspectHandles(HANDLE_TYPE_CONTACT, added,
                 reply_handler=self.__members_added_cb,
                 error_handler=self.__error_handler_cb,
                 dbus_interface=CONNECTION)
 
+        if self._self_handle in removed:
+            removed.remove(self._self_handle)
         if removed:
             self.telepathy_conn.InspectHandles(HANDLE_TYPE_CONTACT, removed,
                 reply_handler=self.__members_removed_cb,
@@ -343,11 +325,23 @@ class Activity(gobject.GObject):
 
     def __members_added_cb(self, contact_ids):
         for contact_id in contact_ids:
-            self.emit('buddy-joined', Buddy(self._account_path, contact_id))
+            if contact_id not in self._buddies:
+                buddy = self._get_buddy(contact_id)
+                self.emit('buddy-joined', buddy)
+                self._buddies[contact_id] = buddy
 
     def __members_removed_cb(self, contact_ids):
         for contact_id in contact_ids:
-            self.emit('buddy-left', Buddy(self._account_path, contact_id))
+            if contact_id in self._buddies:
+                buddy = self._get_buddy(contact_id)
+                self.emit('buddy-left', buddy)
+                del self._buddies[contact_id]
+
+    def _get_buddy(self, contact_id):
+        if contact_id in self._buddies:
+            return self._buddies[contact_id]
+        else:
+            return Buddy(self._account_path, contact_id)
 
     def join(self):
         """Join this activity.
@@ -387,6 +381,7 @@ class Activity(gobject.GObject):
             self.room_handle = share_command.room_handle
             self.telepathy_text_chan = share_command.text_channel
             self.telepathy_tubes_chan = share_command.tubes_channel
+            self._self_handle = share_command.self_handle
             self._publish_properties()
             self._start_tracking_properties()
             self._start_tracking_buddies()
@@ -458,6 +453,11 @@ class _BaseCommand(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
 
+        self.text_channel = None
+        self.tubes_channel = None
+        self.room_handle = None
+        self.self_handle = None
+
     def run(self):
         raise NotImplementedError()
 
@@ -470,9 +470,6 @@ class _ShareCommand(_BaseCommand):
         self._activity_id = activity_id
         self._finished = False
         self._join_command = None
-        self.text_channel = None
-        self.tubes_channel = None
-        self.room_handle = None
 
     def run(self):
         """ TODO: Check we don't need this
@@ -528,11 +525,9 @@ class _JoinCommand(_BaseCommand):
         _BaseCommand.__init__(self)
 
         self._connection = connection
-        self.room_handle = room_handle
         self._finished = False
         self._text_channel_group_flags = None
-        self.text_channel = None
-        self.tubes_channel = None
+        self.room_handle = room_handle
 
     def run(self):
         if self._finished:
@@ -602,12 +597,12 @@ class _JoinCommand(_BaseCommand):
 
             _logger.info('KILL_PS Check that we pass the right self handle depending on the channel flags')
 
-            if self._self_handle in members:
+            if self.self_handle in members:
                 _logger.debug('%r: I am already in the room', self)
                 assert self._finished  # set by _text_channel_members_changed_cb
-            elif self._self_handle in local_pending:
+            elif self.self_handle in local_pending:
                 _logger.debug('%r: We are in local pending - entering', self)
-                group.AddMembers([self._self_handle], '',
+                group.AddMembers([self.self_handle], '',
                     reply_handler=lambda: None,
                     error_handler=lambda e: self._join_failed_cb(e,
                         'got_all_members AddMembers'))
@@ -624,7 +619,7 @@ class _JoinCommand(_BaseCommand):
                                 error_handler=self.__error_handler_cb)
 
         def got_self_handle(self_handle):
-            self._self_handle = self_handle
+            self.self_handle = self_handle
             group.connect_to_signal('GroupFlagsChanged',
                                     self.__text_channel_group_flags_changed_cb)
             group.GetGroupFlags(reply_handler=got_group_flags,
@@ -636,8 +631,8 @@ class _JoinCommand(_BaseCommand):
     def __text_channel_members_changed_cb(self, message, added, removed,
                                           local_pending, remote_pending,
                                           actor, reason):
-        _logger.debug('__text_channel_members_changed_cb added %r removed %r local_pending %r remote_pending %r self_handle %r', added, removed, local_pending, remote_pending, self._self_handle)
-        if self._self_handle in added:
+        _logger.debug('__text_channel_members_changed_cb added %r removed %r local_pending %r remote_pending %r self_handle %r', added, removed, local_pending, remote_pending, self.self_handle)
+        if self.self_handle in added:
             logging.info('KILL_PS Set the channel properties')
             self._finished = True
             self.emit('finished', None)
@@ -706,8 +701,8 @@ class _JoinCommand(_BaseCommand):
         if self._self_handle not in self._handle_to_buddy and self._joined:
             self._text_channel_closed_cb()
         """
-        self._handle_to_buddy[self._self_handle] = None
-        if self._self_handle in self._handle_to_buddy and not self._joined:
+        self._handle_to_buddy[self.self_handle] = None
+        if self.self_handle in self._handle_to_buddy and not self._joined:
             # We've just joined
             self._joined = True
             """
