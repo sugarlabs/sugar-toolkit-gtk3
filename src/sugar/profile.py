@@ -184,12 +184,15 @@ class Profile(object):
             '# log files and features\n'\
             '#export LM_DEBUG=net\n' \
             '#export GABBLE_DEBUG=all\n' \
-            '#export ' \
-            'GABBLE_LOGFILE=$HOME/.sugar/default/logs/telepathy-gabble.log\n' \
+            '#export GABBLE_LOGFILE=' \
+            '$HOME/.sugar/$SUGAR_PROFILE/logs/telepathy-gabble.log\n' \
             '#export SALUT_DEBUG=all\n' \
-            '#export ' \
-            'SALUT_LOGFILE=$HOME/.sugar/default/logs/telepathy-salut.log\n' \
+            '#export SALUT_LOGFILE=' \
+            '$HOME/.sugar/$SUGAR_PROFILE/logs/telepathy-salut.log\n' \
             '#export GIBBER_DEBUG=all\n' \
+            '#export MC_LOGFILE=' \
+            '$HOME/.sugar/$SUGAR_PROFILE/logs/mission-control.log\n' \
+            '#export MC_DEBUG=all\n' \
             '#export PRESENCESERVICE_DEBUG=1\n' \
             '#export SUGAR_LOGGER_LEVEL=debug\n\n' \
             '# Uncomment the following line to enable core dumps\n' \
