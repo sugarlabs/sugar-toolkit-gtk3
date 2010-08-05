@@ -190,6 +190,7 @@ class Profile(object):
             '#export SALUT_LOGFILE=' \
             '$HOME/.sugar/$SUGAR_PROFILE/logs/telepathy-salut.log\n' \
             '#export GIBBER_DEBUG=all\n' \
+            '#export WOCKY_DEBUG=all\n' \
             '#export MC_LOGFILE=' \
             '$HOME/.sugar/$SUGAR_PROFILE/logs/mission-control.log\n' \
             '#export MC_DEBUG=all\n' \
