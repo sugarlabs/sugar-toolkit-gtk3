@@ -2,48 +2,52 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-26 00:33-0400\n"
-"PO-Revision-Date: 2009-09-05 07:26-0400\n"
-"Last-Translator: Myckel Habets <myckel@sdf.lonestar.org>\n"
+"POT-Creation-Date: 2010-01-20 13:10-0500\n"
+"PO-Revision-Date: 2010-06-28 21:09+0200\n"
+"Last-Translator: whe <heppew@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.3\n"
 
-#: ../src/sugar/activity/activity.py:329
+#: ../src/sugar/activity/activity.py:338
 #, python-format
 msgid "%s Activity"
-msgstr "%s activiteit"
+msgstr "%s Activiteit"
 
-#: ../src/sugar/activity/activity.py:714
+#: ../src/sugar/activity/activity.py:738
 msgid "Keep error"
 msgstr "Bewaarfout"
 
-#: ../src/sugar/activity/activity.py:715
+#: ../src/sugar/activity/activity.py:739
 msgid "Keep error: all changes will be lost"
 msgstr "Bewaarfout: alle veranderingen zijn verloren gegaan"
 
-#: ../src/sugar/activity/activity.py:718
+#: ../src/sugar/activity/activity.py:742
 msgid "Don't stop"
 msgstr "Niet stoppen"
 
-#: ../src/sugar/activity/activity.py:721
+#: ../src/sugar/activity/activity.py:745
 msgid "Stop anyway"
 msgstr "Toch stoppen"
 
 #: ../src/sugar/activity/namingalert.py:82
 msgid "Name this entry"
-msgstr "Benoem deze ingang"
+msgstr "Benoem deze invoer"
 
 #: ../src/sugar/activity/namingalert.py:87
-#: ../src/sugar/activity/widgets.py:162
+#: ../src/sugar/activity/widgets.py:166
 msgid "Keep"
 msgstr "Behouden"
 
@@ -59,35 +63,35 @@ msgstr "Beschrijving:"
 msgid "Tags:"
 msgstr "Labels:"
 
-#: ../src/sugar/activity/widgets.py:79
+#: ../src/sugar/activity/widgets.py:83
 msgid "Stop"
 msgstr "Stop"
 
-#: ../src/sugar/activity/widgets.py:91
+#: ../src/sugar/activity/widgets.py:95
 msgid "Undo"
 msgstr "Ongedaan maken"
 
-#: ../src/sugar/activity/widgets.py:99
+#: ../src/sugar/activity/widgets.py:103
 msgid "Redo"
 msgstr "Herhalen"
 
-#: ../src/sugar/activity/widgets.py:106
+#: ../src/sugar/activity/widgets.py:110
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: ../src/sugar/activity/widgets.py:113
+#: ../src/sugar/activity/widgets.py:117
 msgid "Paste"
 msgstr "Plakken"
 
-#: ../src/sugar/activity/widgets.py:123
+#: ../src/sugar/activity/widgets.py:127
 msgid "Private"
 msgstr "Privé"
 
-#: ../src/sugar/activity/widgets.py:130
+#: ../src/sugar/activity/widgets.py:134
 msgid "My Neighborhood"
 msgstr "Mijn omgeving"
 
-#: ../src/sugar/activity/widgets.py:341
+#: ../src/sugar/activity/widgets.py:345
 msgid "Activity"
 msgstr "Activiteit"
 
