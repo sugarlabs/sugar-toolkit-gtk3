@@ -250,9 +250,11 @@ class RawObject(object):
         # to create hardlinks to jobject files
         # and w/o this, it wouldn't work since we have file from mounted device
         if self._file_path is None:
+            data_path = os.path.join(env.get_profile_path(), 'data')
             self._file_path = tempfile.mktemp(
-                    prefix='rawobject',
-                    dir=os.path.join(env.get_profile_path(), 'data'))
+                    prefix='rawobject', dir=data_path)
+            if not os.path.exists(data_path):
+                os.makedirs(data_path)
             os.symlink(self.object_id, self._file_path)
         return self._file_path
 
