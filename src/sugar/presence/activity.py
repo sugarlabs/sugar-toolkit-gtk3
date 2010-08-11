@@ -665,109 +665,15 @@ class _JoinCommand(_BaseCommand):
             self_handle = self._global_self_handle
 
         if self_handle in added:
-            logging.info('KILL_PS Set the channel properties')
-            self._finished = True
-            self.emit('finished', None)
-
-        return
-
-        #_logger.debug('Activity %r text channel %u currently has %r',
-        #              self, self.room_handle, self._handle_to_buddy)
-        _logger.debug('Text channel %u members changed: + %r, - %r, LP %r, '
-                      'RP %r, message %r, actor %r, reason %r', self.room_handle,
-                      added, removed, local_pending, remote_pending,
-                      message, actor, reason)
-        # Note: D-Bus calls this with list arguments, but after GetMembers()
-        # we call it with set and tuple arguments; we cope with any iterable.
-        """
-        if (self.text_channel_group_flags &
-            CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES):
-            _logger.debug('This channel has channel-specific handles')
-            map_chan = self._text_channel
-        else:
-            # we have global handles here
-            _logger.debug('This channel has global handles')
-            map_chan = None
-
-        # Disregard any who are already there - however, if we're joining
-        # the channel, this will still consider everyone to have been added,
-        # because _handle_to_buddy was cleared. That's necessary, so we get
-        # the handle-to-buddy mapping for everyone.
-        added = set(added)
-        added -= frozenset(self._handle_to_buddy.iterkeys())
-        _logger.debug('After filtering for no-ops, we want to add %r', added)
-        added_buddies = self._ps.map_handles_to_buddies(self._tp,
-                                                        map_chan,
-                                                        added)
-        for handle, buddy in added_buddies.iteritems():
-            self._handle_to_buddy[handle] = buddy
-            self._buddy_to_handle[buddy] = handle
-        self._add_buddies(added_buddies.itervalues())
-
-        self._claimed_buddies |= set(added_buddies.itervalues())
-
-        # we treat all pending members as if they weren't there
-        removed = set(removed)
-        removed |= set(local_pending)
-        removed |= set(remote_pending)
-        # disregard any who aren't already there
-        removed &= frozenset(self._handle_to_buddy.iterkeys())
-
-        _logger.debug('After filtering for no-ops, we want to remove %r',
-                      removed)
-        removed_buddies = set()
-        for handle in removed:
-            buddy = self._handle_to_buddy.pop(handle, None)
-            self._buddy_to_handle.pop(buddy)
-            removed_buddies.add(buddy)
-        # If we're not in the room yet, the "removal" may be spurious -
-        # Gabble removes the inviter from members at the same time it adds
-        # us to local-pending. We'll catch up anyway when we join the room and
-        # do the apparent<->reality sync, so just don't remove anyone until
-        # we've joined.
-        if self._joined:
-            self._remove_buddies(removed_buddies)
-
-        # if we were among those removed, we'll have to start believing
-        # the spoofable PEP-based activity tracking again.
-        if self._channel_self_handle not in self._handle_to_buddy and self._joined:
-            self._text_channel_closed_cb()
-        """
-        self._handle_to_buddy[self.channel_self_handle] = None
-        if self.channel_self_handle in self._handle_to_buddy and not self._joined:
-            # We've just joined
-            self._joined = True
-            """
-            _logger.debug('Syncing activity %r buddy list %r with reality %r',
-                          self, self._buddies, self._handle_to_buddy)
-            real_buddies = set(self._handle_to_buddy.itervalues())
-            added_buddies = real_buddies - self._buddies
-            if added_buddies:
-                _logger.debug('... %r are here although they claimed not',
-                              added_buddies)
-            removed_buddies = self._buddies - real_buddies
-            _logger.debug('... %r claimed to be here but are not',
-                          removed_buddies)
-            self._add_buddies(added_buddies)
-            self._remove_buddies(removed_buddies)
-
-            # Leave if the activity crashes
-            if self._activity_unique_name is not None:
-                _logger.debug('Watching unique name %s',
-                              self._activity_unique_name)
-                self._activity_unique_name_watch = dbus.Bus().watch_name_owner(
-                    self._activity_unique_name, self._activity_unique_name_cb)
-            """
-            # Finish the Join process
             if PROPERTIES_INTERFACE not in self.text_channel:
-                self.__join_activity_channel_props_listed_cb(())
+                self._finished = True
+                self.emit('finished', None)
             else:
                 self.text_channel[PROPERTIES_INTERFACE].ListProperties(
-                    reply_handler=self.__join_activity_channel_props_listed_cb,
-                    error_handler=lambda e: self._join_failed_cb(e,
-                        'Activity._text_channel_members_changed_cb'))
+                    reply_handler=self.__list_properties_cb,
+                    error_handler=self.__error_handler_cb)
 
-    def __join_activity_channel_props_listed_cb(self, prop_specs):
+    def __list_properties_cb(self, prop_specs):
         # FIXME: invite-only ought to be set on private activities; but
         # since only the owner can change invite-only, that would break
         # activity scope changes.
@@ -790,9 +696,12 @@ class _JoinCommand(_BaseCommand):
 
         if props_to_set:
             self.text_channel[PROPERTIES_INTERFACE].SetProperties(
-                props_to_set, reply_handler=self._joined_cb,
-                error_handler=lambda e: self._join_failed_cb(e, 
-                    'Activity._join_activity_channel_props_listed_cb'))
+                props_to_set, reply_handler=self.__set_properties_cb,
+                error_handler=self.__error_handler_cb)
         else:
-            self._joined_cb()
+            self._finished = True
+            self.emit('finished', None)
 
+    def __set_properties_cb(self):
+        self._finished = True
+        self.emit('finished', None)
