@@ -62,15 +62,13 @@ import dbus.service
 from dbus import PROPERTIES_IFACE
 import cjson
 from telepathy.server import DBusProperties
-from telepathy.interfaces import CONNECTION, \
-                                 CHANNEL, \
+from telepathy.interfaces import CHANNEL, \
                                  CHANNEL_TYPE_TEXT, \
                                  CLIENT, \
                                  CLIENT_HANDLER
 from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 
 from sugar import util
-from sugar import dispatch
 from sugar.presence import presenceservice
 from sugar.activity.activityservice import ActivityService
 from sugar.activity.namingalert import NamingAlert

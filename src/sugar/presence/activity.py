@@ -26,7 +26,6 @@ from functools import partial
 import dbus
 from dbus import PROPERTIES_IFACE
 import gobject
-import telepathy
 from telepathy.client import Channel
 from telepathy.interfaces import CHANNEL, \
                                  CHANNEL_INTERFACE_GROUP, \

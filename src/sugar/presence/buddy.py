@@ -21,14 +21,12 @@ STABLE.
 """
 
 import logging
-from functools import partial
 
 import gobject
 import gtk
 import dbus
 import gconf
-from telepathy.interfaces import ACCOUNT, \
-                                 CONNECTION, \
+from telepathy.interfaces import CONNECTION, \
                                  CONNECTION_INTERFACE_ALIASING, \
                                  CONNECTION_INTERFACE_CONTACTS
 from telepathy.constants import HANDLE_TYPE_CONTACT

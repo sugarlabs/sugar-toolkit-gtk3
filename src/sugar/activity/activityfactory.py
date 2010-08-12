@@ -27,7 +27,6 @@ import uuid
 import dbus
 import gobject
 
-from sugar.presence import presenceservice
 from sugar.activity.activityhandle import ActivityHandle
 from sugar import util
 from sugar import env

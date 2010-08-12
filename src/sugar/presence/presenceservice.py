@@ -22,7 +22,6 @@ STABLE.
 """
 
 import logging
-import traceback
 
 import gobject
 import dbus
@@ -37,8 +36,7 @@ from sugar.presence.util import get_connection_manager
 from telepathy.interfaces import ACCOUNT, \
                                  ACCOUNT_MANAGER, \
                                  CONNECTION
-from telepathy.constants import HANDLE_TYPE_CONTACT, \
-                                HANDLE_TYPE_ROOM
+from telepathy.constants import HANDLE_TYPE_CONTACT
 
 _logger = logging.getLogger('sugar.presence.presenceservice')
 
