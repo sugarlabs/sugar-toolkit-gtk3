@@ -607,8 +607,6 @@ class _JoinCommand(_BaseCommand):
         self.text_channel_group_flags &= ~removed
 
     def _add_self_to_channel(self):
-        _logger.info('KILL_PS Connect to the Closed signal of the text channel')
-
         # FIXME: cope with non-Group channels here if we want to support
         # non-OLPC-compatible IMs
 
