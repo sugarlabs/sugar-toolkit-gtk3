@@ -352,7 +352,6 @@ class PresenceService(gobject.GObject):
                     self._get_buddies_error_cb(error_handler, e))
 
     def get_buddy(self, account_path, contact_id):
-        logging.info('KILL_PS decide how to invalidate this cache')
         if (account_path, contact_id) in self._buddy_cache:
             return self._buddy_cache[(account_path, contact_id)]
 
