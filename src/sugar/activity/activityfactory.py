@@ -22,6 +22,7 @@ the moment there is no reason to stabilize this API.
 """
 
 import logging
+import uuid
 
 import dbus
 import gobject
@@ -64,28 +65,7 @@ def _close_fds():
 
 def create_activity_id():
     """Generate a new, unique ID for this activity"""
-    pservice = presenceservice.get_instance()
-
-    # create a new unique activity ID
-    i = 0
-    act_id = None
-    while i < 10:
-        act_id = util.unique_id()
-        i += 1
-
-        # check through network activities
-        found = False
-        logging.info('KILL_PS check the activity_id is not used in the network')
-        """
-        activities = pservice.get_activities()
-        for act in activities:
-            if act_id == act.props.id:
-                found = True
-                break
-        """
-        if not found:
-            return act_id
-    raise RuntimeError("Cannot generate unique activity id.")
+    return util.unique_id(uuid.getnode())
 
 
 def get_environment(activity):
