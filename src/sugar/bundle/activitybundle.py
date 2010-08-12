@@ -72,7 +72,7 @@ class ActivityBundle(Bundle):
             self._parse_linfo(linfo_file)
 
         if self._local_name == None:
-           self._local_name = self._name
+            self._local_name = self._name
 
     def _get_manifest(self):
         if self._manifest is None:

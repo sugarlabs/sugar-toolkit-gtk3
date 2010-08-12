@@ -23,7 +23,6 @@ STABLE.
 import logging
 
 import gobject
-import gtk
 import dbus
 import gconf
 from telepathy.interfaces import CONNECTION, \
@@ -52,14 +51,11 @@ class BaseBuddy(gobject.GObject):
         'color': color (XXX what format),
         'current-activity': (XXX dbus path?),
         'owner': (XXX dbus path?),
-        'icon': (XXX pixel data for an icon?)
-    See __gproperties__
     """
 
     __gtype_name__ = 'PresenceBaseBuddy'
 
     __gsignals__ = {
-        'icon-changed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
         'joined-activity': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
             ([gobject.TYPE_PYOBJECT])),
         'left-activity': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -72,27 +68,12 @@ class BaseBuddy(gobject.GObject):
         gobject.GObject.__init__(self)
 
         self._key = None
-        self._icon = None
         self._nick = None
         self._color = None
         self._current_activity = None
         self._owner = False
         self._ip4_address = None
         self._tags = None
-
-    def destroy(self):
-        self._icon_changed_signal.remove()
-        self._joined_activity_signal.remove()
-        self._left_activity_signal.remove()
-        self._property_changed_signal.remove()
-
-    def _get_properties_helper(self):
-        """Retrieve the Buddy's property dictionary from the service object
-        """
-        props = self._buddy.GetProperties(byte_arrays=True)
-        if not props:
-            return {}
-        return props
 
     def get_key(self):
         return self._key
@@ -101,11 +82,6 @@ class BaseBuddy(gobject.GObject):
         self._key = key
 
     key = gobject.property(type=str, getter=get_key, setter=set_key)
-
-    def get_icon(self):
-        raise NotImplementedError()
-
-    icon = gobject.property(type=str, getter=get_icon)
 
     def get_nick(self):
         return self._nick
@@ -163,94 +139,6 @@ class BaseBuddy(gobject.GObject):
     def object_path(self):
         """Retrieve our dbus object path"""
         return None
-
-    def _emit_icon_changed_signal(self, icon_data):
-        """Emit GObject signal when icon has changed"""
-        self._icon = str(icon_data)
-        self.emit('icon-changed')
-        return False
-
-    def __icon_changed_cb(self, icon_data):
-        """Handle dbus signal by emitting a GObject signal"""
-        gobject.idle_add(self._emit_icon_changed_signal, icon_data)
-
-    def __emit_joined_activity_signal(self, object_path):
-        """Emit activity joined signal with Activity object"""
-        self.emit('joined-activity', self._ps_new_object(object_path))
-        return False
-
-    def __joined_activity_cb(self, object_path):
-        """Handle dbus signal by emitting a GObject signal
-
-        Stores the activity in activities dictionary as well
-        """
-        if not self._activities.has_key(object_path):
-            self._activities[object_path] = self._ps_new_object(object_path)
-        gobject.idle_add(self._emit_joined_activity_signal, object_path)
-
-    def _emit_left_activity_signal(self, object_path):
-        """Emit activity left signal with Activity object
-
-        XXX this calls self._ps_new_object instead of self._ps_del_object,
-            which would seem to be the incorrect callback?
-        """
-        self.emit('left-activity', self._ps_new_object(object_path))
-        return False
-
-    def __left_activity_cb(self, object_path):
-        """Handle dbus signal by emitting a GObject signal
-
-        Also removes from the activities dictionary
-        """
-        if self._activities.has_key(object_path):
-            del self._activities[object_path]
-        gobject.idle_add(self._emit_left_activity_signal, object_path)
-
-    def _handle_property_changed_signal(self, prop_list):
-        """Emit property-changed signal with property dictionary
-
-        Generates a property-changed signal with the results of
-        _get_properties_helper()
-        """
-        self._properties = self._get_properties_helper()
-        # FIXME: don't leak unexposed property names
-        self.emit('property-changed', prop_list)
-        return False
-
-    def __property_changed_cb(self, prop_list):
-        """Handle dbus signal by emitting a GObject signal"""
-        gobject.idle_add(self._handle_property_changed_signal, prop_list)
-
-    def get_icon_pixbuf(self):
-        """Retrieve Buddy's icon as a GTK pixel buffer
-
-        XXX Why aren't the icons coming in as SVG?
-        """
-        if self.props.icon and len(self.props.icon):
-            pbl = gtk.gdk.PixbufLoader()
-            pbl.write(self.props.icon)
-            pbl.close()
-            return pbl.get_pixbuf()
-        else:
-            return None
-
-    def get_joined_activities(self):
-        """Retrieve the set of all activities which this buddy has joined
-
-        Uses the GetJoinedActivities method on the service
-        object to produce object paths, wraps each in an
-        Activity object.
-
-        returns list of presence Activity objects
-        """
-        try:
-            resp = self._buddy.GetJoinedActivities()
-        except dbus.exceptions.DBusException:
-            return []
-        acts = []
-        for item in resp:
-            acts.append(self._ps_new_object(item))
-        return acts
 
 
 class Buddy(BaseBuddy):
@@ -316,8 +204,6 @@ class Buddy(BaseBuddy):
     def _update_properties(self, properties):
         if 'key' in properties:
             self.props.key = properties['key']
-        if 'icon' in properties:
-            self.props.icon = properties['icon']
         if 'color' in properties:
             self.props.color = properties['color']
         if 'current-activity' in properties:

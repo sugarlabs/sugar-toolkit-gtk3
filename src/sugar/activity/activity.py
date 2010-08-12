@@ -31,6 +31,7 @@ STABLE.
 """
 # Copyright (C) 2006-2007 Red Hat, Inc.
 # Copyright (C) 2007-2009 One Laptop Per Child
+# Copyright (C) 2010 Collabora Ltd. <http://www.collabora.co.uk/>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -78,7 +79,6 @@ from sugar.graphics.alert import Alert
 from sugar.graphics.icon import Icon
 from sugar.datastore import datastore
 from sugar.session import XSMPClient
-from sugar.presence import presenceservice
 from sugar import wm
 
 # support deprecated imports
@@ -741,7 +741,8 @@ class Activity(Window, gtk.Container):
                 self.shared_activity.invite(
                             buddy, '', self._invite_response_cb)
             else:
-                logging.error('Cannot invite %s, no such buddy.', buddy_key)
+                logging.error('Cannot invite %s %s, no such buddy',
+                              account_path, contact_id)
 
     def invite(self, account_path, contact_id):
         """Invite a buddy to join this Activity.
@@ -923,7 +924,8 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
             CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
             }
         filter_dict = dbus.Dictionary(filters, signature='sv')
-        logging.debug('__get_filters_cb %r', dbus.Array([filter_dict], signature='a{sv}'))
+        logging.debug('__get_filters_cb %r', dbus.Array([filter_dict],
+                                                        signature='a{sv}'))
         return dbus.Array([filter_dict], signature='a{sv}')
 
     @dbus.service.method(dbus_interface=CLIENT_HANDLER,

@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
+# Copyright (C) 2010 Collabora Ltd. <http://www.collabora.co.uk/>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -97,6 +98,7 @@ class Activity(gobject.GObject):
 
         self.room_handle = room_handle
         self._join_command = None
+        self._share_command = None
         self._id = properties.get('id', None)
         self._color = properties.get('color', None)
         self._name = properties.get('name', None)
@@ -692,7 +694,7 @@ class _JoinCommand(_BaseCommand):
             'private': True,      # don't appear in server room lists
         }
         props_to_set = []
-        for ident, name, sig, flags in prop_specs:
+        for ident, name, sig_, flags in prop_specs:
             value = props.pop(name, None)
             if value is not None:
                 if flags & PROPERTY_FLAG_WRITE:
