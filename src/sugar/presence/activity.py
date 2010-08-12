@@ -80,7 +80,8 @@ class Activity(gobject.GObject):
         'joined': (bool, None, None, False, gobject.PARAM_READABLE),
     }
 
-    def __init__(self, account_path, connection, room_handle=None, properties=None):
+    def __init__(self, account_path, connection, room_handle=None,
+                 properties=None):
         if room_handle is None and properties is None:
             raise ValueError('Need to pass one of room_handle or properties')
 
@@ -286,7 +287,8 @@ class Activity(gobject.GObject):
         channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
     def __get_all_members_cb(self, members, local_pending, remote_pending):
-        _logger.debug('__get_all_members_cb %r %r', members, self._text_channel_group_flags)
+        _logger.debug('__get_all_members_cb %r %r', members,
+                      self._text_channel_group_flags)
         if self._channel_self_handle in members:
             members.remove(self._channel_self_handle)
 
@@ -395,7 +397,8 @@ class Activity(gobject.GObject):
             self.telepathy_text_chan = share_command.text_channel
             self.telepathy_tubes_chan = share_command.tubes_channel
             self._channel_self_handle = share_command.channel_self_handle
-            self._text_channel_group_flags = share_command.text_channel_group_flags
+            self._text_channel_group_flags = \
+                    share_command.text_channel_group_flags
             self._publish_properties()
             self._start_tracking_properties()
             self._start_tracking_buddies()
@@ -417,7 +420,6 @@ class Activity(gobject.GObject):
             properties['tags'] = self._tags
         properties['private'] = self._private
 
-        logging.debug('_publish_properties calling SetProperties %r', properties)
         self.telepathy_conn.SetProperties(
                 self.room_handle,
                 properties,
@@ -601,7 +603,8 @@ class _JoinCommand(_BaseCommand):
         self._add_self_to_channel()
 
     def __text_channel_group_flags_changed_cb(self, added, removed):
-        _logger.debug('__text_channel_group_flags_changed_cb %r %r', added, removed)
+        _logger.debug('__text_channel_group_flags_changed_cb %r %r', added,
+                      removed)
         self.text_channel_group_flags |= added
         self.text_channel_group_flags &= ~removed
 
@@ -612,7 +615,10 @@ class _JoinCommand(_BaseCommand):
         group = self.text_channel[CHANNEL_INTERFACE_GROUP]
 
         def got_all_members(members, local_pending, remote_pending):
-            _logger.debug('got_all_members members %r local_pending %r remote_pending %r', members, local_pending, remote_pending)
+            _logger.debug('got_all_members members %r local_pending %r '
+                          'remote_pending %r', members, local_pending,
+                          remote_pending)
+
             if self.text_channel_group_flags & \
                     CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
                 self_handle = self.channel_self_handle
@@ -654,7 +660,11 @@ class _JoinCommand(_BaseCommand):
     def __text_channel_members_changed_cb(self, message, added, removed,
                                           local_pending, remote_pending,
                                           actor, reason):
-        _logger.debug('__text_channel_members_changed_cb added %r removed %r local_pending %r remote_pending %r channel_self_handle %r', added, removed, local_pending, remote_pending, self.channel_self_handle)
+        _logger.debug('__text_channel_members_changed_cb added %r removed %r '
+                      'local_pending %r remote_pending %r channel_self_handle '
+                      '%r', added, removed, local_pending, remote_pending,
+                      self.channel_self_handle)
+
         if self.text_channel_group_flags & \
                 CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
             self_handle = self.channel_self_handle

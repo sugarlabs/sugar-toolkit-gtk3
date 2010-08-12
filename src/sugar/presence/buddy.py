@@ -131,7 +131,8 @@ class BaseBuddy(gobject.GObject):
                 return activity
         return None
 
-    current_activity = gobject.property(type=object, getter=get_current_activity)
+    current_activity = gobject.property(type=object,
+                                        getter=get_current_activity)
 
     def get_owner(self):
         return self._owner
@@ -139,7 +140,8 @@ class BaseBuddy(gobject.GObject):
     def set_owner(self, owner):
         self._owner = owner
 
-    owner = gobject.property(type=bool, getter=get_owner, setter=set_owner, default=False)
+    owner = gobject.property(type=bool, getter=get_owner, setter=set_owner,
+                             default=False)
 
     def get_ip4_address(self):
         return self._ip4_address
@@ -147,7 +149,8 @@ class BaseBuddy(gobject.GObject):
     def set_ip4_address(self, ip4_address):
         self._ip4_address = ip4_address
 
-    ip4_address = gobject.property(type=str, getter=get_ip4_address, setter=set_ip4_address)
+    ip4_address = gobject.property(type=str, getter=get_ip4_address,
+                                   setter=set_ip4_address)
 
     def get_tags(self):
         return self._tags
@@ -333,8 +336,8 @@ class Buddy(BaseBuddy):
 
     def do_get_property(self, pspec):
         if pspec.name == 'nick' and self._get_attributes_call is not None:
-            _logger.debug('%r: Blocking on GetContactAttributes() because someone '
-                          'wants property nick', self)
+            _logger.debug('%r: Blocking on GetContactAttributes() because '
+                          'someone wants property nick', self)
             self._get_attributes_call.block()
         elif pspec.name != 'nick' and self._get_properties_call is not None:
             _logger.debug('%r: Blocking on GetProperties() because someone '

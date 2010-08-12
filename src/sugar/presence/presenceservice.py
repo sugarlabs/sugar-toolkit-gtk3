@@ -264,7 +264,8 @@ class PresenceService(gobject.GObject):
             return self._activity_cache
         else:
             connection_manager = get_connection_manager()
-            connections_per_account = connection_manager.get_connections_per_account()
+            connections_per_account = \
+                    connection_manager.get_connections_per_account()
             for account_path, connection in connections_per_account.items():
                 if not connection.connected:
                     continue
@@ -272,8 +273,10 @@ class PresenceService(gobject.GObject):
                 try:
                     room_handle = connection.connection.GetActivity(activity_id)
                 except dbus.exceptions.DBusException, e:
-                    if e.get_dbus_name() == 'org.freedesktop.Telepathy.Error.NotAvailable':
-                        logging.debug("There's no shared activity with the id %s", activity_id)
+                    name = 'org.freedesktop.Telepathy.Error.NotAvailable'
+                    if e.get_dbus_name() == name:
+                        logging.debug("There's no shared activity with the id "
+                                      "%s", activity_id)
                     else:
                         raise
                 else:
@@ -292,7 +295,8 @@ class PresenceService(gobject.GObject):
             return self._activity_cache
         else:
             connection_manager = get_connection_manager()
-            account_path = connection_manager.get_account_for_connection(connection_path)
+            account_path = \
+                connection_manager.get_account_for_connection(connection_path)
 
             connection_name = connection_path.replace('/', '.')[1:]
             bus = dbus.SessionBus()
@@ -386,11 +390,12 @@ class PresenceService(gobject.GObject):
                 connection_name = connection_path.replace('/', '.')[1:]
                 connection = bus.get_object(connection_name, connection_path)
                 contact_ids = connection.InspectHandles(HANDLE_TYPE_CONTACT,
-                                                        [handle],
-                                                        dbus_interface=CONNECTION)
+                        [handle],
+                        dbus_interface=CONNECTION)
                 return self.get_buddy(account_path, contact_ids[0])
 
-        raise ValueError('Unknown buddy in connection %s with handle %d', tp_conn_path, handle)
+        raise ValueError('Unknown buddy in connection %s with handle %d',
+                         tp_conn_path, handle)
 
     def get_owner(self):
         """Retrieves the laptop Buddy object."""
@@ -425,11 +430,14 @@ class PresenceService(gobject.GObject):
         properties['private'] = private
 
         if self._activity_cache is not None:
-            raise ValueError('Activity %s is already tracked', activity.get_id())
+            raise ValueError('Activity %s is already tracked',
+                             activity.get_id())
 
         connection_manager = get_connection_manager()
-        account_path, connection = connection_manager.get_preferred_connection()
-        shared_activity = Activity(account_path, connection, properties=properties)
+        account_path, connection = \
+                connection_manager.get_preferred_connection()
+        shared_activity = Activity(account_path, connection,
+                                   properties=properties)
         self._activity_cache = shared_activity
 
         """
