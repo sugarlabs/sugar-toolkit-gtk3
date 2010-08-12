@@ -262,7 +262,6 @@ class Buddy(BaseBuddy):
         self.contact_id = contact_id
         self.contact_handle = None
 
-        _logger.info('KILL_PS Handle the connection going away and coming back')
         connection_manager = get_connection_manager()
         connection = connection_manager.get_connection(account_path)
 
