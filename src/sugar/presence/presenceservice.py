@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
+# Copyright (C) 2010 Collabora Ltd. <http://www.collabora.co.uk/>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -267,16 +268,18 @@ class PresenceService(gobject.GObject):
             connection_manager = get_connection_manager()
             connections_per_account = connection_manager.get_connections_per_account()
             for account_path, connection in connections_per_account.items():
+                if not connection.connected:
+                    continue
                 logging.debug("Calling GetActivity on %s", account_path)
                 try:
-                    room_handle = connection.GetActivity(activity_id)
+                    room_handle = connection.connection.GetActivity(activity_id)
                 except dbus.exceptions.DBusException, e:
                     if e.get_dbus_name() == 'org.freedesktop.Telepathy.Error.NotAvailable':
                         logging.debug("There's no shared activity with the id %s", activity_id)
                     else:
                         raise
                 else:
-                    activity = Activity(account_path, connection,
+                    activity = Activity(account_path, connection.connection,
                                         room_handle=room_handle)
                     self._activity_cache = activity
                     return activity
