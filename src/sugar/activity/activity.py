@@ -312,7 +312,7 @@ class Activity(Window, gtk.Container):
         self.shared_activity = None
         self._join_id = None
 
-        if handle.handle_invite:
+        if handle.invited:
             wait_loop = gobject.MainLoop()
             self._client_handler = _ClientHandler(
                     self.get_bundle_id(),

@@ -220,7 +220,7 @@ class ActivityCreationHandler(gobject.GObject):
         (log_path, log_file) = open_log_file(self._bundle)
         command = get_command(self._bundle, self._handle.activity_id,
                               self._handle.object_id, self._handle.uri,
-                              self._handle.handle_invite)
+                              self._handle.invited)
 
         dev_null = file('/dev/null', 'w')
         environment_dir = None
