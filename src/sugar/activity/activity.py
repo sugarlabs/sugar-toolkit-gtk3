@@ -895,7 +895,6 @@ class Activity(Window, gtk.Container):
     # DEPRECATED
     _shared_activity = property(lambda self: self.shared_activity, None)
 
-SUGAR_CLIENT_PATH = '/org/freedesktop/Telepathy/Client/Sugar'
 
 class _ClientHandler(dbus.service.Object, DBusProperties):
     def __init__(self, bundle_id, got_channel_cb):
