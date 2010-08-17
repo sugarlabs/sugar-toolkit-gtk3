@@ -31,7 +31,7 @@ from dbus import PROPERTIES_IFACE
 
 from sugar.presence.buddy import Buddy, Owner
 from sugar.presence.activity import Activity
-from sugar.presence.util import get_connection_manager
+from sugar.presence.connectionmanager import get_connection_manager
 
 from telepathy.interfaces import ACCOUNT, \
                                  ACCOUNT_MANAGER, \

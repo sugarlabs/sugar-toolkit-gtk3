@@ -317,9 +317,9 @@ class Activity(Window, gtk.Container):
             self._client_handler = _ClientHandler(
                     self.get_bundle_id(),
                     partial(self.__got_channel_cb, wait_loop))
-            # The current API requires that self.shared_activity is set before
-            # exiting from __init__, so we wait until we have got the shared
-            # activity.
+            # FIXME: The current API requires that self.shared_activity is set
+            # before exiting from __init__, so we wait until we have got the
+            # shared activity. http://bugs.sugarlabs.org/ticket/2168
             wait_loop.run()
         else:
             pservice = presenceservice.get_instance()
@@ -329,27 +329,35 @@ class Activity(Window, gtk.Container):
 
         if handle.object_id is None and create_jobject:
             logging.debug('Creating a jobject.')
-            self._jobject = datastore.create()
-            title = _('%s Activity') % get_bundle_name()
-            self._jobject.metadata['title'] = title
+            self._jobject = self._initialize_journal_object()
             self.set_title(self._jobject.metadata['title'])
-            self._jobject.metadata['title_set_by_user'] = '0'
-            self._jobject.metadata['activity'] = self.get_bundle_id()
-            self._jobject.metadata['activity_id'] = self.get_id()
-            self._jobject.metadata['keep'] = '0'
-            self._jobject.metadata['preview'] = ''
-            self._jobject.metadata['share-scope'] = SCOPE_PRIVATE
-            if self.shared_activity is not None:
-                icon_color = self.shared_activity.props.color
-            else:
-                client = gconf.client_get_default()
-                icon_color = client.get_string('/desktop/sugar/user/color')
-            self._jobject.metadata['icon-color'] = icon_color
 
-            self._jobject.file_path = ''
-            # Cannot call datastore.write async for creates:
-            # https://dev.laptop.org/ticket/3071
-            datastore.write(self._jobject)
+    def _initialize_journal_object(self):
+        title = _('%s Activity') % get_bundle_name()
+
+        if self.shared_activity is not None:
+            icon_color = self.shared_activity.props.color
+        else:
+            client = gconf.client_get_default()
+            icon_color = client.get_string('/desktop/sugar/user/color')
+
+        jobject = datastore.create()
+        jobject.metadata['title'] = title
+        jobject.metadata['title_set_by_user'] = '0'
+        jobject.metadata['activity'] = self.get_bundle_id()
+        jobject.metadata['activity_id'] = self.get_id()
+        jobject.metadata['keep'] = '0'
+        jobject.metadata['preview'] = ''
+        jobject.metadata['share-scope'] = SCOPE_PRIVATE
+        jobject.metadata['icon-color'] = icon_color
+        jobject.file_path = ''
+
+        # FIXME: We should be able to get an ID synchronously from the DS,
+        # then call async the actual create.
+        # http://bugs.sugarlabs.org/ticket/2169
+        datastore.write(jobject)
+
+        return jobject
 
     def _set_up_sharing(self, mesh_instance, share_scope):
         # handle activity share/join

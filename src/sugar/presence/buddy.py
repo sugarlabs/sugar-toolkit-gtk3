@@ -31,7 +31,7 @@ from telepathy.interfaces import CONNECTION, \
                                  CONNECTION_INTERFACE_CONTACTS
 from telepathy.constants import HANDLE_TYPE_CONTACT
 
-from sugar.presence.util import get_connection_manager
+from sugar.presence.connectionmanager import get_connection_manager
 
 ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
