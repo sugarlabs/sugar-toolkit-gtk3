@@ -25,6 +25,7 @@ import locale
 import os
 import tempfile
 import logging
+import warnings
 
 from sugar import env
 from sugar import util
@@ -151,6 +152,8 @@ class ActivityBundle(Bundle):
             self._bundle_id = cp.get(section, 'bundle_id')
         # FIXME deprecated
         elif cp.has_option(section, 'service_name'):
+            warnings.warn('use bundle_id instead of service_name ' \
+                              'in your activity.info', DeprecationWarning)
             self._bundle_id = cp.get(section, 'service_name')
         else:
             raise MalformedBundleException(
@@ -165,6 +168,8 @@ class ActivityBundle(Bundle):
 
         # FIXME class is deprecated
         if cp.has_option(section, 'class'):
+            warnings.warn('use exec instead of class ' \
+                              'in your activity.info', DeprecationWarning)
             self.activity_class = cp.get(section, 'class')
         elif cp.has_option(section, 'exec'):
             self.bundle_exec = cp.get(section, 'exec')
