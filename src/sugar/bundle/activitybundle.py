@@ -23,6 +23,7 @@ UNSTABLE.
 from ConfigParser import ConfigParser
 import locale
 import os
+import shutil
 import tempfile
 import logging
 import warnings
@@ -393,7 +394,7 @@ class ActivityBundle(Bundle):
             os.unlink(dst)
         os.symlink(src, dst)
 
-    def uninstall(self, install_path, force=False):
+    def uninstall(self, install_path, force=False, delete_profile=False):
         if os.path.islink(install_path):
             # Don't remove the actual activity dir if it's a symbolic link
             # because we may be removing user data.
@@ -421,6 +422,12 @@ class ActivityBundle(Bundle):
                     if os.path.islink(path) and \
                        os.readlink(path).startswith(install_path):
                         os.remove(path)
+
+        if delete_profile:
+            bundle_profile_path = env.get_profile_path(self._bundle_id)
+            if os.path.exists(bundle_profile_path):
+                os.chmod(bundle_profile_path, 0775)
+                shutil.rmtree(bundle_profile_path, ignore_errors=True)
 
         self._uninstall(install_path)
 
