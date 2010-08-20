@@ -71,10 +71,6 @@ class ActivityService(dbus.service.Object):
         self._activity.invite(account_path, contact_id)
 
     @dbus.service.method(_ACTIVITY_INTERFACE)
-    def Invite(self, buddy_key):
-        raise NotImplementedError
-
-    @dbus.service.method(_ACTIVITY_INTERFACE)
     def HandleViewSource(self):
         self._activity.handle_view_source()
 

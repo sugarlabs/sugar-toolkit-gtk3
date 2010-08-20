@@ -16,8 +16,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""UI class to access system-level presence object
-
+"""
 STABLE.
 """
 
@@ -44,27 +43,8 @@ ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 ACCOUNT_MANAGER_PATH = '/org/freedesktop/Telepathy/AccountManager'
 
 class PresenceService(gobject.GObject):
-    """UI-side interface to the dbus presence service
-
-    This class provides UI programmers with simplified access
-    to the dbus service of the same name.  It allows for observing
-    various events from the presence service as GObject events,
-    as well as some basic introspection queries.
-    """
+    """Provides simplified access to the Telepathy framework to activities"""
     __gsignals__ = {
-        'buddy-appeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-        'buddy-disappeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-        # parameters: (activity: Activity, inviter: Buddy, message: unicode)
-        'activity-invitation': (gobject.SIGNAL_RUN_FIRST, None, ([object]*3)),
-        'private-invitation': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT,
-                          gobject.TYPE_PYOBJECT, str])),
-        'activity-appeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-        'activity-disappeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
         'activity-shared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                         ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT,
                           gobject.TYPE_PYOBJECT])),
@@ -122,85 +102,6 @@ class PresenceService(gobject.GObject):
            it's no longer needed.
         """
         del self._objcache[object_path]
-
-    def _emit_buddy_appeared_signal(self, object_path):
-        """Emit GObject event with presence.buddy.Buddy object"""
-        self.emit('buddy-appeared', self._new_object(object_path))
-        return False
-
-    def _buddy_appeared_cb(self, op):
-        """Callback for dbus event (forwards to method to emit GObject
-        event)"""
-        gobject.idle_add(self._emit_buddy_appeared_signal, op)
-
-    def _emit_buddy_disappeared_signal(self, object_path):
-        """Emit GObject event with presence.buddy.Buddy object"""
-        # Don't try to create a new object here if needed; it will probably
-        # fail anyway because the object has already been destroyed in the PS
-        if self._have_object(object_path):
-            obj = self._objcache[object_path]
-            self.emit('buddy-disappeared', obj)
-
-            # We cannot maintain the object in the cache because that would
-            # keep a lot of objects from being collected. That includes UI
-            # objects due to signals using strong references.
-            # If we want to cache some despite the memory usage increase,
-            # we could use a LRU cache limited to some value.
-            del self._objcache[object_path]
-            obj.destroy()
-
-        return False
-
-    def _buddy_disappeared_cb(self, object_path):
-        """Callback for dbus event (forwards to method to emit GObject
-        event)"""
-        gobject.idle_add(self._emit_buddy_disappeared_signal, object_path)
-
-    def _emit_activity_invitation_signal(self, activity_path, buddy_path,
-                                         message):
-        """Emit GObject event with presence.activity.Activity object"""
-        self.emit('activity-invitation', self._new_object(activity_path),
-                  self._new_object(buddy_path), unicode(message))
-        return False
-
-    def _activity_invitation_cb(self, activity_path, buddy_path, message):
-        """Callback for dbus event (forwards to method to emit GObject
-        event)"""
-        gobject.idle_add(self._emit_activity_invitation_signal, activity_path,
-                         buddy_path, message)
-
-    def _emit_private_invitation_signal(self, bus_name, connection,
-                                        channel, chan_type):
-        """Emit GObject event with bus_name, connection and channel"""
-        self.emit('private-invitation', bus_name, connection,
-                  channel, chan_type)
-        return False
-
-    def _private_invitation_cb(self, bus_name, connection, channel, chan_type):
-        """Callback for dbus event (forwards to method to emit GObject
-        event)"""
-        gobject.idle_add(self._emit_private_invitation_signal, bus_name,
-                connection, channel, chan_type)
-
-    def _emit_activity_appeared_signal(self, object_path):
-        """Emit GObject event with presence.activity.Activity object"""
-        self.emit('activity-appeared', self._new_object(object_path))
-        return False
-
-    def _activity_appeared_cb(self, object_path):
-        """Callback for dbus event (forwards to method to emit GObject
-        event)"""
-        gobject.idle_add(self._emit_activity_appeared_signal, object_path)
-
-    def _emit_activity_disappeared_signal(self, object_path):
-        """Emit GObject event with presence.activity.Activity object"""
-        self.emit('activity-disappeared', self._new_object(object_path))
-        return False
-
-    def _activity_disappeared_cb(self, object_path):
-        """Callback for dbus event (forwards to method to emit GObject
-        event)"""
-        gobject.idle_add(self._emit_activity_disappeared_signal, object_path)
 
     def get(self, object_path):
         """Return the Buddy or Activity object corresponding to the given
@@ -461,80 +362,6 @@ class PresenceService(gobject.GObject):
             return None
         else:
             return connection.requested_bus_name, connection.object_path
-
-
-class _OfflineInterface(object):
-    """Offline-presence-service interface
-
-    Used to mimic the behaviour of a real PresenceService sufficiently
-    to avoid crashing client code that expects the given interface.
-
-    XXX we could likely return a "MockOwner" object reasonably
-    easily, but would it be worth it?
-    """
-
-    def raiseException(self, *args, **named):
-        """Raise dbus.exceptions.DBusException"""
-        raise dbus.exceptions.DBusException('PresenceService Interface not '
-            'available')
-
-    GetActivities = raiseException
-    GetActivityById = raiseException
-    GetBuddies = raiseException
-    GetBuddyByPublicKey = raiseException
-    GetOwner = raiseException
-    GetPreferredConnection = raiseException
-
-    def ShareActivity(self, actid, atype, name, properties, reply_handler,
-        error_handler):
-        """Pretend to share and fail..."""
-        exc = IOError('Unable to share activity as PresenceService is not '
-            'currently available')
-        return error_handler(exc)
-
-
-class _MockPresenceService(gobject.GObject):
-    """Test fixture allowing testing of items that use PresenceService
-
-    See PresenceService for usage and purpose
-    """
-
-    __gsignals__ = {
-        'buddy-appeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-        'buddy-disappeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-        'activity-invitation': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-        'private-invitation': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT,
-                          gobject.TYPE_PYOBJECT])),
-        'activity-appeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-        'activity-disappeared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT])),
-    }
-
-    def __init__(self):
-        gobject.GObject.__init__(self)
-
-    def get_activities(self):
-        return []
-
-    def get_activity(self, activity_id):
-        return None
-
-    def get_buddies(self):
-        return []
-
-    def get_buddy(self, key):
-        return None
-
-    def get_owner(self):
-        return None
-
-    def share_activity(self, activity, properties=None):
-        return None
 
 
 _ps = None
