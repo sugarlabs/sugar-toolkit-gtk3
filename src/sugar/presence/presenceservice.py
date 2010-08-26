@@ -58,98 +58,6 @@ class PresenceService(gobject.GObject):
         self._activity_cache = None
         self._buddy_cache = {}
 
-    def _new_object(self, object_path):
-        """Turn new object path into (cached) Buddy/Activity instance
-
-        object_path -- full dbus path of the new object, must be
-            prefixed with either of _PS_BUDDY_OP or _PS_ACTIVITY_OP
-
-        Note that this method is called throughout the class whenever
-        the representation of the object is required, it is not only
-        called when the object is first discovered.  The point is to only have
-        _one_ Python object for any D-Bus object represented by an object path,
-        effectively wrapping the D-Bus object in a single Python GObject.
-
-        returns presence Buddy or Activity representation
-        """
-        obj = None
-        try:
-            obj = self._objcache[object_path]
-            _logger.debug('Reused proxy %r', obj)
-        except KeyError:
-            if object_path.startswith(self._PS_BUDDY_OP):
-                obj = Buddy(self._bus, self._new_object,
-                        self._del_object, object_path)
-            elif object_path.startswith(self._PS_ACTIVITY_OP):
-                obj = Activity(self._bus, self._new_object,
-                        self._del_object, object_path)
-                try:
-                    # Pre-fill the activity's ID
-                    activity_id = obj.props.id
-                except dbus.exceptions.DBusException:
-                    logging.debug('Cannot get the activity ID')
-            else:
-                raise RuntimeError("Unknown object type")
-            self._objcache[object_path] = obj
-            _logger.debug('Created proxy %r', obj)
-        return obj
-
-    def _have_object(self, object_path):
-        return object_path in self._objcache.keys()
-
-    def _del_object(self, object_path):
-        """Fully remove an object from the object cache when
-           it's no longer needed.
-        """
-        del self._objcache[object_path]
-
-    def get(self, object_path):
-        """Return the Buddy or Activity object corresponding to the given
-        D-Bus object path.
-        """
-        return self._new_object(object_path)
-
-    def get_activities(self):
-        """Retrieve set of all activities from service
-
-        returns list of Activity objects for all object paths
-            the service reports exist (using GetActivities)
-        """
-        resp = self._ps.GetActivities()
-        acts = []
-        for item in resp:
-            acts.append(self._new_object(item))
-        return acts
-
-    def _get_activities_cb(self, reply_handler, resp):
-        acts = []
-        for item in resp:
-            acts.append(self._new_object(item))
-
-        reply_handler(acts)
-
-    def _get_activities_error_cb(self, error_handler, e):
-        if error_handler:
-            error_handler(e)
-        else:
-            _logger.warn('Unable to retrieve activity-list from presence '
-                'service: %s', e)
-
-    def get_activities_async(self, reply_handler=None, error_handler=None):
-        """Retrieve set of all activities from service asyncronously
-        """
-
-        if not reply_handler:
-            logging.error('Function get_activities_async called without' \
-                          'a reply handler. Can not run.')
-            return
-
-        self._ps.GetActivities(
-             reply_handler=lambda resp: \
-                    self._get_activities_cb(reply_handler, resp),
-             error_handler=lambda e: \
-                    self._get_activities_error_cb(error_handler, e))
-
     def get_activity(self, activity_id, warn_if_none=True):
         """Retrieve single Activity object for the given unique id
 
@@ -206,53 +114,6 @@ class PresenceService(gobject.GObject):
                                 room_handle=room_handle)
             self._activity_cache = activity
             return activity
-
-    def get_buddies(self):
-        """Retrieve set of all buddies from service
-
-        returns list of Buddy objects for all object paths
-            the service reports exist (using GetBuddies)
-        """
-        try:
-            resp = self._ps.GetBuddies()
-        except dbus.exceptions.DBusException:
-            _logger.exception('Unable to retrieve buddy-list from presence '
-                'service')
-            return []
-        else:
-            buddies = []
-            for item in resp:
-                buddies.append(self._new_object(item))
-            return buddies
-
-    def _get_buddies_cb(self, reply_handler, resp):
-        buddies = []
-        for item in resp:
-            buddies.append(self._new_object(item))
-
-        reply_handler(buddies)
-
-    def _get_buddies_error_cb(self, error_handler, e):
-        if error_handler:
-            error_handler(e)
-        else:
-            _logger.warn('Unable to retrieve buddy-list from presence '
-                'service: %s', e)
-
-    def get_buddies_async(self, reply_handler=None, error_handler=None):
-        """Retrieve set of all buddies from service asyncronously
-        """
-
-        if not reply_handler:
-            logging.error('Function get_buddies_async called without' \
-                          'a reply handler. Can not run.')
-            return
-
-        self._ps.GetBuddies(
-             reply_handler=lambda resp: \
-                    self._get_buddies_cb(reply_handler, resp),
-             error_handler=lambda e: \
-                    self._get_buddies_error_cb(error_handler, e))
 
     def get_buddy(self, account_path, contact_id):
         if (account_path, contact_id) in self._buddy_cache:
@@ -341,11 +202,9 @@ class PresenceService(gobject.GObject):
                                    properties=properties)
         self._activity_cache = shared_activity
 
-        """
         if shared_activity.props.joined:
             raise RuntimeError('Activity %s is already shared.' %
-                               activity.get_id())
-        """
+                               activity.props.id)
 
         shared_activity.share(self.__share_activity_cb,
                               self.__share_activity_error_cb)
@@ -362,6 +221,26 @@ class PresenceService(gobject.GObject):
             return None
         else:
             return connection.requested_bus_name, connection.object_path
+
+    # DEPRECATED
+    def get(self, object_path):
+        raise NotImplementedError()
+
+    # DEPRECATED
+    def get_activities(self):
+        raise NotImplementedError()
+
+    # DEPRECATED
+    def get_activities_async(self, reply_handler=None, error_handler=None):
+        raise NotImplementedError()
+
+    # DEPRECATED
+    def get_buddies(self):
+        raise NotImplementedError()
+
+    # DEPRECATED
+    def get_buddies_async(self, reply_handler=None, error_handler=None):
+        raise NotImplementedError()
 
 
 _ps = None

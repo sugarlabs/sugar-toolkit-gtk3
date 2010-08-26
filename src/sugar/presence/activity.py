@@ -491,14 +491,6 @@ class _ShareCommand(_BaseCommand):
         self._join_command = None
 
     def run(self):
-        """ TODO: Check we don't need this
-        # We shouldn't have to do this, but Gabble sometimes finds the IRC
-        # transport and goes "that has chatrooms, that'll do nicely". Work
-        # around it til Gabble gets better at finding the MUC service.
-        return '%s@%s' % (activity_id,
-                          self._account['fallback-conference-server'])
-        """
-
         self._connection.RequestHandles(
             HANDLE_TYPE_ROOM,
             [self._activity_id],
