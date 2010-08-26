@@ -74,7 +74,8 @@ class ConnectionManager(object):
         self._connections_per_account[account_path] = \
                 Connection(account_path, connection)
 
-        if connection.Get(CONNECTION, 'Status') == CONNECTION_STATUS_CONNECTED:
+        account = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
+        if account.Get(ACCOUNT, 'ConnectionStatus') == CONNECTION_STATUS_CONNECTED:
             self._connections_per_account[account_path].connected = True
         else:
             self._connections_per_account[account_path].connected = False
