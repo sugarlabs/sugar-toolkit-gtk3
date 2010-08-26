@@ -53,8 +53,19 @@ class Profile(object):
         self._pubkey = None
         self._privkey_hash = None
 
-        self.pubkey = self._load_pubkey()
-        self.privkey_hash = self._hash_private_key()
+    def _get_pubkey(self):
+        if self._pubkey is None:
+            self._pubkey = self._load_pubkey()
+        return self._pubkey
+
+    pubkey = property(fget=_get_pubkey)
+
+    def _get_privkey_hash(self):
+        if self._privkey_hash is None:
+            self._privkey_hash = self._hash_private_key()
+        return self._privkey_hash
+
+    privkey_hash = property(fget=_get_privkey_hash)
 
     def is_valid(self):
         client = gconf.client_get_default()
