@@ -198,6 +198,12 @@ class PresenceService(gobject.GObject):
         connection_manager = get_connection_manager()
         account_path, connection = \
                 connection_manager.get_preferred_connection()
+
+        if connection is None:
+            self.emit('activity-shared', False, None,
+                      'No active connection available')
+            return
+
         shared_activity = Activity(account_path, connection,
                                    properties=properties)
         self._activity_cache = shared_activity
