@@ -13,13 +13,17 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # Markus Schlager <m.slg@gmx.de>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: sugar-toolkit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-20 13:10-0500\n"
-"PO-Revision-Date: 2010-03-26 20:39+0200\n"
+"PO-Revision-Date: 2010-09-20 18:17+0200\n"
 "Last-Translator: Markus <m.slg@gmx.de>\n"
 "Language-Team: OLPC-German <LL@li.org>\n"
 "Language: de\n"
@@ -40,7 +44,7 @@ msgstr "Fehler beim Speichern"
 
 #: ../src/sugar/activity/activity.py:739
 msgid "Keep error: all changes will be lost"
-msgstr "Fehler beim Speichern: Alle Änderungen gehen verloren"
+msgstr "Fehler beim Speichern: Alle Änderungen gehen verloren."
 
 #: ../src/sugar/activity/activity.py:742
 msgid "Don't stop"
@@ -114,7 +118,7 @@ msgstr "Ok"
 
 #: ../src/sugar/graphics/alert.py:375
 msgid "Continue"
-msgstr "Weitermachen"
+msgstr "Fortsetzen"
 
 #: ../src/sugar/graphics/colorbutton.py:52
 msgid "Choose a color"
