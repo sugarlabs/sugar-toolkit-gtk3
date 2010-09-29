@@ -2,42 +2,50 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: olpc-sugar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-20 13:10-0500\n"
-"PO-Revision-Date: 2010-03-11 23:18+0200\n"
-"Last-Translator: Roger Orellana <rjorellana@gmail.com>\n"
+"POT-Creation-Date: 2010-09-28 06:08-0400\n"
+"PO-Revision-Date: 2010-09-28 13:10+0200\n"
+"Last-Translator: Tomeu Vizoso <tomeu@tomeuvizoso.net>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.3\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
 
-#: ../src/sugar/activity/activity.py:338
+#: ../src/sugar/activity/activity.py:336
 #, python-format
 msgid "%s Activity"
 msgstr "Actividad %s"
 
-#: ../src/sugar/activity/activity.py:738
+#: ../src/sugar/activity/activity.py:791
 msgid "Keep error"
 msgstr "Error al guardar"
 
-#: ../src/sugar/activity/activity.py:739
+#: ../src/sugar/activity/activity.py:792
 msgid "Keep error: all changes will be lost"
 msgstr "Error al guardar: todos los cambios se perderán"
 
-#: ../src/sugar/activity/activity.py:742
+#: ../src/sugar/activity/activity.py:795
 msgid "Don't stop"
 msgstr "No detener"
 
-#: ../src/sugar/activity/activity.py:745
+#: ../src/sugar/activity/activity.py:798
 msgid "Stop anyway"
 msgstr "Detener de todas formas"
 
@@ -50,9 +58,9 @@ msgstr "Nombre esta entrada"
 # self._stop_item.connect('activate', self._stop_item_activate_cb)
 # self.append_menu_item(self._stop_item)
 #: ../src/sugar/activity/namingalert.py:87
-#: ../src/sugar/activity/widgets.py:166
+#: ../src/sugar/activity/widgets.py:169
 msgid "Keep"
-msgstr "Guardar"
+msgstr "Guardar copia"
 
 #: ../src/sugar/activity/namingalert.py:283
 msgid "Untitled"
@@ -82,31 +90,32 @@ msgstr "Rehacer"
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../src/sugar/activity/widgets.py:117
+#: ../src/sugar/activity/widgets.py:118
 msgid "Paste"
 msgstr "Pegar"
 
-#: ../src/sugar/activity/widgets.py:127
+#: ../src/sugar/activity/widgets.py:129
 msgid "Private"
 msgstr "Privado"
 
-#: ../src/sugar/activity/widgets.py:134
+#: ../src/sugar/activity/widgets.py:136
 msgid "My Neighborhood"
 msgstr "Mi Vecindario"
 
-#: ../src/sugar/activity/widgets.py:345
+#: ../src/sugar/activity/widgets.py:349
 msgid "Activity"
 msgstr "Actividad"
 
-#: ../src/sugar/graphics/alert.py:286 ../src/sugar/graphics/alert.py:365
+#: ../src/sugar/graphics/alert.py:287 ../src/sugar/graphics/alert.py:410
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/sugar/graphics/alert.py:290 ../src/sugar/graphics/alert.py:424
+#: ../src/sugar/graphics/alert.py:291 ../src/sugar/graphics/alert.py:336
+#: ../src/sugar/graphics/alert.py:469
 msgid "Ok"
 msgstr "Aceptar"
 
-#: ../src/sugar/graphics/alert.py:375
+#: ../src/sugar/graphics/alert.py:420
 msgid "Continue"
 msgstr "Continuar"
 
