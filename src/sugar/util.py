@@ -271,10 +271,17 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
             if key in _i18n_timestamps_cache:
                 time_period += _i18n_timestamps_cache[key]
             else:
-                translation = gettext.dngettext('sugar-toolkit',
-                                                name_singular,
-                                                name_plural,
-                                                elapsed_units) % elapsed_units
+                tmp = gettext.dngettext('sugar-toolkit',
+                                        name_singular,
+                                        name_plural,
+                                        elapsed_units)
+                # FIXME: This is a hack so we don't crash when a translation
+                # doesn't contain the expected number of placeholders (#2354)
+                try:
+                    translation = tmp % elapsed_units
+                except TypeError:
+                    translation = tmp
+
                 _i18n_timestamps_cache[key] = translation
                 time_period += translation
 
