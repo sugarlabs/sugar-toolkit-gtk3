@@ -142,7 +142,7 @@ class _IconBuffer(object):
             if self.width != None:
                 size = self.width
 
-            info = theme.lookup_icon(self.icon_name, size, 0)
+            info = theme.lookup_icon(self.icon_name, int(size), 0)
             if info:
                 attach_x, attach_y = self._get_attach_points(info, size)
 
@@ -159,7 +159,7 @@ class _IconBuffer(object):
 
     def _draw_badge(self, context, size, sensitive, widget):
         theme = gtk.icon_theme_get_default()
-        badge_info = theme.lookup_icon(self.badge_name, size, 0)
+        badge_info = theme.lookup_icon(self.badge_name, int(size), 0)
         if badge_info:
             badge_file_name = badge_info.get_filename()
             if badge_file_name.endswith('.svg'):
@@ -276,10 +276,12 @@ class _IconBuffer(object):
         padding = badge_info.icon_padding
         width, height = self._get_size(icon_width, icon_height, padding)
         if self.background_color is None:
-            surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+            surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width),
+                                         int(height))
             context = cairo.Context(surface)
         else:
-            surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
+            surface = cairo.ImageSurface(cairo.FORMAT_RGB24, int(width),
+                                         int(height))
             context = cairo.Context(surface)
             context = gtk.gdk.CairoContext(context)
             context.set_source_color(self.background_color)
