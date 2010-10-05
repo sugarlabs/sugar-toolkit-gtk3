@@ -42,6 +42,8 @@ _logger = logging.getLogger('sugar.presence.presenceservice')
 ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 ACCOUNT_MANAGER_PATH = '/org/freedesktop/Telepathy/AccountManager'
 
+CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
+
 class PresenceService(gobject.GObject):
     """Provides simplified access to the Telepathy framework to activities"""
     __gsignals__ = {
@@ -80,7 +82,9 @@ class PresenceService(gobject.GObject):
                     continue
                 logging.debug("Calling GetActivity on %s", account_path)
                 try:
-                    room_handle = connection.connection.GetActivity(activity_id)
+                    room_handle = connection.connection.GetActivity(
+                            activity_id,
+                            dbus_interface=CONN_INTERFACE_ACTIVITY_PROPERTIES)
                 except dbus.exceptions.DBusException, e:
                     name = 'org.freedesktop.Telepathy.Error.NotAvailable'
                     if e.get_dbus_name() == name:
