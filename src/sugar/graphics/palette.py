@@ -158,6 +158,7 @@ class Palette(PaletteWindow):
         self.popdown(immediate=True)
         # Break the reference cycle. It looks like the gc is not able to free
         # it, possibly because gtk.Menu memory handling is very special.
+        self.menu.disconnect_by_func(self.__menu_item_inserted_cb)
         self.menu = None
 
     def __show_cb(self, widget):

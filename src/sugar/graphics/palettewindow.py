@@ -179,6 +179,7 @@ class PaletteWindow(gtk.Window):
 
     def __destroy_cb(self, palette):
         self.set_group_id(None)
+        self._mouse_detector.disconnect_by_func(self._mouse_slow_cb)
 
     def set_invoker(self, invoker):
         for hid in self._invoker_hids[:]:
@@ -457,6 +458,7 @@ class Invoker(gobject.GObject):
         self._cursor_x = -1
         self._cursor_y = -1
         self._palette = None
+        self._cache_palette = True
 
     def attach(self, parent):
         self.parent = parent
@@ -639,18 +641,33 @@ class Invoker(gobject.GObject):
     def set_palette(self, palette):
         if self._palette is not None:
             self._palette.popdown(immediate=True)
-
-        if self._palette:
             self._palette.props.invoker = None
+            self._palette.destroy()
 
         self._palette = palette
 
-        if self._palette:
+        if self._palette is not None:
             self._palette.props.invoker = self
+            self._palette.connect('popdown', self.__palette_popdown_cb)
 
     palette = gobject.property(
         type=object, setter=set_palette, getter=get_palette)
 
+    def get_cache_palette(self):
+        return self._cache_palette
+
+    def set_cache_palette(self, cache_palette):
+        self._cache_palette = cache_palette
+
+    cache_palette = gobject.property(type=object, setter=set_cache_palette,
+                                     getter=get_cache_palette)
+    """Whether the invoker will cache the palette after its creation. Defaults
+    to True.
+    """
+
+    def __palette_popdown_cb(self, palette):
+        if not self.props.cache_palette:
+            self.set_palette(None)
 
 class WidgetInvoker(Invoker):
 
