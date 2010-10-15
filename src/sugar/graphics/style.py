@@ -35,12 +35,11 @@ _TAB_CURVATURE = 1
 
 
 def _compute_zoom_factor():
-    if os.environ.has_key('SUGAR_SCALING'):
-        try:
-            scaling = int(os.environ['SUGAR_SCALING'])
-            return scaling / 100.0
-        except ValueError:
-            logging.error('Invalid SUGAR_SCALING.')
+    try:
+        scaling = int(os.environ.get('SUGAR_SCALING', '100'))
+        return scaling / 100.0
+    except ValueError:
+        logging.error('Invalid SUGAR_SCALING.')
 
     return 1.0
 

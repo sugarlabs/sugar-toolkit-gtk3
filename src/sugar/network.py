@@ -242,7 +242,7 @@ class GlibURLDownloader(gobject.GObject):
         self.cleanup(remove=True)
 
     def _get_filename_from_headers(self, headers):
-        if not headers.has_key("Content-Disposition"):
+        if 'Content-Disposition' not in headers:
             return None
 
         ftag = "filename="

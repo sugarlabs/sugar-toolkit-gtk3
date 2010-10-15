@@ -26,7 +26,7 @@ _groups = {}
 
 
 def get_group(group_id):
-    if _groups.has_key(group_id):
+    if group_id in _groups:
         group = _groups[group_id]
     else:
         group = Group()

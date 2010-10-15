@@ -271,8 +271,7 @@ class NamingAlert(gtk.Window):
             activity_bundle = ActivityBundle(self._bundle_path)
             file_name = activity_bundle.get_icon()
         entry_icon = CanvasIcon(file_name=file_name)
-        if self._activity.metadata.has_key('icon-color') and \
-                self._activity.metadata['icon-color']:
+        if self._activity.metadata.get('icon-color'):
             entry_icon.props.xo_color = XoColor( \
                 self._activity.metadata['icon-color'])
         return entry_icon

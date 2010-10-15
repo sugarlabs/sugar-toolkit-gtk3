@@ -256,7 +256,7 @@ class Activity(Window, gtk.Container):
         """
         Window.__init__(self)
 
-        if os.environ.has_key('SUGAR_ACTIVITY_ROOT'):
+        if 'SUGAR_ACTIVITY_ROOT' in os.environ:
             # If this activity runs inside Sugar, we want it to take all the
             # screen. Would be better if it was the shell to do this, but we
             # haven't found yet a good way to do it there. See #1263.
@@ -307,7 +307,7 @@ class Activity(Window, gtk.Container):
             self._jobject = datastore.get(handle.object_id)
             self.set_title(self._jobject.metadata['title'])
 
-            if self._jobject.metadata.has_key('share-scope'):
+            if 'share-scope' in self._jobject.metadata:
                 share_scope = self._jobject.metadata['share-scope']
 
         self.shared_activity = None
@@ -509,8 +509,7 @@ class Activity(Window, gtk.Container):
         which isn't specific to a journal item here. If (meta-)data is in
         anyway specific to a journal entry, it MUST be stored in the DataStore.
         """
-        if os.environ.has_key('SUGAR_ACTIVITY_ROOT') and \
-           os.environ['SUGAR_ACTIVITY_ROOT']:
+        if os.environ.get('SUGAR_ACTIVITY_ROOT'):
             return os.environ['SUGAR_ACTIVITY_ROOT']
         else:
             return '/'
@@ -974,8 +973,7 @@ def get_bundle_path():
 
 def get_activity_root():
     """Returns a path for saving Activity specific preferences, etc."""
-    if os.environ.has_key('SUGAR_ACTIVITY_ROOT') and \
-            os.environ['SUGAR_ACTIVITY_ROOT']:
+    if os.environ.get('SUGAR_ACTIVITY_ROOT'):
         return os.environ['SUGAR_ACTIVITY_ROOT']
     else:
         raise RuntimeError("No SUGAR_ACTIVITY_ROOT set.")
