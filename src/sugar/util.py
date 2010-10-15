@@ -50,7 +50,7 @@ def sha_data(data):
     return sha_hash.digest()
 
 
-def unique_id(data = ''):
+def unique_id(data=''):
     """Generate a likely-unique ID for whatever purpose
 
     data -- suffix appended to working data before hashing

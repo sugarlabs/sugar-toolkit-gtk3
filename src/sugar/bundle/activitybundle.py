@@ -136,7 +136,7 @@ class ActivityBundle(Bundle):
 
         return lines
 
-    def get_files(self, manifest = None):
+    def get_files(self, manifest=None):
         files = [line for line in (manifest or self.manifest) if line]
 
         if self.is_file('MANIFEST'):

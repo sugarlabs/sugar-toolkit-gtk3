@@ -69,7 +69,7 @@ class ActivityHandle(object):
 def create_from_dict(handle_dict):
     """Create a handle from a dictionary of parameters"""
     result = ActivityHandle(handle_dict['activity_id'],
-        object_id = handle_dict.get('object_id'),
-        uri = handle_dict.get('uri'),
-        invited = handle_dict.get('invited'))
+        object_id=handle_dict.get('object_id'),
+        uri=handle_dict.get('uri'),
+        invited=handle_dict.get('invited'))
     return result

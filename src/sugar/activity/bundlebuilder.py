@@ -64,7 +64,7 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 
 class Config(object):
 
-    def __init__(self, source_dir=None, dist_dir = None, dist_name = None):
+    def __init__(self, source_dir=None, dist_dir=None, dist_name=None):
         self.source_dir = source_dir or os.getcwd()
         self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
         self.dist_name = dist_name
