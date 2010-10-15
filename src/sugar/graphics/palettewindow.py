@@ -938,9 +938,11 @@ class CellRendererInvoker(Invoker):
             self.notify_mouse_leave()
 
     def _redraw_path(self, path):
+        column = None
         for column in self._tree_view.get_columns():
             if self._cell_renderer in column.get_cell_renderers():
                 break
+        assert column is not None
         area = self._tree_view.get_background_area(path, column)
         x, y = \
             self._tree_view.convert_bin_window_to_widget_coords(area.x, area.y)
