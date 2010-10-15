@@ -823,6 +823,7 @@ class Activity(Window, gtk.Container):
             try:
                 self.save()
             except:
+                # pylint: disable=W0702
                 logging.exception('Error saving activity object to datastore')
                 self._show_keep_failed_dialog()
                 return False

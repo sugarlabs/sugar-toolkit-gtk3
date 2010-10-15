@@ -335,6 +335,7 @@ def _cleanup_temp_files():
         try:
             os.unlink(path)
         except:
+            # pylint: disable=W0702
             logging.exception('Exception occured in _cleanup_temp_files')
 
 atexit.register(_cleanup_temp_files)
