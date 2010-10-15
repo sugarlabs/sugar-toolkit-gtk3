@@ -37,12 +37,14 @@ from telepathy.interfaces import ACCOUNT, \
                                  CONNECTION
 from telepathy.constants import HANDLE_TYPE_CONTACT
 
+
 _logger = logging.getLogger('sugar.presence.presenceservice')
 
 ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 ACCOUNT_MANAGER_PATH = '/org/freedesktop/Telepathy/AccountManager'
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
+
 
 class PresenceService(gobject.GObject):
     """Provides simplified access to the Telepathy framework to activities"""

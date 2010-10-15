@@ -25,6 +25,7 @@ toolbar.toolbar.insert(tollbarbutton_2, -1)
 
 toolbar.toolbar.insert(gtk.SeparatorToolItem(), -1)
 
+
 def del_cb(widget):
     toolbar.toolbar.remove(tollbarbutton_3)
 del_b = gtk.Button('delete sub-widget #3')

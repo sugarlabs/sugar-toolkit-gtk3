@@ -291,6 +291,7 @@ class ConfirmationAlert(Alert):
         self.add_button(gtk.RESPONSE_OK, _('Ok'), icon)
         icon.show()
 
+
 class ErrorAlert(Alert):
     """
     This is a ready-made one button (Ok) alert.
@@ -335,6 +336,7 @@ class ErrorAlert(Alert):
         icon = Icon(icon_name='dialog-ok')
         self.add_button(gtk.RESPONSE_OK, _('Ok'), icon)
         icon.show()
+
 
 class _TimeoutIcon(hippo.CanvasText, hippo.CanvasItem):
     """An icon with a round border"""

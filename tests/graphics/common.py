@@ -19,9 +19,11 @@ import gtk
 
 from sugar.graphics.toolbutton import ToolButton
 
+
 class Test(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
+
 
 class TestPalette(Test):
     def __init__(self):
@@ -39,6 +41,7 @@ class TestPalette(Test):
     def set_palette(self, palette):
         self._invoker.set_palette(palette)
 
+
 class TestRunner(object):
     def run(self, test):
         window = gtk.Window()
@@ -47,6 +50,7 @@ class TestRunner(object):
         test.show()
 
         window.show()
+
 
 def main(test):
     runner = TestRunner()

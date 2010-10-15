@@ -41,6 +41,7 @@ data = [
     ['battery-090', '#D1A3FF,#00A0FF'],
     ['battery-100', '#AC32FF,#FF2B34']]
 
+
 def _button_activated_cb(button):
     import random
 

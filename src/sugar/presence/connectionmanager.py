@@ -31,11 +31,13 @@ from telepathy.constants import CONNECTION_STATUS_CONNECTED
 ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 ACCOUNT_MANAGER_PATH = '/org/freedesktop/Telepathy/AccountManager'
 
+
 class Connection(object):
     def __init__(self, account_path, connection):
         self.account_path = account_path
         self.connection = connection
         self.connected = False
+
 
 class ConnectionManager(object):
     """Track available telepathy connections"""
@@ -108,8 +110,8 @@ class ConnectionManager(object):
                 return account_path
         return None
 
-_connection_manager = None
 
+_connection_manager = None
 def get_connection_manager():
     global _connection_manager
     if not _connection_manager:

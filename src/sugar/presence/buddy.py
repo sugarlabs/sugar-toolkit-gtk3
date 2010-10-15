@@ -144,6 +144,7 @@ class BaseBuddy(gobject.GObject):
 
 class Buddy(BaseBuddy):
     __gtype_name__ = 'PresenceBuddy'
+
     def __init__(self, account_path, contact_id):
         _logger.debug('Buddy.__init__')
         BaseBuddy.__init__(self)

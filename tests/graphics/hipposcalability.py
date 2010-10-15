@@ -19,6 +19,7 @@ canvas.set_root(scrollbars)
 box = hippo.CanvasBox(padding=10, spacing=10)
 scrollbars.set_root(box)
 
+
 def idle_cb():
     global countdown
 

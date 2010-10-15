@@ -463,11 +463,13 @@ class Activity(gobject.GObject):
         _logger.debug('%r: leaving', self)
         self.telepathy_text_chan.Close()
 
+
 class _BaseCommand(gobject.GObject):
     __gsignals__ = {
         'finished': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                      ([object])),
     }
+
     def __init__(self):
         gobject.GObject.__init__(self)
 
@@ -531,6 +533,7 @@ class _ShareCommand(_BaseCommand):
     def __error_handler_cb(self, error):
         self._finished = True
         self.emit('finished', error)
+
 
 class _JoinCommand(_BaseCommand):
     def __init__(self, connection, room_handle):

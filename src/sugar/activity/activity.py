@@ -98,6 +98,7 @@ J_DBUS_INTERFACE = 'org.laptop.Journal'
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
+
 class _ActivitySession(gobject.GObject):
 
     __gsignals__ = {

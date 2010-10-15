@@ -22,6 +22,7 @@ import unittest
 
 from sugar import mime
 
+
 class TestMime(unittest.TestCase):
     def test_from_file_name(self):
         self.assertEqual(mime.get_from_file_name('test.pdf'),
@@ -76,6 +77,6 @@ class TestMime(unittest.TestCase):
                  'text/plain'])
         self.assertEqual(mime_type, 'text/plain')
 
+
 if __name__ == "__main__":
     unittest.main()
-

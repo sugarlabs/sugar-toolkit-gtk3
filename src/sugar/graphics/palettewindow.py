@@ -669,6 +669,7 @@ class Invoker(gobject.GObject):
         if not self.props.cache_palette:
             self.set_palette(None)
 
+
 class WidgetInvoker(Invoker):
 
     def __init__(self, parent=None, widget=None):

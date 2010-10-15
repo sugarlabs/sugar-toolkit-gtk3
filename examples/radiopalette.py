@@ -17,6 +17,7 @@ box.pack_start(toolbar, False)
 text_view = gtk.TextView()
 box.pack_start(text_view)
 
+
 def echo(button, label):
     if not button.props.active:
         return

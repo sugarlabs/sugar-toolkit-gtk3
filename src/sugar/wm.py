@@ -22,6 +22,7 @@ UNSTABLE. Used only internally by Activity and jarabe.
 import gtk
 import logging
 
+
 def _property_get_trapped(window, prop, prop_type):
     gtk.gdk.error_trap_push()
 
@@ -34,6 +35,7 @@ def _property_get_trapped(window, prop, prop_type):
                       'a property on a window' % error)
 
     return prop_info
+
 
 def _property_change_trapped(window, prop, prop_type, format, mode, data):
     gtk.gdk.error_trap_push()
@@ -83,4 +85,3 @@ def set_activity_id(window, activity_id):
 def set_bundle_id(window, bundle_id):
     _property_change_trapped(window, '_SUGAR_BUNDLE_ID', 'STRING', 8,
                              gtk.gdk.PROP_MODE_REPLACE, bundle_id)
-
