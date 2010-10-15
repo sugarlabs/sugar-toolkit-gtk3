@@ -250,11 +250,11 @@ class GlibURLDownloader(gobject.GObject):
         fidx = data.find(ftag)
         if fidx < 0:
             return None
-        fname = data[fidx+len(ftag):]
+        fname = data[fidx + len(ftag):]
         if fname[0] == '"' or fname[0] == "'":
             fname = fname[1:]
-        if fname[len(fname)-1] == '"' or fname[len(fname)-1] == "'":
-            fname = fname[:len(fname)-1]
+        if fname[len(fname) - 1] == '"' or fname[len(fname) - 1] == "'":
+            fname = fname[:len(fname) - 1]
         return fname
 
     def _read_next_chunk(self, source, condition):

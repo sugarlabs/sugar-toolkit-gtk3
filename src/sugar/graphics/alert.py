@@ -357,7 +357,7 @@ class _TimeoutIcon(hippo.CanvasText, hippo.CanvasItem):
         radius = min(width * 0.5, height * 0.5)
 
         hippo.cairo_set_source_rgba32(cr, self.props.background_color)
-        cr.arc(xval, yval, radius, 0, 2*math.pi)
+        cr.arc(xval, yval, radius, 0, 2 * math.pi)
         cr.fill_preserve()
 
 

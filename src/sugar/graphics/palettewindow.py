@@ -110,8 +110,8 @@ class MouseSpeedDetector(gobject.GObject):
         (x, y) = self._get_mouse_position()
         self._mouse_pos = (x, y)
 
-        dist2 = (oldx - x)**2 + (oldy - y)**2
-        if dist2 > self._threshold**2:
+        dist2 = (oldx - x) ** 2 + (oldy - y) ** 2
+        if dist2 > self._threshold ** 2:
             return True
         else:
             return False

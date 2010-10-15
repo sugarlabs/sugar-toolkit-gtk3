@@ -336,7 +336,7 @@ class ActivityBundle(Bundle):
 
         # Is anything in MANIFEST left over after accounting for all files?
         if manifestfiles:
-            err = ("Bundle %s: files in MANIFEST not included: %s"%
+            err = ("Bundle %s: files in MANIFEST not included: %s" %
                    (self._name, str(manifestfiles)))
             if strict_manifest:
                 raise MalformedBundleException(err)

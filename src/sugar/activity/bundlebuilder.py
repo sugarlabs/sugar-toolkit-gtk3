@@ -19,6 +19,7 @@
 STABLE.
 """
 
+import operator
 import os
 import sys
 import zipfile
@@ -84,7 +85,7 @@ class Config(object):
         self.version = bundle.get_activity_version()
         self.activity_name = bundle.get_bundle_name()
         self.bundle_id = bundle.get_bundle_id()
-        self.bundle_name = reduce(lambda x, y: x+y, self.activity_name.split())
+        self.bundle_name = reduce(operator.add, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%s' % (self.bundle_name, self.version)
 
