@@ -61,7 +61,8 @@ class _SVGLoader(object):
                 logging.error(
                     'Icon %s, entity %s is invalid.', file_name, entity)
 
-        import rsvg # XXX this is very slow!  why?
+        # XXX this is very slow!  why?
+        import rsvg
         return rsvg.Handle(data=icon)
 
 

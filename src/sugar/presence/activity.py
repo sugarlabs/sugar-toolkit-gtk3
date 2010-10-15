@@ -683,11 +683,16 @@ class _JoinCommand(_BaseCommand):
         # since only the owner can change invite-only, that would break
         # activity scope changes.
         props = {
-            'anonymous': False,   # otherwise buddy resolution breaks
-            'invite-only': False, # anyone who knows about the channel can join
-            'invite-restricted': False,     # so non-owners can invite others
-            'persistent': False,  # vanish when there are no members
-            'private': True,      # don't appear in server room lists
+            # otherwise buddy resolution breaks
+            'anonymous': False,
+            # anyone who knows about the channel can join
+            'invite-only': False,
+            # so non-owners can invite others
+            'invite-restricted': False,
+            # vanish when there are no members
+            'persistent': False,
+            # don't appear in server room lists
+            'private': True,
         }
         props_to_set = []
         for ident, name, sig_, flags in prop_specs:
