@@ -29,7 +29,6 @@ import gettext
 import tempfile
 import logging
 import atexit
-import traceback
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -336,7 +335,7 @@ def _cleanup_temp_files():
         try:
             os.unlink(path)
         except:
-            logging.error(traceback.format_exc())
+            logging.exception('Exception occured in _cleanup_temp_files')
 
 atexit.register(_cleanup_temp_files)
 
