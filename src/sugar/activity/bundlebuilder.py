@@ -228,6 +228,7 @@ class SourcePackager(Packager):
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
 
+        # pylint: disable=E1103
         return [path.strip() for path in stdout.strip('\n').split('\n')]
 
     def package(self):
