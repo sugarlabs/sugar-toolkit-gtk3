@@ -277,7 +277,7 @@ class Installer(object):
 
 
 def cmd_dev(config, args):
-    '''Setup for development'''
+    """Setup for development"""
 
     if args:
         print 'Usage: %prog dev'
@@ -297,7 +297,7 @@ def cmd_dev(config, args):
 
 
 def cmd_dist_xo(config, args):
-    '''Create a xo bundle package'''
+    """Create a xo bundle package"""
 
     if args:
         print 'Usage: %prog dist_xo'
@@ -308,7 +308,7 @@ def cmd_dist_xo(config, args):
 
 
 def cmd_fix_manifest(config, args):
-    '''Add missing files to the manifest'''
+    """Add missing files to the manifest"""
 
     if args:
         print 'Usage: %prog fix_manifest'
@@ -319,7 +319,7 @@ def cmd_fix_manifest(config, args):
 
 
 def cmd_dist_source(config, args):
-    '''Create a tar source package'''
+    """Create a tar source package"""
 
     if args:
         print 'Usage: %prog dist_source'
@@ -330,7 +330,7 @@ def cmd_dist_source(config, args):
 
 
 def cmd_install(config, args):
-    '''Install the activity in the system'''
+    """Install the activity in the system"""
 
     parser = OptionParser(usage='usage: %prog install [options]')
     parser.add_option('--prefix', dest='prefix', default=sys.prefix,
@@ -345,7 +345,7 @@ def cmd_install(config, args):
 
 
 def cmd_genpot(config, args):
-    '''Generate the gettext pot file'''
+    """Generate the gettext pot file"""
 
     if args:
         print 'Usage: %prog genpot'
@@ -384,7 +384,7 @@ def cmd_genpot(config, args):
 
 
 def cmd_build(config, args):
-    '''Build generated files'''
+    """Build generated files"""
 
     if args:
         print 'Usage: %prog build'

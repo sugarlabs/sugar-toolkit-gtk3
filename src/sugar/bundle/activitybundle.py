@@ -348,8 +348,8 @@ class ActivityBundle(Bundle):
         return install_path
 
     def install_mime_type(self, install_path):
-        ''' Update the mime type database and install the mime type icon
-        '''
+        """ Update the mime type database and install the mime type icon
+        """
         xdg_data_home = os.getenv('XDG_DATA_HOME',
                                   os.path.expanduser('~/.local/share'))
 
