@@ -21,8 +21,6 @@
 STABLE.
 """
 
-import logging
-
 import gtk
 import gobject
 import pango

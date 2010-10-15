@@ -24,8 +24,7 @@ from functools import partial
 import dbus
 from dbus import PROPERTIES_IFACE
 from telepathy.interfaces import ACCOUNT, \
-                                 ACCOUNT_MANAGER, \
-                                 CONNECTION
+                                 ACCOUNT_MANAGER
 from telepathy.constants import CONNECTION_STATUS_CONNECTED
 
 ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
