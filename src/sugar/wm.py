@@ -46,7 +46,7 @@ def _property_change_trapped(window, prop, prop_type, format, mode, data):
                       'a property on a window' % error)
         raise RuntimeError('Received X Error (%i) while setting '
                            'a property on a window' % error)
-    
+
 
 def get_activity_id(wnck_window):
     window = gtk.gdk.window_foreign_new(wnck_window.get_xid())

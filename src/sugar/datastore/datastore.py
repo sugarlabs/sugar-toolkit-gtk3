@@ -153,7 +153,7 @@ class DSObject(object):
         return self._object_id
 
     def set_object_id(self, object_id):
-        if self._update_signal_match is not None: 
+        if self._update_signal_match is not None:
             self._update_signal_match.remove()
         if object_id is not None:
             self._update_signal_match = _get_data_store().connect_to_signal(

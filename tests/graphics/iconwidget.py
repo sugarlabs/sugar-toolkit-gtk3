@@ -45,7 +45,7 @@ def create_icon_widgets(box, sensitive=True):
     icon.set_sensitive(sensitive)
     icon.show()
 
-    icon = Icon(icon_name='computer-xo', 
+    icon = Icon(icon_name='computer-xo',
                 icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR,
                 xo_color=XoColor())
     box.pack_start(icon)

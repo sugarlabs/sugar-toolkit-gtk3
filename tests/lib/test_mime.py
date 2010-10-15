@@ -33,7 +33,7 @@ class TestMime(unittest.TestCase):
                 ['text/plain', 'text/_moz_htmlcontext', 'text/unicode',
                  'text/html', 'text/_moz_htmlinfo'])
         self.assertEqual(mime_type, 'text/html')
-        
+
         # Mozilla's text in c&v
         mime_type = mime.choose_most_significant(
                 ['text/_moz_htmlcontext', 'STRING', 'text/html', 'text/_moz_htmlinfo',
