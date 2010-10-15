@@ -58,7 +58,7 @@ def _close_fds():
     for i in xrange(3, MAXFD):
         try:
             os.close(i)
-        # pylint: disable-msg=W0704
+        # pylint: disable=W0704
         except Exception:
             pass
 
@@ -284,7 +284,7 @@ class ActivityCreationHandler(gobject.GObject):
             self._handle.activity_id, self._service_name)
 
     def _create_error_handler(self, err):
-        logging.error('Couldn't create activity %s (%s): %s',
+        logging.error("Couldn't create activity %s (%s): %s",
             self._handle.activity_id, self._service_name, err)
         self._shell.NotifyLaunchFailure(
             self._handle.activity_id, reply_handler=self._no_reply_handler,

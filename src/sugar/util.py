@@ -133,7 +133,7 @@ class LRU:
     """
 
     def __init__(self, count, pairs=[]):
-        # pylint: disable-msg=W0102,W0612
+        # pylint: disable=W0102,W0612
         self.count = max(count, 1)
         self.d = {}
         self.first = None

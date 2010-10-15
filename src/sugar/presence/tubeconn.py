@@ -36,7 +36,7 @@ class TubeConnection(Connection):
 
     def __new__(cls, conn, tubes_iface, tube_id, address=None,
                 group_iface=None, mainloop=None):
-        # pylint: disable-msg=W0212
+        # pylint: disable=W0212
         # Confused by __new__
         if address is None:
             address = tubes_iface.GetDBusTubeAddress(tube_id)
@@ -59,7 +59,7 @@ class TubeConnection(Connection):
         return self
 
     def _on_get_self_handle_reply(self, handle):
-        # pylint: disable-msg=W0201
+        # pylint: disable=W0201
         # Confused by __new__
         self.self_handle = handle
         match = self._tubes_iface.connect_to_signal('DBusNamesChanged',
