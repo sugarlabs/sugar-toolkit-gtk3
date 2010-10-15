@@ -118,7 +118,7 @@ def get_locale_path(bundle_id):
         candidate_dirs[os.environ['SUGAR_LOCALEDIR']] = 2
 
     gconf_client = gconf.client_get_default()
-    package_dir = gconf_client.get_string("/desktop/sugar/i18n/langpackdir")
+    package_dir = gconf_client.get_string('/desktop/sugar/i18n/langpackdir')
     if package_dir is not None and package_dir is not '':
         candidate_dirs[package_dir] = 1
 

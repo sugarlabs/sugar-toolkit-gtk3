@@ -83,5 +83,5 @@ test.show()
 #import gobject
 #gobject.idle_add(idle_cb)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     common.main(test)

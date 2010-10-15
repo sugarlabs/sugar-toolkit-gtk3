@@ -175,7 +175,7 @@ class RadioToolButton(gtk.RadioToolButton):
         elif child.state == gtk.STATE_PRELIGHT:
             child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
                                   gtk.SHADOW_NONE, event.area,
-                                  child, "toolbutton-prelight",
+                                  child, 'toolbutton-prelight',
                                   allocation.x, allocation.y,
                                   allocation.width, allocation.height)
 

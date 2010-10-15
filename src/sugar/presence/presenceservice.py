@@ -82,7 +82,7 @@ class PresenceService(gobject.GObject):
             for account_path, connection in connections_per_account.items():
                 if not connection.connected:
                     continue
-                logging.debug("Calling GetActivity on %s", account_path)
+                logging.debug('Calling GetActivity on %s', account_path)
                 try:
                     room_handle = connection.connection.GetActivity(
                             activity_id,
@@ -172,12 +172,12 @@ class PresenceService(gobject.GObject):
     def __share_activity_cb(self, activity):
         """Finish sharing the activity
         """
-        self.emit("activity-shared", True, activity, None)
+        self.emit('activity-shared', True, activity, None)
 
     def __share_activity_error_cb(self, activity, error):
         """Notify with GObject event of unsuccessful sharing of activity
         """
-        self.emit("activity-shared", False, activity, error)
+        self.emit('activity-shared', False, activity, error)
 
     def share_activity(self, activity, properties=None, private=True):
         if properties is None:

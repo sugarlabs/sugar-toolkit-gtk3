@@ -59,7 +59,7 @@ def setup_accelerator(tool_button):
 
 class ToolButton(gtk.ToolButton):
 
-    __gtype_name__ = "SugarToolButton"
+    __gtype_name__ = 'SugarToolButton'
 
     def __init__(self, icon_name=None, **kwargs):
         self._accelerator = None
@@ -151,7 +151,7 @@ class ToolButton(gtk.ToolButton):
         elif child.state == gtk.STATE_PRELIGHT:
             child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
                                   gtk.SHADOW_NONE, event.area,
-                                  child, "toolbutton-prelight",
+                                  child, 'toolbutton-prelight',
                                   allocation.x, allocation.y,
                                   allocation.width, allocation.height)
 

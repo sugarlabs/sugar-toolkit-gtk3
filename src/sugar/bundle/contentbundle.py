@@ -97,7 +97,7 @@ class ContentBundle(Bundle):
                 self._l10n = False
             else:
                 raise MalformedBundleException(
-                    'Content bundle %s has invalid l10n key "%s"' %
+                    'Content bundle %s has invalid l10n key %r' %
                     (self._path, l10n))
         else:
             raise MalformedBundleException(
@@ -196,7 +196,7 @@ class ContentBundle(Bundle):
         return os.path.join(self.get_root_dir(), self._activity_start)
 
     def get_start_uri(self):
-        return "file://" + urllib.pathname2url(self.get_start_path())
+        return 'file://' + urllib.pathname2url(self.get_start_path())
 
     def get_bundle_id(self):
         # TODO treat ContentBundle in special way

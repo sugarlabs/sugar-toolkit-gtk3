@@ -25,9 +25,9 @@ import dbus
 import dbus.service
 
 
-_ACTIVITY_SERVICE_NAME = "org.laptop.Activity"
-_ACTIVITY_SERVICE_PATH = "/org/laptop/Activity"
-_ACTIVITY_INTERFACE = "org.laptop.Activity"
+_ACTIVITY_SERVICE_NAME = 'org.laptop.Activity'
+_ACTIVITY_SERVICE_PATH = '/org/laptop/Activity'
+_ACTIVITY_INTERFACE = 'org.laptop.Activity'
 
 
 class ActivityService(dbus.service.Object):

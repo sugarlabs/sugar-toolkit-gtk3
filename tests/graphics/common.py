@@ -45,7 +45,7 @@ class TestPalette(Test):
 class TestRunner(object):
     def run(self, test):
         window = gtk.Window()
-        window.connect("destroy", lambda w: gtk.main_quit())
+        window.connect('destroy', lambda w: gtk.main_quit())
         window.add(test)
         test.show()
 

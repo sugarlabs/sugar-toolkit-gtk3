@@ -80,5 +80,5 @@ class TestMime(unittest.TestCase):
         self.assertEqual(mime_type, 'text/plain')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

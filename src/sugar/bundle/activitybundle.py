@@ -87,9 +87,9 @@ class ActivityBundle(Bundle):
         "activity startup.")
 
     def _raw_manifest(self):
-        f = self.get_file("MANIFEST")
+        f = self.get_file('MANIFEST')
         if not f:
-            logging.warning("Activity directory lacks a MANIFEST file.")
+            logging.warning('Activity directory lacks a MANIFEST file.')
             return []
 
         ret = [line.strip() for line in f.readlines()]
@@ -108,7 +108,7 @@ class ActivityBundle(Bundle):
         lines = self._raw_manifest()
 
         # Remove trailing newlines, they do not help keep absolute position.
-        while lines and lines[-1] == "":
+        while lines and lines[-1] == '':
             lines = lines[:-1]
 
         for num, line in enumerate(lines):
@@ -117,20 +117,20 @@ class ActivityBundle(Bundle):
 
             # Remove duplicates
             if line in lines[0:num]:
-                lines[num] = ""
+                lines[num] = ''
                 logging.warning('Bundle %s: duplicate entry in MANIFEST: %s',
                     self._name, line)
                 continue
 
             # Remove MANIFEST
-            if line == "MANIFEST":
-                lines[num] = ""
+            if line == 'MANIFEST':
+                lines[num] = ''
                 logging.warning('Bundle %s: MANIFEST includes itself: %s',
                     self._name, line)
 
             # Remove invalid files
             if not self.is_file(line):
-                lines[num] = ""
+                lines[num] = ''
                 logging.warning('Bundle %s: invalid entry in MANIFEST: %s',
                     self._name, line)
 
@@ -328,7 +328,7 @@ class ActivityBundle(Bundle):
         for path in paths:
             if path in manifestfiles:
                 manifestfiles.remove(path)
-            elif path != "MANIFEST":
+            elif path != 'MANIFEST':
                 logging.warning('Bundle %s: %s not in MANIFEST', self._name,
                     path)
                 if strict_manifest:
@@ -336,7 +336,7 @@ class ActivityBundle(Bundle):
 
         # Is anything in MANIFEST left over after accounting for all files?
         if manifestfiles:
-            err = ("Bundle %s: files in MANIFEST not included: %s" %
+            err = ('Bundle %s: files in MANIFEST not included: %s' %
                    (self._name, str(manifestfiles)))
             if strict_manifest:
                 raise MalformedBundleException(err)

@@ -261,7 +261,7 @@ class XoColor:
         return '%s,%s' % (self.stroke, self.fill)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import sys
     import re
 

@@ -55,5 +55,5 @@ radio.show()
 palette.set_content(box)
 box.show()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     common.main(test)

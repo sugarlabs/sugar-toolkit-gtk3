@@ -145,7 +145,7 @@ class Alert(gtk.EventBox):
         if pspec.name == 'title':
             if self._title != value:
                 self._title = value
-                self._title_label.set_markup("<b>" + self._title + "</b>")
+                self._title_label.set_markup('<b>' + self._title + '</b>')
         elif pspec.name == 'msg':
             if self._msg != value:
                 self._msg = value

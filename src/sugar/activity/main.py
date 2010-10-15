@@ -56,7 +56,7 @@ class SingleProcess(dbus.service.Object):
         object_path = get_single_process_path(name_service)
         dbus.service.Object.__init__(self, bus_name, object_path)
 
-    @dbus.service.method("org.laptop.SingleProcess", in_signature="a{sv}")
+    @dbus.service.method('org.laptop.SingleProcess', in_signature='a{sv}')
     def create(self, handle_dict):
         handle = activityhandle.create_from_dict(handle_dict)
         create_activity_instance(self.constructor, handle)
@@ -64,14 +64,14 @@ class SingleProcess(dbus.service.Object):
 
 def main():
     parser = OptionParser()
-    parser.add_option("-b", "--bundle-id", dest="bundle_id",
-                      help="identifier of the activity bundle")
-    parser.add_option("-a", "--activity-id", dest="activity_id",
-                      help="identifier of the activity instance")
-    parser.add_option("-o", "--object-id", dest="object_id",
-                      help="identifier of the associated datastore object")
-    parser.add_option("-u", "--uri", dest="uri",
-                      help="URI to load")
+    parser.add_option('-b', '--bundle-id', dest='bundle_id',
+                      help='identifier of the activity bundle')
+    parser.add_option('-a', '--activity-id', dest='activity_id',
+                      help='identifier of the activity instance')
+    parser.add_option('-o', '--object-id', dest='object_id',
+                      help='identifier of the associated datastore object')
+    parser.add_option('-u', '--uri', dest='uri',
+                      help='URI to load')
     parser.add_option('-s', '--single-process', dest='single_process',
                       action='store_true',
                       help='start all the instances in the same process')

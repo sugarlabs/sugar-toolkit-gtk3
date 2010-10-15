@@ -59,12 +59,12 @@ for d in data:
     test.pack_start(icon)
     icon.show()
 
-button = gtk.Button("mec mac")
+button = gtk.Button('mec mac')
 test.pack_start(button)
 button.connect('activate', _button_activated_cb)
 button.show()
 
 test.show()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     common.main(test)

@@ -68,8 +68,8 @@ class ObjectChooser(object):
         self._bus = dbus.SessionBus(mainloop=self._main_loop)
         self._bus.add_signal_receiver(
                 self.__name_owner_changed_cb,
-                signal_name="NameOwnerChanged",
-                dbus_interface="org.freedesktop.DBus",
+                signal_name='NameOwnerChanged',
+                dbus_interface='org.freedesktop.DBus',
                 arg0=J_DBUS_SERVICE)
 
         obj = self._bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)

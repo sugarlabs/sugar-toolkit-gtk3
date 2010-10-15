@@ -69,8 +69,8 @@ class Profile(object):
 
     def is_valid(self):
         client = gconf.client_get_default()
-        nick = client.get_string("/desktop/sugar/user/nick")
-        color = client.get_string("/desktop/sugar/user/color")
+        nick = client.get_string('/desktop/sugar/user/nick')
+        color = client.get_string('/desktop/sugar/user/color')
 
         return nick is not '' and \
                color is not '' and \
@@ -84,21 +84,21 @@ class Profile(object):
             return None
 
         try:
-            f = open(key_path, "r")
+            f = open(key_path, 'r')
             lines = f.readlines()
             f.close()
         except IOError:
             logging.exception('Error reading public key')
             return None
 
-        magic = "ssh-dss "
+        magic = 'ssh-dss '
         for l in lines:
             l = l.strip()
             if not l.startswith(magic):
                 continue
             return l[len(magic):]
         else:
-            logging.error("Error parsing public key.")
+            logging.error('Error parsing public key.')
             return None
 
     def _hash_private_key(self):
@@ -108,7 +108,7 @@ class Profile(object):
             return None
 
         try:
-            f = open(key_path, "r")
+            f = open(key_path, 'r')
             lines = f.readlines()
             f.close()
         except IOError:
@@ -120,15 +120,15 @@ class Profile(object):
         end_found = False
         for l in lines:
             l = l.strip()
-            if l.startswith("-----BEGIN DSA PRIVATE KEY-----"):
+            if l.startswith('-----BEGIN DSA PRIVATE KEY-----'):
                 begin_found = True
                 continue
-            if l.startswith("-----END DSA PRIVATE KEY-----"):
+            if l.startswith('-----END DSA PRIVATE KEY-----'):
                 end_found = True
                 continue
             key += l
         if not (len(key) and begin_found and end_found):
-            logging.error("Error parsing public key.")
+            logging.error('Error parsing public key.')
             return None
 
         # hash it
@@ -145,41 +145,41 @@ class Profile(object):
         if cp.has_option('Buddy', 'NickName'):
             name = cp.get('Buddy', 'NickName')
             # decode nickname from ascii-safe chars to unicode
-            nick = name.decode("utf-8")
-            client.set_string("/desktop/sugar/user/nick", nick)
+            nick = name.decode('utf-8')
+            client.set_string('/desktop/sugar/user/nick', nick)
         if cp.has_option('Buddy', 'Color'):
             color = cp.get('Buddy', 'Color')
-            client.set_string("/desktop/sugar/user/color", color)
+            client.set_string('/desktop/sugar/user/color', color)
         if cp.has_option('Jabber', 'Server'):
             server = cp.get('Jabber', 'Server')
-            client.set_string("/desktop/sugar/collaboration/jabber_server",
+            client.set_string('/desktop/sugar/collaboration/jabber_server',
                               server)
         if cp.has_option('Date', 'Timezone'):
             timezone = cp.get('Date', 'Timezone')
-            client.set_string("/desktop/sugar/date/timezone", timezone)
+            client.set_string('/desktop/sugar/date/timezone', timezone)
         if cp.has_option('Frame', 'HotCorners'):
             delay = float(cp.get('Frame', 'HotCorners'))
-            client.set_int("/desktop/sugar/frame/corner_delay", int(delay))
+            client.set_int('/desktop/sugar/frame/corner_delay', int(delay))
         if cp.has_option('Frame', 'WarmEdges'):
             delay = float(cp.get('Frame', 'WarmEdges'))
-            client.set_int("/desktop/sugar/frame/edge_delay", int(delay))
+            client.set_int('/desktop/sugar/frame/edge_delay', int(delay))
         if cp.has_option('Server', 'Backup1'):
             backup1 = cp.get('Server', 'Backup1')
-            client.set_string("/desktop/sugar/backup_url", backup1)
+            client.set_string('/desktop/sugar/backup_url', backup1)
         if cp.has_option('Sound', 'Volume'):
             volume = float(cp.get('Sound', 'Volume'))
-            client.set_int("/desktop/sugar/sound/volume", int(volume))
+            client.set_int('/desktop/sugar/sound/volume', int(volume))
         if cp.has_option('Power', 'AutomaticPM'):
             state = cp.get('Power', 'AutomaticPM')
-            if state.lower() == "true":
-                client.set_bool("/desktop/sugar/power/automatic", True)
+            if state.lower() == 'true':
+                client.set_bool('/desktop/sugar/power/automatic', True)
         if cp.has_option('Power', 'ExtremePM'):
             state = cp.get('Power', 'ExtremePM')
-            if state.lower() == "true":
-                client.set_bool("/desktop/sugar/power/extreme", True)
+            if state.lower() == 'true':
+                client.set_bool('/desktop/sugar/power/extreme', True)
         if cp.has_option('Shell', 'FavoritesLayout'):
             layout = cp.get('Shell', 'FavoritesLayout')
-            client.set_string("/desktop/sugar/desktop/favorites_layout",
+            client.set_string('/desktop/sugar/desktop/favorites_layout',
                               layout)
         del cp
         try:
@@ -225,12 +225,12 @@ def get_profile():
 
 def get_nick_name():
     client = gconf.client_get_default()
-    return client.get_string("/desktop/sugar/user/nick")
+    return client.get_string('/desktop/sugar/user/nick')
 
 
 def get_color():
     client = gconf.client_get_default()
-    color = client.get_string("/desktop/sugar/user/color")
+    color = client.get_string('/desktop/sugar/user/color')
     return XoColor(color)
 
 

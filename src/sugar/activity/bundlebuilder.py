@@ -108,7 +108,7 @@ class Builder(object):
         po_dir = os.path.join(self.config.source_dir, 'po')
 
         if not self.config.bundle.is_dir(po_dir):
-            logging.warn("Missing po/ dir, cannot build_locale")
+            logging.warn('Missing po/ dir, cannot build_locale')
             return
 
         locale_dir = os.path.join(self.config.source_dir, 'locale')
@@ -128,8 +128,8 @@ class Builder(object):
             if not os.path.isdir(mo_path):
                 os.makedirs(mo_path)
 
-            mo_file = os.path.join(mo_path, "%s.mo" % self.config.bundle_id)
-            args = ["msgfmt", "--output-file=%s" % mo_file, file_name]
+            mo_file = os.path.join(mo_path, '%s.mo' % self.config.bundle_id)
+            args = ['msgfmt', '--output-file=%s' % mo_file, file_name]
             retcode = subprocess.call(args)
             if retcode:
                 print 'ERROR - msgfmt failed with return code %i.' % retcode
@@ -170,9 +170,9 @@ class Builder(object):
         for path in self.check_manifest():
             manifest.append(path)
 
-        f = open(os.path.join(self.config.source_dir, "MANIFEST"), "wb")
+        f = open(os.path.join(self.config.source_dir, 'MANIFEST'), 'wb')
         for line in manifest:
-            f.write(line + "\n")
+            f.write(line + '\n')
 
 
 class Packager(object):
@@ -399,7 +399,7 @@ def print_commands():
 
     for name, func in globals().items():
         if name.startswith('cmd_'):
-            print "%-20s %s" % (name.replace('cmd_', ''), func.__doc__)
+            print '%-20s %s' % (name.replace('cmd_', ''), func.__doc__)
 
     print '\n(Type "./setup.py <command> --help" for help about a ' \
           'particular command\'s options.'
@@ -407,7 +407,7 @@ def print_commands():
 
 def start(bundle_name=None):
     if bundle_name:
-        logging.warn("bundle_name deprecated, now comes from activity.info")
+        logging.warn('bundle_name deprecated, now comes from activity.info')
 
     parser = OptionParser(usage='[action] [options]')
     parser.disable_interspersed_args()

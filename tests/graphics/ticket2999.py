@@ -34,5 +34,5 @@ text_view.props.buffer.props.text = 'Blah blah blah, blah blah blah.'
 test.pack_start(text_view)
 text_view.show()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     common.main(test)

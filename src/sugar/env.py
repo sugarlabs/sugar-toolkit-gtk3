@@ -34,7 +34,7 @@ def get_profile_path(path=None):
         try:
             os.makedirs(base, 0770)
         except OSError:
-            print "Could not create user directory."
+            print 'Could not create user directory.'
 
     if path != None:
         return os.path.join(base, path)

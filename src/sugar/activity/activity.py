@@ -88,9 +88,9 @@ from sugar.activity.widgets import ActivityToolbox
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
-SCOPE_PRIVATE = "private"
-SCOPE_INVITE_ONLY = "invite"  # shouldn't be shown in UI, it's implicit
-SCOPE_NEIGHBORHOOD = "public"
+SCOPE_PRIVATE = 'private'
+SCOPE_INVITE_ONLY = 'invite'  # shouldn't be shown in UI, it's implicit
+SCOPE_NEIGHBORHOOD = 'public'
 
 J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
@@ -269,7 +269,7 @@ class Activity(Window, gtk.Container):
         # but they get truncated anyway so if more characters
         # are supported in the future we will get a better view
         # of the processes
-        proc_title = "%s <%s>" % (get_bundle_name(), handle.activity_id)
+        proc_title = '%s <%s>' % (get_bundle_name(), handle.activity_id)
         util.set_proc_title(proc_title)
 
         self.connect('realize', self.__realize_cb)
@@ -362,16 +362,16 @@ class Activity(Window, gtk.Container):
 
     def _set_up_sharing(self, mesh_instance, share_scope):
         # handle activity share/join
-        logging.debug("*** Act %s, mesh instance %r, scope %s",
+        logging.debug('*** Act %s, mesh instance %r, scope %s',
                       self._activity_id, mesh_instance, share_scope)
         if mesh_instance is not None:
             # There's already an instance on the mesh, join it
-            logging.debug("*** Act %s joining existing mesh instance %r",
+            logging.debug('*** Act %s joining existing mesh instance %r',
                           self._activity_id, mesh_instance)
             self.shared_activity = mesh_instance
             self.shared_activity.connect('notify::private',
                                          self.__privacy_changed_cb)
-            self._join_id = self.shared_activity.connect("joined",
+            self._join_id = self.shared_activity.connect('joined',
                                                          self.__joined_cb)
             if not self.shared_activity.props.joined:
                 self.shared_activity.join()
@@ -778,7 +778,7 @@ class Activity(Window, gtk.Container):
         its 'private' property.
         """
         if self.shared_activity and self.shared_activity.props.joined:
-            raise RuntimeError("Activity %s already shared." %
+            raise RuntimeError('Activity %s already shared.' %
                                self._activity_id)
         verb = private and 'private' or 'public'
         logging.debug('Requesting %s share of activity %s.', verb,
@@ -880,7 +880,7 @@ class Activity(Window, gtk.Container):
         """Returns the jobject metadata or None if there is no jobject.
 
         Activities can set metadata in write_file() using:
-            self.metadata['MyKey'] = "Something"
+            self.metadata['MyKey'] = 'Something'
 
         and retrieve metadata in read_file() using:
             self.metadata.get('MyKey', 'aDefaultValue')
@@ -976,7 +976,7 @@ def get_activity_root():
     if os.environ.get('SUGAR_ACTIVITY_ROOT'):
         return os.environ['SUGAR_ACTIVITY_ROOT']
     else:
-        raise RuntimeError("No SUGAR_ACTIVITY_ROOT set.")
+        raise RuntimeError('No SUGAR_ACTIVITY_ROOT set.')
 
 
 def show_object_in_journal(object_id):

@@ -44,5 +44,5 @@ toolbar.insert(button, -1)
 button.show()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     common.main(test)

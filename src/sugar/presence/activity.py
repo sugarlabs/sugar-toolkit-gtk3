@@ -180,7 +180,7 @@ class Activity(gobject.GObject):
     def do_get_property(self, pspec):
         """Retrieve a particular property from our property dictionary"""
 
-        if pspec.name == "joined":
+        if pspec.name == 'joined':
             return self._joined
 
         if self._get_properties_call is not None:
@@ -188,17 +188,17 @@ class Activity(gobject.GObject):
                           'wants property %s', self, pspec.name)
             self._get_properties_call.block()
 
-        if pspec.name == "id":
+        if pspec.name == 'id':
             return self._id
-        elif pspec.name == "name":
+        elif pspec.name == 'name':
             return self._name
-        elif pspec.name == "color":
+        elif pspec.name == 'color':
             return self._color
-        elif pspec.name == "type":
+        elif pspec.name == 'type':
             return self._type
-        elif pspec.name == "tags":
+        elif pspec.name == 'tags':
             return self._tags
-        elif pspec.name == "private":
+        elif pspec.name == 'private':
             return self._private
 
     def do_set_property(self, pspec, val):
@@ -206,16 +206,16 @@ class Activity(gobject.GObject):
         # FIXME: need an asynchronous API to set these properties,
         # particularly 'private'
 
-        if pspec.name == "name":
+        if pspec.name == 'name':
             self._name = val
-        elif pspec.name == "color":
+        elif pspec.name == 'color':
             self._color = val
-        elif pspec.name == "tags":
+        elif pspec.name == 'tags':
             self._tags = val
-        elif pspec.name == "private":
+        elif pspec.name == 'private':
             self._private = val
         else:
-            raise ValueError('Unknown property "%s"', pspec.name)
+            raise ValueError('Unknown property %r', pspec.name)
 
         self._publish_properties()
 
@@ -457,7 +457,7 @@ class Activity(gobject.GObject):
     # Leaving
     def __text_channel_closed_cb(self):
         self._joined = False
-        self.emit("joined", False, "left activity")
+        self.emit('joined', False, 'left activity')
 
     def leave(self):
         """Leave this shared activity"""

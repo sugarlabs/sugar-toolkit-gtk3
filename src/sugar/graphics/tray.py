@@ -396,7 +396,7 @@ class TrayButton(ToolButton):
 
 class _IconWidget(gtk.EventBox):
 
-    __gtype_name__ = "SugarTrayIconWidget"
+    __gtype_name__ = 'SugarTrayIconWidget'
 
     def __init__(self, icon_name=None, xo_color=None):
         gtk.EventBox.__init__(self)
@@ -422,7 +422,7 @@ class _IconWidget(gtk.EventBox):
 
 class TrayIcon(gtk.ToolItem):
 
-    __gtype_name__ = "SugarTrayIcon"
+    __gtype_name__ = 'SugarTrayIcon'
 
     def __init__(self, icon_name=None, xo_color=None):
         gtk.ToolItem.__init__(self)

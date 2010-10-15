@@ -28,7 +28,7 @@ from sugar.graphics.palette import Palette, ToolInvoker
 
 class ToggleToolButton(gtk.ToggleToolButton):
 
-    __gtype_name__ = "SugarToggleToolButton"
+    __gtype_name__ = 'SugarToggleToolButton'
 
     def __init__(self, named_icon=None):
         gtk.ToggleToolButton.__init__(self)
@@ -82,7 +82,7 @@ class ToggleToolButton(gtk.ToggleToolButton):
         elif child.state == gtk.STATE_PRELIGHT:
             child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
                                   gtk.SHADOW_NONE, event.area,
-                                  child, "toolbutton-prelight",
+                                  child, 'toolbutton-prelight',
                                   allocation.x, allocation.y,
                                   allocation.width, allocation.height)
 

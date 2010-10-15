@@ -21,7 +21,7 @@ box.pack_start(text_view)
 def echo(button, label):
     if not button.props.active:
         return
-    text_view.props.buffer.props.text += "\n" + label
+    text_view.props.buffer.props.text += '\n' + label
 
 # RadioMenuButton
 

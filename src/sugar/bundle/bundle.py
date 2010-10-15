@@ -103,7 +103,7 @@ class Bundle(object):
             if ext != self._unzipped_extension:
                 raise MalformedBundleException(
                     'All files in the bundle must be inside a single ' +
-                    'directory whose name ends with "%s"' %
+                    'directory whose name ends with %r' %
                     self._unzipped_extension)
 
         for file_name in file_names:
@@ -118,7 +118,7 @@ class Bundle(object):
         if self._zip_file is None:
             path = os.path.join(self._path, filename)
             try:
-                f = open(path, "rb")
+                f = open(path, 'rb')
             except IOError:
                 return None
         else:

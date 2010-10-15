@@ -65,7 +65,7 @@ class ComboBox(gtk.ComboBox):
         width, height = gtk.icon_size_lookup(size)
         info = icon_theme.lookup_icon(name, max(width, height), 0)
         if not info:
-            raise ValueError("Icon '" + name + "' not found.")
+            raise ValueError('Icon %r not found.' % name)
         fname = info.get_filename()
         del info
         return fname

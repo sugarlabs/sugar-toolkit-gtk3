@@ -247,7 +247,7 @@ class _IconBuffer(object):
         #   -- 2007-12-14 Benjamin Berg
         pixbuf = widget.style.render_icon(icon_source, widget.get_direction(),
                                           gtk.STATE_INSENSITIVE, -1, widget,
-                                          "sugar-icon")
+                                          'sugar-icon')
 
         return pixbuf
 

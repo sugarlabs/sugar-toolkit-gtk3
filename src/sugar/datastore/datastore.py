@@ -35,9 +35,9 @@ from sugar import env
 from sugar import mime
 from sugar import dispatch
 
-DS_DBUS_SERVICE = "org.laptop.sugar.DataStore"
-DS_DBUS_INTERFACE = "org.laptop.sugar.DataStore"
-DS_DBUS_PATH = "/org/laptop/sugar/DataStore"
+DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
+DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
+DS_DBUS_PATH = '/org/laptop/sugar/DataStore'
 
 _data_store = None
 
@@ -316,8 +316,8 @@ def create():
 def _update_ds_entry(uid, properties, filename, transfer_ownership=False,
         reply_handler=None, error_handler=None, timeout=-1):
     debug_properties = properties.copy()
-    if "preview" in debug_properties:
-        debug_properties["preview"] = "<omitted>"
+    if 'preview' in debug_properties:
+        debug_properties['preview'] = '<omitted>'
     logging.debug('dbus_helpers.update: %s, %s, %s, %s', uid, filename,
         debug_properties, transfer_ownership)
     if reply_handler and error_handler:

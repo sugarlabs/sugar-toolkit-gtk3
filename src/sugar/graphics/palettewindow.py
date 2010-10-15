@@ -165,7 +165,7 @@ class PaletteWindow(gtk.Window):
         self.set_data('sugar-accel-group', accel_group)
         self.add_accel_group(accel_group)
 
-        self.set_group_id("default")
+        self.set_group_id('default')
 
         self.connect('show', self.__show_cb)
         self.connect('hide', self.__hide_cb)
@@ -279,12 +279,12 @@ class PaletteWindow(gtk.Window):
 
         if gap:
             wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
-                                 gtk.SHADOW_IN, event.area, self, "palette",
+                                 gtk.SHADOW_IN, event.area, self, 'palette',
                                  0, 0, allocation.width, allocation.height,
                                  gap[0], gap[1], gap[2])
         else:
             wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
-                             gtk.SHADOW_IN, event.area, self, "palette",
+                             gtk.SHADOW_IN, event.area, self, 'palette',
                              0, 0, allocation.width, allocation.height)
 
         # Fall trough to the container expose handler.
@@ -740,14 +740,14 @@ class WidgetInvoker(Invoker):
         if gap:
             wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
                                  gtk.SHADOW_IN, event.area, self._widget,
-                                 "palette-invoker", x, y,
+                                 'palette-invoker', x, y,
                                  self._widget.allocation.width,
                                  self._widget.allocation.height,
                                  gap[0], gap[1], gap[2])
         else:
             wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
                              gtk.SHADOW_IN, event.area, self._widget,
-                             "palette-invoker", x, y,
+                             'palette-invoker', x, y,
                              self._widget.allocation.width,
                              self._widget.allocation.height)
 

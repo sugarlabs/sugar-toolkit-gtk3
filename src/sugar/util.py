@@ -64,7 +64,7 @@ def unique_id(data=''):
         to be unique-enough, no attempt is made to make
         perfectly unique values.
     """
-    data_string = "%s%s%s" % (time.time(), random.randint(10000, 100000), data)
+    data_string = '%s%s%s' % (time.time(), random.randint(10000, 100000), data)
     return printable_hash(sha_data(data_string))
 
 
