@@ -147,6 +147,7 @@ class PaletteWindow(gtk.Window):
         self._alignment = None
         self._up = False
         self._old_alloc = None
+        self._palette_state = None
 
         self._popup_anim = animator.Animator(.5, 10)
         self._popup_anim.add(_PopupAnimation(self))
