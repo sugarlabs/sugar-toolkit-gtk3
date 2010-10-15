@@ -32,7 +32,7 @@ def _property_get_trapped(window, prop, prop_type):
     error = gtk.gdk.error_trap_pop()
     if error:
         logging.debug('Received X Error (%i) while getting '
-                      'a property on a window' % error)
+                      'a property on a window', error)
 
     return prop_info
 
@@ -45,7 +45,7 @@ def _property_change_trapped(window, prop, prop_type, format, mode, data):
     error = gtk.gdk.error_trap_pop()
     if error:
         logging.debug('Received X Error (%i) while setting '
-                      'a property on a window' % error)
+                      'a property on a window', error)
         raise RuntimeError('Received X Error (%i) while setting '
                            'a property on a window' % error)
 
