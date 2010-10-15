@@ -928,7 +928,7 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
     def __get_filters_cb(self):
         logging.debug('__get_filters_cb')
         filters = {
-            CHANNEL + '.ChannelType'     : CHANNEL_TYPE_TEXT,
+            CHANNEL + '.ChannelType': CHANNEL_TYPE_TEXT,
             CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
             }
         filter_dict = dbus.Dictionary(filters, signature='sv')
