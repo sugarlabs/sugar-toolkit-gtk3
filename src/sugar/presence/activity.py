@@ -135,7 +135,8 @@ class Activity(gobject.GObject):
                 dbus_interface=CONN_INTERFACE_ACTIVITY_PROPERTIES)
 
     def __activity_properties_changed_cb(self, room_handle, properties):
-        _logger.debug('%r: Activity properties changed to %r', self, properties)
+        _logger.debug('%r: Activity properties changed to %r', self,
+                      properties)
         self._update_properties(properties)
 
     def __got_properties_cb(self, properties):

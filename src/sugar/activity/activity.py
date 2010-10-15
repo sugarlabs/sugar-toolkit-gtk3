@@ -569,7 +569,8 @@ class Activity(Window, gtk.Container):
         if self._closing:
             self._show_keep_failed_dialog()
             self._closing = False
-        raise RuntimeError('Error saving activity object to datastore: %s', err)
+        raise RuntimeError('Error saving activity object to datastore: %s',
+                           err)
 
     def _cleanup_jobject(self):
         if self._jobject:

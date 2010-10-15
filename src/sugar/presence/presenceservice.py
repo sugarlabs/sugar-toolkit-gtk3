@@ -72,8 +72,8 @@ class PresenceService(gobject.GObject):
         """
         if self._activity_cache is not None:
             if self._activity_cache.props.id != activity_id:
-                raise RuntimeError('Activities can only access their own shared'
-                                   'instance')
+                raise RuntimeError('Activities can only access their own'
+                                   ' shared instance')
             return self._activity_cache
         else:
             connection_manager = get_connection_manager()
@@ -105,8 +105,8 @@ class PresenceService(gobject.GObject):
     def get_activity_by_handle(self, connection_path, room_handle):
         if self._activity_cache is not None:
             if self._activity_cache.room_handle != room_handle:
-                raise RuntimeError('Activities can only access their own shared'
-                                   'instance')
+                raise RuntimeError('Activities can only access their own'
+                                   ' shared instance')
             return self._activity_cache
         else:
             connection_manager = get_connection_manager()
@@ -227,8 +227,8 @@ class PresenceService(gobject.GObject):
 
         returns the bus name and the object path of the Telepathy connection
         """
-        connection_manager = get_connection_manager()
-        account_path, connection = connection_manager.get_preferred_connection()
+        manager = get_connection_manager()
+        account_path, connection = manager.get_preferred_connection()
         if connection is None:
             return None
         else:

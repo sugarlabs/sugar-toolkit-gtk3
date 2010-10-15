@@ -37,15 +37,17 @@ class TestMime(unittest.TestCase):
 
         # Mozilla's text in c&v
         mime_type = mime.choose_most_significant(
-                ['text/_moz_htmlcontext', 'STRING', 'text/html', 'text/_moz_htmlinfo',
-                 'text/x-moz-url-priv', 'UTF8_STRING', 'COMPOUND_TEXT'])
+                ['text/_moz_htmlcontext', 'STRING', 'text/html',
+                 'text/_moz_htmlinfo', 'text/x-moz-url-priv', 'UTF8_STRING',
+                 'COMPOUND_TEXT'])
         self.assertEqual(mime_type, 'text/html')
 
         # Mozilla gif in dnd
         mime_type = mime.choose_most_significant(
                 ['application/x-moz-file-promise-url',
-                 'application/x-moz-file-promise-dest-filename', 'text/_moz_htmlinfo',
-                 'text/x-moz-url-desc', 'text/_moz_htmlcontext', 'text/x-moz-url-data',
+                 'application/x-moz-file-promise-dest-filename',
+                 'text/_moz_htmlinfo', 'text/x-moz-url-desc',
+                 'text/_moz_htmlcontext', 'text/x-moz-url-data',
                  'text/uri-list'])
         self.assertEqual(mime_type, 'text/uri-list')
 

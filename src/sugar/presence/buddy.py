@@ -182,7 +182,8 @@ class Buddy(BaseBuddy):
                 CONNECTION_INTERFACE_CONTACTS,
                 'GetContactAttributes',
                 'auasb',
-                ([self.contact_handle], [CONNECTION_INTERFACE_ALIASING], False),
+                ([self.contact_handle], [CONNECTION_INTERFACE_ALIASING],
+                 False),
                 reply_handler=self.__got_attributes_cb,
                 error_handler=self.__error_handler_cb)
 
