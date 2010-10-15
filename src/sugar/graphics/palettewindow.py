@@ -853,7 +853,7 @@ class ToolInvoker(WidgetInvoker):
     def _get_alignments(self):
         parent = self._widget.get_parent()
         if parent is None:
-            return WidgetInvoker._get_alignments()
+            return WidgetInvoker._get_alignments(self)
 
         if parent.get_orientation() is gtk.ORIENTATION_HORIZONTAL:
             return self.BOTTOM + self.TOP
