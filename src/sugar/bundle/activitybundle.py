@@ -32,7 +32,8 @@ from sugar import env
 from sugar import util
 from sugar.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
-
+from sugar.bundle.bundleversion import NormalizedVersion
+from sugar.bundle.bundleversion import InvalidVersionError
 
 class ActivityBundle(Bundle):
     """A Sugar activity bundle
@@ -59,7 +60,7 @@ class ActivityBundle(Bundle):
         self._mime_types = None
         self._show_launcher = True
         self._tags = None
-        self._activity_version = 0
+        self._activity_version = '0'
         self._installation_time = os.stat(path).st_mtime
         self._manifest = None
 
@@ -197,11 +198,12 @@ class ActivityBundle(Bundle):
         if cp.has_option(section, 'activity_version'):
             version = cp.get(section, 'activity_version')
             try:
-                self._activity_version = int(version)
-            except ValueError:
+                NormalizedVersion(version)
+            except InvalidVersionError:
                 raise MalformedBundleException(
                     'Activity bundle %s has invalid version number %s' %
                     (self._path, version))
+            self._activity_version = version
 
     def _get_linfo_file(self):
         lang = locale.getdefaultlocale()[0]
