@@ -276,6 +276,8 @@ class Installer(object):
 
             shutil.copy(source, dest)
 
+        self.config.bundle.install_mime_type(self.config.source_dir)
+
 
 def cmd_dev(config, args):
     """Setup for development"""
