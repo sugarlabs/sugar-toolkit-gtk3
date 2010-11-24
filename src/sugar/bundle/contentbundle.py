@@ -29,6 +29,9 @@ from sugar import env
 from sugar.bundle.bundle import Bundle, NotInstalledException, \
     MalformedBundleException
 
+from sugar.bundle.bundleversion import NormalizedVersion
+from sugar.bundle.bundleversion import InvalidVersionError
+
 
 class ContentBundle(Bundle):
     """A Sugar content bundle
@@ -52,7 +55,7 @@ class ContentBundle(Bundle):
         self._subcategory = None
         self._category_class = None
         self._category_icon = None
-        self._library_version = None
+        self._library_version = '0'
         self._bundle_class = None
         self._activity_start = None
         self._global_name = None
@@ -83,11 +86,12 @@ class ContentBundle(Bundle):
         if cp.has_option(section, 'library_version'):
             version = cp.get(section, 'library_version')
             try:
-                self._library_version = int(version)
-            except ValueError:
+                NormalizedVersion(version)
+            except InvalidVersionError:
                 raise MalformedBundleException(
                     'Content bundle %s has invalid version number %s' %
                     (self._path, version))
+            self._library_version = version
 
         if cp.has_option(section, 'l10n'):
             l10n = cp.get(section, 'l10n')
