@@ -71,7 +71,11 @@ class Bundle(object):
         self._zip_file = None
 
         if not os.path.isdir(self._path):
-            self._zip_file = zipfile.ZipFile(self._path)
+            try:
+                self._zip_file = zipfile.ZipFile(self._path)
+            except zipfile.error, exception:
+                raise MalformedBundleException('Error accessing zip file %r: '
+                                               '%s' % (self._path, exception))
             self._check_zip_bundle()
 
         # manifest = self._get_file(self._infodir + '/contents')
