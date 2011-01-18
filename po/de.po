@@ -33,13 +33,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # Markus Schlager <m.slg@gmx.de>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: sugar-toolkit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-28 06:08-0400\n"
-"PO-Revision-Date: 2010-09-20 18:17+0200\n"
+"PO-Revision-Date: 2011-01-18 10:12+0200\n"
 "Last-Translator: Markus <m.slg@gmx.de>\n"
 "Language-Team: OLPC-German <LL@li.org>\n"
 "Language: de\n"
@@ -118,7 +126,7 @@ msgstr "Privat"
 
 #: ../src/sugar/activity/widgets.py:136
 msgid "My Neighborhood"
-msgstr "Meine Umgebung"
+msgstr "Meine Nachbarn"
 
 #: ../src/sugar/activity/widgets.py:349
 msgid "Activity"
