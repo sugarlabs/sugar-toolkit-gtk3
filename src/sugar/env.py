@@ -24,7 +24,7 @@ import os
 
 
 def is_emulator():
-    return os.environ.get('SUGAR_EMULATOR', 'yes') == 'yes'
+    return os.environ.get('SUGAR_EMULATOR', 'no') == 'yes'
 
 
 def get_profile_path(path=None):
