@@ -2,11 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-26 00:33-0400\n"
+"POT-Creation-Date: 2010-09-28 06:08-0400\n"
 "PO-Revision-Date: 2009-09-01 12:17-0400\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +29,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 1.2.1\n"
 
-#: ../src/sugar/activity/activity.py:329
+#: ../src/sugar/activity/activity.py:336
 #, python-format
 msgid "%s Activity"
 msgstr "Activité %s"
 
-#: ../src/sugar/activity/activity.py:714
+#: ../src/sugar/activity/activity.py:791
 msgid "Keep error"
 msgstr "Erreur d'enregistrement"
 
-#: ../src/sugar/activity/activity.py:715
+#: ../src/sugar/activity/activity.py:792
 msgid "Keep error: all changes will be lost"
 msgstr "Erreur d'enregistrement : toutes les modifications seront perdues"
 
-#: ../src/sugar/activity/activity.py:718
+#: ../src/sugar/activity/activity.py:795
 msgid "Don't stop"
 msgstr "Ne pas arrêter"
 
-#: ../src/sugar/activity/activity.py:721
+#: ../src/sugar/activity/activity.py:798
 msgid "Stop anyway"
 msgstr "Arrêter quand même"
 
@@ -43,7 +55,7 @@ msgid "Name this entry"
 msgstr "Donner un nom à cette entrée"
 
 #: ../src/sugar/activity/namingalert.py:87
-#: ../src/sugar/activity/widgets.py:162
+#: ../src/sugar/activity/widgets.py:169
 msgid "Keep"
 msgstr "Conserver"
 
@@ -59,47 +71,48 @@ msgstr "Description :"
 msgid "Tags:"
 msgstr "Étiquettes :"
 
-#: ../src/sugar/activity/widgets.py:79
+#: ../src/sugar/activity/widgets.py:83
 msgid "Stop"
 msgstr "Arrêter"
 
-#: ../src/sugar/activity/widgets.py:91
+#: ../src/sugar/activity/widgets.py:95
 msgid "Undo"
 msgstr "Annuler"
 
-#: ../src/sugar/activity/widgets.py:99
+#: ../src/sugar/activity/widgets.py:103
 msgid "Redo"
 msgstr "Répéter"
 
-#: ../src/sugar/activity/widgets.py:106
+#: ../src/sugar/activity/widgets.py:110
 msgid "Copy"
 msgstr "Copier"
 
-#: ../src/sugar/activity/widgets.py:113
+#: ../src/sugar/activity/widgets.py:118
 msgid "Paste"
 msgstr "Coller"
 
-#: ../src/sugar/activity/widgets.py:123
+#: ../src/sugar/activity/widgets.py:129
 msgid "Private"
 msgstr "Privé"
 
-#: ../src/sugar/activity/widgets.py:130
+#: ../src/sugar/activity/widgets.py:136
 msgid "My Neighborhood"
 msgstr "Mon voisinage"
 
-#: ../src/sugar/activity/widgets.py:341
+#: ../src/sugar/activity/widgets.py:349
 msgid "Activity"
 msgstr "Activité"
 
-#: ../src/sugar/graphics/alert.py:286 ../src/sugar/graphics/alert.py:365
+#: ../src/sugar/graphics/alert.py:287 ../src/sugar/graphics/alert.py:410
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../src/sugar/graphics/alert.py:290 ../src/sugar/graphics/alert.py:424
+#: ../src/sugar/graphics/alert.py:291 ../src/sugar/graphics/alert.py:336
+#: ../src/sugar/graphics/alert.py:469
 msgid "Ok"
 msgstr "Ok"
 
-#: ../src/sugar/graphics/alert.py:375
+#: ../src/sugar/graphics/alert.py:420
 msgid "Continue"
 msgstr "Continuer"
 
