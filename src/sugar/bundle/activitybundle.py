@@ -35,6 +35,7 @@ from sugar.bundle.bundle import Bundle, \
 from sugar.bundle.bundleversion import NormalizedVersion
 from sugar.bundle.bundleversion import InvalidVersionError
 
+
 class ActivityBundle(Bundle):
     """A Sugar activity bundle
 
