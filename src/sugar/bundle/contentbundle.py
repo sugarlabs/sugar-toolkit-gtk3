@@ -224,7 +224,7 @@ class ContentBundle(Bundle):
         else:
             return False
 
-    def install(self, install_path):
+    def install(self):
         # TODO ignore passed install_path argument
         # needs rethinking while fixing ContentBundle support
         install_path = env.get_user_library_path()
