@@ -643,7 +643,13 @@ class Invoker(gobject.GObject):
         if self._palette is not None:
             self._palette.popdown(immediate=True)
             self._palette.props.invoker = None
-            self._palette.destroy()
+            # GTK pops down the palette before it invokes the actions on the
+            # menu item. We need to postpone destruction of the palette until
+            # after all signals have propagated from the menu item to the
+            # palette owner.
+            gobject.idle_add(lambda old_palette=self._palette:
+                             old_palette.destroy(),
+                             priority=gobject.PRIORITY_LOW)
 
         self._palette = palette
 
