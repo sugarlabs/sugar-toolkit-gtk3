@@ -88,6 +88,8 @@ class Window(gtk.Window):
 
         gtk.Window.__init__(self, **args)
 
+        self.set_decorated(False)
+        self.maximize()
         self.connect('realize', self.__window_realize_cb)
         self.connect('key-press-event', self.__key_press_cb)
 
