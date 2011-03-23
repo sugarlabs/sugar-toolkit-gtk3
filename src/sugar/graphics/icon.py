@@ -328,6 +328,8 @@ class Icon(gtk.Image):
         # collected while it's still used if it's a sugar.util.TempFilePath.
         # See #1175
         self._file = None
+        self._alpha = 1.0
+        self._scale = 1.0
 
         gobject.GObject.__init__(self, **kwargs)
 
@@ -416,8 +418,22 @@ class Icon(gtk.Image):
             (allocation.height - requisition[1]) * yalign)
 
         cr = self.window.cairo_create()
+
+        if self._scale != 1.0:
+            cr.scale(self._scale, self._scale)
+
+            margin = self._buffer.width * (1 - self._scale) / 2
+            x, y = x + margin, y + margin
+
+            x = x / self._scale
+            y = y / self._scale
+
         cr.set_source_surface(surface, x, y)
-        cr.paint()
+
+        if self._alpha == 1.0:
+            cr.paint()
+        else:
+            cr.paint_with_alpha(self._alpha)
 
     def set_xo_color(self, value):
         """
@@ -520,6 +536,22 @@ class Icon(gtk.Image):
     badge_name = gobject.property(
         type=str, getter=get_badge_name, setter=set_badge_name)
 
+    def set_alpha(self, value):
+        if self._alpha != value:
+            self._alpha = value
+            self.queue_draw()
+
+    alpha = gobject.property(
+        type=float, setter=set_alpha)
+
+    def set_scale(self, value):
+        if self._scale != value:
+            self._scale = value
+            self.queue_draw()
+
+    scale = gobject.property(
+        type=float, setter=set_scale)
+
 
 class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 
@@ -530,6 +562,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 
         self._buffer = _IconBuffer()
         self._palette_invoker = CanvasInvoker()
+        self._alpha = 1.0
 
         hippo.CanvasBox.__init__(self, **kwargs)
 
@@ -771,8 +804,6 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         None
 
         """
-        logging.warning(
-            'CanvasIcon: the scale parameter is currently unsupported')
         if self._buffer.scale != value:
             self._buffer.scale = value
             self.emit_request_changed()
@@ -792,6 +823,14 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
 
     scale = gobject.property(
         type=float, getter=get_scale, setter=set_scale)
+
+    def set_alpha(self, alpha):
+        if self._alpha != alpha:
+            self._alpha = alpha
+            self.emit_paint_needed(0, 0, -1, -1)
+
+    alpha = gobject.property(
+        type=float, setter=set_alpha)
 
     def set_cache(self, value):
         """
@@ -874,7 +913,10 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
             y = (height - surface.get_height()) / 2
 
             cr.set_source_surface(surface, x, y)
-            cr.paint()
+            if self._alpha == 1.0:
+                cr.paint()
+            else:
+                cr.paint_with_alpha(self._alpha)
 
     def do_get_content_width_request(self):
         """
