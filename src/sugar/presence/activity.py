@@ -109,6 +109,7 @@ class Activity(gobject.GObject):
         self._channel_self_handle = None
         self._text_channel_group_flags = 0
         self._buddies = {}
+        self._joined_buddies = {}
 
         self._get_properties_call = None
         if not self.room_handle is None:
@@ -231,7 +232,7 @@ class Activity(gobject.GObject):
         returns list of presence Buddy objects that we can successfully
         create from the buddy object paths that PS has for this activity.
         """
-        return self._buddies.values()
+        return self._joined_buddies.values()
 
     def get_buddy_by_handle(self, handle):
         """Retrieve the Buddy object given a telepathy handle.
@@ -321,6 +322,7 @@ class Activity(gobject.GObject):
         _logger.debug('__add_initial_buddies %r', contact_ids)
         for contact_id in contact_ids:
             self._buddies[contact_id] = self._get_buddy(contact_id)
+            self._joined_buddies[contact_id] = self._get_buddy(contact_id)
         # Once we have the initial members, we can finish the join process
         self._joined = True
         self.emit('joined', True, None)
@@ -347,6 +349,8 @@ class Activity(gobject.GObject):
                 buddy = self._get_buddy(contact_id)
                 self.emit('buddy-joined', buddy)
                 self._buddies[contact_id] = buddy
+            if contact_id not in self._joined_buddies:
+                self._joined_buddies[contact_id] = buddy
 
     def _remove_buddies(self, contact_ids):
         for contact_id in contact_ids:
