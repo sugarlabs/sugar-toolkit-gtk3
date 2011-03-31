@@ -34,7 +34,7 @@ _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 
 def _create_activity_icon(metadata):
-    if metadata.get('icon-color', ''):
+    if metadata is not None and metadata.get('icon-color'):
         color = XoColor(metadata['icon-color'])
     else:
         client = gconf.client_get_default()
