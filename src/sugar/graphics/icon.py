@@ -241,10 +241,6 @@ class _IconBuffer(object):
         icon_source.set_direction_wildcarded(False)
         icon_source.set_size_wildcarded(False)
 
-        # Please note that the pixbuf returned by this function is leaked
-        # with current stable versions of pygtk. The relevant bug is
-        # http://bugzilla.gnome.org/show_bug.cgi?id=502871
-        #   -- 2007-12-14 Benjamin Berg
         pixbuf = widget.style.render_icon(icon_source, widget.get_direction(),
                                           gtk.STATE_INSENSITIVE, -1, widget,
                                           'sugar-icon')
