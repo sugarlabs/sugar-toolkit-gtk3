@@ -523,6 +523,7 @@ class _ShareCommand(_BaseCommand):
         self.text_channel = join_command.text_channel
         self.text_channel_group_flags = join_command.text_channel_group_flags
         self.tubes_channel = join_command.tubes_channel
+        self.channel_self_handle = join_command.channel_self_handle
 
         self._connection.AddActivity(
             self._activity_id,
