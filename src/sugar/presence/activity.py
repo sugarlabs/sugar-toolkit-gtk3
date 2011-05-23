@@ -341,7 +341,7 @@ class Activity(gobject.GObject):
         if self._channel_self_handle in removed:
             removed.remove(self._channel_self_handle)
         if removed:
-            self._resolve_handles(added, reply_cb=self._remove_buddies)
+            self._resolve_handles(removed, reply_cb=self._remove_buddies)
 
     def _add_buddies(self, contact_ids):
         for contact_id in contact_ids:
