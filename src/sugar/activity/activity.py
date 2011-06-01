@@ -336,6 +336,8 @@ class Activity(Window, gtk.Container):
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
+        if self.shared_activity and self.shared_activity.props.name != title:
+            title = self.shared_activity.props.name
 
         if self.shared_activity is not None:
             icon_color = self.shared_activity.props.color
