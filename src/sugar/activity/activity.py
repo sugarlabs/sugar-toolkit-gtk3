@@ -68,6 +68,7 @@ from telepathy.interfaces import CHANNEL, \
                                  CLIENT, \
                                  CLIENT_HANDLER
 from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
+from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar import util
 from sugar.presence import presenceservice
@@ -389,17 +390,22 @@ class Activity(Window, gtk.Container):
             else:
                 logging.debug('Unknown share scope %r', share_scope)
 
-    def __got_channel_cb(self, wait_loop, connection_path, channel_path):
+    def __got_channel_cb(self, wait_loop, connection_path, channel_path,
+                         handle_type):
         logging.debug('Activity.__got_channel_cb')
-        connection_name = connection_path.replace('/', '.')[1:]
-
-        bus = dbus.SessionBus()
-        channel = bus.get_object(connection_name, channel_path)
-        room_handle = channel.Get(CHANNEL, 'TargetHandle')
-
         pservice = presenceservice.get_instance()
-        mesh_instance = pservice.get_activity_by_handle(connection_path,
-                                                        room_handle)
+
+        if handle_type == CONNECTION_HANDLE_TYPE_ROOM:
+            connection_name = connection_path.replace('/', '.')[1:]
+            bus = dbus.SessionBus()
+            channel = bus.get_object(connection_name, channel_path)
+            room_handle = channel.Get(CHANNEL, 'TargetHandle')
+            mesh_instance = pservice.get_activity_by_handle(connection_path,
+                                                            room_handle)
+        else:
+            mesh_instance = pservice.get_activity(self._activity_id,
+                                                  warn_if_none=False)
+
         self._set_up_sharing(mesh_instance, SCOPE_PRIVATE)
         wait_loop.quit()
 
@@ -945,8 +951,11 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
                 account, connection, channels, requests_satisfied,
                 user_action_time, handler_info)
         try:
-            for channel in channels:
-                self._got_channel_cb(connection, channel[0])
+            for object_path, properties in channels:
+                channel_type = properties[CHANNEL + '.ChannelType']
+                handle_type = properties[CHANNEL + '.TargetHandleType']
+                if channel_type == CHANNEL_TYPE_TEXT:
+                    self._got_channel_cb(connection, object_path, handle_type)
         except Exception, e:
             logging.exception(e)
 
