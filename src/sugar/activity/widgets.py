@@ -16,7 +16,6 @@
 # Boston, MA 02111-1307, USA.
 
 import gtk
-import gobject
 import gettext
 import gconf
 
@@ -186,32 +185,40 @@ class TitleEntry(gtk.ToolItem):
     def __init__(self, activity, **kwargs):
         gtk.ToolItem.__init__(self)
         self.set_expand(False)
-        self._update_title_sid = None
 
         self.entry = gtk.Entry(**kwargs)
         self.entry.set_size_request(int(gtk.gdk.screen_width() / 3), -1)
         self.entry.set_text(activity.metadata['title'])
-        self.entry.connect('changed', self.__title_changed_cb, activity)
+        self.entry.connect('focus-out-event', self.__title_changed_cb, activity)
         self.entry.show()
         self.add(self.entry)
 
         activity.metadata.connect('updated', self.__jobject_updated_cb)
+        activity.connect('_closing', self.__closing_cb)
 
     def modify_bg(self, state, color):
         gtk.ToolItem.modify_bg(self, state, color)
         self.entry.modify_bg(state, color)
 
     def __jobject_updated_cb(self, jobject):
+        if self.entry.flags() & gtk.HAS_FOCUS:
+            return
+        if self.entry.get_text() == jobject['title']:
+            return
         self.entry.set_text(jobject['title'])
 
-    def __title_changed_cb(self, entry, activity):
-        if self._update_title_sid is not None:
-            gobject.source_remove(self._update_title_sid)
-        self._update_title_sid = gobject.timeout_add_seconds(
-                1, self.__update_title_cb, activity)
+    def __closing_cb(self, activity):
+        self.save_title(activity)
+        return False
 
-    def __update_title_cb(self, activity):
+    def __title_changed_cb(self, editable, event, activity):
+        self.save_title(activity)
+        return False
+
+    def save_title(self, activity):
         title = self.entry.get_text()
+        if title == activity.metadata['title']:
+            return
 
         activity.metadata['title'] = title
         activity.metadata['title_set_by_user'] = '1'
@@ -220,9 +227,6 @@ class TitleEntry(gtk.ToolItem):
         shared_activity = activity.get_shared_activity()
         if shared_activity is not None:
             shared_activity.props.name = title
-
-        self._update_title_sid = None
-        return False
 
 
 class ActivityToolbar(gtk.Toolbar):

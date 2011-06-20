@@ -223,6 +223,9 @@ class Activity(Window, gtk.Container):
     __gsignals__ = {
         'shared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
         'joined': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        # For internal use only, use can_close() if you want to perform extra
+        # checks before actually closing
+        '_closing': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
     }
 
     def __init__(self, handle, create_jobject=True):
@@ -862,6 +865,8 @@ class Activity(Window, gtk.Container):
         """
         if not self.can_close():
             return
+
+        self.emit('_closing')
 
         if skip_save or self._jobject is None or \
                 self.metadata.get('title_set_by_user', '0') == '1':
