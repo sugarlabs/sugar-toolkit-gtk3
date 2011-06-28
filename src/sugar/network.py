@@ -75,6 +75,12 @@ class GlibTCPServer(SocketServer.TCPServer):
         # let the request be closed by the request handler when its done
         pass
 
+    def shutdown_request(self, request):
+        """Called to shutdown and close an individual request."""
+        # like close_request, let the request be closed by the request handler
+        # when done
+        pass
+
 
 class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """RequestHandler class that integrates with Glib mainloop.  It writes
