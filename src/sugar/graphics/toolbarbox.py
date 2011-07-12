@@ -36,6 +36,15 @@ class ToolbarButton(ToolButton):
         self.connect('clicked',
                 lambda widget: self.set_expanded(not self.is_expanded()))
 
+        self.connect('hierarchy-changed', self.__hierarchy_changed_cb)
+
+    def __hierarchy_changed_cb(self, tool_button, previous_toplevel):
+        if hasattr(self.parent, 'owner'):
+            if self.page_widget:
+                self._unparent()
+                self.parent.owner.pack_start(self.page_widget)
+                self.set_expanded(False)
+
     def get_toolbar_box(self):
         if not hasattr(self.parent, 'owner'):
             return None
