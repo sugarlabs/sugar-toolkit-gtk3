@@ -335,13 +335,17 @@ class Activity(Window, gtk.Container):
                                                   warn_if_none=False)
             self._set_up_sharing(mesh_instance, share_scope)
 
+        if not create_jobject:
+            self.set_title(get_bundle_name())
+            return
+
         if self.shared_activity is not None:
             self._jobject.metadata['title'] = self.shared_activity.props.name
             self._jobject.metadata['icon-color'] = \
                 self.shared_activity.props.color
-        self.set_title(self._jobject.metadata['title'])
-        self._jobject.metadata.connect('updated',
-                                       self.__jobject_updated_cb)
+            self.set_title(self._jobject.metadata['title'])
+            self._jobject.metadata.connect('updated',
+                                           self.__jobject_updated_cb)
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
