@@ -224,6 +224,8 @@ class TitleEntry(gtk.ToolItem):
         activity.metadata['title_set_by_user'] = '1'
         activity.save()
 
+        activity.set_title(title)
+
         shared_activity = activity.get_shared_activity()
         if shared_activity is not None:
             shared_activity.props.name = title

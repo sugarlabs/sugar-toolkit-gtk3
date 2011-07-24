@@ -340,6 +340,8 @@ class Activity(Window, gtk.Container):
             self._jobject.metadata['icon-color'] = \
                 self.shared_activity.props.color
         self.set_title(self._jobject.metadata['title'])
+        self._jobject.metadata.connect('updated',
+                                       self.__jobject_updated_cb)
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
@@ -363,6 +365,11 @@ class Activity(Window, gtk.Container):
         datastore.write(jobject)
 
         return jobject
+
+    def __jobject_updated_cb(self, jobject):
+        if self.get_title() == jobject['title']:
+            return
+        self.set_title(jobject['title'])
 
     def _set_up_sharing(self, mesh_instance, share_scope):
         # handle activity share/join
