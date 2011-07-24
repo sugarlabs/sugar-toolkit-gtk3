@@ -309,13 +309,16 @@ class Activity(Window, gtk.Container):
 
         if handle.object_id:
             self._jobject = datastore.get(handle.object_id)
-            self.set_title(self._jobject.metadata['title'])
 
             if 'share-scope' in self._jobject.metadata:
                 share_scope = self._jobject.metadata['share-scope']
 
         self.shared_activity = None
         self._join_id = None
+
+        if handle.object_id is None and create_jobject:
+            logging.debug('Creating a jobject.')
+            self._jobject = self._initialize_journal_object()
 
         if handle.invited:
             wait_loop = gobject.MainLoop()
@@ -332,21 +335,16 @@ class Activity(Window, gtk.Container):
                                                   warn_if_none=False)
             self._set_up_sharing(mesh_instance, share_scope)
 
-        if handle.object_id is None and create_jobject:
-            logging.debug('Creating a jobject.')
-            self._jobject = self._initialize_journal_object()
-            self.set_title(self._jobject.metadata['title'])
+        if self.shared_activity is not None:
+            self._jobject.metadata['title'] = self.shared_activity.props.name
+            self._jobject.metadata['icon-color'] = \
+                self.shared_activity.props.color
+        self.set_title(self._jobject.metadata['title'])
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
-        if self.shared_activity and self.shared_activity.props.name != title:
-            title = self.shared_activity.props.name
-
-        if self.shared_activity is not None:
-            icon_color = self.shared_activity.props.color
-        else:
-            client = gconf.client_get_default()
-            icon_color = client.get_string('/desktop/sugar/user/color')
+        client = gconf.client_get_default()
+        icon_color = client.get_string('/desktop/sugar/user/color')
 
         jobject = datastore.create()
         jobject.metadata['title'] = title
