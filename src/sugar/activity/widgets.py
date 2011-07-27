@@ -18,6 +18,7 @@
 import gtk
 import gettext
 import gconf
+import logging
 
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.toolbarbox import ToolbarButton
@@ -161,10 +162,13 @@ class ShareButton(RadioMenuButton):
             self.neighborhood.handler_unblock(self._neighborhood_handle)
 
 
+# DEPRECATED
 class KeepButton(ToolButton):
 
     def __init__(self, activity, **kwargs):
         ToolButton.__init__(self, **kwargs)
+        logging.warning('KeepButton has been deprecated since Sugar 0.94'
+                        ' and should not be used in newly written code.')
         self.props.tooltip = _('Keep')
         self.props.accelerator = '<Ctrl>S'
 
@@ -232,8 +236,8 @@ class TitleEntry(gtk.ToolItem):
 
 
 class ActivityToolbar(gtk.Toolbar):
-    """The Activity toolbar with the Journal entry title, sharing,
-       Keep and Stop buttons
+    """The Activity toolbar with the Journal entry title, sharing
+       and Stop buttons
 
     All activities should have this toolbar. It is easiest to add it to your
     Activity by using the ActivityToolbox.
@@ -260,10 +264,6 @@ class ActivityToolbar(gtk.Toolbar):
         self.share = ShareButton(activity)
         self.share.show()
         self.insert(self.share, -1)
-
-        self.keep = KeepButton(activity)
-        self.insert(self.keep, -1)
-        self.keep.show()
 
         self.stop = StopButton(activity)
         self.insert(self.stop, -1)
