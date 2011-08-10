@@ -47,10 +47,6 @@ _sugarext_la_SOURCES =			\
 	eggsmclient.c			\
 	eggsmclient-private.h		\
 	eggsmclient-xsmp.c		\
-	sexy-icon-entry.h		\
-	sexy-icon-entry.c		\
-	sugar-address-entry.c		\
-	sugar-address-entry.h		\
 	sugar-grid.c			\
 	sugar-grid.h			\
 	sugar-key-grabber.c		\

@@ -4,11 +4,9 @@ headers
 #include <Python.h>
 
 #include "pygobject.h"
-#include "sugar-address-entry.h"
 #include "sugar-grid.h"
 #include "sugar-key-grabber.h"
 #include "sugar-menu.h"
-#include "sexy-icon-entry.h"
 #include "gsm-session.h"
 #include "gsm-xsmp.h"
 #include "acme-volume-alsa.h"

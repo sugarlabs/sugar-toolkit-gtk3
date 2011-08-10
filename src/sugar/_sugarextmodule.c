@@ -28,7 +28,6 @@
 extern PyMethodDef py_sugarext_functions[];
 
 void py_sugarext_register_classes (PyObject *d);
-void py_sugarext_add_constants (PyObject *module, const gchar *strip_prefix);
 
 DL_EXPORT(void)
 init_sugarext(void)
@@ -42,7 +41,6 @@ init_sugarext(void)
     d = PyModule_GetDict(m);
 
     py_sugarext_register_classes(d);
-    py_sugarext_add_constants(m, "SEXY_");
 
     if (PyErr_Occurred ()) {
         Py_FatalError ("can't initialise module _sugarext");

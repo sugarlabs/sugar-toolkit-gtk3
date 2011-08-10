@@ -17,19 +17,17 @@
 
 import gtk
 
-from sugar import _sugarext
-
 from sugar.graphics import style
 from sugar.graphics.icon import _SVGLoader
 
-ICON_ENTRY_PRIMARY = _sugarext.ICON_ENTRY_PRIMARY
-ICON_ENTRY_SECONDARY = _sugarext.ICON_ENTRY_SECONDARY
+ICON_ENTRY_PRIMARY = gtk.ENTRY_ICON_PRIMARY
+ICON_ENTRY_SECONDARY = gtk.ENTRY_ICON_SECONDARY
 
 
-class IconEntry(_sugarext.IconEntry):
+class IconEntry(gtk.Entry):
 
     def __init__(self):
-        _sugarext.IconEntry.__init__(self)
+        gtk.Entry.__init__(self)
 
         self._clear_icon = None
         self._clear_shown = False
@@ -51,21 +49,15 @@ class IconEntry(_sugarext.IconEntry):
         else:
             pixbuf = gtk.gdk.pixbuf_new_from_file(icon_info.get_filename())
         del icon_info
+        self.set_icon(position, pixbuf)
 
-        image = gtk.Image()
-        image.set_from_pixbuf(pixbuf)
-        image.show()
-
-        self.set_icon(position, image)
-
-    def set_icon(self, position, image):
-        if image.get_storage_type() not in [gtk.IMAGE_PIXBUF, gtk.IMAGE_STOCK]:
-            raise ValueError('Image must have a storage type of pixbuf or ' +
-                             'stock, not %r.' % image.get_storage_type())
-        _sugarext.IconEntry.set_icon(self, position, image)
+    def set_icon(self, position, pixbuf):
+        if type(pixbuf) is not gtk.gdk.Pixbuf:
+            raise ValueError('Argument must be a pixbuf, not %r.' % pixbuf)
+        self.set_icon_from_pixbuf(position, pixbuf)
 
     def remove_icon(self, position):
-        _sugarext.IconEntry.set_icon(self, position, None)
+        self.set_icon_from_pixbuf(position, None)
 
     def add_clear_button(self):
         if self.props.text != "":
@@ -73,13 +65,13 @@ class IconEntry(_sugarext.IconEntry):
         else:
             self.hide_clear_button()
 
-        self.connect('icon-pressed', self._icon_pressed_cb)
+        self.connect('icon-press', self._icon_pressed_cb)
         self.connect('changed', self._changed_cb)
 
     def show_clear_button(self):
         if not self._clear_shown:
             self.set_icon_from_name(ICON_ENTRY_SECONDARY,
-                'dialog-cancel')
+                                    'dialog-cancel')
             self._clear_shown = True
 
     def hide_clear_button(self):
