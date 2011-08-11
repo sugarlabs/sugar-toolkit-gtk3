@@ -49,7 +49,7 @@ import gettext
 
 import gtk
 import gobject
-import hippo
+import pango
 import math
 
 from sugar.graphics import style
@@ -338,27 +338,43 @@ class ErrorAlert(Alert):
         icon.show()
 
 
-class _TimeoutIcon(hippo.CanvasText, hippo.CanvasItem):
-    """An icon with a round border"""
-    __gtype_name__ = 'AlertTimeoutIcon'
+class _TimeoutIcon(gtk.Alignment):
+    __gtype_name__ = 'SugarTimeoutIcon'
 
-    def __init__(self, **kwargs):
-        hippo.CanvasText.__init__(self, **kwargs)
+    def __init__(self):
+        gtk.Alignment.__init__(self, 0, 0, 1, 1)
+        self.set_app_paintable(True)
+        self._text = gtk.Label()
+        self._text.set_alignment(0.5, 0.5)
+        attrlist = pango.AttrList()
+        attrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD))
+        self._text.set_attributes(attrlist)
+        self.add(self._text)
+        self._text.show()
+        self.connect("expose_event", self.__expose_cb)
 
-        self.props.orientation = hippo.ORIENTATION_HORIZONTAL
-        self.props.border_left = style.DEFAULT_SPACING
-        self.props.border_right = style.DEFAULT_SPACING
+    def __expose_cb(self, widget, event):
+        context = widget.window.cairo_create()
+        self._draw(context)
+        return False
 
-    def do_paint_background(self, cr, damaged_box):
-        [width, height] = self.get_allocation()
+    def do_size_request(self, requisition):
+        requisition.height, requisition.width = \
+            gtk.icon_size_lookup(gtk.ICON_SIZE_BUTTON)
+        self._text.size_request()
 
-        xval = width * 0.5
-        yval = height * 0.5
-        radius = min(width * 0.5, height * 0.5)
+    def _draw(self, context):
+        rect = self.get_allocation()
+        x = rect.x + rect.width * 0.5
+        y = rect.y + rect.height * 0.5
+        radius = rect.width / 2
+        context.arc(x, y, radius, 0, 2 * math.pi)
+        widget_style = self.get_style()
+        context.set_source_color(widget_style.bg[self.get_state()])
+        context.fill_preserve()
 
-        hippo.cairo_set_source_rgba32(cr, self.props.background_color)
-        cr.arc(xval, yval, radius, 0, 2 * math.pi)
-        cr.fill_preserve()
+    def set_text(self, text):
+        self._text.set_text(str(text))
 
 
 class TimeoutAlert(Alert):
@@ -412,20 +428,16 @@ class TimeoutAlert(Alert):
         self.add_button(gtk.RESPONSE_CANCEL, _('Cancel'), icon)
         icon.show()
 
-        self._timeout_text = _TimeoutIcon(
-            text=self._timeout,
-            color=style.COLOR_BUTTON_GREY.get_int(),
-            background_color=style.COLOR_WHITE.get_int())
-        canvas = hippo.Canvas()
-        canvas.set_root(self._timeout_text)
-        canvas.show()
-        self.add_button(gtk.RESPONSE_OK, _('Continue'), canvas)
+        self._timeout_text = _TimeoutIcon()
+        self._timeout_text.set_text(self._timeout)
+        self.add_button(gtk.RESPONSE_OK, _('Continue'), self._timeout_text)
+        self._timeout_text.show()
 
         gobject.timeout_add_seconds(1, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1
-        self._timeout_text.props.text = self._timeout
+        self._timeout_text.set_text(self._timeout)
         if self._timeout == 0:
             self._response(gtk.RESPONSE_OK)
             return False
@@ -461,20 +473,16 @@ class NotifyAlert(Alert):
 
         self._timeout = timeout
 
-        self._timeout_text = _TimeoutIcon(
-            text=self._timeout,
-            color=style.COLOR_BUTTON_GREY.get_int(),
-            background_color=style.COLOR_WHITE.get_int())
-        canvas = hippo.Canvas()
-        canvas.set_root(self._timeout_text)
-        canvas.show()
-        self.add_button(gtk.RESPONSE_OK, _('Ok'), canvas)
+        self._timeout_text = _TimeoutIcon()
+        self._timeout_text.set_text(self._timeout)
+        self.add_button(gtk.RESPONSE_OK, _('Ok'), self._timeout_text)
+        self._timeout_text.show()
 
         gobject.timeout_add(1000, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1
-        self._timeout_text.props.text = self._timeout
+        self._timeout_text.set_text(self._timeout)
         if self._timeout == 0:
             self._response(gtk.RESPONSE_OK)
             return False
