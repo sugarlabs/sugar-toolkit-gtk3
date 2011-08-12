@@ -21,7 +21,6 @@ STABLE.
 
 import gtk
 import gobject
-import hippo
 
 from sugar.graphics import style
 
@@ -47,14 +46,10 @@ class Toolbox(gtk.VBox):
         self.pack_start(self._notebook)
         self._notebook.show()
 
-        # FIXME improve gtk.Notebook and do this in the theme
-        self._separator = hippo.Canvas()
-        box = hippo.CanvasBox(
-                    border_color=style.COLOR_BUTTON_GREY.get_int(),
-                    background_color=style.COLOR_PANEL_GREY.get_int(),
-                    box_height=style.TOOLBOX_SEPARATOR_HEIGHT,
-                    border_bottom=style.LINE_WIDTH)
-        self._separator.set_root(box)
+        self._separator = gtk.HSeparator()
+        self._separator.modify_bg(gtk.STATE_NORMAL,
+                                  style.COLOR_PANEL_GREY.get_gdk_color())
+        self._separator.set_size_request(1, style.TOOLBOX_SEPARATOR_HEIGHT)
         self.pack_start(self._separator, False)
 
         self._notebook.connect('notify::page', self._notify_page_cb)
