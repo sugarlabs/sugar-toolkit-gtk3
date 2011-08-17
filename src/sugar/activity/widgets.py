@@ -265,6 +265,9 @@ class ActivityToolbar(gtk.Toolbar):
         self.share.show()
         self.insert(self.share, -1)
 
+        # DEPRECATED
+        self.keep = KeepButton(activity)
+
         self.stop = StopButton(activity)
         self.insert(self.stop, -1)
         self.stop.show()
