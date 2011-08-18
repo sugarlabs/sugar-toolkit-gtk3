@@ -343,6 +343,7 @@ class Activity(Window, gtk.Container):
             self._jobject.metadata['title'] = self.shared_activity.props.name
             self._jobject.metadata['icon-color'] = \
                 self.shared_activity.props.color
+        else:
             self.set_title(self._jobject.metadata['title'])
             self._jobject.metadata.connect('updated',
                                            self.__jobject_updated_cb)
