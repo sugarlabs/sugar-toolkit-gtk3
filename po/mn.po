@@ -7,20 +7,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-20 13:10-0500\n"
-"PO-Revision-Date: 2009-09-21 18:10-0400\n"
-"Last-Translator: Odontsetseg Bat-Erdene <obat-erdene@suffolk.edu>\n"
+"PO-Revision-Date: 2011-08-24 18:07+0200\n"
+"Last-Translator: Cris Anderson <anderson861@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: mn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.1\n"
 
 #: ../src/sugar/activity/activity.py:338
 #, python-format
 msgid "%s Activity"
-msgstr "%s үйл ажиллагаа"
+msgstr "%s Програм"
 
 #: ../src/sugar/activity/activity.py:738
 msgid "Keep error"
@@ -28,19 +28,19 @@ msgstr "Хадгалахын алдаа"
 
 #: ../src/sugar/activity/activity.py:739
 msgid "Keep error: all changes will be lost"
-msgstr "Хадгалахын алдаа: бүх өөрчлөлтүүд устгагдана"
+msgstr "Хадгалахын алдаа: бүх өөрчлөлт устана"
 
 #: ../src/sugar/activity/activity.py:742
 msgid "Don't stop"
-msgstr "Бүү хаа"
+msgstr "Бүү зогсоо"
 
 #: ../src/sugar/activity/activity.py:745
 msgid "Stop anyway"
-msgstr "Ямар ч нөхцөлд хаах"
+msgstr "Ямар ч үед хаах"
 
 #: ../src/sugar/activity/namingalert.py:82
 msgid "Name this entry"
-msgstr ""
+msgstr "Оруулгын нэр"
 
 #: ../src/sugar/activity/namingalert.py:87
 #: ../src/sugar/activity/widgets.py:166
@@ -49,15 +49,15 @@ msgstr "Хадгалах"
 
 #: ../src/sugar/activity/namingalert.py:283
 msgid "Untitled"
-msgstr ""
+msgstr "Нэр өгөөгүй"
 
 #: ../src/sugar/activity/namingalert.py:290
 msgid "Description:"
-msgstr ""
+msgstr "Тодорхойлолт:"
 
 #: ../src/sugar/activity/namingalert.py:314
 msgid "Tags:"
-msgstr ""
+msgstr "Зангилаас:"
 
 #: ../src/sugar/activity/widgets.py:83
 msgid "Stop"
@@ -89,7 +89,7 @@ msgstr "Миний Хөршүүд"
 
 #: ../src/sugar/activity/widgets.py:345
 msgid "Activity"
-msgstr "Үйл ажиллагаа"
+msgstr "Програм"
 
 #: ../src/sugar/graphics/alert.py:286 ../src/sugar/graphics/alert.py:365
 msgid "Cancel"
@@ -149,7 +149,7 @@ msgstr "%s-ын өмнө"
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d жил"
-msgstr[1] "%d жил"
+msgstr[1] "%d он жил"
 
 #: ../src/sugar/util.py:242
 #, python-format
@@ -193,22 +193,22 @@ msgstr "Хоосон"
 #: ../src/sugar/util.py:341
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d Байт"
 
 #: ../src/sugar/util.py:343
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d КБайт"
 
 #: ../src/sugar/util.py:345
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d МБайт"
 
 #: ../src/sugar/util.py:347
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d ГБайт"
 
 #~ msgid "Share with:"
 #~ msgstr "Хуваалцах:"
