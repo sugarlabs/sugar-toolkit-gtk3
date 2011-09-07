@@ -40,7 +40,7 @@ class ToolbarButton(ToolButton):
 
     def __hierarchy_changed_cb(self, tool_button, previous_toplevel):
         if hasattr(self.parent, 'owner'):
-            if self.page_widget:
+            if self.page_widget and previous_toplevel is None:
                 self._unparent()
                 self.parent.owner.pack_start(self.page_widget)
                 self.set_expanded(False)
