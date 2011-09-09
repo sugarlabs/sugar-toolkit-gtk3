@@ -170,11 +170,29 @@ class XOPackager(Packager):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
 
-        for f in self.builder.get_files():
+        for f in self._get_files_in_git():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
+        locale_dir = os.path.join(self.config.source_dir, 'locale')
+        locale_files = list_files(locale_dir, IGNORE_DIRS, IGNORE_FILES)
+        for f in locale_files:
+            bundle_zip.write(os.path.join(locale_dir, f),
+                             os.path.join(self.config.bundle_root_dir,
+                                          'locale', f))
 
         bundle_zip.close()
+
+    def _get_files_in_git(self):
+        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
+                                  cwd=self.config.source_dir)
+        stdout, _ = git_ls.communicate()
+        if git_ls.returncode:
+            # Fall back to filtered list
+            return list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
+
+        # pylint: disable=E1103
+        return [path.strip() for path in stdout.strip('\n').split('\n')]
 
 
 class SourcePackager(Packager):
