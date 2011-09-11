@@ -103,12 +103,9 @@ class Window(gtk.Window):
         self.__vbox.pack_start(self.__hbox)
         self.__hbox.show()
 
-        self._event_box = gtk.EventBox()
-        self.__hbox.pack_start(self._event_box)
-        self._event_box.show()
-        self._event_box.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK
-                                   | gtk.gdk.POINTER_MOTION_MASK)
-        self._event_box.connect('motion-notify-event', self.__motion_notify_cb)
+        self.add_events(gtk.gdk.POINTER_MOTION_HINT_MASK
+                        | gtk.gdk.POINTER_MOTION_MASK)
+        self.connect('motion-notify-event', self.__motion_notify_cb)
 
         self.add(self.__vbox)
         self.__vbox.show()
@@ -173,10 +170,10 @@ class Window(gtk.Window):
 
     def set_canvas(self, canvas):
         if self._canvas:
-            self._event_box.remove(self._canvas)
+            self.__hbox.remove(self._canvas)
 
         if canvas:
-            self._event_box.add(canvas)
+            self.__hbox.pack_start(canvas)
 
         self._canvas = canvas
         self.__vbox.set_focus_child(self._canvas)
