@@ -344,9 +344,9 @@ class Activity(Window, gtk.Container):
             self._jobject.metadata['icon-color'] = \
                 self.shared_activity.props.color
         else:
-            self.set_title(self._jobject.metadata['title'])
             self._jobject.metadata.connect('updated',
                                            self.__jobject_updated_cb)
+        self.set_title(self._jobject.metadata['title'])
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
