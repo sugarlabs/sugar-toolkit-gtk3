@@ -163,6 +163,7 @@ class XOPackager(Packager):
         Packager.__init__(self, builder.config)
 
         self.builder = builder
+        self.builder.build_locale()
         self.package_path = os.path.join(self.config.dist_dir,
                                          self.config.xo_name)
 
