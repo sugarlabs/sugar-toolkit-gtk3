@@ -21,17 +21,13 @@ import os
 import gio
 import gtk
 import gobject
-import hippo
 import gconf
 
 from sugar.graphics import style
 from sugar.graphics.icon import Icon
 from sugar.graphics.xocolor import XoColor
-from sugar.graphics.icon import CanvasIcon
 from sugar.graphics.icon import get_icon_file_name
-from sugar.graphics.entry import CanvasEntry
 from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.canvastextview import CanvasTextView
 
 from sugar.bundle.activitybundle import ActivityBundle
 
@@ -114,45 +110,37 @@ class NamingToolbar(gtk.Toolbar):
         self.emit('keep-clicked')
 
 
-class FavoriteIcon(CanvasIcon):
+class FavoriteIcon(gtk.ToggleButton):
 
-    def __init__(self, favorite):
-        CanvasIcon.__init__(self, icon_name='emblem-favorite',
-                            box_width=style.GRID_CELL_SIZE * 3 / 5,
-                            size=style.SMALL_ICON_SIZE)
-        self._favorite = None
-        self.set_favorite(favorite)
-        self.connect('button-release-event', self.__release_event_cb)
-        self.connect('motion-notify-event', self.__motion_notify_event_cb)
+    def __init__(self):
+        gtk.ToggleButton.__init__(self)
+        self.set_relief(gtk.RELIEF_NONE)
+        self.set_focus_on_click(False)
 
-    def set_favorite(self, favorite):
-        if favorite == self._favorite:
-            return
+        self._icon = Icon(icon_name='emblem-favorite',
+                          pixel_size=style.SMALL_ICON_SIZE)
+        self.set_image(self._icon)
 
-        self._favorite = favorite
-        if favorite:
+        self.connect('toggled', self.__toggled_cb)
+        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+        self.connect('enter-notify-event', self.__enter_notify_event_cb)
+
+    def __toggled_cb(self, widget):
+        if self.get_active():
             client = gconf.client_get_default()
             color = XoColor(client.get_string('/desktop/sugar/user/color'))
-            self.props.xo_color = color
+            self._icon.props.xo_color = color
         else:
-            self.props.stroke_color = style.COLOR_BUTTON_GREY.get_svg()
-            self.props.fill_color = style.COLOR_WHITE.get_svg()
+            self._icon.props.stroke_color = style.COLOR_BUTTON_GREY.get_svg()
+            self._icon.props.fill_color = style.COLOR_WHITE.get_svg()
 
-    def get_favorite(self):
-        return self._favorite
+    def __enter_notify_event_cb(self, icon, event):
+        if not self.get_active():
+            self._icon.props.fill_color = style.COLOR_BUTTON_GREY.get_svg()
 
-    favorite = gobject.property(
-        type=bool, default=False, getter=get_favorite, setter=set_favorite)
-
-    def __release_event_cb(self, icon, event):
-        self.props.favorite = not self.props.favorite
-
-    def __motion_notify_event_cb(self, icon, event):
-        if not self._favorite:
-            if event.detail == hippo.MOTION_DETAIL_ENTER:
-                icon.props.fill_color = style.COLOR_BUTTON_GREY.get_svg()
-            elif event.detail == hippo.MOTION_DETAIL_LEAVE:
-                icon.props.fill_color = style.COLOR_TRANSPARENT.get_svg()
+    def __leave_notify_event_cb(self, icon, event):
+        if not self.get_active():
+            self._icon.props.fill_color = style.COLOR_TRANSPARENT.get_svg()
 
 
 class NamingAlert(gtk.Window):
@@ -194,71 +182,66 @@ class NamingAlert(gtk.Window):
         vbox.pack_start(toolbar, False)
         toolbar.show()
 
-        canvas = hippo.Canvas()
-        self._root = hippo.CanvasBox()
-        self._root.props.background_color = style.COLOR_WHITE.get_int()
-        canvas.set_root(self._root)
-        vbox.pack_start(canvas)
-        canvas.show()
-
         body = self._create_body()
-        self._root.append(body, hippo.PACK_EXPAND)
+        vbox.pack_start(body, expand=True, fill=True)
+        body.show()
 
-        widget = self._title.get_property('widget')
-        widget.grab_focus()
+        self._title.grab_focus()
 
     def _create_body(self):
-        body = hippo.CanvasBox()
-        body.props.orientation = hippo.ORIENTATION_VERTICAL
-        body.props.background_color = style.COLOR_WHITE.get_int()
-        body.props.padding_top = style.DEFAULT_SPACING * 3
+        body = gtk.VBox(spacing=style.DEFAULT_SPACING)
+        body.set_border_width(style.DEFAULT_SPACING * 3)
+        header = self._create_header()
+        body.pack_start(header, expand=False, padding=style.DEFAULT_PADDING)
 
-        header = hippo.CanvasBox(orientation=hippo.ORIENTATION_HORIZONTAL,
-                                 padding=style.DEFAULT_PADDING,
-                                 padding_right=style.GRID_CELL_SIZE,
-                                 spacing=style.DEFAULT_SPACING)
-        body.append(header)
+        body.pack_start(self._create_separator(style.DEFAULT_SPACING),
+                        expand=False)
 
-        descriptions = hippo.CanvasBox(
-            orientation=hippo.ORIENTATION_HORIZONTAL,
-            spacing=style.DEFAULT_SPACING * 3,
-            padding_left=style.GRID_CELL_SIZE,
-            padding_right=style.GRID_CELL_SIZE,
-            padding_top=style.DEFAULT_SPACING * 3)
+        body.pack_start(self._create_label(_('Description:')), expand=False)
 
-        body.append(descriptions, hippo.PACK_EXPAND)
+        description = self._activity.metadata.get('description', '')
+        description_box, self._description = self._create_text_view(description)
+        body.pack_start(description_box, expand=True, fill=True)
 
-        first_column = hippo.CanvasBox(orientation=hippo.ORIENTATION_VERTICAL,
-                                       spacing=style.DEFAULT_SPACING)
-        descriptions.append(first_column)
+        body.pack_start(self._create_separator(style.DEFAULT_PADDING),
+                        expand=False)
 
-        second_column = hippo.CanvasBox(orientation=hippo.ORIENTATION_VERTICAL,
-                                       spacing=style.DEFAULT_SPACING)
-        descriptions.append(second_column, hippo.PACK_EXPAND)
 
-        self._favorite_icon = self._create_favorite_icon()
-        header.append(self._favorite_icon)
+        body.pack_start(self._create_label(_('Tags:')), expand=False)
 
-        entry_icon = self._create_entry_icon()
-        header.append(entry_icon)
+        tags = self._activity.metadata.get('tags', '')
+        tags_box, self._tags = self._create_text_view(tags)
+        body.pack_start(tags_box, expand=True, fill=True)
 
-        self._title = self._create_title()
-        header.append(self._title, hippo.PACK_EXPAND)
-
-        if gtk.widget_get_default_direction() == gtk.TEXT_DIR_RTL:
-            header.reverse()
-
-        description_box, self._description = self._create_description()
-        second_column.append(description_box)
-
-        tags_box, self._tags = self._create_tags()
-        second_column.append(tags_box)
-
+        body.show_all()
         return body
 
-    def _create_favorite_icon(self):
-        favorite_icon = FavoriteIcon(False)
-        return favorite_icon
+    def _create_label(self, text):
+        text = gtk.Label(text)
+        text.set_alignment(0, 0.5)
+        text.modify_fg(gtk.STATE_NORMAL,
+                       style.COLOR_BUTTON_GREY.get_gdk_color())
+        return text
+
+    def _create_separator(self, height):
+        separator = gtk.HSeparator()
+        separator.modify_bg(gtk.STATE_NORMAL, style.COLOR_WHITE.get_gdk_color())
+        separator.set_size_request(-1, height)
+        return separator
+
+    def _create_header(self):
+        header = gtk.HBox(spacing=style.DEFAULT_SPACING)
+
+        self._favorite_icon = FavoriteIcon()
+        header.pack_start(self._favorite_icon, expand=False)
+
+        entry_icon = self._create_entry_icon()
+        header.pack_start(entry_icon, expand=False)
+
+        self._title = self._create_title()
+        header.pack_start(self._title, expand=True)
+
+        return header
 
     def _create_entry_icon(self):
         bundle_id = self._activity.metadata.get('activity', '')
@@ -270,83 +253,52 @@ class NamingAlert(gtk.Window):
         else:
             activity_bundle = ActivityBundle(self._bundle_path)
             file_name = activity_bundle.get_icon()
-        entry_icon = CanvasIcon(file_name=file_name)
+        entry_icon = Icon(file=file_name, icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR)
         if self._activity.metadata.get('icon-color'):
             entry_icon.props.xo_color = XoColor( \
                 self._activity.metadata['icon-color'])
         return entry_icon
 
     def _create_title(self):
-        title = CanvasEntry()
-        title.set_background(style.COLOR_WHITE.get_html())
-        title.props.text = self._activity.metadata.get('title', _('Untitled'))
+        title = gtk.Entry()
+        title.set_text(self._activity.metadata.get('title', _('Untitled')))
         return title
 
-    def _create_description(self):
-        vbox = hippo.CanvasBox()
-        vbox.props.spacing = style.DEFAULT_SPACING
+    def _create_text_view(self, text):
+        scrolled_window = gtk.ScrolledWindow()
+        scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        scrolled_window.set_border_width(style.LINE_WIDTH)
+        scrolled_window.set_shadow_type(gtk.SHADOW_IN)
 
-        text = hippo.CanvasText(text=_('Description:'),
-                                font_desc=style.FONT_NORMAL.get_pango_desc())
-        text.props.color = style.COLOR_BUTTON_GREY.get_int()
+        text_view = gtk.TextView()
+        text_view.set_left_margin(style.DEFAULT_PADDING)
+        text_view.set_wrap_mode(gtk.WRAP_WORD_CHAR)
+        text_view.set_accepts_tab(False)
+        text_view.get_buffer().set_text(text)
+        scrolled_window.add(text_view)
 
-        if gtk.widget_get_default_direction() == gtk.TEXT_DIR_RTL:
-            text.props.xalign = hippo.ALIGNMENT_END
-        else:
-            text.props.xalign = hippo.ALIGNMENT_START
-
-        vbox.append(text)
-
-        description = self._activity.metadata.get('description', '')
-        text_view = CanvasTextView(description,
-                                   box_height=style.GRID_CELL_SIZE * 2)
-        vbox.append(text_view, hippo.PACK_EXPAND)
-
-        text_view.text_view_widget.props.accepts_tab = False
-
-        return vbox, text_view
-
-    def _create_tags(self):
-        vbox = hippo.CanvasBox()
-        vbox.props.spacing = style.DEFAULT_SPACING
-
-        text = hippo.CanvasText(text=_('Tags:'),
-                                font_desc=style.FONT_NORMAL.get_pango_desc())
-        text.props.color = style.COLOR_BUTTON_GREY.get_int()
-
-        if gtk.widget_get_default_direction() == gtk.TEXT_DIR_RTL:
-            text.props.xalign = hippo.ALIGNMENT_END
-        else:
-            text.props.xalign = hippo.ALIGNMENT_START
-
-        vbox.append(text)
-
-        tags = self._activity.metadata.get('tags', '')
-        text_view = CanvasTextView(tags, box_height=style.GRID_CELL_SIZE * 2)
-        vbox.append(text_view, hippo.PACK_EXPAND)
-
-        text_view.text_view_widget.props.accepts_tab = False
-
-        return vbox, text_view
+        return scrolled_window, text_view
 
     def __realize_cb(self, widget):
         self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
         self.window.set_accept_focus(True)
 
     def __keep_cb(self, widget):
-        is_favorite = self._favorite_icon.get_favorite()
-        if is_favorite:
+        if self._favorite_icon.get_active():
             self._activity.metadata['keep'] = 1
         else:
             self._activity.metadata['keep'] = 0
 
-        self._activity.metadata['title'] = self._title.props.text
+        self._activity.metadata['title'] = self._title.get_text()
 
-        new_tags = self._tags.text_view_widget.props.buffer.props.text
+        text_buffer = self._tags.get_buffer()
+        start, end = text_buffer.get_bounds()
+        new_tags = text_buffer.get_text(start, end)
         self._activity.metadata['tags'] = new_tags
 
-        new_description = \
-                self._description.text_view_widget.props.buffer.props.text
+        text_buffer = self._description.get_buffer()
+        start, end = text_buffer.get_bounds()
+        new_description = text_buffer.get_text(start, end)
         self._activity.metadata['description'] = new_description
 
         self._activity.metadata['title_set_by_user'] = '1'
