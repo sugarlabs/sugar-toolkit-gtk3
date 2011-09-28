@@ -1,3 +1,15 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Vietnamese translation for Sugar Tookit.
 # Copyright © 2009 Free Software Foundation, Inc.
 # Clytie Siddall <clytie@riverland.net.au>, 2009.
@@ -5,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sugar-toolkit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-20 13:10-0500\n"
+"POT-Creation-Date: 2010-09-28 06:08-0400\n"
 "PO-Revision-Date: 2009-09-25 09:03-0400\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -16,24 +28,24 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 1.2.1\n"
 
-#: ../src/sugar/activity/activity.py:338
+#: ../src/sugar/activity/activity.py:336
 #, python-format
 msgid "%s Activity"
 msgstr "Hoạt động %s"
 
-#: ../src/sugar/activity/activity.py:738
+#: ../src/sugar/activity/activity.py:791
 msgid "Keep error"
 msgstr "Giữ lỗi"
 
-#: ../src/sugar/activity/activity.py:739
+#: ../src/sugar/activity/activity.py:792
 msgid "Keep error: all changes will be lost"
 msgstr "Giữ lỗi: tất cả các thay đổi sẽ bị mất"
 
-#: ../src/sugar/activity/activity.py:742
+#: ../src/sugar/activity/activity.py:795
 msgid "Don't stop"
 msgstr "Không dừng"
 
-#: ../src/sugar/activity/activity.py:745
+#: ../src/sugar/activity/activity.py:798
 msgid "Stop anyway"
 msgstr "Vẫn dừng"
 
@@ -42,7 +54,7 @@ msgid "Name this entry"
 msgstr "Đặt tên mục nhập này"
 
 #: ../src/sugar/activity/namingalert.py:87
-#: ../src/sugar/activity/widgets.py:166
+#: ../src/sugar/activity/widgets.py:169
 msgid "Keep"
 msgstr "Giữ"
 
@@ -74,31 +86,32 @@ msgstr "Hoàn lại"
 msgid "Copy"
 msgstr "Chép"
 
-#: ../src/sugar/activity/widgets.py:117
+#: ../src/sugar/activity/widgets.py:118
 msgid "Paste"
 msgstr "Dán"
 
-#: ../src/sugar/activity/widgets.py:127
+#: ../src/sugar/activity/widgets.py:129
 msgid "Private"
 msgstr "Riêng"
 
-#: ../src/sugar/activity/widgets.py:134
+#: ../src/sugar/activity/widgets.py:136
 msgid "My Neighborhood"
 msgstr "Hàng xóm mình"
 
-#: ../src/sugar/activity/widgets.py:345
+#: ../src/sugar/activity/widgets.py:349
 msgid "Activity"
 msgstr "Hoạt động"
 
-#: ../src/sugar/graphics/alert.py:286 ../src/sugar/graphics/alert.py:365
+#: ../src/sugar/graphics/alert.py:287 ../src/sugar/graphics/alert.py:410
 msgid "Cancel"
 msgstr "Thôi"
 
-#: ../src/sugar/graphics/alert.py:290 ../src/sugar/graphics/alert.py:424
+#: ../src/sugar/graphics/alert.py:291 ../src/sugar/graphics/alert.py:336
+#: ../src/sugar/graphics/alert.py:469
 msgid "Ok"
 msgstr "OK"
 
-#: ../src/sugar/graphics/alert.py:375
+#: ../src/sugar/graphics/alert.py:420
 msgid "Continue"
 msgstr "Tiếp"
 
