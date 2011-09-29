@@ -156,6 +156,18 @@ class Packager(object):
         if not os.path.exists(self.config.dist_dir):
             os.mkdir(self.config.dist_dir)
 
+    def get_files_in_git(self):
+        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
+                                  cwd=self.config.source_dir)
+        stdout, _ = git_ls.communicate()
+        if git_ls.returncode:
+            # Fall back to filtered list
+            return list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
+
+        # pylint: disable=E1103
+        return [path.strip() for path in stdout.strip('\n').split('\n')]
+
 
 class XOPackager(Packager):
 
@@ -163,6 +175,7 @@ class XOPackager(Packager):
         Packager.__init__(self, builder.config)
 
         self.builder = builder
+        self.builder.build_locale()
         self.package_path = os.path.join(self.config.dist_dir,
                                          self.config.xo_name)
 
@@ -170,7 +183,7 @@ class XOPackager(Packager):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
 
-        for f in self._get_files_in_git():
+        for f in self.get_files_in_git():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
         locale_dir = os.path.join(self.config.source_dir, 'locale')
@@ -182,18 +195,6 @@ class XOPackager(Packager):
 
         bundle_zip.close()
 
-    def _get_files_in_git(self):
-        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
-                                  cwd=self.config.source_dir)
-        stdout, _ = git_ls.communicate()
-        if git_ls.returncode:
-            # Fall back to filtered list
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
-
-        # pylint: disable=E1103
-        return [path.strip() for path in stdout.strip('\n').split('\n')]
-
 
 class SourcePackager(Packager):
 
@@ -202,21 +203,9 @@ class SourcePackager(Packager):
         self.package_path = os.path.join(self.config.dist_dir,
                                          self.config.tar_name)
 
-    def get_files(self):
-        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
-                                  cwd=self.config.source_dir)
-        stdout, _ = git_ls.communicate()
-        if git_ls.returncode:
-            # Fall back to filtered list
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
-
-        # pylint: disable=E1103
-        return [path.strip() for path in stdout.strip('\n').split('\n')]
-
     def package(self):
         tar = tarfile.open(self.package_path, 'w:bz2')
-        for f in self.get_files():
+        for f in self.get_files_in_git():
             tar.add(os.path.join(self.config.source_dir, f),
                     os.path.join(self.config.tar_root_dir, f))
         tar.close()
