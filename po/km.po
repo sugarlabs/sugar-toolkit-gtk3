@@ -2,152 +2,221 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-24 00:07+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-09-28 06:08-0400\n"
+"PO-Revision-Date: 2011-10-08 09:42+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: km\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar/activity/activity.py:120
-msgid "Share with:"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:122
-msgid "Private"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:123
-msgid "My Neighborhood"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:130
-msgid "Keep"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:136
-msgid "Stop"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:251
-msgid "Undo"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:256
-msgid "Redo"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:266
-msgid "Copy"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:271
-msgid "Paste"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:297
-msgid "Activity"
-msgstr ""
-
-#: ../src/sugar/activity/activity.py:469
+#: ../src/sugar/activity/activity.py:336
 #, python-format
 msgid "%s Activity"
-msgstr ""
+msgstr "%s សកម្មភាព"
 
-#: ../src/sugar/activity/activity.py:856
+#: ../src/sugar/activity/activity.py:791
 msgid "Keep error"
-msgstr ""
+msgstr "រក្សាទុកកំហុស"
 
-#: ../src/sugar/activity/activity.py:857
+#: ../src/sugar/activity/activity.py:792
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "រក្សាទុកកំហុសរាលការប្តូរនឹងត្រូវបាត់បង់"
 
-#: ../src/sugar/activity/activity.py:860
+#: ../src/sugar/activity/activity.py:795
 msgid "Don't stop"
-msgstr ""
+msgstr "កុំ​ឈប់"
 
-#: ../src/sugar/activity/activity.py:863
+#: ../src/sugar/activity/activity.py:798
 msgid "Stop anyway"
-msgstr ""
+msgstr "ទោះបី​យាង​ណា​ក៍ដោយ​ក៍ឈប់​ដែរ"
 
-#: ../src/sugar/graphics/alert.py:166 ../src/sugar/graphics/alert.py:209
+#: ../src/sugar/activity/namingalert.py:82
+msgid "Name this entry"
+msgstr "បញ្ចូលឈ្មោះនេះ"
+
+#: ../src/sugar/activity/namingalert.py:87
+#: ../src/sugar/activity/widgets.py:169
+msgid "Keep"
+msgstr "រក្សាទុក"
+
+#: ../src/sugar/activity/namingalert.py:283
+msgid "Untitled"
+msgstr "គ្មាន​ចំណង​ជើង"
+
+#: ../src/sugar/activity/namingalert.py:290
+msgid "Description:"
+msgstr "ពិពណ៌នា ៖"
+
+#: ../src/sugar/activity/namingalert.py:314
+msgid "Tags:"
+msgstr "គំនូស ៖"
+
+#: ../src/sugar/activity/widgets.py:83
+msgid "Stop"
+msgstr "ឈប់"
+
+#: ../src/sugar/activity/widgets.py:95
+msgid "Undo"
+msgstr "កុំ​ធ្វើ​វិញ"
+
+#: ../src/sugar/activity/widgets.py:103
+msgid "Redo"
+msgstr "ធ្វើ​វិញ"
+
+#: ../src/sugar/activity/widgets.py:110
+msgid "Copy"
+msgstr "ចំលង"
+
+#: ../src/sugar/activity/widgets.py:118
+msgid "Paste"
+msgstr "បិតត"
+
+#: ../src/sugar/activity/widgets.py:129
+msgid "Private"
+msgstr "ឯកជន"
+
+#: ../src/sugar/activity/widgets.py:136
+msgid "My Neighborhood"
+msgstr "ភូមិរបស់ខ្ញុំ"
+
+#: ../src/sugar/activity/widgets.py:349
+msgid "Activity"
+msgstr "សកម្មភាព"
+
+#: ../src/sugar/graphics/alert.py:287 ../src/sugar/graphics/alert.py:410
 msgid "Cancel"
-msgstr ""
+msgstr "បោះបង់"
 
-#: ../src/sugar/graphics/alert.py:170 ../src/sugar/graphics/alert.py:247
+#: ../src/sugar/graphics/alert.py:291 ../src/sugar/graphics/alert.py:336
+#: ../src/sugar/graphics/alert.py:469
 msgid "Ok"
-msgstr ""
+msgstr "យល់ព្រម"
 
-#: ../src/sugar/graphics/alert.py:219
+#: ../src/sugar/graphics/alert.py:420
 msgid "Continue"
-msgstr ""
+msgstr "បន្ត"
 
-#: ../src/sugar/util.py:181
+#: ../src/sugar/graphics/colorbutton.py:52
+msgid "Choose a color"
+msgstr "ជ្រើសរើសមួយពណ៌"
+
+#: ../src/sugar/graphics/colorbutton.py:272
+msgid "Red"
+msgstr "ក្រហម"
+
+#: ../src/sugar/graphics/colorbutton.py:274
+msgid "Green"
+msgstr "បៃតង"
+
+#: ../src/sugar/graphics/colorbutton.py:276
+msgid "Blue"
+msgstr "ខៀវ"
+
+#: ../src/sugar/util.py:218
 msgid " and "
-msgstr ""
+msgstr " និង "
 
-#: ../src/sugar/util.py:182
+#: ../src/sugar/util.py:219
 msgid ", "
-msgstr ""
+msgstr ", "
 
+# TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: ../src/sugar/util.py:185
+#: ../src/sugar/util.py:222
 msgid "Seconds ago"
-msgstr ""
+msgstr "វិនាទីកន្លងទៅ"
 
+# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+# "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: ../src/sugar/util.py:189
+#: ../src/sugar/util.py:226
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s បន្លងទៅ"
 
+# TRANS: Relative dates (eg. 1 month and 5 days).
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: ../src/sugar/util.py:202
+#: ../src/sugar/util.py:241
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ឆ្នាំ"
 
-#: ../src/sugar/util.py:203
+#: ../src/sugar/util.py:242
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ខែ"
 
-#: ../src/sugar/util.py:204
+#: ../src/sugar/util.py:243
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d អាទិត្យ"
 
-#: ../src/sugar/util.py:205
+#: ../src/sugar/util.py:244
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ថ្ងៃ"
 
-#: ../src/sugar/util.py:206
+#: ../src/sugar/util.py:245
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d​ ម៉ោង"
 
-#: ../src/sugar/util.py:207
+#: ../src/sugar/util.py:246
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d នាទី"
+
+# NhTbUm  <a href="http://cfvirfeivtbz.com/">cfvirfeivtbz</a>, [url=http://vroplsmvjyaa.com/]vroplsmvjyaa[/url], [link=http://frovijvsivvj.com/]frovijvsivvj[/link], http://sfxucwqyoccg.com/
+#: ../src/sugar/util.py:339
+msgid "Empty"
+msgstr "ទទេ"
+
+#: ../src/sugar/util.py:341
+#, python-format
+msgid "%d B"
+msgstr ""
+
+#: ../src/sugar/util.py:343
+#, python-format
+msgid "%d KB"
+msgstr ""
+
+#: ../src/sugar/util.py:345
+#, python-format
+msgid "%d MB"
+msgstr ""
+
+#: ../src/sugar/util.py:347
+#, python-format
+msgid "%d GB"
+msgstr ""
+
+#~ msgid "Share with:"
+#~ msgstr "រួមជំណែក"
