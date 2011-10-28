@@ -204,19 +204,22 @@ msgid "%d B"
 msgstr ""
 
 #: ../src/sugar/util.py:343
+#: ../src/sugar/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d គីឡូបៃ"
 
 #: ../src/sugar/util.py:345
+#: ../src/sugar/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d មេកាបៃ"
 
 #: ../src/sugar/util.py:347
+#: ../src/sugar/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d ជីកាបៃ"
 
 #~ msgid "Share with:"
 #~ msgstr "រួមជំណែក"
