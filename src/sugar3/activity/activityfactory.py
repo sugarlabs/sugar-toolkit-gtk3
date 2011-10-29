@@ -29,8 +29,8 @@ import dbus
 import gobject
 
 from sugar3.activity.activityhandle import ActivityHandle
-from sugar import util
-from sugar import env
+from sugar3 import util
+from sugar3 import env
 from sugar3.datastore import datastore
 
 from errno import EEXIST, ENOSPC

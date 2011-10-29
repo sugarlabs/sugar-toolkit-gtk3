@@ -31,9 +31,9 @@ import gio
 import dbus
 import dbus.glib
 
-from sugar import env
-from sugar import mime
-from sugar import dispatch
+from sugar3 import env
+from sugar3 import mime
+from sugar3 import dispatch
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'

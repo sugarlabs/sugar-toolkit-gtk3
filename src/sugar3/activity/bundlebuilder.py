@@ -32,7 +32,7 @@ from optparse import OptionParser
 import logging
 from fnmatch import fnmatch
 
-from sugar import env
+from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
 
 

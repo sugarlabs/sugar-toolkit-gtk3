@@ -25,7 +25,7 @@ from ConfigParser import ConfigParser
 import os
 import urllib
 
-from sugar import env
+from sugar3 import env
 from sugar3.bundle.bundle import Bundle, NotInstalledException, \
     MalformedBundleException
 

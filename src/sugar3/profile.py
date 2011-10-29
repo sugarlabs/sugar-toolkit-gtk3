@@ -25,8 +25,8 @@ import os
 import logging
 from ConfigParser import ConfigParser
 
-from sugar import env
-from sugar import util
+from sugar3 import env
+from sugar3 import util
 from sugar3.graphics.xocolor import XoColor
 
 

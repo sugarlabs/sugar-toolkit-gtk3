@@ -28,8 +28,8 @@ import tempfile
 import logging
 import warnings
 
-from sugar import env
-from sugar import util
+from sugar3 import env
+from sugar3 import util
 from sugar3.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
 from sugar3.bundle.bundleversion import NormalizedVersion
