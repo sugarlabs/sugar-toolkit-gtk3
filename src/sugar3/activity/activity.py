@@ -273,6 +273,8 @@ class Activity(Window, gtk.Container):
         # This code can be removed when we grow an xsettings daemon (the GTK+
         # init routines will then automatically figure out the font settings)
         settings = Gtk.Settings.get_default()
+        settings.set_property('gtk-theme-name', 'sugar')
+        settings.set_property('gtk-icon-theme-name', 'sugar')
         settings.set_property('gtk-font-name',
                               '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
 
