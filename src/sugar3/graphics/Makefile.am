@@ -2,10 +2,8 @@ sugardir = $(pythondir)/sugar3/graphics
 sugar_PYTHON =              \
 	alert.py                \
 	animator.py             \
-	canvastextview.py       \
 	colorbutton.py          \
 	combobox.py             \
-	entry.py                \
 	iconentry.py            \
 	icon.py                 \
 	__init__.py             \
@@ -18,7 +16,6 @@ sugar_PYTHON =              \
 	panel.py                \
 	radiopalette.py         \
 	radiotoolbutton.py      \
-	roundbox.py             \
 	style.py                \
 	toggletoolbutton.py     \
 	toolbarbox.py           \
