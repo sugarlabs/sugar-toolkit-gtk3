@@ -25,7 +25,6 @@ import logging
 
 import gtk
 import gobject
-import hippo
 
 from sugar3.graphics import palettegroup
 from sugar3.graphics import animator
@@ -785,64 +784,6 @@ class WidgetInvoker(Invoker):
     def _get_widget(self):
         return self._widget
     widget = gobject.property(type=object, getter=_get_widget, setter=None)
-
-
-class CanvasInvoker(Invoker):
-
-    def __init__(self, parent=None):
-        Invoker.__init__(self)
-
-        self._position_hint = self.AT_CURSOR
-        self._motion_hid = None
-        self._release_hid = None
-        self._item = None
-
-        if parent:
-            self.attach(parent)
-
-    def attach(self, parent):
-        Invoker.attach(self, parent)
-
-        self._item = parent
-        self._motion_hid = self._item.connect('motion-notify-event',
-                                              self.__motion_notify_event_cb)
-        self._release_hid = self._item.connect('button-release-event',
-                                               self.__button_release_event_cb)
-
-    def detach(self):
-        Invoker.detach(self)
-        self._item.disconnect(self._motion_hid)
-        self._item.disconnect(self._release_hid)
-
-    def get_default_position(self):
-        return self.AT_CURSOR
-
-    def get_rect(self):
-        context = self._item.get_context()
-        if context:
-            x, y = context.translate_to_screen(self._item)
-            width, height = self._item.get_allocation()
-            return gtk.gdk.Rectangle(x, y, width, height)
-        else:
-            return gtk.gdk.Rectangle()
-
-    def __motion_notify_event_cb(self, button, event):
-        if event.detail == hippo.MOTION_DETAIL_ENTER:
-            self.notify_mouse_enter()
-        elif event.detail == hippo.MOTION_DETAIL_LEAVE:
-            self.notify_mouse_leave()
-
-        return False
-
-    def __button_release_event_cb(self, button, event):
-        if event.button == 3:
-            self.notify_right_click()
-            return True
-        else:
-            return False
-
-    def get_toplevel(self):
-        return hippo.get_canvas_for_item(self._item).get_toplevel()
 
 
 class ToolInvoker(WidgetInvoker):
