@@ -57,6 +57,7 @@ from functools import partial
 
 from gi.repository import GConf
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GObject
 import dbus
 import dbus.service
@@ -507,11 +508,18 @@ class Activity(Window, Gtk.Container):
 
     def _adapt_window_to_screen(self):
         screen = Gdk.Screen.get_default()
-        self.set_geometry_hints(None,
-                                screen.get_width(), screen.get_height(),
-                                screen.get_width(), screen.get_height(),
-                                screen.get_width(), screen.get_height(),
-                                1, 1, 1, 1)
+        geometry = Gdk.Geometry()
+        geometry.max_width = geometry.base_width = geometry.min_width = \
+            screen.get_width()
+        geometry.max_height = geometry.base_height = geometry.min_height = \
+            screen.get_height()
+        geometry.width_inc = geometry.height_inc = geometry.min_aspect = \
+            geometry.max_aspect = 1
+        hints = Gdk.WindowHints(Gdk.WindowHints.ASPECT |
+                                Gdk.WindowHints.BASE_SIZE |
+                                Gdk.WindowHints.MAX_SIZE |
+                                Gdk.WindowHints.MIN_SIZE)
+        self.set_geometry_hints(None, geometry, hints)
 
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
