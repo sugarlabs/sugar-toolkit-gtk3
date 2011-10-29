@@ -182,8 +182,7 @@ class _IconBuffer(object):
 
             if not sensitive:
                 pixbuf = self._get_insensitive_pixbuf(pixbuf, widget)
-            surface = hippo.cairo_surface_from_gdk_pixbuf(pixbuf)
-            context.set_source_surface(surface, 0, 0)
+            context.set_source_pixbuf(pixbuf, 0, 0)
             context.paint()
 
     def _get_size(self, icon_width, icon_height, padding):
@@ -296,14 +295,12 @@ class _IconBuffer(object):
                 pixbuf = handle.get_pixbuf()
                 pixbuf = self._get_insensitive_pixbuf(pixbuf, widget)
 
-                pixbuf_surface = hippo.cairo_surface_from_gdk_pixbuf(pixbuf)
-                context.set_source_surface(pixbuf_surface, 0, 0)
+                context.set_source_pixbuf(pixbuf, 0, 0)
                 context.paint()
         else:
             if not sensitive:
                 pixbuf = self._get_insensitive_pixbuf(pixbuf, widget)
-            pixbuf_surface = hippo.cairo_surface_from_gdk_pixbuf(pixbuf)
-            context.set_source_surface(pixbuf_surface, 0, 0)
+            context.set_source_pixbuf(pixbuf, 0, 0)
             context.paint()
 
         if self.badge_name:
