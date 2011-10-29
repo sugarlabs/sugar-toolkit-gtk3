@@ -23,8 +23,8 @@ controls. Ticket #2855.
 
 import gtk
 
-from sugar.graphics.palette import Palette
-from sugar.graphics.icon import Icon
+from sugar3.graphics.palette import Palette
+from sugar3.graphics.icon import Icon
 
 import common
 

@@ -22,8 +22,8 @@ STABLE.
 from telepathy.constants import (
     CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES)
 
-from sugar.presence.tubeconn import TubeConnection
-from sugar.presence import presenceservice
+from sugar3.presence.tubeconn import TubeConnection
+from sugar3.presence import presenceservice
 
 
 class SugarTubeConnection(TubeConnection):
@@ -42,7 +42,7 @@ class SugarTubeConnection(TubeConnection):
         """Retrieve a Buddy object given a telepathy handle.
 
         cs_handle: A channel-specific CONTACT type handle.
-        returns: sugar.presence Buddy object or None
+        returns: sugar3.presence Buddy object or None
         """
         pservice = presenceservice.get_instance()
         if self.self_handle == cs_handle:

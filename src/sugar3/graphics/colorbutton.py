@@ -22,9 +22,9 @@ import gobject
 import struct
 import logging
 
-from sugar.graphics import style
-from sugar.graphics.icon import Icon
-from sugar.graphics.palette import Palette, ToolInvoker, WidgetInvoker
+from sugar3.graphics import style
+from sugar3.graphics.icon import Icon
+from sugar3.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -40,7 +40,7 @@ class _ColorButton(gtk.Button):
     but does not have any alpha support.
     Instead of a color selector dialog it will pop up a Sugar palette.
 
-    As a preview an sugar.graphics.Icon is used. The fill color will be set to
+    As a preview an sugar3.graphics.Icon is used. The fill color will be set to
     the current color, and the stroke color is set to the font color.
     """
 
@@ -232,7 +232,7 @@ class _ColorButton(gtk.Button):
 
 class _ColorPalette(Palette):
     """This is a color picker palette. It will usually be used indirectly
-    trough a sugar.graphics.ColorButton.
+    trough a sugar3.graphics.ColorButton.
     """
     _RED = 0
     _GREEN = 1

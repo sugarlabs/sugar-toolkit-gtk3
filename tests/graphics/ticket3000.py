@@ -21,7 +21,7 @@ Spec in ticket #3000.
 
 import gtk
 
-from sugar.graphics.toolbutton import ToolButton
+from sugar3.graphics.toolbutton import ToolButton
 
 import common
 

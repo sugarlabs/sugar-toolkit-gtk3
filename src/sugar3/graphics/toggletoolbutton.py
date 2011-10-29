@@ -22,8 +22,8 @@ STABLE.
 import gobject
 import gtk
 
-from sugar.graphics.icon import Icon
-from sugar.graphics.palette import Palette, ToolInvoker
+from sugar3.graphics.icon import Icon
+from sugar3.graphics.palette import Palette, ToolInvoker
 
 
 class ToggleToolButton(gtk.ToggleToolButton):

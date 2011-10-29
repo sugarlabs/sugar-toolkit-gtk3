@@ -1,10 +1,10 @@
 import gtk
 
-from sugar.graphics.radiopalette import RadioPalette, RadioMenuButton, \
+from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton, \
                                         RadioToolsButton
-from sugar.graphics.radiotoolbutton import RadioToolButton
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics import style
+from sugar3.graphics.radiotoolbutton import RadioToolButton
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics import style
 
 window = gtk.Window()
 

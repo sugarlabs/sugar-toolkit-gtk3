@@ -17,8 +17,8 @@
 
 import gtk
 
-from sugar.graphics import style
-from sugar.graphics.icon import _SVGLoader
+from sugar3.graphics import style
+from sugar3.graphics.icon import _SVGLoader
 
 ICON_ENTRY_PRIMARY = gtk.ENTRY_ICON_PRIMARY
 ICON_ENTRY_SECONDARY = gtk.ENTRY_ICON_SECONDARY

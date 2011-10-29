@@ -2,8 +2,8 @@ import hippo
 import gtk
 import gobject
 
-from sugar.graphics.icon import CanvasIcon
-from sugar.graphics.roundbox import CanvasRoundBox
+from sugar3.graphics.icon import CanvasIcon
+from sugar3.graphics.roundbox import CanvasRoundBox
 
 import common
 

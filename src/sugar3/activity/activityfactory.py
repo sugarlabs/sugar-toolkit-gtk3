@@ -28,10 +28,10 @@ import uuid
 import dbus
 import gobject
 
-from sugar.activity.activityhandle import ActivityHandle
+from sugar3.activity.activityhandle import ActivityHandle
 from sugar import util
 from sugar import env
-from sugar.datastore import datastore
+from sugar3.datastore import datastore
 
 from errno import EEXIST, ENOSPC
 
@@ -167,7 +167,7 @@ class ActivityCreationHandler(gobject.GObject):
             the activity to be created and the sharing
             service that may or may not be connected with it
 
-            sugar.activity.activityhandle.ActivityHandle instance
+            sugar3.activity.activityhandle.ActivityHandle instance
 
         calls the "create" method on the service for this
         particular activity type and registers the

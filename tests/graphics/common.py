@@ -17,7 +17,7 @@
 
 import gtk
 
-from sugar.graphics.toolbutton import ToolButton
+from sugar3.graphics.toolbutton import ToolButton
 
 
 class Test(gtk.VBox):

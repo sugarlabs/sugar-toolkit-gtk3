@@ -30,10 +30,10 @@ import warnings
 
 from sugar import env
 from sugar import util
-from sugar.bundle.bundle import Bundle, \
+from sugar3.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
-from sugar.bundle.bundleversion import NormalizedVersion
-from sugar.bundle.bundleversion import InvalidVersionError
+from sugar3.bundle.bundleversion import NormalizedVersion
+from sugar3.bundle.bundleversion import InvalidVersionError
 
 
 class ActivityBundle(Bundle):

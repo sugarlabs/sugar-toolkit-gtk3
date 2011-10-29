@@ -24,8 +24,8 @@ import gobject
 import gtk
 import warnings
 
-from sugar.graphics.icon import Icon
-from sugar.graphics import palettegroup
+from sugar3.graphics.icon import Icon
+from sugar3.graphics import palettegroup
 
 
 _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT = 2

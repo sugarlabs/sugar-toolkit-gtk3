@@ -30,8 +30,8 @@ import gtk
 import hippo
 import cairo
 
-from sugar.graphics.xocolor import XoColor
-from sugar.util import LRU
+from sugar3.graphics.xocolor import XoColor
+from sugar3.util import LRU
 
 
 _BADGE_SIZE = 0.45
@@ -325,7 +325,7 @@ class Icon(gtk.Image):
     def __init__(self, **kwargs):
         self._buffer = _IconBuffer()
         # HACK: need to keep a reference to the path so it doesn't get garbage
-        # collected while it's still used if it's a sugar.util.TempFilePath.
+        # collected while it's still used if it's a sugar3.util.TempFilePath.
         # See #1175
         self._file = None
         self._alpha = 1.0
@@ -558,7 +558,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
     __gtype_name__ = 'CanvasIcon'
 
     def __init__(self, **kwargs):
-        from sugar.graphics.palette import CanvasInvoker
+        from sugar3.graphics.palette import CanvasInvoker
 
         self._buffer = _IconBuffer()
         self._palette_invoker = CanvasInvoker()
@@ -980,7 +980,7 @@ class CanvasIcon(hippo.CanvasBox, hippo.CanvasItem):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
-        from sugar.graphics.palette import Palette
+        from sugar3.graphics.palette import Palette
 
         self.set_palette(Palette(text))
 
@@ -994,7 +994,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
     }
 
     def __init__(self, tree_view):
-        from sugar.graphics.palette import CellRendererInvoker
+        from sugar3.graphics.palette import CellRendererInvoker
 
         self._buffer = _IconBuffer()
         self._buffer.cache = True

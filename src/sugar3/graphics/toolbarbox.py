@@ -18,10 +18,10 @@
 import gtk
 import gobject
 
-from sugar.graphics import style
-from sugar.graphics.palette import PaletteWindow, ToolInvoker
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics import palettegroup
+from sugar3.graphics import style
+from sugar3.graphics.palette import PaletteWindow, ToolInvoker
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics import palettegroup
 
 
 class ToolbarButton(ToolButton):

@@ -26,10 +26,10 @@ import dbus.service
 import dbus.glib
 
 import sugar
-from sugar.activity import activityhandle
-from sugar.activity import i18n
-from sugar.bundle.activitybundle import ActivityBundle
-from sugar.graphics import style
+from sugar3.activity import activityhandle
+from sugar3.activity import i18n
+from sugar3.bundle.activitybundle import ActivityBundle
+from sugar3.graphics import style
 from sugar import logger
 
 
@@ -111,7 +111,7 @@ def main():
     locale_path = i18n.get_locale_path(bundle.get_bundle_id())
 
     gettext.bindtextdomain(bundle.get_bundle_id(), locale_path)
-    gettext.bindtextdomain('sugar-toolkit', sugar.locale_path)
+    gettext.bindtextdomain('sugar-toolkit', sugar3.locale_path)
     gettext.textdomain(bundle.get_bundle_id())
 
     splitted_module = args[0].rsplit('.', 1)

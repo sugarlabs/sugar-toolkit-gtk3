@@ -16,7 +16,7 @@
 # Boston, MA 02111-1307, USA.
 
 """
-UNSTABLE. It should really be internal to the sugar.presence package.
+UNSTABLE. It should really be internal to the sugar3.presence package.
 """
 
 from functools import partial

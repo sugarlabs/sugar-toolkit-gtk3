@@ -22,10 +22,10 @@ STABLE.
 import gobject
 import gtk
 
-from sugar.graphics import style
-from sugar.graphics.palette import ToolInvoker
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.icon import Icon
+from sugar3.graphics import style
+from sugar3.graphics.palette import ToolInvoker
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.icon import Icon
 
 
 _PREVIOUS_PAGE = 0

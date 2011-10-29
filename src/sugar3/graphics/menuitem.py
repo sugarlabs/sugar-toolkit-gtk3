@@ -25,7 +25,7 @@ import gobject
 import pango
 import gtk
 
-from sugar.graphics.icon import Icon
+from sugar3.graphics.icon import Icon
 
 
 class MenuItem(gtk.ImageMenuItem):

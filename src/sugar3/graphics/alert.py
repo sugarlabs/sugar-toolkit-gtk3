@@ -13,14 +13,14 @@ Examples
 create a simple alert message.
 
 .. code-block:: python
-  from sugar.graphics.alert import Alert
+  from sugar3.graphics.alert import Alert
   ...
        # Create a new simple alert
         alert = Alert()
         # Populate the title and text body of the alert.
         alert.props.title=_('Title of Alert Goes Here')
         alert.props.msg = _('Text message of alert goes here')
-        # Call the add_alert() method (inherited via the sugar.graphics.Window
+        # Call the add_alert() method (inherited via the sugar3.graphics.Window
         # superclass of Activity) to add this alert to the activity window.
         self.add_alert(alert)
         alert.show()
@@ -52,8 +52,8 @@ import gobject
 import pango
 import math
 
-from sugar.graphics import style
-from sugar.graphics.icon import Icon
+from sugar3.graphics import style
+from sugar3.graphics.icon import Icon
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -252,7 +252,7 @@ class ConfirmationAlert(Alert):
     --------
 
     .. code-block:: python
-      from sugar.graphics.alert import ConfirmationAlert
+      from sugar3.graphics.alert import ConfirmationAlert
       ...
         #### Method: _alert_confirmation, create a Confirmation alert (with ok
                      and cancel buttons standard)
@@ -304,7 +304,7 @@ class ErrorAlert(Alert):
     --------
 
     .. code-block:: python
-      from sugar.graphics.alert import ErrorAlert
+      from sugar3.graphics.alert import ErrorAlert
       ...
         #### Method: _alert_error, create a Error alert (with ok
                      button standard)
@@ -388,7 +388,7 @@ class TimeoutAlert(Alert):
     --------
 
     .. code-block:: python
-      from sugar.graphics.alert import TimeoutAlert
+      from sugar3.graphics.alert import TimeoutAlert
       ...
         #### Method: _alert_timeout, create a Timeout alert (with ok and cancel
                      buttons standard)
@@ -452,7 +452,7 @@ class NotifyAlert(Alert):
     --------
 
     .. code-block:: python
-      from sugar.graphics.alert import NotifyAlert
+      from sugar3.graphics.alert import NotifyAlert
       ...
         #### Method: _alert_notify, create a Notify alert (with only an 'OK'
                      button)

@@ -39,7 +39,7 @@ class ActivityService(dbus.service.Object):
     def __init__(self, activity):
         """Initialise the service for the given activity
 
-        activity -- sugar.activity.activity.Activity instance
+        activity -- sugar3.activity.activity.Activity instance
 
         Creates dbus services that use the instance's activity_id
         as discriminants among all active services

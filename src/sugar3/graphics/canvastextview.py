@@ -18,7 +18,7 @@
 import gtk
 import hippo
 
-from sugar.graphics import style
+from sugar3.graphics import style
 
 
 class CanvasTextView(hippo.CanvasWidget):

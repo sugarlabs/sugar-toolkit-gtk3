@@ -26,11 +26,11 @@ import os
 import urllib
 
 from sugar import env
-from sugar.bundle.bundle import Bundle, NotInstalledException, \
+from sugar3.bundle.bundle import Bundle, NotInstalledException, \
     MalformedBundleException
 
-from sugar.bundle.bundleversion import NormalizedVersion
-from sugar.bundle.bundleversion import InvalidVersionError
+from sugar3.bundle.bundleversion import NormalizedVersion
+from sugar3.bundle.bundleversion import InvalidVersionError
 
 
 class ContentBundle(Bundle):

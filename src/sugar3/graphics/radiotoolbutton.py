@@ -23,9 +23,9 @@ STABLE.
 import gtk
 import gobject
 
-from sugar.graphics.icon import Icon
-from sugar.graphics.palette import Palette, ToolInvoker
-from sugar.graphics import toolbutton
+from sugar3.graphics.icon import Icon
+from sugar3.graphics.palette import Palette, ToolInvoker
+from sugar3.graphics import toolbutton
 
 
 class RadioToolButton(gtk.RadioToolButton):

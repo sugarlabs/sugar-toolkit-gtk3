@@ -33,7 +33,7 @@ import logging
 from fnmatch import fnmatch
 
 from sugar import env
-from sugar.bundle.activitybundle import ActivityBundle
+from sugar3.bundle.activitybundle import ActivityBundle
 
 
 IGNORE_DIRS = ['dist', '.git']

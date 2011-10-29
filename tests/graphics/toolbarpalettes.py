@@ -21,8 +21,8 @@ Test palette positioning for toolbar and tray.
 
 import gtk
 
-from sugar.graphics.tray import HTray, TrayButton
-from sugar.graphics.toolbutton import ToolButton
+from sugar3.graphics.tray import HTray, TrayButton
+from sugar3.graphics.toolbutton import ToolButton
 
 import common
 

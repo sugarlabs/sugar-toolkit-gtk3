@@ -25,7 +25,7 @@ import gobject
 import gtk
 import dbus
 
-from sugar.datastore import datastore
+from sugar3.datastore import datastore
 
 
 J_DBUS_SERVICE = 'org.laptop.Journal'

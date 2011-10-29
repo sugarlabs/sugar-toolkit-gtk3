@@ -27,7 +27,7 @@ from ConfigParser import ConfigParser
 
 from sugar import env
 from sugar import util
-from sugar.graphics.xocolor import XoColor
+from sugar3.graphics.xocolor import XoColor
 
 
 _profile = None

@@ -13,7 +13,7 @@ which class to start.
 For example the most minimal Activity:
 
 
-   from sugar.activity import activity
+   from sugar3.activity import activity
 
    class ReadActivity(activity.Activity):
         pass
@@ -71,20 +71,20 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar import util
-from sugar.presence import presenceservice
-from sugar.activity.activityservice import ActivityService
-from sugar.activity.namingalert import NamingAlert
-from sugar.graphics import style
-from sugar.graphics.window import Window
-from sugar.graphics.alert import Alert
-from sugar.graphics.icon import Icon
-from sugar.datastore import datastore
-from sugar.session import XSMPClient
+from sugar3.presence import presenceservice
+from sugar3.activity.activityservice import ActivityService
+from sugar3.activity.namingalert import NamingAlert
+from sugar3.graphics import style
+from sugar3.graphics.window import Window
+from sugar3.graphics.alert import Alert
+from sugar3.graphics.icon import Icon
+from sugar3.datastore import datastore
+from sugar3.session import XSMPClient
 from sugar import wm
 
 # support deprecated imports
-from sugar.activity.widgets import ActivityToolbar, EditToolbar
-from sugar.activity.widgets import ActivityToolbox
+from sugar3.activity.widgets import ActivityToolbar, EditToolbar
+from sugar3.activity.widgets import ActivityToolbox
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -196,7 +196,7 @@ class Activity(Window, gtk.Container):
 
            Usually, you will also need the standard EditToolbar. This is the
            one which has the standard copy and paste buttons. You need to
-           derive your own EditToolbar class from sugar.EditToolbar:
+           derive your own EditToolbar class from sugar3.EditToolbar:
                 class EditToolbar(activity.EditToolbar):
                     ...
 
@@ -231,7 +231,7 @@ class Activity(Window, gtk.Container):
     def __init__(self, handle, create_jobject=True):
         """Initialise the Activity
 
-        handle -- sugar.activity.activityhandle.ActivityHandle
+        handle -- sugar3.activity.activityhandle.ActivityHandle
             instance providing the activity id and access to the
             presence service which *may* provide sharing for this
             application
@@ -729,7 +729,7 @@ class Activity(Window, gtk.Container):
     def get_shared_activity(self):
         """Returns an instance of the shared Activity or None
 
-        The shared activity is of type sugar.presence.activity.Activity
+        The shared activity is of type sugar3.presence.activity.Activity
         """
         return self._shared_activity
 

@@ -27,9 +27,9 @@ import gtk
 import gobject
 import hippo
 
-from sugar.graphics import palettegroup
-from sugar.graphics import animator
-from sugar.graphics import style
+from sugar3.graphics import palettegroup
+from sugar3.graphics import animator
+from sugar3.graphics import style
 
 
 def _calculate_gap(a, b):

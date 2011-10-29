@@ -25,16 +25,16 @@ import gtk
 import gobject
 import pango
 
-from sugar.graphics import palettegroup
-from sugar.graphics import animator
-from sugar.graphics import style
-from sugar.graphics.icon import Icon
-from sugar.graphics.palettewindow import PaletteWindow
+from sugar3.graphics import palettegroup
+from sugar3.graphics import animator
+from sugar3.graphics import style
+from sugar3.graphics.icon import Icon
+from sugar3.graphics.palettewindow import PaletteWindow
 from sugar import _sugarext
 
 # DEPRECATED
 # Import these for backwards compatibility
-from sugar.graphics.palettewindow import MouseSpeedDetector, Invoker, \
+from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
         WidgetInvoker, CanvasInvoker, ToolInvoker, CellRendererInvoker
 
 

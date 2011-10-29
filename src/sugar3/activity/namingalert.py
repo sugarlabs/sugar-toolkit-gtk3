@@ -23,13 +23,13 @@ import gtk
 import gobject
 import gconf
 
-from sugar.graphics import style
-from sugar.graphics.icon import Icon
-from sugar.graphics.xocolor import XoColor
-from sugar.graphics.icon import get_icon_file_name
-from sugar.graphics.toolbutton import ToolButton
+from sugar3.graphics import style
+from sugar3.graphics.icon import Icon
+from sugar3.graphics.xocolor import XoColor
+from sugar3.graphics.icon import get_icon_file_name
+from sugar3.graphics.toolbutton import ToolButton
 
-from sugar.bundle.activitybundle import ActivityBundle
+from sugar3.bundle.activitybundle import ActivityBundle
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)

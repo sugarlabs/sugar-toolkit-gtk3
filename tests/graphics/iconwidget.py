@@ -16,13 +16,13 @@
 # Boston, MA 02111-1307, USA.
 
 """
-Test the sugar.graphics.icon.Icon widget.
+Test the sugar3.graphics.icon.Icon widget.
 """
 
 import gtk
 
-from sugar.graphics.icon import Icon
-from sugar.graphics.xocolor import XoColor
+from sugar3.graphics.icon import Icon
+from sugar3.graphics.xocolor import XoColor
 
 import common
 

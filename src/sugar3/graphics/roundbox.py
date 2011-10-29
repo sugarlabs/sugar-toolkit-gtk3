@@ -23,7 +23,7 @@ import math
 
 import hippo
 
-from sugar.graphics import style
+from sugar3.graphics import style
 
 
 class CanvasRoundBox(hippo.CanvasBox, hippo.CanvasItem):

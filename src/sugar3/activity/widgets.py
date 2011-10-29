@@ -20,14 +20,14 @@ import gettext
 import gconf
 import logging
 
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.toolbarbox import ToolbarButton
-from sugar.graphics.radiopalette import RadioPalette, RadioMenuButton
-from sugar.graphics.radiotoolbutton import RadioToolButton
-from sugar.graphics.toolbox import Toolbox
-from sugar.graphics.xocolor import XoColor
-from sugar.graphics.icon import Icon
-from sugar.bundle.activitybundle import ActivityBundle
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.toolbarbox import ToolbarButton
+from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton
+from sugar3.graphics.radiotoolbutton import RadioToolButton
+from sugar3.graphics.toolbox import Toolbox
+from sugar3.graphics.xocolor import XoColor
+from sugar3.graphics.icon import Icon
+from sugar3.bundle.activitybundle import ActivityBundle
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -40,7 +40,7 @@ def _create_activity_icon(metadata):
         client = gconf.client_get_default()
         color = XoColor(client.get_string('/desktop/sugar/user/color'))
 
-    from sugar.activity.activity import get_bundle_path
+    from sugar3.activity.activity import get_bundle_path
     bundle = ActivityBundle(get_bundle_path())
     icon = Icon(file=bundle.get_icon(), xo_color=color)
 
