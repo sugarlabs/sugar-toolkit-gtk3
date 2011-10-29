@@ -1,4 +1,4 @@
-sugardir = $(pythondir)/sugar/graphics
+sugardir = $(pythondir)/sugar3/graphics
 sugar_PYTHON =              \
 	alert.py                \
 	animator.py             \

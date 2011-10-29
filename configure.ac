@@ -1,4 +1,4 @@
-AC_INIT([sugar-toolkit],[0.95.1],[],[sugar-toolkit])
+AC_INIT([sugar-toolkit-gtk3],[0.95.1],[],[sugar-toolkit-gtk3])
 
 AC_PREREQ([2.59])
 
@@ -38,11 +38,11 @@ AM_GLIB_GNU_GETTEXT
 AC_OUTPUT([
 Makefile
 src/Makefile
-src/sugar/Makefile
-src/sugar/activity/Makefile
-src/sugar/bundle/Makefile
-src/sugar/graphics/Makefile
-src/sugar/presence/Makefile
-src/sugar/datastore/Makefile
+src/sugar3/Makefile
+src/sugar3/activity/Makefile
+src/sugar3/bundle/Makefile
+src/sugar3/graphics/Makefile
+src/sugar3/presence/Makefile
+src/sugar3/datastore/Makefile
 po/Makefile.in
 ])

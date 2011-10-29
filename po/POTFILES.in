@@ -1,7 +1,7 @@
-src/sugar/activity/activity.py
-src/sugar/activity/namingalert.py
-src/sugar/activity/widgets.py
-src/sugar/graphics/alert.py
-src/sugar/graphics/colorbutton.py
-src/sugar/graphics/objectchooser.py
-src/sugar/util.py
+src/sugar3/activity/activity.py
+src/sugar3/activity/namingalert.py
+src/sugar3/activity/widgets.py
+src/sugar3/graphics/alert.py
+src/sugar3/graphics/colorbutton.py
+src/sugar3/graphics/objectchooser.py
+src/sugar3/util.py

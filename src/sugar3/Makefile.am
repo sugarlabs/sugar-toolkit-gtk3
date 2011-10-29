@@ -1,6 +1,6 @@
 SUBDIRS = activity bundle graphics presence datastore
 
-sugardir = $(pythondir)/sugar
+sugardir = $(pythondir)/sugar3
 sugar_PYTHON =		\
 	env.py		\
         network.py	\
@@ -9,7 +9,7 @@ sugar_PYTHON =		\
 	util.py		\
 	wm.py
 
-pkgpyexecdir = $(pythondir)/sugar
+pkgpyexecdir = $(pythondir)/sugar3
 
 pkgpyexec_LTLIBRARIES = _sugarext.la
 

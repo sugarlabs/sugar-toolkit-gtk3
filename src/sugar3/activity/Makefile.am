@@ -1,4 +1,4 @@
-sugardir = $(pythondir)/sugar/activity
+sugardir = $(pythondir)/sugar3/activity
 sugar_PYTHON =              \
 	__init__.py             \
 	activity.py             \
