@@ -46,5 +46,6 @@ src/sugar3/bundle/Makefile
 src/sugar3/graphics/Makefile
 src/sugar3/presence/Makefile
 src/sugar3/datastore/Makefile
+src/sugar3/dispatch/Makefile
 po/Makefile.in
 ])
