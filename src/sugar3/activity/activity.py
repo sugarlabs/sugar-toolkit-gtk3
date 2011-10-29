@@ -70,8 +70,10 @@ from telepathy.interfaces import CHANNEL, \
 from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
+import sugar3
 from sugar3 import util
 from sugar3.presence import presenceservice
+from sugar3.activity import i18n
 from sugar3.activity.activityservice import ActivityService
 from sugar3.activity.namingalert import NamingAlert
 from sugar3.graphics import style
@@ -258,6 +260,22 @@ class Activity(Window, gtk.Container):
             the base class __init()__ before doing Activity specific things.
 
         """
+        # Stuff that needs to be done early
+
+        locale_path = i18n.get_locale_path(self.get_bundle_id())
+        gettext.bindtextdomain(self.get_bundle_id(), locale_path)
+        gettext.bindtextdomain('sugar-toolkit', sugar3.locale_path)
+        gettext.textdomain(self.get_bundle_id())
+
+        icons_path = os.path.join(get_bundle_path(), 'icons')
+        Gtk.IconTheme.get_default().append_search_path(icons_path)
+
+        # This code can be removed when we grow an xsettings daemon (the GTK+
+        # init routines will then automatically figure out the font settings)
+        settings = Gtk.Settings.get_default()
+        settings.set_property('gtk-font-name',
+                              '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
+
         Window.__init__(self)
 
         if 'SUGAR_ACTIVITY_ROOT' in os.environ:
@@ -347,6 +365,9 @@ class Activity(Window, gtk.Container):
             self._jobject.metadata.connect('updated',
                                            self.__jobject_updated_cb)
         self.set_title(self._jobject.metadata['title'])
+
+    def run_main_loop(self):
+        Gtk.main()
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
