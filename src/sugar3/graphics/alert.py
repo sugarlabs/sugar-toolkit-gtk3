@@ -351,10 +351,9 @@ class _TimeoutIcon(Gtk.Alignment):
         self._text.set_attributes(attrlist)
         self.add(self._text)
         self._text.show()
-        self.connect("expose_event", self.__expose_cb)
+        self.connect('draw', self.__draw_cb)
 
-    def __expose_cb(self, widget, event):
-        context = widget.get_window().cairo_create()
+    def __draw_cb(self, widget, context):
         self._draw(context)
         return False
 
@@ -364,13 +363,15 @@ class _TimeoutIcon(Gtk.Alignment):
         self._text.size_request()
 
     def _draw(self, context):
-        rect = self.get_allocation()
-        x = rect.x + rect.width * 0.5
-        y = rect.y + rect.height * 0.5
-        radius = rect.width / 2
+        w = self.get_allocated_width()
+        h = self.get_allocated_height()
+        x = w * 0.5
+        y = h * 0.5
+        radius = w / 2
         context.arc(x, y, radius, 0, 2 * math.pi)
         widget_style = self.get_style()
-        context.set_source_color(widget_style.bg[self.get_state()])
+        color = widget_style.bg[self.get_state()]
+        context.set_source_rgb(color.red, color.green, color.blue)
         context.fill_preserve()
 
     def set_text(self, text):
