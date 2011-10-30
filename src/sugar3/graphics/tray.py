@@ -130,11 +130,11 @@ class _TrayViewport(Gtk.Viewport):
             return self._can_scroll_prev
 
     def _size_allocate_cb(self, viewport, allocation):
-        bar_requisition = self.traybar.get_child_requisition()
+        bar_minimum, bar_natural = self.traybar.get_preferred_size()
         if self.orientation == Gtk.Orientation.HORIZONTAL:
-            scrollable = bar_requisition[0] > allocation.width
+            scrollable = bar_minimum.width > allocation.width
         else:
-            scrollable = bar_requisition[1] > allocation.height
+            scrollable = bar_minimum.height > allocation.height
 
         if scrollable != self._scrollable:
             self._scrollable = scrollable
