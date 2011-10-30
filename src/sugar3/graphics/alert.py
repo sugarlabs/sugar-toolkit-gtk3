@@ -342,7 +342,7 @@ class _TimeoutIcon(Gtk.Alignment):
     __gtype_name__ = 'SugarTimeoutIcon'
 
     def __init__(self):
-        GObject.GObject.__init__(self, 0, 0, 1, 1)
+        Gtk.Alignment.__init__(self, xalign=0, yalign=0, xscale=1, yscale=1)
         self.set_app_paintable(True)
         self._text = Gtk.Label()
         self._text.set_alignment(0.5, 0.5)
