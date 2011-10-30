@@ -309,7 +309,7 @@ def _setup_page(page_widget, color, hpad):
 def _embed_page(box_class, page):
     page.show()
 
-    alignment = Gtk.Alignment.new(0.0, 0.0, 1.0, 1.0)
+    alignment = Gtk.Alignment(xscale=1.0, yscale=1.0)
     alignment.add(page)
     alignment.show()
 

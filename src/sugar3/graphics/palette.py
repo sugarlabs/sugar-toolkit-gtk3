@@ -67,8 +67,8 @@ class Palette(PaletteWindow):
         primary_box.pack_start(self._icon_box, False, True, 0)
 
         labels_box = Gtk.VBox()
-        self._label_alignment = Gtk.Alignment.new(xalign=0, yalign=0.5,
-                                              xscale=1, yscale=0.33)
+        self._label_alignment = Gtk.Alignment(xalign=0, yalign=0.5, xscale=1,
+                                              yscale=0.33)
         self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING,
                                           style.DEFAULT_SPACING)
         self._label_alignment.add(labels_box)
