@@ -385,7 +385,7 @@ class Icon(Gtk.Image):
             width = 0
         return (width, width)
 
-    def do_expose_event(self, event):
+    def do_draw(self, cr):
         """
         Parameters
         ----------
@@ -413,8 +413,6 @@ class Icon(Gtk.Image):
             (allocation.width - requisition.width) * xalign)
         y = math.floor(ypad +
             (allocation.height - requisition.height) * yalign)
-
-        cr = self.get_window().cairo_create()
 
         if self._scale != 1.0:
             cr.scale(self._scale, self._scale)
