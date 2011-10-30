@@ -362,27 +362,27 @@ class Icon(Gtk.Image):
     def _file_changed_cb(self, image, pspec):
         self._buffer.file_name = self.props.file
 
-    def do_size_request(self, requisition):
-        """
-        Parameters
-        ----------
-        requisition :
-
-        Returns
-        -------
-        None
-
-        """
+    def do_get_preferred_height(self):
         self._sync_image_properties()
         surface = self._buffer.get_surface()
         if surface:
-            requisition[0] = surface.get_width()
-            requisition[1] = surface.get_height()
-        elif self._buffer.width and self._buffer.height:
-            requisition[0] = self._buffer.width
-            requisition[1] = self._buffer.width
+            height = surface.get_height()
+        elif self._buffer.height:
+            height = self._buffer.height
         else:
-            requisition[0] = requisition[1] = 0
+            height = 0
+        return (height, height)
+
+    def do_get_preferred_width(self):
+        self._sync_image_properties()
+        surface = self._buffer.get_surface()
+        if surface:
+            width = surface.get_width()
+        elif self._buffer.width:
+            width = self._buffer.width
+        else:
+            width = 0
+        return (width, width)
 
     def do_expose_event(self, event):
         """
@@ -408,9 +408,9 @@ class Icon(Gtk.Image):
             xalign = 1.0 - xalign
 
         allocation = self.get_allocation()
-        x = math.floor(allocation.x + xpad +
+        x = math.floor(xpad +
             (allocation.width - requisition.width) * xalign)
-        y = math.floor(allocation.y + ypad +
+        y = math.floor(ypad +
             (allocation.height - requisition.height) * yalign)
 
         cr = self.get_window().cairo_create()
