@@ -65,7 +65,7 @@ class Toolbox(Gtk.VBox):
 
         event_box = Gtk.EventBox()
 
-        alignment = Gtk.Alignment.new(0.0, 0.0, 1.0, 1.0)
+        alignment = Gtk.Alignment(xscale=1.0, yscale=1.0)
         alignment.set_padding(0, 0, style.TOOLBOX_HORIZONTAL_PADDING,
                               style.TOOLBOX_HORIZONTAL_PADDING)
 
