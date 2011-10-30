@@ -265,7 +265,7 @@ sm_client_xsmp_connect (gpointer user_data)
       free (client_id);
 
       gdk_threads_enter ();
-      gdk_set_sm_client_id (xsmp->client_id);
+      gdk_x11_set_sm_client_id (xsmp->client_id);
       gdk_threads_leave ();
 
       g_debug ("Got client ID \"%s\"", xsmp->client_id);
