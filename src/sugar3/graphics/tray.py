@@ -233,14 +233,14 @@ class HTray(gtk.HBox):
         gobject.GObject.__init__(self, **kwargs)
 
         scroll_left = _TrayScrollButton('go-left', _PREVIOUS_PAGE)
-        self.pack_start(scroll_left, False)
+        self.pack_start(scroll_left, False, False, 0)
 
         self._viewport = _TrayViewport(gtk.ORIENTATION_HORIZONTAL)
         self.pack_start(self._viewport)
         self._viewport.show()
 
         scroll_right = _TrayScrollButton('go-right', _NEXT_PAGE)
-        self.pack_start(scroll_right, False)
+        self.pack_start(scroll_right, False, False, 0)
 
         scroll_left.viewport = self._viewport
         scroll_right.viewport = self._viewport
@@ -319,14 +319,14 @@ class VTray(gtk.VBox):
         gobject.GObject.__init__(self, **kwargs)
 
         scroll_up = _TrayScrollButton('go-up', _PREVIOUS_PAGE)
-        self.pack_start(scroll_up, False)
+        self.pack_start(scroll_up, False, False, 0)
 
         self._viewport = _TrayViewport(gtk.ORIENTATION_VERTICAL)
         self.pack_start(self._viewport)
         self._viewport.show()
 
         scroll_down = _TrayScrollButton('go-down', _NEXT_PAGE)
-        self.pack_start(scroll_down, False)
+        self.pack_start(scroll_down, False, False, 0)
 
         scroll_up.viewport = self._viewport
         scroll_down.viewport = self._viewport

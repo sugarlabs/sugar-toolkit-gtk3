@@ -104,8 +104,8 @@ class Notebook(gtk.Notebook):
         tab_button.show()
         tab_label.show()
 
-        tab_box.pack_start(tab_label, True)
-        tab_box.pack_start(tab_button, True)
+        tab_box.pack_start(tab_label, True, False, 0)
+        tab_box.pack_start(tab_button, True, False, 0)
 
         tab_box.show_all()
         event_box.add(tab_box)
