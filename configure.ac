@@ -20,7 +20,7 @@ AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
 AC_PATH_PROG(PYGTK_CODEGEN, pygtk-codegen-2.0, no)
 
-PKG_CHECK_MODULES(EXT, pygtk-2.0 gtk+-2.0 sm ice alsa)
+PKG_CHECK_MODULES(EXT, gtk+-3.0 gdk-3.0 gdk-pixbuf-2.0 sm ice alsa librsvg-2.0)
 
 PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
 AC_SUBST(PYGTK_DEFSDIR)
