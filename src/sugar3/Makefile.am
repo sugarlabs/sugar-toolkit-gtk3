@@ -33,6 +33,8 @@ libsugarext_la_SOURCES =		\
 	eggsmclient.h			\
 	eggsmclient-private.h		\
 	eggsmclient-xsmp.c		\
+	gdk-wrapper.c			\
+	gdk-wrapper.h			\
 	gsm-app.c			\
 	gsm-app.h			\
 	gsm-client.c			\
@@ -70,7 +72,8 @@ INTROSPECTION_GIRS = SugarExt-1.0.gir
 INTROSPECTION_SCANNER_ARGS = --identifier-prefix=Sugar --symbol-prefix=sugar \
 	--identifier-prefix=EggSM --symbol-prefix=egg_sm \
 	--identifier-prefix=Gsm --symbol-prefix=gsm \
-	--identifier-prefix=Acme --symbol-prefix=acme
+	--identifier-prefix=Acme --symbol-prefix=acme \
+	--identifier-prefix=GdkWrapper --symbol-prefix=gdk_wrapper
 SugarExt_1_0_gir_LIBS = libsugarext.la
 SugarExt_1_0_gir_FILES = \
 	acme-volume.c \
@@ -84,7 +87,10 @@ SugarExt_1_0_gir_FILES = \
 	gsm-xsmp.c \
 	gsm-xsmp.h \
 	sugar-key-grabber.c \
-	sugar-key-grabber.h
+	sugar-key-grabber.h \
+	gdk-wrapper.c \
+	gdk-wrapper.h
+
 SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
 SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
