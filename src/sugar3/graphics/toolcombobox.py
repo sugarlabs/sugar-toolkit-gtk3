@@ -43,7 +43,7 @@ class ToolComboBox(gtk.ToolItem):
         hbox = gtk.HBox(False, style.DEFAULT_SPACING)
 
         self.label = gtk.Label(self._label_text)
-        hbox.pack_start(self.label, False)
+        hbox.pack_start(self.label, False, False, 0)
         self.label.show()
 
         if combo:

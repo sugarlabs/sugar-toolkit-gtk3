@@ -179,11 +179,11 @@ class NamingAlert(gtk.Window):
 
         toolbar = NamingToolbar()
         toolbar.connect('keep-clicked', self.__keep_cb)
-        vbox.pack_start(toolbar, False)
+        vbox.pack_start(toolbar, False, False, 0)
         toolbar.show()
 
         body = self._create_body()
-        vbox.pack_start(body, expand=True, fill=True)
+        vbox.pack_start(body, True, True, 0)
         body.show()
 
         self._title.grab_focus()
@@ -192,26 +192,24 @@ class NamingAlert(gtk.Window):
         body = gtk.VBox(spacing=style.DEFAULT_SPACING)
         body.set_border_width(style.DEFAULT_SPACING * 3)
         header = self._create_header()
-        body.pack_start(header, expand=False, padding=style.DEFAULT_PADDING)
+        body.pack_start(header, False, False, style.DEFAULT_PADDING)
 
-        body.pack_start(self._create_separator(style.DEFAULT_SPACING),
-                        expand=False)
+        body.pack_start(self._create_separator(style.DEFAULT_SPACING), False, False, 0)
 
-        body.pack_start(self._create_label(_('Description:')), expand=False)
+        body.pack_start(self._create_label(_('Description:')), False, False, 0)
 
         description = self._activity.metadata.get('description', '')
         description_box, self._description = self._create_text_view(description)
-        body.pack_start(description_box, expand=True, fill=True)
+        body.pack_start(description_box, True, True, 0)
 
-        body.pack_start(self._create_separator(style.DEFAULT_PADDING),
-                        expand=False)
+        body.pack_start(self._create_separator(style.DEFAULT_PADDING), False, False, 0)
 
 
-        body.pack_start(self._create_label(_('Tags:')), expand=False)
+        body.pack_start(self._create_label(_('Tags:')), False, False, 0)
 
         tags = self._activity.metadata.get('tags', '')
         tags_box, self._tags = self._create_text_view(tags)
-        body.pack_start(tags_box, expand=True, fill=True)
+        body.pack_start(tags_box, True, True, 0)
 
         body.show_all()
         return body

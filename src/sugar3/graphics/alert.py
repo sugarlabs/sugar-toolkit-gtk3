@@ -104,12 +104,12 @@ class Alert(gtk.EventBox):
         self._msg_box = gtk.VBox()
         self._title_label = gtk.Label()
         self._title_label.set_alignment(0, 0.5)
-        self._msg_box.pack_start(self._title_label, False)
+        self._msg_box.pack_start(self._title_label, False, False, 0)
 
         self._msg_label = gtk.Label()
         self._msg_label.set_alignment(0, 0.5)
-        self._msg_box.pack_start(self._msg_label, False)
-        self._hbox.pack_start(self._msg_box, False)
+        self._msg_box.pack_start(self._msg_label, False, False, 0)
+        self._hbox.pack_start(self._msg_box, False, False, 0)
 
         self._buttons_box = gtk.HButtonBox()
         self._buttons_box.set_layout(gtk.BUTTONBOX_END)
@@ -154,7 +154,7 @@ class Alert(gtk.EventBox):
         elif pspec.name == 'icon':
             if self._icon != value:
                 self._icon = value
-                self._hbox.pack_start(self._icon, False)
+                self._hbox.pack_start(self._icon, False, False, 0)
                 self._hbox.reorder_child(self._icon, 0)
 
     def do_get_property(self, pspec):
