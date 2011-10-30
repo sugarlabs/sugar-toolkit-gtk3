@@ -21,6 +21,7 @@ UNSTABLE. Used only internally by Activity and jarabe.
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import SugarExt
 import logging
 
 
@@ -42,7 +43,7 @@ def _property_change_trapped(window, prop, prop_type, format, mode, data):
     # pylint: disable=W0622
     Gdk.error_trap_push()
 
-    window.property_change(prop, prop_type, format, mode, data)
+    SugarExt.property_change(window, prop, prop_type, format, mode, data)
 
     error = Gdk.error_trap_pop()
     if error:
