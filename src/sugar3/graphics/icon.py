@@ -32,6 +32,7 @@ import cairo
 from sugar3.graphics.xocolor import XoColor
 from sugar3.util import LRU
 
+from gi.repository import SugarExt
 
 _BADGE_SIZE = 0.45
 
@@ -60,9 +61,7 @@ class _SVGLoader(object):
                 logging.error(
                     'Icon %s, entity %s is invalid.', file_name, entity)
 
-        # XXX this is very slow!  why?
-        import rsvg
-        return rsvg.Handle(data=icon)
+        return SugarExt.RsvgWrapper.new(icon)
 
 
 class _IconInfo(object):
@@ -165,9 +164,8 @@ class _IconBuffer(object):
             if badge_file_name.endswith('.svg'):
                 handle = self._loader.load(badge_file_name, {}, self.cache)
 
-                dimensions = handle.get_dimension_data()
-                icon_width = int(dimensions[0])
-                icon_height = int(dimensions[1])
+                icon_width = handle.get_width()
+                icon_height = handle.get_height()
 
                 pixbuf = handle.get_pixbuf()
             else:
@@ -259,9 +257,8 @@ class _IconBuffer(object):
 
         if is_svg:
             handle = self._load_svg(icon_info.file_name)
-            dimensions = handle.get_dimension_data()
-            icon_width = int(dimensions[0])
-            icon_height = int(dimensions[1])
+            icon_width = handle.get_width()
+            icon_height = handle.get_height()
         else:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.file_name)
             icon_width = pixbuf.get_width()
