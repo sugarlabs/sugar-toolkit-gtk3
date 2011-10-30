@@ -291,12 +291,12 @@ class NamingAlert(gtk.Window):
 
         text_buffer = self._tags.get_buffer()
         start, end = text_buffer.get_bounds()
-        new_tags = text_buffer.get_text(start, end)
+        new_tags = text_buffer.get_text(start, end, False)
         self._activity.metadata['tags'] = new_tags
 
         text_buffer = self._description.get_buffer()
         start, end = text_buffer.get_bounds()
-        new_description = text_buffer.get_text(start, end)
+        new_description = text_buffer.get_text(start, end, False)
         self._activity.metadata['description'] = new_description
 
         self._activity.metadata['title_set_by_user'] = '1'
