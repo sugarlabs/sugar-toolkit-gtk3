@@ -39,7 +39,7 @@ class ComboBox(gtk.ComboBox):
                                     gobject.TYPE_BOOLEAN)
         self.set_model(self._model)
 
-        self.set_row_separator_func(self._is_separator)
+        self.set_row_separator_func(self._is_separator, None)
 
     def get_value(self):
         """
@@ -166,5 +166,5 @@ class ComboBox(gtk.ComboBox):
         """
         self._model.clear()
 
-    def _is_separator(self, model, row):
+    def _is_separator(self, model, row, data):
         return model[row][3]
