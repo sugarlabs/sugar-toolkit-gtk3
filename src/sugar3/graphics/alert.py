@@ -49,7 +49,6 @@ import gettext
 
 from gi.repository import Gtk
 from gi.repository import GObject
-from gi.repository import Pango
 import math
 
 from sugar3.graphics import style
@@ -346,9 +345,6 @@ class _TimeoutIcon(Gtk.Alignment):
         self.set_app_paintable(True)
         self._text = Gtk.Label()
         self._text.set_alignment(0.5, 0.5)
-        attrlist = Pango.AttrList()
-        attrlist.insert(Pango.AttrWeight(Pango.Weight.BOLD))
-        self._text.set_attributes(attrlist)
         self.add(self._text)
         self._text.show()
         self.connect('draw', self.__draw_cb)
@@ -375,7 +371,7 @@ class _TimeoutIcon(Gtk.Alignment):
         context.fill_preserve()
 
     def set_text(self, text):
-        self._text.set_text(str(text))
+        self._text.set_markup('<b>%s</b>' % str(text))
 
 
 class TimeoutAlert(Alert):
