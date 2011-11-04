@@ -44,9 +44,8 @@ class Notebook(gtk.Notebook):
         #        Set the 'can-close-tabs' property using **kwargs
         #        Set True the scrollable notebook property
 
-        gobject.GObject.__init__(self, **kwargs)
-
         self._can_close_tabs = None
+        GObject.GObject.__init__(self, **kwargs)
 
         self.set_scrollable(True)
         self.show()
