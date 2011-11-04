@@ -80,7 +80,7 @@ class Notebook(Gtk.Notebook):
         Gtk.Button.set_relief(button, Gtk.ReliefStyle.NONE)
 
         settings = Gtk.Widget.get_settings(button)
-        w, h = Gtk.icon_size_lookup_for_settings(settings, Gtk.IconSize.MENU)
+        valid, w, h = Gtk.icon_size_lookup_for_settings(settings, Gtk.IconSize.MENU)
         Gtk.Widget.set_size_request(button, w + 4, h + 4)
         image.show()
         icon_box.pack_start(image, True, False, 0)

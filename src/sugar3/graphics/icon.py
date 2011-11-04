@@ -346,7 +346,7 @@ class Icon(Gtk.Image):
             self._buffer.file_name = self.props.file
 
         if self.props.pixel_size == -1:
-            width, height = Gtk.icon_size_lookup(self.props.icon_size)
+            valid, width, height = Gtk.icon_size_lookup(self.props.icon_size)
         else:
             width = height = self.props.pixel_size
         if self._buffer.width != width or self._buffer.height != height:

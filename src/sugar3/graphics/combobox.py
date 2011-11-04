@@ -62,7 +62,7 @@ class ComboBox(Gtk.ComboBox):
 
     def _get_real_name_from_theme(self, name, size):
         icon_theme = Gtk.IconTheme.get_default()
-        width, height = Gtk.icon_size_lookup(size)
+        valid, width, height = Gtk.icon_size_lookup(size)
         info = icon_theme.lookup_icon(name, max(width, height), 0)
         if not info:
             raise ValueError('Icon %r not found.' % name)
@@ -91,8 +91,8 @@ class ComboBox(Gtk.ComboBox):
             self._icon_renderer = Gtk.CellRendererPixbuf()
 
             settings = self.get_settings()
-            w, h = Gtk.icon_size_lookup_for_settings(
-                                            settings, Gtk.IconSize.MENU)
+            valid, w, h = Gtk.icon_size_lookup_for_settings(
+                settings, Gtk.IconSize.MENU)
             self._icon_renderer.props.stock_size = max(w, h)
 
             self.pack_start(self._icon_renderer, False)
@@ -108,7 +108,7 @@ class ComboBox(Gtk.ComboBox):
                 size = Gtk.IconSize.MENU
             else:
                 size = Gtk.IconSize.LARGE_TOOLBAR
-            width, height = Gtk.icon_size_lookup(size)
+            valid, width, height = Gtk.icon_size_lookup(size)
 
             if icon_name:
                 file_name = self._get_real_name_from_theme(icon_name, size)
