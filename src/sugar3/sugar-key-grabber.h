@@ -21,7 +21,7 @@
 #define __SUGAR_KEY_GRABBER_H__
 
 #include <glib-object.h>
-#include <gdk/gdkwindow.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
