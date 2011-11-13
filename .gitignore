@@ -2,6 +2,8 @@
 *.lo
 *.pyc
 *~
+*.gir
+*.typelib
 .deps
 .libs
 

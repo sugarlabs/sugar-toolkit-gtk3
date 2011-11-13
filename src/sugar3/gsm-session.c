@@ -501,6 +501,14 @@ client_disconnected (GsmClient *client, gpointer data)
   g_object_unref (client);
 }
 
+/**
+ * gsm_session_create_global
+ *
+ * Creates a new GSM_SESSION
+ *
+ * Returns: (transfer full): returns GSM_SESSION
+ **/
+
 GsmSession *
 gsm_session_create_global (void)
 {
