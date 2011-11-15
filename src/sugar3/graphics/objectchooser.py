@@ -47,8 +47,9 @@ class ObjectChooser(object):
 
         if parent is None:
             parent_xid = 0
-        elif hasattr(parent, 'window') and hasattr(parent.window, 'xid'):
-            parent_xid = parent.window.xid
+        elif hasattr(parent, 'get_window') and hasattr(parent.get_window(),
+                                                       'xid'):
+            parent_xid = parent.get_window().xid
         else:
             parent_xid = parent
 

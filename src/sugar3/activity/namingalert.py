@@ -279,7 +279,7 @@ class NamingAlert(Gtk.Window):
 
     def __realize_cb(self, widget):
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        self.window.set_accept_focus(True)
+        self.get_window().set_accept_focus(True)
 
     def __keep_cb(self, widget):
         if self._favorite_icon.get_active():

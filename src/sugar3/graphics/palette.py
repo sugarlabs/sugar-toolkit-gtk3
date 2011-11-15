@@ -350,8 +350,9 @@ class Palette(PaletteWindow):
 
     def _update_accept_focus(self):
         accept_focus = len(self._content.get_children())
-        if self.window:
-            self.window.set_accept_focus(accept_focus)
+        window = self.get_window()
+        if window:
+            window.set_accept_focus(accept_focus)
 
     def __realize_cb(self, widget):
         self._update_accept_focus()

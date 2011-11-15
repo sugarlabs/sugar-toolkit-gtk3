@@ -85,32 +85,32 @@ class _TrayViewport(Gtk.Viewport):
             start = item.allocation.y
             stop = item.allocation.y + item.allocation.height
 
-        if start < adj.value:
-            adj.value = start
-        elif stop > adj.value + adj.page_size:
-            adj.value = stop - adj.page_size
+        if start < adj.get_value():
+            adj.set_value(start)
+        elif stop > adj.get_value() + adj.get_page_size():
+            adj.set_value(stop - adj.get_page_size())
 
     def _scroll_next(self):
         allocation = self.get_allocation()
         if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
-            new_value = adj.value + allocation.width
-            adj.value = min(new_value, adj.upper - allocation.width)
+            new_value = adj.get_value() + allocation.width
+            adj.set_value(min(new_value, adj.get_upper() - allocation.width))
         else:
             adj = self.get_vadjustment()
-            new_value = adj.value + allocation.height
-            adj.value = min(new_value, adj.upper - allocation.height)
+            new_value = adj.get_value() + allocation.height
+            adj.set_value(min(new_value, adj.get_upper() - allocation.height))
 
     def _scroll_previous(self):
         allocation = self.get_allocation()
         if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
-            new_value = adj.value - allocation.width
-            adj.value = max(adj.lower, new_value)
+            new_value = adj.get_value() - allocation.width
+            adj.set_value(max(adj.get_lower(), new_value))
         else:
             adj = self.get_vadjustment()
-            new_value = adj.value - allocation.height
-            adj.value = max(adj.lower, new_value)
+            new_value = adj.get_value() - allocation.height
+            adj.set_value(max(adj.get_lower(), new_value))
 
     def do_size_request(self, requisition):
         child_requisition = self.get_child().size_request()
@@ -141,12 +141,13 @@ class _TrayViewport(Gtk.Viewport):
             self.notify('scrollable')
 
     def _adjustment_changed_cb(self, adjustment):
-        if adjustment.value <= adjustment.lower:
+        if adjustment.get_value() <= adjustment.get_lower():
             can_scroll_prev = False
         else:
             can_scroll_prev = True
 
-        if adjustment.value + adjustment.page_size >= adjustment.upper:
+        if adjustment.get_value() + adjustment.get_page_size() >= \
+           adjustment.get_upper():
             can_scroll_next = False
         else:
             can_scroll_next = True
@@ -409,7 +410,7 @@ class _IconWidget(Gtk.EventBox):
         self._icon.show()
 
     def do_expose_event(self, event):
-        palette = self.parent.palette
+        palette = self.get_parent().palette
         if palette and palette.is_up():
             invoker = palette.props.invoker
             invoker.draw_rectangle(event, palette)
