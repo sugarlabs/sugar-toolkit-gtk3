@@ -19,7 +19,7 @@
 Test the sugar3.graphics.icon.Icon widget.
 """
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.xocolor import XoColor
@@ -28,41 +28,41 @@ import common
 
 test = common.Test()
 
-hbox = gtk.HBox()
-test.pack_start(hbox)
-sensitive_box = gtk.VBox()
-insensitive_box = gtk.VBox()
+hbox = Gtk.HBox()
+test.pack_start(hbox, True, True, 0)
+sensitive_box = Gtk.VBox()
+insensitive_box = Gtk.VBox()
 
-hbox.pack_start(sensitive_box)
-hbox.pack_start(insensitive_box)
+hbox.pack_start(sensitive_box, True, True, 0)
+hbox.pack_start(insensitive_box, True, True, 0)
 hbox.show_all()
 
 
 def create_icon_widgets(box, sensitive=True):
     icon = Icon(icon_name='go-previous')
-    icon.props.icon_size = gtk.ICON_SIZE_LARGE_TOOLBAR
-    box.pack_start(icon)
+    icon.props.icon_size = Gtk.IconSize.LARGE_TOOLBAR
+    box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='computer-xo',
-                icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR,
+                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
                 xo_color=XoColor())
-    box.pack_start(icon)
+    box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='battery-000',
-                icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR,
+                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
                 badge_name='emblem-busy')
-    box.pack_start(icon)
+    box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='gtk-new',
-                icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR,
+                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
                 badge_name='gtk-cancel')
-    box.pack_start(icon)
+    box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
@@ -80,8 +80,8 @@ test.show()
 #    test.queue_draw()
 #    return True
 #
-#import gobject
-#gobject.idle_add(idle_cb)
+#from gi.repository import GObject
+#GObject.idle_add(idle_cb)
 
 if __name__ == '__main__':
     common.main(test)

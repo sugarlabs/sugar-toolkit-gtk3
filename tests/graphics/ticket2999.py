@@ -19,7 +19,7 @@
 Spec in ticket #2999.
 """
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.palette import Palette
 from sugar3.graphics.icon import Icon
@@ -29,9 +29,9 @@ import common
 test = common.Test()
 test.set_border_width(60)
 
-text_view = gtk.TextView()
+text_view = Gtk.TextView()
 text_view.props.buffer.props.text = 'Blah blah blah, blah blah blah.'
-test.pack_start(text_view)
+test.pack_start(text_view, True, True, 0)
 text_view.show()
 
 if __name__ == '__main__':

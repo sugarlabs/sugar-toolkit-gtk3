@@ -19,7 +19,7 @@
 Test the sugar3.graphics.icon.* cache.
 """
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.xocolor import XoColor
@@ -54,13 +54,13 @@ def _button_activated_cb(button):
 
 for d in data:
     icon = Icon(icon_name=d[0],
-                icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR,
+                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
                 xo_color=XoColor(d[1]))
-    test.pack_start(icon)
+    test.pack_start(icon, True, True, 0)
     icon.show()
 
-button = gtk.Button('mec mac')
-test.pack_start(button)
+button = Gtk.Button('mec mac')
+test.pack_start(button, True, True, 0)
 button.connect('activate', _button_activated_cb)
 button.show()
 

@@ -23,9 +23,9 @@ STABLE.
 
 import logging
 
-from gtk import gdk
-import gtk
-import gobject
+from gi.repository import Gdk
+from gi.repository import Gtk
+from gi.repository import GObject
 
 from sugar3.graphics import palettegroup
 from sugar3.graphics import animator
@@ -39,22 +39,22 @@ def _calculate_gap(a, b):
     gap = True
 
     if a.y + a.height == b.y:
-        gap_side = gtk.POS_BOTTOM
+        gap_side = Gtk.PositionType.BOTTOM
     elif a.x + a.width == b.x:
-        gap_side = gtk.POS_RIGHT
+        gap_side = Gtk.PositionType.RIGHT
     elif a.x == b.x + b.width:
-        gap_side = gtk.POS_LEFT
+        gap_side = Gtk.PositionType.LEFT
     elif a.y == b.y + b.height:
-        gap_side = gtk.POS_TOP
+        gap_side = Gtk.PositionType.TOP
     else:
         gap = False
 
     if gap:
-        if gap_side == gtk.POS_BOTTOM or gap_side == gtk.POS_TOP:
+        if gap_side == Gtk.PositionType.BOTTOM or gap_side == Gtk.PositionType.TOP:
             gap_start = min(a.width, max(0, b.x - a.x))
             gap_size = max(0, min(a.width,
                                   (b.x + b.width) - a.x) - gap_start)
-        elif gap_side == gtk.POS_RIGHT or gap_side == gtk.POS_LEFT:
+        elif gap_side == Gtk.PositionType.RIGHT or gap_side == Gtk.PositionType.LEFT:
             gap_start = min(a.height, max(0, b.y - a.y))
             gap_size = max(0, min(a.height,
                                   (b.y + b.height) - a.y) - gap_start)
@@ -65,11 +65,11 @@ def _calculate_gap(a, b):
         return False
 
 
-class MouseSpeedDetector(gobject.GObject):
+class MouseSpeedDetector(GObject.GObject):
 
     __gsignals__ = {
-        'motion-slow': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'motion-fast': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'motion-slow': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'motion-fast': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     _MOTION_SLOW = 1
@@ -80,7 +80,7 @@ class MouseSpeedDetector(gobject.GObject):
             delay in msec
             threshold in pixels (per tick of 'delay' msec)"""
 
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._threshold = thresh
         self._parent = parent
@@ -93,15 +93,15 @@ class MouseSpeedDetector(gobject.GObject):
         self.stop()
 
         self._mouse_pos = self._get_mouse_position()
-        self._timeout_hid = gobject.timeout_add(self._delay, self._timer_cb)
+        self._timeout_hid = GObject.timeout_add(self._delay, self._timer_cb)
 
     def stop(self):
         if self._timeout_hid is not None:
-            gobject.source_remove(self._timeout_hid)
+            GObject.source_remove(self._timeout_hid)
         self._state = None
 
     def _get_mouse_position(self):
-        display = gtk.gdk.display_get_default()
+        display = Gdk.Display.get_default()
         screen_, x, y, mask_ = display.get_pointer()
         return (x, y)
 
@@ -128,14 +128,14 @@ class MouseSpeedDetector(gobject.GObject):
         return True
 
 
-class PaletteWindow(gtk.Window):
+class PaletteWindow(Gtk.Window):
 
     __gtype_name__ = 'SugarPaletteWindow'
 
     __gsignals__ = {
-        'popup': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'popdown': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'activate': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'popup': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'popdown': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'activate': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, **kwargs):
@@ -155,14 +155,14 @@ class PaletteWindow(gtk.Window):
         self._popdown_anim = animator.Animator(0.6, 10)
         self._popdown_anim.add(_PopdownAnimation(self))
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
         self.set_decorated(False)
         self.set_resizable(False)
         # Just assume xthickness and ythickness are the same
         self.set_border_width(self.get_style().xthickness)
 
-        accel_group = gtk.AccelGroup()
+        accel_group = Gtk.AccelGroup()
         self.set_data('sugar-accel-group', accel_group)
         self.add_accel_group(accel_group)
 
@@ -199,12 +199,12 @@ class PaletteWindow(gtk.Window):
     def get_invoker(self):
         return self._invoker
 
-    invoker = gobject.property(type=object,
+    invoker = GObject.property(type=object,
                                getter=get_invoker,
                                setter=set_invoker)
 
     def __realize_cb(self, widget):
-        self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
     def _mouse_slow_cb(self, widget):
         self._mouse_detector.stop()
@@ -240,16 +240,16 @@ class PaletteWindow(gtk.Window):
     def get_group_id(self):
         return self._group_id
 
-    group_id = gobject.property(type=str,
+    group_id = GObject.property(type=str,
                                 getter=get_group_id,
                                 setter=set_group_id)
 
     def do_size_request(self, requisition):
-        gtk.Window.do_size_request(self, requisition)
+        Gtk.Window.do_size_request(self, requisition)
         requisition.width = max(requisition.width, style.GRID_CELL_SIZE * 2)
 
     def do_size_allocate(self, allocation):
-        gtk.Window.do_size_allocate(self, allocation)
+        Gtk.Window.do_size_allocate(self, allocation)
 
         if self._old_alloc is None or \
            self._old_alloc.x != allocation.x or \
@@ -260,7 +260,7 @@ class PaletteWindow(gtk.Window):
 
         # We need to store old allocation because when size_allocate
         # is called widget.allocation is already updated.
-        # gtk.Window resizing is different from normal containers:
+        # Gtk.Window resizing is different from normal containers:
         # the X window is resized, widget.allocation is updated from
         # the configure request handler and finally size_allocate is called.
         self._old_alloc = allocation
@@ -279,18 +279,18 @@ class PaletteWindow(gtk.Window):
         wstyle = self.get_style()
 
         if gap:
-            wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
-                                 gtk.SHADOW_IN, event.area, self, 'palette',
+            wstyle.paint_box_gap(event.window, Gtk.StateType.PRELIGHT,
+                                 Gtk.ShadowType.IN, event.area, self, 'palette',
                                  0, 0, allocation.width, allocation.height,
                                  gap[0], gap[1], gap[2])
         else:
-            wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
-                             gtk.SHADOW_IN, event.area, self, 'palette',
+            wstyle.paint_box(event.window, Gtk.StateType.PRELIGHT,
+                             Gtk.ShadowType.IN, event.area, self, 'palette',
                              0, 0, allocation.width, allocation.height)
 
         # Fall trough to the container expose handler.
         # (Leaving out the window expose handler which redraws everything)
-        gtk.Bin.do_expose_event(self, event)
+        Gtk.Bin.do_expose_event(self, event)
 
     def update_position(self):
         invoker = self._invoker
@@ -362,13 +362,13 @@ class PaletteWindow(gtk.Window):
         self.popup(immediate=True)
 
     def __enter_notify_event_cb(self, widget, event):
-        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
-                event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.detail != Gdk.NOTIFY_INFERIOR and \
+                event.mode == Gdk.CROSSING_NORMAL:
             self.on_enter(event)
 
     def __leave_notify_event_cb(self, widget, event):
-        if event.detail != gtk.gdk.NOTIFY_INFERIOR and \
-                event.mode == gtk.gdk.CROSSING_NORMAL:
+        if event.detail != Gdk.NOTIFY_INFERIOR and \
+                event.mode == Gdk.CROSSING_NORMAL:
             self.on_leave(event)
 
     def __show_cb(self, widget):
@@ -393,7 +393,7 @@ class PaletteWindow(gtk.Window):
         y = win_y + rectangle.y
         width, height = self.size_request()
 
-        return gtk.gdk.Rectangle(x, y, width, height)
+        return (x, y, width, height)
 
     def get_palette_state(self):
         return self._palette_state
@@ -429,15 +429,15 @@ class _PopdownAnimation(animator.Animation):
             self._palette.popdown(immediate=True)
 
 
-class Invoker(gobject.GObject):
+class Invoker(GObject.GObject):
 
     __gtype_name__ = 'SugarPaletteInvoker'
 
     __gsignals__ = {
-        'mouse-enter': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'mouse-leave': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'right-click': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'focus-out': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'mouse-enter': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'mouse-leave': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'right-click': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'focus-out': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     ANCHORED = 0
@@ -449,12 +449,12 @@ class Invoker(gobject.GObject):
     LEFT = [(-1.0, 0.0, 0.0, 0.0), (-1.0, -1.0, 0.0, 1.0)]
 
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
         self.parent = None
 
-        self._screen_area = gtk.gdk.Rectangle(0, 0, gtk.gdk.screen_width(),
-                                              gtk.gdk.screen_height())
+        self._screen_area = (0, 0, Gdk.Screen.width(),
+                                              Gdk.Screen.height())
         self._position_hint = self.ANCHORED
         self._cursor_x = -1
         self._cursor_y = -1
@@ -477,7 +477,7 @@ class Invoker(gobject.GObject):
         invoker_valign = alignment[3]
 
         if self._cursor_x == -1 or self._cursor_y == -1:
-            display = gtk.gdk.display_get_default()
+            display = Gdk.Display.get_default()
             screen_, x, y, mask_ = display.get_pointer()
             self._cursor_x = x
             self._cursor_y = y
@@ -486,7 +486,7 @@ class Invoker(gobject.GObject):
             rect = self.get_rect()
         else:
             dist = style.PALETTE_CURSOR_DISTANCE
-            rect = gtk.gdk.Rectangle(self._cursor_x - dist,
+            rect = (self._cursor_x - dist,
                                      self._cursor_y - dist,
                                      dist * 2, dist * 2)
 
@@ -498,7 +498,7 @@ class Invoker(gobject.GObject):
         y = rect.y + rect.height * invoker_valign + \
             palette_height * palette_valign
 
-        return gtk.gdk.Rectangle(int(x), int(y),
+        return (int(x), int(y),
                                  palette_width, palette_height)
 
     def _in_screen(self, rect):
@@ -647,9 +647,9 @@ class Invoker(gobject.GObject):
             # menu item. We need to postpone destruction of the palette until
             # after all signals have propagated from the menu item to the
             # palette owner.
-            gobject.idle_add(lambda old_palette=self._palette:
+            GObject.idle_add(lambda old_palette=self._palette:
                              old_palette.destroy(),
-                             priority=gobject.PRIORITY_LOW)
+                             priority=GObject.PRIORITY_LOW)
 
         self._palette = palette
 
@@ -657,7 +657,7 @@ class Invoker(gobject.GObject):
             self._palette.props.invoker = self
             self._palette.connect('popdown', self.__palette_popdown_cb)
 
-    palette = gobject.property(
+    palette = GObject.property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_cache_palette(self):
@@ -666,7 +666,7 @@ class Invoker(gobject.GObject):
     def set_cache_palette(self, cache_palette):
         self._cache_palette = cache_palette
 
-    cache_palette = gobject.property(type=object, setter=set_cache_palette,
+    cache_palette = GObject.property(type=object, setter=set_cache_palette,
                                      getter=get_cache_palette)
     """Whether the invoker will cache the palette after its creation. Defaults
     to True.
@@ -723,20 +723,20 @@ class WidgetInvoker(Invoker):
             x = 0
             y = 0
 
-        if self._widget.flags() & gtk.NO_WINDOW:
+        if self._widget.flags() & Gtk.NO_WINDOW:
             x += allocation.x
             y += allocation.y
 
         width = allocation.width
         height = allocation.height
 
-        return gtk.gdk.Rectangle(x, y, width, height)
+        return (x, y, width, height)
 
     def has_rectangle_gap(self):
         return True
 
     def draw_rectangle(self, event, palette):
-        if self._widget.flags() & gtk.NO_WINDOW:
+        if self._widget.flags() & Gtk.NO_WINDOW:
             x, y = self._widget.allocation.x, self._widget.allocation.y
         else:
             x = y = 0
@@ -745,15 +745,15 @@ class WidgetInvoker(Invoker):
         gap = _calculate_gap(self.get_rect(), palette.get_rect())
 
         if gap:
-            wstyle.paint_box_gap(event.window, gtk.STATE_PRELIGHT,
-                                 gtk.SHADOW_IN, event.area, self._widget,
+            wstyle.paint_box_gap(event.window, Gtk.StateType.PRELIGHT,
+                                 Gtk.ShadowType.IN, event.area, self._widget,
                                  'palette-invoker', x, y,
                                  self._widget.allocation.width,
                                  self._widget.allocation.height,
                                  gap[0], gap[1], gap[2])
         else:
-            wstyle.paint_box(event.window, gtk.STATE_PRELIGHT,
-                             gtk.SHADOW_IN, event.area, self._widget,
+            wstyle.paint_box(event.window, Gtk.StateType.PRELIGHT,
+                             Gtk.ShadowType.IN, event.area, self._widget,
                              'palette-invoker', x, y,
                              self._widget.allocation.width,
                              self._widget.allocation.height)
@@ -784,7 +784,7 @@ class WidgetInvoker(Invoker):
 
     def _get_widget(self):
         return self._widget
-    widget = gobject.property(type=object, getter=_get_widget, setter=None)
+    widget = GObject.property(type=object, getter=_get_widget, setter=None)
 
 
 class ToolInvoker(WidgetInvoker):
@@ -796,14 +796,14 @@ class ToolInvoker(WidgetInvoker):
             self.attach_tool(parent)
 
     def attach_tool(self, widget):
-        self.attach_widget(widget, widget.child)
+        self.attach_widget(widget, widget.get_child())
 
     def _get_alignments(self):
         parent = self._widget.get_parent()
         if parent is None:
             return WidgetInvoker._get_alignments(self)
 
-        if parent.get_orientation() is gtk.ORIENTATION_HORIZONTAL:
+        if parent.get_orientation() is Gtk.Orientation.HORIZONTAL:
             return self.BOTTOM + self.TOP
         else:
             return self.LEFT + self.RIGHT
@@ -851,14 +851,14 @@ class CellRendererInvoker(Invoker):
             x = 0
             y = 0
 
-        if self._tree_view.flags() & gtk.NO_WINDOW:
+        if self._tree_view.flags() & Gtk.NO_WINDOW:
             x += allocation.x
             y += allocation.y
 
         width = allocation.width
         height = allocation.height
 
-        return gtk.gdk.Rectangle(x, y, width, height)
+        return (x, y, width, height)
 
     def __motion_notify_event_cb(self, widget, event):
         if event.window != widget.get_bin_window():

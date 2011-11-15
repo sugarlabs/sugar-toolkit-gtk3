@@ -25,9 +25,9 @@ import time
 from datetime import datetime
 import os
 import tempfile
-import gobject
-import gconf
-import gio
+from gi.repository import GObject
+from gi.repository import GConf
+from gi.repository import Gio
 import dbus
 import dbus.glib
 
@@ -77,14 +77,14 @@ updated = dispatch.Signal()
 _get_data_store()
 
 
-class DSMetadata(gobject.GObject):
+class DSMetadata(GObject.GObject):
     """A representation of the metadata associated with a DS entry."""
     __gsignals__ = {
-        'updated': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'updated': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, properties=None):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         if not properties:
             self._properties = {}
         else:
@@ -226,12 +226,12 @@ class RawObject(object):
 
     def __init__(self, file_path):
         stat = os.stat(file_path)
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         metadata = {
                 'uid': file_path,
                 'title': os.path.basename(file_path),
                 'timestamp': stat.st_mtime,
-                'mime_type': gio.content_type_guess(filename=file_path),
+                'mime_type': Gio.content_type_guess(filename=file_path),
                 'activity': '',
                 'activity_id': '',
                 'icon-color': client.get_string('/desktop/sugar/user/color'),

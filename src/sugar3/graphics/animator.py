@@ -21,20 +21,20 @@ STABLE.
 
 import time
 
-import gobject
+from gi.repository import GObject
 
 EASE_OUT_EXPO = 0
 EASE_IN_EXPO = 1
 
 
-class Animator(gobject.GObject):
+class Animator(GObject.GObject):
 
     __gsignals__ = {
-        'completed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'completed': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self._animations = []
         self._duration = duration
         self._interval = 1.0 / fps
@@ -80,7 +80,7 @@ class Animator(gobject.GObject):
             self.stop()
 
         self._start_time = time.time()
-        self._timeout_sid = gobject.timeout_add(
+        self._timeout_sid = GObject.timeout_add(
                     int(self._interval * 1000), self._next_frame_cb)
 
     def stop(self):
@@ -95,7 +95,7 @@ class Animator(gobject.GObject):
 
         """
         if self._timeout_sid:
-            gobject.source_remove(self._timeout_sid)
+            GObject.source_remove(self._timeout_sid)
             self._timeout_sid = 0
             self.emit('completed')
 

@@ -25,10 +25,10 @@ STABLE.
 import os
 import logging
 
-from gtk import gdk
-import gtk
-import pango
-import gconf
+from gi.repository import Gdk
+from gi.repository import Gtk
+from gi.repository import Pango
+from gi.repository import GConf
 
 
 FOCUS_LINE_WIDTH = 2
@@ -54,7 +54,7 @@ class Font(object):
         return self._desc
 
     def get_pango_desc(self):
-        return pango.FontDescription(self._desc)
+        return Pango.FontDescription(self._desc)
 
 
 class Color(object):
@@ -71,7 +71,7 @@ class Color(object):
                 (int(self._g * 255) << 16) + (int(self._r * 255) << 24)
 
     def get_gdk_color(self):
-        return gtk.gdk.Color(int(self._r * 65535), int(self._g * 65535),
+        return Gdk.Color(int(self._r * 65535), int(self._g * 65535),
                              int(self._b * 65535))
 
     def get_html(self):
@@ -116,7 +116,7 @@ MEDIUM_ICON_SIZE = zoom(55 * 1.5)
 LARGE_ICON_SIZE = zoom(55 * 2.0)
 XLARGE_ICON_SIZE = zoom(55 * 2.75)
 
-client = gconf.client_get_default()
+client = GConf.Client.get_default()
 FONT_SIZE = client.get_float('/desktop/sugar/font/default_size')
 FONT_FACE = client.get_string('/desktop/sugar/font/default_face')
 

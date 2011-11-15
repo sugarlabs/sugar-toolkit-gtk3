@@ -17,24 +17,24 @@
 
 """Notebook class
 
-This class create a gtk.Notebook() widget supporting
+This class create a Gtk.Notebook() widget supporting
 a close button in every tab when the 'can-close-tabs' gproperty
 is enabled (True)
 
 STABLE.
 """
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 
-class Notebook(gtk.Notebook):
+class Notebook(Gtk.Notebook):
 
     __gtype_name__ = 'SugarNotebook'
 
     __gproperties__ = {
         'can-close-tabs': (bool, None, None, False,
-            gobject.PARAM_READWRITE | gobject.PARAM_CONSTRUCT_ONLY),
+            GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
     }
 
     def __init__(self, **kwargs):
@@ -74,26 +74,26 @@ class Notebook(gtk.Notebook):
             raise AssertionError
 
     def _add_icon_to_button(self, button):
-        icon_box = gtk.HBox()
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU)
-        gtk.Button.set_relief(button, gtk.RELIEF_NONE)
+        icon_box = Gtk.HBox()
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
+        Gtk.Button.set_relief(button, Gtk.ReliefStyle.NONE)
 
-        settings = gtk.Widget.get_settings(button)
-        w, h = gtk.icon_size_lookup_for_settings(settings, gtk.ICON_SIZE_MENU)
-        gtk.Widget.set_size_request(button, w + 4, h + 4)
+        settings = Gtk.Widget.get_settings(button)
+        w, h = Gtk.icon_size_lookup_for_settings(settings, Gtk.IconSize.MENU)
+        Gtk.Widget.set_size_request(button, w + 4, h + 4)
         image.show()
         icon_box.pack_start(image, True, False, 0)
         button.add(icon_box)
         icon_box.show()
 
     def _create_custom_tab(self, text, child):
-        event_box = gtk.EventBox()
+        event_box = Gtk.EventBox()
 
-        tab_box = gtk.HBox(False, 2)
-        tab_label = gtk.Label(text)
+        tab_box = Gtk.HBox(False, 2)
+        tab_label = Gtk.Label(label=text)
 
-        tab_button = gtk.Button()
+        tab_button = Gtk.Button()
         tab_button.connect('clicked', self._close_page, child)
 
         # Add a picture on a button
@@ -132,7 +132,7 @@ class Notebook(gtk.Notebook):
             eventbox = self._create_custom_tab(text_label, widget)
             self.append_page(widget, eventbox)
         else:
-            self.append_page(widget, gtk.Label(text_label))
+            self.append_page(widget, Gtk.Label(label=text_label))
 
         pages = self.get_n_pages()
 

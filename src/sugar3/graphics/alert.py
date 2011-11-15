@@ -47,9 +47,9 @@ STABLE.
 
 import gettext
 
-import gtk
-import gobject
-import pango
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import Pango
 import math
 
 from sugar3.graphics import style
@@ -59,7 +59,7 @@ from sugar3.graphics.icon import Icon
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 
-class Alert(gtk.EventBox):
+class Alert(Gtk.EventBox):
     """
     UI interface for Alerts
 
@@ -81,13 +81,13 @@ class Alert(gtk.EventBox):
     __gtype_name__ = 'SugarAlert'
 
     __gsignals__ = {
-        'response': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([object])),
+        'response': (GObject.SignalFlags.RUN_FIRST, None, ([object])),
     }
 
     __gproperties__ = {
-        'title': (str, None, None, None, gobject.PARAM_READWRITE),
-        'msg': (str, None, None, None, gobject.PARAM_READWRITE),
-        'icon': (object, None, None, gobject.PARAM_WRITABLE),
+        'title': (str, None, None, None, GObject.PARAM_READWRITE),
+        'msg': (str, None, None, None, GObject.PARAM_READWRITE),
+        'icon': (object, None, None, GObject.PARAM_WRITABLE),
     }
 
     def __init__(self, **kwargs):
@@ -97,26 +97,26 @@ class Alert(gtk.EventBox):
         self._icon = None
         self._buttons = {}
 
-        self._hbox = gtk.HBox()
+        self._hbox = Gtk.HBox()
         self._hbox.set_border_width(style.DEFAULT_SPACING)
         self._hbox.set_spacing(style.DEFAULT_SPACING)
 
-        self._msg_box = gtk.VBox()
-        self._title_label = gtk.Label()
+        self._msg_box = Gtk.VBox()
+        self._title_label = Gtk.Label()
         self._title_label.set_alignment(0, 0.5)
         self._msg_box.pack_start(self._title_label, False, False, 0)
 
-        self._msg_label = gtk.Label()
+        self._msg_label = Gtk.Label()
         self._msg_label.set_alignment(0, 0.5)
         self._msg_box.pack_start(self._msg_label, False, False, 0)
         self._hbox.pack_start(self._msg_box, False, False, 0)
 
-        self._buttons_box = gtk.HButtonBox()
-        self._buttons_box.set_layout(gtk.BUTTONBOX_END)
+        self._buttons_box = Gtk.HButtonBox()
+        self._buttons_box.set_layout(Gtk.ButtonBoxStyle.END)
         self._buttons_box.set_spacing(style.DEFAULT_SPACING)
-        self._hbox.pack_start(self._buttons_box)
+        self._hbox.pack_start(self._buttons_box, True, True, 0)
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
         self.set_visible_window(True)
         self.add(self._hbox)
@@ -189,22 +189,22 @@ class Alert(gtk.EventBox):
             that will occure right to the buttom
 
         icon :
-            this can be a SugarIcon or a gtk.Image
+            this can be a SugarIcon or a Gtk.Image
 
         postion :
             the position of the button in the box (optional)
 
         Returns
         -------
-        button :gtk.Button
+        button :Gtk.Button
 
         """
-        button = gtk.Button()
+        button = Gtk.Button()
         self._buttons[response_id] = button
         if icon is not None:
             button.set_image(icon)
         button.set_label(label)
-        self._buttons_box.pack_start(button)
+        self._buttons_box.pack_start(button, True, True, 0)
         button.show()
         button.connect('clicked', self.__button_clicked_cb, response_id)
         if position != -1:
@@ -245,8 +245,8 @@ class ConfirmationAlert(Alert):
 
     A confirmation alert is a nice shortcut from a standard Alert because it
     comes with 'OK' and 'Cancel' buttons already built-in. When clicked, the
-    'OK' button will emit a response with a response_id of gtk.RESPONSE_OK,
-    while the 'Cancel' button will emit gtk.RESPONSE_CANCEL.
+    'OK' button will emit a response with a response_id of Gtk.ResponseType.OK,
+    while the 'Cancel' button will emit Gtk.ResponseType.CANCEL.
 
     Examples
     --------
@@ -273,9 +273,9 @@ class ConfirmationAlert(Alert):
             self.remove_alert(alert)
 
             #Do any work that is specific to the type of button clicked.
-            if response_id is gtk.RESPONSE_OK:
+            if response_id is Gtk.ResponseType.OK:
                 print 'Ok Button was clicked. Do any work upon ok here ...'
-            elif response_id is gtk.RESPONSE_CANCEL:
+            elif response_id is Gtk.ResponseType.CANCEL:
                 print 'Cancel Button was clicked.'
 
     """
@@ -284,11 +284,11 @@ class ConfirmationAlert(Alert):
         Alert.__init__(self, **kwargs)
 
         icon = Icon(icon_name='dialog-cancel')
-        self.add_button(gtk.RESPONSE_CANCEL, _('Cancel'), icon)
+        self.add_button(Gtk.ResponseType.CANCEL, _('Cancel'), icon)
         icon.show()
 
         icon = Icon(icon_name='dialog-ok')
-        self.add_button(gtk.RESPONSE_OK, _('Ok'), icon)
+        self.add_button(Gtk.ResponseType.OK, _('Ok'), icon)
         icon.show()
 
 
@@ -298,7 +298,7 @@ class ErrorAlert(Alert):
 
     An error alert is a nice shortcut from a standard Alert because it
     comes with the 'OK' button already built-in. When clicked, the
-    'OK' button will emit a response with a response_id of gtk.RESPONSE_OK.
+    'OK' button will emit a response with a response_id of Gtk.ResponseType.OK.
 
     Examples
     --------
@@ -325,7 +325,7 @@ class ErrorAlert(Alert):
             self.remove_alert(alert)
 
             #Do any work that is specific to the response_id.
-            if response_id is gtk.RESPONSE_OK:
+            if response_id is Gtk.ResponseType.OK:
                 print 'Ok Button was clicked. Do any work upon ok here ...'
 
     """
@@ -334,33 +334,33 @@ class ErrorAlert(Alert):
         Alert.__init__(self, **kwargs)
 
         icon = Icon(icon_name='dialog-ok')
-        self.add_button(gtk.RESPONSE_OK, _('Ok'), icon)
+        self.add_button(Gtk.ResponseType.OK, _('Ok'), icon)
         icon.show()
 
 
-class _TimeoutIcon(gtk.Alignment):
+class _TimeoutIcon(Gtk.Alignment):
     __gtype_name__ = 'SugarTimeoutIcon'
 
     def __init__(self):
-        gtk.Alignment.__init__(self, 0, 0, 1, 1)
+        GObject.GObject.__init__(self, 0, 0, 1, 1)
         self.set_app_paintable(True)
-        self._text = gtk.Label()
+        self._text = Gtk.Label()
         self._text.set_alignment(0.5, 0.5)
-        attrlist = pango.AttrList()
-        attrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD))
+        attrlist = Pango.AttrList()
+        attrlist.insert(Pango.AttrWeight(Pango.Weight.BOLD))
         self._text.set_attributes(attrlist)
         self.add(self._text)
         self._text.show()
         self.connect("expose_event", self.__expose_cb)
 
     def __expose_cb(self, widget, event):
-        context = widget.window.cairo_create()
+        context = widget.get_window().cairo_create()
         self._draw(context)
         return False
 
     def do_size_request(self, requisition):
         requisition.height, requisition.width = \
-            gtk.icon_size_lookup(gtk.ICON_SIZE_BUTTON)
+            Gtk.icon_size_lookup(Gtk.IconSize.BUTTON)
         self._text.size_request()
 
     def _draw(self, context):
@@ -410,9 +410,9 @@ class TimeoutAlert(Alert):
             self.remove_alert(alert)
 
             #Do any work that is specific to the type of button clicked.
-            if response_id is gtk.RESPONSE_OK:
+            if response_id is Gtk.ResponseType.OK:
                 print 'Ok Button was clicked. Do any work upon ok here ...'
-            elif response_id is gtk.RESPONSE_CANCEL:
+            elif response_id is Gtk.ResponseType.CANCEL:
                 print 'Cancel Button was clicked.'
             elif response_id == -1:
                 print 'Timout occurred'
@@ -425,21 +425,21 @@ class TimeoutAlert(Alert):
         self._timeout = timeout
 
         icon = Icon(icon_name='dialog-cancel')
-        self.add_button(gtk.RESPONSE_CANCEL, _('Cancel'), icon)
+        self.add_button(Gtk.ResponseType.CANCEL, _('Cancel'), icon)
         icon.show()
 
         self._timeout_text = _TimeoutIcon()
         self._timeout_text.set_text(self._timeout)
-        self.add_button(gtk.RESPONSE_OK, _('Continue'), self._timeout_text)
+        self.add_button(Gtk.ResponseType.OK, _('Continue'), self._timeout_text)
         self._timeout_text.show()
 
-        gobject.timeout_add_seconds(1, self.__timeout)
+        GObject.timeout_add_seconds(1, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1
         self._timeout_text.set_text(self._timeout)
         if self._timeout == 0:
-            self._response(gtk.RESPONSE_OK)
+            self._response(Gtk.ResponseType.OK)
             return False
         return True
 
@@ -475,15 +475,15 @@ class NotifyAlert(Alert):
 
         self._timeout_text = _TimeoutIcon()
         self._timeout_text.set_text(self._timeout)
-        self.add_button(gtk.RESPONSE_OK, _('Ok'), self._timeout_text)
+        self.add_button(Gtk.ResponseType.OK, _('Ok'), self._timeout_text)
         self._timeout_text.show()
 
-        gobject.timeout_add(1000, self.__timeout)
+        GObject.timeout_add(1000, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1
         self._timeout_text.set_text(self._timeout)
         if self._timeout == 0:
-            self._response(gtk.RESPONSE_OK)
+            self._response(Gtk.ResponseType.OK)
             return False
         return True

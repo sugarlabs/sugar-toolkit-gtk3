@@ -19,12 +19,12 @@
 STABLE.
 """
 
-import gtk
+from gi.repository import Gtk
 
 
-class Panel(gtk.VBox):
+class Panel(Gtk.VBox):
 
     __gtype_name__ = 'SugarPanel'
 
     def __init__(self):
-        gtk.VBox.__init__(self)
+        GObject.GObject.__init__(self)

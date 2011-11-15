@@ -22,7 +22,7 @@ STABLE.
 import random
 import logging
 
-import gconf
+from gi.repository import GConf
 
 colors = [
 ['#B20008', '#FF2B34'], \
@@ -237,7 +237,7 @@ class XoColor:
         elif not is_valid(color_string):
             logging.debug('Color string is not valid: %s, '
                           'fallback to default', color_string)
-            client = gconf.client_get_default()
+            client = GConf.Client.get_default()
             color_string = client.get_string('/desktop/sugar/user/color')
             randomize = False
         else:

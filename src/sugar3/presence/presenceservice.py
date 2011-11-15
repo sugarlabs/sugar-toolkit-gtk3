@@ -22,7 +22,7 @@ STABLE.
 
 import logging
 
-import gobject
+from gi.repository import GObject
 import dbus
 import dbus.exceptions
 import dbus.glib
@@ -46,18 +46,18 @@ ACCOUNT_MANAGER_PATH = '/org/freedesktop/Telepathy/AccountManager'
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
 
-class PresenceService(gobject.GObject):
+class PresenceService(GObject.GObject):
     """Provides simplified access to the Telepathy framework to activities"""
     __gsignals__ = {
-        'activity-shared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ([gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT,
-                          gobject.TYPE_PYOBJECT])),
+        'activity-shared': (GObject.SignalFlags.RUN_FIRST, None,
+                        ([GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT,
+                          GObject.TYPE_PYOBJECT])),
     }
 
     def __init__(self):
         """Initialise the service and attempt to connect to events
         """
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._activity_cache = None
         self._buddy_cache = {}

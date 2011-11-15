@@ -19,18 +19,18 @@
 UNSTABLE. Used only internally by Activity and jarabe.
 """
 
-import gtk
-from gtk import gdk
+from gi.repository import Gtk
+from gi.repository import Gdk
 import logging
 
 
 def _property_get_trapped(window, prop, prop_type):
-    gtk.gdk.error_trap_push()
+    Gdk.error_trap_push()
 
     prop_info = window.property_get(prop, prop_type)
 
     # We just log a message
-    error = gtk.gdk.error_trap_pop()
+    error = Gdk.error_trap_pop()
     if error:
         logging.debug('Received X Error (%i) while getting '
                       'a property on a window', error)
@@ -40,11 +40,11 @@ def _property_get_trapped(window, prop, prop_type):
 
 def _property_change_trapped(window, prop, prop_type, format, mode, data):
     # pylint: disable=W0622
-    gtk.gdk.error_trap_push()
+    Gdk.error_trap_push()
 
     window.property_change(prop, prop_type, format, mode, data)
 
-    error = gtk.gdk.error_trap_pop()
+    error = Gdk.error_trap_pop()
     if error:
         logging.debug('Received X Error (%i) while setting '
                       'a property on a window', error)
@@ -53,7 +53,7 @@ def _property_change_trapped(window, prop, prop_type, format, mode, data):
 
 
 def get_activity_id(wnck_window):
-    window = gtk.gdk.window_foreign_new(wnck_window.get_xid())
+    window = Gdk.window_foreign_new(wnck_window.get_xid())
     prop_info = _property_get_trapped(window, '_SUGAR_ACTIVITY_ID', 'STRING')
     if prop_info is None:
         return None
@@ -62,7 +62,7 @@ def get_activity_id(wnck_window):
 
 
 def get_bundle_id(wnck_window):
-    window = gtk.gdk.window_foreign_new(wnck_window.get_xid())
+    window = Gdk.window_foreign_new(wnck_window.get_xid())
     prop_info = _property_get_trapped(window, '_SUGAR_BUNDLE_ID', 'STRING')
     if prop_info is None:
         return None
@@ -71,7 +71,7 @@ def get_bundle_id(wnck_window):
 
 
 def get_sugar_window_type(wnck_window):
-    window = gtk.gdk.window_foreign_new(wnck_window.get_xid())
+    window = Gdk.window_foreign_new(wnck_window.get_xid())
     prop_info = _property_get_trapped(window, '_SUGAR_WINDOW_TYPE', 'STRING')
     if prop_info is None:
         return None
@@ -81,9 +81,9 @@ def get_sugar_window_type(wnck_window):
 
 def set_activity_id(window, activity_id):
     _property_change_trapped(window, '_SUGAR_ACTIVITY_ID', 'STRING', 8,
-                             gtk.gdk.PROP_MODE_REPLACE, activity_id)
+                             Gdk.PROP_MODE_REPLACE, activity_id)
 
 
 def set_bundle_id(window, bundle_id):
     _property_change_trapped(window, '_SUGAR_BUNDLE_ID', 'STRING', 8,
-                             gtk.gdk.PROP_MODE_REPLACE, bundle_id)
+                             Gdk.PROP_MODE_REPLACE, bundle_id)

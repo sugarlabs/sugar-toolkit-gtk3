@@ -15,19 +15,19 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics import style
 from sugar3.graphics.icon import _SVGLoader
 
-ICON_ENTRY_PRIMARY = gtk.ENTRY_ICON_PRIMARY
-ICON_ENTRY_SECONDARY = gtk.ENTRY_ICON_SECONDARY
+ICON_ENTRY_PRIMARY = Gtk.EntryIconPosition.PRIMARY
+ICON_ENTRY_SECONDARY = Gtk.EntryIconPosition.SECONDARY
 
 
-class IconEntry(gtk.Entry):
+class IconEntry(Gtk.Entry):
 
     def __init__(self):
-        gtk.Entry.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._clear_icon = None
         self._clear_shown = False
@@ -35,9 +35,9 @@ class IconEntry(gtk.Entry):
         self.connect('key_press_event', self._keypress_event_cb)
 
     def set_icon_from_name(self, position, name):
-        icon_theme = gtk.icon_theme_get_default()
+        icon_theme = Gtk.IconTheme.get_default()
         icon_info = icon_theme.lookup_icon(name,
-                                           gtk.ICON_SIZE_SMALL_TOOLBAR,
+                                           Gtk.IconSize.SMALL_TOOLBAR,
                                            0)
 
         if icon_info.get_filename().endswith('.svg'):
@@ -47,12 +47,12 @@ class IconEntry(gtk.Entry):
             handle = loader.load(icon_info.get_filename(), entities, None)
             pixbuf = handle.get_pixbuf()
         else:
-            pixbuf = gtk.gdk.pixbuf_new_from_file(icon_info.get_filename())
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.get_filename())
         del icon_info
         self.set_icon(position, pixbuf)
 
     def set_icon(self, position, pixbuf):
-        if type(pixbuf) is not gtk.gdk.Pixbuf:
+        if type(pixbuf) is not GdkPixbuf.Pixbuf:
             raise ValueError('Argument must be a pixbuf, not %r.' % pixbuf)
         self.set_icon_from_pixbuf(position, pixbuf)
 
@@ -80,7 +80,7 @@ class IconEntry(gtk.Entry):
             self._clear_shown = False
 
     def _keypress_event_cb(self, widget, event):
-        keyval = gtk.gdk.keyval_name(event.keyval)
+        keyval = Gdk.keyval_name(event.keyval)
         if keyval == 'Escape':
             self.props.text = ''
             return True

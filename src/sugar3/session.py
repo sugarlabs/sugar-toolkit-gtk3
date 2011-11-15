@@ -21,23 +21,23 @@ UNSTABLE. Used only internally by jarabe.
 
 import os
 
-from sugar import _sugarext
+from gi.repository import SugarExt
 
 
-class XSMPClient(_sugarext.SMClientXSMP):
+class XSMPClient(SugarExt.Client):
 
     def __init__(self):
-        _sugarext.SMClientXSMP.__init__(self)
+        SugarExt.Client.__init__(self)
 
 
 class SessionManager(object):
 
     def __init__(self):
-        address = _sugarext.xsmp_init()
+        address = SugarExt.xsmp_init()
         os.environ['SESSION_MANAGER'] = address
-        _sugarext.xsmp_run()
+        SugarExt.xsmp_run()
 
-        self.session = _sugarext.session_create_global()
+        self.session = SugarExt.Session.create_global()
 
     def start(self):
         self.session.start()
@@ -48,7 +48,7 @@ class SessionManager(object):
         self.session.initiate_shutdown()
 
     def shutdown_completed(self):
-        _sugarext.xsmp_shutdown()
+        SugarExt.xsmp_shutdown()
 
     def __shutdown_completed_cb(self, session):
         self.shutdown_completed()
