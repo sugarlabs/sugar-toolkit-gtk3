@@ -18,9 +18,9 @@
  */
 
 #include <X11/X.h>
-#include <gdk/gdkscreen.h>
-#include <gdk/gdkx.h>
+#include <X11/Xlib.h>
 #include <gdk/gdk.h>
+#include <gdk/gdkx.h>
 
 #include "sugar-key-grabber.h"
 #include "eggaccelerators.h"
@@ -160,11 +160,12 @@ sugar_key_grabber_init(SugarKeyGrabber *grabber)
 static void
 grab_key_real (Key *key, GdkWindow *root, gboolean grab, int result)
 {
+        Display *display = GDK_DISPLAY_XDISPLAY(gdk_display_get_default ());
         if (grab)
-                XGrabKey (GDK_DISPLAY(), key->keycode, (result | key->state),
+                XGrabKey (display, key->keycode, (result | key->state),
                                 GDK_WINDOW_XID (root), True, GrabModeAsync, GrabModeAsync);
         else
-                XUngrabKey(GDK_DISPLAY(), key->keycode, (result | key->state),
+                XUngrabKey(display, key->keycode, (result | key->state),
                                 GDK_WINDOW_XID (root));
 }
 
@@ -255,7 +256,7 @@ sugar_key_grabber_is_modifier(SugarKeyGrabber *grabber, guint keycode, guint mas
 	gint start, end, i, mod_index;
 	gboolean is_modifier = FALSE;
 
-	xdisplay = gdk_x11_drawable_get_xdisplay(GDK_DRAWABLE (grabber->root));
+	xdisplay = GDK_DISPLAY_XDISPLAY(gdk_display_get_default ());
 
 	modmap = XGetModifierMapping(xdisplay);
 

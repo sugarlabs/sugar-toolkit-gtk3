@@ -32,8 +32,8 @@
 
 #include <glib/gi18n.h>
 #include <gdk/gdk.h>
-#include <gtk/gtkwindow.h>
-#include <gdk/gdkx.h>
+#include <gtk/gtk.h>
+
 
 struct EggDesktopFile {
   GKeyFile           *key_file;
