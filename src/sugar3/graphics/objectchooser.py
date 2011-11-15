@@ -21,8 +21,8 @@ STABLE.
 
 import logging
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 import dbus
 
 from sugar3.datastore import datastore
@@ -39,7 +39,7 @@ class ObjectChooser(object):
                  what_filter=None):
         # For backwards compatibility:
         # - We ignore title, flags and buttons.
-        # - 'parent' can be a xid or a gtk.Window
+        # - 'parent' can be a xid or a Gtk.Window
 
         if title is not None or flags is not None or buttons is not None:
             logging.warning('Invocation of ObjectChooser() has deprecated '
@@ -57,13 +57,13 @@ class ObjectChooser(object):
         self._object_id = None
         self._bus = None
         self._chooser_id = None
-        self._response_code = gtk.RESPONSE_NONE
+        self._response_code = Gtk.ResponseType.NONE
         self._what_filter = what_filter
 
     def run(self):
         self._object_id = None
 
-        self._main_loop = gobject.MainLoop()
+        self._main_loop = GObject.MainLoop()
 
         self._bus = dbus.SessionBus(mainloop=self._main_loop)
         self._bus.add_signal_receiver(
@@ -86,11 +86,11 @@ class ObjectChooser(object):
 
         self._chooser_id = journal.ChooseObject(self._parent_xid, what_filter)
 
-        gtk.gdk.threads_leave()
+        Gdk.threads_leave()
         try:
             self._main_loop.run()
         finally:
-            gtk.gdk.threads_enter()
+            Gdk.threads_enter()
         self._main_loop = None
 
         return self._response_code
@@ -114,7 +114,7 @@ class ObjectChooser(object):
         if chooser_id != self._chooser_id:
             return
         logging.debug('ObjectChooser.__chooser_response_cb: %r', object_id)
-        self._response_code = gtk.RESPONSE_ACCEPT
+        self._response_code = Gtk.ResponseType.ACCEPT
         self._object_id = object_id
         self._cleanup()
 
@@ -122,11 +122,11 @@ class ObjectChooser(object):
         if chooser_id != self._chooser_id:
             return
         logging.debug('ObjectChooser.__chooser_cancelled_cb: %r', chooser_id)
-        self._response_code = gtk.RESPONSE_CANCEL
+        self._response_code = Gtk.ResponseType.CANCEL
         self._cleanup()
 
     def __name_owner_changed_cb(self, name, old, new):
         logging.debug('ObjectChooser.__name_owner_changed_cb')
         # Journal service disappeared from the bus
-        self._response_code = gtk.RESPONSE_CANCEL
+        self._response_code = Gtk.ResponseType.CANCEL
         self._cleanup()

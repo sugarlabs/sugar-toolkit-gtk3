@@ -15,21 +15,21 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.toolbutton import ToolButton
 
 
-class Test(gtk.VBox):
+class Test(Gtk.VBox):
     def __init__(self):
-        gtk.VBox.__init__(self)
+        GObject.GObject.__init__(self)
 
 
 class TestPalette(Test):
     def __init__(self):
         Test.__init__(self)
 
-        toolbar = gtk.Toolbar()
+        toolbar = Gtk.Toolbar()
 
         self._invoker = ToolButton('go-previous')
         toolbar.insert(self._invoker, -1)
@@ -44,8 +44,8 @@ class TestPalette(Test):
 
 class TestRunner(object):
     def run(self, test):
-        window = gtk.Window()
-        window.connect('destroy', lambda w: gtk.main_quit())
+        window = Gtk.Window()
+        window.connect('destroy', lambda w: Gtk.main_quit())
         window.add(test)
         test.show()
 
@@ -56,4 +56,4 @@ def main(test):
     runner = TestRunner()
     runner.run(test)
 
-    gtk.main()
+    Gtk.main()

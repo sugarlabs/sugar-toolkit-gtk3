@@ -19,7 +19,7 @@
 STABLE.
 """
 
-import gobject
+from gi.repository import GObject
 
 
 _groups = {}
@@ -40,15 +40,15 @@ def popdown_all():
         group.popdown()
 
 
-class Group(gobject.GObject):
+class Group(GObject.GObject):
 
     __gsignals__ = {
-        'popup': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'popdown': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'popup': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'popdown': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self._up = False
         self._palettes = []
         self._sig_ids = {}

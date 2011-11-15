@@ -23,9 +23,9 @@ STABLE.
 
 import logging
 
-import gobject
+from gi.repository import GObject
 import dbus
-import gconf
+from gi.repository import GConf
 from telepathy.interfaces import CONNECTION, \
                                  CONNECTION_INTERFACE_ALIASING, \
                                  CONNECTION_INTERFACE_CONTACTS
@@ -39,7 +39,7 @@ CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 _logger = logging.getLogger('sugar3.presence.buddy')
 
 
-class BaseBuddy(gobject.GObject):
+class BaseBuddy(GObject.GObject):
     """UI interface for a Buddy in the presence service
 
     Each buddy interface tracks a set of activities and properties
@@ -57,16 +57,16 @@ class BaseBuddy(gobject.GObject):
     __gtype_name__ = 'PresenceBaseBuddy'
 
     __gsignals__ = {
-        'joined-activity': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-            ([gobject.TYPE_PYOBJECT])),
-        'left-activity': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-            ([gobject.TYPE_PYOBJECT])),
-        'property-changed': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-            ([gobject.TYPE_PYOBJECT])),
+        'joined-activity': (GObject.SignalFlags.RUN_FIRST, None,
+            ([GObject.TYPE_PYOBJECT])),
+        'left-activity': (GObject.SignalFlags.RUN_FIRST, None,
+            ([GObject.TYPE_PYOBJECT])),
+        'property-changed': (GObject.SignalFlags.RUN_FIRST, None,
+            ([GObject.TYPE_PYOBJECT])),
     }
 
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._key = None
         self._nick = None
@@ -82,7 +82,7 @@ class BaseBuddy(gobject.GObject):
     def set_key(self, key):
         self._key = key
 
-    key = gobject.property(type=str, getter=get_key, setter=set_key)
+    key = GObject.property(type=str, getter=get_key, setter=set_key)
 
     def get_nick(self):
         return self._nick
@@ -90,7 +90,7 @@ class BaseBuddy(gobject.GObject):
     def set_nick(self, nick):
         self._nick = nick
 
-    nick = gobject.property(type=str, getter=get_nick, setter=set_nick)
+    nick = GObject.property(type=str, getter=get_nick, setter=set_nick)
 
     def get_color(self):
         return self._color
@@ -98,7 +98,7 @@ class BaseBuddy(gobject.GObject):
     def set_color(self, color):
         self._color = color
 
-    color = gobject.property(type=str, getter=get_color, setter=set_color)
+    color = GObject.property(type=str, getter=get_color, setter=set_color)
 
     def get_current_activity(self):
         if self._current_activity is None:
@@ -108,7 +108,7 @@ class BaseBuddy(gobject.GObject):
                 return activity
         return None
 
-    current_activity = gobject.property(type=object,
+    current_activity = GObject.property(type=object,
                                         getter=get_current_activity)
 
     def get_owner(self):
@@ -117,7 +117,7 @@ class BaseBuddy(gobject.GObject):
     def set_owner(self, owner):
         self._owner = owner
 
-    owner = gobject.property(type=bool, getter=get_owner, setter=set_owner,
+    owner = GObject.property(type=bool, getter=get_owner, setter=set_owner,
                              default=False)
 
     def get_ip4_address(self):
@@ -126,7 +126,7 @@ class BaseBuddy(gobject.GObject):
     def set_ip4_address(self, ip4_address):
         self._ip4_address = ip4_address
 
-    ip4_address = gobject.property(type=str, getter=get_ip4_address,
+    ip4_address = GObject.property(type=str, getter=get_ip4_address,
                                    setter=set_ip4_address)
 
     def get_tags(self):
@@ -135,7 +135,7 @@ class BaseBuddy(gobject.GObject):
     def set_tags(self, tags):
         self._tags = tags
 
-    tags = gobject.property(type=str, getter=get_tags, setter=set_tags)
+    tags = GObject.property(type=str, getter=get_tags, setter=set_tags)
 
     def object_path(self):
         """Retrieve our dbus object path"""
@@ -243,6 +243,6 @@ class Owner(BaseBuddy):
     def __init__(self):
         BaseBuddy.__init__(self)
 
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         self.props.nick = client.get_string('/desktop/sugar/user/nick')
         self.props.color = client.get_string('/desktop/sugar/user/color')

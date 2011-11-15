@@ -22,8 +22,8 @@ STABLE.
 
 import logging
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
@@ -31,21 +31,21 @@ from sugar3.graphics.palette import Palette, ToolInvoker
 
 def _add_accelerator(tool_button):
     if not tool_button.props.accelerator or not tool_button.get_toplevel() or \
-            not tool_button.child:
+            not tool_button.get_child():
         return
 
     # TODO: should we remove the accelerator from the prev top level?
 
     accel_group = tool_button.get_toplevel().get_data('sugar-accel-group')
     if not accel_group:
-        logging.warning('No gtk.AccelGroup in the top level window.')
+        logging.warning('No Gtk.AccelGroup in the top level window.')
         return
 
-    keyval, mask = gtk.accelerator_parse(tool_button.props.accelerator)
-    # the accelerator needs to be set at the child, so the gtk.AccelLabel
+    keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
+    # the accelerator needs to be set at the child, so the Gtk.AccelLabel
     # in the palette can pick it up.
-    tool_button.child.add_accelerator('clicked', accel_group, keyval, mask,
-                                      gtk.ACCEL_LOCKED | gtk.ACCEL_VISIBLE)
+    tool_button.get_child().add_accelerator('clicked', accel_group, keyval, mask,
+                                      Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE)
 
 
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
@@ -57,7 +57,7 @@ def setup_accelerator(tool_button):
     tool_button.connect('hierarchy-changed', _hierarchy_changed_cb)
 
 
-class ToolButton(gtk.ToolButton):
+class ToolButton(Gtk.ToolButton):
 
     __gtype_name__ = 'SugarToolButton'
 
@@ -66,7 +66,7 @@ class ToolButton(gtk.ToolButton):
         self._tooltip = None
         self._palette_invoker = ToolInvoker()
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
         self._palette_invoker.attach_tool(self)
 
@@ -97,12 +97,12 @@ class ToolButton(gtk.ToolButton):
         self._tooltip = tooltip
 
         # Set label, shows up when toolbar overflows
-        gtk.ToolButton.set_label(self, tooltip)
+        Gtk.ToolButton.set_label(self, tooltip)
 
     def get_tooltip(self):
         return self._tooltip
 
-    tooltip = gobject.property(type=str, setter=set_tooltip,
+    tooltip = GObject.property(type=str, setter=set_tooltip,
         getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
@@ -112,7 +112,7 @@ class ToolButton(gtk.ToolButton):
     def get_accelerator(self):
         return self._accelerator
 
-    accelerator = gobject.property(type=str, setter=set_accelerator,
+    accelerator = GObject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)
 
     def set_icon(self, icon_name):
@@ -129,7 +129,7 @@ class ToolButton(gtk.ToolButton):
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
 
-    palette = gobject.property(
+    palette = GObject.property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_palette_invoker(self):
@@ -139,7 +139,7 @@ class ToolButton(gtk.ToolButton):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = gobject.property(
+    palette_invoker = GObject.property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_expose_event(self, event):
@@ -148,14 +148,14 @@ class ToolButton(gtk.ToolButton):
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker
             invoker.draw_rectangle(event, self.palette)
-        elif child.state == gtk.STATE_PRELIGHT:
-            child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
-                                  gtk.SHADOW_NONE, event.area,
+        elif child.state == Gtk.StateType.PRELIGHT:
+            child.style.paint_box(event.window, Gtk.StateType.PRELIGHT,
+                                  Gtk.ShadowType.NONE, event.area,
                                   child, 'toolbutton-prelight',
                                   allocation.x, allocation.y,
                                   allocation.width, allocation.height)
 
-        gtk.ToolButton.do_expose_event(self, event)
+        Gtk.ToolButton.do_expose_event(self, event)
 
     def do_clicked(self):
         if self.palette:

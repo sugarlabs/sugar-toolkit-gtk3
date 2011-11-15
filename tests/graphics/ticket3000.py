@@ -19,7 +19,7 @@
 Spec in ticket #3000.
 """
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.toolbutton import ToolButton
 
@@ -27,7 +27,7 @@ import common
 
 test = common.Test()
 
-toolbar = gtk.Toolbar()
+toolbar = Gtk.Toolbar()
 test.pack_start(toolbar, False)
 toolbar.show()
 
@@ -35,7 +35,7 @@ button = ToolButton('go-previous')
 toolbar.insert(button, -1)
 button.show()
 
-separator = gtk.SeparatorToolItem()
+separator = Gtk.SeparatorToolItem()
 toolbar.add(separator)
 separator.show()
 

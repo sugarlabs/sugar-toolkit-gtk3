@@ -19,8 +19,8 @@
 STABLE.
 """
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from sugar3.graphics import style
 from sugar3.graphics.palette import ToolInvoker
@@ -32,12 +32,12 @@ _PREVIOUS_PAGE = 0
 _NEXT_PAGE = 1
 
 
-class _TrayViewport(gtk.Viewport):
+class _TrayViewport(Gtk.Viewport):
 
     __gproperties__ = {
-        'scrollable': (bool, None, None, False, gobject.PARAM_READABLE),
-        'can-scroll-prev': (bool, None, None, False, gobject.PARAM_READABLE),
-        'can-scroll-next': (bool, None, None, False, gobject.PARAM_READABLE),
+        'scrollable': (bool, None, None, False, GObject.PARAM_READABLE),
+        'can-scroll-prev': (bool, None, None, False, GObject.PARAM_READABLE),
+        'can-scroll-next': (bool, None, None, False, GObject.PARAM_READABLE),
     }
 
     def __init__(self, orientation):
@@ -46,11 +46,11 @@ class _TrayViewport(gtk.Viewport):
         self._can_scroll_next = False
         self._can_scroll_prev = False
 
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
-        self.set_shadow_type(gtk.SHADOW_NONE)
+        self.set_shadow_type(Gtk.ShadowType.NONE)
 
-        self.traybar = gtk.Toolbar()
+        self.traybar = Gtk.Toolbar()
         self.traybar.set_orientation(orientation)
         self.traybar.set_show_arrow(False)
         self.add(self.traybar)
@@ -58,7 +58,7 @@ class _TrayViewport(gtk.Viewport):
 
         self.connect('size_allocate', self._size_allocate_cb)
 
-        if self.orientation == gtk.ORIENTATION_HORIZONTAL:
+        if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
         else:
             adj = self.get_vadjustment()
@@ -76,7 +76,7 @@ class _TrayViewport(gtk.Viewport):
         assert item in self.traybar.get_children()
 
         # Get the allocation, and make sure that it is visible
-        if self.orientation == gtk.ORIENTATION_HORIZONTAL:
+        if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
             start = item.allocation.x
             stop = item.allocation.x + item.allocation.width
@@ -92,7 +92,7 @@ class _TrayViewport(gtk.Viewport):
 
     def _scroll_next(self):
         allocation = self.get_allocation()
-        if self.orientation == gtk.ORIENTATION_HORIZONTAL:
+        if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
             new_value = adj.value + allocation.width
             adj.value = min(new_value, adj.upper - allocation.width)
@@ -103,7 +103,7 @@ class _TrayViewport(gtk.Viewport):
 
     def _scroll_previous(self):
         allocation = self.get_allocation()
-        if self.orientation == gtk.ORIENTATION_HORIZONTAL:
+        if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
             new_value = adj.value - allocation.width
             adj.value = max(adj.lower, new_value)
@@ -114,7 +114,7 @@ class _TrayViewport(gtk.Viewport):
 
     def do_size_request(self, requisition):
         child_requisition = self.get_child().size_request()
-        if self.orientation == gtk.ORIENTATION_HORIZONTAL:
+        if self.orientation == Gtk.Orientation.HORIZONTAL:
             requisition[0] = 0
             requisition[1] = child_requisition[1]
         else:
@@ -131,7 +131,7 @@ class _TrayViewport(gtk.Viewport):
 
     def _size_allocate_cb(self, viewport, allocation):
         bar_requisition = self.traybar.get_child_requisition()
-        if self.orientation == gtk.ORIENTATION_HORIZONTAL:
+        if self.orientation == Gtk.Orientation.HORIZONTAL:
             scrollable = bar_requisition[0] > allocation.width
         else:
             scrollable = bar_requisition[1] > allocation.height
@@ -171,10 +171,10 @@ class _TrayScrollButton(ToolButton):
         self.set_size_request(style.GRID_CELL_SIZE, style.GRID_CELL_SIZE)
 
         self.icon = Icon(icon_name=icon_name,
-                         icon_size=gtk.ICON_SIZE_SMALL_TOOLBAR)
-        # The alignment is a hack to work around gtk.ToolButton code
-        # that sets the icon_size when the icon_widget is a gtk.Image
-        alignment = gtk.Alignment(0.5, 0.5)
+                         icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+        # The alignment is a hack to work around Gtk.ToolButton code
+        # that sets the icon_size when the icon_widget is a Gtk.Image
+        alignment = Gtk.Alignment.new(0.5, 0.5)
         alignment.add(self.icon)
         self.set_icon_widget(alignment)
         alignment.show_all()
@@ -216,27 +216,27 @@ ALIGN_TO_START = 0
 ALIGN_TO_END = 1
 
 
-class HTray(gtk.HBox):
+class HTray(Gtk.HBox):
 
     __gtype_name__ = 'SugarHTray'
 
     __gproperties__ = {
         'align': (int, None, None, 0, 1, ALIGN_TO_START,
-            gobject.PARAM_READWRITE | gobject.PARAM_CONSTRUCT_ONLY),
-        'drag-active': (bool, None, None, False, gobject.PARAM_READWRITE),
+            GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
+        'drag-active': (bool, None, None, False, GObject.PARAM_READWRITE),
     }
 
     def __init__(self, **kwargs):
         self._drag_active = False
         self.align = ALIGN_TO_START
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
         scroll_left = _TrayScrollButton('go-left', _PREVIOUS_PAGE)
         self.pack_start(scroll_left, False, False, 0)
 
-        self._viewport = _TrayViewport(gtk.ORIENTATION_HORIZONTAL)
-        self.pack_start(self._viewport)
+        self._viewport = _TrayViewport(Gtk.Orientation.HORIZONTAL)
+        self.pack_start(self._viewport, True, True, 0)
         self._viewport.show()
 
         scroll_right = _TrayScrollButton('go-right', _NEXT_PAGE)
@@ -246,7 +246,7 @@ class HTray(gtk.HBox):
         scroll_right.viewport = self._viewport
 
         if self.align == ALIGN_TO_END:
-            spacer = gtk.SeparatorToolItem()
+            spacer = Gtk.SeparatorToolItem()
             spacer.set_size_request(0, 0)
             spacer.props.draw = False
             spacer.set_expand(True)
@@ -273,10 +273,10 @@ class HTray(gtk.HBox):
         if self._drag_active != active:
             self._drag_active = active
             if self._drag_active:
-                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL,
+                self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL,
                         style.COLOR_BLACK.get_gdk_color())
             else:
-                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL, None)
+                self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL, None)
 
     def get_children(self):
         children = self._viewport.traybar.get_children()[:]
@@ -302,27 +302,27 @@ class HTray(gtk.HBox):
         self._viewport.scroll_to_item(item)
 
 
-class VTray(gtk.VBox):
+class VTray(Gtk.VBox):
 
     __gtype_name__ = 'SugarVTray'
 
     __gproperties__ = {
         'align': (int, None, None, 0, 1, ALIGN_TO_START,
-            gobject.PARAM_READWRITE | gobject.PARAM_CONSTRUCT_ONLY),
-        'drag-active': (bool, None, None, False, gobject.PARAM_READWRITE),
+            GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
+        'drag-active': (bool, None, None, False, GObject.PARAM_READWRITE),
     }
 
     def __init__(self, **kwargs):
         self._drag_active = False
         self.align = ALIGN_TO_START
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
         scroll_up = _TrayScrollButton('go-up', _PREVIOUS_PAGE)
         self.pack_start(scroll_up, False, False, 0)
 
-        self._viewport = _TrayViewport(gtk.ORIENTATION_VERTICAL)
-        self.pack_start(self._viewport)
+        self._viewport = _TrayViewport(Gtk.Orientation.VERTICAL)
+        self.pack_start(self._viewport, True, True, 0)
         self._viewport.show()
 
         scroll_down = _TrayScrollButton('go-down', _NEXT_PAGE)
@@ -332,7 +332,7 @@ class VTray(gtk.VBox):
         scroll_down.viewport = self._viewport
 
         if self.align == ALIGN_TO_END:
-            spacer = gtk.SeparatorToolItem()
+            spacer = Gtk.SeparatorToolItem()
             spacer.set_size_request(0, 0)
             spacer.props.draw = False
             spacer.set_expand(True)
@@ -359,10 +359,10 @@ class VTray(gtk.VBox):
         if self._drag_active != active:
             self._drag_active = active
             if self._drag_active:
-                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL,
+                self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL,
                         style.COLOR_BLACK.get_gdk_color())
             else:
-                self._viewport.traybar.modify_bg(gtk.STATE_NORMAL, None)
+                self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL, None)
 
     def get_children(self):
         children = self._viewport.traybar.get_children()[:]
@@ -394,17 +394,17 @@ class TrayButton(ToolButton):
         ToolButton.__init__(self, **kwargs)
 
 
-class _IconWidget(gtk.EventBox):
+class _IconWidget(Gtk.EventBox):
 
     __gtype_name__ = 'SugarTrayIconWidget'
 
     def __init__(self, icon_name=None, xo_color=None):
-        gtk.EventBox.__init__(self)
+        GObject.GObject.__init__(self)
 
         self.set_app_paintable(True)
 
         self._icon = Icon(icon_name=icon_name, xo_color=xo_color,
-                          icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR)
+                          icon_size=Gtk.IconSize.LARGE_TOOLBAR)
         self.add(self._icon)
         self._icon.show()
 
@@ -414,18 +414,18 @@ class _IconWidget(gtk.EventBox):
             invoker = palette.props.invoker
             invoker.draw_rectangle(event, palette)
 
-        gtk.EventBox.do_expose_event(self, event)
+        Gtk.EventBox.do_expose_event(self, event)
 
     def get_icon(self):
         return self._icon
 
 
-class TrayIcon(gtk.ToolItem):
+class TrayIcon(Gtk.ToolItem):
 
     __gtype_name__ = 'SugarTrayIcon'
 
     def __init__(self, icon_name=None, xo_color=None):
-        gtk.ToolItem.__init__(self)
+        Gtk.ToolItem.__init__(self)
 
         self._icon_widget = _IconWidget(icon_name, xo_color)
         self.add(self._icon_widget)
@@ -450,7 +450,7 @@ class TrayIcon(gtk.ToolItem):
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
 
-    palette = gobject.property(
+    palette = GObject.property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_palette_invoker(self):
@@ -460,7 +460,7 @@ class TrayIcon(gtk.ToolItem):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = gobject.property(
+    palette_invoker = GObject.property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def get_icon(self):

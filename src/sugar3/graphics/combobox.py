@@ -19,24 +19,24 @@
 STABLE.
 """
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 
-class ComboBox(gtk.ComboBox):
+class ComboBox(Gtk.ComboBox):
 
     __gtype_name__ = 'SugarComboBox'
 
     def __init__(self):
-        gtk.ComboBox.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._text_renderer = None
         self._icon_renderer = None
 
-        self._model = gtk.ListStore(gobject.TYPE_PYOBJECT,
-                                    gobject.TYPE_STRING,
-                                    gtk.gdk.Pixbuf,
-                                    gobject.TYPE_BOOLEAN)
+        self._model = Gtk.ListStore(GObject.TYPE_PYOBJECT,
+                                    GObject.TYPE_STRING,
+                                    GdkPixbuf.Pixbuf,
+                                    GObject.TYPE_BOOLEAN)
         self.set_model(self._model)
 
         self.set_row_separator_func(self._is_separator, None)
@@ -57,12 +57,12 @@ class ComboBox(gtk.ComboBox):
             return None
         return row[0]
 
-    value = gobject.property(
+    value = GObject.property(
         type=object, getter=get_value, setter=None)
 
     def _get_real_name_from_theme(self, name, size):
-        icon_theme = gtk.icon_theme_get_default()
-        width, height = gtk.icon_size_lookup(size)
+        icon_theme = Gtk.IconTheme.get_default()
+        width, height = Gtk.icon_size_lookup(size)
         info = icon_theme.lookup_icon(name, max(width, height), 0)
         if not info:
             raise ValueError('Icon %r not found.' % name)
@@ -88,32 +88,32 @@ class ComboBox(gtk.ComboBox):
 
         """
         if not self._icon_renderer and (icon_name or file_name):
-            self._icon_renderer = gtk.CellRendererPixbuf()
+            self._icon_renderer = Gtk.CellRendererPixbuf()
 
             settings = self.get_settings()
-            w, h = gtk.icon_size_lookup_for_settings(
-                                            settings, gtk.ICON_SIZE_MENU)
+            w, h = Gtk.icon_size_lookup_for_settings(
+                                            settings, Gtk.IconSize.MENU)
             self._icon_renderer.props.stock_size = max(w, h)
 
             self.pack_start(self._icon_renderer, False)
             self.add_attribute(self._icon_renderer, 'pixbuf', 2)
 
         if not self._text_renderer and text:
-            self._text_renderer = gtk.CellRendererText()
+            self._text_renderer = Gtk.CellRendererText()
             self.pack_end(self._text_renderer, True)
             self.add_attribute(self._text_renderer, 'text', 1)
 
         if icon_name or file_name:
             if text:
-                size = gtk.ICON_SIZE_MENU
+                size = Gtk.IconSize.MENU
             else:
-                size = gtk.ICON_SIZE_LARGE_TOOLBAR
-            width, height = gtk.icon_size_lookup(size)
+                size = Gtk.IconSize.LARGE_TOOLBAR
+            width, height = Gtk.icon_size_lookup(size)
 
             if icon_name:
                 file_name = self._get_real_name_from_theme(icon_name, size)
 
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
                                                 file_name, width, height)
         else:
             pixbuf = None

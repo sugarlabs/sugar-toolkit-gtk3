@@ -21,7 +21,7 @@ contains only an icon and should be rendered similarly to the toolbar
 controls. Ticket #2855.
 """
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.palette import Palette
 from sugar3.graphics.icon import Icon
@@ -33,19 +33,19 @@ test = common.TestPalette()
 palette = Palette('Test radio and toggle')
 test.set_palette(palette)
 
-box = gtk.HBox()
+box = Gtk.HBox()
 
-toggle = gtk.ToggleButton()
+toggle = Gtk.ToggleButton()
 
-icon = Icon(icon_name='go-previous', icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR)
+icon = Icon(icon_name='go-previous', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 toggle.set_image(icon)
 
 box.pack_start(toggle, False)
 toggle.show()
 
-radio = gtk.RadioButton()
+radio = Gtk.RadioButton()
 
-icon = Icon(icon_name='go-next', icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR)
+icon = Icon(icon_name='go-next', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
 radio.set_image(icon)
 
 radio.set_mode(False)

@@ -20,7 +20,7 @@
 DEPRECATED. We are using GConf now to store preferences.
 """
 
-import gconf
+from gi.repository import GConf
 import os
 import logging
 from ConfigParser import ConfigParser
@@ -68,7 +68,7 @@ class Profile(object):
     privkey_hash = property(fget=_get_privkey_hash)
 
     def is_valid(self):
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         nick = client.get_string('/desktop/sugar/user/nick')
         color = client.get_string('/desktop/sugar/user/color')
 
@@ -140,7 +140,7 @@ class Profile(object):
         path = os.path.join(env.get_profile_path(), 'config')
         cp.read([path])
 
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
 
         if cp.has_option('Buddy', 'NickName'):
             name = cp.get('Buddy', 'NickName')
@@ -224,12 +224,12 @@ def get_profile():
 
 
 def get_nick_name():
-    client = gconf.client_get_default()
+    client = GConf.Client.get_default()
     return client.get_string('/desktop/sugar/user/nick')
 
 
 def get_color():
-    client = gconf.client_get_default()
+    client = GConf.Client.get_default()
     color = client.get_string('/desktop/sugar/user/color')
     return XoColor(color)
 

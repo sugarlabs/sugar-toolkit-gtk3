@@ -15,10 +15,10 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-from gtk import gdk
-import gtk
+from gi.repository import Gdk
+from gi.repository import Gtk
 import gettext
-import gconf
+from gi.repository import GConf
 import logging
 
 from sugar3.graphics.toolbutton import ToolButton
@@ -38,7 +38,7 @@ def _create_activity_icon(metadata):
     if metadata is not None and metadata.get('icon-color'):
         color = XoColor(metadata['icon-color'])
     else:
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         color = XoColor(client.get_string('/desktop/sugar/user/color'))
 
     from sugar3.activity.activity import get_bundle_path
@@ -173,7 +173,7 @@ class KeepButton(ToolButton):
         self.props.tooltip = _('Keep')
         self.props.accelerator = '<Ctrl>S'
 
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         color = XoColor(client.get_string('/desktop/sugar/user/color'))
         keep_icon = Icon(icon_name='document-save', xo_color=color)
         keep_icon.show()
@@ -185,14 +185,14 @@ class KeepButton(ToolButton):
         activity.copy()
 
 
-class TitleEntry(gtk.ToolItem):
+class TitleEntry(Gtk.ToolItem):
 
     def __init__(self, activity, **kwargs):
-        gtk.ToolItem.__init__(self)
+        Gtk.ToolItem.__init__(self)
         self.set_expand(False)
 
-        self.entry = gtk.Entry(**kwargs)
-        self.entry.set_size_request(int(gtk.gdk.screen_width() / 3), -1)
+        self.entry = Gtk.Entry(**kwargs)
+        self.entry.set_size_request(int(Gdk.Screen.width() / 3), -1)
         self.entry.set_text(activity.metadata['title'])
         self.entry.connect('focus-out-event', self.__title_changed_cb, activity)
         self.entry.show()
@@ -202,11 +202,11 @@ class TitleEntry(gtk.ToolItem):
         activity.connect('_closing', self.__closing_cb)
 
     def modify_bg(self, state, color):
-        gtk.ToolItem.modify_bg(self, state, color)
+        Gtk.ToolItem.modify_bg(self, state, color)
         self.entry.modify_bg(state, color)
 
     def __jobject_updated_cb(self, jobject):
-        if self.entry.flags() & gtk.HAS_FOCUS:
+        if self.entry.has_focus():
             return
         if self.entry.get_text() == jobject['title']:
             return
@@ -236,7 +236,7 @@ class TitleEntry(gtk.ToolItem):
             shared_activity.props.name = title
 
 
-class ActivityToolbar(gtk.Toolbar):
+class ActivityToolbar(Gtk.Toolbar):
     """The Activity toolbar with the Journal entry title, sharing
        and Stop buttons
 
@@ -245,7 +245,7 @@ class ActivityToolbar(gtk.Toolbar):
     """
 
     def __init__(self, activity, orientation_left=False):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         self._activity = activity
 
@@ -256,7 +256,7 @@ class ActivityToolbar(gtk.Toolbar):
             self.title = title_button.entry
 
         if orientation_left == False:
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
             self.insert(separator, -1)
@@ -274,7 +274,7 @@ class ActivityToolbar(gtk.Toolbar):
         self.stop.show()
 
 
-class EditToolbar(gtk.Toolbar):
+class EditToolbar(Gtk.Toolbar):
     """Provides the standard edit toolbar for Activities.
 
     Members:
@@ -309,7 +309,7 @@ class EditToolbar(gtk.Toolbar):
     """
 
     def __init__(self):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
         self.undo = UndoButton()
         self.insert(self.undo, -1)
@@ -319,7 +319,7 @@ class EditToolbar(gtk.Toolbar):
         self.insert(self.redo, -1)
         self.redo.show()
 
-        self.separator = gtk.SeparatorToolItem()
+        self.separator = Gtk.SeparatorToolItem()
         self.separator.set_draw(True)
         self.insert(self.separator, -1)
         self.separator.show()

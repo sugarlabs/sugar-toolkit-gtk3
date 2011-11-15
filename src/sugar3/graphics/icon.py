@@ -25,8 +25,8 @@ import re
 import math
 import logging
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 import cairo
 
 from sugar3.graphics.xocolor import XoColor
@@ -120,11 +120,11 @@ class _IconBuffer(object):
         return self._loader.load(file_name, entities, self.cache)
 
     def _get_attach_points(self, info, size_request):
-        attach_points = info.get_attach_points()
+        return 0,0;has_attach_points_, attach_points = info.get_attach_points()
 
         if attach_points:
-            attach_x = float(attach_points[0][0]) / size_request
-            attach_y = float(attach_points[0][1]) / size_request
+            attach_x = float(attach_points[0].x) / size_request
+            attach_y = float(attach_points[0].y) / size_request
         else:
             attach_x = attach_y = 0
 
@@ -136,7 +136,7 @@ class _IconBuffer(object):
         if self.file_name:
             icon_info.file_name = self.file_name
         elif self.icon_name:
-            theme = gtk.icon_theme_get_default()
+            theme = Gtk.IconTheme.get_default()
 
             size = 50
             if self.width != None:
@@ -158,7 +158,7 @@ class _IconBuffer(object):
         return icon_info
 
     def _draw_badge(self, context, size, sensitive, widget):
-        theme = gtk.icon_theme_get_default()
+        theme = Gtk.IconTheme.get_default()
         badge_info = theme.lookup_icon(self.badge_name, int(size), 0)
         if badge_info:
             badge_file_name = badge_info.get_filename()
@@ -171,7 +171,7 @@ class _IconBuffer(object):
 
                 pixbuf = handle.get_pixbuf()
             else:
-                pixbuf = gtk.gdk.pixbuf_new_from_file(badge_file_name)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(badge_file_name)
 
                 icon_width = pixbuf.get_width()
                 icon_height = pixbuf.get_height()
@@ -231,16 +231,16 @@ class _IconBuffer(object):
         if not (widget and widget.style):
             return pixbuf
 
-        icon_source = gtk.IconSource()
+        icon_source = Gtk.IconSource()
         # Special size meaning "don't touch"
         icon_source.set_size(-1)
         icon_source.set_pixbuf(pixbuf)
-        icon_source.set_state(gtk.STATE_INSENSITIVE)
+        icon_source.set_state(Gtk.StateType.INSENSITIVE)
         icon_source.set_direction_wildcarded(False)
         icon_source.set_size_wildcarded(False)
 
         pixbuf = widget.style.render_icon(icon_source, widget.get_direction(),
-                                          gtk.STATE_INSENSITIVE, -1, widget,
+                                          Gtk.StateType.INSENSITIVE, -1, widget,
                                           'sugar-icon')
 
         return pixbuf
@@ -262,7 +262,7 @@ class _IconBuffer(object):
             icon_width = int(dimensions[0])
             icon_height = int(dimensions[1])
         else:
-            pixbuf = gtk.gdk.pixbuf_new_from_file(icon_info.file_name)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.file_name)
             icon_width = pixbuf.get_width()
             icon_height = pixbuf.get_height()
 
@@ -278,7 +278,7 @@ class _IconBuffer(object):
             surface = cairo.ImageSurface(cairo.FORMAT_RGB24, int(width),
                                          int(height))
             context = cairo.Context(surface)
-            context = gtk.gdk.CairoContext(context)
+            context = Gdk.CairoContext(context)
             context.set_source_color(self.background_color)
             context.paint()
 
@@ -314,7 +314,7 @@ class _IconBuffer(object):
     xo_color = property(_get_xo_color, _set_xo_color)
 
 
-class Icon(gtk.Image):
+class Icon(Gtk.Image):
 
     __gtype_name__ = 'SugarIcon'
 
@@ -327,7 +327,7 @@ class Icon(gtk.Image):
         self._alpha = 1.0
         self._scale = 1.0
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
     def get_file(self):
         return self._file
@@ -336,7 +336,7 @@ class Icon(gtk.Image):
         self._file = file_name
         self._buffer.file_name = file_name
 
-    file = gobject.property(type=object, setter=set_file, getter=get_file)
+    file = GObject.property(type=object, setter=set_file, getter=get_file)
 
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
@@ -346,7 +346,7 @@ class Icon(gtk.Image):
             self._buffer.file_name = self.props.file
 
         if self.props.pixel_size == -1:
-            width, height = gtk.icon_size_lookup(self.props.icon_size)
+            width, height = Gtk.icon_size_lookup(self.props.icon_size)
         else:
             width = height = self.props.pixel_size
         if self._buffer.width != width or self._buffer.height != height:
@@ -396,7 +396,7 @@ class Icon(gtk.Image):
 
         """
         self._sync_image_properties()
-        sensitive = (self.state != gtk.STATE_INSENSITIVE)
+        sensitive = (self.is_sensitive())
         surface = self._buffer.get_surface(sensitive, self)
         if surface is None:
             return
@@ -404,7 +404,7 @@ class Icon(gtk.Image):
         xpad, ypad = self.get_padding()
         xalign, yalign = self.get_alignment()
         requisition = self.get_child_requisition()
-        if self.get_direction() != gtk.TEXT_DIR_LTR:
+        if self.get_direction() != Gtk.TextDirection.LTR:
             xalign = 1.0 - xalign
 
         allocation = self.get_allocation()
@@ -413,7 +413,7 @@ class Icon(gtk.Image):
         y = math.floor(allocation.y + ypad +
             (allocation.height - requisition[1]) * yalign)
 
-        cr = self.window.cairo_create()
+        cr = self.get_window().cairo_create()
 
         if self._scale != 1.0:
             cr.scale(self._scale, self._scale)
@@ -446,7 +446,7 @@ class Icon(gtk.Image):
             self._buffer.xo_color = value
             self.queue_draw()
 
-    xo_color = gobject.property(
+    xo_color = GObject.property(
         type=object, getter=None, setter=set_xo_color)
 
     def set_fill_color(self, value):
@@ -477,7 +477,7 @@ class Icon(gtk.Image):
         """
         return self._buffer.fill_color
 
-    fill_color = gobject.property(
+    fill_color = GObject.property(
         type=object, getter=get_fill_color, setter=set_fill_color)
 
     def set_stroke_color(self, value):
@@ -508,7 +508,7 @@ class Icon(gtk.Image):
         """
         return self._buffer.stroke_color
 
-    stroke_color = gobject.property(
+    stroke_color = GObject.property(
         type=object, getter=get_stroke_color, setter=set_stroke_color)
 
     def set_badge_name(self, value):
@@ -529,7 +529,7 @@ class Icon(gtk.Image):
     def get_badge_name(self):
         return self._buffer.badge_name
 
-    badge_name = gobject.property(
+    badge_name = GObject.property(
         type=str, getter=get_badge_name, setter=set_badge_name)
 
     def set_alpha(self, value):
@@ -537,7 +537,7 @@ class Icon(gtk.Image):
             self._alpha = value
             self.queue_draw()
 
-    alpha = gobject.property(
+    alpha = GObject.property(
         type=float, setter=set_alpha)
 
     def set_scale(self, value):
@@ -545,16 +545,16 @@ class Icon(gtk.Image):
             self._scale = value
             self.queue_draw()
 
-    scale = gobject.property(
+    scale = GObject.property(
         type=float, setter=set_scale)
 
 
-class CellRendererIcon(gtk.GenericCellRenderer):
+class CellRendererIcon(Gtk.CellRenderer):
 
     __gtype_name__ = 'SugarCellRendererIcon'
 
     __gsignals__ = {
-        'clicked': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [object]),
+        'clicked': (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
     def __init__(self, tree_view):
@@ -569,7 +569,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         self._prelit_stroke_color = None
         self._palette_invoker = CellRendererInvoker()
 
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._palette_invoker.attach_cell_renderer(tree_view, self)
 
@@ -584,19 +584,19 @@ class CellRendererIcon(gtk.GenericCellRenderer):
     def get_palette_invoker(self):
         return self._palette_invoker
 
-    palette_invoker = gobject.property(type=object, getter=get_palette_invoker)
+    palette_invoker = GObject.property(type=object, getter=get_palette_invoker)
 
     def set_file_name(self, value):
         if self._buffer.file_name != value:
             self._buffer.file_name = value
 
-    file_name = gobject.property(type=str, setter=set_file_name)
+    file_name = GObject.property(type=str, setter=set_file_name)
 
     def set_icon_name(self, value):
         if self._buffer.icon_name != value:
             self._buffer.icon_name = value
 
-    icon_name = gobject.property(type=str, setter=set_icon_name)
+    icon_name = GObject.property(type=str, setter=set_icon_name)
 
     def get_xo_color(self):
         return self._xo_color
@@ -604,40 +604,40 @@ class CellRendererIcon(gtk.GenericCellRenderer):
     def set_xo_color(self, value):
         self._xo_color = value
 
-    xo_color = gobject.property(type=object,
+    xo_color = GObject.property(type=object,
             getter=get_xo_color, setter=set_xo_color)
 
     def set_fill_color(self, value):
         if self._fill_color != value:
             self._fill_color = value
 
-    fill_color = gobject.property(type=object, setter=set_fill_color)
+    fill_color = GObject.property(type=object, setter=set_fill_color)
 
     def set_stroke_color(self, value):
         if self._stroke_color != value:
             self._stroke_color = value
 
-    stroke_color = gobject.property(type=object, setter=set_stroke_color)
+    stroke_color = GObject.property(type=object, setter=set_stroke_color)
 
     def set_prelit_fill_color(self, value):
         if self._prelit_fill_color != value:
             self._prelit_fill_color = value
 
-    prelit_fill_color = gobject.property(type=object,
+    prelit_fill_color = GObject.property(type=object,
                                          setter=set_prelit_fill_color)
 
     def set_prelit_stroke_color(self, value):
         if self._prelit_stroke_color != value:
             self._prelit_stroke_color = value
 
-    prelit_stroke_color = gobject.property(type=object,
+    prelit_stroke_color = GObject.property(type=object,
                                            setter=set_prelit_stroke_color)
 
     def set_background_color(self, value):
         if self._buffer.background_color != value:
             self._buffer.background_color = value
 
-    background_color = gobject.property(type=object,
+    background_color = GObject.property(type=object,
                                         setter=set_background_color)
 
     def set_size(self, value):
@@ -645,7 +645,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
             self._buffer.width = value
             self._buffer.height = value
 
-    size = gobject.property(type=object, setter=set_size)
+    size = GObject.property(type=object, setter=set_size)
 
     def on_get_size(self, widget, cell_area):
         width = self._buffer.width + self.props.xpad * 2
@@ -655,7 +655,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
 
         if width > 0 and height > 0 and cell_area is not None:
 
-            if widget.get_direction() == gtk.TEXT_DIR_RTL:
+            if widget.get_direction() == Gtk.TextDirection.RTL:
                 xoffset = 1.0 - self.props.xalign
             else:
                 xoffset = self.props.xalign
@@ -707,7 +707,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
         has_prelit_colors = None not in [prelit_fill_color,
                                          prelit_stroke_color]
 
-        if flags & gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
+        if flags & Gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
                 self._is_prelit(widget):
 
             self._buffer.fill_color = prelit_fill_color
@@ -733,7 +733,7 @@ class CellRendererIcon(gtk.GenericCellRenderer):
 
 def get_icon_state(base_name, perc, step=5):
     strength = round(perc / step) * step
-    icon_theme = gtk.icon_theme_get_default()
+    icon_theme = Gtk.IconTheme.get_default()
 
     while strength <= 100 and strength >= 0:
         icon_name = '%s-%03d' % (base_name, strength)
@@ -744,8 +744,8 @@ def get_icon_state(base_name, perc, step=5):
 
 
 def get_icon_file_name(icon_name):
-    icon_theme = gtk.icon_theme_get_default()
-    info = icon_theme.lookup_icon(icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR, 0)
+    icon_theme = Gtk.IconTheme.get_default()
+    info = icon_theme.lookup_icon(icon_name, Gtk.IconSize.LARGE_TOOLBAR, 0)
     if not info:
         return None
     filename = info.get_filename()
