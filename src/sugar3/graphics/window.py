@@ -21,6 +21,7 @@ STABLE.
 """
 
 import gobject
+from gtk import gdk
 import gtk
 import warnings
 

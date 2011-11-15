@@ -23,6 +23,7 @@ STABLE.
 
 import logging
 
+from gtk import gdk
 import gtk
 import gobject
 

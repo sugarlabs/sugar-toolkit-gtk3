@@ -20,6 +20,7 @@ UNSTABLE. Used only internally by Activity and jarabe.
 """
 
 import gtk
+from gtk import gdk
 import logging
 
 
