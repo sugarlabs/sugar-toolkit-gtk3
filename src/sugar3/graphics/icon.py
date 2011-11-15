@@ -181,7 +181,7 @@ class _IconBuffer(object):
 
             if not sensitive:
                 pixbuf = self._get_insensitive_pixbuf(pixbuf, widget)
-            context.set_source_pixbuf(pixbuf, 0, 0)
+            Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
             context.paint()
 
     def _get_size(self, icon_width, icon_height, padding):
@@ -294,12 +294,12 @@ class _IconBuffer(object):
                 pixbuf = handle.get_pixbuf()
                 pixbuf = self._get_insensitive_pixbuf(pixbuf, widget)
 
-                context.set_source_pixbuf(pixbuf, 0, 0)
+                Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
                 context.paint()
         else:
             if not sensitive:
                 pixbuf = self._get_insensitive_pixbuf(pixbuf, widget)
-            context.set_source_pixbuf(pixbuf, 0, 0)
+            Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
             context.paint()
 
         if self.badge_name:
