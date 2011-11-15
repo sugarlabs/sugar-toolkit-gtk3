@@ -228,7 +228,7 @@ class _IconBuffer(object):
             self.fill_color = None
 
     def _get_insensitive_pixbuf(self, pixbuf, widget):
-        if not (widget and widget.style):
+        if not (widget and widget.get_style()):
             return pixbuf
 
         icon_source = Gtk.IconSource()
@@ -239,9 +239,10 @@ class _IconBuffer(object):
         icon_source.set_direction_wildcarded(False)
         icon_source.set_size_wildcarded(False)
 
-        pixbuf = widget.style.render_icon(icon_source, widget.get_direction(),
-                                          Gtk.StateType.INSENSITIVE, -1, widget,
-                                          'sugar-icon')
+        style = widget.get_style()
+        pixbuf = style.render_icon(icon_source, widget.get_direction(),
+                                   Gtk.StateType.INSENSITIVE, -1, widget,
+                                   'sugar-icon')
 
         return pixbuf
 

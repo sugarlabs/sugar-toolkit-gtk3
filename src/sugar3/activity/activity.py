@@ -924,8 +924,8 @@ class Activity(Window, Gtk.Container):
             self.reveal()
 
     def __realize_cb(self, window):
-        wm.set_bundle_id(window.window, self.get_bundle_id())
-        wm.set_activity_id(window.window, str(self._activity_id))
+        wm.set_bundle_id(window.get_window(), self.get_bundle_id())
+        wm.set_activity_id(window.get_window(), str(self._activity_id))
 
     def __delete_event_cb(self, widget, event):
         self.close()

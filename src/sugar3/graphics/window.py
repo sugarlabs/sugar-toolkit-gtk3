@@ -125,13 +125,14 @@ class Window(Gtk.Window):
         even after invoking on response on non-gtk events.
         See #1423.
         """
-        if self.window is None:
+        window = self.get_window()
+        if window is None:
             self.show()
             return
         timestamp = Gtk.get_current_event_time()
         if not timestamp:
-            timestamp = GdkX11.get_server_time(self.window)
-        self.window.focus(timestamp)
+            timestamp = GdkX11.get_server_time(window)
+        window.focus(timestamp)
 
     def fullscreen(self):
         palettegroup.popdown_all()
@@ -238,7 +239,7 @@ class Window(Gtk.Window):
     def __window_realize_cb(self, window):
         group = Gtk.Window()
         group.realize()
-        window.window.set_group(group.window)
+        window.get_window().set_group(group.get_window())
 
     def __key_press_cb(self, widget, event):
         key = Gdk.keyval_name(event.keyval)
