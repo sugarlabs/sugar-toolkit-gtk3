@@ -409,9 +409,9 @@ class Icon(Gtk.Image):
 
         allocation = self.get_allocation()
         x = math.floor(allocation.x + xpad +
-            (allocation.width - requisition[0]) * xalign)
+            (allocation.width - requisition.width) * xalign)
         y = math.floor(allocation.y + ypad +
-            (allocation.height - requisition[1]) * yalign)
+            (allocation.height - requisition.height) * yalign)
 
         cr = self.get_window().cairo_create()
 
