@@ -25,6 +25,8 @@
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 
+#define GDK_KEY(symbol) GDK_KEY_##symbol
+
 enum
 {
   EGG_MODMAP_ENTRY_SHIFT   = 0,
@@ -352,9 +354,10 @@ egg_accelerator_parse_virtual (const gchar            *accelerator,
 			bad_keyval = TRUE;
 		    }
 		}
-	    } else if (keycode != NULL)
-		*keycode = XKeysymToKeycode (GDK_DISPLAY(), keyval);
-
+	    } else if (keycode != NULL) {
+	       *keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY(gdk_display_get_default ()),
+					    keyval);
+	    }
           accelerator += len;
           len -= len;
 	}
@@ -624,20 +627,20 @@ reload_modmap (GdkKeymap *keymap,
       j = 0;
       while (j < n_entries)
         {
-          if (keyvals[j] == GDK_Num_Lock)
+          if (keyvals[j] == GDK_KEY(Num_Lock))
             mask |= EGG_VIRTUAL_NUM_LOCK_MASK;
-          else if (keyvals[j] == GDK_Scroll_Lock)
+          else if (keyvals[j] == GDK_KEY(Scroll_Lock))
             mask |= EGG_VIRTUAL_SCROLL_LOCK_MASK;
-          else if (keyvals[j] == GDK_Meta_L ||
-                   keyvals[j] == GDK_Meta_R)
+	  else if (keyvals[j] == GDK_KEY(Meta_L) ||
+                   keyvals[j] == GDK_KEY(Meta_R))
             mask |= EGG_VIRTUAL_META_MASK;
-          else if (keyvals[j] == GDK_Hyper_L ||
-                   keyvals[j] == GDK_Hyper_R)
+          else if (keyvals[j] == GDK_KEY(Hyper_L) ||
+                   keyvals[j] == GDK_KEY(Hyper_R))
             mask |= EGG_VIRTUAL_HYPER_MASK;
-          else if (keyvals[j] == GDK_Super_L ||
-                   keyvals[j] == GDK_Super_R)
+          else if (keyvals[j] == GDK_KEY(Super_L) ||
+                   keyvals[j] == GDK_KEY(Super_R))
             mask |= EGG_VIRTUAL_SUPER_MASK;
-          else if (keyvals[j] == GDK_Mode_switch)
+          else if (keyvals[j] == GDK_KEY(Mode_switch))
             mask |= EGG_VIRTUAL_MODE_SWITCH_MASK;
 
           ++j;
