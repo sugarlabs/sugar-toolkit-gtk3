@@ -386,7 +386,7 @@ class PaletteWindow(Gtk.Window):
         self.emit('popdown')
 
     def get_rect(self):
-        win_x, win_y = self.window.get_origin()
+        win_x, win_y = self.get_window().get_origin()
         rectangle = self.get_allocation()
 
         x = win_x + rectangle.x
@@ -715,8 +715,9 @@ class WidgetInvoker(Invoker):
 
     def get_rect(self):
         allocation = self._widget.get_allocation()
-        if self._widget.window is not None:
-            x, y = self._widget.window.get_origin()
+        window = self._widget.get_window()
+        if window is not None:
+            x, y = window.get_origin()
         else:
             logging.warning(
                 "Trying to position palette with invoker that's not realized.")
@@ -843,8 +844,9 @@ class CellRendererInvoker(Invoker):
 
     def get_rect(self):
         allocation = self._tree_view.get_allocation()
-        if self._tree_view.window is not None:
-            x, y = self._tree_view.window.get_origin()
+        window = self._tree_view.get_window()
+        if window is not None:
+            x, y = window.get_origin()
         else:
             logging.warning(
                 "Trying to position palette with invoker that's not realized.")

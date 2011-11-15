@@ -39,16 +39,18 @@ class ToolbarButton(ToolButton):
         self.connect('hierarchy-changed', self.__hierarchy_changed_cb)
 
     def __hierarchy_changed_cb(self, tool_button, previous_toplevel):
-        if hasattr(self.parent, 'owner'):
+        parent = self.get_parent()
+        if hasattr(parent, 'owner'):
             if self.page_widget and previous_toplevel is None:
                 self._unparent()
-                self.parent.owner.pack_start(self.page_widget, True, True, 0)
+                parent.owner.pack_start(self.page_widget, True, True, 0)
                 self.set_expanded(False)
 
     def get_toolbar_box(self):
-        if not hasattr(self.parent, 'owner'):
+        parent = self.get_parent()
+        if not hasattr(parent, 'owner'):
             return None
-        return self.parent.owner
+        return parent.owner
 
     toolbar_box = property(get_toolbar_box)
 
@@ -72,7 +74,7 @@ class ToolbarButton(ToolButton):
 
     def is_in_palette(self):
         return self.page is not None and \
-                self.page_widget.parent == self.props.palette
+                self.page_widget.get_parent() == self.props.palette
 
     def is_expanded(self):
         return self.page is not None and \
@@ -95,9 +97,10 @@ class ToolbarButton(ToolButton):
         box = self.toolbar_box
 
         if box.expanded_button is not None:
-            if box.expanded_button.window is not None:
+            button_window = box.expanded_button.get_window()
+            if button_window is not None:
                 # need to redraw it to erase arrow
-                box.expanded_button.window.invalidate_rect(None, True)
+                button_window.invalidate_rect(None, True)
             box.expanded_button.set_expanded(False)
         box.expanded_button = self
 
@@ -117,9 +120,10 @@ class ToolbarButton(ToolButton):
             self.props.palette.add(self.page_widget)
 
     def _unparent(self):
-        if self.page_widget.parent is None:
+        page_parent = self.page_widget.get_parent()
+        if page_parent is None:
             return
-        self.page_widget.parent.remove(self.page_widget)
+        page_parent.remove(self.page_widget)
 
     def do_expose_event(self, event):
         if not self.is_expanded() or self.props.palette is not None and \
@@ -218,7 +222,7 @@ class _ToolbarPalette(PaletteWindow):
         self.set_group_id('toolbarbox')
 
     def get_expanded_button(self):
-        return self.invoker.parent
+        return self.invoker.get_parent()
 
     expanded_button = property(get_expanded_button)
 
@@ -272,9 +276,10 @@ class _Box(Gtk.EventBox):
         self.set_app_paintable(True)
 
     def do_expose_event(self, widget, event):
-        if self.parent.expanded_button is None:
+        expanded_button = self.get_parent().expanded_button
+        if expanded_button is None:
             return
-        alloc = self.parent.expanded_button.allocation
+        alloc = expanded_button.allocation
         self.get_style().paint_box(event.window,
                 Gtk.StateType.NORMAL, Gtk.ShadowType.IN, event.area, self,
                 'palette-invoker', -style.FOCUS_LINE_WIDTH, 0,
@@ -318,7 +323,7 @@ def _embed_page(box_class, page):
 
 
 def _get_embedded_page(page_widget):
-    return page_widget.get_child().child
+    return page_widget.get_child().get_child()
 
 
 def _paint_arrow(widget, event, arrow_type):
