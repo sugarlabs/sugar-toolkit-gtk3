@@ -25,6 +25,7 @@ STABLE.
 import os
 import logging
 
+from gtk import gdk
 import gtk
 import pango
 import gconf
