@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton, \
                                         RadioToolsButton
@@ -6,16 +6,16 @@ from sugar3.graphics.radiotoolbutton import RadioToolButton
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics import style
 
-window = gtk.Window()
+window = Gtk.Window()
 
-box = gtk.VBox()
+box = Gtk.VBox()
 window.add(box)
 
-toolbar = gtk.Toolbar()
+toolbar = Gtk.Toolbar()
 box.pack_start(toolbar, False)
 
-text_view = gtk.TextView()
-box.pack_start(text_view)
+text_view = Gtk.TextView()
+box.pack_start(text_view, True, True, 0)
 
 
 def echo(button, label):
@@ -72,4 +72,4 @@ button = RadioToolsButton(palette=palette)
 toolbar.insert(button, -1)
 
 window.show_all()
-gtk.main()
+Gtk.main()

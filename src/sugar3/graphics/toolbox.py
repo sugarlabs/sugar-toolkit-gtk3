@@ -19,35 +19,35 @@
 STABLE.
 """
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 from sugar3.graphics import style
 
 
-class Toolbox(gtk.VBox):
+class Toolbox(Gtk.VBox):
 
     __gtype_name__ = 'SugarToolbox'
 
     __gsignals__ = {
-        'current-toolbar-changed': (gobject.SIGNAL_RUN_FIRST,
-            gobject.TYPE_NONE, ([int])),
+        'current-toolbar-changed': (GObject.SignalFlags.RUN_FIRST,
+            None, ([int])),
     }
 
     def __init__(self):
-        gtk.VBox.__init__(self)
+        GObject.GObject.__init__(self)
 
-        self._notebook = gtk.Notebook()
-        self._notebook.set_tab_pos(gtk.POS_BOTTOM)
+        self._notebook = Gtk.Notebook()
+        self._notebook.set_tab_pos(Gtk.PositionType.BOTTOM)
         self._notebook.set_show_border(False)
         self._notebook.set_show_tabs(False)
         self._notebook.props.tab_vborder = style.TOOLBOX_TAB_VBORDER
         self._notebook.props.tab_hborder = style.TOOLBOX_TAB_HBORDER
-        self.pack_start(self._notebook)
+        self.pack_start(self._notebook, True, True, 0)
         self._notebook.show()
 
-        self._separator = gtk.HSeparator()
-        self._separator.modify_bg(gtk.STATE_NORMAL,
+        self._separator = Gtk.HSeparator()
+        self._separator.modify_bg(Gtk.StateType.NORMAL,
                                   style.COLOR_PANEL_GREY.get_gdk_color())
         self._separator.set_size_request(1, style.TOOLBOX_SEPARATOR_HEIGHT)
         self.pack_start(self._separator, False)
@@ -58,14 +58,14 @@ class Toolbox(gtk.VBox):
         self.emit('current-toolbar-changed', notebook.props.page)
 
     def add_toolbar(self, name, toolbar):
-        label = gtk.Label(name)
+        label = Gtk.Label(label=name)
         width, height_ = label.size_request()
         label.set_size_request(max(width, style.TOOLBOX_TAB_LABEL_WIDTH), -1)
         label.set_alignment(0.0, 0.5)
 
-        event_box = gtk.EventBox()
+        event_box = Gtk.EventBox()
 
-        alignment = gtk.Alignment(0.0, 0.0, 1.0, 1.0)
+        alignment = Gtk.Alignment.new(0.0, 0.0, 1.0, 1.0)
         alignment.set_padding(0, 0, style.TOOLBOX_HORIZONTAL_PADDING,
                               style.TOOLBOX_HORIZONTAL_PADDING)
 

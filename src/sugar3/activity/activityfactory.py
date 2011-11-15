@@ -26,7 +26,7 @@ import logging
 import uuid
 
 import dbus
-import gobject
+from gi.repository import GObject
 
 from sugar3.activity.activityhandle import ActivityHandle
 from sugar3 import util
@@ -148,7 +148,7 @@ def open_log_file(activity):
                 raise e
 
 
-class ActivityCreationHandler(gobject.GObject):
+class ActivityCreationHandler(GObject.GObject):
     """Sugar-side activity creation interface
 
     This object uses a dbus method on the ActivityFactory
@@ -182,7 +182,7 @@ class ActivityCreationHandler(gobject.GObject):
         If the file '/etc/olpc-security' exists, then activity launching
         will be delegated to the prototype 'Rainbow' security service.
         """
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._bundle = bundle
         self._service_name = bundle.get_bundle_id()
@@ -258,7 +258,7 @@ class ActivityCreationHandler(gobject.GObject):
             stdout=log_file.fileno(),
             stderr=log_file.fileno())
 
-        gobject.child_watch_add(child.pid,
+        GObject.child_watch_add(child.pid,
                                 _child_watch_cb,
                                 (environment_dir, log_file,
                                     self._handle.activity_id))

@@ -20,15 +20,15 @@
 STABLE.
 """
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
 from sugar3.graphics import toolbutton
 
 
-class RadioToolButton(gtk.RadioToolButton):
+class RadioToolButton(Gtk.RadioToolButton):
     """
     An implementation of a "push" button.
 
@@ -42,7 +42,7 @@ class RadioToolButton(gtk.RadioToolButton):
         self._xo_color = None
         self._palette_invoker = ToolInvoker()
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
         self._palette_invoker.attach_tool(self)
 
@@ -73,12 +73,12 @@ class RadioToolButton(gtk.RadioToolButton):
         self._tooltip = tooltip
 
         # Set label, shows up when toolbar overflows
-        gtk.RadioToolButton.set_label(self, tooltip)
+        Gtk.RadioToolButton.set_label(self, tooltip)
 
     def get_tooltip(self):
         return self._tooltip
 
-    tooltip = gobject.property(type=str, setter=set_tooltip,
+    tooltip = GObject.property(type=str, setter=set_tooltip,
         getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
@@ -112,13 +112,13 @@ class RadioToolButton(gtk.RadioToolButton):
         """
         return self._accelerator
 
-    accelerator = gobject.property(type=str, setter=set_accelerator,
+    accelerator = GObject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)
 
     def set_named_icon(self, named_icon):
         icon = Icon(icon_name=named_icon,
                     xo_color=self._xo_color,
-                    icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR)
+                    icon_size=Gtk.IconSize.LARGE_TOOLBAR)
         self.set_icon_widget(icon)
         icon.show()
 
@@ -128,7 +128,7 @@ class RadioToolButton(gtk.RadioToolButton):
         else:
             return None
 
-    named_icon = gobject.property(type=str, setter=set_named_icon,
+    named_icon = GObject.property(type=str, setter=set_named_icon,
                                   getter=get_named_icon)
 
     def set_xo_color(self, xo_color):
@@ -140,7 +140,7 @@ class RadioToolButton(gtk.RadioToolButton):
     def get_xo_color(self):
         return self._xo_color
 
-    xo_color = gobject.property(type=object, setter=set_xo_color,
+    xo_color = GObject.property(type=object, setter=set_xo_color,
                                 getter=get_xo_color)
 
     def create_palette(self):
@@ -152,7 +152,7 @@ class RadioToolButton(gtk.RadioToolButton):
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
 
-    palette = gobject.property(
+    palette = GObject.property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_palette_invoker(self):
@@ -162,7 +162,7 @@ class RadioToolButton(gtk.RadioToolButton):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = gobject.property(
+    palette_invoker = GObject.property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_expose_event(self, event):
@@ -172,11 +172,11 @@ class RadioToolButton(gtk.RadioToolButton):
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker
             invoker.draw_rectangle(event, self.palette)
-        elif child.state == gtk.STATE_PRELIGHT:
-            child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
-                                  gtk.SHADOW_NONE, event.area,
+        elif child.state == Gtk.StateType.PRELIGHT:
+            child.style.paint_box(event.window, Gtk.StateType.PRELIGHT,
+                                  Gtk.ShadowType.NONE, event.area,
                                   child, 'toolbutton-prelight',
                                   allocation.x, allocation.y,
                                   allocation.width, allocation.height)
 
-        gtk.RadioToolButton.do_expose_event(self, event)
+        Gtk.RadioToolButton.do_expose_event(self, event)

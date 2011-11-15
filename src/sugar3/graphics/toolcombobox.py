@@ -19,30 +19,30 @@
 STABLE.
 """
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 from sugar3.graphics.combobox import ComboBox
 from sugar3.graphics import style
 
 
-class ToolComboBox(gtk.ToolItem):
+class ToolComboBox(Gtk.ToolItem):
 
     __gproperties__ = {
-        'label-text': (str, None, None, None, gobject.PARAM_WRITABLE),
+        'label-text': (str, None, None, None, GObject.PARAM_WRITABLE),
     }
 
     def __init__(self, combo=None, **kwargs):
         self.label = None
         self._label_text = ''
 
-        gobject.GObject.__init__(self, **kwargs)
+        GObject.GObject.__init__(self, **kwargs)
 
         self.set_border_width(style.DEFAULT_PADDING)
 
-        hbox = gtk.HBox(False, style.DEFAULT_SPACING)
+        hbox = Gtk.HBox(False, style.DEFAULT_SPACING)
 
-        self.label = gtk.Label(self._label_text)
+        self.label = Gtk.Label(label=self._label_text)
         hbox.pack_start(self.label, False, False, 0)
         self.label.show()
 
@@ -51,7 +51,7 @@ class ToolComboBox(gtk.ToolItem):
         else:
             self.combo = ComboBox()
 
-        hbox.pack_start(self.combo)
+        hbox.pack_start(self.combo, True, True, 0)
         self.combo.show()
 
         self.add(hbox)

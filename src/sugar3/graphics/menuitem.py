@@ -21,39 +21,39 @@ STABLE.
 
 import logging
 
-import gobject
-import pango
-import gtk
+from gi.repository import GObject
+from gi.repository import Pango
+from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
 
 
-class MenuItem(gtk.ImageMenuItem):
+class MenuItem(Gtk.ImageMenuItem):
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
                  xo_color=None, file_name=None):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self._accelerator = None
 
-        label = gtk.AccelLabel(text_label)
+        label = Gtk.AccelLabel(label=text_label)
         label.set_alignment(0.0, 0.5)
         label.set_accel_widget(self)
         if text_maxlen > 0:
-            label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+            label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
             label.set_max_width_chars(text_maxlen)
         self.add(label)
         label.show()
 
         if icon_name is not None:
             icon = Icon(icon_name=icon_name,
-                        icon_size=gtk.ICON_SIZE_SMALL_TOOLBAR)
+                        icon_size=Gtk.IconSize.SMALL_TOOLBAR)
             if xo_color is not None:
                 icon.props.xo_color = xo_color
             self.set_image(icon)
             icon.show()
 
         elif file_name is not None:
-            icon = Icon(file=file_name, icon_size=gtk.ICON_SIZE_SMALL_TOOLBAR)
+            icon = Icon(file=file_name, icon_size=Gtk.IconSize.SMALL_TOOLBAR)
             if xo_color is not None:
                 icon.props.xo_color = xo_color
             self.set_image(icon)
@@ -77,12 +77,12 @@ class MenuItem(gtk.ImageMenuItem):
 
         accel_group = self.get_toplevel().get_data('sugar-accel-group')
         if not accel_group:
-            logging.warning('No gtk.AccelGroup in the top level window.')
+            logging.warning('No Gtk.AccelGroup in the top level window.')
             return
 
-        keyval, mask = gtk.accelerator_parse(self._accelerator)
+        keyval, mask = Gtk.accelerator_parse(self._accelerator)
         self.add_accelerator('activate', accel_group, keyval, mask,
-                             gtk.ACCEL_LOCKED | gtk.ACCEL_VISIBLE)
+                             Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE)
 
     def set_accelerator(self, accelerator):
         self._accelerator = accelerator
@@ -91,5 +91,5 @@ class MenuItem(gtk.ImageMenuItem):
     def get_accelerator(self):
         return self._accelerator
 
-    accelerator = gobject.property(type=str, setter=set_accelerator,
+    accelerator = GObject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)

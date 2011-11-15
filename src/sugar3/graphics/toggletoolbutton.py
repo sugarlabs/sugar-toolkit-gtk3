@@ -19,19 +19,19 @@
 STABLE.
 """
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
 
 
-class ToggleToolButton(gtk.ToggleToolButton):
+class ToggleToolButton(Gtk.ToggleToolButton):
 
     __gtype_name__ = 'SugarToggleToolButton'
 
     def __init__(self, named_icon=None):
-        gtk.ToggleToolButton.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._palette_invoker = ToolInvoker(self)
         self.set_named_icon(named_icon)
@@ -56,7 +56,7 @@ class ToggleToolButton(gtk.ToggleToolButton):
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
 
-    palette = gobject.property(
+    palette = GObject.property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_palette_invoker(self):
@@ -66,7 +66,7 @@ class ToggleToolButton(gtk.ToggleToolButton):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = gobject.property(
+    palette_invoker = GObject.property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
@@ -79,13 +79,13 @@ class ToggleToolButton(gtk.ToggleToolButton):
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker
             invoker.draw_rectangle(event, self.palette)
-        elif child.state == gtk.STATE_PRELIGHT:
-            child.style.paint_box(event.window, gtk.STATE_PRELIGHT,
-                                  gtk.SHADOW_NONE, event.area,
+        elif child.state == Gtk.StateType.PRELIGHT:
+            child.style.paint_box(event.window, Gtk.StateType.PRELIGHT,
+                                  Gtk.ShadowType.NONE, event.area,
                                   child, 'toolbutton-prelight',
                                   allocation.x, allocation.y,
                                   allocation.width, allocation.height)
 
-        gtk.ToggleToolButton.do_expose_event(self, event)
+        Gtk.ToggleToolButton.do_expose_event(self, event)
 
     palette = property(get_palette, set_palette)

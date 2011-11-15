@@ -19,7 +19,7 @@
 Test the sugar3.graphics.icon.Icon widget.
 """
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.tray import HTray, VTray
 from sugar3.graphics.tray import TrayButton, TrayIcon
@@ -28,13 +28,13 @@ import common
 
 test = common.Test()
 
-vbox = gtk.VBox()
+vbox = Gtk.VBox()
 
 tray = HTray()
 vbox.pack_start(tray, False)
 tray.show()
 
-theme_icons = gtk.icon_theme_get_default().list_icons()
+theme_icons = Gtk.IconTheme.get_default().list_icons()
 
 for i in range(0, 100):
     button = TrayButton(icon_name=theme_icons[i])
@@ -50,7 +50,7 @@ for i in range(0, 10):
     tray.add_item(icon)
     icon.show()
 
-hbox = gtk.HBox()
+hbox = Gtk.HBox()
 
 tray = VTray()
 hbox.pack_start(tray, False)
@@ -70,10 +70,10 @@ for i in range(0, 4):
     tray.add_item(button)
     button.show()
 
-vbox.pack_start(hbox)
+vbox.pack_start(hbox, True, True, 0)
 hbox.show()
 
-test.pack_start(vbox)
+test.pack_start(vbox, True, True, 0)
 vbox.show()
 
 test.show()

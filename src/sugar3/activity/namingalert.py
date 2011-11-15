@@ -18,10 +18,10 @@
 import gettext
 import os
 
-import gio
-import gtk
-import gobject
-import gconf
+from gi.repository import Gio
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GConf
 
 from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
@@ -40,7 +40,7 @@ def _get_icon_name(metadata):
 
     mime_type = metadata.get('mime_type', '')
     if not file_name and mime_type:
-        icons = gio.content_type_get_icon(mime_type)
+        icons = Gio.content_type_get_icon(mime_type)
         for icon_name in icons.props.names:
             file_name = get_icon_file_name(icon_name)
             if file_name is not None:
@@ -52,30 +52,30 @@ def _get_icon_name(metadata):
     return file_name
 
 
-class NamingToolbar(gtk.Toolbar):
+class NamingToolbar(Gtk.Toolbar):
     """ Toolbar of the naming alert
     """
 
     __gtype_name__ = 'SugarNamingToolbar'
 
     __gsignals__ = {
-        'keep-clicked': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'keep-clicked': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self):
-        gtk.Toolbar.__init__(self)
+        Gtk.Toolbar.__init__(self)
 
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         color = XoColor(client.get_string('/desktop/sugar/user/color'))
         icon = Icon()
         icon.set_from_icon_name('activity-journal',
-                                gtk.ICON_SIZE_LARGE_TOOLBAR)
+                                Gtk.IconSize.LARGE_TOOLBAR)
         icon.props.xo_color = color
         self._add_widget(icon)
 
         self._add_separator()
 
-        self._title = gtk.Label(_('Name this entry'))
+        self._title = Gtk.Label(label=_('Name this entry'))
         self._add_widget(self._title)
 
         self._add_separator(True)
@@ -87,7 +87,7 @@ class NamingToolbar(gtk.Toolbar):
         self._keep_button.show()
 
     def _add_separator(self, expand=False):
-        separator = gtk.SeparatorToolItem()
+        separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         if expand:
             separator.set_expand(True)
@@ -97,7 +97,7 @@ class NamingToolbar(gtk.Toolbar):
         separator.show()
 
     def _add_widget(self, widget, expand=False):
-        tool_item = gtk.ToolItem()
+        tool_item = Gtk.ToolItem()
         tool_item.set_expand(expand)
 
         tool_item.add(widget)
@@ -110,11 +110,11 @@ class NamingToolbar(gtk.Toolbar):
         self.emit('keep-clicked')
 
 
-class FavoriteIcon(gtk.ToggleButton):
+class FavoriteIcon(Gtk.ToggleButton):
 
     def __init__(self):
-        gtk.ToggleButton.__init__(self)
-        self.set_relief(gtk.RELIEF_NONE)
+        GObject.GObject.__init__(self)
+        self.set_relief(Gtk.ReliefStyle.NONE)
         self.set_focus_on_click(False)
 
         self._icon = Icon(icon_name='emblem-favorite',
@@ -127,7 +127,7 @@ class FavoriteIcon(gtk.ToggleButton):
 
     def __toggled_cb(self, widget):
         if self.get_active():
-            client = gconf.client_get_default()
+            client = GConf.Client.get_default()
             color = XoColor(client.get_string('/desktop/sugar/user/color'))
             self._icon.props.xo_color = color
         else:
@@ -143,12 +143,12 @@ class FavoriteIcon(gtk.ToggleButton):
             self._icon.props.fill_color = style.COLOR_TRANSPARENT.get_svg()
 
 
-class NamingAlert(gtk.Window):
+class NamingAlert(Gtk.Window):
 
     __gtype_name__ = 'SugarNamingAlert'
 
     def __init__(self, activity, bundle_path):
-        gtk.Window.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._bundle_path = bundle_path
         self._favorite_icon = None
@@ -156,16 +156,16 @@ class NamingAlert(gtk.Window):
         self._description = None
         self._tags = None
 
-        accel_group = gtk.AccelGroup()
+        accel_group = Gtk.AccelGroup()
         self.set_data('sugar-accel-group', accel_group)
         self.add_accel_group(accel_group)
 
         self.set_border_width(style.LINE_WIDTH)
         offset = style.GRID_CELL_SIZE
-        width = gtk.gdk.screen_width() - offset * 2
-        height = gtk.gdk.screen_height() - offset * 2
+        width = Gdk.Screen.width() - offset * 2
+        height = Gdk.Screen.height() - offset * 2
         self.set_size_request(width, height)
-        self.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+        self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_decorated(False)
         self.set_resizable(False)
         self.set_modal(True)
@@ -173,7 +173,7 @@ class NamingAlert(gtk.Window):
 
         self._activity = activity
 
-        vbox = gtk.VBox()
+        vbox = Gtk.VBox()
         self.add(vbox)
         vbox.show()
 
@@ -189,23 +189,23 @@ class NamingAlert(gtk.Window):
         self._title.grab_focus()
 
     def _create_body(self):
-        body = gtk.VBox(spacing=style.DEFAULT_SPACING)
+        body = Gtk.VBox(spacing=style.DEFAULT_SPACING)
         body.set_border_width(style.DEFAULT_SPACING * 3)
         header = self._create_header()
         body.pack_start(header, False, False, style.DEFAULT_PADDING)
 
-        body.pack_start(self._create_separator(style.DEFAULT_SPACING), False, False, 0)
+        body.pack_start(self._create_separator(style.DEFAULT_SPACING, True, True, 0), False, False, 0)
 
-        body.pack_start(self._create_label(_('Description:')), False, False, 0)
+        body.pack_start(self._create_label(_('Description:', True, True, 0)), False, False, 0)
 
         description = self._activity.metadata.get('description', '')
         description_box, self._description = self._create_text_view(description)
         body.pack_start(description_box, True, True, 0)
 
-        body.pack_start(self._create_separator(style.DEFAULT_PADDING), False, False, 0)
+        body.pack_start(self._create_separator(style.DEFAULT_PADDING, True, True, 0), False, False, 0)
 
 
-        body.pack_start(self._create_label(_('Tags:')), False, False, 0)
+        body.pack_start(self._create_label(_('Tags:', True, True, 0)), False, False, 0)
 
         tags = self._activity.metadata.get('tags', '')
         tags_box, self._tags = self._create_text_view(tags)
@@ -215,29 +215,29 @@ class NamingAlert(gtk.Window):
         return body
 
     def _create_label(self, text):
-        text = gtk.Label(text)
+        text = Gtk.Label(label=text)
         text.set_alignment(0, 0.5)
-        text.modify_fg(gtk.STATE_NORMAL,
+        text.modify_fg(Gtk.StateType.NORMAL,
                        style.COLOR_BUTTON_GREY.get_gdk_color())
         return text
 
     def _create_separator(self, height):
-        separator = gtk.HSeparator()
-        separator.modify_bg(gtk.STATE_NORMAL, style.COLOR_WHITE.get_gdk_color())
+        separator = Gtk.HSeparator()
+        separator.modify_bg(Gtk.StateType.NORMAL, style.COLOR_WHITE.get_gdk_color())
         separator.set_size_request(-1, height)
         return separator
 
     def _create_header(self):
-        header = gtk.HBox(spacing=style.DEFAULT_SPACING)
+        header = Gtk.HBox(spacing=style.DEFAULT_SPACING)
 
         self._favorite_icon = FavoriteIcon()
-        header.pack_start(self._favorite_icon, expand=False)
+        header.pack_start(self._favorite_icon, False, True, 0)
 
         entry_icon = self._create_entry_icon()
-        header.pack_start(entry_icon, expand=False)
+        header.pack_start(entry_icon, False, True, 0)
 
         self._title = self._create_title()
-        header.pack_start(self._title, expand=True)
+        header.pack_start(self._title, True, True, 0)
 
         return header
 
@@ -251,26 +251,26 @@ class NamingAlert(gtk.Window):
         else:
             activity_bundle = ActivityBundle(self._bundle_path)
             file_name = activity_bundle.get_icon()
-        entry_icon = Icon(file=file_name, icon_size=gtk.ICON_SIZE_LARGE_TOOLBAR)
+        entry_icon = Icon(file=file_name, icon_size=Gtk.IconSize.LARGE_TOOLBAR)
         if self._activity.metadata.get('icon-color'):
             entry_icon.props.xo_color = XoColor( \
                 self._activity.metadata['icon-color'])
         return entry_icon
 
     def _create_title(self):
-        title = gtk.Entry()
+        title = Gtk.Entry()
         title.set_text(self._activity.metadata.get('title', _('Untitled')))
         return title
 
     def _create_text_view(self, text):
-        scrolled_window = gtk.ScrolledWindow()
-        scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scrolled_window.set_border_width(style.LINE_WIDTH)
-        scrolled_window.set_shadow_type(gtk.SHADOW_IN)
+        scrolled_window.set_shadow_type(Gtk.ShadowType.IN)
 
-        text_view = gtk.TextView()
+        text_view = Gtk.TextView()
         text_view.set_left_margin(style.DEFAULT_PADDING)
-        text_view.set_wrap_mode(gtk.WRAP_WORD_CHAR)
+        text_view.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
         text_view.set_accepts_tab(False)
         text_view.get_buffer().set_text(text)
         scrolled_window.add(text_view)
@@ -278,7 +278,7 @@ class NamingAlert(gtk.Window):
         return scrolled_window, text_view
 
     def __realize_cb(self, widget):
-        self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.window.set_accept_focus(True)
 
     def __keep_cb(self, widget):

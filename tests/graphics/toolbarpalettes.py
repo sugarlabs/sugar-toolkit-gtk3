@@ -19,7 +19,7 @@
 Test palette positioning for toolbar and tray.
 """
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.tray import HTray, TrayButton
 from sugar3.graphics.toolbutton import ToolButton
@@ -28,11 +28,11 @@ import common
 
 test = common.Test()
 
-vbox = gtk.VBox()
+vbox = Gtk.VBox()
 
-theme_icons = gtk.icon_theme_get_default().list_icons()
+theme_icons = Gtk.IconTheme.get_default().list_icons()
 
-toolbar = gtk.Toolbar()
+toolbar = Gtk.Toolbar()
 vbox.pack_start(toolbar, False)
 toolbar.show()
 
@@ -42,8 +42,8 @@ for i in range(0, 5):
     toolbar.insert(button, -1)
     button.show()
 
-content = gtk.Label()
-vbox.pack_start(content)
+content = Gtk.Label()
+vbox.pack_start(content, True, True, 0)
 content.show()
 
 tray = HTray()
@@ -56,7 +56,7 @@ for i in range(0, 30):
     tray.add_item(button)
     button.show()
 
-test.pack_start(vbox)
+test.pack_start(vbox, True, True, 0)
 vbox.show()
 
 test.show()

@@ -55,9 +55,9 @@ import time
 from hashlib import sha1
 from functools import partial
 
-import gconf
-import gtk
-import gobject
+from gi.repository import GConf
+from gi.repository import Gtk
+from gi.repository import GObject
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
@@ -100,15 +100,15 @@ J_DBUS_INTERFACE = 'org.laptop.Journal'
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
 
-class _ActivitySession(gobject.GObject):
+class _ActivitySession(GObject.GObject):
 
     __gsignals__ = {
-        'quit-requested': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'quit': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'quit-requested': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'quit': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
         self._xsmp_client = XSMPClient()
         self._xsmp_client.connect('quit-requested',
@@ -127,7 +127,7 @@ class _ActivitySession(gobject.GObject):
 
         if len(self._activities) == 0:
             logging.debug('Quitting the activity process.')
-            gtk.main_quit()
+            Gtk.main_quit()
 
     def will_quit(self, activity, will_quit):
         if will_quit:
@@ -150,7 +150,7 @@ class _ActivitySession(gobject.GObject):
         self.emit('quit')
 
 
-class Activity(Window, gtk.Container):
+class Activity(Window, Gtk.Container):
     """This is the base Activity class that all other Activities derive from.
        This is where your activity starts.
 
@@ -204,8 +204,8 @@ class Activity(Window, gtk.Container):
 
            Finaly, your Activity will very likely need some activity specific
            buttons and options you can create your own toolbars by deriving a
-           class from gtk.Toolbar:
-                class MySpecialToolbar(gtk.Toolbar):
+           class from Gtk.Toolbar:
+                class MySpecialToolbar(Gtk.Toolbar):
                     ...
 
         4. Use your creativity. Make your Activity something special and share
@@ -221,11 +221,11 @@ class Activity(Window, gtk.Container):
     __gtype_name__ = 'SugarActivity'
 
     __gsignals__ = {
-        'shared': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
-        'joined': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        'shared': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'joined': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         # For internal use only, use can_close() if you want to perform extra
         # checks before actually closing
-        '_closing': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ([])),
+        '_closing': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, handle, create_jobject=True):
@@ -248,7 +248,7 @@ class Activity(Window, gtk.Container):
             Connects our "destroy" message to our _destroy_cb
             method.
 
-            Creates a base gtk.Window within this window.
+            Creates a base Gtk.Window within this window.
 
             Creates an ActivityService (self._bus) servicing
             this application.
@@ -265,7 +265,7 @@ class Activity(Window, gtk.Container):
             # screen. Would be better if it was the shell to do this, but we
             # haven't found yet a good way to do it there. See #1263.
             self.connect('window-state-event', self.__window_state_event_cb)
-            screen = gtk.gdk.screen_get_default()
+            screen = Gdk.Screen.get_default()
             screen.connect('size-changed', self.__screen_size_changed_cb)
             self._adapt_window_to_screen()
 
@@ -298,7 +298,7 @@ class Activity(Window, gtk.Container):
                               self.__session_quit_requested_cb)
         self._session.connect('quit', self.__session_quit_cb)
 
-        accel_group = gtk.AccelGroup()
+        accel_group = Gtk.AccelGroup()
         self.set_data('sugar-accel-group', accel_group)
         self.add_accel_group(accel_group)
 
@@ -321,7 +321,7 @@ class Activity(Window, gtk.Container):
             self._jobject = self._initialize_journal_object()
 
         if handle.invited:
-            wait_loop = gobject.MainLoop()
+            wait_loop = GObject.MainLoop()
             self._client_handler = _ClientHandler(
                     self.get_bundle_id(),
                     partial(self.__got_channel_cb, wait_loop))
@@ -350,7 +350,7 @@ class Activity(Window, gtk.Container):
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         icon_color = client.get_string('/desktop/sugar/user/color')
 
         jobject = datastore.create()
@@ -433,7 +433,7 @@ class Activity(Window, gtk.Container):
             if not self._active and self._jobject:
                 self.save()
 
-    active = gobject.property(
+    active = GObject.property(
         type=bool, default=False, getter=get_active, setter=set_active)
 
     def get_max_participants(self):
@@ -442,7 +442,7 @@ class Activity(Window, gtk.Container):
     def set_max_participants(self, participants):
         self._max_participants = participants
 
-    max_participants = gobject.property(
+    max_participants = GObject.property(
             type=int, default=0, getter=get_max_participants,
             setter=set_max_participants)
 
@@ -468,7 +468,7 @@ class Activity(Window, gtk.Container):
         """Sets the 'work area' of your activity with the canvas of your
         choice.
 
-        One commonly used canvas is gtk.ScrolledWindow
+        One commonly used canvas is Gtk.ScrolledWindow
         """
         Window.set_canvas(self, canvas)
         if not self._read_file_called:
@@ -483,7 +483,7 @@ class Activity(Window, gtk.Container):
         self.move(0, 0)
 
     def _adapt_window_to_screen(self):
-        screen = gtk.gdk.screen_get_default()
+        screen = Gdk.Screen.get_default()
         self.set_geometry_hints(None,
                                 screen.get_width(), screen.get_height(),
                                 screen.get_width(), screen.get_height(),
@@ -615,11 +615,11 @@ class Activity(Window, gtk.Container):
         pixmap = self.canvas.get_snapshot((-1, -1, 0, 0))
 
         width, height = pixmap.get_size()
-        pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, 0, 8, width, height)
+        pixbuf = GdkPixbuf.Pixbuf(GdkPixbuf.Colorspace.RGB, 0, 8, width, height)
         pixbuf = pixbuf.get_from_drawable(pixmap, pixmap.get_colormap(),
                                           0, 0, 0, 0, width, height)
         pixbuf = pixbuf.scale_simple(style.zoom(300), style.zoom(225),
-                                     gtk.gdk.INTERP_BILINEAR)
+                                     GdkPixbuf.InterpType.BILINEAR)
 
         preview_data = []
 
@@ -814,10 +814,10 @@ class Activity(Window, gtk.Container):
         alert.props.msg = _('Keep error: all changes will be lost')
 
         cancel_icon = Icon(icon_name='dialog-cancel')
-        alert.add_button(gtk.RESPONSE_CANCEL, _('Don\'t stop'), cancel_icon)
+        alert.add_button(Gtk.ResponseType.CANCEL, _('Don\'t stop'), cancel_icon)
 
         stop_icon = Icon(icon_name='dialog-ok')
-        alert.add_button(gtk.RESPONSE_OK, _('Stop anyway'), stop_icon)
+        alert.add_button(Gtk.ResponseType.OK, _('Stop anyway'), stop_icon)
 
         self.add_alert(alert)
         alert.connect('response', self._keep_failed_dialog_response_cb)
@@ -826,7 +826,7 @@ class Activity(Window, gtk.Container):
 
     def _keep_failed_dialog_response_cb(self, alert, response_id):
         self.remove_alert(alert)
-        if response_id == gtk.RESPONSE_OK:
+        if response_id == Gtk.ResponseType.OK:
             self.close(skip_save=True)
             if self._quit_requested:
                 self._session.will_quit(self, True)

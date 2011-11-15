@@ -15,7 +15,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-import gtk
+from gi.repository import Gtk
 
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.palette import Palette
@@ -63,7 +63,7 @@ class RadioPalette(Palette):
     def __init__(self, **kwargs):
         Palette.__init__(self, **kwargs)
 
-        self.button_box = gtk.HBox()
+        self.button_box = Gtk.HBox()
         self.button_box.show()
         self.set_content(self.button_box)
 
@@ -75,7 +75,7 @@ class RadioPalette(Palette):
 
         button.show()
         button.connect('clicked', self.__clicked_cb)
-        self.button_box.pack_start(button, fill=False)
+        self.button_box.pack_start(button, True, False, 0)
         button.palette_label = label
 
         if not children:
