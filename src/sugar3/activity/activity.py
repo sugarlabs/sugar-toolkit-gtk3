@@ -272,10 +272,15 @@ class Activity(Window, Gtk.Container):
         icons_path = os.path.join(get_bundle_path(), 'icons')
         Gtk.IconTheme.get_default().append_search_path(icons_path)
 
+        sugar_theme = 'sugar-72'
+        if 'SUGAR_SCALING' in os.environ:
+            if os.environ['SUGAR_SCALING'] == '100':
+                sugar_theme = 'sugar-100'
+
         # This code can be removed when we grow an xsettings daemon (the GTK+
         # init routines will then automatically figure out the font settings)
         settings = Gtk.Settings.get_default()
-        settings.set_property('gtk-theme-name', 'sugar')
+        settings.set_property('gtk-theme-name', sugar_theme)
         settings.set_property('gtk-icon-theme-name', 'sugar')
         settings.set_property('gtk-font-name',
                               '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
