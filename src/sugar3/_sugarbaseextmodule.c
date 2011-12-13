@@ -22,7 +22,7 @@
 #endif
 
 /* include this first, before NO_IMPORT_PYGOBJECT is defined */
-#include <pygobject.h>
+#include <Python.h>
 
 extern PyMethodDef py_sugarbaseext_functions[];
 
