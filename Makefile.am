@@ -11,4 +11,4 @@ EXTRA_DIST =                    \
 	intltool-update.in      \
 	intltool-extract.in
 
-SUBDIRS = src po
+SUBDIRS = bin src po

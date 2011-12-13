@@ -39,6 +39,7 @@ GOBJECT_INTROSPECTION_CHECK([1.30.0])
 
 AC_OUTPUT([
 Makefile
+bin/Makefile
 src/Makefile
 src/sugar3/Makefile
 src/sugar3/activity/Makefile
