@@ -35,7 +35,7 @@ from gi.repository import SugarExt
 # DEPRECATED
 # Import these for backwards compatibility
 from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
-        WidgetInvoker, CanvasInvoker, ToolInvoker, CellRendererInvoker
+        WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
 
 
 class Palette(PaletteWindow):

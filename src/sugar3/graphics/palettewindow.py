@@ -788,6 +788,68 @@ class WidgetInvoker(Invoker):
     widget = GObject.property(type=object, getter=_get_widget, setter=None)
 
 
+class CursorInvoker(Invoker):
+
+    def __init__(self, parent=None):
+        Invoker.__init__(self)
+
+        self._position_hint = self.AT_CURSOR
+        self._enter_hid = None
+        self._leave_hid = None
+        self._release_hid = None
+        self._item = None
+
+        if parent:
+            self.attach(parent)
+
+    def attach(self, parent):
+        Invoker.attach(self, parent)
+
+        self._item = parent
+        self._enter_hid = self._item.connect('enter-notify-event',
+                                             self.__enter_notify_event_cb)
+        self._leave_hid = self._item.connect('leave-notify-event',
+                                             self.__leave_notify_event_cb)
+        self._release_hid = self._item.connect('button-release-event',
+                                               self.__button_release_event_cb)
+
+    def detach(self):
+        Invoker.detach(self)
+        self._item.disconnect(self._enter_hid)
+        self._item.disconnect(self._leave_hid)
+        self._item.disconnect(self._release_hid)
+
+    def get_default_position(self):
+        return self.AT_CURSOR
+
+    def get_rect(self):
+        window = self._item.get_window()
+        allocation = self._item.get_allocation()
+        rect = Gdk.Rectangle()
+        rect.x, rect.y = window.get_root_coords(allocation.x, allocation.y)
+        rect.width = allocation.width
+        rect.height = allocation.height
+        return rect
+
+    def __enter_notify_event_cb(self, button, event):
+        self.notify_mouse_enter()
+        return False
+
+    def __leave_notify_event_cb(self, button, event):
+        self.notify_mouse_leave()
+        return False
+
+    def __button_release_event_cb(self, button, event):
+        if event.button == 3:
+            self.notify_right_click()
+            return True
+        else:
+            return False
+
+    def get_toplevel(self):
+        return self._item.get_toplevel()
+
+
 class ToolInvoker(WidgetInvoker):
 
     def __init__(self, parent=None):
