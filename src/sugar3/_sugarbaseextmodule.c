@@ -31,8 +31,6 @@ init_sugarbaseext(void)
 {
     PyObject *m, *d;
 
-    init_pygobject ();
-
     m = Py_InitModule ("_sugarbaseext", py_sugarbaseext_functions);
     d = PyModule_GetDict (m);
 
