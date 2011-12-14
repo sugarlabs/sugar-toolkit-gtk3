@@ -29,6 +29,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 import cairo
 
+from sugar3.graphics import style
 from sugar3.graphics.xocolor import XoColor
 from sugar3.util import LRU
 
@@ -543,6 +544,75 @@ class Icon(Gtk.Image):
 
     scale = GObject.property(
         type=float, setter=set_scale)
+
+
+class EventIcon(Gtk.EventBox):
+    """
+    An Icon class that provides access to mouse events and that can act as a
+    cursor-positioned palette invoker.
+    """
+
+    __gtype_name__ = 'EventIcon'
+    __gsignals__ = {
+        'activated': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, []),
+    }
+
+    def __init__(self, **kwargs):
+        Gtk.EventBox.__init__(self)
+
+        self._icon = Icon()
+        for key, value in kwargs.iteritems():
+            self._icon.set_property(key, value)
+        self.add(self._icon)
+        self._icon.show()
+
+        from sugar3.graphics.palette import CursorInvoker
+        self._palette_invoker = CursorInvoker()
+        self._palette_invoker.attach(self)
+
+        self.modify_bg(Gtk.StateType.NORMAL, style.COLOR_WHITE.get_gdk_color())
+        self.connect('destroy', self.__destroy_cb)
+
+    def __destroy_cb(self, icon):
+        if self._palette_invoker is not None:
+            self._palette_invoker.detach()
+
+    def do_button_press_event(self, event):
+        if event.button == 1:
+            self.emit('activated')
+            return True
+        else:
+            return False
+
+    def get_icon(self):
+        return self._icon
+
+    icon = GObject.property(
+        type=object, getter=get_icon)
+
+    def get_palette(self):
+        return self._palette_invoker.palette
+
+    def set_palette(self, palette):
+        self._palette_invoker.palette = palette
+
+    palette = GObject.property(
+        type=object, setter=set_palette, getter=get_palette)
+
+    def get_palette_invoker(self):
+        return self._palette_invoker
+
+    def set_palette_invoker(self, palette_invoker):
+        self._palette_invoker.detach()
+        self._palette_invoker = palette_invoker
+
+    palette_invoker = GObject.property(
+        type=object, setter=set_palette_invoker, getter=get_palette_invoker)
+
+    def set_tooltip(self, text):
+        from sugar3.graphics.palette import Palette
+
+        self.set_palette(Palette(text))
 
 
 class CellRendererIcon(Gtk.CellRenderer):
