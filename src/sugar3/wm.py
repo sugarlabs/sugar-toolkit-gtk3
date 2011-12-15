@@ -82,9 +82,9 @@ def get_sugar_window_type(wnck_window):
 
 def set_activity_id(window, activity_id):
     _property_change_trapped(window, '_SUGAR_ACTIVITY_ID', 'STRING', 8,
-                             Gdk.PROP_MODE_REPLACE, activity_id)
+                             Gdk.PropMode.REPLACE, activity_id)
 
 
 def set_bundle_id(window, bundle_id):
     _property_change_trapped(window, '_SUGAR_BUNDLE_ID', 'STRING', 8,
-                             Gdk.PROP_MODE_REPLACE, bundle_id)
+                             Gdk.PropMode.REPLACE, bundle_id)

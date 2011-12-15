@@ -58,6 +58,7 @@ from functools import partial
 from gi.repository import GConf
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GObject
 import dbus
 import dbus.service

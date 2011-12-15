@@ -354,10 +354,13 @@ class _TimeoutIcon(Gtk.Alignment):
         self._draw(context)
         return False
 
-    def do_size_request(self, requisition):
-        requisition.height, requisition.width = \
-            Gtk.icon_size_lookup(Gtk.IconSize.BUTTON)
-        self._text.size_request()
+    def do_get_preferred_width(self):
+        width = Gtk.icon_size_lookup(Gtk.IconSize.BUTTON)[1]
+        return width, width
+
+    def do_get_preferred_height(self):
+        height = Gtk.icon_size_lookup(Gtk.IconSize.BUTTON)[2]
+        return height, height
 
     def _draw(self, context):
         w = self.get_allocated_width()
