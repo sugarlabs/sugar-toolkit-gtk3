@@ -450,6 +450,10 @@ class PaletteWindow(GObject.GObject):
         self._widget.disconnect_by_func(self.__leave_notify_cb)
         self._set_effective_group_id(None)
 
+    def destroy(self):
+        if self._widget is not None:
+            self._widget.destroy()
+
     def __destroy_cb(self, palette):
         self._mouse_detector.disconnect_by_func(self._mouse_slow_cb)
 
