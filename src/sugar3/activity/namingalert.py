@@ -20,6 +20,7 @@ import os
 
 from gi.repository import Gio
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import GConf
 
@@ -194,18 +195,18 @@ class NamingAlert(Gtk.Window):
         header = self._create_header()
         body.pack_start(header, False, False, style.DEFAULT_PADDING)
 
-        body.pack_start(self._create_separator(style.DEFAULT_SPACING, True, True, 0), False, False, 0)
+        body.pack_start(self._create_separator(style.DEFAULT_SPACING), False, False, 0)
 
-        body.pack_start(self._create_label(_('Description:', True, True, 0)), False, False, 0)
+        body.pack_start(self._create_label(_('Description:')), False, False, 0)
 
         description = self._activity.metadata.get('description', '')
         description_box, self._description = self._create_text_view(description)
         body.pack_start(description_box, True, True, 0)
 
-        body.pack_start(self._create_separator(style.DEFAULT_PADDING, True, True, 0), False, False, 0)
+        body.pack_start(self._create_separator(style.DEFAULT_PADDING), False, False, 0)
 
 
-        body.pack_start(self._create_label(_('Tags:', True, True, 0)), False, False, 0)
+        body.pack_start(self._create_label(_('Tags:')), False, False, 0)
 
         tags = self._activity.metadata.get('tags', '')
         tags_box, self._tags = self._create_text_view(tags)

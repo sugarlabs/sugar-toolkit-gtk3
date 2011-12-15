@@ -22,6 +22,7 @@ STABLE.
 
 from gi.repository import GObject
 from gi.repository import Gdk
+from gi.repository import GdkX11
 from gi.repository import Gtk
 import warnings
 
@@ -35,7 +36,7 @@ _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT = 2
 class UnfullscreenButton(Gtk.Window):
 
     def __init__(self):
-        GObject.GObject.__init__(self)
+        Gtk.Window.__init__(self)
 
         self.set_decorated(False)
         self.set_resizable(False)
@@ -46,11 +47,9 @@ class UnfullscreenButton(Gtk.Window):
         self.props.accept_focus = False
 
         #Setup estimate of width, height
-        w, h = Gtk.icon_size_lookup(Gtk.IconSize.LARGE_TOOLBAR)
+        valid_, w, h = Gtk.icon_size_lookup(Gtk.IconSize.LARGE_TOOLBAR)
         self._width = w
         self._height = h
-
-        self.connect('size-request', self._size_request_cb)
 
         screen = self.get_screen()
         screen.connect('size-changed', self._screen_size_changed_cb)
@@ -73,10 +72,11 @@ class UnfullscreenButton(Gtk.Window):
         x = Gdk.Screen.width() - self._width
         self.move(x, 0)
 
-    def _size_request_cb(self, widget, req):
-        self._width = req.width
-        self._height = req.height
+    def do_get_preferred_width(self):
+        minimum, natural = Gtk.Window.do_get_preferred_width(self)
+        self._width = minimum
         self._reposition()
+        return minimum, natural
 
     def _screen_size_changed_cb(self, screen):
         self._reposition()
@@ -193,7 +193,7 @@ class Window(Gtk.Window):
             self.__vbox.remove(self._toolbar_box)
 
         if toolbar_box:
-            self.__vbox.pack_start(toolbar_box, False)
+            self.__vbox.pack_start(toolbar_box, False, False, 0)
             self.__vbox.reorder_child(toolbar_box, 0)
 
         self._toolbar_box = toolbar_box
@@ -206,18 +206,18 @@ class Window(Gtk.Window):
             box.remove(self.tray)
 
         if position == Gtk.PositionType.LEFT:
-            self.__hbox.pack_start(tray, False)
+            self.__hbox.pack_start(tray, False, False, 0)
         elif position == Gtk.PositionType.RIGHT:
-            self.__hbox.pack_end(tray, False)
+            self.__hbox.pack_end(tray, False, False, 0)
         elif position == Gtk.PositionType.BOTTOM:
-            self.__vbox.pack_end(tray, False)
+            self.__vbox.pack_end(tray, False, False, 0)
 
         self.tray = tray
 
     def add_alert(self, alert):
         self._alerts.append(alert)
         if len(self._alerts) == 1:
-            self.__vbox.pack_start(alert, False)
+            self.__vbox.pack_start(alert, False, False, 0)
             if self._toolbar_box is not None:
                 self.__vbox.reorder_child(alert, 1)
             else:
@@ -230,7 +230,7 @@ class Window(Gtk.Window):
             if alert.get_parent() is not None:
                 self.__vbox.remove(alert)
                 if len(self._alerts) >= 1:
-                    self.__vbox.pack_start(self._alerts[0], False)
+                    self.__vbox.pack_start(self._alerts[0], False, False, 0)
                     if self._toolbar_box is not None:
                         self.__vbox.reorder_child(self._alerts[0], 1)
                     else:

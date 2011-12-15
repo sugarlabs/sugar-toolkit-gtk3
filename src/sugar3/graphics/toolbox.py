@@ -50,7 +50,7 @@ class Toolbox(Gtk.VBox):
         self._separator.modify_bg(Gtk.StateType.NORMAL,
                                   style.COLOR_PANEL_GREY.get_gdk_color())
         self._separator.set_size_request(1, style.TOOLBOX_SEPARATOR_HEIGHT)
-        self.pack_start(self._separator, False)
+        self.pack_start(self._separator, False, False, 0)
 
         self._notebook.connect('notify::page', self._notify_page_cb)
 
@@ -59,8 +59,9 @@ class Toolbox(Gtk.VBox):
 
     def add_toolbar(self, name, toolbar):
         label = Gtk.Label(label=name)
-        width, height_ = label.size_request()
-        label.set_size_request(max(width, style.TOOLBOX_TAB_LABEL_WIDTH), -1)
+        req = label.size_request()
+        label.set_size_request(max(req.width, style.TOOLBOX_TAB_LABEL_WIDTH),
+                               -1)
         label.set_alignment(0.0, 0.5)
 
         event_box = Gtk.EventBox()

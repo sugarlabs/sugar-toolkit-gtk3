@@ -231,7 +231,7 @@ class RawObject(object):
                 'uid': file_path,
                 'title': os.path.basename(file_path),
                 'timestamp': stat.st_mtime,
-                'mime_type': Gio.content_type_guess(filename=file_path),
+                'mime_type': Gio.content_type_guess(file_path, None)[0],
                 'activity': '',
                 'activity_id': '',
                 'icon-color': client.get_string('/desktop/sugar/user/color'),

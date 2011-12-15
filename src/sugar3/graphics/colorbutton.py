@@ -17,6 +17,8 @@
 # Boston, MA 02111-1307, USA.
 
 import gettext
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import GObject
 import struct
@@ -261,7 +263,7 @@ class _ColorPalette(Palette):
         self._swatch_tray = Gtk.Table()
 
         self._picker_hbox.pack_start(self._swatch_tray, True, True, 0)
-        self._picker_hbox.pack_start(Gtk.VSeparator(, True, True, 0),
+        self._picker_hbox.pack_start(Gtk.VSeparator(), True, True,
                                      padding=style.DEFAULT_SPACING)
 
         self._chooser_table = Gtk.Table(3, 2)

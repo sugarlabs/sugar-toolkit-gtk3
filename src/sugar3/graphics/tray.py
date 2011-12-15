@@ -76,14 +76,15 @@ class _TrayViewport(Gtk.Viewport):
         assert item in self.traybar.get_children()
 
         # Get the allocation, and make sure that it is visible
+        allocation = item.get_allocation()
         if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
-            start = item.allocation.x
-            stop = item.allocation.x + item.allocation.width
+            start = allocation.x
+            stop = allocation.x + allocation.width
         else:
             adj = self.get_vadjustment()
-            start = item.allocation.y
-            stop = item.allocation.y + item.allocation.height
+            start = allocation.y
+            stop = allocation.y + allocation.height
 
         if start < adj.get_value():
             adj.set_value(start)
@@ -112,14 +113,17 @@ class _TrayViewport(Gtk.Viewport):
             new_value = adj.get_value() - allocation.height
             adj.set_value(max(adj.get_lower(), new_value))
 
-    def do_size_request(self, requisition):
-        child_requisition = self.get_child().size_request()
+    def do_get_preferred_width(self):
         if self.orientation == Gtk.Orientation.HORIZONTAL:
-            requisition[0] = 0
-            requisition[1] = child_requisition[1]
-        else:
-            requisition[0] = child_requisition[0]
-            requisition[1] = 0
+            return Gtk.Viewport.do_get_preferred_width(self)
+        child_minimum, child_natural = self.get_child().get_preferred_size()
+        return child_minimum.width, child_natural.width
+
+    def do_get_preferred_height(self):
+        if self.orientation != Gtk.Orientation.HORIZONTAL:
+            return Gtk.Viewport.do_get_preferred_width(self)
+        child_minimum, child_natural = self.get_child().get_preferred_size()
+        return child_minimum.height, child_natural.height
 
     def do_get_property(self, pspec):
         if pspec.name == 'scrollable':

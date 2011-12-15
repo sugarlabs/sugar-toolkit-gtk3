@@ -15,7 +15,10 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 
 from sugar3.graphics import style
 from sugar3.graphics.icon import _SVGLoader

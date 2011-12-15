@@ -23,6 +23,7 @@ import logging
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 import dbus
 
 from sugar3.datastore import datastore

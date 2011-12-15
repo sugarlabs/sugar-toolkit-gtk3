@@ -20,6 +20,7 @@ STABLE.
 """
 
 from gi.repository import Gtk
+from gi.repository import GObject
 
 
 class Panel(Gtk.VBox):
