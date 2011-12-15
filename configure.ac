@@ -29,7 +29,7 @@ AC_SUBST(PYGTK_DEFSDIR)
 #
 ALL_LINGUAS="af am ar ay bg bi bn_IN bn ca cpp cs da de dz el en es fa_AF fa ff fil fr gu ha he hi ht hu id ig is it ja km ko kos mg mi mk ml mn mr ms mvo nb ne nl pa pap pis pl ps pt_BR pt qu ro ru rw sd si sk sl sq sv sw ta te th tpi tr tvl tzo ug ur vi wa yo zh_CN zh_TW"
 
-GETTEXT_PACKAGE=sugar-toolkit
+GETTEXT_PACKAGE=sugar-toolkit-gtk3
 AC_PROG_INTLTOOL([0.33])
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
