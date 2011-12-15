@@ -1,6 +1,8 @@
 # Copyright (C) 2007, Eduardo Silva <edsiper@gmail.com>
 # Copyright (C) 2008, One Laptop Per Child
 # Copyright (C) 2009, Tomeu Vizoso
+# Copyright (C) 2011, Benjamin Berg <benjamin@sipsolutions.net>
+# Copyright (C) 2011, Marco Pesenti Gritti <marco@marcopg.org>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -29,8 +31,8 @@ from sugar3.graphics import palettegroup
 from sugar3.graphics import animator
 from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
-from sugar3.graphics.palettewindow import PaletteWindow
-from gi.repository import SugarExt
+from sugar3.graphics.palettewindow import PaletteWindow, \
+    _PaletteWindowWidget, _PaletteMenuWidget
 
 # DEPRECATED
 # Import these for backwards compatibility
@@ -39,16 +41,37 @@ from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
 
 
 class Palette(PaletteWindow):
+    """
+    Floating palette implementation.
+
+    This class dynamically switches between one of two encapsulated child
+    widget types: a _PaletteWindowWidget or a _PaletteMenuWidget.
+
+    The window widget, created by default, acts as the container for any
+    type of widget the user may wish to add. It can optionally display primary
+    text, secondary text, and an icon at the top of the palette.
+
+    If the user attempts to access the 'menu' property, the window widget is
+    destroyed and the palette is dynamically switched to use a menu widget.
+    This is a GtkMenu that retains the same look and feel as a normal palette,
+    allowing submenus and so on. If primary text, secondary text and/or icons
+    were provided, an initial menu entry is created containing widgets to
+    display such information.
+    """
+
     PRIMARY = 0
     SECONDARY = 1
 
+    __gsignals__ = {
+        'activate': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+    }
+
     __gtype_name__ = 'SugarPalette'
 
-    def __init__(self, label=None, accel_path=None, menu_after_content=False,
+    def __init__(self, label=None, accel_path=None,
                  text_maxlen=60, **kwargs):
         # DEPRECATED: label is passed with the primary-text property,
-        # accel_path is set via the invoker property, and menu_after_content
-        # is not used
+        # accel_path is set via the invoker property
 
         self._primary_text = None
         self._secondary_text = None
@@ -56,15 +79,12 @@ class Palette(PaletteWindow):
         self._icon_visible = True
         self._palette_state = self.PRIMARY
 
-        palette_box = Gtk.VBox()
-
-        primary_box = Gtk.HBox()
-        palette_box.pack_start(primary_box, False, True, 0)
-        primary_box.show()
+        self._primary_box = Gtk.HBox()
+        self._primary_box.show()
 
         self._icon_box = Gtk.HBox()
         self._icon_box.set_size_request(style.GRID_CELL_SIZE, -1)
-        primary_box.pack_start(self._icon_box, False, True, 0)
+        self._primary_box.pack_start(self._icon_box, False, True, 0)
 
         labels_box = Gtk.VBox()
         self._label_alignment = Gtk.Alignment(xalign=0, yalign=0.5, xscale=1,
@@ -73,7 +93,7 @@ class Palette(PaletteWindow):
                                           style.DEFAULT_SPACING)
         self._label_alignment.add(labels_box)
         self._label_alignment.show()
-        primary_box.pack_start(self._label_alignment, True, True, 0)
+        self._primary_box.pack_start(self._label_alignment, True, True, 0)
         labels_box.show()
 
         self._label = Gtk.AccelLabel(label='')
@@ -94,12 +114,9 @@ class Palette(PaletteWindow):
         labels_box.pack_start(self._secondary_label, True, True, 0)
 
         self._secondary_box = Gtk.VBox()
-        palette_box.pack_start(self._secondary_box, True, True, 0)
 
         self._separator = Gtk.HSeparator()
         self._secondary_box.pack_start(self._separator, True, True, 0)
-
-        self._menu_content_separator = Gtk.HSeparator()
 
         self._secondary_anim = animator.Animator(2.0, 10)
         self._secondary_anim.add(_SecondaryAnimation(self))
@@ -107,64 +124,41 @@ class Palette(PaletteWindow):
         # we init after initializing all of our containers
         PaletteWindow.__init__(self, **kwargs)
 
-        primary_box.set_size_request(-1, style.GRID_CELL_SIZE
-                                     - 2 * self.get_border_width())
-
         self._full_request = [0, 0]
-        self._menu_box = None
         self._content = None
 
         # we set these for backward compatibility
         if label is not None:
             self.props.primary_text = label
 
-        self._add_menu()
-        self._secondary_box.pack_start(self._menu_content_separator, True, True, 0)
         self._add_content()
 
         self.action_bar = PaletteActionBar()
         self._secondary_box.pack_start(self.action_bar, True, True, 0)
         self.action_bar.show()
 
-        self.add(palette_box)
-        palette_box.show()
-
-        # The menu is not shown here until an item is added
-        self.menu = _Menu(self)
-        self.menu.connect('item-inserted', self.__menu_item_inserted_cb)
-
-        self.connect('realize', self.__realize_cb)
-        self.connect('show', self.__show_cb)
-        self.connect('hide', self.__hide_cb)
         self.connect('notify::invoker', self.__notify_invoker_cb)
-        self.connect('destroy', self.__destroy_cb)
+        self.connect('popdown', self.__popdown_cb)
+
+        # Default to a normal window palette
+        self._content_widget = None
+        self.set_content(None)
+
+    def _setup_widget(self):
+        PaletteWindow._setup_widget(self)
+        self._widget.connect('destroy', self.__destroy_cb)
 
     def _invoker_right_click_cb(self, invoker):
         self.popup(immediate=True, state=self.SECONDARY)
-
-    def do_style_set(self, previous_style):
-        # Prevent a warning from pygtk
-        if previous_style is not None:
-            Gtk.Window.do_style_set(self, previous_style)
-        self.set_border_width(self.get_style().xthickness)
-
-    def __menu_item_inserted_cb(self, menu):
-        self._update_separators()
 
     def __destroy_cb(self, palette):
         self._secondary_anim.stop()
         self.popdown(immediate=True)
         # Break the reference cycle. It looks like the gc is not able to free
         # it, possibly because Gtk.Menu memory handling is very special.
-        self.menu.disconnect_by_func(self.__menu_item_inserted_cb)
-        self.menu = None
+        self._widget = None
 
-    def __show_cb(self, widget):
-        self.menu.set_active(True)
-
-    def __hide_cb(self, widget):
-        self.menu.set_active(False)
-        self.menu.cancel()
+    def __popdown_cb(self, widget):
         self._secondary_anim.stop()
 
     def __notify_invoker_cb(self, palette, pspec):
@@ -198,27 +192,15 @@ class Palette(PaletteWindow):
     def popdown(self, immediate=False):
         if immediate:
             self._secondary_anim.stop()
-            self._popdown_submenus()
             # to suppress glitches while later re-opening
             self.set_palette_state(self.PRIMARY)
+            if self._widget:
+                self._widget.size_request()
         PaletteWindow.popdown(self, immediate)
 
-    def _popdown_submenus(self):
-        # TODO explicit hiding of subitems
-        # should be removed after fixing #1301
-        if self.menu is not None:
-            for menu_item in self.menu.get_children():
-                if menu_item.props.submenu is not None:
-                    menu_item.props.submenu.popdown()
-
-    def on_enter(self, event):
-        PaletteWindow.on_enter(self, event)
+    def on_enter(self):
+        PaletteWindow.on_enter(self)
         self._secondary_anim.start()
-
-    def _add_menu(self):
-        self._menu_box = Gtk.VBox()
-        self._secondary_box.pack_start(self._menu_box, True, True, 0)
-        self._menu_box.show()
 
     def _add_content(self):
         # The content is not shown until a widget is added
@@ -315,6 +297,22 @@ class Palette(PaletteWindow):
                                     setter=set_icon_visible)
 
     def set_content(self, widget):
+        assert self._widget is None \
+                or isinstance(self._widget, _PaletteWindowWidget)
+
+        if self._widget is None:
+            self._widget = _PaletteWindowWidget()
+            self._setup_widget()
+
+            self._palette_box = Gtk.VBox()
+            self._palette_box.pack_start(self._primary_box, False, True, 0)
+            self._palette_box.pack_start(self._secondary_box, True, True, 0)
+
+            self._widget.add(self._palette_box)
+            self._palette_box.show()
+            height = style.GRID_CELL_SIZE - 2 * self._widget.get_border_width()
+            self._primary_box.set_size_request(-1, height)
+
         if self._content.get_children():
             self._content.remove(self._content.get_children()[0])
 
@@ -324,48 +322,37 @@ class Palette(PaletteWindow):
         else:
             self._content.hide()
 
+        self._content_widget = widget
+
         self._update_accept_focus()
         self._update_separators()
 
-    def do_size_request(self, requisition):
-        PaletteWindow.do_size_request(self, requisition)
+    def do_get_preferred_width(self):
+        minimum, natural = PaletteWindow.do_get_preferred_width(self)
 
         # Gtk.AccelLabel request doesn't include the accelerator.
         label_width = self._label_alignment.size_request()[0] + \
                       self._label.get_accel_width() + \
                       2 * self.get_border_width()
 
-        requisition.width = max(requisition.width,
-                                label_width,
-                                self._full_request[0])
+        width = max(minimum, label_width, self._full_request[0])
+        return width, width
 
     def _update_separators(self):
-        visible = self.menu.get_children() or  \
-                  self._content.get_children()
+        visible = self._content.get_children()
         self._separator.props.visible = visible
-
-        visible = self.menu.get_children() and  \
-                  self._content.get_children()
-        self._menu_content_separator.props.visible = visible
 
     def _update_accept_focus(self):
         accept_focus = len(self._content.get_children())
-        window = self.get_window()
-        if window:
-            window.set_accept_focus(accept_focus)
-
-    def __realize_cb(self, widget):
-        self._update_accept_focus()
+        self._widget.set_accept_focus(accept_focus)
 
     def _update_full_request(self):
         if self._palette_state == self.PRIMARY:
-            self.menu.embed(self._menu_box)
             self._secondary_box.show()
 
-        self._full_request = self.size_request()
+        self._full_request = self._widget.size_request()
 
         if self._palette_state == self.PRIMARY:
-            self.menu.unembed()
             self._secondary_box.hide()
 
     def _set_palette_state(self, state):
@@ -373,14 +360,45 @@ class Palette(PaletteWindow):
             return
 
         if state == self.PRIMARY:
-            self.menu.unembed()
             self._secondary_box.hide()
         elif state == self.SECONDARY:
-            self.menu.embed(self._menu_box)
             self._secondary_box.show()
             self.update_position()
 
         self._palette_state = state
+
+    def get_menu(self):
+        assert self._content_widget is None
+
+        if self._widget is None \
+                or not isinstance(self._widget, _PaletteMenuWidget):
+            if self._widget is not None:
+                self._palette_box.remove(self._primary_box)
+                self._palette_box.remove(self._secondary_box)
+                self._teardown_widget()
+                self._widget.destroy()
+
+            self._widget = _PaletteMenuWidget()
+
+            self._label_menuitem = Gtk.MenuItem()
+            child = self._label_menuitem.get_child()
+            if child is not None:
+                self._label_menuitem.remove(child)
+            self._label_menuitem.add(self._primary_box)
+
+            # Mark the menuitem as insensitive so that it appears as an
+            # informational element, rather than a clickable item in the menu.
+            # TODO: see if we can do this better in GTK.
+            self._label_menuitem.set_sensitive(False)
+
+            self._label_menuitem.show()
+            self._widget.append(self._label_menuitem)
+
+            self._setup_widget()
+
+        return self._widget
+
+    menu = GObject.property(type=object, getter=get_menu)
 
 
 class PaletteActionBar(Gtk.HButtonBox):
@@ -395,44 +413,6 @@ class PaletteActionBar(Gtk.HButtonBox):
 
         self.pack_start(button, True, True, 0)
         button.show()
-
-
-class _Menu(SugarExt.Menu):
-
-    __gtype_name__ = 'SugarPaletteMenu'
-
-    __gsignals__ = {
-        'item-inserted': (GObject.SignalFlags.RUN_FIRST, None, ([])),
-    }
-
-    def __init__(self, palette):
-        SugarExt.Menu.__init__(self)
-        self._palette = palette
-
-    def do_insert(self, item, position):
-        SugarExt.Menu.do_insert(self, item, position)
-        self.emit('item-inserted')
-        self.show()
-
-    def attach(self, child, left_attach, right_attach,
-               top_attach, bottom_attach):
-        SugarExt.Menu.attach(self, child, left_attach, right_attach,
-                              top_attach, bottom_attach)
-        self.emit('item-inserted')
-        self.show()
-
-    def do_expose_event(self, event):
-        # Ignore the Menu expose, just do the MenuShell expose to prevent any
-        # border from being drawn here. A border is drawn by the palette object
-        # around everything.
-        Gtk.MenuShell.do_expose_event(self, event)
-
-    def do_grab_notify(self, was_grabbed):
-        # Ignore grab_notify as the menu would close otherwise
-        pass
-
-    def do_deactivate(self):
-        self._palette.hide()
 
 
 class _SecondaryAnimation(animator.Animation):

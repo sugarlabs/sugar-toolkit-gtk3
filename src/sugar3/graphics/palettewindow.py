@@ -1,6 +1,8 @@
 # Copyright (C) 2007, Eduardo Silva <edsiper@gmail.com>
 # Copyright (C) 2008, One Laptop Per Child
 # Copyright (C) 2009, Tomeu Vizoso
+# Copyright (C) 2011, Benjamin Berg <benjamin@sipsolutions.net>
+# Copyright (C) 2011, Marco Pesenti Gritti <marco@marcopg.org>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -65,6 +67,258 @@ def _calculate_gap(a, b):
         return False
 
 
+class _PaletteMenuWidget(Gtk.Menu):
+
+    __gtype_name__ = "SugarPaletteMenuWidget"
+
+    __gsignals__ = {
+        'enter-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+    }
+
+    def __init__(self):
+        Gtk.Menu.__init__(self)
+
+        accel_group = Gtk.AccelGroup()
+        self.set_data('sugar-accel-group', accel_group)
+        self.get_toplevel().add_accel_group(accel_group)
+
+        self._popup_position = (0, 0)
+        self._entered = False
+        self._mouse_in_palette = False
+        self._mouse_in_invoker = False
+        self._up = False
+        self._invoker = None
+        self._menus = []
+
+    def set_accept_focus(self, focus):
+        pass
+
+    def get_origin(self):
+        res_, x, y = self.get_toplevel().get_window().get_origin()
+        return x, y
+
+    def do_size_request(self, requisition):
+        Gtk.Window.do_size_request(self, requisition)
+        requisition.width = max(requisition.width, style.GRID_CELL_SIZE * 2)
+
+    def move(self, x, y):
+        self._popup_position = (x, y)
+
+    def set_transient_for(self, window):
+        pass
+
+    def _position(self, widget, data):
+        return self._popup_position[0], self._popup_position[1], False
+
+    def popup(self, invoker):
+        if self._up:
+            return
+
+        # We need to track certain mouse events in order to close the palette
+        # when the mouse leaves the palette and the invoker widget, but
+        # GtkMenu makes our lives hard here.
+        #
+        # GtkMenu takes a grab on the root window, meaning that normal
+        # enter/leave events are not sent to the relevant widgets.
+        # However, connecting enter-notify and leave-notify events in this
+        # GtkMenu subclass mean that we get to see the events being grabbed.
+        # With certain filtering in place (see _enter_notify_cb and
+        # _leave_notify_cb) we are able to accurately determine when the
+        # mouse leaves/enters the palette menu. Some spurious events are
+        # generated but the important thing is that the last event generated
+        # in response to a user action is always reliable (i.e. we will
+        # always get a leave event last if the user left the menu,
+        # even if we get some strange enter events leading up to it).
+        #
+        # This is complicated with submenus; in this case the submenu takes
+        # the grab, so we must also listen for events on any submenus of
+        # the palette and apply the same considerations.
+        #
+        # The remaining challenge is tracking when the mouse enters or leaves
+        # the invoker area. While the appropriate GtkMenu grab is active,
+        # we do get informed of such events, however these events will only
+        # arrive if the user has entered the menu. If the user hovers over
+        # the invoker and then leaves the invoker without entering the palette,
+        # we get no enter/leave event.
+        # We work around this by tracking mouse motion events. When the mouse
+        # moves, we compare the mouse coordinates to the region occupied by the
+        # invoker, and this lets us track enter/leave for the invoker widget.
+
+        self._invoker = invoker
+        self._find_all_menus(self)
+        for menu in self._menus:
+            if self._invoker:
+                menu.connect('motion-notify-event', self._motion_notify_cb)
+            menu.connect('enter-notify-event', self._enter_notify_cb)
+            menu.connect('leave-notify-event', self._leave_notify_cb)
+        self._entered = False
+        self._mouse_in_palette = False
+        self._mouse_in_invoker = False
+        Gtk.Menu.popup(self, None, None, self._position, None, 0, 0)
+        self._up = True
+
+    def popdown(self):
+        if not self._up:
+            return
+        Gtk.Menu.popdown(self)
+
+        for menu in self._menus:
+            menu.disconnect_by_func(self._motion_notify_cb)
+            menu.disconnect_by_func(self._enter_notify_cb)
+            menu.disconnect_by_func(self._leave_notify_cb)
+
+        self._up = False
+        self._menus = []
+        self._invoker = None
+
+    def _find_all_menus(self, menu):
+        """
+        Recursively find all submenus of menu, adding them to self._menus.
+        """
+        self._menus.append(menu)
+        for child in menu.get_children():
+            if not isinstance(child, Gtk.MenuItem):
+                continue
+            submenu = child.get_submenu()
+            if submenu and isinstance(submenu, Gtk.Menu):
+                self._find_all_menus(submenu)
+
+    def _enter_notify_cb(self, widget, event):
+        if event.mode in (Gdk.CrossingMode.GRAB, Gdk.CrossingMode.GTK_GRAB):
+            return False
+        if Gtk.get_event_widget(event) not in self._menus:
+            return False
+
+        self._mouse_in_palette = True
+        self._reevaluate_state()
+        return False
+
+    def _leave_notify_cb(self, widget, event):
+        if event.mode in (Gdk.CrossingMode.GRAB, Gdk.CrossingMode.GTK_GRAB):
+            return False
+        if Gtk.get_event_widget(event) not in self._menus:
+            return False
+
+        self._mouse_in_palette = False
+        self._reevaluate_state()
+        return False
+
+    def _motion_notify_cb(self, widget, event):
+        rect = self._invoker.get_rect()
+        x = event.x_root
+        y = event.y_root
+        in_invoker = x >= rect.x and x < (rect.x + rect.width) \
+            and y >= rect.y and y < (rect.y + rect.height)
+        if in_invoker != self._mouse_in_invoker:
+            self._mouse_in_invoker = in_invoker
+            self._reevaluate_state()
+
+    def _reevaluate_state(self):
+        if self._entered:
+            # If we previously advised that the mouse was inside, but now the
+            # mouse is outside both the invoker and the palette, notify that
+            # the mouse has left.
+            if not self._mouse_in_palette and not self._mouse_in_invoker:
+                self._entered = False
+                self.emit('leave-notify')
+        else:
+            # If we previously advised that the mouse had left, but now the
+            # mouse is inside either the palette or the invoker, notify that
+            # the mouse has entered.
+            if self._mouse_in_palette or self._mouse_in_invoker:
+                self._entered = True
+                self.emit('enter-notify')
+
+
+class _PaletteWindowWidget(Gtk.Window):
+
+    __gtype_name__ = 'SugarPaletteWindowWidget'
+
+    __gsignals__ = {
+        'enter-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+    }
+
+    def __init__(self):
+        Gtk.Window.__init__(self)
+
+        self.set_decorated(False)
+        self.set_resizable(False)
+        self.set_position(Gtk.WindowPosition.NONE)
+
+        accel_group = Gtk.AccelGroup()
+        self.set_data('sugar-accel-group', accel_group)
+        self.add_accel_group(accel_group)
+
+        self._old_alloc = None
+
+        self._should_accept_focus = True
+
+    def set_accept_focus(self, focus):
+        self._should_accept_focus = focus
+        if self.get_window() != None:
+            self.get_window().set_accept_focus(focus)
+
+    def get_origin(self):
+        res_, x, y = self.get_window().get_origin()
+        return x, y
+
+    def do_realize(self):
+        Gtk.Window.do_realize(self)
+
+        self.get_window().set_accept_focus(self._should_accept_focus)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+
+    def do_size_request(self, requisition):
+        Gtk.Window.do_size_request(self, requisition)
+        requisition.width = max(requisition.width, style.GRID_CELL_SIZE * 2)
+
+    def do_size_allocate(self, allocation):
+        Gtk.Window.do_size_allocate(self, allocation)
+
+        if self._old_alloc is None or \
+           self._old_alloc.x != allocation.x or \
+           self._old_alloc.y != allocation.y or \
+           self._old_alloc.width != allocation.width or \
+           self._old_alloc.height != allocation.height:
+            self.queue_draw()
+
+        # We need to store old allocation because when size_allocate
+        # is called widget.allocation is already updated.
+        # Gtk.Window resizing is different from normal containers:
+        # the X window is resized, widget.allocation is updated from
+        # the configure request handler and finally size_allocate is called.
+        self._old_alloc = allocation
+
+    def __enter_notify_event_cb(self, widget, event):
+        if event.mode == Gdk.CrossingMode.NORMAL and \
+                event.detail != Gdk.NotifyType.INFERIOR:
+            self.emit('enter-notify')
+        return False
+
+    def __leave_notify_event_cb(self, widget, event):
+        if event.mode != Gdk.CrossingMode.NORMAL:
+            return False
+
+        if event.detail != Gdk.NotifyType.INFERIOR:
+            self.emit('leave-notify')
+
+    def popup(self, invoker):
+        if self.get_visible():
+            return
+        self.connect('enter-notify-event', self.__enter_notify_event_cb)
+        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+        self.show()
+
+    def popdown(self):
+        if not self.get_visible():
+            return
+        self.disconnect_by_func(self.__enter_notify_event_cb)
+        self.disconnect_by_func(self.__leave_notify_event_cb)
+        self.hide()
+
+
 class MouseSpeedDetector(GObject.GObject):
 
     __gsignals__ = {
@@ -75,15 +329,15 @@ class MouseSpeedDetector(GObject.GObject):
     _MOTION_SLOW = 1
     _MOTION_FAST = 2
 
-    def __init__(self, parent, delay, thresh):
+    def __init__(self, delay, thresh):
         """Create MouseSpeedDetector object,
             delay in msec
             threshold in pixels (per tick of 'delay' msec)"""
 
         GObject.GObject.__init__(self)
 
+        self.parent = None
         self._threshold = thresh
-        self._parent = parent
         self._delay = delay
         self._state = None
         self._timeout_hid = None
@@ -101,8 +355,10 @@ class MouseSpeedDetector(GObject.GObject):
         self._state = None
 
     def _get_mouse_position(self):
-        display = Gdk.Display.get_default()
-        screen_, x, y, mask_ = display.get_pointer()
+        display = self.parent.get_display()
+        manager = display.get_device_manager()
+        pointer_device = manager.get_client_pointer()
+        screen, x, y = pointer_device.get_position()
         return (x, y)
 
     def _detect_motion(self):
@@ -128,14 +384,16 @@ class MouseSpeedDetector(GObject.GObject):
         return True
 
 
-class PaletteWindow(Gtk.Window):
+class PaletteWindow(GObject.GObject):
+    """
+    Base class for _ToolbarPalette and Palette.
 
-    __gtype_name__ = 'SugarPaletteWindow'
+    Provides basic management of child widget, invoker, and animation.
+    """
 
     __gsignals__ = {
         'popup': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'popdown': (GObject.SignalFlags.RUN_FIRST, None, ([])),
-        'activate': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, **kwargs):
@@ -146,8 +404,8 @@ class PaletteWindow(Gtk.Window):
         self._cursor_y = 0
         self._alignment = None
         self._up = False
-        self._old_alloc = None
         self._palette_state = None
+        self._widget = None
 
         self._popup_anim = animator.Animator(.5, 10)
         self._popup_anim.add(_PopupAnimation(self))
@@ -157,29 +415,35 @@ class PaletteWindow(Gtk.Window):
 
         GObject.GObject.__init__(self, **kwargs)
 
-        self.set_decorated(False)
-        self.set_resizable(False)
-        # Just assume xthickness and ythickness are the same
-        self.set_border_width(self.get_style().xthickness)
-
-        accel_group = Gtk.AccelGroup()
-        self.set_data('sugar-accel-group', accel_group)
-        self.add_accel_group(accel_group)
-
         self.set_group_id('default')
 
-        self.connect('show', self.__show_cb)
-        self.connect('hide', self.__hide_cb)
-        self.connect('realize', self.__realize_cb)
-        self.connect('destroy', self.__destroy_cb)
-        self.connect('enter-notify-event', self.__enter_notify_event_cb)
-        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+        self._mouse_detector = MouseSpeedDetector(200, 5)
 
-        self._mouse_detector = MouseSpeedDetector(self, 200, 5)
+    def _setup_widget(self):
+        self._widget.connect('show', self.__show_cb)
+        self._widget.connect('hide', self.__hide_cb)
+        self._widget.connect('destroy', self.__destroy_cb)
+        self._widget.connect('enter-notify', self.__enter_notify_cb)
+        self._widget.connect('leave-notify', self.__leave_notify_cb)
+
+        self._set_effective_group_id(self._group_id)
+
         self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
+        self._mouse_detector.parent = self._widget
+
+    def _teardown_widget(self):
+        self._widget.disconnect_by_func(self.__show_cb)
+        self._widget.disconnect_by_func(self.__hide_cb)
+        self._widget.disconnect_by_func(self.__destroy_cb)
+        self._widget.disconnect_by_func(self.__enter_notify_cb)
+        self._widget.disconnect_by_func(self.__leave_notify_cb)
+        self._set_effective_group_id(None)
+
+    def destroy(self):
+        if self._widget is not None:
+            self._widget.destroy()
 
     def __destroy_cb(self, palette):
-        self.set_group_id(None)
         self._mouse_detector.disconnect_by_func(self._mouse_slow_cb)
 
     def set_invoker(self, invoker):
@@ -203,9 +467,6 @@ class PaletteWindow(Gtk.Window):
                                getter=get_invoker,
                                setter=set_invoker)
 
-    def __realize_cb(self, widget):
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-
     def _mouse_slow_cb(self, widget):
         self._mouse_detector.stop()
         self._palette_do_popup()
@@ -228,14 +489,17 @@ class PaletteWindow(Gtk.Window):
     def is_up(self):
         return self._up
 
-    def set_group_id(self, group_id):
+    def _set_effective_group_id(self, group_id):
         if self._group_id:
             group = palettegroup.get_group(self._group_id)
             group.remove(self)
         if group_id:
-            self._group_id = group_id
             group = palettegroup.get_group(group_id)
             group.add(self)
+
+    def set_group_id(self, group_id):
+        self._set_effective_group_id(group_id)
+        self._group_id = group_id
 
     def get_group_id(self):
         return self._group_id
@@ -244,69 +508,21 @@ class PaletteWindow(Gtk.Window):
                                 getter=get_group_id,
                                 setter=set_group_id)
 
-    def do_size_request(self, requisition):
-        Gtk.Window.do_size_request(self, requisition)
-        requisition.width = max(requisition.width, style.GRID_CELL_SIZE * 2)
-
-    def do_size_allocate(self, allocation):
-        Gtk.Window.do_size_allocate(self, allocation)
-
-        if self._old_alloc is None or \
-           self._old_alloc.x != allocation.x or \
-           self._old_alloc.y != allocation.y or \
-           self._old_alloc.width != allocation.width or \
-           self._old_alloc.height != allocation.height:
-            self.queue_draw()
-
-        # We need to store old allocation because when size_allocate
-        # is called widget.allocation is already updated.
-        # Gtk.Window resizing is different from normal containers:
-        # the X window is resized, widget.allocation is updated from
-        # the configure request handler and finally size_allocate is called.
-        self._old_alloc = allocation
-
-    def do_expose_event(self, event):
-        # We want to draw a border with a beautiful gap
-        if self._invoker is not None and self._invoker.has_rectangle_gap():
-            invoker = self._invoker.get_rect()
-            palette = self.get_rect()
-
-            gap = _calculate_gap(palette, invoker)
-        else:
-            gap = False
-
-        allocation = self.get_allocation()
-        wstyle = self.get_style()
-
-        if gap:
-            wstyle.paint_box_gap(event.window, Gtk.StateType.PRELIGHT,
-                                 Gtk.ShadowType.IN, event.area, self, 'palette',
-                                 0, 0, allocation.width, allocation.height,
-                                 gap[0], gap[1], gap[2])
-        else:
-            wstyle.paint_box(event.window, Gtk.StateType.PRELIGHT,
-                             Gtk.ShadowType.IN, event.area, self, 'palette',
-                             0, 0, allocation.width, allocation.height)
-
-        # Fall trough to the container expose handler.
-        # (Leaving out the window expose handler which redraws everything)
-        Gtk.Bin.do_expose_event(self, event)
-
     def update_position(self):
         invoker = self._invoker
         if invoker is None or self._alignment is None:
             logging.error('Cannot update the palette position.')
             return
 
-        rect = self.size_request()
+        rect = self._widget.size_request()
         position = invoker.get_position_for_alignment(self._alignment, rect)
         if position is None:
             position = invoker.get_position(rect)
 
-        self.move(position.x, position.y)
+        self._widget.move(position.x, position.y)
 
     def get_full_size_request(self):
-        return self.size_request()
+        return self._widget.size_request()
 
     def popup(self, immediate=False):
         if self._invoker is not None:
@@ -314,7 +530,7 @@ class PaletteWindow(Gtk.Window):
             self._alignment = self._invoker.get_alignment(full_size_request)
 
             self.update_position()
-            self.set_transient_for(self._invoker.get_toplevel())
+            self._widget.set_transient_for(self._invoker.get_toplevel())
 
         self._popdown_anim.stop()
 
@@ -322,7 +538,7 @@ class PaletteWindow(Gtk.Window):
             self._popup_anim.start()
         else:
             self._popup_anim.stop()
-            self.show()
+            self._widget.popup(self._invoker)
             # we have to invoke update_position() twice
             # since WM could ignore first move() request
             self.update_position()
@@ -335,8 +551,8 @@ class PaletteWindow(Gtk.Window):
             self._popdown_anim.start()
         else:
             self._popdown_anim.stop()
-            self.size_request()
-            self.hide()
+            if self._widget is not None:
+                self._widget.popdown()
 
     def on_invoker_enter(self):
         self._popdown_anim.stop()
@@ -346,10 +562,10 @@ class PaletteWindow(Gtk.Window):
         self._mouse_detector.stop()
         self.popdown()
 
-    def on_enter(self, event):
+    def on_enter(self):
         self._popdown_anim.stop()
 
-    def on_leave(self, event):
+    def on_leave(self):
         self.popdown()
 
     def _invoker_mouse_enter_cb(self, invoker):
@@ -361,15 +577,11 @@ class PaletteWindow(Gtk.Window):
     def _invoker_right_click_cb(self, invoker):
         self.popup(immediate=True)
 
-    def __enter_notify_event_cb(self, widget, event):
-        if event.detail != Gdk.NOTIFY_INFERIOR and \
-                event.mode == Gdk.CROSSING_NORMAL:
-            self.on_enter(event)
+    def __enter_notify_cb(self, widget):
+        self.on_enter()
 
-    def __leave_notify_event_cb(self, widget, event):
-        if event.detail != Gdk.NOTIFY_INFERIOR and \
-                event.mode == Gdk.CROSSING_NORMAL:
-            self.on_leave(event)
+    def __leave_notify_cb(self, widget):
+        self.on_leave()
 
     def __show_cb(self, widget):
         if self._invoker is not None:
@@ -386,14 +598,20 @@ class PaletteWindow(Gtk.Window):
         self.emit('popdown')
 
     def get_rect(self):
-        win_x, win_y = self.get_window().get_origin()
+        win_x, win_y = self._widget.get_origin()
         rectangle = self.get_allocation()
 
         x = win_x + rectangle.x
         y = win_y + rectangle.y
-        width, height = self.size_request()
+        requisition = self._widget.size_request()
 
-        return (x, y, width, height)
+        rect = Gdk.Rectangle()
+        rect.x = x
+        rect.y = y
+        rect.width = requisition.width
+        rect.height = requisition.height
+
+        return rect
 
     def get_palette_state(self):
         return self._palette_state
@@ -453,8 +671,10 @@ class Invoker(GObject.GObject):
 
         self.parent = None
 
-        self._screen_area = (0, 0, Gdk.Screen.width(),
-                                              Gdk.Screen.height())
+        self._screen_area = Gdk.Rectangle()
+        self._screen_area.x = self._screen_area.y = 0
+        self._screen_area.width = Gdk.Screen.width()
+        self._screen_area.height = Gdk.Screen.height()
         self._position_hint = self.ANCHORED
         self._cursor_x = -1
         self._cursor_y = -1
@@ -477,8 +697,10 @@ class Invoker(GObject.GObject):
         invoker_valign = alignment[3]
 
         if self._cursor_x == -1 or self._cursor_y == -1:
-            display = Gdk.Display.get_default()
-            screen_, x, y, mask_ = display.get_pointer()
+            display = self.parent.get_display()
+            manager = display.get_device_manager()
+            pointer_device = manager.get_client_pointer()
+            screen, x, y = pointer_device.get_position()
             self._cursor_x = x
             self._cursor_y = y
 
@@ -486,11 +708,12 @@ class Invoker(GObject.GObject):
             rect = self.get_rect()
         else:
             dist = style.PALETTE_CURSOR_DISTANCE
-            rect = (self._cursor_x - dist,
-                                     self._cursor_y - dist,
-                                     dist * 2, dist * 2)
+            rect = Gdk.Rectangle()
+            rect.x = self._cursor_x - dist
+            rect.y = self._cursor_y - dist
+            rect.width = rect.height = dist * 2
 
-        palette_width, palette_height = palette_dim
+        palette_width, palette_height = palette_dim.width, palette_dim.height
 
         x = rect.x + rect.width * invoker_halign + \
             palette_width * palette_halign
@@ -498,8 +721,12 @@ class Invoker(GObject.GObject):
         y = rect.y + rect.height * invoker_valign + \
             palette_height * palette_valign
 
-        return (int(x), int(y),
-                                 palette_width, palette_height)
+        rect = Gdk.Rectangle()
+        rect.x = int(x)
+        rect.y = int(y)
+        rect.width = palette_width
+        rect.height = palette_height
+        return rect
 
     def _in_screen(self, rect):
         return rect.x >= self._screen_area.x and \
@@ -582,12 +809,12 @@ class Invoker(GObject.GObject):
 
             # Set palette_valign to align to screen on the top
             if dtop > dbottom:
-                pv = -float(dtop) / palette_dim[1]
+                pv = -float(dtop) / palette_dim.height
 
             # Set palette_valign to align to screen on the bottom
             else:
-                pv = -float(palette_dim[1] - dbottom - rect.height) \
-                        / palette_dim[1]
+                pv = -float(palette_dim.height - dbottom - rect.height) \
+                        / palette_dim.height
 
         elif best_alignment in self.TOP or best_alignment in self.BOTTOM:
             dleft = rect.x - screen_area.x
@@ -597,12 +824,12 @@ class Invoker(GObject.GObject):
 
             # Set palette_halign to align to screen on left
             if dleft > dright:
-                ph = -float(dleft) / palette_dim[0]
+                ph = -float(dleft) / palette_dim.width
 
             # Set palette_halign to align to screen on right
             else:
-                ph = -float(palette_dim[0] - dright - rect.width) \
-                        / palette_dim[0]
+                ph = -float(palette_dim.width - dright - rect.width) \
+                        / palette_dim.width
 
         return (ph, pv, ih, iv)
 
@@ -717,30 +944,31 @@ class WidgetInvoker(Invoker):
         allocation = self._widget.get_allocation()
         window = self._widget.get_window()
         if window is not None:
-            x, y = window.get_origin()
+            res, x, y = window.get_origin()
         else:
             logging.warning(
                 "Trying to position palette with invoker that's not realized.")
             x = 0
             y = 0
 
-        if self._widget.flags() & Gtk.NO_WINDOW:
-            x += allocation.x
-            y += allocation.y
+        x += allocation.x
+        y += allocation.y
 
         width = allocation.width
         height = allocation.height
 
-        return (x, y, width, height)
+        rect = Gdk.Rectangle()
+        rect.x = x
+        rect.y = y
+        rect.width = width
+        rect.height = height
+        return rect
 
     def has_rectangle_gap(self):
         return True
 
     def draw_rectangle(self, event, palette):
-        if self._widget.flags() & Gtk.NO_WINDOW:
-            x, y = self._widget.allocation.x, self._widget.allocation.y
-        else:
-            x = y = 0
+        x, y = self._widget.allocation.x, self._widget.allocation.y
 
         wstyle = self._widget.get_style()
         gap = _calculate_gap(self.get_rect(), palette.get_rect())
@@ -763,7 +991,8 @@ class WidgetInvoker(Invoker):
         self.notify_mouse_enter()
 
     def __leave_notify_event_cb(self, widget, event):
-        self.notify_mouse_leave()
+        if event.mode == Gdk.CrossingMode.NORMAL:
+            self.notify_mouse_leave()
 
     def __button_release_event_cb(self, widget, event):
         if event.button == 3:
@@ -908,16 +1137,15 @@ class CellRendererInvoker(Invoker):
         allocation = self._tree_view.get_allocation()
         window = self._tree_view.get_window()
         if window is not None:
-            x, y = window.get_origin()
+            res, x, y = window.get_origin()
         else:
             logging.warning(
                 "Trying to position palette with invoker that's not realized.")
             x = 0
             y = 0
 
-        if self._tree_view.flags() & Gtk.NO_WINDOW:
-            x += allocation.x
-            y += allocation.y
+        x += allocation.x
+        y += allocation.y
 
         width = allocation.width
         height = allocation.height

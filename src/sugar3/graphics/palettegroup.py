@@ -75,6 +75,11 @@ class Group(GObject.GObject):
         self._sig_ids[palette].append(sid)
 
     def remove(self, palette):
+        if not palette in self._palettes:
+            # This happens when converting a window based palette to a menu
+            # based one.
+            return
+
         sig_ids = self._sig_ids[palette]
         for sid in sig_ids:
             palette.disconnect(sid)
