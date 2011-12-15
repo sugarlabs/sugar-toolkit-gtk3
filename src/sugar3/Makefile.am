@@ -53,9 +53,7 @@ libsugarext_la_SOURCES =		\
 	sugar-grid.c			\
 	sugar-grid.h			\
 	sugar-key-grabber.c		\
-	sugar-key-grabber.h		\
-	sugar-menu.c			\
-	sugar-menu.h
+	sugar-key-grabber.h
 
 sugar_LTLIBRARIES = _sugarbaseext.la
 

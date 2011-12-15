@@ -15,11 +15,14 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import math
+
 from gi.repository import Gtk
 from gi.repository import GObject
 
 from sugar3.graphics import style
-from sugar3.graphics.palette import PaletteWindow, ToolInvoker
+from sugar3.graphics.palettewindow import PaletteWindow, ToolInvoker, \
+    _PaletteWindowWidget
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics import palettegroup
 
@@ -74,7 +77,7 @@ class ToolbarButton(ToolButton):
 
     def is_in_palette(self):
         return self.page is not None and \
-                self.page_widget.get_parent() == self.props.palette
+                self.page_widget.get_parent() == self.props.palette._widget
 
     def is_expanded(self):
         return self.page is not None and \
@@ -97,10 +100,7 @@ class ToolbarButton(ToolButton):
         box = self.toolbar_box
 
         if box.expanded_button is not None:
-            button_window = box.expanded_button.get_window()
-            if button_window is not None:
-                # need to redraw it to erase arrow
-                button_window.invalidate_rect(None, True)
+            box.expanded_button.queue_draw()
             box.expanded_button.set_expanded(False)
         box.expanded_button = self
 
@@ -117,7 +117,7 @@ class ToolbarButton(ToolButton):
         self._unparent()
 
         if isinstance(self.props.palette, _ToolbarPalette):
-            self.props.palette.add(self.page_widget)
+            self.props.palette._widget.add(self.page_widget)
 
     def _unparent(self):
         page_parent = self.page_widget.get_parent()
@@ -125,28 +125,22 @@ class ToolbarButton(ToolButton):
             return
         page_parent.remove(self.page_widget)
 
-    def do_expose_event(self, event):
+    def do_draw(self, cr):
         if not self.is_expanded() or self.props.palette is not None and \
                 self.props.palette.is_up():
-            ToolButton.do_expose_event(self, event)
-            _paint_arrow(self, event, Gtk.ArrowType.DOWN)
+            Gtk.ToolButton.do_draw(self, cr)
+            _paint_arrow(self, cr, math.pi)
             return
 
-        alloc = self.allocation
+        alloc = self.get_allocation()
 
-        self.get_style().paint_box(event.window,
-                Gtk.StateType.NORMAL, Gtk.ShadowType.IN, event.area, self,
-                'palette-invoker', alloc.x, 0,
-                alloc.width, alloc.height + style.FOCUS_LINE_WIDTH)
+        context = self.get_style_context()
+        context.add_class('toolitem')
 
-        if self.get_child().state != Gtk.StateType.PRELIGHT:
-            self.get_style().paint_box(event.window,
-                    Gtk.StateType.NORMAL, Gtk.ShadowType.NONE, event.area, self, None,
-                    alloc.x + style.FOCUS_LINE_WIDTH, style.FOCUS_LINE_WIDTH,
-                    alloc.width - style.FOCUS_LINE_WIDTH * 2, alloc.height)
-
-        Gtk.ToolButton.do_expose_event(self, event)
-        _paint_arrow(self, event, Gtk.ArrowType.UP)
+        Gtk.render_frame_gap(context, cr, 0, 0, alloc.width, alloc.height,
+                             Gtk.PositionType.BOTTOM, 0, alloc.width)
+        Gtk.ToolButton.do_draw(self, cr)
+        _paint_arrow(self, cr, 0)
 
 
 class ToolbarBox(Gtk.VBox):
@@ -214,15 +208,20 @@ class _ToolbarPalette(PaletteWindow):
 
     def __init__(self, **kwargs):
         PaletteWindow.__init__(self, **kwargs)
-        self.set_border_width(0)
         self._has_focus = False
 
         group = palettegroup.get_group('default')
         group.connect('popdown', self.__group_popdown_cb)
         self.set_group_id('toolbarbox')
 
+        self._widget = _PaletteWindowWidget()
+        self._widget.set_border_width(0)
+        self._setup_widget()
+
+        self._widget.connect('realize', self._realize_cb)
+
     def get_expanded_button(self):
-        return self.invoker.get_parent()
+        return self.invoker.parent
 
     expanded_button = property(get_expanded_button)
 
@@ -234,12 +233,12 @@ class _ToolbarPalette(PaletteWindow):
         PaletteWindow.on_invoker_leave(self)
         self._set_focus(False)
 
-    def on_enter(self, event):
-        PaletteWindow.on_enter(self, event)
+    def on_enter(self):
+        PaletteWindow.on_enter(self)
         self._set_focus(True)
 
-    def on_leave(self, event):
-        PaletteWindow.on_enter(self, event)
+    def on_leave(self):
+        PaletteWindow.on_enter(self)
         self._set_focus(False)
 
     def _set_focus(self, new_focus):
@@ -249,10 +248,10 @@ class _ToolbarPalette(PaletteWindow):
             if not group.is_up():
                 self.popdown()
 
-    def do_size_request(self, requisition):
-        Gtk.Window.do_size_request(self, requisition)
-        requisition.width = max(requisition.width,
-                                Gdk.Screen.width())
+    def _realize_cb(self, widget):
+        screen = self._widget.get_screen()
+        width = screen.width()
+        self._widget.set_size_request(width, -1)
 
     def popup(self, immediate=False):
         button = self.expanded_button
@@ -272,10 +271,10 @@ class _Box(Gtk.EventBox):
 
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.connect('expose-event', self.do_expose_event)
         self.set_app_paintable(True)
 
     def do_expose_event(self, widget, event):
+        # TODO: reimplement this in the theme
         expanded_button = self.get_parent().expanded_button
         if expanded_button is None:
             return
@@ -326,12 +325,14 @@ def _get_embedded_page(page_widget):
     return page_widget.get_child().get_child()
 
 
-def _paint_arrow(widget, event, arrow_type):
-    alloc = widget.allocation
-    x = alloc.x + alloc.width / 2 - style.TOOLBAR_ARROW_SIZE / 2
-    y = alloc.y + alloc.height - int(style.TOOLBAR_ARROW_SIZE * .85)
+def _paint_arrow(widget, cr, angle):
+    alloc = widget.get_allocation()
 
-    widget.get_style().paint_arrow(event.window,
-            Gtk.StateType.NORMAL, Gtk.ShadowType.NONE, event.area, widget,
-            None, arrow_type, True,
-            x, y, style.TOOLBAR_ARROW_SIZE, style.TOOLBAR_ARROW_SIZE)
+    arrow_size = style.TOOLBAR_ARROW_SIZE / 2
+    y = alloc.height - arrow_size
+    x = (alloc.width - arrow_size) / 2
+
+    context = widget.get_style_context()
+    context.add_class('toolitem')
+
+    Gtk.render_arrow(context, cr, angle, x, y, arrow_size)
