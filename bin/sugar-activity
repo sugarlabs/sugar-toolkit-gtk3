@@ -25,10 +25,9 @@ import dbus
 import dbus.service
 import dbus.glib
 
-import sugar
-from sugar.activity import activityhandle
-from sugar.bundle.activitybundle import ActivityBundle
-from sugar import logger
+from sugar3.activity import activityhandle
+from sugar3.bundle.activitybundle import ActivityBundle
+from sugar3 import logger
 
 
 def create_activity_instance(constructor, handle):
