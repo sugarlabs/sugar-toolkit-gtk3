@@ -163,28 +163,6 @@ class ShareButton(RadioMenuButton):
             self.neighborhood.handler_unblock(self._neighborhood_handle)
 
 
-# DEPRECATED
-class KeepButton(ToolButton):
-
-    def __init__(self, activity, **kwargs):
-        ToolButton.__init__(self, **kwargs)
-        logging.warning('KeepButton has been deprecated since Sugar 0.94'
-                        ' and should not be used in newly written code.')
-        self.props.tooltip = _('Keep')
-        self.props.accelerator = '<Ctrl>S'
-
-        client = GConf.Client.get_default()
-        color = XoColor(client.get_string('/desktop/sugar/user/color'))
-        keep_icon = Icon(icon_name='document-save', xo_color=color)
-        keep_icon.show()
-
-        self.set_icon_widget(keep_icon)
-        self.connect('clicked', self.__keep_button_clicked_cb, activity)
-
-    def __keep_button_clicked_cb(self, button, activity):
-        activity.copy()
-
-
 class TitleEntry(Gtk.ToolItem):
 
     def __init__(self, activity, **kwargs):
@@ -265,9 +243,6 @@ class ActivityToolbar(Gtk.Toolbar):
         self.share = ShareButton(activity)
         self.share.show()
         self.insert(self.share, -1)
-
-        # DEPRECATED
-        self.keep = KeepButton(activity)
 
         self.stop = StopButton(activity)
         self.insert(self.stop, -1)
