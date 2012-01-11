@@ -768,7 +768,7 @@ class Activity(Window, Gtk.Container):
 
         The shared activity is of type sugar3.presence.activity.Activity
         """
-        return self._shared_activity
+        return self.shared_activity
 
     def get_shared(self):
         """Returns TRUE if the activity is shared on the mesh."""
@@ -961,9 +961,6 @@ class Activity(Window, Gtk.Container):
 
     def get_document_path(self, async_cb, async_err_cb):
         async_err_cb(NotImplementedError())
-
-    # DEPRECATED
-    _shared_activity = property(lambda self: self.shared_activity, None)
 
 
 class _ClientHandler(dbus.service.Object, DBusProperties):
