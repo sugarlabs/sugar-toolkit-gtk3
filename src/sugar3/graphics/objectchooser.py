@@ -36,16 +36,7 @@ J_DBUS_PATH = '/org/laptop/Journal'
 
 class ObjectChooser(object):
 
-    def __init__(self, title=None, parent=None, flags=None, buttons=None,
-                 what_filter=None):
-        # For backwards compatibility:
-        # - We ignore title, flags and buttons.
-        # - 'parent' can be a xid or a Gtk.Window
-
-        if title is not None or flags is not None or buttons is not None:
-            logging.warning('Invocation of ObjectChooser() has deprecated '
-                            'parameters.')
-
+    def __init__(self, parent=None, what_filter=None):
         if parent is None:
             parent_xid = 0
         elif hasattr(parent, 'get_window') and hasattr(parent.get_window(),
