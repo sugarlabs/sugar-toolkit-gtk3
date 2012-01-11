@@ -86,10 +86,6 @@ from sugar3.datastore import datastore
 from sugar3.session import XSMPClient
 from sugar3 import wm
 
-# support deprecated imports
-from sugar3.activity.widgets import ActivityToolbar, EditToolbar
-from sugar3.activity.widgets import ActivityToolbox
-
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 

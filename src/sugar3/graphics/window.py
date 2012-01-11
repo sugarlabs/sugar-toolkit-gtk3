@@ -285,15 +285,3 @@ class Window(Gtk.Window):
 
     enable_fullscreen_mode = GObject.property(type=object,
         setter=set_enable_fullscreen_mode, getter=get_enable_fullscreen_mode)
-
-    # DEPRECATED
-
-    def set_toolbox(self, toolbar_box):
-        warnings.warn('use toolbar_box instead of toolbox', DeprecationWarning)
-        self.set_toolbar_box(toolbar_box)
-
-    def get_toolbox(self):
-        warnings.warn('use toolbar_box instead of toolbox', DeprecationWarning)
-        return self._toolbar_box
-
-    toolbox = property(get_toolbox, set_toolbox)

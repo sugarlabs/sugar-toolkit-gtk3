@@ -68,7 +68,6 @@ class ActivityToolbarButton(ToolbarButton):
 
     def __init__(self, activity, **kwargs):
         toolbar = ActivityToolbar(activity, orientation_left=True)
-        toolbar.stop.hide()
 
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
 
@@ -215,12 +214,7 @@ class TitleEntry(Gtk.ToolItem):
 
 
 class ActivityToolbar(Gtk.Toolbar):
-    """The Activity toolbar with the Journal entry title, sharing
-       and Stop buttons
-
-    All activities should have this toolbar. It is easiest to add it to your
-    Activity by using the ActivityToolbox.
-    """
+    """The Activity toolbar with the Journal entry title and sharing button"""
 
     def __init__(self, activity, orientation_left=False):
         Gtk.Toolbar.__init__(self)
@@ -243,10 +237,6 @@ class ActivityToolbar(Gtk.Toolbar):
         self.share = ShareButton(activity)
         self.share.show()
         self.insert(self.share, -1)
-
-        self.stop = StopButton(activity)
-        self.insert(self.stop, -1)
-        self.stop.show()
 
 
 class EditToolbar(Gtk.Toolbar):
@@ -306,33 +296,3 @@ class EditToolbar(Gtk.Toolbar):
         self.paste = PasteButton()
         self.insert(self.paste, -1)
         self.paste.show()
-
-
-class ActivityToolbox(Toolbox):
-    """Creates the Toolbox for the Activity
-
-    By default, the toolbox contains only the ActivityToolbar. After creating
-    the toolbox, you can add your activity specific toolbars, for example the
-    EditToolbar.
-
-    To add the ActivityToolbox to your Activity in MyActivity.__init__() do:
-
-        # Create the Toolbar with the ActivityToolbar:
-        toolbox = activity.ActivityToolbox(self)
-        ... your code, inserting all other toolbars you need, like EditToolbar
-
-        # Add the toolbox to the activity frame:
-        self.set_toolbar_box(toolbox)
-        # And make it visible:
-        toolbox.show()
-    """
-
-    def __init__(self, activity):
-        Toolbox.__init__(self)
-
-        self._activity_toolbar = ActivityToolbar(activity)
-        self.add_toolbar(_('Activity'), self._activity_toolbar)
-        self._activity_toolbar.show()
-
-    def get_activity_toolbar(self):
-        return self._activity_toolbar
