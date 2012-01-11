@@ -43,7 +43,6 @@ class ActivityBundle(Bundle):
     """
 
     MIME_TYPE = 'application/vnd.olpc-sugar'
-    DEPRECATED_MIME_TYPE = 'application/vnd.olpc-x-sugar'
 
     _zipped_extension = '.xo'
     _unzipped_extension = '.activity'
@@ -84,11 +83,6 @@ class ActivityBundle(Bundle):
 
         if cp.has_option(section, 'bundle_id'):
             self._bundle_id = cp.get(section, 'bundle_id')
-        # FIXME deprecated
-        elif cp.has_option(section, 'service_name'):
-            warnings.warn('use bundle_id instead of service_name ' \
-                              'in your activity.info', DeprecationWarning)
-            self._bundle_id = cp.get(section, 'service_name')
         else:
             raise MalformedBundleException(
                 'Activity bundle %s does not specify a bundle id' %
@@ -100,12 +94,7 @@ class ActivityBundle(Bundle):
             raise MalformedBundleException(
                 'Activity bundle %s does not specify a name' % self._path)
 
-        # FIXME class is deprecated
-        if cp.has_option(section, 'class'):
-            warnings.warn('use exec instead of class ' \
-                              'in your activity.info', DeprecationWarning)
-            self.activity_class = cp.get(section, 'class')
-        elif cp.has_option(section, 'exec'):
+        if cp.has_option(section, 'exec'):
             self.bundle_exec = cp.get(section, 'exec')
         else:
             raise MalformedBundleException(
