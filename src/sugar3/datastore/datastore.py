@@ -495,47 +495,6 @@ def copy(ds_object, mount_point):
     write(new_ds_object)
 
 
-def mount(uri, options, timeout=-1):
-    """Deprecated. API private to the shell. Mount a device.
-
-    Keyword arguments:
-    uri -- identifier of the device
-    options -- mount options
-    timeout -- dbus timeout for the caller to wait (default -1)
-
-    Return: empty string
-
-    """
-    return _get_data_store().mount(uri, options, timeout=timeout)
-
-
-def unmount(mount_point_id):
-    """Deprecated. API private to the shell.
-
-    Keyword arguments:
-    mount_point_id -- id of the mount point
-
-    Note: API private to the shell.
-
-    """
-    _get_data_store().unmount(mount_point_id)
-
-
-def mounts():
-    """Deprecated. Returns the mount point of the datastore. We get mount
-    points through gio now. API private to the shell.
-
-    Return: datastore mount point
-
-    """
-    return _get_data_store().mounts()
-
-
-def complete_indexing():
-    """Deprecated. API private to the shell."""
-    logging.warning('The method complete_indexing has been deprecated.')
-
-
 def get_unique_values(key):
     """Retrieve an array of unique values for a field.
 
