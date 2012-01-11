@@ -379,10 +379,7 @@ def print_commands():
           'particular command\'s options.'
 
 
-def start(bundle_name=None):
-    if bundle_name:
-        logging.warn('bundle_name deprecated, now comes from activity.info')
-
+def start():
     parser = OptionParser(usage='[action] [options]')
     parser.disable_interspersed_args()
     (options_, args) = parser.parse_args()
