@@ -131,7 +131,7 @@ class Window(Gtk.Window):
             return
         timestamp = Gtk.get_current_event_time()
         if not timestamp:
-            timestamp = GdkX11.get_server_time(window)
+            timestamp = GdkX11.x11_get_server_time(window)
         window.focus(timestamp)
 
     def fullscreen(self):
