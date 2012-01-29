@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-28 06:08-0400\n"
+"POT-Creation-Date: 2012-01-27 00:30-0500\n"
 "PO-Revision-Date: 2010-02-16 07:27+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,195 +29,193 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.1\n"
 
-#: ../src/sugar/activity/activity.py:336
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s Aktivitet"
 
-#: ../src/sugar/activity/activity.py:791
+#: ../src/sugar3/activity/activity.py:846
 msgid "Keep error"
 msgstr "Gabim gjat mbajtjes"
 
-#: ../src/sugar/activity/activity.py:792
+#: ../src/sugar3/activity/activity.py:847
 msgid "Keep error: all changes will be lost"
 msgstr "Gabim gjat mbajtjes: të gjitha ndrryshimet do humbasin"
 
-#: ../src/sugar/activity/activity.py:795
+#: ../src/sugar3/activity/activity.py:850
 msgid "Don't stop"
 msgstr "Mos ndalo"
 
-#: ../src/sugar/activity/activity.py:798
+#: ../src/sugar3/activity/activity.py:853
 msgid "Stop anyway"
 msgstr "Ndalo gjithsesi"
 
-#: ../src/sugar/activity/namingalert.py:82
+#: ../src/sugar3/activity/namingalert.py:79
 msgid "Name this entry"
 msgstr "Ndrryshoja emrin"
 
-#: ../src/sugar/activity/namingalert.py:87
-#: ../src/sugar/activity/widgets.py:169
+#: ../src/sugar3/activity/namingalert.py:84
 msgid "Keep"
 msgstr "Mbaj"
 
-#: ../src/sugar/activity/namingalert.py:283
-msgid "Untitled"
-msgstr "E paemërtuar"
-
-#: ../src/sugar/activity/namingalert.py:290
+#: ../src/sugar3/activity/namingalert.py:200
 msgid "Description:"
 msgstr "Përshkrimi:"
 
-#: ../src/sugar/activity/namingalert.py:314
+#: ../src/sugar3/activity/namingalert.py:209
 msgid "Tags:"
 msgstr "Etiketat:"
 
-#: ../src/sugar/activity/widgets.py:83
+#: ../src/sugar3/activity/namingalert.py:263
+msgid "Untitled"
+msgstr "E paemërtuar"
+
+#: ../src/sugar3/activity/widgets.py:83
 msgid "Stop"
 msgstr "Ndalo"
 
-#: ../src/sugar/activity/widgets.py:95
+#: ../src/sugar3/activity/widgets.py:95
 msgid "Undo"
 msgstr "Zhbëj"
 
-#: ../src/sugar/activity/widgets.py:103
+#: ../src/sugar3/activity/widgets.py:103
 msgid "Redo"
 msgstr "Bëj"
 
-#: ../src/sugar/activity/widgets.py:110
+#: ../src/sugar3/activity/widgets.py:110
 msgid "Copy"
 msgstr "Kopjo"
 
-#: ../src/sugar/activity/widgets.py:118
+#: ../src/sugar3/activity/widgets.py:118
 msgid "Paste"
 msgstr "Ngjit"
 
-#: ../src/sugar/activity/widgets.py:129
+#: ../src/sugar3/activity/widgets.py:129
 msgid "Private"
 msgstr "Private"
 
-#: ../src/sugar/activity/widgets.py:136
+#: ../src/sugar3/activity/widgets.py:136
 msgid "My Neighborhood"
 msgstr "Lagjja Ime"
 
-#: ../src/sugar/activity/widgets.py:349
-msgid "Activity"
-msgstr "Aktivitet"
-
-#: ../src/sugar/graphics/alert.py:287 ../src/sugar/graphics/alert.py:410
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
 msgstr "Anulo"
 
-#: ../src/sugar/graphics/alert.py:291 ../src/sugar/graphics/alert.py:336
-#: ../src/sugar/graphics/alert.py:469
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
 msgid "Ok"
 msgstr "Në rregull"
 
-#: ../src/sugar/graphics/alert.py:420
+#: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
 msgstr "Vazhdo"
 
-#: ../src/sugar/graphics/colorbutton.py:52
+#: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
 msgstr "Zgjidh një ngjyrë"
 
-#: ../src/sugar/graphics/colorbutton.py:272
+#: ../src/sugar3/graphics/colorbutton.py:274
 msgid "Red"
 msgstr "Kuq"
 
-#: ../src/sugar/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:276
 msgid "Green"
 msgstr "Gjelbër"
 
-#: ../src/sugar/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:278
 msgid "Blue"
 msgstr "Kaltër"
 
-#: ../src/sugar/util.py:218
+#: ../src/sugar3/util.py:217
 msgid " and "
 msgstr " dhe "
 
-#: ../src/sugar/util.py:219
+#: ../src/sugar3/util.py:218
 msgid ", "
 msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: ../src/sugar/util.py:222
+#: ../src/sugar3/util.py:221
 msgid "Seconds ago"
 msgstr "Sekonda më parë"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: ../src/sugar/util.py:226
+#: ../src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
 msgstr "%s më parë"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: ../src/sugar/util.py:241
+#: ../src/sugar3/util.py:240
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d vit"
 msgstr[1] "%d vite"
 
-#: ../src/sugar/util.py:242
+#: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d muaj"
 msgstr[1] "%d muajt"
 
-#: ../src/sugar/util.py:243
+#: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d javë"
 msgstr[1] "%d javë"
 
-#: ../src/sugar/util.py:244
+#: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d ditë"
 msgstr[1] "%d ditë"
 
-#: ../src/sugar/util.py:245
+#: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d orë"
 msgstr[1] "%d orë"
 
-#: ../src/sugar/util.py:246
+#: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minutë"
 msgstr[1] "%d minuta"
 
-#: ../src/sugar/util.py:339
+#: ../src/sugar3/util.py:346
 msgid "Empty"
 msgstr "Bosh"
 
-#: ../src/sugar/util.py:341
+#: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
 msgstr "%d B"
 
-#: ../src/sugar/util.py:343
+#: ../src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: ../src/sugar/util.py:345
+#: ../src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
 msgstr "%d MB"
 
-#: ../src/sugar/util.py:347
+#: ../src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
+
+#~ msgid "Activity"
+#~ msgstr "Aktivitet"
 
 #~ msgid "Share with:"
 #~ msgstr "Ndaj me:"
