@@ -1,5 +1,4 @@
 src/sugar3/activity/activity.py
-src/sugar3/activity/namingalert.py
 src/sugar3/activity/widgets.py
 src/sugar3/graphics/alert.py
 src/sugar3/graphics/colorbutton.py

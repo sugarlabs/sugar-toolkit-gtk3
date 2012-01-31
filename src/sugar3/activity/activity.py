@@ -77,7 +77,6 @@ from sugar3 import util
 from sugar3.presence import presenceservice
 from sugar3.activity import i18n
 from sugar3.activity.activityservice import ActivityService
-from sugar3.activity.namingalert import NamingAlert
 from sugar3.graphics import style
 from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
@@ -911,19 +910,12 @@ class Activity(Window, Gtk.Container):
 
         self.emit('_closing')
 
-        if skip_save or self._jobject is None or \
-                self.metadata.get('title_set_by_user', '0') == '1':
-            if not self._closing:
-                if not self._prepare_close(skip_save):
-                    return
+        if not self._closing:
+            if not self._prepare_close(skip_save):
+                return
 
-            if not self._updating_jobject:
-                self._complete_close()
-        else:
-            title_alert = NamingAlert(self, get_bundle_path())
-            title_alert.set_transient_for(self.get_toplevel())
-            title_alert.show()
-            self.reveal()
+        if not self._updating_jobject:
+            self._complete_close()
 
     def __realize_cb(self, window):
         wm.set_bundle_id(window.get_window(), self.get_bundle_id())
