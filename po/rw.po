@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 00:30-0500\n"
+"POT-Creation-Date: 2012-02-03 00:30-0500\n"
 "PO-Revision-Date: 2008-08-06 03:42-0400\n"
 "Last-Translator: Carine Umutesi <carine.umutesi@rita.rw>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,74 +15,59 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Pootle 1.1.0rc2\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
 msgstr "%s Igikorwa"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
 msgstr "Gumana ikosa"
 
-#: ../src/sugar3/activity/activity.py:847
+#: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
 msgstr "Gumana ikosa:impinduka zose zirabura"
 
-#: ../src/sugar3/activity/activity.py:850
+#: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
 msgstr "Ntuhagarare"
 
-#: ../src/sugar3/activity/activity.py:853
+#: ../src/sugar3/activity/activity.py:852
 msgid "Stop anyway"
 msgstr "Hagarara muburyo bwose"
 
-#: ../src/sugar3/activity/namingalert.py:79
-msgid "Name this entry"
-msgstr "Ita izina icyi cyinjizwe"
-
-#: ../src/sugar3/activity/namingalert.py:84
-msgid "Keep"
-msgstr "Gumana"
-
-#: ../src/sugar3/activity/namingalert.py:200
-msgid "Description:"
-msgstr "Igisobanuro:"
-
-#: ../src/sugar3/activity/namingalert.py:209
-msgid "Tags:"
-msgstr "Tags:"
-
-#: ../src/sugar3/activity/namingalert.py:263
-msgid "Untitled"
-msgstr "Nta mutwe"
-
-#: ../src/sugar3/activity/widgets.py:83
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "Hagarika"
 
-#: ../src/sugar3/activity/widgets.py:95
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "Subiramo"
 
-#: ../src/sugar3/activity/widgets.py:103
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "Gukuraho icyariho"
 
-#: ../src/sugar3/activity/widgets.py:110
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "Gukoporora"
 
-#: ../src/sugar3/activity/widgets.py:118
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "Omeka"
 
-#: ../src/sugar3/activity/widgets.py:129
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "Byihariye"
 
-#: ../src/sugar3/activity/widgets.py:136
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "Guturana kwanjye"
+
+#: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
+msgid "Descriptions"
+msgstr "Igisobanuro:"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -200,11 +185,14 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#~ msgid "Share with:"
-#~ msgstr "Gusangira na:"
+#~ msgid "Name this entry"
+#~ msgstr "Ita izina icyi cyinjizwe"
 
-#~ msgid "Activity"
-#~ msgstr "Igikorwa"
+#~ msgid "Keep"
+#~ msgstr "Gumana"
 
-#~ msgid "Activity"
-#~ msgstr "Igikorwa"
+#~ msgid "Tags:"
+#~ msgstr "Tags:"
+
+#~ msgid "Untitled"
+#~ msgstr "Nta mutwe"
