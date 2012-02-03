@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 00:30-0500\n"
-"PO-Revision-Date: 2009-09-01 12:17-0400\n"
+"POT-Creation-Date: 2012-02-03 00:30-0500\n"
+"PO-Revision-Date: 2012-02-03 19:45+0200\n"
 "Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fr\n"
@@ -27,76 +27,60 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
 msgstr "Activité %s"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
 msgstr "Erreur d'enregistrement"
 
-#: ../src/sugar3/activity/activity.py:847
+#: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
 msgstr "Erreur d'enregistrement : toutes les modifications seront perdues"
 
-#: ../src/sugar3/activity/activity.py:850
+#: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
 msgstr "Ne pas arrêter"
 
-#: ../src/sugar3/activity/activity.py:853
+#: ../src/sugar3/activity/activity.py:852
 msgid "Stop anyway"
 msgstr "Arrêter quand même"
 
-#: ../src/sugar3/activity/namingalert.py:79
-msgid "Name this entry"
-msgstr "Donner un nom à cette entrée"
-
-#: ../src/sugar3/activity/namingalert.py:84
-msgid "Keep"
-msgstr "Conserver"
-
-#: ../src/sugar3/activity/namingalert.py:200
-msgid "Description:"
-msgstr "Description :"
-
-#: ../src/sugar3/activity/namingalert.py:209
-msgid "Tags:"
-msgstr "Étiquettes :"
-
-#: ../src/sugar3/activity/namingalert.py:263
-msgid "Untitled"
-msgstr "Sans titre"
-
-#: ../src/sugar3/activity/widgets.py:83
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "Arrêter"
 
-#: ../src/sugar3/activity/widgets.py:95
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "Annuler"
 
-#: ../src/sugar3/activity/widgets.py:103
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "Répéter"
 
-#: ../src/sugar3/activity/widgets.py:110
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "Copier"
 
-#: ../src/sugar3/activity/widgets.py:118
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "Coller"
 
-#: ../src/sugar3/activity/widgets.py:129
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "Privé"
 
-#: ../src/sugar3/activity/widgets.py:136
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "Mon voisinage"
+
+#: ../src/sugar3/activity/widgets.py:226
+msgid "Descriptions"
+msgstr "Descriptions"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -217,6 +201,18 @@ msgstr "%d Mo"
 #, python-format
 msgid "%d GB"
 msgstr "%d Go"
+
+#~ msgid "Name this entry"
+#~ msgstr "Donner un nom à cette entrée"
+
+#~ msgid "Keep"
+#~ msgstr "Conserver"
+
+#~ msgid "Tags:"
+#~ msgstr "Étiquettes :"
+
+#~ msgid "Untitled"
+#~ msgstr "Sans titre"
 
 #~ msgid "Activity"
 #~ msgstr "Activité"
