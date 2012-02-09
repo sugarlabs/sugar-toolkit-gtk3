@@ -223,7 +223,7 @@ class DescriptionItem(Gtk.ToolItem):
 
         description_button = ToolButton('edit-description')
         description_button.show()
-        description_button.set_tooltip(_('Descriptions'))
+        description_button.set_tooltip(_('Description'))
         self._palette = description_button.get_palette()
 
         description_box = Gtk.HBox()
