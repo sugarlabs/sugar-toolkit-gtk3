@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 00:30-0500\n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
 "PO-Revision-Date: 2012-01-28 22:30+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,74 +18,59 @@ msgstr ""
 "100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:847
+#: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:850
+#: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:853
+#: ../src/sugar3/activity/activity.py:852
 msgid "Stop anyway"
 msgstr ""
 
-#: ../src/sugar3/activity/namingalert.py:79
-msgid "Name this entry"
-msgstr ""
-
-#: ../src/sugar3/activity/namingalert.py:84
-msgid "Keep"
-msgstr ""
-
-#: ../src/sugar3/activity/namingalert.py:200
-msgid "Description:"
-msgstr "Aprašas:"
-
-#: ../src/sugar3/activity/namingalert.py:209
-msgid "Tags:"
-msgstr "Žymos:"
-
-#: ../src/sugar3/activity/namingalert.py:263
-msgid "Untitled"
-msgstr ""
-
-#: ../src/sugar3/activity/widgets.py:83
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:95
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:103
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:110
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:118
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:129
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:136
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
+msgid "Description"
+msgstr "Aprašas:"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -143,6 +128,7 @@ msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:241
 #, python-format
@@ -150,6 +136,7 @@ msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:242
 #, python-format
@@ -157,6 +144,7 @@ msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:243
 #, python-format
@@ -164,6 +152,7 @@ msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:244
 #, python-format
@@ -171,6 +160,7 @@ msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:245
 #, python-format
@@ -178,6 +168,7 @@ msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
@@ -202,3 +193,4 @@ msgstr ""
 #, python-format
 msgid "%d GB"
 msgstr ""
+
