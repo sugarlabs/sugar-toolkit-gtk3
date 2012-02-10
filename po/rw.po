@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-03 00:30-0500\n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
 "PO-Revision-Date: 2012-02-09 11:17-0400\n"
 "Last-Translator: Chris Leonard <cjl@laptop.org>\n"
 "Language-Team: Sugar Labs\n"
@@ -68,7 +68,7 @@ msgstr "Guturana kwanjye"
 
 #: ../src/sugar3/activity/widgets.py:226
 #, fuzzy
-msgid "Descriptions"
+msgid "Description"
 msgstr "Igisobanuro:"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
@@ -186,4 +186,3 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
-
