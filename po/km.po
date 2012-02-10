@@ -2,23 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 00:30-0500\n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
 "PO-Revision-Date: 2011-10-08 09:42+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,74 +17,59 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
 msgstr "%s សកម្មភាព"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
 msgstr "រក្សាទុកកំហុស"
 
-#: ../src/sugar3/activity/activity.py:847
+#: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
 msgstr "រក្សាទុកកំហុសរាលការប្តូរនឹងត្រូវបាត់បង់"
 
-#: ../src/sugar3/activity/activity.py:850
+#: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
 msgstr "កុំ​ឈប់"
 
-#: ../src/sugar3/activity/activity.py:853
+#: ../src/sugar3/activity/activity.py:852
 msgid "Stop anyway"
 msgstr "ទោះបី​យាង​ណា​ក៍ដោយ​ក៍ឈប់​ដែរ"
 
-#: ../src/sugar3/activity/namingalert.py:79
-msgid "Name this entry"
-msgstr "បញ្ចូលឈ្មោះនេះ"
-
-#: ../src/sugar3/activity/namingalert.py:84
-msgid "Keep"
-msgstr "រក្សាទុក"
-
-#: ../src/sugar3/activity/namingalert.py:200
-msgid "Description:"
-msgstr "ពិពណ៌នា ៖"
-
-#: ../src/sugar3/activity/namingalert.py:209
-msgid "Tags:"
-msgstr "គំនូស ៖"
-
-#: ../src/sugar3/activity/namingalert.py:263
-msgid "Untitled"
-msgstr "គ្មាន​ចំណង​ជើង"
-
-#: ../src/sugar3/activity/widgets.py:83
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "ឈប់"
 
-#: ../src/sugar3/activity/widgets.py:95
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "កុំ​ធ្វើ​វិញ"
 
-#: ../src/sugar3/activity/widgets.py:103
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "ធ្វើ​វិញ"
 
-#: ../src/sugar3/activity/widgets.py:110
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "ចំលង"
 
-#: ../src/sugar3/activity/widgets.py:118
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "បិតត"
 
-#: ../src/sugar3/activity/widgets.py:129
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "ឯកជន"
 
-#: ../src/sugar3/activity/widgets.py:136
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "ភូមិរបស់ខ្ញុំ"
+
+#: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
+msgid "Description"
+msgstr "ពិពណ៌នា ៖"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -194,6 +167,7 @@ msgid "Empty"
 msgstr "ទទេ"
 
 #: ../src/sugar3/util.py:348
+#, python-format
 #, python-format, fuzzy
 msgid "%d B"
 msgstr "%d គីឡូបៃ"
@@ -213,8 +187,3 @@ msgstr "%d មេកាបៃ"
 msgid "%d GB"
 msgstr "%d ជីកាបៃ"
 
-#~ msgid "Activity"
-#~ msgstr "សកម្មភាព"
-
-#~ msgid "Share with:"
-#~ msgstr "រួមជំណែក"
