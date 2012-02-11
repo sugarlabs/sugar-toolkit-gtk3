@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-03 19:45+0200\n"
-"Last-Translator: samy boutayeb <s.boutayeb@free.fr>\n"
+"PO-Revision-Date: 2012-02-11 04:43+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -67,9 +67,8 @@ msgid "My Neighborhood"
 msgstr "Mon voisinage"
 
 #: ../src/sugar3/activity/widgets.py:226
-#, fuzzy
 msgid "Description"
-msgstr "Descriptions"
+msgstr "Description"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -190,4 +189,3 @@ msgstr "%d Mo"
 #, python-format
 msgid "%d GB"
 msgstr "%d Go"
-
