@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 00:30-0500\n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
 "PO-Revision-Date: 2008-07-24 12:55+0100\n"
 "Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,76 +15,59 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1rc4\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
 msgstr "%s వ్యాపకం"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
 msgstr "పొరబాటు జరిగింది"
 
-#: ../src/sugar3/activity/activity.py:847
+#: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
 msgstr "పొరబాటు జరిగింది : అన్ని మార్పులూ పోతాయి"
 
-#: ../src/sugar3/activity/activity.py:850
+#: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
 msgstr "ఆపవద్దు"
 
-#: ../src/sugar3/activity/activity.py:853
+#: ../src/sugar3/activity/activity.py:852
 msgid "Stop anyway"
 msgstr "ఏదేమైనా ఆపువేయి"
 
-# i am not sure what entry is and missing a letter (pettu)
-#: ../src/sugar3/activity/namingalert.py:79
-msgid "Name this entry"
-msgstr "ఈ పద్దుకి పేరుపెట్టండి"
-
-#: ../src/sugar3/activity/namingalert.py:84
-msgid "Keep"
-msgstr "ఉంచు"
-
-#: ../src/sugar3/activity/namingalert.py:200
-msgid "Description:"
-msgstr "వివరణ"
-
-#: ../src/sugar3/activity/namingalert.py:209
-msgid "Tags:"
-msgstr ""
-
-#: ../src/sugar3/activity/namingalert.py:263
-#, fuzzy
-msgid "Untitled"
-msgstr "పేరు లేని"
-
-#: ../src/sugar3/activity/widgets.py:83
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "ఆపు"
 
-#: ../src/sugar3/activity/widgets.py:95
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "చివరిది రద్దుచేయి"
 
-#: ../src/sugar3/activity/widgets.py:103
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "చివరిది తిరిగిచేయి"
 
-#: ../src/sugar3/activity/widgets.py:110
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "నకలు"
 
-#: ../src/sugar3/activity/widgets.py:118
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "అతికించు"
 
-#: ../src/sugar3/activity/widgets.py:129
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "సొంతం"
 
-#: ../src/sugar3/activity/widgets.py:136
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "నా చుట్టుపక్కలవారు"
+
+#: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
+msgid "Description"
+msgstr "వివరణ"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -202,8 +185,3 @@ msgstr ""
 msgid "%d GB"
 msgstr ""
 
-#~ msgid "Share with:"
-#~ msgstr "తో పంచుకో:"
-
-#~ msgid "Activity"
-#~ msgstr "వ్యాపకం"
