@@ -2,23 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-03 00:30-0500\n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
 "PO-Revision-Date: 2012-02-06 07:06+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +67,8 @@ msgid "My Neighborhood"
 msgstr "मेरो छिमेकी"
 
 #: ../src/sugar3/activity/widgets.py:226
-msgid "Descriptions"
+#, fuzzy
+msgid "Description"
 msgstr "वर्णन"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
@@ -203,20 +192,3 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#~ msgid "Name this entry"
-#~ msgstr "यो एन्ट्रीलाई नाम देऊ"
-
-#~ msgid "Keep"
-#~ msgstr "राख"
-
-#~ msgid "Tags:"
-#~ msgstr "ट्‍याग:"
-
-#~ msgid "Untitled"
-#~ msgstr "नाम बिनाको"
-
-#~ msgid "Activity"
-#~ msgstr "क्रियाकलाप"
-
-#~ msgid "Share with:"
-#~ msgstr "संग बाँड:"
