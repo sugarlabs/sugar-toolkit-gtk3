@@ -7,13 +7,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2008-07-24 12:55+0100\n"
-"Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
+"PO-Revision-Date: 2012-02-11 07:46+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: ../src/sugar3/activity/activity.py:377
 #, python-format
@@ -65,7 +67,6 @@ msgid "My Neighborhood"
 msgstr "నా చుట్టుపక్కలవారు"
 
 #: ../src/sugar3/activity/widgets.py:226
-#, fuzzy
 msgid "Description"
 msgstr "వివరణ"
 
@@ -184,4 +185,3 @@ msgstr ""
 #, python-format
 msgid "%d GB"
 msgstr ""
-
