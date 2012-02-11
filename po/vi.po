@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: sugar-toolkit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-10 09:20+0200\n"
+"PO-Revision-Date: 2012-02-11 07:52+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "Language: vi\n"
@@ -70,9 +70,8 @@ msgid "My Neighborhood"
 msgstr "Hàng xóm mình"
 
 #: ../src/sugar3/activity/widgets.py:226
-#, fuzzy
 msgid "Description"
-msgstr "Mô tả:"
+msgstr "Mô tả"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -188,4 +187,3 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
-
