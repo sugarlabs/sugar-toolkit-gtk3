@@ -2,101 +2,74 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-27 00:30-0500\n"
-"PO-Revision-Date: 2011-09-02 05:03+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
+"PO-Revision-Date: 2012-02-03 09:41+0200\n"
+"Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: si\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
 msgstr "%s ක්‍රියාකාරකම"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
 msgstr "දෝශය තබාගන්න"
 
-#: ../src/sugar3/activity/activity.py:847
+#: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
 msgstr "දෝශය තබාගන්න: සියළු වෙනස්කිරීම් නැතිවනු ඇත"
 
-#: ../src/sugar3/activity/activity.py:850
+#: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
 msgstr "නවත්වන්න එපා"
 
-#: ../src/sugar3/activity/activity.py:853
+#: ../src/sugar3/activity/activity.py:852
 msgid "Stop anyway"
 msgstr "කෙසේ හෝ නවත්වන්න"
 
-#: ../src/sugar3/activity/namingalert.py:79
-msgid "Name this entry"
-msgstr "මෙම ඇතුළත් කිරීම නම් කරන්න"
-
-#: ../src/sugar3/activity/namingalert.py:84
-msgid "Keep"
-msgstr "තබාගන්න"
-
-#: ../src/sugar3/activity/namingalert.py:200
-msgid "Description:"
-msgstr "විස්තරය:"
-
-#: ../src/sugar3/activity/namingalert.py:209
-msgid "Tags:"
-msgstr "ටැග්:"
-
-#: ../src/sugar3/activity/namingalert.py:263
-msgid "Untitled"
-msgstr "සිර්තල නොමැති"
-
-#: ../src/sugar3/activity/widgets.py:83
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "නවත්වන්න"
 
-#: ../src/sugar3/activity/widgets.py:95
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "නිශ්ප්‍රභ කරන්න"
 
-#: ../src/sugar3/activity/widgets.py:103
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "යළි කරන්න"
 
-#: ../src/sugar3/activity/widgets.py:110
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "පිටපත් කරන්න"
 
-#: ../src/sugar3/activity/widgets.py:118
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "අලවන්න"
 
-#: ../src/sugar3/activity/widgets.py:129
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "පුද්ගලික"
 
-#: ../src/sugar3/activity/widgets.py:136
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "මගේ වටපිටාව"
+
+#: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
+msgid "Description"
+msgstr "විස්තර"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -218,8 +191,3 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#~ msgid "Activity"
-#~ msgstr "ක්‍රියාකාරකම"
-
-#~ msgid "Share with:"
-#~ msgstr "බෙදාගත යුත්තේ:"
