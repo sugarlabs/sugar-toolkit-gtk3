@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2010-09-22 07:00+0200\n"
-"Last-Translator: krom9ra <krom9ra@gmail.com>\n"
+"PO-Revision-Date: 2012-02-11 07:29+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.0.3\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: ../src/sugar3/activity/activity.py:377
 #, python-format
@@ -68,9 +68,8 @@ msgid "My Neighborhood"
 msgstr "Мои соседи"
 
 #: ../src/sugar3/activity/widgets.py:226
-#, fuzzy
 msgid "Description"
-msgstr "Описание:"
+msgstr "Описание"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -199,4 +198,3 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
-
