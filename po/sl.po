@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-03 00:30-0500\n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
 "PO-Revision-Date: 2009-01-29 08:25-0500\n"
 "Last-Translator: Denis Oštir <denis.ostir@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgstr "Moja soseščina"
 
 #: ../src/sugar3/activity/widgets.py:226
 #, fuzzy
-msgid "Descriptions"
+msgid "Description"
 msgstr "Opis:"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
@@ -201,14 +201,3 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#~ msgid "Name this entry"
-#~ msgstr "Poimenuj ta vnos"
-
-#~ msgid "Keep"
-#~ msgstr "Obdrži"
-
-#~ msgid "Tags:"
-#~ msgstr "Oznake:"
-
-#~ msgid "Untitled"
-#~ msgstr "Neimenovan"
