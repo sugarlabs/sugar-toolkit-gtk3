@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-10 09:14+0200\n"
+"PO-Revision-Date: 2012-02-11 07:38+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sw\n"
@@ -102,11 +102,11 @@ msgstr "Blue"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
-msgstr " na"
+msgstr " na "
 
 #: ../src/sugar3/util.py:218
 msgid ", "
-msgstr ",_"
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
@@ -186,4 +186,3 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
-
