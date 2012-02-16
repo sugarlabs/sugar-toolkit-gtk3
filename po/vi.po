@@ -102,7 +102,6 @@ msgstr "Lục"
 msgid "Blue"
 msgstr "Xanh"
 
-# Không cần từ. No word needed.
 #: ../src/sugar3/util.py:217
 msgid " and "
 msgstr ""
