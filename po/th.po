@@ -149,7 +149,6 @@ msgstr[0] "%d วัน"
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:245
 #, python-format
