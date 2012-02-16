@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-03 15:16+0200\n"
-"Last-Translator: anush.mkrtchyan <anush.mkrtchyan@ca1492.com>\n"
+"PO-Revision-Date: 2012-02-16 05:57+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: Sugar Labs\n"
 "Language: hy\n"
 "MIME-Version: 1.0\n"
@@ -67,9 +67,8 @@ msgid "My Neighborhood"
 msgstr "Իմ հարևանությունը"
 
 #: ../src/sugar3/activity/widgets.py:226
-#, fuzzy
 msgid "Description"
-msgstr "Նկարագրություններ"
+msgstr "Նկարագրություն"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -192,4 +191,3 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
-
