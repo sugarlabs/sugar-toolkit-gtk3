@@ -184,4 +184,3 @@ msgstr "%d 兆字节"
 #, python-format
 msgid "%d GB"
 msgstr "%d 吉字节"
-
