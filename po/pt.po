@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 07:24+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-03-08 22:20+0200\n"
+"Last-Translator: Eduardo H. <hoboprimate@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
-msgstr "Actividade %s"
+msgstr "Atividade %s"
 
 #: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
@@ -28,7 +28,7 @@ msgstr "Erro ao guardar"
 
 #: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
-msgstr "Erro ao guardar: todas as mudanças serão perdidas"
+msgstr "Erro ao guardar: todas as alterações serão perdidas"
 
 #: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
@@ -64,11 +64,11 @@ msgstr "Privado"
 
 #: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
-msgstr "A minha vizinhança"
+msgstr "Minha Vizinhança"
 
 #: ../src/sugar3/activity/widgets.py:226
 msgid "Description"
-msgstr "Descrições"
+msgstr "Descrição"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
