@@ -54,11 +54,12 @@ import os
 import time
 from hashlib import sha1
 from functools import partial
+import StringIO
+import cairo
 
 from gi.repository import GConf
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GObject
 import dbus
 import dbus.service
@@ -641,27 +642,55 @@ class Activity(Window, Gtk.Container):
         Activities can override this method, which should return a str with the
         binary content of a png image with a width of 300 and a height of 225
         pixels.
+
+        The method does create a cairo surface similar to that of the canvas'
+        window and draws on that. Then we create a cairo image surface with
+        the desired preview size and scale the canvas surface on that.
         """
-        if self.canvas is None or not hasattr(self.canvas, 'get_snapshot'):
+        if self.canvas is None or not hasattr(self.canvas, 'get_window'):
             return None
-        pixmap = self.canvas.get_snapshot((-1, -1, 0, 0))
 
-        width, height = pixmap.get_size()
-        pixbuf = GdkPixbuf.Pixbuf(GdkPixbuf.Colorspace.RGB, 0, 8, width, height)
-        pixbuf = pixbuf.get_from_drawable(pixmap, pixmap.get_colormap(),
-                                          0, 0, 0, 0, width, height)
-        pixbuf = pixbuf.scale_simple(style.zoom(300), style.zoom(225),
-                                     GdkPixbuf.InterpType.BILINEAR)
+        window = self.canvas.get_window()
+        alloc = self.canvas.get_allocation()
 
-        preview_data = []
+        dummy_cr = Gdk.cairo_create(window)
+        target = dummy_cr.get_target()
+        canvas_width, canvas_height = alloc.width, alloc.height
+        screenshot_surface = target.create_similar(cairo.CONTENT_COLOR,
+                                                   canvas_width, canvas_height)
+        del dummy_cr, target
 
-        def save_func(buf, data):
-            data.append(buf)
+        cr = cairo.Context(screenshot_surface)
+        r, g, b, a_ = style.COLOR_PANEL_GREY.get_rgba()
+        cr.set_source_rgb(r, g, b)
+        cr.paint()
+        self.canvas.draw(cr)
+        del cr
 
-        pixbuf.save_to_callback(save_func, 'png', user_data=preview_data)
-        preview_data = ''.join(preview_data)
+        preview_width, preview_height = style.zoom(300), style.zoom(225)
+        preview_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                                             preview_width, preview_height)
+        cr = cairo.Context(preview_surface)
 
-        return preview_data
+        scale_w = preview_width * 1.0 / canvas_width
+        scale_h = preview_height * 1.0 / canvas_height
+        scale = min(scale_w, scale_h)
+
+        translate_x = int((preview_width - (canvas_width * scale)) / 2)
+        translate_y = int((preview_height - (canvas_height * scale)) / 2)
+
+        cr.translate(translate_x, translate_y)
+        cr.scale(scale, scale)
+
+        cr.set_source_rgba(1, 1, 1, 0)
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        cr.paint()
+        cr.set_source_surface(screenshot_surface)
+        cr.paint()
+
+        preview_str = StringIO.StringIO()
+        preview_surface.write_to_png(preview_str)
+        return preview_str.getvalue()
 
     def _get_buddies(self):
         if self.shared_activity is not None:
