@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 07:44+0200\n"
+"PO-Revision-Date: 2012-03-10 16:35+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ta\n"
@@ -124,15 +124,15 @@ msgstr "%sமுன்"
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "%dவருடம்"
-msgstr[1] "%d  வருடங்கள்"
+msgstr[0] "%d வருடம்"
+msgstr[1] "%d வருடங்கள்"
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "%d  மாதம்"
-msgstr[1] "%d  மாதங்கள்"
+msgstr[0] "%d மாதம்"
+msgstr[1] "%d மாதங்கள்"
 
 #: ../src/sugar3/util.py:242
 #, python-format
