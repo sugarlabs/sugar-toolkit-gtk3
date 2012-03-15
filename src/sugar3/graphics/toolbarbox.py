@@ -38,7 +38,7 @@ class ToolbarButton(ToolButton):
 
         self.connect('clicked',
                 lambda widget: self.set_expanded(not self.is_expanded()))
-
+        self.connect_after('draw', self.__drawing_cb)
         self.connect('hierarchy-changed', self.__hierarchy_changed_cb)
 
     def __hierarchy_changed_cb(self, tool_button, previous_toplevel):
@@ -125,32 +125,19 @@ class ToolbarButton(ToolButton):
             return
         page_parent.remove(self.page_widget)
 
-    def do_draw(self, cr):
+    def __drawing_cb(self, button, cr):
         alloc = self.get_allocation()
-
         context = self.get_style_context()
         context.add_class('toolitem')
-
-        arrow_direction = 0
         if not self.is_expanded() or self.props.palette is not None and \
                 self.props.palette.is_up():
-            arrow_direction = math.pi
-
-        if not self.is_expanded() and self.props.palette is not None and \
-            self.props.palette.is_up():
-            # draw a black background
-            cr.set_source_rgba(*style.COLOR_BLACK.get_rgba())
-            cr.rectangle(0, 0, alloc.width, alloc.height)
-            cr.fill()
-
-        Gtk.ToolButton.do_draw(self, cr)
-
-        if self.is_expanded() or self.props.palette is not None and \
-            self.props.palette.is_up():
-            Gtk.render_frame_gap(context, cr, 0, 0, alloc.width, alloc.height,
-                                 Gtk.PositionType.BOTTOM, 0, alloc.width)
-
-        _paint_arrow(self, cr, arrow_direction)
+            ToolButton.do_draw(self, cr)
+            _paint_arrow(self, cr, math.pi)
+            return False
+        Gtk.render_frame_gap(context, cr, 0, 0, alloc.width, alloc.height,
+                             Gtk.PositionType.BOTTOM, 0, alloc.width)
+        _paint_arrow(self, cr, 0)
+        return False
 
 
 class ToolbarBox(Gtk.VBox):
