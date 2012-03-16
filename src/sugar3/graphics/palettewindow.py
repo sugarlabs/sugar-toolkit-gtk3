@@ -98,14 +98,13 @@ class _PaletteMenuWidget(Gtk.Menu):
         res_, x, y = self.get_toplevel().get_window().get_origin()
         return x, y
 
-    def do_size_request(self, requisition):
-        Gtk.Window.do_size_request(self, requisition)
-        requisition.width = max(requisition.width, style.GRID_CELL_SIZE * 2)
-
     def move(self, x, y):
         self._popup_position = (x, y)
 
     def set_transient_for(self, window):
+        pass
+
+    def set_invoker(self, invoker):
         pass
 
     def _position(self, widget, data):
@@ -252,7 +251,7 @@ class _PaletteWindowWidget(Gtk.Window):
         self.add_accel_group(accel_group)
 
         self._old_alloc = None
-
+        self._invoker = None
         self._should_accept_focus = True
 
     def set_accept_focus(self, focus):
@@ -270,9 +269,13 @@ class _PaletteWindowWidget(Gtk.Window):
         self.get_window().set_accept_focus(self._should_accept_focus)
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
-    def do_size_request(self, requisition):
-        Gtk.Window.do_size_request(self, requisition)
-        requisition.width = max(requisition.width, style.GRID_CELL_SIZE * 2)
+    def do_get_preferred_width(self):
+        size = 0
+        child = self.get_child()
+        if child:
+            minimum_size, natural_size = child.get_preferred_width()
+            size = max(minimum_size, natural_size, style.GRID_CELL_SIZE * 2)
+        return size, size
 
     def do_size_allocate(self, allocation):
         Gtk.Window.do_size_allocate(self, allocation)
@@ -290,6 +293,46 @@ class _PaletteWindowWidget(Gtk.Window):
         # the X window is resized, widget.allocation is updated from
         # the configure request handler and finally size_allocate is called.
         self._old_alloc = allocation
+
+    def set_invoker(self, invoker):
+        self._invoker = invoker
+
+    def get_rect(self):
+        win_x, win_y = self.get_origin()
+        rectangle = self.get_allocation()
+
+        x = win_x + rectangle.x
+        y = win_y + rectangle.y
+        minimum, natural = self.get_preferred_size()
+        rect = Gdk.Rectangle()
+        rect.x = x
+        rect.y = y
+        rect.width = minimum.width
+        rect.height = natural.height
+
+        return rect
+
+    def do_draw(self, cr):
+        # Fall trough to the container expose handler.
+        # (Leaving out the window expose handler which redraws everything)
+        Gtk.Window.do_draw(self, cr)
+
+        if self._invoker is not None and self._invoker.has_rectangle_gap():
+            invoker = self._invoker.get_rect()
+            palette = self.get_rect()
+            gap = _calculate_gap(palette, invoker)
+        else:
+            gap = False
+
+        allocation = self.get_allocation()
+        context = self.get_style_context()
+        context.add_class('toolitem')
+        if gap:
+            Gtk.render_frame_gap(context, cr, 0, 0, allocation.width, allocation.height,
+                                 gap[0], gap[1], gap[2])
+        else:
+            Gtk.render_frame(context, cr, 0, 0, allocation.width, allocation.height)
+        return False
 
     def __enter_notify_event_cb(self, widget, event):
         if event.mode == Gdk.CrossingMode.NORMAL and \
@@ -427,6 +470,7 @@ class PaletteWindow(GObject.GObject):
         self._widget.connect('leave-notify', self.__leave_notify_cb)
 
         self._set_effective_group_id(self._group_id)
+        self._widget.set_invoker(self._invoker)
 
         self._mouse_detector.connect('motion-slow', self._mouse_slow_cb)
         self._mouse_detector.parent = self._widget
@@ -452,6 +496,7 @@ class PaletteWindow(GObject.GObject):
             self._invoker_hids.remove(hid)
 
         self._invoker = invoker
+        self._widget.set_invoker(self._invoker)
         if invoker is not None:
             self._invoker_hids.append(self._invoker.connect(
                 'mouse-enter', self._invoker_mouse_enter_cb))
@@ -599,17 +644,17 @@ class PaletteWindow(GObject.GObject):
 
     def get_rect(self):
         win_x, win_y = self._widget.get_origin()
-        rectangle = self.get_allocation()
+        rectangle = self._widget.get_allocation()
 
         x = win_x + rectangle.x
         y = win_y + rectangle.y
-        requisition = self._widget.size_request()
+        minimum, natural_ = self._widget.get_preferred_size()
 
         rect = Gdk.Rectangle()
         rect.x = x
         rect.y = y
-        rect.width = requisition.width
-        rect.height = requisition.height
+        rect.width = minimum.width
+        rect.height = minimum.height
 
         return rect
 
@@ -967,25 +1012,18 @@ class WidgetInvoker(Invoker):
     def has_rectangle_gap(self):
         return True
 
-    def draw_rectangle(self, event, palette):
-        x, y = self._widget.allocation.x, self._widget.allocation.y
+    def draw_rectangle(self, cr, palette):
+        allocation = self.parent.get_allocation()
 
-        wstyle = self._widget.get_style()
+        context = self.parent.get_style_context()
+        context.add_class('toolitem')
+
         gap = _calculate_gap(self.get_rect(), palette.get_rect())
-
         if gap:
-            wstyle.paint_box_gap(event.window, Gtk.StateType.PRELIGHT,
-                                 Gtk.ShadowType.IN, event.area, self._widget,
-                                 'palette-invoker', x, y,
-                                 self._widget.allocation.width,
-                                 self._widget.allocation.height,
+            Gtk.render_frame_gap(context, cr, 0, 0,
+                                 allocation.width,
+                                 allocation.height,
                                  gap[0], gap[1], gap[2])
-        else:
-            wstyle.paint_box(event.window, Gtk.StateType.PRELIGHT,
-                             Gtk.ShadowType.IN, event.area, self._widget,
-                             'palette-invoker', x, y,
-                             self._widget.allocation.width,
-                             self._widget.allocation.height)
 
     def __enter_notify_event_cb(self, widget, event):
         self.notify_mouse_enter()

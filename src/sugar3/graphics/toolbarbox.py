@@ -38,7 +38,7 @@ class ToolbarButton(ToolButton):
 
         self.connect('clicked',
                 lambda widget: self.set_expanded(not self.is_expanded()))
-
+        self.connect_after('draw', self.__drawing_cb)
         self.connect('hierarchy-changed', self.__hierarchy_changed_cb)
 
     def __hierarchy_changed_cb(self, tool_button, previous_toplevel):
@@ -66,7 +66,7 @@ class ToolbarButton(ToolButton):
         if page is None:
             self.page_widget = None
             return
-        self.page_widget, alignment_ = _embed_page(_Box, page)
+        self.page_widget, alignment_ = _embed_page(_Box(self), page)
         self.page_widget.set_size_request(-1, style.GRID_CELL_SIZE)
         page.show()
         if self.props.palette is None:
@@ -125,22 +125,19 @@ class ToolbarButton(ToolButton):
             return
         page_parent.remove(self.page_widget)
 
-    def do_draw(self, cr):
-        if not self.is_expanded() or self.props.palette is not None and \
-                self.props.palette.is_up():
-            Gtk.ToolButton.do_draw(self, cr)
-            _paint_arrow(self, cr, math.pi)
-            return
-
+    def __drawing_cb(self, button, cr):
         alloc = self.get_allocation()
-
         context = self.get_style_context()
         context.add_class('toolitem')
-
+        if not self.is_expanded() or self.props.palette is not None and \
+                self.props.palette.is_up():
+            ToolButton.do_draw(self, cr)
+            _paint_arrow(self, cr, math.pi)
+            return False
         Gtk.render_frame_gap(context, cr, 0, 0, alloc.width, alloc.height,
                              Gtk.PositionType.BOTTOM, 0, alloc.width)
-        Gtk.ToolButton.do_draw(self, cr)
         _paint_arrow(self, cr, 0)
+        return False
 
 
 class ToolbarBox(Gtk.VBox):
@@ -155,7 +152,7 @@ class ToolbarBox(Gtk.VBox):
         self._toolbar.connect('remove', self.__remove_cb)
 
         self._toolbar_widget, self._toolbar_alignment = \
-                _embed_page(Gtk.EventBox, self._toolbar)
+                _embed_page(Gtk.EventBox(), self._toolbar)
         self.pack_start(self._toolbar_widget, True, True, 0)
 
         self.props.padding = padding
@@ -269,26 +266,23 @@ class _ToolbarPalette(PaletteWindow):
 
 class _Box(Gtk.EventBox):
 
-    def __init__(self):
+    def __init__(self, toolbar_button):
         GObject.GObject.__init__(self)
         self.set_app_paintable(True)
+        self._toolbar_button = toolbar_button
 
-    def do_expose_event(self, widget, event):
-        # TODO: reimplement this in the theme
-        expanded_button = self.get_parent().expanded_button
-        if expanded_button is None:
-            return
-        alloc = expanded_button.allocation
-        self.get_style().paint_box(event.window,
-                Gtk.StateType.NORMAL, Gtk.ShadowType.IN, event.area, self,
-                'palette-invoker', -style.FOCUS_LINE_WIDTH, 0,
-                self.allocation.width + style.FOCUS_LINE_WIDTH * 2,
-                self.allocation.height + style.FOCUS_LINE_WIDTH)
-        self.get_style().paint_box(event.window,
-                Gtk.StateType.NORMAL, Gtk.ShadowType.NONE, event.area, self, None,
-                alloc.x + style.FOCUS_LINE_WIDTH, 0,
-                alloc.width - style.FOCUS_LINE_WIDTH * 2,
-                    style.FOCUS_LINE_WIDTH)
+    def do_draw(self, cr):
+        button_alloc = self._toolbar_button.get_allocation()
+
+        cr.set_line_width(style.FOCUS_LINE_WIDTH * 2)
+        cr.set_source_rgba(*style.COLOR_BUTTON_GREY.get_rgba())
+        cr.move_to(0, 0)
+        cr.line_to(button_alloc.x + style.FOCUS_LINE_WIDTH, 0)
+        cr.move_to(button_alloc.x + button_alloc.width - style.FOCUS_LINE_WIDTH, 0)
+        cr.line_to(self.get_allocation().width, 0)
+        cr.stroke()
+
+        Gtk.EventBox.do_draw(self, cr)
 
 
 def _setup_page(page_widget, color, hpad):
@@ -305,14 +299,13 @@ def _setup_page(page_widget, color, hpad):
     page_widget.modify_bg(Gtk.StateType.PRELIGHT, color)
 
 
-def _embed_page(box_class, page):
+def _embed_page(page_widget, page):
     page.show()
 
     alignment = Gtk.Alignment(xscale=1.0, yscale=1.0)
     alignment.add(page)
     alignment.show()
 
-    page_widget = box_class()
     page_widget.modify_bg(Gtk.StateType.ACTIVE,
             style.COLOR_BUTTON_GREY.get_gdk_color())
     page_widget.add(alignment)
