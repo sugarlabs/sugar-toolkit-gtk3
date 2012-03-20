@@ -29,13 +29,12 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
+from gi.repository import Rsvg
 import cairo
 
 from sugar3.graphics import style
 from sugar3.graphics.xocolor import XoColor
 from sugar3.util import LRU
-
-from gi.repository import SugarExt
 
 _BADGE_SIZE = 0.45
 
@@ -64,7 +63,7 @@ class _SVGLoader(object):
                 logging.error(
                     'Icon %s, entity %s is invalid.', file_name, entity)
 
-        return SugarExt.RsvgWrapper.new(icon)
+        return Rsvg.Handle.new_from_data(icon)
 
 
 class _IconInfo(object):
@@ -260,8 +259,8 @@ class _IconBuffer(object):
 
         if is_svg:
             handle = self._load_svg(icon_info.file_name)
-            icon_width = handle.get_width()
-            icon_height = handle.get_height()
+            icon_width = handle.props.width
+            icon_height = handle.props.height
         else:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.file_name)
             icon_width = pixbuf.get_width()
