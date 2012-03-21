@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-03-15 01:21+0200\n"
+"PO-Revision-Date: 2012-03-21 06:51+0200\n"
 "Last-Translator: Xin <dram.wang@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_CN\n"
@@ -24,11 +24,11 @@ msgstr "%s活动"
 
 #: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
-msgstr "保存错误"
+msgstr "保存出错"
 
 #: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
-msgstr "保存错误: 所有更改将会丧失"
+msgstr "保存出错: 所有更改将会丢失"
 
 #: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
