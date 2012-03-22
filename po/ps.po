@@ -118,6 +118,7 @@ msgstr "ثانیې وړاندې"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225
+#, python-format
 #, python-format, fuzzy
 msgid "%s ago"
 msgstr "وړاندې"

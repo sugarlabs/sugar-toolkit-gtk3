@@ -66,9 +66,11 @@ msgstr "پرايويٹ"
 msgid "My Neighborhood"
 msgstr "ميرا گردونواح"
 
+# وضاحت
 #: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
 msgid "Description"
-msgstr ""
+msgstr "وضاحت"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -83,22 +85,25 @@ msgstr "ٹھيک ہے"
 msgid "Continue"
 msgstr "جاری رکھيں"
 
+# رنگ منتخب کریں
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
-msgstr ""
+msgstr "رنگ منتخب کریں"
 
+# لال
 #: ../src/sugar3/graphics/colorbutton.py:274
-#, fuzzy
 msgid "Red"
-msgstr "دوبارہ کريں"
+msgstr "لال"
 
+# سبز
 #: ../src/sugar3/graphics/colorbutton.py:276
 msgid "Green"
-msgstr ""
+msgstr "سبز"
 
+# نیلا
 #: ../src/sugar3/graphics/colorbutton.py:278
 msgid "Blue"
-msgstr ""
+msgstr "نیلا"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
@@ -163,29 +168,35 @@ msgid_plural "%d minutes"
 msgstr[0] "%d منٹ"
 msgstr[1] "%d منٹ"
 
+# خالی
 #: ../src/sugar3/util.py:346
 msgid "Empty"
-msgstr ""
+msgstr "خالی"
 
+# %d B
 #: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d B"
 
+# %d KB
 #: ../src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d KB"
 
+# %d MB
 #: ../src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
+# %d GB
+#
 #: ../src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #~ msgid "Keep"
 #~ msgstr "رکھيں"
@@ -195,3 +206,21 @@ msgstr ""
 
 #~ msgid "Activity"
 #~ msgstr "سرگرمی"
+
+# بلا عنوان
+#~ msgid "Untitled"
+#~ msgstr "بلا عنوان"
+
+# اس اندراج کو نام دیں
+#~ msgid "Name this entry"
+#~ msgstr "اس اندراج کو نام دیں"
+
+# ٹیگ:
+#~ msgid "Tags:"
+#~ msgstr "ٹیگ:"
+
+#~ msgid "Activity"
+#~ msgstr "سرگرمی"
+
+#~ msgid "Keep"
+#~ msgstr "رکھيں"

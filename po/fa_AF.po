@@ -116,42 +116,49 @@ msgstr "ثانیه قبل"
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225
+#, python-format
 #, python-format, fuzzy
 msgid "%s ago"
 msgstr "قبل"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
+#, python-format
 #, python-format, fuzzy
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "سال"
 
 #: ../src/sugar3/util.py:241
+#, python-format
 #, python-format, fuzzy
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "ماه"
 
 #: ../src/sugar3/util.py:242
+#, python-format
 #, python-format, fuzzy
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "هفته"
 
 #: ../src/sugar3/util.py:243
+#, python-format
 #, python-format, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "روز"
 
 #: ../src/sugar3/util.py:244
+#, python-format
 #, python-format, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "ساعت"
 
 #: ../src/sugar3/util.py:245
+#, python-format
 #, python-format, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -180,4 +187,3 @@ msgstr ""
 #, python-format
 msgid "%d GB"
 msgstr ""
-

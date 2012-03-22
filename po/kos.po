@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2009-09-02 21:21-0400\n"
-"Last-Translator: Chris Leonard <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-02-11 06:44+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: kos\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 1.2.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: ../src/sugar3/activity/activity.py:377
 #, python-format
@@ -105,7 +105,7 @@ msgstr ""
 
 #: ../src/sugar3/util.py:218
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
