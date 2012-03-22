@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 07:48+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2012-03-22 09:45+0200\n"
+"Last-Translator: Meechai <malaku38@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
@@ -20,19 +20,19 @@ msgstr ""
 #: ../src/sugar3/activity/activity.py:377
 #, python-format
 msgid "%s Activity"
-msgstr "กิจกรรม %s"
+msgstr "กิจกรรม%s"
 
 #: ../src/sugar3/activity/activity.py:845
 msgid "Keep error"
-msgstr "เก็บพลาด"
+msgstr "การเก็บผิดพลาด"
 
 #: ../src/sugar3/activity/activity.py:846
 msgid "Keep error: all changes will be lost"
-msgstr "การเก็บผิดพลาด: สิ่งที่แก้ไขไปจะไม่ถูกเก็บไว้"
+msgstr "การเก็บผิดพลาด: การเปลี่ยนแปลงทั้งหมดจะหายไป"
 
 #: ../src/sugar3/activity/activity.py:849
 msgid "Don't stop"
-msgstr "ไม่ต้องหยุด"
+msgstr "ไม่หยุด"
 
 #: ../src/sugar3/activity/activity.py:852
 msgid "Stop anyway"
@@ -44,7 +44,7 @@ msgstr "หยุด"
 
 #: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
-msgstr "เลิกทำ"
+msgstr "ทำกลับ"
 
 #: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
@@ -64,7 +64,7 @@ msgstr "ส่วนตัว"
 
 #: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
-msgstr "เพื่อนรอบๆ ตัวฉัน"
+msgstr "เพื่อนบ้านของฉัน"
 
 #: ../src/sugar3/activity/widgets.py:226
 msgid "Description"
@@ -148,7 +148,7 @@ msgstr[0] "%d วัน"
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
+msgstr[0] "%d ชั่วโมง"
 
 #: ../src/sugar3/util.py:245
 #, python-format
