@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.7.0\n"
+
+#  "Actividad %s"
+#: ../src/sugar3/activity/activity.py:377
+#, python-format
+msgid "%s Activity"
+msgstr "%s Ruwana"
+
+#  "Error al guardar"
+#: ../src/sugar3/activity/activity.py:845
+msgid "Keep error"
+msgstr "Allchakuchkaptin pantarun"
+
+#  "Error al guardar: todos los cambios se perderán"
+#: ../src/sugar3/activity/activity.py:846
+msgid "Keep error: all changes will be lost"
+msgstr "Allchakuchkaptin pantarun: llapan huknirasqaqa chinkarinqan"
+
+#  "No detener"
+#: ../src/sugar3/activity/activity.py:849
+msgid "Don't stop"
+msgstr "Ama sayachiychu"
+
+#  "Detener de todas formas"
+#: ../src/sugar3/activity/activity.py:852
+msgid "Stop anyway"
+msgstr "Sayachinaykipunim"
+
+#  "Parar"
+#: ../src/sugar3/activity/widgets.py:86
+msgid "Stop"
+msgstr "Sayachiy"
+
+#  "Deshacer"
+#: ../src/sugar3/activity/widgets.py:98
+msgid "Undo"
+msgstr "Pichay"
+
+#  "Rehacer"
+#: ../src/sugar3/activity/widgets.py:106
+msgid "Redo"
+msgstr "Kutipay"
+
+#  "Copiar"
+#: ../src/sugar3/activity/widgets.py:113
+msgid "Copy"
+msgstr "Kikinchay"
+
+#  "Pegar"
+#: ../src/sugar3/activity/widgets.py:121
+msgid "Paste"
+msgstr "K'askachiy"
+
+#  "Privado"
+#: ../src/sugar3/activity/widgets.py:132
+msgid "Private"
+msgstr "Pakasqa"
+
+#  "Mi Vecindario"
+#: ../src/sugar3/activity/widgets.py:139
+msgid "My Neighborhood"
+msgstr "Aylluy"
+
+# "Descripción:"
+#: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
+msgid "Description"
+msgstr "Riqsichinapaq:"
+
+#  "Cancelar"
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+msgid "Cancel"
+msgstr "Chinkachiy"
+
+#  "Aceptar"
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+msgid "Ok"
+msgstr "Chaskiy"
+
+#  "Continuar"
+#: ../src/sugar3/graphics/alert.py:434
+msgid "Continue"
+msgstr "Purillay"
+
+#  "Escoja un color"
+#: ../src/sugar3/graphics/colorbutton.py:54
+msgid "Choose a color"
+msgstr "Huk llinp'ita akllay"
+
+#  "Rojo"
+#: ../src/sugar3/graphics/colorbutton.py:274
+msgid "Red"
+msgstr "Puka"
+
+#  "Verde"
+#: ../src/sugar3/graphics/colorbutton.py:276
+msgid "Green"
+msgstr "Q´umer"
+
+#  "Azul"
+#: ../src/sugar3/graphics/colorbutton.py:278
+msgid "Blue"
+msgstr "Anqas"
+
+#  " y "
+#: ../src/sugar3/util.py:217
+msgid " and "
+msgstr " hinallataq "
+
+#  ", "
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ", "
+
+#  "Segundos atrás"
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+msgid "Seconds ago"
+msgstr "As tumpalla"
+
+#  "%s atrás"
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+msgid "%s ago"
+msgstr "%s qhipa"
+
+#  "%d año"
+#  "%d años"
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d wata"
+msgstr[1] "%d watakuna"
+
+#  "%d mes"
+#  "%d meses"
+#: ../src/sugar3/util.py:241
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d killa"
+msgstr[1] "%d killakuna"
+
+#  "%d semana"
+#  "%d semanas"
+#: ../src/sugar3/util.py:242
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d qanchischaw"
+msgstr[1] "%d qanchischawkuna"
+
+#  "%d día"
+#  "%d días"
+#: ../src/sugar3/util.py:243
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d p'unchaw"
+msgstr[1] "%d p'unchawkuna"
+
+#  "%d hora"
+#  "%d horas"
+#: ../src/sugar3/util.py:244
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d pacha"
+msgstr[1] "%d pachakuna"
+
+#  "%d minuto"
+#  "%d minutos"
+#: ../src/sugar3/util.py:245
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d chinini"
+msgstr[1] "%d chininikuna"
+
+#  "Vacio"
+#: ../src/sugar3/util.py:346
+msgid "Empty"
+msgstr "Ch´usaq"
+
+#  "%d B"
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr "%d B"
+
+#  "%d KB"
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr "%d KB"
+
+#  "%d MB"
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr "%d MB"
+
+#  "%d GB"
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr "%d GB"
+
+#  "Sin título"
+#~ msgid "Untitled"
+#~ msgstr "Mana sutinchayniyuq"
+
+#  "Nombre esta entrada"
+#~ msgid "Name this entry"
+#~ msgstr "Haykunata sutichay"
+
+#  "Etiquetas:"
+#~ msgid "Tags:"
+#~ msgstr "Sutichaq:"
+
+#  "Actividad"
+#~ msgid "Activity"
+#~ msgstr "Ruwana"
+
+#  "Guardar copia"
+#~ msgid "Keep"
+#~ msgstr "Kikinchata waqaychay"
