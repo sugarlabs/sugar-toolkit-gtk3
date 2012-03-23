@@ -48,8 +48,6 @@ libsugarext_la_SOURCES =		\
 	gsm-session.h			\
 	gsm-xsmp.c			\
 	gsm-xsmp.h			\
-	rsvg-wrapper.c			\
-	rsvg-wrapper.h			\
 	sugar-grid.c			\
 	sugar-grid.h			\
 	sugar-key-grabber.c		\
@@ -133,9 +131,7 @@ SugarExt_1_0_gir_FILES = \
 	sugar-grid.c \
 	sugar-grid.h \
 	gdk-wrapper.c \
-	gdk-wrapper.h \
-	rsvg-wrapper.c \
-	rsvg-wrapper.h
+	gdk-wrapper.h
 
 SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
 SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
