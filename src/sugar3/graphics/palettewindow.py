@@ -239,9 +239,10 @@ class _PaletteWindowWidget(Gtk.Window):
         'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
-    def __init__(self):
+    def __init__(self, palette=None):
         Gtk.Window.__init__(self)
 
+        self._palette = palette
         self.set_decorated(False)
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.NONE)
@@ -270,11 +271,12 @@ class _PaletteWindowWidget(Gtk.Window):
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
     def do_get_preferred_width(self):
-        size = 0
-        child = self.get_child()
-        if child:
-            minimum_size, natural_size = child.get_preferred_width()
-            size = max(minimum_size, natural_size, style.GRID_CELL_SIZE * 2)
+        minimum, natural = Gtk.Window.do_get_preferred_width(self)
+        label_width = 0
+        if self._palette is not None:
+            label_width = self._palette.get_label_width()
+        size = max(natural, label_width + 2 * self.get_border_width(),
+                   style.GRID_CELL_SIZE * 2)
         return size, size
 
     def do_size_allocate(self, allocation):

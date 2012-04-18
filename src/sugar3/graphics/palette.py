@@ -301,7 +301,7 @@ class Palette(PaletteWindow):
                 or isinstance(self._widget, _PaletteWindowWidget)
 
         if self._widget is None:
-            self._widget = _PaletteWindowWidget()
+            self._widget = _PaletteWindowWidget(self)
             self._setup_widget()
 
             self._palette_box = Gtk.VBox()
@@ -327,16 +327,11 @@ class Palette(PaletteWindow):
         self._update_accept_focus()
         self._update_separators()
 
-    def do_get_preferred_width(self):
-        minimum, natural = PaletteWindow.do_get_preferred_width(self)
-
+    def get_label_width(self):
         # Gtk.AccelLabel request doesn't include the accelerator.
-        label_width = self._label_alignment.size_request()[0] + \
-                      self._label.get_accel_width() + \
-                      2 * self.get_border_width()
-
-        width = max(minimum, label_width, self._full_request[0])
-        return width, width
+        label_width = self._label_alignment.get_preferred_width()[1] + \
+                      self._label.get_accel_width()
+        return label_width
 
     def _update_separators(self):
         visible = self._content.get_children()
