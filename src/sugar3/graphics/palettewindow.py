@@ -329,7 +329,7 @@ class _PaletteWindowWidget(Gtk.Window):
         context.add_class('toolitem')
         if gap:
             Gtk.render_frame_gap(context, cr, 0, 0, allocation.width, allocation.height,
-                                 gap[0], gap[1], gap[2])
+                                 gap[0], gap[1], gap[1] + gap[2])
         else:
             Gtk.render_frame(context, cr, 0, 0, allocation.width, allocation.height)
         return False
@@ -1023,7 +1023,7 @@ class WidgetInvoker(Invoker):
             Gtk.render_frame_gap(context, cr, 0, 0,
                                  allocation.width,
                                  allocation.height,
-                                 gap[0], gap[1], gap[2])
+                                 gap[0], gap[1], gap[1] + gap[2])
 
     def __enter_notify_event_cb(self, widget, event):
         self.notify_mouse_enter()
