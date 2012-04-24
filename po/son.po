@@ -125,42 +125,36 @@ msgstr ""
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:346
 #, fuzzy
