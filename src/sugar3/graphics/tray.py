@@ -115,13 +115,15 @@ class _TrayViewport(Gtk.Viewport):
 
     def do_get_preferred_width(self):
         if self.orientation == Gtk.Orientation.HORIZONTAL:
-            return Gtk.Viewport.do_get_preferred_width(self)
+            min_width, nat_width = Gtk.Viewport.do_get_preferred_width(self)
+            return 0, nat_width
         child_minimum, child_natural = self.get_child().get_preferred_size()
         return child_minimum.width, child_natural.width
 
     def do_get_preferred_height(self):
         if self.orientation != Gtk.Orientation.HORIZONTAL:
-            return Gtk.Viewport.do_get_preferred_width(self)
+            min_height, nat_height = Gtk.Viewport.do_get_preferred_height(self)
+            return 0, nat_height
         child_minimum, child_natural = self.get_child().get_preferred_size()
         return child_minimum.height, child_natural.height
 
