@@ -1,0 +1,96 @@
+Description: Fail (exit with errorcode 1) on fatal errors in bundlebuilder.py
+Author: Jonas Smedegaard <dr@jones.dk>
+Last-Update: 2010-02-08
+--- a/src/sugar3/activity/bundlebuilder.py
++++ b/src/sugar3/activity/bundlebuilder.py
+@@ -133,6 +133,7 @@
+             retcode = subprocess.call(args)
+             if retcode:
+                 print 'ERROR - msgfmt failed with return code %i.' % retcode
++                exit (1)
+ 
+             cat = gettext.GNUTranslations(open(mo_file, 'r'))
+             translated_name = cat.gettext(self.config.activity_name)
+@@ -255,8 +256,9 @@
+     """Setup for development"""
+ 
+     if args:
++        print 'ERROR - Wrong argument.'
+         print 'Usage: %prog dev'
+-        return
++        exit (1)
+ 
+     bundle_path = env.get_user_activities_path()
+     if not os.path.isdir(bundle_path):
+@@ -275,8 +277,9 @@
+     """Create a xo bundle package"""
+ 
+     if args:
++        print 'ERROR - Wrong argument.'
+         print 'Usage: %prog dist_xo'
+-        return
++        exit (1)
+ 
+     packager = XOPackager(Builder(config))
+     packager.package()
+@@ -294,8 +297,9 @@
+     """Create a tar source package"""
+ 
+     if args:
++        print 'ERROR - Wrong argument.'
+         print 'Usage: %prog dist_source'
+-        return
++        exit (1)
+ 
+     packager = SourcePackager(config)
+     packager.package()
+@@ -309,8 +313,9 @@
+                       help='Prefix to install files to')
+     (suboptions, subargs) = parser.parse_args(args)
+     if subargs:
++        print 'ERROR - Wrong argument.'
+         parser.print_help()
+-        return
++        exit (1)
+ 
+     installer = Installer(Builder(config))
+     installer.install(suboptions.prefix)
+@@ -320,8 +325,9 @@
+     """Generate the gettext pot file"""
+ 
+     if args:
++        print 'ERROR - Wrong argument.'
+         print 'Usage: %prog genpot'
+-        return
++        exit (1)
+ 
+     po_path = os.path.join(config.source_dir, 'po')
+     if not os.path.isdir(po_path):
+@@ -355,14 +361,16 @@
+     retcode = subprocess.call(args)
+     if retcode:
+         print 'ERROR - xgettext failed with return code %i.' % retcode
++        exit (1)
+ 
+ 
+ def cmd_build(config, args):
+     """Build generated files"""
+ 
+     if args:
++        print 'ERROR - Wrong argument.'
+         print 'Usage: %prog build'
+-        return
++        exit (1)
+ 
+     builder = Builder(config)
+     builder.build()
+@@ -389,7 +397,9 @@
+     try:
+         globals()['cmd_' + args[0]](config, args[1:])
+     except (KeyError, IndexError):
++        print 'ERROR - Wrong command or argument.'
+         print_commands()
++        exit (1)
+ 
+ 
+ if __name__ == '__main__':

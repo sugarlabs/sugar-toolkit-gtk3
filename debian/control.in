@@ -1,0 +1,137 @@
+Source: sugar-toolkit-gtk3
+Section: python
+Priority: optional
+Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
+Uploaders: Jonas Smedegaard <dr@jones.dk>
+Build-Depends: @cdbs@
+Standards-Version: 3.9.3
+Vcs-Git: git://git.debian.org/git/collab-maint/sugar-toolkit-gtk3
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sugar-toolkit-gtk3.git
+Homepage: http://wiki.sugarlabs.org/go/Sugar
+
+Package: libsugarext0
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: ${cdbs:Depends},
+ ${misc:Depends},
+ ${shlibs:Depends},
+ libsugarext-data (= ${source:Version})
+Pre-Depends: ${cdbs:Pre-Depends},
+ ${misc:Pre-Depends}
+Description: GTK3-based Sugar toolkit - runtime library
+ Sugar is a desktop environment. It is conceived as a platform upon
+ which children learn with Sugar Activities. The platform provides
+ mechanisms for collaboration, reflection, and exploration. Sugar
+ Activities cover a broad range of applications: browsing, drawing,
+ composing, writing, programming, etc.
+ .
+ The sugar3 library contains a set of widgets to build HIG compliant
+ applications and interfaces to interact with system services like
+ presence and the datastore.
+ .
+ This package contains the runtime library.
+
+Package: libsugarext-data
+Section: misc
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Description: GTK3-based Sugar toolkit - common files
+ Sugar is a desktop environment. It is conceived as a platform upon
+ which children learn with Sugar Activities. The platform provides
+ mechanisms for collaboration, reflection, and exploration. Sugar
+ Activities cover a broad range of applications: browsing, drawing,
+ composing, writing, programming, etc.
+ .
+ The sugar3 library contains a set of widgets to build HIG compliant
+ applications and interfaces to interact with system services like
+ presence and the datastore.
+ .
+ This contains the common files needed by the runtime library.
+
+Package: libsugarext-dev
+Section: libdevel
+Architecture: any
+Depends: ${cdbs:Depends},
+ ${misc:Depends},
+ ${shlibs:Depends},
+ libsugarext0 (= ${binary:Version}),
+ gir1.2-sugarext-1.0 (= ${binary:Version})
+Description: GTK3-based Sugar toolkit - develelopment files
+ Sugar is a desktop environment. It is conceived as a platform upon
+ which children learn with Sugar Activities. The platform provides
+ mechanisms for collaboration, reflection, and exploration. Sugar
+ Activities cover a broad range of applications: browsing, drawing,
+ composing, writing, programming, etc.
+ .
+ The sugar3 library contains a set of widgets to build HIG compliant
+ applications and interfaces to interact with system services like
+ presence and the datastore.
+ .
+ This package contains the files needed for development.
+
+Package: libsugarext-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: ${misc:Depends},
+ libsugarext0 (= ${binary:Version}),
+Description: GTK3-based Sugar toolkit - debugging symbols
+ Sugar is a desktop environment. It is conceived as a platform upon
+ which children learn with Sugar Activities. The platform provides
+ mechanisms for collaboration, reflection, and exploration. Sugar
+ Activities cover a broad range of applications: browsing, drawing,
+ composing, writing, programming, etc.
+ .
+ The sugar3 library contains a set of widgets to build HIG compliant
+ applications and interfaces to interact with system services like
+ presence and the datastore.
+ .
+ This package contains detached debugging symbols.
+
+Package: python-sugar3
+Architecture: any
+Depends: ${cdbs:Depends},
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+ gir1.2-sugarext-1.0 (= ${binary:Version}),
+Recommends: ${cdbs:Recommends}
+Suggests: ${cdbs:Suggests}
+Provides: ${cdbs:Provides},
+ ${python:Provides}
+Conflicts: ${cdbs:Conflicts}
+Replaces: ${cdbs:Replaces}
+Description: GTK3-based Sugar toolkit - Python bindings
+ Sugar is a desktop environment. It is conceived as a platform upon
+ which children learn with Sugar Activities. The platform provides
+ mechanisms for collaboration, reflection, and exploration. Sugar
+ Activities cover a broad range of applications: browsing, drawing,
+ composing, writing, programming, etc.
+ .
+ The sugar3 library contains a set of widgets to build HIG compliant
+ applications and interfaces to interact with system services like
+ presence and the datastore.
+ .
+ This package contains Python bindings.
+
+Package: gir1.2-sugarext-1.0
+Section: introspection
+Architecture: any
+Depends: ${cdbs:Depends},
+ ${gir:Depends},
+ ${misc:Depends}
+Description: GTK3-based Sugar toolkit - GObject introspection
+ Sugar is a desktop environment. It is conceived as a platform upon
+ which children learn with Sugar Activities. The platform provides
+ mechanisms for collaboration, reflection, and exploration. Sugar
+ Activities cover a broad range of applications: browsing, drawing,
+ composing, writing, programming, etc.
+ .
+ The sugar3 library contains a set of widgets to build HIG compliant
+ applications and interfaces to interact with system services like
+ presence and the datastore.
+ .
+ This package can be used by other packages using the GIRepository
+ format to generate dynamic bindings.

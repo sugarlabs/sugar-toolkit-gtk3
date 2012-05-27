@@ -1,0 +1,6 @@
+sugar-toolkit-gtk3 (0.96.1-1) unstable; urgency=low
+
+  * Initial packaging release.
+    Closes: bug#674802.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 28 May 2012 01:11:35 +0200
