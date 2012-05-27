@@ -1,0 +1,187 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
+"PO-Revision-Date: 2012-03-10 16:35+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ../src/sugar3/activity/activity.py:377
+#, python-format
+msgid "%s Activity"
+msgstr "%s செயற்பாடு"
+
+#: ../src/sugar3/activity/activity.py:845
+msgid "Keep error"
+msgstr "தவறை வைத்திரு"
+
+#: ../src/sugar3/activity/activity.py:846
+msgid "Keep error: all changes will be lost"
+msgstr "தவறை வைத்திரு: எல்லா மாற்றங்களும் அழிந்துவிடும்."
+
+#: ../src/sugar3/activity/activity.py:849
+msgid "Don't stop"
+msgstr "நிறுத்து"
+
+#: ../src/sugar3/activity/activity.py:852
+msgid "Stop anyway"
+msgstr "நிறுத்து"
+
+#: ../src/sugar3/activity/widgets.py:86
+msgid "Stop"
+msgstr "நிறுத்து"
+
+#: ../src/sugar3/activity/widgets.py:98
+msgid "Undo"
+msgstr "மீட்டலை ரத்து செய்"
+
+#: ../src/sugar3/activity/widgets.py:106
+msgid "Redo"
+msgstr "மீள் செய்"
+
+#: ../src/sugar3/activity/widgets.py:113
+msgid "Copy"
+msgstr "பிரதியெடு"
+
+#: ../src/sugar3/activity/widgets.py:121
+msgid "Paste"
+msgstr "ஒட்டு"
+
+#: ../src/sugar3/activity/widgets.py:132
+msgid "Private"
+msgstr "தனியார்"
+
+#: ../src/sugar3/activity/widgets.py:139
+msgid "My Neighborhood"
+msgstr "எனது சுற்றுபுறங்கள்"
+
+#: ../src/sugar3/activity/widgets.py:226
+msgid "Description"
+msgstr "விளக்கம்"
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+msgid "Cancel"
+msgstr "தவிர்"
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+msgid "Ok"
+msgstr "சரி"
+
+#: ../src/sugar3/graphics/alert.py:434
+msgid "Continue"
+msgstr "தொடரவும்"
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+msgid "Choose a color"
+msgstr "நிறத்தை தெரிவு செய்"
+
+#: ../src/sugar3/graphics/colorbutton.py:274
+msgid "Red"
+msgstr "சிவப்பு"
+
+#: ../src/sugar3/graphics/colorbutton.py:276
+msgid "Green"
+msgstr "பச்சை"
+
+#: ../src/sugar3/graphics/colorbutton.py:278
+msgid "Blue"
+msgstr "நீலம்"
+
+#: ../src/sugar3/util.py:217
+msgid " and "
+msgstr " உடன் "
+
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ", "
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+msgid "Seconds ago"
+msgstr "வினாடிகளுக்கு பின்"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+msgid "%s ago"
+msgstr "%sமுன்"
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d வருடம்"
+msgstr[1] "%d வருடங்கள்"
+
+#: ../src/sugar3/util.py:241
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d மாதம்"
+msgstr[1] "%d மாதங்கள்"
+
+#: ../src/sugar3/util.py:242
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d கிழமை"
+msgstr[1] "%d கிழமைகள்"
+
+#: ../src/sugar3/util.py:243
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%dநாள்"
+msgstr[1] "%dநாற்கள்"
+
+#: ../src/sugar3/util.py:244
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d மணித்தியாலம்"
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:245
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%dநிமிடம்"
+msgstr[1] "%dநிமிடங்கள்"
+
+#: ../src/sugar3/util.py:346
+msgid "Empty"
+msgstr "காலி"
+
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr "%d பி"
+
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr "%d கேபி(KB)"
+
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr "%d எம்பி(MB)"
+
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr "%d ஜிபி(GB)"

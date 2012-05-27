@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
+"PO-Revision-Date: 2012-02-11 06:57+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ne\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ../src/sugar3/activity/activity.py:377
+#, python-format
+msgid "%s Activity"
+msgstr "%s क्रियाकलाप"
+
+#: ../src/sugar3/activity/activity.py:845
+msgid "Keep error"
+msgstr "त्रुटि राख"
+
+#: ../src/sugar3/activity/activity.py:846
+msgid "Keep error: all changes will be lost"
+msgstr "त्रुटि राख: सबै परिवर्तनहरु हराँउछन्"
+
+#: ../src/sugar3/activity/activity.py:849
+msgid "Don't stop"
+msgstr "नरोक"
+
+#: ../src/sugar3/activity/activity.py:852
+msgid "Stop anyway"
+msgstr "जसरीभएपनि रोक"
+
+#: ../src/sugar3/activity/widgets.py:86
+msgid "Stop"
+msgstr "रोक"
+
+#: ../src/sugar3/activity/widgets.py:98
+msgid "Undo"
+msgstr "पहिलेकै अवस्थामा फर्काउ"
+
+#: ../src/sugar3/activity/widgets.py:106
+msgid "Redo"
+msgstr "फेरि गर"
+
+#: ../src/sugar3/activity/widgets.py:113
+msgid "Copy"
+msgstr "प्रतिलिपी बनाऊ"
+
+#: ../src/sugar3/activity/widgets.py:121
+msgid "Paste"
+msgstr "प्रतिलिपी सार"
+
+#: ../src/sugar3/activity/widgets.py:132
+msgid "Private"
+msgstr "गुप्‍त"
+
+#: ../src/sugar3/activity/widgets.py:139
+msgid "My Neighborhood"
+msgstr "मेरो छिमेकी"
+
+#: ../src/sugar3/activity/widgets.py:226
+msgid "Description"
+msgstr "वर्णन"
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+msgid "Cancel"
+msgstr "रद्द गर"
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+msgid "Ok"
+msgstr "हुन्छ"
+
+#: ../src/sugar3/graphics/alert.py:434
+msgid "Continue"
+msgstr "जारी राख"
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+msgid "Choose a color"
+msgstr "एउटा रंङ छान"
+
+#: ../src/sugar3/graphics/colorbutton.py:274
+msgid "Red"
+msgstr "रातो"
+
+#: ../src/sugar3/graphics/colorbutton.py:276
+msgid "Green"
+msgstr "हरियो"
+
+#: ../src/sugar3/graphics/colorbutton.py:278
+msgid "Blue"
+msgstr "निलो"
+
+#: ../src/sugar3/util.py:217
+msgid " and "
+msgstr " र "
+
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ", "
+
+# TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+msgid "Seconds ago"
+msgstr "केही बेर अघि"
+
+# TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+# "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+msgid "%s ago"
+msgstr "%s अघि"
+
+# TRANS: Relative dates (eg. 1 month and 5 days).
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d वर्ष"
+msgstr[1] "%d वर्ष"
+
+#: ../src/sugar3/util.py:241
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d महिना"
+msgstr[1] "%d महिना"
+
+#: ../src/sugar3/util.py:242
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d हप्ता"
+msgstr[1] "%d हप्ता"
+
+#: ../src/sugar3/util.py:243
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d दिन"
+msgstr[1] "%d दिन"
+
+#: ../src/sugar3/util.py:244
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d घन्टा"
+msgstr[1] "%d घन्टा"
+
+#: ../src/sugar3/util.py:245
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d मिनेट"
+msgstr[1] "%d मिनेट"
+
+# PVYcWl  <a href="http://xqqaieskstfg.com/">xqqaieskstfg</a>, [url=http://ppdtielpiiuh.com/]ppdtielpiiuh[/url], [link=http://vqjssabejaor.com/]vqjssabejaor[/link], http://itsxoktqpgdg.com/
+#: ../src/sugar3/util.py:346
+msgid "Empty"
+msgstr "खाली"
+
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr "%d B"
+
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr "%d KB"
+
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr "%d MB"
+
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr "%d GB"

@@ -1,0 +1,190 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-10 00:30-0500\n"
+"PO-Revision-Date: 2012-02-11 04:42+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fil\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ../src/sugar3/activity/activity.py:377
+#, python-format
+msgid "%s Activity"
+msgstr "%s Aktibidad"
+
+#: ../src/sugar3/activity/activity.py:845
+msgid "Keep error"
+msgstr "Panatilihin ang pagkakamali"
+
+#: ../src/sugar3/activity/activity.py:846
+msgid "Keep error: all changes will be lost"
+msgstr "Panatilihin ang pagkakamali: lahat ng pagbabago ay mawawala"
+
+#: ../src/sugar3/activity/activity.py:849
+msgid "Don't stop"
+msgstr "huwag huminto"
+
+#: ../src/sugar3/activity/activity.py:852
+msgid "Stop anyway"
+msgstr "Ihinto gayon pa man"
+
+#: ../src/sugar3/activity/widgets.py:86
+msgid "Stop"
+msgstr "Ihinto"
+
+#: ../src/sugar3/activity/widgets.py:98
+msgid "Undo"
+msgstr "Bawiin"
+
+#: ../src/sugar3/activity/widgets.py:106
+msgid "Redo"
+msgstr "Ulitin"
+
+#: ../src/sugar3/activity/widgets.py:113
+msgid "Copy"
+msgstr "Kopyahin"
+
+#: ../src/sugar3/activity/widgets.py:121
+msgid "Paste"
+msgstr "Idikit"
+
+#: ../src/sugar3/activity/widgets.py:132
+msgid "Private"
+msgstr "Pribado"
+
+#: ../src/sugar3/activity/widgets.py:139
+msgid "My Neighborhood"
+msgstr "Aking kapitbahayan"
+
+#: ../src/sugar3/activity/widgets.py:226
+msgid "Description"
+msgstr "Paglalarawan"
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+msgid "Cancel"
+msgstr "ipag pawalang bisa"
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+msgid "Ok"
+msgstr "Tanggapin"
+
+#: ../src/sugar3/graphics/alert.py:434
+msgid "Continue"
+msgstr "Magpatuloy"
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+msgid "Choose a color"
+msgstr "Pumili ng kulay"
+
+#: ../src/sugar3/graphics/colorbutton.py:274
+msgid "Red"
+msgstr "Pula"
+
+# berde (from the spanish verde) is more commonly known and used.  Luntian is more filipino but uncommon
+#: ../src/sugar3/graphics/colorbutton.py:276
+msgid "Green"
+msgstr "berde"
+
+#: ../src/sugar3/graphics/colorbutton.py:278
+msgid "Blue"
+msgstr "Bughaw"
+
+# if atsaka is chosen, it should be "at saka" with a space.  "At saka" is more like "and also".  And is just "at".
+#: ../src/sugar3/util.py:217
+msgid " and "
+msgstr " at "
+
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ", "
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+msgid "Seconds ago"
+msgstr "segundong nakaraan"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+msgid "%s ago"
+msgstr ""
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d taon"
+msgstr[1] "%d taon"
+
+#: ../src/sugar3/util.py:241
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d buwan"
+msgstr[1] "%d buwan"
+
+#: ../src/sugar3/util.py:242
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d linggo"
+msgstr[1] "%d linggo"
+
+#: ../src/sugar3/util.py:243
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d araw"
+msgstr[1] "%d araw"
+
+#: ../src/sugar3/util.py:244
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d oras"
+msgstr[1] "%d oras"
+
+#: ../src/sugar3/util.py:245
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minuto"
+
+#: ../src/sugar3/util.py:346
+msgid "Empty"
+msgstr "Walang laman"
+
+# there isn't really a concept of bytes (or kb, kB, kiB, kib, mB, miB, etc) in filipino.  might as well just copy directly from english.
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr "%d B"
+
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr "%d Kb"
+
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr "%d MB"
+
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr "%d GB"
