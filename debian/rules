@@ -47,7 +47,9 @@ DEB_CONFIGURE_EXTRA_FLAGS += --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH)
 #DEB_AUTOMAKE_ARGS = --add-missing --copy
 
 # Needed by upstream build process
-CDBS_BUILD_DEPENDS += , libgtk-3-dev, libgdk-pixbuf2.0-dev, libsm-dev, libice-dev, libasound2-dev | libasound-dev, librsvg2-dev
+CDBS_BUILD_DEPENDS += , libgtk-3-dev, libgdk-pixbuf2.0-dev, libsm-dev
+CDBS_BUILD_DEPENDS += , libice-dev, libasound2-dev | libasound-dev
+CDBS_BUILD_DEPENDS += , librsvg2-dev, python-gtk2-dev
 CDBS_BUILD_DEPENDS += , libgirepository1.0-dev (>= 1.30.0)
 CDBS_BUILD_DEPENDS += , gettext, intltool, libxml-parser-perl
 
