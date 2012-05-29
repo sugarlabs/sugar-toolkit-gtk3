@@ -38,7 +38,8 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_U
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
 DEB_UPSTREAM_TARBALL_MD5 = 8e4247b7920e0d99cbfe85f3def16c41
 
-# Multiarch quirks (should ideally be resolved automagically)
+# Multiarch quirks
+# (unneeded since Wheezy: can be dropped after Wheezy+1)
 CDBS_PREDEPENDS_$(libpkg) = $(if $(DEB_HOST_MULTIARCH),multiarch-support)
 DEB_CONFIGURE_EXTRA_FLAGS += --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH)
 
