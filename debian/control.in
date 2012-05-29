@@ -48,7 +48,8 @@ Description: GTK3-based Sugar toolkit - common files
  applications and interfaces to interact with system services like
  presence and the datastore.
  .
- This contains the common files needed by the runtime library.
+ This contains the common files (translations) used by the runtime
+ library.
 
 Package: libsugarext-dev
 Section: libdevel
