@@ -1,3 +1,16 @@
+sugar-toolkit-gtk3 (0.96.1-2) unstable; urgency=low
+
+  * Update package relations:
+    + Fix build-depend on python-gtk2-dev.
+      Closes: bug#674970. Thanks to Aaron M. Ucko.
+    + Fix have python-sugar3 depend on imported GIR bindings.
+    + Build-depend on dh-buildinfo: Works with multiarch now.
+    + Relax libsugarext0 to recommend (not depend on) libsugarext-data.
+  * Improve libsugarext-data long description to clarify it contains
+    translations.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 29 May 2012 10:47:01 +0200
+
 sugar-toolkit-gtk3 (0.96.1-1) unstable; urgency=low
 
   * Initial packaging release.

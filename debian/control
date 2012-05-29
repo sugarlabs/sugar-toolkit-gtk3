@@ -9,12 +9,14 @@ Build-Depends: autotools-dev,
  cdbs (>= 0.4.97~),
  python-all-dev,
  debhelper,
+ dh-buildinfo,
  libgtk-3-dev,
  libgdk-pixbuf2.0-dev,
  libsm-dev,
  libice-dev,
  libasound2-dev | libasound-dev,
  librsvg2-dev,
+ python-gtk2-dev,
  libgirepository1.0-dev (>= 1.30.0),
  gettext,
  intltool,
@@ -31,8 +33,8 @@ Architecture: any
 Multi-Arch: same
 Depends: ${cdbs:Depends},
  ${misc:Depends},
- ${shlibs:Depends},
- libsugarext-data (= ${source:Version})
+ ${shlibs:Depends}
+Recommends: libsugarext-data (= ${source:Version})
 Pre-Depends: ${cdbs:Pre-Depends},
  ${misc:Pre-Depends}
 Description: GTK3-based Sugar toolkit - runtime library
@@ -64,7 +66,8 @@ Description: GTK3-based Sugar toolkit - common files
  applications and interfaces to interact with system services like
  presence and the datastore.
  .
- This contains the common files needed by the runtime library.
+ This contains the common files (translations) used by the runtime
+ library.
 
 Package: libsugarext-dev
 Section: libdevel
