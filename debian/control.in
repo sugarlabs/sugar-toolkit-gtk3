@@ -15,8 +15,8 @@ Architecture: any
 Multi-Arch: same
 Depends: ${cdbs:Depends},
  ${misc:Depends},
- ${shlibs:Depends},
- libsugarext-data (= ${source:Version})
+ ${shlibs:Depends}
+Recommends: libsugarext-data (= ${source:Version})
 Pre-Depends: ${cdbs:Pre-Depends},
  ${misc:Pre-Depends}
 Description: GTK3-based Sugar toolkit - runtime library
