@@ -937,6 +937,7 @@ class Activity(Window, Gtk.Container):
         if not self.can_close():
             return
 
+        self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
         self.emit('_closing')
 
         if not self._closing:
