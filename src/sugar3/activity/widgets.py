@@ -234,6 +234,7 @@ class DescriptionItem(Gtk.ToolItem):
         self._text_view = Gtk.TextView()
         self._text_view.set_left_margin(style.DEFAULT_PADDING)
         self._text_view.set_right_margin(style.DEFAULT_PADDING)
+        self._text_view.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
         text_buffer = Gtk.TextBuffer()
         if 'description' in activity.metadata:
             text_buffer.set_text(activity.metadata['description'])
