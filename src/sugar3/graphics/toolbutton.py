@@ -120,6 +120,8 @@ class ToolButton(Gtk.ToolButton):
         self.set_icon_widget(icon)
         icon.show()
 
+    icon_name = GObject.property(type=str, setter=set_icon)
+
     def create_palette(self):
         return None
 
