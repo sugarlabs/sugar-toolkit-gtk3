@@ -73,10 +73,8 @@ from telepathy.interfaces import CHANNEL, \
 from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
-import sugar3
 from sugar3 import util
 from sugar3.presence import presenceservice
-from sugar3.activity import i18n
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
 from sugar3.graphics.window import Window
@@ -259,12 +257,6 @@ class Activity(Window, Gtk.Container):
 
         """
         # Stuff that needs to be done early
-
-        locale_path = i18n.get_locale_path(self.get_bundle_id())
-        gettext.bindtextdomain(self.get_bundle_id(), locale_path)
-        gettext.bindtextdomain('sugar-toolkit', sugar3.locale_path)
-        gettext.textdomain(self.get_bundle_id())
-
         icons_path = os.path.join(get_bundle_path(), 'icons')
         Gtk.IconTheme.get_default().append_search_path(icons_path)
 
@@ -322,7 +314,7 @@ class Activity(Window, Gtk.Container):
         self._session.connect('quit', self.__session_quit_cb)
 
         accel_group = Gtk.AccelGroup()
-        self.set_data('sugar-accel-group', accel_group)
+        self.sugar_accel_group = accel_group
         self.add_accel_group(accel_group)
 
         self._bus = ActivityService(self)

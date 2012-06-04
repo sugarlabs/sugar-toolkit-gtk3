@@ -17,8 +17,6 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-from gi.repository import GConf
-
 from gettext import gettext
 import locale
 import os
@@ -134,11 +132,6 @@ def get_locale_path(bundle_id):
 
     if 'SUGAR_LOCALEDIR' in os.environ:
         candidate_dirs[os.environ['SUGAR_LOCALEDIR']] = 2
-
-    gconf_client = GConf.Client.get_default()
-    package_dir = gconf_client.get_string('/desktop/sugar/i18n/langpackdir')
-    if package_dir is not None and package_dir is not '':
-        candidate_dirs[package_dir] = 1
 
     candidate_dirs[os.path.join(sys.prefix, 'share', 'locale')] = 0
 
