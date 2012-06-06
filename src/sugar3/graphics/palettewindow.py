@@ -80,7 +80,7 @@ class _PaletteMenuWidget(Gtk.Menu):
         Gtk.Menu.__init__(self)
 
         accel_group = Gtk.AccelGroup()
-        self.set_data('sugar-accel-group', accel_group)
+        self.sugar_accel_group = accel_group
         self.get_toplevel().add_accel_group(accel_group)
 
         self._popup_position = (0, 0)
@@ -248,7 +248,7 @@ class _PaletteWindowWidget(Gtk.Window):
         self.set_position(Gtk.WindowPosition.NONE)
 
         accel_group = Gtk.AccelGroup()
-        self.set_data('sugar-accel-group', accel_group)
+        self.sugar_accel_group = accel_group
         self.add_accel_group(accel_group)
 
         self._old_alloc = None

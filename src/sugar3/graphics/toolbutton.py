@@ -35,12 +35,11 @@ def _add_accelerator(tool_button):
         return
 
     # TODO: should we remove the accelerator from the prev top level?
-
-    accel_group = tool_button.get_toplevel().get_data('sugar-accel-group')
-    if not accel_group:
+    if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
         logging.warning('No Gtk.AccelGroup in the top level window.')
         return
 
+    accel_group = tool_button.get_toplevel().sugar_accel_group
     keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
     # the accelerator needs to be set at the child, so the Gtk.AccelLabel
     # in the palette can pick it up.
