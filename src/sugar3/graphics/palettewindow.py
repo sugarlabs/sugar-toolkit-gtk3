@@ -498,7 +498,8 @@ class PaletteWindow(GObject.GObject):
             self._invoker_hids.remove(hid)
 
         self._invoker = invoker
-        self._widget.set_invoker(self._invoker)
+        if self._widget is not None:
+            self._widget.set_invoker(invoker)
         if invoker is not None:
             self._invoker_hids.append(self._invoker.connect(
                 'mouse-enter', self._invoker_mouse_enter_cb))
