@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-03-23 19:30+0200\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-06-08 19:07+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: aym\n"
@@ -18,28 +18,28 @@ msgstr ""
 "X-Generator: Pootle 2.0.5\n"
 
 #  "Actividad %s"
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s Luräwi"
 
 #  "Error al guardar"
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "Pantjasa imaña"
 
 #  "Error al guardar: todos los cambios se perderán"
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "Pantjasa imaña: taqi wakichatanakawa chhaqani"
 
 #  "No detener"
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "Jan sayt'amti"
 
 #  "Detener de todas formas"
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr "Mäpita sayt'ayaña"
 
@@ -227,22 +227,23 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#  "Sin título"
-#~ msgid "Untitled"
-#~ msgstr "Jan sutini"
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "Qillqata"
 
-#  "Nombre esta entrada"
-#~ msgid "Name this entry"
-#~ msgstr "Akïri qalltäwiru sutichma"
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "Rixita"
 
-#  "Etiquetas:"
-#~ msgid "Tags:"
-#~ msgstr "Suti chimpunaka:"
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "Ist'aña"
 
-#  "Actividad"
-#~ msgid "Activity"
-#~ msgstr "Lurawi"
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "Uñjaña"
 
-#  "Guardar copia"
-#~ msgid "Keep"
-#~ msgstr "Ch'ullapa imaña"
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "Mayachäwi"
+
