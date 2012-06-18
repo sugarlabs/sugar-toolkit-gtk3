@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 06:37+0200\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-06-18 20:49+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: km\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s សកម្មភាព"
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "រក្សាទុកកំហុស"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "រក្សាទុកកំហុសរាលការប្តូរនឹងត្រូវបាត់បង់"
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "កុំ​ឈប់"
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr "ទោះបី​យាង​ណា​ក៍ដោយ​ក៍ឈប់​ដែរ"
 
@@ -167,9 +167,9 @@ msgstr "ទទេ"
 
 #: ../src/sugar3/util.py:348
 #, python-format
-#, python-format, fuzzy
+#, python-format,
 msgid "%d B"
-msgstr "%d គីឡូបៃ"
+msgstr "%d បៃ"
 
 #: ../src/sugar3/util.py:350
 #, python-format
@@ -185,3 +185,23 @@ msgstr "%d មេកាបៃ"
 #, python-format
 msgid "%d GB"
 msgstr "%d ជីកាបៃ"
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "អត្ថបទ"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "រូបភាព"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "សំលេង"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "វីដេអូ"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "តភ្ជាប់"
