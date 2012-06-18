@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 06:57+0200\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-06-18 09:10+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ne\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s क्रियाकलाप"
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "त्रुटि राख"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "त्रुटि राख: सबै परिवर्तनहरु हराँउछन्"
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "नरोक"
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr "जसरीभएपनि रोक"
 
@@ -190,3 +190,23 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "पाठ"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "चित्र"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "आवाज"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "चलचित्र"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "जोडान"
