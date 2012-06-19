@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-10 09:17+0200\n"
+"POT-Creation-Date: 2012-06-18 03:24-0400\n"
+"PO-Revision-Date: 2012-06-19 06:14+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: tr\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:370
 #, python-format
 msgid "%s Activity"
 msgstr "%s Aktivite"
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:866
 msgid "Keep error"
 msgstr "Kayıt Hatası"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:867
 msgid "Keep error: all changes will be lost"
 msgstr "Kayıt Hatası: tüm değişiklikler kaybedilecek"
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:870
 msgid "Don't stop"
 msgstr "Durdurma"
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:873
 msgid "Stop anyway"
 msgstr "Durdur"
 
@@ -186,3 +186,23 @@ msgstr ""
 #, python-format
 msgid "%d GB"
 msgstr ""
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "Metin"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "Resim"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "Ses"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "Video"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "Bağlantı"
