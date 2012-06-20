@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-06-06 05:37+0200\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-06-21 01:28+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: quz\n"
@@ -18,28 +18,28 @@ msgstr ""
 "X-Generator: Pootle 2.0.5\n"
 
 #  "Actividad %s"
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s Ruwana"
 
 #  "Error al guardar"
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "Allchakuchkaptin pantarun"
 
 #  "Error al guardar: todos los cambios se perderán"
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "Allchakuchkaptin pantarun: llapan huknirasqaqa chinkarinqan"
 
 #  "No detener"
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "Ama sayachiychu"
 
 #  "Detener de todas formas"
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr "Sayachinaykipunim"
 
@@ -227,3 +227,22 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "Qillqa"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "Wanki"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "Uyarina"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "Qhawarina"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "Waskhana"

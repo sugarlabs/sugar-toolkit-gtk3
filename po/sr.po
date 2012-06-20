@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 07:31+0200\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-06-20 00:10+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sr\n"
@@ -18,24 +18,24 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s активност"
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "Задржи грешку"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "Задржи грешку: све измене ће бити изгубљене"
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "Не заустављај"
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr "Ипак заустави"
 
@@ -192,3 +192,23 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "Текст"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "Слика"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "Аудио"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "Видео"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "Веза"

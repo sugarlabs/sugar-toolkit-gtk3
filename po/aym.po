@@ -246,4 +246,3 @@ msgstr "Uñjaña"
 #: ../src/sugar3/mime.py:72
 msgid "Link"
 msgstr "Mayachäwi"
-

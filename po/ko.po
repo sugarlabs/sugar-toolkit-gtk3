@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 06:43+0200\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-06-18 06:36+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ko\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s 활동"
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "에러 무시"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "에러 무시: 변경된 모든내용이 사라집니다"
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "멈추지 않기"
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr "일단 멈춤"
 
@@ -179,3 +179,23 @@ msgstr ""
 #, python-format
 msgid "%d GB"
 msgstr ""
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "텍스트"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "이미지"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "오디오"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "비디오"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "링크"
