@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-06-20 07:36+0200\n"
+"PO-Revision-Date: 2012-06-21 03:30+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
@@ -60,11 +60,11 @@ msgstr "Kopírovat"
 
 #: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
-msgstr ""
+msgstr "Vložit"
 
 #: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
-msgstr ""
+msgstr "Soukromý"
 
 #: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
