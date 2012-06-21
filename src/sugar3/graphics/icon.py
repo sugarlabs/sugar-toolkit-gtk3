@@ -385,16 +385,6 @@ class Icon(Gtk.Image):
         return (width, width)
 
     def do_draw(self, cr):
-        """
-        Parameters
-        ----------
-        event :
-
-        Returns:
-        --------
-        None
-
-        """
         self._sync_image_properties()
         sensitive = (self.is_sensitive())
         surface = self._buffer.get_surface(sensitive, self)
@@ -430,16 +420,6 @@ class Icon(Gtk.Image):
             cr.paint_with_alpha(self._alpha)
 
     def set_xo_color(self, value):
-        """
-        Parameters
-        ----------
-        value :
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.xo_color != value:
             self._buffer.xo_color = value
             self.queue_draw()
@@ -448,78 +428,28 @@ class Icon(Gtk.Image):
         type=object, getter=None, setter=set_xo_color)
 
     def set_fill_color(self, value):
-        """
-        Parameters
-        ----------
-        value :
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.fill_color != value:
             self._buffer.fill_color = value
             self.queue_draw()
 
     def get_fill_color(self):
-        """
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        fill_color :
-
-        """
         return self._buffer.fill_color
 
     fill_color = GObject.property(
         type=object, getter=get_fill_color, setter=set_fill_color)
 
     def set_stroke_color(self, value):
-        """
-        Parameters
-        ----------
-        value :
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.stroke_color != value:
             self._buffer.stroke_color = value
             self.queue_draw()
 
     def get_stroke_color(self):
-        """
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        stroke_color :
-
-        """
         return self._buffer.stroke_color
 
     stroke_color = GObject.property(
         type=object, getter=get_stroke_color, setter=set_stroke_color)
 
     def set_badge_name(self, value):
-        """
-        Parameters
-        ----------
-        value:
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.badge_name != value:
             self._buffer.badge_name = value
             self.queue_resize()
