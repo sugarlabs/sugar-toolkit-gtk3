@@ -561,6 +561,8 @@ class EventIcon(Gtk.EventBox):
     def __init__(self, **kwargs):
         Gtk.EventBox.__init__(self)
 
+        self.set_visible_window(False)
+
         self._icon = Icon()
         for key, value in kwargs.iteritems():
             self._icon.set_property(key, value)
