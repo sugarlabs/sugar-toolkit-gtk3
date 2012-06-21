@@ -594,6 +594,9 @@ class EventIcon(Gtk.EventBox):
     icon = GObject.property(
         type=object, getter=get_icon)
 
+    def create_palette(self):
+        return None
+
     def get_palette(self):
         return self._palette_invoker.palette
 
