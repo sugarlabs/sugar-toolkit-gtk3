@@ -483,46 +483,175 @@ class EventIcon(Gtk.EventBox):
     cursor-positioned palette invoker.
     """
 
-    __gtype_name__ = 'EventIcon'
-    __gsignals__ = {
-        'activated': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, []),
-    }
+    __gtype_name__ = 'SugarEventIcon'
 
     def __init__(self, **kwargs):
-        Gtk.EventBox.__init__(self)
+        self._buffer = _IconBuffer()
+        self._alpha = 1.0
 
+        Gtk.EventBox.__init__(self)
         self.set_visible_window(False)
         self.set_above_child(True)
-
-        self._icon = Icon()
         for key, value in kwargs.iteritems():
-            self._icon.set_property(key, value)
-        self.add(self._icon)
-        self._icon.show()
+            self.set_property(key, value)
 
         from sugar3.graphics.palette import CursorInvoker
         self._palette_invoker = CursorInvoker()
-        self._palette_invoker.attach(self)
 
-        self.modify_bg(Gtk.StateType.NORMAL, style.COLOR_WHITE.get_gdk_color())
+        self._palette_invoker.attach(self)
         self.connect('destroy', self.__destroy_cb)
+
+    def do_draw(self, cr):
+        surface = self._buffer.get_surface()
+        if surface:
+            allocation = self.get_allocation()
+
+            x = (allocation.width - surface.get_width()) / 2
+            y = (allocation.height - surface.get_height()) / 2
+
+            cr.set_source_surface(surface, x, y)
+            if self._alpha == 1.0:
+                cr.paint()
+            else:
+                cr.paint_with_alpha(self._alpha)
+
+    def do_get_preferred_height(self):
+        surface = self._buffer.get_surface()
+        if surface:
+            height = surface.get_height()
+        elif self._buffer.height:
+            height = self._buffer.height
+        else:
+            height = 0
+        return (height, height)
+
+    def do_get_preferred_width(self):
+        surface = self._buffer.get_surface()
+        if surface:
+            width = surface.get_width()
+        elif self._buffer.width:
+            width = self._buffer.width
+        else:
+            width = 0
+        return (width, width)
 
     def __destroy_cb(self, icon):
         if self._palette_invoker is not None:
             self._palette_invoker.detach()
 
-    def do_button_press_event(self, event):
-        if event.button == 1:
-            self.emit('activated')
-            return True
-        else:
-            return False
+    def set_file_name(self, value):
+        if self._buffer.file_name != value:
+            self._buffer.file_name = value
+            self.queue_draw()
 
-    def get_icon(self):
-        return self._icon
+    def get_file_name(self):
+        return self._buffer.file_name
 
-    icon = GObject.property(
-        type=object, getter=get_icon)
+    file_name = GObject.property(
+        type=object, getter=get_file_name, setter=set_file_name)
+
+    def set_icon_name(self, value):
+        if self._buffer.icon_name != value:
+            self._buffer.icon_name = value
+            self.queue_draw()
+
+    def get_icon_name(self):
+        return self._buffer.icon_name
+
+    icon_name = GObject.property(
+        type=object, getter=get_icon_name, setter=set_icon_name)
+
+    def set_xo_color(self, value):
+        if self._buffer.xo_color != value:
+            self._buffer.xo_color = value
+            self.queue_draw()
+
+    xo_color = GObject.property(
+        type=object, getter=None, setter=set_xo_color)
+
+    def set_fill_color(self, value):
+        if self._buffer.fill_color != value:
+            self._buffer.fill_color = value
+            self.queue_draw()
+
+    def get_fill_color(self):
+        return self._buffer.fill_color
+
+    fill_color = GObject.property(
+        type=object, getter=get_fill_color, setter=set_fill_color)
+
+    def set_stroke_color(self, value):
+        if self._buffer.stroke_color != value:
+            self._buffer.stroke_color = value
+            self.queue_draw()
+
+    def get_stroke_color(self):
+        return self._buffer.stroke_color
+
+    stroke_color = GObject.property(
+        type=object, getter=get_stroke_color, setter=set_stroke_color)
+
+    def set_background_color(self, value):
+        if self._buffer.background_color != value:
+            self._buffer.background_color = value
+            self.queue_draw()
+
+    def get_background_color(self):
+        return self._buffer.background_color
+
+    background_color = GObject.property(
+        type=object, getter=get_background_color, setter=set_background_color)
+
+    def set_size(self, value):
+        if self._buffer.width != value:
+            self._buffer.width = value
+            self._buffer.height = value
+            self.queue_resize()
+
+    def get_size(self):
+        return self._buffer.width
+
+    pixel_size = GObject.property(
+        type=object, getter=get_size, setter=set_size)
+
+    def set_scale(self, value):
+        if self._buffer.scale != value:
+            self._buffer.scale = value
+            self.queue_resize()
+
+    def get_scale(self):
+        return self._buffer.scale
+
+    scale = GObject.property(
+        type=float, getter=get_scale, setter=set_scale)
+
+    def set_alpha(self, alpha):
+        if self._alpha != alpha:
+            self._alpha = alpha
+            self.queue_draw()
+
+    alpha = GObject.property(
+        type=float, setter=set_alpha)
+
+    def set_cache(self, value):
+        self._buffer.cache = value
+
+    def get_cache(self):
+        return self._buffer.cache
+
+    cache = GObject.property(
+        type=bool, default=False, getter=get_cache, setter=set_cache)
+
+    def set_badge_name(self, value):
+        if self._buffer.badge_name != value:
+            self._buffer.badge_name = value
+            self.queue_draw()
+
+    def get_badge_name(self):
+        return self._buffer.badge_name
+
+    badge_name = GObject.property(
+        type=object, getter=get_badge_name, setter=set_badge_name)
 
     def create_palette(self):
         return None
