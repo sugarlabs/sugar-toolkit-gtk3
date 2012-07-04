@@ -43,6 +43,8 @@ from sugar3.presence.buddy import Buddy
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
+CONN_INTERFACE_ROOM_CONFIG = \
+    'org.freedesktop.Telepathy.Channel.Interface.RoomConfig1'
 
 _logger = logging.getLogger('sugar3.presence.activity')
 
@@ -674,14 +676,57 @@ class _JoinCommand(_BaseCommand):
         else:
             self_handle = self._global_self_handle
 
-        if self_handle in added:
-            if PROPERTIES_INTERFACE not in self.text_channel:
-                self._finished = True
-                self.emit('finished', None)
-            else:
-                self.text_channel[PROPERTIES_INTERFACE].ListProperties(
-                    reply_handler=self.__list_properties_cb,
-                    error_handler=self.__error_handler_cb)
+        if self_handle not in added:
+            return
+
+        # Use RoomConfig1 to configure the text channel. If this
+        # doesn't exist, fall-back on old-style PROPERTIES_INTERFACE.
+        if CONN_INTERFACE_ROOM_CONFIG in self.text_channel:
+            self.__update_room_config()
+        elif PROPERTIES_INTERFACE in self.text_channel:
+            self.text_channel[PROPERTIES_INTERFACE].ListProperties(
+                reply_handler=self.__list_properties_cb,
+                error_handler=self.__error_handler_cb)
+        else:
+            # FIXME: when does this codepath get hit?
+            # It could be related to no property configuration being available
+            # in the selected backend, or it could be called at some stage
+            # of the protocol when properties aren't available yet.
+            self._finished = True
+            self.emit('finished', None)
+
+    def __update_room_config(self):
+        # FIXME: invite-only ought to be set on private activities; but
+        # since only the owner can change invite-only, that would break
+        # activity scope changes.
+        props = {
+            # otherwise buddy resolution breaks
+            'Anonymous': False,
+            # anyone who knows about the channel can join
+            'InviteOnly': False,
+            # vanish when there are no members
+            'Persistent': False,
+            # don't appear in server room lists
+            'Private': True,
+        }
+        room_cfg = self.text_channel[CONN_INTERFACE_ROOM_CONFIG]
+        room_cfg.UpdateConfiguration(props,
+                                     reply_handler=self.__room_cfg_updated_cb,
+                                     error_handler=self.__room_cfg_error_cb)
+
+    def __room_cfg_updated_cb(self):
+        self._finished = True
+        self.emit('finished', None)
+
+    def __room_cfg_error_cb(self, error):
+        # If RoomConfig update fails, it's probably because we don't have
+        # permission (e.g. we are not the session initiator). Thats OK -
+        # ignore the failure and carry on.
+        if (error.get_dbus_name() !=
+                'org.freedesktop.Telepathy.Error.PermissionDenied'):
+            logging.error("Error setting room configuration: %s", error)
+        self._finished = True
+        self.emit('finished', None)
 
     def __list_properties_cb(self, prop_specs):
         # FIXME: invite-only ought to be set on private activities; but
