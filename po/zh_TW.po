@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-11 04:32+0200\n"
+"POT-Creation-Date: 2012-06-18 03:24-0400\n"
+"PO-Revision-Date: 2012-06-20 07:20+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_TW\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:370
 #, python-format
 msgid "%s Activity"
 msgstr "%s 活動"
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:866
 msgid "Keep error"
 msgstr "保存時發生錯誤"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:867
 msgid "Keep error: all changes will be lost"
 msgstr "保存時發生錯誤：所作的變動將遺失"
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:870
 msgid "Don't stop"
 msgstr "不停止"
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:873
 msgid "Stop anyway"
 msgstr "確定停止"
 
@@ -183,3 +183,23 @@ msgstr "%d MB"
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "文字"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "圖片"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "聲音"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "影像"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "連結"
