@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sugar-toolkit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"POT-Creation-Date: 2012-06-18 03:24-0400\n"
 "PO-Revision-Date: 2012-06-05 21:53+0200\n"
 "Last-Translator: Markus <m.slg@gmx.de>\n"
 "Language-Team: OLPC-German <LL@li.org>\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:370
 #, python-format
 msgid "%s Activity"
 msgstr "%s Aktivität"
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:866
 msgid "Keep error"
 msgstr "Fehler beim Speichern"
 
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:867
 msgid "Keep error: all changes will be lost"
 msgstr "Fehler beim Speichern: Alle Änderungen gehen verloren."
 
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:870
 msgid "Don't stop"
 msgstr "Nicht beenden"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:873
 msgid "Stop anyway"
 msgstr "Trotzdem beenden"
 
