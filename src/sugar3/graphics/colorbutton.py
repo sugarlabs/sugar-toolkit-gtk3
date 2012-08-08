@@ -63,21 +63,21 @@ class _ColorButton(Gtk.Button):
 
         GObject.GObject.__init__(self, **kwargs)
 
+        # FIXME Drag and drop is not working, SL #3796
         if self._accept_drag:
-            Gtk.drag_dest_set(self, Gtk.DEST_DEFAULT_MOTION |
-                               Gtk.DEST_DEFAULT_HIGHLIGHT |
-                               Gtk.DEST_DEFAULT_DROP,
-                               [('application/x-color', 0, 0)],
-                               Gdk.DragAction.COPY)
-        self.drag_source_set(Gdk.EventMask.BUTTON1_MASK | Gdk.EventMask.BUTTON3_MASK,
-                             [('application/x-color', 0, 0)],
-                             Gdk.DragAction.COPY)
+            self.drag_dest_set(Gtk.DestDefaults.MOTION |
+                    Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+                    [Gtk.TargetEntry.new('application/x-color', 0, 0)],
+                    Gdk.DragAction.COPY)
+        self.drag_source_set(Gdk.ModifierType.BUTTON1_MASK |
+                    Gdk.ModifierType.BUTTON3_MASK,
+                    [Gtk.TargetEntry.new('application/x-color', 0, 0)],
+                    Gdk.DragAction.COPY)
         self.connect('drag_data_received', self.__drag_data_received_cb)
         self.connect('drag_data_get', self.__drag_data_get_cb)
 
         self._preview.fill_color = get_svg_color_string(self._color)
-        self._preview.stroke_color = \
-            get_svg_color_string(self.style.fg[Gtk.StateType.NORMAL])
+        self._preview.stroke_color = self._get_fg_style_color_str()
         self.set_image(self._preview)
 
         if self._has_palette and self._has_invoker:
@@ -103,8 +103,14 @@ class _ColorButton(Gtk.Button):
         self.color = self._palette.color
 
     def do_style_set(self, previous_style):
-        self._preview.stroke_color = \
-            get_svg_color_string(self.style.fg[Gtk.StateType.NORMAL])
+        self._preview.stroke_color = self._get_fg_style_color_str()
+
+    def _get_fg_style_color_str(self):
+        context = self.get_style_context()
+        fg_color = context.get_color(Gtk.StateType.NORMAL)
+        # the color components are stored as float values between 0.0 and 1.0
+        return '#%.2X%.2X%.2X' % (fg_color.red * 255, fg_color.green * 255,
+                              fg_color.blue * 255)
 
     def do_clicked(self):
         if self._palette:
@@ -438,6 +444,7 @@ class ColorToolButton(Gtk.ToolItem):
         # Replace it with a ColorButton
         color_button = _ColorButton(icon_name=icon_name, has_invoker=False)
         self.add(color_button)
+        color_button.show()
 
         # The following is so that the behaviour on the toolbar is correct.
         color_button.set_relief(Gtk.ReliefStyle.NONE)
