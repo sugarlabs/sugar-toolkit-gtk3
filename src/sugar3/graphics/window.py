@@ -65,8 +65,8 @@ class UnfullscreenButton(Gtk.Window):
         self._button.show()
         self.add(self._button)
 
-    def connect_button_press(self, cb):
-        self._button.connect('button-press-event', cb)
+    def connect_button_clicked(self, cb):
+        self._button.connect('clicked', cb)
 
     def _reposition(self):
         x = Gdk.Screen.width() - self._width
@@ -114,8 +114,8 @@ class Window(Gtk.Window):
         self._is_fullscreen = False
         self._unfullscreen_button = UnfullscreenButton()
         self._unfullscreen_button.set_transient_for(self)
-        self._unfullscreen_button.connect_button_press(
-            self.__unfullscreen_button_pressed)
+        self._unfullscreen_button.connect_button_clicked(
+            self.__unfullscreen_button_clicked)
         self._unfullscreen_button_timeout_id = None
 
     def reveal(self):
@@ -253,7 +253,7 @@ class Window(Gtk.Window):
             return True
         return False
 
-    def __unfullscreen_button_pressed(self, widget, event):
+    def __unfullscreen_button_clicked(self, button):
         self.unfullscreen()
 
     def __motion_notify_cb(self, widget, event):
