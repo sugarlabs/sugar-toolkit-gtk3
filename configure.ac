@@ -1,4 +1,4 @@
-AC_INIT([sugar-toolkit-gtk3],[0.96.4],[],[sugar-toolkit-gtk3])
+AC_INIT([sugar-toolkit-gtk3],[0.96.5],[],[sugar-toolkit-gtk3])
 
 AC_PREREQ([2.59])
 
