@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-06-20 08:01+0200\n"
+"PO-Revision-Date: 2012-08-19 17:20+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fil\n"
@@ -191,20 +191,20 @@ msgstr "%d GB"
 
 #: ../src/sugar3/mime.py:43
 msgid "Text"
-msgstr "ข้อความ"
+msgstr "Teksto"
 
 #: ../src/sugar3/mime.py:52
 msgid "Image"
-msgstr "รูปภาพ"
+msgstr "Larawan"
 
 #: ../src/sugar3/mime.py:58
 msgid "Audio"
-msgstr "เสียง"
+msgstr "Audio"
 
 #: ../src/sugar3/mime.py:66
 msgid "Video"
-msgstr "วีดีโอ"
+msgstr "Video"
 
 #: ../src/sugar3/mime.py:72
 msgid "Link"
-msgstr "เชื่อมโยง"
+msgstr ""
