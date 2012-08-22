@@ -65,7 +65,13 @@ _generic_types = [
     'id': GENERIC_TYPE_VIDEO,
     'name': _('Video'),
     'icon': 'video-x-generic',
-    'types': ['video/ogg', 'application/ogg', 'video/x-theora+ogg'],
+    'types': ['video/ogg', 'application/ogg', 'video/x-theora+ogg',
+              'video/x-theora', 'video/x-mng', 'video/mpeg4',
+              'video/mpeg-stream', 'video/mpeg', 'video/mpegts', 'video/mpeg2',
+              'video/mpeg1', 'video/x-cdxa', 'video/x-ogm+ogg', 'video/x-flv',
+              'video/mp4', 'video/x-matroska', 'video/x-msvideo',
+              'application/x-ogm-video', 'video/quicktime', 'video/x-quicktime'
+              'video/avi'],
 },
 {
     'id': GENERIC_TYPE_LINK,
