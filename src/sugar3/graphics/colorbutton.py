@@ -523,14 +523,20 @@ class ColorToolButton(Gtk.ToolItem):
 
     title = GObject.property(type=str, getter=get_title, setter=set_title)
 
-    def do_draw(self, cr):
+    def do_expose_event(self, event):
         child = self.get_child()
         allocation = self.get_allocation()
         if self._palette and self._palette.is_up():
             invoker = self._palette.props.invoker
-            invoker.draw_rectangle(cr, self._palette)
+            invoker.draw_rectangle(event, self._palette)
+        elif child.state == Gtk.StateType.PRELIGHT:
+            child.style.paint_box(event.window, Gtk.StateType.PRELIGHT,
+                                  Gtk.ShadowType.NONE, event.area,
+                                  child, 'toolbutton-prelight',
+                                  allocation.x, allocation.y,
+                                  allocation.width, allocation.height)
 
-        Gtk.ToolButton.do_draw(self, cr)
+        Gtk.ToolButton.do_expose_event(self, event)
 
     def __notify_change(self, widget, pspec):
         self.notify(pspec.name)
