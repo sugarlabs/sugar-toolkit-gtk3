@@ -20,6 +20,18 @@ from gi.repository import GObject
 
 from sugar3.graphics.toolbutton import ToolButton
 
+import os
+
+
+def set_theme():
+    settings = Gtk.Settings.get_default()
+    sugar_theme = 'sugar-72'
+    if 'SUGAR_SCALING' in os.environ:
+        if os.environ['SUGAR_SCALING'] == '100':
+            sugar_theme = 'sugar-100'
+    settings.set_property('gtk-theme-name', sugar_theme)
+    settings.set_property('gtk-icon-theme-name', 'sugar')
+
 
 class Test(Gtk.VBox):
     def __init__(self):
@@ -45,6 +57,7 @@ class TestPalette(Test):
 
 class TestRunner(object):
     def run(self, test):
+        set_theme()
         window = Gtk.Window()
         window.connect('destroy', lambda w: Gtk.main_quit())
         window.add(test)
