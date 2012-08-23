@@ -497,7 +497,6 @@ class EventIcon(Gtk.EventBox):
 
         from sugar3.graphics.palette import CursorInvoker
         self._palette_invoker = CursorInvoker()
-
         self._palette_invoker.attach(self)
         self.connect('destroy', self.__destroy_cb)
 
@@ -705,9 +704,7 @@ class CellRendererIcon(Gtk.CellRenderer):
 
         self._palette_invoker.attach_cell_renderer(tree_view, self)
 
-        self.connect('destroy', self.__destroy_cb)
-
-    def __destroy_cb(self, icon):
+    def __del__(self):
         self._palette_invoker.detach()
 
     def create_palette(self):
@@ -779,7 +776,8 @@ class CellRendererIcon(Gtk.CellRenderer):
 
     size = GObject.property(type=object, setter=set_size)
 
-    def on_get_size(self, widget, cell_area):
+    def do_get_size(self, widget, cell_area, x_offset=None, y_offset=None,
+                    width=None, height=None):
         width = self._buffer.width + self.props.xpad * 2
         height = self._buffer.height + self.props.ypad * 2
         xoffset = 0
@@ -797,11 +795,11 @@ class CellRendererIcon(Gtk.CellRenderer):
 
         return xoffset, yoffset, width, height
 
-    def on_activate(self, event, widget, path, background_area, cell_area,
+    def do_activate(self, event, widget, path, background_area, cell_area,
                     flags):
         pass
 
-    def on_start_editing(self, event, widget, path, background_area, cell_area,
+    def do_start_editing(self, event, widget, path, background_area, cell_area,
                          flags):
         pass
 
@@ -814,7 +812,7 @@ class CellRendererIcon(Gtk.CellRenderer):
 
         path_, column, x, y = pos
 
-        for cell_renderer in column.get_cell_renderers():
+        for cell_renderer in column.get_cells():
             if cell_renderer == self:
                 cell_x, cell_width = column.cell_get_position(cell_renderer)
                 if x > cell_x and x < (cell_x + cell_width):
@@ -823,8 +821,7 @@ class CellRendererIcon(Gtk.CellRenderer):
 
         return False
 
-    def on_render(self, window, widget, background_area, cell_area,
-            expose_area, flags):
+    def do_render(self, cr, widget, background_area, cell_area, flags):
         if self._xo_color is not None:
             stroke_color = self._xo_color.get_stroke_color()
             fill_color = self._xo_color.get_fill_color()
@@ -839,7 +836,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         has_prelit_colors = None not in [prelit_fill_color,
                                          prelit_stroke_color]
 
-        if flags & Gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
+        if flags & Gtk.CellRendererState.PRELIT and has_prelit_colors and \
                 self._is_prelit(widget):
 
             self._buffer.fill_color = prelit_fill_color
@@ -852,14 +849,14 @@ class CellRendererIcon(Gtk.CellRenderer):
         if surface is None:
             return
 
-        xoffset, yoffset, width_, height_ = self.on_get_size(widget, cell_area)
+        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
 
         x = cell_area.x + xoffset
         y = cell_area.y + yoffset
 
-        cr = window.cairo_create()
         cr.set_source_surface(surface, math.floor(x), math.floor(y))
-        cr.rectangle(expose_area)
+        cr.rectangle(cell_area.x, cell_area.y, cell_area.width,
+                     cell_area.height)
         cr.paint()
 
 
