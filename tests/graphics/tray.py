@@ -31,10 +31,10 @@ test = common.Test()
 vbox = Gtk.VBox()
 
 tray = HTray()
-vbox.pack_start(tray, False)
+vbox.pack_start(tray, False, False, 0)
 tray.show()
 
-theme_icons = Gtk.IconTheme.get_default().list_icons()
+theme_icons = Gtk.IconTheme.get_default().list_icons(context=None)
 
 for i in range(0, 100):
     button = TrayButton(icon_name=theme_icons[i])
@@ -42,7 +42,7 @@ for i in range(0, 100):
     button.show()
 
 tray = HTray()
-vbox.pack_start(tray, False)
+vbox.pack_start(tray, False, False, 0)
 tray.show()
 
 for i in range(0, 10):
@@ -53,7 +53,7 @@ for i in range(0, 10):
 hbox = Gtk.HBox()
 
 tray = VTray()
-hbox.pack_start(tray, False)
+hbox.pack_start(tray, False, False, 0)
 tray.show()
 
 for i in range(0, 100):
@@ -62,7 +62,7 @@ for i in range(0, 100):
     button.show()
 
 tray = VTray()
-hbox.pack_start(tray, False)
+hbox.pack_start(tray, False, False, 0)
 tray.show()
 
 for i in range(0, 4):

@@ -415,13 +415,13 @@ class _IconWidget(Gtk.EventBox):
         self.add(self._icon)
         self._icon.show()
 
-    def do_expose_event(self, event):
+    def do_draw(self, cr):
         palette = self.get_parent().palette
         if palette and palette.is_up():
             invoker = palette.props.invoker
-            invoker.draw_rectangle(event, palette)
+            invoker.draw_rectangle(cr, palette)
 
-        Gtk.EventBox.do_expose_event(self, event)
+        Gtk.EventBox.do_draw(self, cr)
 
     def get_icon(self):
         return self._icon
