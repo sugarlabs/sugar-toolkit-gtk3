@@ -157,11 +157,21 @@ class Packager(object):
             os.mkdir(self.config.dist_dir)
 
     def get_files_in_git(self):
-        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
-                                  cwd=self.config.source_dir)
+        try:
+            git_ls = subprocess.Popen(['git', 'ls-files'],
+                                      stdout=subprocess.PIPE,
+                                      cwd=self.config.source_dir)
+        except OSError:
+            logging.warn('Packager: git is not installed, ' \
+                             'fall back to filtered list')
+            return list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
+
         stdout, _ = git_ls.communicate()
         if git_ls.returncode:
             # Fall back to filtered list
+            logging.warn('Packager: this is not a git repository, ' \
+                             'fall back to filtered list')
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
 
