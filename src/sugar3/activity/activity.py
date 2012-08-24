@@ -82,8 +82,7 @@ from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
 from sugar3.session import XSMPClient
-from sugar3 import wm
-
+from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
@@ -940,8 +939,9 @@ class Activity(Window, Gtk.Container):
             self._complete_close()
 
     def __realize_cb(self, window):
-        wm.set_bundle_id(window.get_window(), self.get_bundle_id())
-        wm.set_activity_id(window.get_window(), str(self._activity_id))
+        xid = window.get_window().get_xid()
+        SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
+        SugarExt.wm_set_activity_id(xid, str(self._activity_id))
 
     def __delete_event_cb(self, widget, event):
         self.close()
