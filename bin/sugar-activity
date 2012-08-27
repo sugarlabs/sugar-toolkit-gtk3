@@ -18,6 +18,12 @@
 
 import os
 import sys
+
+# Change the default encoding to avoid UnicodeDecodeError
+# http://lists.sugarlabs.org/archive/sugar-devel/2012-August/038928.html
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 import gettext
 from optparse import OptionParser
 
