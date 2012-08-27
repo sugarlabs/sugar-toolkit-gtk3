@@ -166,8 +166,8 @@ class _IconBuffer(object):
             if badge_file_name.endswith('.svg'):
                 handle = self._loader.load(badge_file_name, {}, self.cache)
 
-                icon_width = handle.get_width()
-                icon_height = handle.get_height()
+                icon_width = handle.props.width
+                icon_height = handle.props.height
 
                 pixbuf = handle.get_pixbuf()
             else:
