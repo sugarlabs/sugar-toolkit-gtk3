@@ -252,6 +252,11 @@ sugar_zoom_controller_class_init (SugarZoomControllerClass *klass)
   controller_class->get_state = sugar_zoom_controller_get_state;
   controller_class->reset = sugar_zoom_controller_reset;
 
+  /**
+   * SugarZoomController::zoom-changed:
+   * @controller: the object on which the signal is emitted
+   * @delta: Difference with the starting zooming state
+   */
   signals[ZOOM_CHANGED] =
     g_signal_new ("zoom-changed",
                   SUGAR_TYPE_ZOOM_CONTROLLER,
@@ -271,6 +276,18 @@ sugar_zoom_controller_new (void)
   return g_object_new (SUGAR_TYPE_ZOOM_CONTROLLER, NULL);
 }
 
+/**
+ * sugar_zoom_controller_get_zoom_delta:
+ * @controller: a #SugarZoomController
+ * @delta: (out) (transfer none): zoom delta
+ *
+ * If @controller is on state %SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED,
+ * this function returns %TRUE and fills in @delta with the zooming
+ * difference since the gesture was recognized (hence the starting point
+ * is considered 1x).
+ *
+ * Returns: %TRUE if @controller is recognizing a zoom gesture
+ **/
 gboolean
 sugar_zoom_controller_get_zoom_delta (SugarZoomController *controller,
                                       gdouble             *delta)

@@ -256,6 +256,12 @@ sugar_rotate_controller_class_init (SugarRotateControllerClass *klass)
   controller_class->get_state = sugar_rotate_controller_get_state;
   controller_class->reset = sugar_rotate_controller_reset;
 
+  /**
+   * SugarRotateController::angle-changed:
+   * @controller: the object on which the signal is emitted
+   * @angle: Current angle
+   * @angle_delta: Difference with the starting angle
+   */
   signals[ANGLE_CHANGED] =
     g_signal_new ("angle-changed",
                   SUGAR_TYPE_ROTATE_CONTROLLER,
@@ -275,6 +281,17 @@ sugar_rotate_controller_new (void)
   return g_object_new (SUGAR_TYPE_ROTATE_CONTROLLER, NULL);
 }
 
+/**
+ * sugar_rotate_controller_get_angle_delta:
+ * @controller: a #SugarRotateController
+ * @delta: (out) (transfer none): angle delta
+ *
+ * If @controller is on state %SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED,
+ * this function returns %TRUE and fills in @delta with the angle difference
+ * since the gesture was first recognized.
+ *
+ * Returns: %TRUE if @controller is recognizing a rotate gesture
+ **/
 gboolean
 sugar_rotate_controller_get_angle_delta (SugarRotateController *controller,
                                          gdouble               *delta)
