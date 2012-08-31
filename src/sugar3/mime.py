@@ -25,6 +25,8 @@ import os
 import logging
 import gettext
 
+from gi.repository import GdkPixbuf
+
 from sugar3 import _sugarbaseext
 
 _ = lambda msg: gettext.dgettext('sugar-base', msg)
@@ -34,6 +36,14 @@ GENERIC_TYPE_IMAGE = 'Image'
 GENERIC_TYPE_AUDIO = 'Audio'
 GENERIC_TYPE_VIDEO = 'Video'
 GENERIC_TYPE_LINK = 'Link'
+
+
+def _get_supported_image_mime_types():
+    mime_types = []
+    for image_format in GdkPixbuf.Pixbuf.get_formats():
+        mime_types.extend(image_format.get_mime_types())
+    return mime_types
+
 
 _extensions = {}
 _globs_timestamps = []
@@ -51,7 +61,7 @@ _generic_types = [
     'id': GENERIC_TYPE_IMAGE,
     'name': _('Image'),
     'icon': 'image-x-generic',
-    'types': ['image/png', 'image/gif', 'image/jpeg'],
+    'types': _get_supported_image_mime_types(),
 },
 {
     'id': GENERIC_TYPE_AUDIO,
