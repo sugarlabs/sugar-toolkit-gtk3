@@ -1,4 +1,4 @@
-SUBDIRS = activity bundle graphics presence datastore dispatch
+SUBDIRS = event-controller activity bundle graphics presence datastore dispatch
 
 sugardir = $(pythondir)/sugar3
 sugar_PYTHON =		\
