@@ -48,4 +48,24 @@ EXTRA_DIST =				\
 	sugar-enum-types.c.template	\
 	sugar-enum-types.h.template
 
-CLEANFILES = $(BUILT_SOURCES)
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS = SugarEventController-1.0.gir
+INTROSPECTION_SCANNER_ARGS = --identifier-prefix=Sugar --symbol-prefix=sugar
+SugarEventController_1_0_gir_LIBS = libsugar-eventcontroller.la
+SugarEventController_1_0_gir_FILES =	\
+	$(eventcontroller_h_sources)	\
+	$(eventcontroller_c_sources)
+SugarEventController_1_0_gir_CFLAGS =	\
+	-DSUGAR_TOOLKIT_COMPILATION
+
+SugarEventController_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
+SugarEventController_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
+SugarEventController_1_0_gir_EXPORT_PACKAGES = SugarEventController-1.0
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibdir = $(libdir)/girepository-1.0
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES = $(BUILT_SOURCES) $(gir_DATA) $(typelib_DATA)
