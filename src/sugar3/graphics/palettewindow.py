@@ -1106,7 +1106,8 @@ class CursorInvoker(Invoker):
         return False
 
     def __leave_notify_event_cb(self, button, event):
-        self.notify_mouse_leave()
+        if event.mode == Gdk.CrossingMode.NORMAL:
+            self.notify_mouse_leave()
         return False
 
     def __button_release_event_cb(self, button, event):
