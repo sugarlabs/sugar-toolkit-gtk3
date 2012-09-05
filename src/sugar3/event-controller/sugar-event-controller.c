@@ -24,15 +24,22 @@
 
 typedef struct _SugarControllerItem SugarControllerItem;
 typedef struct _SugarControllerWidgetData SugarControllerWidgetData;
+typedef struct _SugarEventControllerPriv SugarEventControllerPriv;
 
 enum {
-  PROP_STATE = 1
+  PROP_STATE = 1,
+  PROP_WIDGET
 };
 
 enum {
   STARTED,
   FINISHED,
   LAST_SIGNAL
+};
+
+struct _SugarEventControllerPriv
+{
+  GtkWidget *widget;
 };
 
 struct _SugarControllerItem
@@ -61,6 +68,10 @@ sugar_event_controller_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
+  SugarEventControllerPriv *priv;
+
+  priv = SUGAR_EVENT_CONTROLLER (object)->_priv;
+
   switch (prop_id)
     {
     case PROP_STATE:
@@ -71,6 +82,29 @@ sugar_event_controller_get_property (GObject    *object,
         g_value_set_enum (value, state);
         break;
       }
+    case PROP_WIDGET:
+      g_value_set_object (value, priv->widget);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+sugar_event_controller_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  SugarEventControllerPriv *priv;
+
+  priv = SUGAR_EVENT_CONTROLLER (object)->_priv;
+
+  switch (prop_id)
+    {
+    case PROP_WIDGET:
+      priv->widget = g_value_get_object (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -82,6 +116,7 @@ sugar_event_controller_class_init (SugarEventControllerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->get_property = sugar_event_controller_get_property;
+  object_class->set_property = sugar_event_controller_set_property;
 
   g_object_class_install_property (object_class,
                                    PROP_STATE,
@@ -94,6 +129,16 @@ sugar_event_controller_class_init (SugarEventControllerClass *klass)
                                                       G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK |
                                                       G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (object_class,
+                                   PROP_WIDGET,
+                                   g_param_spec_object ("widget",
+                                                        "Widget",
+                                                        "Widget the controller is attached to",
+                                                        GTK_TYPE_WIDGET,
+                                                        G_PARAM_READWRITE |
+                                                        G_PARAM_STATIC_NAME |
+                                                        G_PARAM_STATIC_NICK |
+                                                        G_PARAM_STATIC_BLURB));
   signals[STARTED] =
     g_signal_new ("started",
                   G_TYPE_FROM_CLASS (klass),
@@ -111,12 +156,16 @@ sugar_event_controller_class_init (SugarEventControllerClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  g_type_class_add_private (object_class, sizeof (SugarEventControllerPriv));
   quark_widget_controller_data = g_quark_from_static_string ("sugar-widget-controller-data");
 }
 
 static void
 sugar_event_controller_init (SugarEventController *controller)
 {
+  controller->_priv = G_TYPE_INSTANCE_GET_PRIVATE (controller,
+                                                   SUGAR_TYPE_EVENT_CONTROLLER,
+                                                   SugarEventControllerPriv);
 }
 
 static gboolean
@@ -300,6 +349,7 @@ sugar_event_controller_attach (SugarEventController      *controller,
                                              G_CALLBACK (_sugar_event_controller_state_notify),
                                              widget);
   g_array_append_val (data->controllers, item);
+  g_object_set (controller, "widget", widget, NULL);
 
   return TRUE;
 }
@@ -328,6 +378,7 @@ sugar_event_controller_detach (SugarEventController *controller,
       if (item->controller == controller)
         {
           sugar_event_controller_reset (item->controller);
+          g_object_set (controller, "widget", NULL, NULL);
           g_object_unref (item->controller);
           g_signal_handler_disconnect (item->controller,
                                        item->notify_handler_id);
