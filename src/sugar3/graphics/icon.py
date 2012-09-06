@@ -121,7 +121,7 @@ class _IconBuffer(object):
         return self._loader.load(file_name, entities, self.cache)
 
     def _get_attach_points(self, info, size_request):
-        return 0,0;has_attach_points_, attach_points = info.get_attach_points()
+        has_attach_points_, attach_points = info.get_attach_points()
 
         if attach_points:
             attach_x = float(attach_points[0].x) / size_request
