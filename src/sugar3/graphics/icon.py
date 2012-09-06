@@ -278,7 +278,6 @@ class _IconBuffer(object):
             surface = cairo.ImageSurface(cairo.FORMAT_RGB24, int(width),
                                          int(height))
             context = cairo.Context(surface)
-            context = Gdk.CairoContext(context)
             context.set_source_color(self.background_color)
             context.paint()
 
