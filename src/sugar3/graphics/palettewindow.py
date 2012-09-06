@@ -1221,7 +1221,7 @@ class CellRendererInvoker(Invoker):
     def _redraw_path(self, path):
         column = None
         for column in self._tree_view.get_columns():
-            if self._cell_renderer in column.get_cell_renderers():
+            if self._cell_renderer in column.get_cells():
                 break
         assert column is not None
         area = self._tree_view.get_background_area(path, column)
@@ -1255,7 +1255,7 @@ class CellRendererInvoker(Invoker):
 
         path_, column, x, y_ = pos
 
-        for cell_renderer in column.get_cell_renderers():
+        for cell_renderer in column.get_cells():
             if cell_renderer == self._cell_renderer:
                 cell_x, cell_width = column.cell_get_position(cell_renderer)
                 if x > cell_x and x < (cell_x + cell_width):
