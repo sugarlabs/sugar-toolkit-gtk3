@@ -856,6 +856,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         cr.set_source_surface(surface, math.floor(x), math.floor(y))
         cr.rectangle(cell_area.x, cell_area.y, cell_area.width,
                      cell_area.height)
+        cr.clip()
         cr.paint()
 
 
