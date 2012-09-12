@@ -1005,6 +1005,10 @@ class WidgetInvoker(Invoker):
             x = 0
             y = 0
 
+        if not self._widget.get_has_window():
+            x += allocation.x
+            y += allocation.y
+
         rect = Gdk.Rectangle()
         rect.x = x
         rect.y = y
