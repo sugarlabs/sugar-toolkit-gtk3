@@ -400,7 +400,10 @@ class MouseSpeedDetector(GObject.GObject):
         self._state = None
 
     def _get_mouse_position(self):
-        display = self.parent.get_display()
+        if hasattr(self.parent, 'get_display'):
+            display = self.parent.get_display()
+        else:
+            display = Gdk.Display.get_default()
         manager = display.get_device_manager()
         pointer_device = manager.get_client_pointer()
         screen, x, y = pointer_device.get_position()
@@ -745,7 +748,10 @@ class Invoker(GObject.GObject):
         invoker_valign = alignment[3]
 
         if self._cursor_x == -1 or self._cursor_y == -1:
-            display = self.parent.get_display()
+            if hasattr(self.parent, 'get_display'):
+                display = self.parent.get_display()
+            else:
+                display = Gdk.Display.get_default()
             manager = display.get_device_manager()
             pointer_device = manager.get_client_pointer()
             screen, x, y = pointer_device.get_position()
@@ -1167,7 +1173,7 @@ class CellRendererInvoker(Invoker):
         self._release_hid = tree_view.connect('button-release-event',
                                               self.__button_release_event_cb)
 
-        self.attach(cell_renderer)
+        Invoker.attach(self, cell_renderer)
 
     def detach(self):
         Invoker.detach(self)
@@ -1186,13 +1192,14 @@ class CellRendererInvoker(Invoker):
             x = 0
             y = 0
 
-        x += allocation.x
-        y += allocation.y
+        rect = Gdk.Rectangle()
+        rect.x = x + allocation.x
+        rect.y = y + allocation.y
 
-        width = allocation.width
-        height = allocation.height
+        rect.width = allocation.width
+        rect.height = allocation.height
 
-        return (x, y, width, height)
+        return rect
 
     def __motion_notify_event_cb(self, widget, event):
         if event.window != widget.get_bin_window():
@@ -1231,7 +1238,9 @@ class CellRendererInvoker(Invoker):
         self._tree_view.queue_draw_area(x, y, area.width, area.height)
 
     def __leave_notify_event_cb(self, widget, event):
-        self.notify_mouse_leave()
+        if event.mode == Gdk.CrossingMode.NORMAL:
+            self.notify_mouse_leave()
+        return False
 
     def __button_release_event_cb(self, widget, event):
         if event.button == 1 and self._point_in_cell_renderer(event.x,
