@@ -270,6 +270,8 @@ class _Box(Gtk.EventBox):
         GObject.GObject.__init__(self)
         self.set_app_paintable(True)
         self._toolbar_button = toolbar_button
+        self.modify_bg(Gtk.StateType.NORMAL,
+                       style.COLOR_TOOLBAR_GREY.get_gdk_color())
 
     def do_draw(self, cr):
         button_alloc = self._toolbar_button.get_allocation()
