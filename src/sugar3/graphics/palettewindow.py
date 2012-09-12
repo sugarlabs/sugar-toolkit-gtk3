@@ -998,24 +998,18 @@ class WidgetInvoker(Invoker):
         allocation = self._widget.get_allocation()
         window = self._widget.get_window()
         if window is not None:
-            res, x, y = window.get_origin()
+            res_, x, y = window.get_origin()
         else:
             logging.warning(
                 "Trying to position palette with invoker that's not realized.")
             x = 0
             y = 0
 
-        x += allocation.x
-        y += allocation.y
-
-        width = allocation.width
-        height = allocation.height
-
         rect = Gdk.Rectangle()
         rect.x = x
         rect.y = y
-        rect.width = width
-        rect.height = height
+        rect.width = allocation.width
+        rect.height = allocation.height
         return rect
 
     def has_rectangle_gap(self):
