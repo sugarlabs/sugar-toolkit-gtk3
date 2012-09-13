@@ -26,7 +26,7 @@
 #ifndef __SUGAR_ROTATE_CONTROLLER_H__
 #define __SUGAR_ROTATE_CONTROLLER_H__
 
-#include "sugar-event-controller.h"
+#include "sugar-touch-controller.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -43,13 +43,13 @@ typedef struct _SugarRotateControllerClass SugarRotateControllerClass;
 
 struct _SugarRotateController
 {
-  SugarEventController parent_instance;
+  SugarTouchController parent_instance;
   gpointer _priv;
 };
 
 struct _SugarRotateControllerClass
 {
-  SugarEventControllerClass parent_class;
+  SugarTouchControllerClass parent_class;
 
   void (* angle_changed) (SugarRotateController *controller,
                           gdouble                angle,
