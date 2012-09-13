@@ -58,8 +58,8 @@ struct _SugarSwipeControllerClass
 {
   SugarEventControllerClass parent_class;
 
-  void (* swipe_finished) (SugarSwipeController *controller,
-                           SugarSwipeDirection   direction);
+  void (* swipe_ended) (SugarSwipeController *controller,
+                        SugarSwipeDirection   direction);
 };
 
 GType                  sugar_swipe_controller_get_type (void) G_GNUC_CONST;

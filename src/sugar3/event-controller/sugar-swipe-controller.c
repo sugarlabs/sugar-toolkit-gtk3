@@ -30,7 +30,7 @@ typedef struct _SugarSwipeControllerPriv SugarSwipeControllerPriv;
 typedef struct _SugarEventData SugarEventData;
 
 enum {
-  SWIPE_FINISHED,
+  SWIPE_ENDED,
   LAST_SIGNAL
 };
 
@@ -193,7 +193,7 @@ _sugar_swipe_controller_check_emit (SugarSwipeController *controller)
       priv->swiped = TRUE;
       g_signal_emit_by_name (G_OBJECT (controller), "started");
       g_object_notify (G_OBJECT (controller), "state");
-      g_signal_emit (controller, signals[SWIPE_FINISHED], 0, direction);
+      g_signal_emit (controller, signals[SWIPE_ENDED], 0, direction);
       g_signal_emit_by_name (G_OBJECT (controller), "finished");
     }
 }
@@ -302,11 +302,11 @@ sugar_swipe_controller_class_init (SugarSwipeControllerClass *klass)
   controller_class->get_state = sugar_swipe_controller_get_state;
   controller_class->reset = sugar_swipe_controller_reset;
 
-  signals[SWIPE_FINISHED] =
-    g_signal_new ("swipe-finished",
+  signals[SWIPE_ENDED] =
+    g_signal_new ("swipe-ended",
                   SUGAR_TYPE_SWIPE_CONTROLLER,
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (SugarSwipeControllerClass, swipe_finished),
+                  G_STRUCT_OFFSET (SugarSwipeControllerClass, swipe_ended),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__ENUM,
                   G_TYPE_NONE, 1,
