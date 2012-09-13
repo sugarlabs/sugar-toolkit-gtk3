@@ -189,19 +189,26 @@ _sugar_long_press_anim_draw (GtkWidget                *widget,
                              SugarLongPressController *controller)
 {
   SugarLongPressControllerPriv *priv = controller->_priv;
+  GtkStyleContext *context;
   gdouble progress;
   gint64 diff_msec;
+  GdkRGBA color;
 
   diff_msec = (g_get_monotonic_time () - priv->start_time) / 1000;
-  progress = (gdouble) diff_msec / priv->timeout;
+  progress = (gdouble) diff_msec / priv->delay;
 
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
   cairo_save (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_set_source_rgba (cr, 0, 0, 0, 0);
-  cairo_paint (cr);
-  cairo_restore (cr);
 
+  gtk_style_context_add_class (context, "long-press-notification");
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+
+  gdk_cairo_set_source_rgba (cr, &color);
   _stroke_progress_notification (cr, progress);
+
+  gtk_style_context_restore (context);
+  cairo_restore (cr);
 
   return TRUE;
 }
@@ -277,6 +284,7 @@ _sugar_long_press_anim_timeout (gpointer user_data)
       else
         _sugar_long_press_controller_update_shape (priv->anim_window,
                                                    controller);
+
       g_signal_connect (priv->anim_window, "draw",
                         G_CALLBACK (_sugar_long_press_anim_draw),
                         controller);
