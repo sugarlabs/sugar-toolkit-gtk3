@@ -51,14 +51,14 @@ struct _SugarZoomControllerClass
 {
   SugarTouchControllerClass parent_class;
 
-  void (* zoom_changed) (SugarZoomController *controller,
-                         gdouble              zoom);
+  void (* scale_changed) (SugarZoomController *controller,
+                          gdouble              scale);
 };
 
-GType                  sugar_zoom_controller_get_type       (void) G_GNUC_CONST;
-SugarEventController * sugar_zoom_controller_new            (void);
-gboolean               sugar_zoom_controller_get_zoom_delta (SugarZoomController *controller,
-                                                             gdouble             *delta);
+GType                  sugar_zoom_controller_get_type        (void) G_GNUC_CONST;
+SugarEventController * sugar_zoom_controller_new             (void);
+gboolean               sugar_zoom_controller_get_scale_delta (SugarZoomController *controller,
+                                                              gdouble             *scale);
 
 G_END_DECLS
 

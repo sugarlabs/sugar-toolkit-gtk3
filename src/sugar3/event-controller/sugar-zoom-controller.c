@@ -106,7 +106,7 @@ _sugar_zoom_controller_check_emit (SugarZoomController *controller)
     return FALSE;
 
   zoom = distance / priv->initial_distance;
-  g_signal_emit (controller, signals[ZOOM_CHANGED], 0, zoom);
+  g_signal_emit (controller, signals[SCALE_CHANGED], 0, zoom);
 
   return TRUE;
 }
@@ -161,15 +161,15 @@ sugar_zoom_controller_class_init (SugarZoomControllerClass *klass)
   controller_class->updated = sugar_zoom_controller_updated;
 
   /**
-   * SugarZoomController::zoom-changed:
+   * SugarZoomController::scale-changed:
    * @controller: the object on which the signal is emitted
-   * @delta: Difference with the starting zooming state
+   * @scale: Difference with the starting zooming state
    */
-  signals[ZOOM_CHANGED] =
-    g_signal_new ("zoom-changed",
+  signals[SCALE_CHANGED] =
+    g_signal_new ("scale-changed",
                   SUGAR_TYPE_ZOOM_CONTROLLER,
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (SugarZoomControllerClass, zoom_changed),
+                  G_STRUCT_OFFSET (SugarZoomControllerClass, scale_changed),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__DOUBLE,
                   G_TYPE_NONE, 1,
@@ -185,20 +185,20 @@ sugar_zoom_controller_new (void)
 }
 
 /**
- * sugar_zoom_controller_get_zoom_delta:
+ * sugar_zoom_controller_get_scale_delta:
  * @controller: a #SugarZoomController
- * @delta: (out) (transfer none): zoom delta
+ * @scale: (out) (transfer none): zoom delta
  *
  * If @controller is on state %SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED,
- * this function returns %TRUE and fills in @delta with the zooming
+ * this function returns %TRUE and fills in @scale with the zooming
  * difference since the gesture was recognized (hence the starting point
  * is considered 1x).
  *
  * Returns: %TRUE if @controller is recognizing a zoom gesture
  **/
 gboolean
-sugar_zoom_controller_get_zoom_delta (SugarZoomController *controller,
-                                      gdouble             *delta)
+sugar_zoom_controller_get_scale_delta (SugarZoomController *controller,
+                                       gdouble             *scale)
 {
   SugarZoomControllerPriv *priv;
   gdouble distance;
@@ -210,8 +210,8 @@ sugar_zoom_controller_get_zoom_delta (SugarZoomController *controller,
 
   priv = controller->_priv;
 
-  if (delta)
-    *delta = distance / priv->initial_distance;
+  if (scale)
+    *scale = distance / priv->initial_distance;
 
   return TRUE;
 }
