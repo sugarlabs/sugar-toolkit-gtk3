@@ -54,8 +54,8 @@ struct _SugarTouchControllerClass
 
 GType     sugar_touch_controller_get_type     (void) G_GNUC_CONST;
 gboolean  sugar_touch_controller_get_center   (SugarTouchController *controller,
-                                               gint                 *x,
-                                               gint                 *y);
+                                               gint                 *center_x,
+                                               gint                 *center_y);
 
 gint      sugar_touch_controller_get_num_touches (SugarTouchController *controller);
 GList   * sugar_touch_controller_get_sequences   (SugarTouchController *controller);

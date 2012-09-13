@@ -221,6 +221,17 @@ sugar_touch_controller_init (SugarTouchController *controller)
                                          (GDestroyNotify) g_free);
 }
 
+/**
+ * sugar_touch_controller_get_center:
+ * @controller: a #SugarTouchController
+ * @center_x: (out) (transfer none): Return location for the X axis of the bounding box center
+ * @center_y: (out) (transfer none): Return location for the Y axis of the bounding box center
+ *
+ * If a gesture is ongoing, this function returns the center of
+ * the bounding box containing all ongoing touches.
+ *
+ * Returns: %TRUE if a gesture is in progress
+ **/
 gboolean
 sugar_touch_controller_get_center (SugarTouchController *controller,
                                    gint                 *center_x,
@@ -234,6 +245,12 @@ sugar_touch_controller_get_center (SugarTouchController *controller,
   g_return_val_if_fail (SUGAR_IS_TOUCH_CONTROLLER (controller), FALSE);
 
   priv = controller->_priv;
+  x1 = y1 = G_MAXINT;
+  x2 = y2 = G_MININT;
+
+  if (!TOUCHES_IN_RANGE (g_hash_table_size (priv->touches), priv))
+    return FALSE;
+
   g_hash_table_iter_init (&iter, priv->touches);
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &point))
@@ -255,8 +272,18 @@ sugar_touch_controller_get_center (SugarTouchController *controller,
       dy = y2 - y1;
       *center_y = y1 + (ABS (dy) / 2);
     }
+
+  return TRUE;
 }
 
+/**
+ * sugar_touch_controller_get_num_touches:
+ * @controller: a #SugarTouchController
+ *
+ * Returns the number of touches currently operating on @controller
+ *
+ * Returns: The number of touches
+ **/
 gint
 sugar_touch_controller_get_num_touches (SugarTouchController *controller)
 {
@@ -269,6 +296,14 @@ sugar_touch_controller_get_num_touches (SugarTouchController *controller)
   return g_hash_table_size (priv->touches);
 }
 
+/**
+ * sugar_touch_controller_get_sequences:
+ * @controller: a #SugarTouchController
+ *
+ * Returns the touch sequences currently operating on @controller
+ *
+ * Returns: (element-type Gdk.EventSequence) (transfer container): The list of sequences
+ **/
 GList *
 sugar_touch_controller_get_sequences (SugarTouchController *controller)
 {
@@ -281,6 +316,18 @@ sugar_touch_controller_get_sequences (SugarTouchController *controller)
   return g_hash_table_get_keys (priv->touches);
 }
 
+/**
+ * sugar_touch_controller_get_coords:
+ * @controller: a #SugarTouchController
+ * @sequence: a #GdkEventSequence
+ * @x: (out) (transfer none): Return location for the X coordinate of the touch
+ * @y: (out) (transfer none): Return location for the X coordinate of the touch
+ *
+ * If @sequence is operating on @controller, this function returns %TRUE and
+ * fills in @x and @y with the latest coordinates for that @sequence.
+ *
+ * Returns: %TRUE if @sequence operates on @controller
+ **/
 gboolean
 sugar_touch_controller_get_coords (SugarTouchController *controller,
                                    GdkEventSequence     *sequence,
