@@ -183,7 +183,7 @@ sugar_rotate_controller_handle_event (SugarEventController *controller,
         }
       else if (priv->touches[0].set || priv->touches[1].set)
         {
-          g_signal_emit_by_name (G_OBJECT (controller), "finished");
+          g_signal_emit_by_name (G_OBJECT (controller), "ended");
           g_object_notify (G_OBJECT (controller), "state");
         }
       break;
@@ -226,7 +226,7 @@ sugar_rotate_controller_reset (SugarEventController *controller)
   priv = SUGAR_ROTATE_CONTROLLER (controller)->_priv;
 
   if (priv->touches[0].set && priv->touches[1].set)
-    g_signal_emit_by_name (G_OBJECT (controller), "finished");
+    g_signal_emit_by_name (G_OBJECT (controller), "ended");
 
   priv->touches[0].sequence = NULL;
   priv->touches[0].set = FALSE;

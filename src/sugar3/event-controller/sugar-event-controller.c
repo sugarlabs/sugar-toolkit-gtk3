@@ -32,8 +32,9 @@ enum {
 };
 
 enum {
-  STARTED,
-  FINISHED,
+  BEGAN,
+  UPDATED,
+  ENDED,
   LAST_SIGNAL
 };
 
@@ -139,19 +140,27 @@ sugar_event_controller_class_init (SugarEventControllerClass *klass)
                                                         G_PARAM_STATIC_NAME |
                                                         G_PARAM_STATIC_NICK |
                                                         G_PARAM_STATIC_BLURB));
-  signals[STARTED] =
-    g_signal_new ("started",
+  signals[BEGAN] =
+    g_signal_new ("began",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (SugarEventControllerClass, started),
+                  G_STRUCT_OFFSET (SugarEventControllerClass, began),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-  signals[FINISHED] =
-    g_signal_new ("finished",
+  signals[UPDATED] =
+    g_signal_new ("updated",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (SugarEventControllerClass, finished),
+                  G_STRUCT_OFFSET (SugarEventControllerClass, updated),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  signals[ENDED] =
+    g_signal_new ("ended",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (SugarEventControllerClass, ended),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);

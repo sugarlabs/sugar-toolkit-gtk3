@@ -191,10 +191,10 @@ _sugar_swipe_controller_check_emit (SugarSwipeController *controller)
   if (_sugar_swipe_controller_get_direction (check, last, &direction))
     {
       priv->swiped = TRUE;
-      g_signal_emit_by_name (G_OBJECT (controller), "started");
+      g_signal_emit_by_name (G_OBJECT (controller), "began");
       g_object_notify (G_OBJECT (controller), "state");
       g_signal_emit (controller, signals[SWIPE_ENDED], 0, direction);
-      g_signal_emit_by_name (G_OBJECT (controller), "finished");
+      g_signal_emit_by_name (G_OBJECT (controller), "ended");
     }
 }
 

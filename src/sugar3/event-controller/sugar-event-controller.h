@@ -63,8 +63,9 @@ struct _SugarEventControllerClass
   GObjectClass parent_class;
 
   /* Signals */
-  void                      (* started)      (SugarEventController *controller);
-  void                      (* finished)     (SugarEventController *controller);
+  void                      (* began)        (SugarEventController *controller);
+  void                      (* updated)      (SugarEventController *controller);
+  void                      (* ended)        (SugarEventController *controller);
 
   /* vmethods */
   gboolean                  (* handle_event) (SugarEventController *controller,

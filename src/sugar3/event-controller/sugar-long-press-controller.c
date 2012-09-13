@@ -319,7 +319,7 @@ _sugar_long_press_controller_timeout (gpointer user_data)
 
   priv->timeout_id = 0;
   priv->triggered = TRUE;
-  g_signal_emit_by_name (controller, "started");
+  g_signal_emit_by_name (controller, "began");
 
   return FALSE;
 }
@@ -352,7 +352,7 @@ sugar_long_press_controller_reset (SugarEventController *controller)
   priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->_priv;
 
   if (priv->triggered)
-    g_signal_emit_by_name (controller, "finished");
+    g_signal_emit_by_name (controller, "ended");
 
   _sugar_long_press_controller_cancel (SUGAR_LONG_PRESS_CONTROLLER (controller));
   _sugar_long_press_controller_unset_device (SUGAR_LONG_PRESS_CONTROLLER (controller));
