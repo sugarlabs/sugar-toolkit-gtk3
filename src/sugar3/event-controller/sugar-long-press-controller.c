@@ -21,17 +21,17 @@
 
 #include "sugar-long-press-controller.h"
 
-#define DEFAULT_THRESHOLD 32
-#define DEFAULT_TIMEOUT   800
-#define ANIM_WINDOW_WIDTH 100
-#define ARC_LINE_WIDTH    10
+#define DEFAULT_THRESHOLD     32
+#define DEFAULT_TRIGGER_DELAY 800
+#define ANIM_WINDOW_WIDTH     100
+#define ARC_LINE_WIDTH        10
 
 typedef struct _SugarLongPressControllerPriv SugarLongPressControllerPriv;
 
 enum {
   PROP_0,
   PROP_THRESHOLD,
-  PROP_TIMEOUT
+  PROP_TRIGGER_DELAY
 };
 
 struct _SugarLongPressControllerPriv
@@ -47,7 +47,7 @@ struct _SugarLongPressControllerPriv
   guint anim_id;
   guint timeout_id;
   guint threshold;
-  guint timeout;
+  guint delay;
   guint cancelled : 1;
   guint triggered : 1;
 };
@@ -65,7 +65,7 @@ sugar_long_press_controller_init (SugarLongPressController *controller)
                                                           SUGAR_TYPE_LONG_PRESS_CONTROLLER,
                                                           SugarLongPressControllerPriv);
   priv->threshold = DEFAULT_THRESHOLD;
-  priv->timeout = DEFAULT_TIMEOUT;
+  priv->delay = DEFAULT_TRIGGER_DELAY;
   priv->x = priv->y = -1;
   priv->root_x = priv->root_y = -1;
 }
@@ -128,8 +128,8 @@ sugar_long_press_controller_get_property (GObject    *object,
     case PROP_THRESHOLD:
       g_value_set_uint (value, priv->threshold);
       break;
-    case PROP_TIMEOUT:
-      g_value_set_uint (value, priv->timeout);
+    case PROP_TRIGGER_DELAY:
+      g_value_set_uint (value, priv->delay);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -150,8 +150,8 @@ sugar_long_press_controller_set_property (GObject      *object,
     case PROP_THRESHOLD:
       priv->threshold = g_value_get_uint (value);
       break;
-    case PROP_TIMEOUT:
-      priv->timeout = g_value_get_uint (value);
+    case PROP_TRIGGER_DELAY:
+      priv->delay = g_value_get_uint (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -396,7 +396,7 @@ sugar_long_press_controller_handle_event (SugarEventController *controller,
                                  _sugar_long_press_anim_timeout,
                                  controller);
       priv->timeout_id =
-        gdk_threads_add_timeout (priv->timeout,
+        gdk_threads_add_timeout (priv->delay,
                                  _sugar_long_press_controller_timeout,
                                  controller);
       g_object_notify (G_OBJECT (controller), "state");
@@ -445,11 +445,11 @@ sugar_long_press_controller_class_init (SugarLongPressControllerClass *klass)
                                                       G_PARAM_STATIC_NICK |
                                                       G_PARAM_STATIC_BLURB));
   g_object_class_install_property (object_class,
-                                   PROP_TIMEOUT,
-                                   g_param_spec_uint ("timeout",
-                                                      "Timeout",
-                                                      "Value in milliseconds to timeout the triggering",
-                                                      0, G_MAXUINT, DEFAULT_TIMEOUT,
+                                   PROP_TRIGGER_DELAY,
+                                   g_param_spec_uint ("trigger-delay",
+                                                      "Trigger delay",
+                                                      "delay in milliseconds before the gesture is triggered",
+                                                      0, G_MAXUINT, DEFAULT_TRIGGER_DELAY,
                                                       G_PARAM_READWRITE |
                                                       G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK |
