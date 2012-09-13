@@ -23,25 +23,14 @@
 #include "sugar-zoom-controller.h"
 
 typedef struct _SugarZoomControllerPriv SugarZoomControllerPriv;
-typedef struct _SugarTouch SugarTouch;
 
 enum {
-  ZOOM_CHANGED,
+  SCALE_CHANGED,
   LAST_SIGNAL
-};
-
-struct _SugarTouch
-{
-  GdkEventSequence *sequence;
-  gint x;
-  gint y;
-  guint set : 1;
 };
 
 struct _SugarZoomControllerPriv
 {
-  GdkDevice *device;
-  SugarTouch touches[2];
   gdouble initial_distance;
 };
 
@@ -49,7 +38,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (SugarZoomController,
                sugar_zoom_controller,
-               SUGAR_TYPE_EVENT_CONTROLLER)
+               SUGAR_TYPE_TOUCH_CONTROLLER)
 
 static void
 sugar_zoom_controller_init (SugarZoomController *controller)
@@ -65,29 +54,13 @@ sugar_zoom_controller_finalize (GObject *object)
   G_OBJECT_CLASS (sugar_zoom_controller_parent_class)->finalize (object);
 }
 
-static SugarTouch *
-_sugar_zoom_controller_find_touch (SugarZoomController *controller,
-                                   GdkEventSequence    *sequence)
+static void
+sugar_zoom_controller_constructed (GObject *object)
 {
-  SugarZoomControllerPriv *priv;
-  gint unset = -1, i;
-
-  priv = controller->_priv;
-
-  for (i = 0; i < 2; i++)
-    {
-      if (priv->touches[i].sequence == sequence)
-        return &priv->touches[i];
-      else if (!priv->touches[i].set && unset < 0)
-        unset = i;
-    }
-
-  if (unset < 0)
-    return NULL;
-
-  priv->touches[unset].sequence = sequence;
-  priv->touches[unset].set = TRUE;
-  return &priv->touches[unset];
+  g_object_set (object,
+                "min-touches", 2,
+                "max-touches", 2,
+                NULL);
 }
 
 static gboolean
@@ -95,15 +68,24 @@ _sugar_zoom_controller_get_distance (SugarZoomController *controller,
                                      gdouble             *distance)
 {
   SugarZoomControllerPriv *priv;
+  gint x1, y1, x2, y2;
+  GList *touches;
   gdouble dx, dy;
 
   priv = controller->_priv;
 
-  if (!priv->touches[0].set || !priv->touches[1].set)
+  if (sugar_touch_controller_get_num_touches (SUGAR_TOUCH_CONTROLLER (controller)) != 2)
     return FALSE;
 
-  dx = priv->touches[0].x - priv->touches[1].x;
-  dy = priv->touches[0].y - priv->touches[1].y;
+  touches = sugar_touch_controller_get_sequences (SUGAR_TOUCH_CONTROLLER (controller));
+
+  sugar_touch_controller_get_coords (SUGAR_TOUCH_CONTROLLER (controller),
+                                     touches->data, &x1, &y1);
+  sugar_touch_controller_get_coords (SUGAR_TOUCH_CONTROLLER (controller),
+                                     touches->next->data, &x2, &y2);
+
+  dx = x1 - x2;
+  dy = y1 - y2;;
   *distance = sqrt ((dx * dx) + (dy * dy));
 
   return TRUE;
@@ -129,113 +111,38 @@ _sugar_zoom_controller_check_emit (SugarZoomController *controller)
   return TRUE;
 }
 
-static gboolean
-sugar_zoom_controller_handle_event (SugarEventController *controller,
-                                    GdkEvent             *event)
-{
-  SugarZoomControllerPriv *priv;
-  GdkEventSequence *sequence;
-  gboolean handled = TRUE;
-  GdkDevice *device;
-  SugarTouch *touch;
-
-  priv = SUGAR_ZOOM_CONTROLLER (controller)->_priv;
-  device = gdk_event_get_device (event);
-  sequence = gdk_event_get_event_sequence (event);
-
-  if (priv->device && priv->device != device)
-    return FALSE;
-
-  touch = _sugar_zoom_controller_find_touch (SUGAR_ZOOM_CONTROLLER (controller),
-                                             sequence);
-  if (!touch)
-    return FALSE;
-
-  switch (event->type)
-    {
-    case GDK_TOUCH_BEGIN:
-      touch->x = event->touch.x;
-      touch->y = event->touch.y;
-
-      if (!priv->device)
-        priv->device = g_object_ref (device);
-
-      if (priv->touches[0].set && priv->touches[1].set)
-        {
-          _sugar_zoom_controller_get_distance (SUGAR_ZOOM_CONTROLLER (controller),
-                                               &priv->initial_distance);
-          g_signal_emit_by_name (G_OBJECT (controller), "began");
-          g_object_notify (G_OBJECT (controller), "state");
-        }
-      break;
-    case GDK_TOUCH_END:
-      touch->sequence = NULL;
-      touch->set = FALSE;
-
-      if (!priv->touches[0].set && !priv->touches[1].set)
-        {
-          g_object_unref (priv->device);
-          priv->device = NULL;
-        }
-      else if (!priv->touches[0].set || priv->touches[1].set)
-        {
-          g_signal_emit_by_name (G_OBJECT (controller), "ended");
-          g_object_notify (G_OBJECT (controller), "state");
-        }
-      break;
-    case GDK_TOUCH_UPDATE:
-      touch->x = event->touch.x;
-      touch->y = event->touch.y;
-      _sugar_zoom_controller_check_emit (SUGAR_ZOOM_CONTROLLER (controller));
-      break;
-    default:
-      handled = FALSE;
-      break;
-    }
-
-  return handled;
-}
-
 SugarEventControllerState
 sugar_zoom_controller_get_state (SugarEventController *controller)
 {
   SugarZoomControllerPriv *priv;
+  gint num_touches;
 
   priv = SUGAR_ZOOM_CONTROLLER (controller)->_priv;
+  num_touches = sugar_touch_controller_get_num_touches (SUGAR_TOUCH_CONTROLLER (controller));
 
-  if (priv->device)
-    {
-      if (priv->touches[0].set && priv->touches[1].set)
-        return SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED;
-      else if (priv->touches[0].set || priv->touches[1].set)
-        return SUGAR_EVENT_CONTROLLER_STATE_COLLECTING;
-    }
+  if (num_touches == 2)
+    return SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED;
+  else if (num_touches == 1)
+    return SUGAR_EVENT_CONTROLLER_STATE_COLLECTING;
 
   return SUGAR_EVENT_CONTROLLER_STATE_NONE;
 }
 
-void
-sugar_zoom_controller_reset (SugarEventController *controller)
+static void
+sugar_zoom_controller_began (SugarEventController *controller)
 {
   SugarZoomControllerPriv *priv;
 
   priv = SUGAR_ZOOM_CONTROLLER (controller)->_priv;
-
-  if (priv->touches[0].set && priv->touches[1].set)
-    g_signal_emit_by_name (G_OBJECT (controller), "ended");
-
-  priv->touches[0].sequence = NULL;
-  priv->touches[0].set = FALSE;
-  priv->touches[1].sequence = NULL;
-  priv->touches[1].set = FALSE;
-
-  if (priv->device)
-    {
-      g_object_unref (priv->device);
-      priv->device = NULL;
-    }
-
+  _sugar_zoom_controller_get_distance (SUGAR_ZOOM_CONTROLLER (controller),
+                                       &priv->initial_distance);
   g_object_notify (G_OBJECT (controller), "state");
+}
+
+static void
+sugar_zoom_controller_updated (SugarEventController *controller)
+{
+  _sugar_zoom_controller_check_emit (SUGAR_ZOOM_CONTROLLER (controller));
 }
 
 static void
@@ -246,11 +153,12 @@ sugar_zoom_controller_class_init (SugarZoomControllerClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = sugar_zoom_controller_finalize;
+  object_class->constructed = sugar_zoom_controller_constructed;
 
   controller_class = SUGAR_EVENT_CONTROLLER_CLASS (klass);
-  controller_class->handle_event = sugar_zoom_controller_handle_event;
   controller_class->get_state = sugar_zoom_controller_get_state;
-  controller_class->reset = sugar_zoom_controller_reset;
+  controller_class->began = sugar_zoom_controller_began;
+  controller_class->updated = sugar_zoom_controller_updated;
 
   /**
    * SugarZoomController::zoom-changed:

@@ -26,7 +26,7 @@
 #ifndef __SUGAR_ZOOM_CONTROLLER_H__
 #define __SUGAR_ZOOM_CONTROLLER_H__
 
-#include "sugar-event-controller.h"
+#include "sugar-touch-controller.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -43,13 +43,13 @@ typedef struct _SugarZoomControllerClass SugarZoomControllerClass;
 
 struct _SugarZoomController
 {
-  SugarEventController parent_instance;
+  SugarTouchController parent_instance;
   gpointer _priv;
 };
 
 struct _SugarZoomControllerClass
 {
-  SugarEventControllerClass parent_class;
+  SugarTouchControllerClass parent_class;
 
   void (* zoom_changed) (SugarZoomController *controller,
                          gdouble              zoom);
