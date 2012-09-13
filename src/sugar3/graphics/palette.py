@@ -40,9 +40,40 @@ from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
         WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
 
 
-class Palette(PaletteWindow):
+class _HeaderItem(Gtk.MenuItem):
+    """A MenuItem with a custom child widget that gets all the
+    available space.
+
     """
-    Floating palette implementation.
+
+    __gtype_name__ = 'SugarPaletteHeader'
+
+    def __init__(self, widget):
+        Gtk.MenuItem.__init__(self)
+        if self.get_child() is not None:
+            self.remove(self.get_child())
+        self.add(widget)
+        # FIXME we have to mark it as insensitive again to make it an
+        # informational element, when we realize how to get the icon
+        # displayed correctly - SL #3836
+        # self.set_sensitive(False)
+
+    def do_size_allocate(self, allocation):
+        self.set_allocation(allocation)
+        self.get_child().size_allocate(allocation)
+
+
+class _HeaderSeparator(Gtk.SeparatorMenuItem):
+    """A SeparatorMenuItem that can be styled in the theme."""
+
+    __gtype_name__ = 'SugarPaletteHeaderSeparator'
+
+    def __init__(self):
+        Gtk.SeparatorMenuItem.__init__(self)
+
+
+class Palette(PaletteWindow):
+    """Floating palette implementation.
 
     This class dynamically switches between one of two encapsulated child
     widget types: a _PaletteWindowWidget or a _PaletteMenuWidget.
@@ -375,19 +406,13 @@ class Palette(PaletteWindow):
 
             self._widget = _PaletteMenuWidget()
 
-            self._label_menuitem = Gtk.MenuItem()
-            child = self._label_menuitem.get_child()
-            if child is not None:
-                self._label_menuitem.remove(child)
-            self._label_menuitem.add(self._primary_box)
-
-            # Mark the menuitem as insensitive so that it appears as an
-            # informational element, rather than a clickable item in the menu.
-            # TODO: see if we can do this better in GTK.
-            self._label_menuitem.set_sensitive(False)
-
+            self._label_menuitem = _HeaderItem(self._primary_box)
             self._label_menuitem.show()
             self._widget.append(self._label_menuitem)
+
+            separator = _HeaderSeparator()
+            self._widget.append(separator)
+            separator.show()
 
             self._setup_widget()
 
