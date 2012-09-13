@@ -16,6 +16,7 @@ eventcontroller_h_sources = 		\
 	sugar-long-press-controller.h	\
 	sugar-rotate-controller.h	\
 	sugar-swipe-controller.h	\
+	sugar-touch-controller.h	\
 	sugar-zoom-controller.h
 
 eventcontroller_c_sources =		\
@@ -23,6 +24,7 @@ eventcontroller_c_sources =		\
 	sugar-long-press-controller.c	\
 	sugar-rotate-controller.c	\
 	sugar-swipe-controller.c	\
+	sugar-touch-controller.c	\
 	sugar-zoom-controller.c
 
 
