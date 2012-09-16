@@ -33,9 +33,6 @@ libsugar_eventcontroller_la_SOURCES =	\
 	$(eventcontroller_h_sources)	\
 	$(eventcontroller_c_sources)
 
-libsugar_eventcontrollerinclude_HEADERS = \
-	$(eventcontroller_h_sources)
-
 BUILT_SOURCES = 			\
 	sugar-enum-types.c		\
 	sugar-enum-types.h
