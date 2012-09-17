@@ -274,7 +274,7 @@ _sugar_long_press_anim_timeout (gpointer user_data)
 
       gtk_window_set_screen (GTK_WINDOW (priv->anim_window), screen);
 
-      if (rgba_visual)
+      if (rgba_visual && gdk_screen_is_composited (screen))
         {
           GdkRGBA bg = { 0, 0, 0, 0 };
 
