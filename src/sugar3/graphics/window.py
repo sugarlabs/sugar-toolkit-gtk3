@@ -94,6 +94,14 @@ class Window(Gtk.Window):
         self.connect('realize', self.__window_realize_cb)
         self.connect('key-press-event', self.__key_press_cb)
 
+        # OSK support: canvas auto panning based on input focus
+        if GObject.signal_lookup('request-clear-area', Window) != 0 and \
+                GObject.signal_lookup('unset-clear-area', Window) != 0:
+            self.connect('size-allocate', self.__size_allocate_cb)
+            self.connect('request-clear-area', self.__request_clear_area_cb)
+            self.connect('unset-clear-area', self.__unset_clear_area_cb)
+            self._clear_area_dy = 0
+
         self._toolbar_box = None
         self._alerts = []
         self._canvas = None
@@ -276,6 +284,19 @@ class Window(Gtk.Window):
         self._unfullscreen_button.hide()
         self._unfullscreen_button_timeout_id = None
         return False
+
+    def __request_clear_area_cb(self, activity, osk_rect, cursor_rect):
+        self._clear_area_dy = cursor_rect.y + cursor_rect.height - osk_rect.y
+        self.queue_resize()
+
+    def __unset_clear_area_cb(self, activity, snap_back):
+        self._clear_area_dy = 0
+        self.queue_resize()
+
+    def __size_allocate_cb(self, widget, allocation):
+        self.set_allocation(allocation)
+        allocation.y -= self._clear_area_dy
+        self.__vbox.size_allocate(allocation)
 
     def set_enable_fullscreen_mode(self, enable_fullscreen_mode):
         self._enable_fullscreen_mode = enable_fullscreen_mode
