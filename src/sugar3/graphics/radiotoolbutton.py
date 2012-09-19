@@ -36,7 +36,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     __gtype_name__ = 'SugarRadioToolButton'
 
-    def __init__(self, **kwargs):
+    def __init__(self, icon_name=None, **kwargs):
         self._accelerator = None
         self._tooltip = None
         self._xo_color = None
@@ -45,6 +45,9 @@ class RadioToolButton(Gtk.RadioToolButton):
         GObject.GObject.__init__(self, **kwargs)
 
         self._palette_invoker.attach_tool(self)
+
+        if icon_name:
+            self.set_icon_name(icon_name)
 
         self.connect('destroy', self.__destroy_cb)
 
@@ -115,21 +118,13 @@ class RadioToolButton(Gtk.RadioToolButton):
     accelerator = GObject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)
 
-    def set_named_icon(self, named_icon):
-        icon = Icon(icon_name=named_icon,
-                    xo_color=self._xo_color,
-                    icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+    def set_icon_name(self, icon_name):
+        icon = Icon(icon_name=icon_name,
+                    xo_color=self._xo_color)
         self.set_icon_widget(icon)
         icon.show()
 
-    def get_named_icon(self):
-        if self.props.icon_widget is not None:
-            return self.props.icon_widget.props.icon_name
-        else:
-            return None
-
-    named_icon = GObject.property(type=str, setter=set_named_icon,
-                                  getter=get_named_icon)
+    icon_name = GObject.property(type=str, setter=set_icon_name)
 
     def set_xo_color(self, xo_color):
         if self._xo_color != xo_color:

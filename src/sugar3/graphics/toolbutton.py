@@ -70,7 +70,7 @@ class ToolButton(Gtk.ToolButton):
         self._palette_invoker.attach_tool(self)
 
         if icon_name:
-            self.set_icon(icon_name)
+            self.set_icon_name(icon_name)
 
         self.get_child().connect('can-activate-accel',
                                  self.__button_can_activate_accel_cb)
@@ -114,12 +114,12 @@ class ToolButton(Gtk.ToolButton):
     accelerator = GObject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)
 
-    def set_icon(self, icon_name):
+    def set_icon_name(self, icon_name):
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
 
-    icon_name = GObject.property(type=str, setter=set_icon)
+    icon_name = GObject.property(type=str, setter=set_icon_name)
 
     def create_palette(self):
         return None

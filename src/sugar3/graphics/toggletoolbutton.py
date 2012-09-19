@@ -61,11 +61,13 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
     __gtype_name__ = 'SugarToggleToolButton'
 
-    def __init__(self, named_icon=None):
+    def __init__(self, icon_name=None):
         GObject.GObject.__init__(self)
 
         self._palette_invoker = ToolInvoker(self)
-        self.set_named_icon(named_icon)
+
+        if icon_name:
+            self.set_icon_name(icon_name)
 
         self.connect('destroy', self.__destroy_cb)
 
@@ -73,10 +75,12 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         if self._palette_invoker is not None:
             self._palette_invoker.detach()
 
-    def set_named_icon(self, named_icon):
-        icon = Icon(icon_name=named_icon)
+    def set_icon_name(self, icon_name):
+        icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
+
+    icon_name = GObject.property(type=str, setter=set_icon_name)
 
     def create_palette(self):
         return None
