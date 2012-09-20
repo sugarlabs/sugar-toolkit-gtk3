@@ -85,7 +85,14 @@ class RadioToolButton(Gtk.RadioToolButton):
         self.set_icon_widget(icon)
         icon.show()
 
-    icon_name = GObject.property(type=str, setter=set_icon_name)
+    def get_icon_name(self):
+        if self.props.icon_widget is not None:
+            return self.props.icon_widget.props.icon_name
+        else:
+            return None
+
+    icon_name = GObject.property(type=str, setter=set_icon_name,
+                                 getter=get_icon_name)
 
     def set_xo_color(self, xo_color):
         if self._xo_color != xo_color:
