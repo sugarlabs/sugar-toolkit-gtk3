@@ -62,6 +62,8 @@ class ActivityBundle(Bundle):
         self._tags = None
         self._activity_version = '0'
         self._installation_time = os.stat(path).st_mtime
+        self._summary = None
+        self._local_summary = None
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
@@ -74,6 +76,9 @@ class ActivityBundle(Bundle):
 
         if self._local_name == None:
             self._local_name = self._name
+
+        if self._local_summary == None:
+            self._local_summary = self._summary
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
@@ -126,6 +131,9 @@ class ActivityBundle(Bundle):
                     (self._path, version))
             self._activity_version = version
 
+        if cp.has_option(section, 'summary'):
+            self._summary = cp.get(section, 'summary')
+
     def _get_linfo_file(self):
         lang = locale.getdefaultlocale()[0]
         if not lang:
@@ -151,6 +159,9 @@ class ActivityBundle(Bundle):
 
         if cp.has_option(section, 'name'):
             self._local_name = cp.get(section, 'name')
+
+        if cp.has_option(section, 'summary'):
+            self._local_summary = cp.get(section, 'summary')
 
         if cp.has_option(section, 'tags'):
             tag_list = cp.get(section, 'tags').strip(';')
@@ -224,6 +235,10 @@ class ActivityBundle(Bundle):
     def get_tags(self):
         """Get the tags that describe the activity"""
         return self._tags
+
+    def get_summary(self):
+        """Get the summary that describe the activity"""
+        return self._local_summary
 
     def get_show_launcher(self):
         """Get whether there should be a visible launcher for the activity"""
