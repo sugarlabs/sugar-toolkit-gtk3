@@ -100,5 +100,5 @@ class RadioPalette(Palette):
             return
 
         parent.props.label = button.palette_label
-        parent.set_icon(button.props.icon_name)
+        parent.set_icon_name(button.props.icon_name)
         parent.selected_button = button
