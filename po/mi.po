@@ -7,64 +7,64 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-02-11 06:56+0200\n"
+"PO-Revision-Date: 2012-09-21 10:19+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: mi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
 #: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
-msgstr ""
+msgstr "%s Hohe"
 
 #: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
-msgstr ""
+msgstr "Penapena hapa"
 
 #: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "Penapena hapa: ka ngaro ngā huringa katoa"
 
 #: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
-msgstr ""
+msgstr "Kaua e tū"
 
 #: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
-msgstr ""
+msgstr "Tū tonu"
 
 #: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
-msgstr ""
+msgstr "Tū"
 
 #: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
-msgstr ""
+msgstr "Wete"
 
 #: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
-msgstr ""
+msgstr "Mahi Anō"
 
 #: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
-msgstr ""
+msgstr "Tārua"
 
 #: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
-msgstr ""
+msgstr "Whakapiri"
 
 #: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
-msgstr ""
+msgstr "Tūmataiti"
 
 #: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
-msgstr ""
+msgstr "Taku Takiwā"
 
 #: ../src/sugar3/activity/widgets.py:226
 msgid "Description"
@@ -72,36 +72,36 @@ msgstr "Whakaaturanga"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
-msgstr ""
+msgstr "Whakakore"
 
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479
 msgid "Ok"
-msgstr ""
+msgstr "Āe"
 
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
-msgstr ""
+msgstr "Haere Tonu"
 
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
-msgstr ""
+msgstr "Kōwhiri tae"
 
 #: ../src/sugar3/graphics/colorbutton.py:274
 msgid "Red"
-msgstr ""
+msgstr "Whero"
 
 #: ../src/sugar3/graphics/colorbutton.py:276
 msgid "Green"
-msgstr ""
+msgstr "Kākāriki"
 
 #: ../src/sugar3/graphics/colorbutton.py:278
 msgid "Blue"
-msgstr ""
+msgstr "Kikorangi"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
-msgstr ""
+msgstr " me "
 
 #: ../src/sugar3/util.py:218
 msgid ", "
@@ -110,98 +110,102 @@ msgstr ", "
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
 msgid "Seconds ago"
-msgstr ""
+msgstr "Ngā hēkona ki mua"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s ki mua"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
-#, python-format
+#, python-format, 
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d tau"
+msgstr[1] "%d ngā tau"
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d marama"
+msgstr[1] "%d ngā marama"
 
 #: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d wiki"
+msgstr[1] "%d ngā wiki"
 
 #: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d rā"
+msgstr[1] "%d ngā rā"
 
 #: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d haora"
+msgstr[1] "%d ngā haora"
 
 #: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d meneti"
+msgstr[1] "%d ngā mēneti"
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
-msgstr ""
+msgstr "Putua"
 
 #: ../src/sugar3/util.py:348
 #, python-format
+#, python-format,
 msgid "%d B"
-msgstr ""
+msgstr "%d B"
 
 #: ../src/sugar3/util.py:350
 #, python-format
+#, python-format,
 msgid "%d KB"
-msgstr ""
+msgstr "%d KB"
 
 #: ../src/sugar3/util.py:352
 #, python-format
+#, python-format,
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: ../src/sugar3/util.py:354
 #, python-format
+#, python-format,
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: ../src/sugar3/mime.py:43
 msgid "Text"
-msgstr ""
+msgstr "Kuputuhi"
 
 #: ../src/sugar3/mime.py:52
 msgid "Image"
-msgstr ""
+msgstr "Atahanga"
 
 #: ../src/sugar3/mime.py:58
 msgid "Audio"
-msgstr ""
+msgstr "Ororongo"
 
 #: ../src/sugar3/mime.py:66
 msgid "Video"
-msgstr ""
+msgstr "Ataata"
 
 #: ../src/sugar3/mime.py:72
 msgid "Link"
-msgstr ""
+msgstr "Hononga"
