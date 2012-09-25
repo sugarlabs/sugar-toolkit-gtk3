@@ -47,6 +47,8 @@ libsugarext_la_SOURCES =		\
 	gsm-xsmp.h			\
 	sugar-grid.c			\
 	sugar-grid.h			\
+	sugar-gesture-grabber.c		\
+	sugar-gesture-grabber.h		\
 	sugar-key-grabber.c		\
 	sugar-key-grabber.h		\
 	sugar-wm.c			\
