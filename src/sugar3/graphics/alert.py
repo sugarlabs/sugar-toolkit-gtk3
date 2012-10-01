@@ -369,8 +369,8 @@ class _TimeoutIcon(Gtk.Alignment):
         y = h * 0.5
         radius = w / 2
         context.arc(x, y, radius, 0, 2 * math.pi)
-        widget_style = self.get_style()
-        color = widget_style.bg[self.get_state()]
+        widget_style = self.get_style_context()
+        color = widget_style.get_background_color(self.get_state())
         context.set_source_rgb(color.red, color.green, color.blue)
         context.fill_preserve()
 
