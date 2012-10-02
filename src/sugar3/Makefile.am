@@ -108,12 +108,6 @@ sugar-marshal.h: sugar-marshal.list
 CLEANFILES = $(BUILT_SOURCES) _sugarbaseext.c
 EXTRA_DIST = sugar-marshal.list _sugarbaseext.override _sugarbaseext.defs
 
-noinst_PROGRAMS = test
-
-AM_CPPFLAGS = $(EXT_CFLAGS)
-test_DEPENDENCIES =
-test_LDADD = $(EXT_LIBS) ./libsugarext.la ./event-controller/libsugar-eventcontroller.la
-
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS = SugarExt-1.0.gir
 INTROSPECTION_SCANNER_ARGS = --identifier-prefix=Sugar --symbol-prefix=sugar \
@@ -121,6 +115,7 @@ INTROSPECTION_SCANNER_ARGS = --identifier-prefix=Sugar --symbol-prefix=sugar \
 	--identifier-prefix=Gsm --symbol-prefix=gsm \
 	--identifier-prefix=Acme --symbol-prefix=acme \
 	--include-uninstalled=$(top_builddir)/src/sugar3/event-controller/SugarGestures-1.0.gir
+INTROSPECTION_COMPILER_ARGS = --includedir=$(top_builddir)/src/sugar3/event-controller
 SugarExt_1_0_gir_LIBS = libsugarext.la $(top_builddir)/src/sugar3/event-controller/libsugar-eventcontroller.la
 SugarExt_1_0_gir_FILES = \
 	acme-volume.c \
