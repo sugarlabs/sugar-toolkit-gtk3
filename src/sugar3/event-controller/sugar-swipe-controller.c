@@ -46,6 +46,7 @@ struct _SugarSwipeControllerPriv
   GdkDevice *device;
   GdkEventSequence *sequence;
   GArray *event_data;
+  guint swiping : 1;
   guint swiped : 1;
 };
 
@@ -83,6 +84,7 @@ _sugar_swipe_controller_clear_events (SugarSwipeController *controller)
       priv->event_data->len > 0)
     g_array_remove_range (priv->event_data, 0, priv->event_data->len);
 
+  priv->swiping = FALSE;
   priv->swiped = FALSE;
 }
 
@@ -164,18 +166,18 @@ _sugar_swipe_controller_get_direction (SugarEventData      *from,
   return FALSE;
 }
 
-static void
-_sugar_swipe_controller_check_emit (SugarSwipeController *controller)
+static gboolean
+_sugar_swipe_controller_get_event_direction (SugarSwipeController *controller,
+                                             SugarSwipeDirection  *direction)
 {
   SugarSwipeControllerPriv *priv;
   SugarEventData *last, *check;
-  SugarSwipeDirection direction;
   gint i;
 
   priv = controller->_priv;
 
   if (!priv->event_data || priv->event_data->len == 0)
-    return;
+    return FALSE;
 
   last = &g_array_index (priv->event_data, SugarEventData,
                          priv->event_data->len - 1);
@@ -188,11 +190,20 @@ _sugar_swipe_controller_check_emit (SugarSwipeController *controller)
         break;
     }
 
-  if (_sugar_swipe_controller_get_direction (check, last, &direction))
+  return _sugar_swipe_controller_get_direction (check, last, direction);
+}
+
+static void
+_sugar_swipe_controller_check_emit (SugarSwipeController *controller)
+{
+  SugarSwipeControllerPriv *priv;
+  SugarSwipeDirection direction;
+
+  priv = controller->_priv;
+
+  if (_sugar_swipe_controller_get_event_direction (controller, &direction))
     {
       priv->swiped = TRUE;
-      g_signal_emit_by_name (G_OBJECT (controller), "began");
-      g_object_notify (G_OBJECT (controller), "state");
       g_signal_emit (controller, signals[SWIPE_ENDED], 0, direction);
       g_signal_emit_by_name (G_OBJECT (controller), "ended");
     }
@@ -204,6 +215,7 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
 {
   SugarSwipeControllerPriv *priv;
   SugarSwipeController *swipe;
+  SugarSwipeDirection direction;
   GdkEventSequence *sequence;
   gboolean handled = TRUE;
   GdkDevice *device;
@@ -242,6 +254,13 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
       break;
     case GDK_TOUCH_UPDATE:
       _sugar_swipe_controller_store_event (swipe, event);
+
+      if (_sugar_swipe_controller_get_event_direction (swipe, &direction))
+        {
+          priv->swiping = TRUE;
+          g_signal_emit_by_name (G_OBJECT (controller), "began");
+          g_object_notify (G_OBJECT (controller), "state");
+        }
       break;
     default:
       handled = FALSE;
@@ -260,7 +279,7 @@ sugar_swipe_controller_get_state (SugarEventController *controller)
 
   if (priv->device)
     {
-      if (priv->swiped)
+      if (priv->swiped || priv->swiping)
         return SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED;
       else if (priv->event_data->len > 0)
         return SUGAR_EVENT_CONTROLLER_STATE_COLLECTING;
