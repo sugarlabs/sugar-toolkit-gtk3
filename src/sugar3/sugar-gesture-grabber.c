@@ -256,6 +256,7 @@ filter_function (GdkXEvent *xevent,
         SugarGestureGrabber *grabber;
         SugarGestureGrabberPriv *priv;
         gboolean handled = FALSE;
+        Window event_window;
         GdkDevice *device;
         XIDeviceEvent *ev;
         GdkDisplay *display;
@@ -284,6 +285,9 @@ filter_function (GdkXEvent *xevent,
         default:
                 return GDK_FILTER_CONTINUE;
         }
+
+        if (ev->event != gdk_x11_window_get_xid (priv->root_window))
+                return GDK_FILTER_CONTINUE;
 
         event->touch.window = g_object_ref (priv->root_window);
         event->touch.time = ev->time;
