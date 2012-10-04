@@ -34,6 +34,11 @@ enum {
   PROP_TRIGGER_DELAY
 };
 
+enum {
+  PRESSED,
+  N_SIGNALS
+};
+
 struct _SugarLongPressControllerPriv
 {
   GdkDevice *device;
@@ -51,6 +56,8 @@ struct _SugarLongPressControllerPriv
   guint cancelled : 1;
   guint triggered : 1;
 };
+
+static guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE (SugarLongPressController,
                sugar_long_press_controller,
@@ -321,6 +328,8 @@ _sugar_long_press_controller_timeout (gpointer user_data)
   priv->triggered = TRUE;
   g_signal_emit_by_name (controller, "began");
 
+  g_signal_emit (controller, signals[PRESSED], 0, priv->x, priv->y);
+
   return FALSE;
 }
 
@@ -462,6 +471,15 @@ sugar_long_press_controller_class_init (SugarLongPressControllerClass *klass)
                                                       G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK |
                                                       G_PARAM_STATIC_BLURB));
+  signals[PRESSED] =
+    g_signal_new ("pressed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (SugarLongPressControllerClass, pressed),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_INT, G_TYPE_INT);
 
   g_type_class_add_private (klass, sizeof (SugarLongPressControllerPriv));
 }
