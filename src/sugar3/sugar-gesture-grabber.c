@@ -76,13 +76,15 @@ _sugar_gesture_grabber_notify_touch (SugarGestureGrabber *grabber,
 		if (data->consumed)
 			continue;
 
+		gdk_error_trap_push ();
 		XIAllowTouchEvents (gdk_x11_display_get_xdisplay (display),
 				    gdk_x11_device_get_id (data->device),
 				    GPOINTER_TO_INT (data->sequence),
 				    gdk_x11_window_get_xid (priv->root_window),
 				    (handled) ? XIAcceptTouch : XIRejectTouch);
 
-                data->consumed = TRUE;
+		gdk_error_trap_pop_ignored ();
+		data->consumed = TRUE;
 	}
 }
 
@@ -307,10 +309,12 @@ filter_function (GdkXEvent *xevent,
         handled = _sugar_gesture_grabber_run_controllers (grabber, event);
 
         if (!handled) {
+                gdk_error_trap_push ();
                 XIAllowTouchEvents (gdk_x11_display_get_xdisplay (display),
                                     ev->deviceid, ev->detail,
                                     gdk_x11_window_get_xid (priv->root_window),
                                     XIRejectTouch);
+                gdk_error_trap_pop_ignored ();
         } else if (event->type == GDK_TOUCH_BEGIN) {
                 _sugar_gesture_grabber_add_touch (grabber,
                                                   event->touch.device,
