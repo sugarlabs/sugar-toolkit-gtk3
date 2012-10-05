@@ -48,6 +48,13 @@ typedef enum {
   SUGAR_SWIPE_DIRECTION_DOWN
 } SugarSwipeDirection;
 
+typedef enum {
+  SUGAR_SWIPE_DIRECTION_FLAG_LEFT  = 1 << SUGAR_SWIPE_DIRECTION_LEFT,
+  SUGAR_SWIPE_DIRECTION_FLAG_RIGHT = 1 << SUGAR_SWIPE_DIRECTION_RIGHT,
+  SUGAR_SWIPE_DIRECTION_FLAG_UP    = 1 << SUGAR_SWIPE_DIRECTION_UP,
+  SUGAR_SWIPE_DIRECTION_FLAG_DOWN  = 1 << SUGAR_SWIPE_DIRECTION_DOWN,
+} SugarSwipeDirectionFlags;
+
 struct _SugarSwipeController
 {
   SugarEventController parent_instance;
@@ -63,7 +70,7 @@ struct _SugarSwipeControllerClass
 };
 
 GType                  sugar_swipe_controller_get_type (void) G_GNUC_CONST;
-SugarEventController * sugar_swipe_controller_new      (void);
+SugarEventController * sugar_swipe_controller_new      (SugarSwipeDirectionFlags directions);
 
 G_END_DECLS
 

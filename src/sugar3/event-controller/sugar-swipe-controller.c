@@ -30,6 +30,10 @@ typedef struct _SugarSwipeControllerPriv SugarSwipeControllerPriv;
 typedef struct _SugarEventData SugarEventData;
 
 enum {
+  PROP_DIRECTIONS = 1
+};
+
+enum {
   SWIPE_ENDED,
   LAST_SIGNAL
 };
@@ -48,6 +52,7 @@ struct _SugarSwipeControllerPriv
   GArray *event_data;
   guint swiping : 1;
   guint swiped : 1;
+  guint directions : 4;
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -65,6 +70,42 @@ sugar_swipe_controller_init (SugarSwipeController *controller)
                                                           SUGAR_TYPE_SWIPE_CONTROLLER,
                                                           SugarSwipeControllerPriv);
   priv->event_data = g_array_new (FALSE, FALSE, sizeof (SugarEventData));
+}
+
+static void
+sugar_swipe_controller_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  SugarSwipeControllerPriv *priv = SUGAR_SWIPE_CONTROLLER (object)->_priv;
+
+  switch (prop_id)
+    {
+    case PROP_DIRECTIONS:
+      g_value_set_flags (value, priv->directions);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+sugar_swipe_controller_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  SugarSwipeControllerPriv *priv = SUGAR_SWIPE_CONTROLLER (object)->_priv;
+
+  switch (prop_id)
+    {
+    case PROP_DIRECTIONS:
+      priv->directions = g_value_get_flags (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -172,6 +213,7 @@ _sugar_swipe_controller_get_event_direction (SugarSwipeController *controller,
 {
   SugarSwipeControllerPriv *priv;
   SugarEventData *last, *check;
+  SugarSwipeDirection dir;
   gint i;
 
   priv = controller->_priv;
@@ -190,7 +232,17 @@ _sugar_swipe_controller_get_event_direction (SugarSwipeController *controller,
         break;
     }
 
-  return _sugar_swipe_controller_get_direction (check, last, direction);
+  if (!_sugar_swipe_controller_get_direction (check, last, &dir))
+    return FALSE;
+
+  /* Check whether the direction is allowed */
+  if ((priv->directions & (1 << dir)) == 0)
+    return FALSE;
+
+  if (direction)
+    *direction = dir;
+
+  return TRUE;
 }
 
 static void
@@ -201,12 +253,16 @@ _sugar_swipe_controller_check_emit (SugarSwipeController *controller)
 
   priv = controller->_priv;
 
+  if (!priv->swiping)
+    return;
+
   if (_sugar_swipe_controller_get_event_direction (controller, &direction))
     {
       priv->swiped = TRUE;
       g_signal_emit (controller, signals[SWIPE_ENDED], 0, direction);
-      g_signal_emit_by_name (G_OBJECT (controller), "ended");
     }
+
+  g_signal_emit_by_name (G_OBJECT (controller), "ended");
 }
 
 static gboolean
@@ -314,6 +370,8 @@ sugar_swipe_controller_class_init (SugarSwipeControllerClass *klass)
   GObjectClass *object_class;
 
   object_class = G_OBJECT_CLASS (klass);
+  object_class->get_property = sugar_swipe_controller_get_property;
+  object_class->set_property = sugar_swipe_controller_set_property;
   object_class->finalize = sugar_swipe_controller_finalize;
 
   controller_class = SUGAR_EVENT_CONTROLLER_CLASS (klass);
@@ -321,6 +379,15 @@ sugar_swipe_controller_class_init (SugarSwipeControllerClass *klass)
   controller_class->get_state = sugar_swipe_controller_get_state;
   controller_class->reset = sugar_swipe_controller_reset;
 
+  g_object_class_install_property (object_class,
+                                   PROP_DIRECTIONS,
+                                   g_param_spec_flags ("directions",
+                                                       "Directions",
+                                                       "Allowed swipe directions",
+                                                       SUGAR_TYPE_SWIPE_DIRECTION_FLAGS, 0,
+                                                       G_PARAM_READABLE |
+                                                       G_PARAM_WRITABLE |
+                                                       G_PARAM_CONSTRUCT_ONLY));
   signals[SWIPE_ENDED] =
     g_signal_new ("swipe-ended",
                   SUGAR_TYPE_SWIPE_CONTROLLER,
@@ -335,7 +402,9 @@ sugar_swipe_controller_class_init (SugarSwipeControllerClass *klass)
 }
 
 SugarEventController *
-sugar_swipe_controller_new (void)
+sugar_swipe_controller_new (SugarSwipeDirectionFlags directions)
 {
-  return g_object_new (SUGAR_TYPE_SWIPE_CONTROLLER, NULL);
+  return g_object_new (SUGAR_TYPE_SWIPE_CONTROLLER,
+                       "directions", directions,
+                       NULL);
 }
