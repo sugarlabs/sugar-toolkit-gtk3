@@ -121,7 +121,8 @@ msgstr "%s ki mua"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
-#, python-format, 
+#, python-format
+#, python-format,
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d tau"
