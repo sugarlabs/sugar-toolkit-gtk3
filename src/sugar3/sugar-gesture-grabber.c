@@ -258,7 +258,6 @@ filter_function (GdkXEvent *xevent,
         SugarGestureGrabber *grabber;
         SugarGestureGrabberPriv *priv;
         gboolean handled = FALSE;
-        Window event_window;
         GdkDevice *device;
         XIDeviceEvent *ev;
         GdkDisplay *display;
