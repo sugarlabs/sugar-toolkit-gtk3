@@ -258,7 +258,6 @@ filter_function (GdkXEvent *xevent,
         SugarGestureGrabber *grabber;
         SugarGestureGrabberPriv *priv;
         gboolean handled = FALSE;
-        Window event_window;
         GdkDevice *device;
         XIDeviceEvent *ev;
         GdkDisplay *display;
@@ -366,6 +365,32 @@ sugar_gesture_grabber_new (void)
 	return g_object_new (SUGAR_TYPE_GESTURE_GRABBER, NULL);
 }
 
+static ControllerData *
+_sugar_gesture_grabber_find_controller (SugarGestureGrabber  *grabber,
+					SugarEventController *controller,
+					gint		     *pos)
+{
+	SugarGestureGrabberPriv *priv;
+	guint i;
+
+	priv = grabber->_priv;
+
+	for (i = 0; i < priv->controllers->len; i++) {
+		ControllerData *data;
+
+		data = &g_array_index (priv->controllers, ControllerData, i);
+
+		if (data->controller == controller) {
+			if (pos)
+				*pos = i;
+
+			return data;
+		}
+	}
+
+	return NULL;
+}
+
 void
 sugar_gesture_grabber_add (SugarGestureGrabber  *grabber,
 			   SugarEventController *controller,
@@ -377,9 +402,36 @@ sugar_gesture_grabber_add (SugarGestureGrabber  *grabber,
 	g_return_if_fail (SUGAR_IS_GESTURE_GRABBER (grabber));
 	g_return_if_fail (SUGAR_IS_EVENT_CONTROLLER (controller));
 
+	if (_sugar_gesture_grabber_find_controller (grabber, controller, NULL)) {
+		g_warning ("Controller is already on the gesture grabber"
+			   " list. Controllers can only be added once.");
+		return;
+	}
+
 	priv = grabber->_priv;
 
 	data.controller = g_object_ref (controller);
 	data.rect = *rect;
 	g_array_append_val (priv->controllers, data);
+}
+
+void
+sugar_gesture_grabber_remove (SugarGestureGrabber  *grabber,
+			      SugarEventController *controller)
+{
+	SugarGestureGrabberPriv *priv;
+	ControllerData *data;
+	gint pos;
+
+	g_return_if_fail (SUGAR_IS_GESTURE_GRABBER (grabber));
+	g_return_if_fail (SUGAR_IS_EVENT_CONTROLLER (controller));
+
+	priv = grabber->_priv;
+	data = _sugar_gesture_grabber_find_controller (grabber, controller, &pos);
+
+	if (data) {
+		g_array_remove_index_fast (priv->controllers, pos);
+		sugar_event_controller_reset (data->controller);
+		g_object_unref (data->controller);
+	}
 }

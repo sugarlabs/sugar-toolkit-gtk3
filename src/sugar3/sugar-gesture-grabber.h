@@ -51,6 +51,8 @@ SugarGestureGrabber * sugar_gesture_grabber_new      (void);
 void                  sugar_gesture_grabber_add      (SugarGestureGrabber  *grabber,
 						      SugarEventController *controller,
 						      const GdkRectangle   *rect);
+void		      sugar_gesture_grabber_remove   (SugarGestureGrabber  *grabber,
+						      SugarEventController *controller);
 
 G_END_DECLS
 
