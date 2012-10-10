@@ -19,11 +19,11 @@ toolbar_box = ToolbarBox()
 vbox.pack_start(toolbar_box, False, False, 0)
 toolbar_box.show()
 
-radial_button = RadioToolButton(named_icon='view-radial')
+radial_button = RadioToolButton(icon_name='view-radial')
 toolbar_box.toolbar.insert(radial_button, -1)
 radial_button.show()
 
-list_button = RadioToolButton(named_icon='view-list')
+list_button = RadioToolButton(icon_name='view-list')
 list_button.props.group = radial_button
 toolbar_box.toolbar.insert(list_button, -1)
 list_button.show()
