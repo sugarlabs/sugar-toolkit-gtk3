@@ -679,6 +679,71 @@ class EventIcon(Gtk.EventBox):
         self.set_palette(Palette(text))
 
 
+class CanvasIcon(EventIcon):
+    """
+    An EventIcon with active and prelight states, and a styleable
+    background.
+
+    If the icon pops up a palette, the prelight state is set until the
+    palette pops down.
+
+    """
+
+    __gtype_name__ = 'SugarCanvasIcon'
+
+    def __init__(self, **kwargs):
+        EventIcon.__init__(self, **kwargs)
+
+        self._in_prelight_state = False
+
+        self.connect('enter-notify-event', self.__enter_notify_event_cb)
+        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+        self.connect('button-press-event', self.__button_press_event_cb)
+        self.connect('button-release-event', self.__button_release_event_cb)
+
+    def connect_to_palette_pop_events(self, palette):
+        palette.connect('popup', self.__palette_popup_cb)
+        palette.connect('popdown', self.__palette_popdown_cb)
+
+    def do_draw(self, cr):
+        """Render a background that fits the allocated space."""
+        allocation = self.get_allocation()
+        context = self.get_style_context()
+        Gtk.render_background(context, cr, 0, 0,
+                              allocation.width,
+                              allocation.height)
+
+        EventIcon.do_draw(self, cr)
+
+    def __enter_notify_event_cb(self, icon, event):
+        self._in_prelight_state = True
+        if self.get_state() != Gtk.StateFlags.ACTIVE:
+            self.set_state(Gtk.StateFlags.PRELIGHT)
+
+    def __leave_notify_event_cb(self, icon, event):
+        if self.palette.is_up():
+            return
+
+        self._in_prelight_state = False
+        if self.get_state() != Gtk.StateFlags.ACTIVE:
+            self.set_state(False)
+
+    def __button_press_event_cb(self, icon, event):
+        self.set_state(Gtk.StateFlags.ACTIVE)
+
+    def __button_release_event_cb(self, icon, event):
+        if self._in_prelight_state:
+            self.set_state(Gtk.StateFlags.PRELIGHT)
+        else:
+            self.set_state(False)
+
+    def __palette_popup_cb(self, palette):
+        self.set_state(Gtk.StateFlags.PRELIGHT)
+
+    def __palette_popdown_cb(self, palette):
+        self.set_state(False)
+
+
 class CellRendererIcon(Gtk.CellRenderer):
 
     __gtype_name__ = 'SugarCellRendererIcon'
