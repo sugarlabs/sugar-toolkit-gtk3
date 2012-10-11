@@ -47,6 +47,8 @@ libsugarext_la_SOURCES =		\
 	gsm-xsmp.h			\
 	sugar-grid.c			\
 	sugar-grid.h			\
+	sugar-cursor-tracker.c		\
+	sugar-cursor-tracker.h		\
 	sugar-gesture-grabber.c		\
 	sugar-gesture-grabber.h		\
 	sugar-key-grabber.c		\
@@ -128,6 +130,8 @@ SugarExt_1_0_gir_FILES = \
 	gsm-session.h \
 	gsm-xsmp.c \
 	gsm-xsmp.h \
+	sugar-cursor-tracker.c \
+	sugar-cursor-tracker.h \
 	sugar-gesture-grabber.c \
 	sugar-gesture-grabber.h \
 	sugar-key-grabber.c \
