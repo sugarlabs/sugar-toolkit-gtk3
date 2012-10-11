@@ -129,8 +129,14 @@ sugar_touch_controller_handle_event (SugarEventController *controller,
       break;
     case GDK_TOUCH_UPDATE:
       point = g_hash_table_lookup (priv->touches, sequence);
-      point->x = event->touch.x;
-      point->y = event->touch.y;
+
+      if (point)
+        {
+          point->x = event->touch.x;
+          point->y = event->touch.y;
+        }
+      else
+        handled = FALSE;
       break;
     default:
       handled = FALSE;
