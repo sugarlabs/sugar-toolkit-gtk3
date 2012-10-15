@@ -694,8 +694,6 @@ class CanvasIcon(EventIcon):
     def __init__(self, **kwargs):
         EventIcon.__init__(self, **kwargs)
 
-        self._in_prelight_state = False
-
         self.connect('enter-notify-event', self.__enter_notify_event_cb)
         self.connect('leave-notify-event', self.__leave_notify_event_cb)
         self.connect('button-press-event', self.__button_press_event_cb)
@@ -716,32 +714,27 @@ class CanvasIcon(EventIcon):
         EventIcon.do_draw(self, cr)
 
     def __enter_notify_event_cb(self, icon, event):
-        self._in_prelight_state = True
-        if self.get_state() != Gtk.StateFlags.ACTIVE:
-            self.set_state(Gtk.StateFlags.PRELIGHT)
+        self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.PRELIGHT,
+                             clear=True)
 
     def __leave_notify_event_cb(self, icon, event):
         if self.palette and self.palette.is_up():
             return
 
-        self._in_prelight_state = False
-        if self.get_state() != Gtk.StateFlags.ACTIVE:
-            self.set_state(False)
+        self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
 
     def __button_press_event_cb(self, icon, event):
-        self.set_state(Gtk.StateFlags.ACTIVE)
+        self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.ACTIVE,
+                             clear=True)
 
     def __button_release_event_cb(self, icon, event):
-        if self._in_prelight_state:
-            self.set_state(Gtk.StateFlags.PRELIGHT)
-        else:
-            self.set_state(False)
+        self.unset_state_flags(Gtk.StateFlags.ACTIVE)
 
     def __palette_popup_cb(self, palette):
-        self.set_state(Gtk.StateFlags.PRELIGHT)
+        self.set_state_flags(Gtk.StateFlags.PRELIGHT, clear=True)
 
     def __palette_popdown_cb(self, palette):
-        self.set_state(False)
+        self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
 
 
 class CellRendererIcon(Gtk.CellRenderer):
