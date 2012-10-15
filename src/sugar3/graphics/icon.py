@@ -721,7 +721,7 @@ class CanvasIcon(EventIcon):
             self.set_state(Gtk.StateFlags.PRELIGHT)
 
     def __leave_notify_event_cb(self, icon, event):
-        if self.palette.is_up():
+        if self.palette and self.palette.is_up():
             return
 
         self._in_prelight_state = False
