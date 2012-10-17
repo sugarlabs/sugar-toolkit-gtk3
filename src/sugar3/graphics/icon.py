@@ -760,7 +760,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._prelit_stroke_color = None
         self._palette_invoker = CellRendererInvoker()
 
-        GObject.GObject.__init__(self)
+        Gtk.CellRenderer.__init__(self)
 
         self._palette_invoker.attach_cell_renderer(tree_view, self)
 
@@ -882,6 +882,23 @@ class CellRendererIcon(Gtk.CellRenderer):
         return False
 
     def do_render(self, cr, widget, background_area, cell_area, flags):
+        context = widget.get_style_context()
+        context.save()
+        context.add_class("sugar-icon-cell")
+
+        # The context will have prelight state if the mouse pointer is
+        # in the entire row, but we want that state if the pointer is
+        # in this cell only:
+        if flags & Gtk.CellRendererState.PRELIT:
+            if not self._is_prelit(widget):
+                context.set_state(Gtk.StateFlags.NORMAL)
+
+        Gtk.render_background(context, cr, background_area.x, background_area.y,
+                              background_area.width, background_area.height)
+
+        Gtk.render_frame(context, cr, background_area.x, background_area.y,
+                         background_area.width, background_area.height)
+
         if self._xo_color is not None:
             stroke_color = self._xo_color.get_stroke_color()
             fill_color = self._xo_color.get_fill_color()
