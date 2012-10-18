@@ -264,7 +264,7 @@ sugar_touch_controller_get_center (SugarTouchController *controller,
       x1 = MIN (x1, point->x);
       y1 = MIN (y1, point->y);
       x2 = MAX (x2, point->x);
-      y2 = MAX (y2, point->x);
+      y2 = MAX (y2, point->y);
     }
 
   if (center_x)
