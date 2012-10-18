@@ -758,14 +758,27 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._stroke_color = None
         self._prelit_fill_color = None
         self._prelit_stroke_color = None
+        self._active_state = False
         self._palette_invoker = CellRendererInvoker()
 
         Gtk.CellRenderer.__init__(self)
+
+        tree_view.connect('button-press-event',
+                          self.__button_press_event_cb)
+        tree_view.connect('button-release-event',
+                          self.__button_release_event_cb)
 
         self._palette_invoker.attach_cell_renderer(tree_view, self)
 
     def __del__(self):
         self._palette_invoker.detach()
+
+    def __button_press_event_cb(self, widget, event):
+        if self._point_in_cell_renderer(widget, event.x, event.y):
+            self._active_state = True
+
+    def __button_release_event_cb(self, widget, event):
+        self._active_state = False
 
     def create_palette(self):
         return None
@@ -863,14 +876,21 @@ class CellRendererIcon(Gtk.CellRenderer):
                          flags):
         pass
 
-    def _is_prelit(self, tree_view):
-        x, y = tree_view.get_pointer()
-        x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
-        pos = tree_view.get_path_at_pos(x, y)
+    def _point_in_cell_renderer(self, tree_view, x=None, y=None):
+        """Check if the point with coordinates x, y is inside this icon.
+
+        If the x, y coordinates are not given, they are taken from the
+        pointer current position.
+
+        """
+        if x is None and y is None:
+            x, y = tree_view.get_pointer()
+            x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
+        pos = tree_view.get_path_at_pos(int(x), int(y))
         if pos is None:
             return False
 
-        path_, column, x, y = pos
+        path_, column, x, y_ = pos
 
         for cell_renderer in column.get_cells():
             if cell_renderer == self:
@@ -886,12 +906,18 @@ class CellRendererIcon(Gtk.CellRenderer):
         context.save()
         context.add_class("sugar-icon-cell")
 
+        pointer_inside = self._point_in_cell_renderer(widget)
+
         # The context will have prelight state if the mouse pointer is
         # in the entire row, but we want that state if the pointer is
         # in this cell only:
         if flags & Gtk.CellRendererState.PRELIT:
-            if not self._is_prelit(widget):
+            if pointer_inside:
+                if self._active_state:
+                    context.set_state(Gtk.StateFlags.ACTIVE)
+            else:
                 context.set_state(Gtk.StateFlags.NORMAL)
+
 
         Gtk.render_background(context, cr, background_area.x, background_area.y,
                               background_area.width, background_area.height)
@@ -914,7 +940,7 @@ class CellRendererIcon(Gtk.CellRenderer):
                                          prelit_stroke_color]
 
         if flags & Gtk.CellRendererState.PRELIT and has_prelit_colors and \
-                self._is_prelit(widget):
+                pointer_inside:
 
             self._buffer.fill_color = prelit_fill_color
             self._buffer.stroke_color = prelit_stroke_color
