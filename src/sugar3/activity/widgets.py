@@ -60,6 +60,8 @@ class ActivityButton(ToolButton):
         self.set_icon_widget(icon)
         icon.show()
 
+        self.props.hide_tooltip_on_click = False
+        self.palette_invoker.props.toggle_palette = True
         self.props.tooltip = activity.metadata['title']
         activity.metadata.connect('updated', self.__jobject_updated_cb)
 
