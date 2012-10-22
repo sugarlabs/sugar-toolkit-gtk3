@@ -510,6 +510,8 @@ class PaletteWindow(GObject.GObject):
                 'mouse-leave', self._invoker_mouse_leave_cb))
             self._invoker_hids.append(self._invoker.connect(
                 'right-click', self._invoker_right_click_cb))
+            self._invoker_hids.append(self._invoker.connect(
+                'toggle-state', self._invoker_toggle_state_cb))
 
     def get_invoker(self):
         return self._invoker
@@ -626,7 +628,13 @@ class PaletteWindow(GObject.GObject):
         self.on_invoker_leave()
 
     def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True)
+        self.popup(immediate=True, state=1)
+
+    def _invoker_toggle_state_cb(self, invoker):
+        if self.is_up():
+            self.popdown(immediate=True)
+        else:
+            self.popup(immediate=True, state=1)
 
     def __enter_notify_cb(self, widget):
         self.on_enter()
@@ -706,6 +714,7 @@ class Invoker(GObject.GObject):
         'mouse-enter': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'mouse-leave': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'right-click': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'toggle-state': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'focus-out': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
@@ -731,6 +740,7 @@ class Invoker(GObject.GObject):
         self._cursor_y = -1
         self._palette = None
         self._cache_palette = True
+        self._toggle_palette = False
 
     def attach(self, parent):
         self.parent = parent
@@ -917,6 +927,10 @@ class Invoker(GObject.GObject):
         self._ensure_palette_exists()
         self.emit('right-click')
 
+    def notify_toggle_state(self):
+        self._ensure_palette_exists()
+        self.emit('toggle-state')
+
     def get_palette(self):
         return self._palette
 
@@ -951,6 +965,18 @@ class Invoker(GObject.GObject):
                                      getter=get_cache_palette)
     """Whether the invoker will cache the palette after its creation. Defaults
     to True.
+    """
+
+    def get_toggle_palette(self):
+        return self._toggle_palette
+
+    def set_toggle_palette(self, toggle_palette):
+        self._toggle_palette = toggle_palette
+
+    toggle_palette = GObject.property(type=object, setter=set_toggle_palette,
+                                      getter=get_toggle_palette)
+    """Whether the invoker will popup/popdown the Palette on
+    button left click/touch tap. Defaults to False.
     """
 
     def __palette_popdown_cb(self, palette):
@@ -1040,7 +1066,10 @@ class WidgetInvoker(Invoker):
             self.notify_mouse_leave()
 
     def __button_release_event_cb(self, widget, event):
-        if event.button == 3:
+        if event.button == 1:
+            if self.props.toggle_palette:
+                self.notify_toggle_state()
+        elif event.button == 3:
             self.notify_right_click()
             return True
         else:
@@ -1115,6 +1144,9 @@ class CursorInvoker(Invoker):
         return False
 
     def __button_release_event_cb(self, button, event):
+        if event.button == 1:
+            if self.props.toggle_palette:
+                self.notify_toggle_state()
         if event.button == 3:
             self.notify_right_click()
             return True

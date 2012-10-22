@@ -67,6 +67,7 @@ class ToolButton(Gtk.ToolButton):
 
         GObject.GObject.__init__(self, **kwargs)
 
+        self._hide_tooltip_on_click = True
         self._palette_invoker.attach_tool(self)
 
         if icon_name:
@@ -103,6 +104,17 @@ class ToolButton(Gtk.ToolButton):
 
     tooltip = GObject.property(type=str, setter=set_tooltip,
         getter=get_tooltip)
+
+    def get_hide_tooltip_on_click(self):
+        return self._hide_tooltip_on_click
+
+    def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
+        if self._hide_tooltip_on_click != hide_tooltip_on_click:
+            self._hide_tooltip_on_click = hide_tooltip_on_click
+
+    hide_tooltip_on_click = GObject.property(
+        type=bool, default=True, getter=get_hide_tooltip_on_click,
+        setter=set_hide_tooltip_on_click)
 
     def set_accelerator(self, accelerator):
         self._accelerator = accelerator
@@ -168,5 +180,5 @@ class ToolButton(Gtk.ToolButton):
         return False
 
     def do_clicked(self):
-        if self.palette:
+        if self._hide_tooltip_on_click and self.palette:
             self.palette.popdown(True)
