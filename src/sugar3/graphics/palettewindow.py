@@ -439,6 +439,9 @@ class PaletteWindow(GObject.GObject):
     Provides basic management of child widget, invoker, and animation.
     """
 
+    PRIMARY = 0
+    SECONDARY = 1
+
     __gsignals__ = {
         'popup': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'popdown': (GObject.SignalFlags.RUN_FIRST, None, ([])),
@@ -628,13 +631,13 @@ class PaletteWindow(GObject.GObject):
         self.on_invoker_leave()
 
     def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True, state=1)
+        self.popup(immediate=True, state=self.SECONDARY)
 
     def _invoker_toggle_state_cb(self, invoker):
         if self.is_up():
             self.popdown(immediate=True)
         else:
-            self.popup(immediate=True, state=1)
+            self.popup(immediate=True, state=self.SECONDARY)
 
     def __enter_notify_cb(self, widget):
         self.on_enter()

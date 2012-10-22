@@ -90,9 +90,6 @@ class Palette(PaletteWindow):
     display such information.
     """
 
-    PRIMARY = 0
-    SECONDARY = 1
-
     __gsignals__ = {
         'activate': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
