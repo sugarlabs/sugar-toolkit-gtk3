@@ -112,9 +112,12 @@ class Window(Gtk.Window):
         self.__vbox.pack_start(self.__hbox, True, True, 0)
         self.__hbox.show()
 
-        self.add_events(Gdk.EventMask.POINTER_MOTION_HINT_MASK
-                        | Gdk.EventMask.POINTER_MOTION_MASK)
+        self.add_events(Gdk.EventMask.POINTER_MOTION_HINT_MASK |
+                        Gdk.EventMask.POINTER_MOTION_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK |
+                        Gdk.EventMask.TOUCH_MASK)
         self.connect('motion-notify-event', self.__motion_notify_cb)
+        self.connect('button-release-event', self.__button_press_event_cb)
 
         self.add(self.__vbox)
         self.__vbox.show()
@@ -264,21 +267,28 @@ class Window(Gtk.Window):
     def __unfullscreen_button_clicked(self, button):
         self.unfullscreen()
 
+    def __button_press_event_cb(self, widget, event):
+        self._show_unfullscreen_button()
+        return False
+
     def __motion_notify_cb(self, widget, event):
+        self._show_unfullscreen_button()
+        return False
+
+    def _show_unfullscreen_button(self):
         if self._is_fullscreen and self.props.enable_fullscreen_mode:
             if not self._unfullscreen_button.props.visible:
                 self._unfullscreen_button.show()
-            else:
-                # Reset the timer
-                if self._unfullscreen_button_timeout_id is not None:
-                    GObject.source_remove(self._unfullscreen_button_timeout_id)
-                    self._unfullscreen_button_timeout_id = None
 
-                self._unfullscreen_button_timeout_id = \
-                    GObject.timeout_add_seconds( \
-                        _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
-                        self.__unfullscreen_button_timeout_cb)
-        return False
+            # Reset the timer
+            if self._unfullscreen_button_timeout_id is not None:
+                GObject.source_remove(self._unfullscreen_button_timeout_id)
+                self._unfullscreen_button_timeout_id = None
+
+            self._unfullscreen_button_timeout_id = \
+                GObject.timeout_add_seconds( \
+                    _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
+                    self.__unfullscreen_button_timeout_cb)
 
     def __unfullscreen_button_timeout_cb(self):
         self._unfullscreen_button.hide()
