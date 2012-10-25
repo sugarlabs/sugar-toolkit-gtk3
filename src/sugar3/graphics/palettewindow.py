@@ -29,6 +29,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GObject
 
+from gi.repository import SugarGestures
 from sugar3.graphics import palettegroup
 from sugar3.graphics import animator
 from sugar3.graphics import style
@@ -1062,7 +1063,8 @@ class WidgetInvoker(Invoker):
                                  gap[0], gap[1], gap[1] + gap[2])
 
     def __enter_notify_event_cb(self, widget, event):
-        self.notify_mouse_enter()
+        if event.mode == Gdk.CrossingMode.NORMAL:
+            self.notify_mouse_enter()
 
     def __leave_notify_event_cb(self, widget, event):
         if event.mode == Gdk.CrossingMode.NORMAL:
@@ -1104,6 +1106,9 @@ class CursorInvoker(Invoker):
         self._leave_hid = None
         self._release_hid = None
         self._item = None
+        self._long_pressed_recognized = False
+        self._long_pressed_hid = None
+        self._long_pressed_controller = SugarGestures.LongPressController()
 
         if parent:
             self.attach(parent)
@@ -1118,12 +1123,18 @@ class CursorInvoker(Invoker):
                                              self.__leave_notify_event_cb)
         self._release_hid = self._item.connect('button-release-event',
                                                self.__button_release_event_cb)
+        self._long_pressed_hid = self._long_pressed_controller.connect('pressed', \
+                self.__long_pressed_event_cb, self._item)
+        self._long_pressed_controller.attach(self._item, \
+                SugarGestures.EventControllerFlags.NONE)
 
     def detach(self):
         Invoker.detach(self)
         self._item.disconnect(self._enter_hid)
         self._item.disconnect(self._leave_hid)
         self._item.disconnect(self._release_hid)
+        self._long_pressed_controller.detach(self._item)
+        self._long_pressed_controller.disconnect(self._long_pressed_hid)
 
     def get_default_position(self):
         return self.AT_CURSOR
@@ -1138,7 +1149,8 @@ class CursorInvoker(Invoker):
         return rect
 
     def __enter_notify_event_cb(self, button, event):
-        self.notify_mouse_enter()
+        if event.mode == Gdk.CrossingMode.NORMAL:
+            self.notify_mouse_enter()
         return False
 
     def __leave_notify_event_cb(self, button, event):
@@ -1147,6 +1159,9 @@ class CursorInvoker(Invoker):
         return False
 
     def __button_release_event_cb(self, button, event):
+        if self._long_pressed_recognized:
+            self._long_pressed_recognized = False
+            return True
         if event.button == 1:
             if self.props.toggle_palette:
                 self.notify_toggle_state()
@@ -1155,6 +1170,10 @@ class CursorInvoker(Invoker):
             return True
         else:
             return False
+
+    def __long_pressed_event_cb(self, controller, x, y, widget):
+        self._long_pressed_recognized = True
+        self.notify_right_click()
 
     def get_toplevel(self):
         return self._item.get_toplevel()
