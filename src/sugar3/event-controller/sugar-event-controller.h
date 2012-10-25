@@ -80,6 +80,8 @@ gboolean  sugar_event_controller_handle_event (SugarEventController *controller,
 gboolean  sugar_event_controller_attach       (SugarEventController      *controller,
 					       GtkWidget                 *widget,
                                                SugarEventControllerFlags  flags);
+gboolean  sugar_event_controller_detach       (SugarEventController      *controller,
+					       GtkWidget                 *widget);
 gboolean  sugar_event_controller_reset        (SugarEventController *controller);
 
 SugarEventControllerState
