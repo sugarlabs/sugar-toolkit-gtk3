@@ -491,6 +491,9 @@ class EventIcon(Gtk.EventBox):
         Gtk.EventBox.__init__(self)
         self.set_visible_window(False)
         self.set_above_child(True)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
+                        Gdk.EventMask.TOUCH_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK)
         for key, value in kwargs.iteritems():
             self.set_property(key, value)
 
