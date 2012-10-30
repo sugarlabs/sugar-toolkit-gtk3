@@ -205,11 +205,16 @@ class _PaletteMenuWidget(Gtk.Menu):
         return False
 
     def _motion_notify_cb(self, widget, event):
-        rect = self._invoker.get_rect()
         x = event.x_root
         y = event.y_root
-        in_invoker = x >= rect.x and x < (rect.x + rect.width) \
-            and y >= rect.y and y < (rect.y + rect.height)
+
+        if type(self._invoker) is CellRendererInvoker:
+            in_invoker = self._invoker.point_in_cell_renderer(x, y)
+        else:
+            rect = self._invoker.get_rect()
+            in_invoker = x >= rect.x and x < (rect.x + rect.width) \
+                and y >= rect.y and y < (rect.y + rect.height)
+
         if in_invoker != self._mouse_in_invoker:
             self._mouse_in_invoker = in_invoker
             self._reevaluate_state()
@@ -1256,7 +1261,7 @@ class CellRendererInvoker(Invoker):
     def __motion_notify_event_cb(self, widget, event):
         if event.window != widget.get_bin_window():
             return
-        if self._point_in_cell_renderer(event.x, event.y):
+        if self.point_in_cell_renderer(event.x, event.y):
 
             tree_view = self._tree_view
             path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
@@ -1295,7 +1300,7 @@ class CellRendererInvoker(Invoker):
         return False
 
     def __button_release_event_cb(self, widget, event):
-        if event.button == 1 and self._point_in_cell_renderer(event.x,
+        if event.button == 1 and self.point_in_cell_renderer(event.x,
             event.y):
             tree_view = self._tree_view
             path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
@@ -1303,14 +1308,14 @@ class CellRendererInvoker(Invoker):
             self._cell_renderer.emit('clicked', path)
             # So the treeview receives it and knows a drag isn't going on
             return False
-        if event.button == 3 and self._point_in_cell_renderer(event.x,
+        if event.button == 3 and self.point_in_cell_renderer(event.x,
             event.y):
             self.notify_right_click()
             return True
         else:
             return False
 
-    def _point_in_cell_renderer(self, event_x, event_y):
+    def point_in_cell_renderer(self, event_x, event_y):
         pos = self._tree_view.get_path_at_pos(int(event_x), int(event_y))
         if pos is None:
             return False
