@@ -21,6 +21,7 @@ STABLE.
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from sugar3.graphics import style
 from sugar3.graphics.palette import ToolInvoker
@@ -409,6 +410,9 @@ class _IconWidget(Gtk.EventBox):
         GObject.GObject.__init__(self)
 
         self.set_app_paintable(True)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
+                        Gdk.EventMask.TOUCH_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK)
 
         self._icon = Icon(icon_name=icon_name, xo_color=xo_color,
                           icon_size=Gtk.IconSize.LARGE_TOOLBAR)
