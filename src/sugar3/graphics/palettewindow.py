@@ -1002,6 +1002,11 @@ class WidgetInvoker(Invoker):
         self._enter_hid = None
         self._leave_hid = None
         self._release_hid = None
+        self._click_hid = None
+        self._touch_hid = None
+        self._long_pressed_recognized = False
+        self._long_pressed_hid = None
+        self._long_pressed_controller = SugarGestures.LongPressController()
 
         if parent or widget:
             self.attach_widget(parent, widget)
@@ -1018,9 +1023,18 @@ class WidgetInvoker(Invoker):
             self.__enter_notify_event_cb)
         self._leave_hid = self._widget.connect('leave-notify-event',
             self.__leave_notify_event_cb)
+        if GObject.signal_lookup('clicked', self._widget) != 0:
+            self._click_hid = self._widget.connect('clicked',
+                self.__click_event_cb)
+        self._touch_hid = self._widget.connect('touch-event',
+            self.__touch_event_cb)
         self._release_hid = self._widget.connect('button-release-event',
             self.__button_release_event_cb)
 
+        self._long_pressed_hid = self._long_pressed_controller.connect(
+            'pressed', self.__long_pressed_event_cb, self._widget)
+        self._long_pressed_controller.attach(self._widget,
+            SugarGestures.EventControllerFlags.NONE)
         self.attach(parent)
 
     def detach(self):
@@ -1028,6 +1042,11 @@ class WidgetInvoker(Invoker):
         self._widget.disconnect(self._enter_hid)
         self._widget.disconnect(self._leave_hid)
         self._widget.disconnect(self._release_hid)
+        if self._click_hid:
+            self._widget.disconnect(self._click_hid)
+        self._widget.disconnect(self._touch_hid)
+        self._long_pressed_controller.detach(self._widget)
+        self._long_pressed_controller.disconnect(self._long_pressed_hid)
 
     def get_rect(self):
         allocation = self._widget.get_allocation()
@@ -1075,8 +1094,19 @@ class WidgetInvoker(Invoker):
         if event.mode == Gdk.CrossingMode.NORMAL:
             self.notify_mouse_leave()
 
+    def __touch_event_cb(self, button, event):
+        if event.type == Gdk.EventType.TOUCH_END:
+            if self._long_pressed_recognized:
+                self._long_pressed_recognized = False
+                return True
+        return False
+
+    def __click_event_cb(self, button):
+        if self.props.toggle_palette:
+            self.notify_toggle_state()
+
     def __button_release_event_cb(self, widget, event):
-        if event.button == 1:
+        if event.button == 1 and not self._click_hid:
             if self.props.toggle_palette:
                 self.notify_toggle_state()
         elif event.button == 3:
@@ -1084,6 +1114,10 @@ class WidgetInvoker(Invoker):
             return True
         else:
             return False
+
+    def __long_pressed_event_cb(self, controller, x, y, widget):
+        self._long_pressed_recognized = True
+        self.notify_right_click()
 
     def get_toplevel(self):
         return self._widget.get_toplevel()
