@@ -152,6 +152,7 @@ class _PaletteMenuWidget(Gtk.Menu):
                 menu.connect('motion-notify-event', self._motion_notify_cb)
             menu.connect('enter-notify-event', self._enter_notify_cb)
             menu.connect('leave-notify-event', self._leave_notify_cb)
+            menu.connect('button-release-event', self._button_release_event_cb)
         self._entered = False
         self._mouse_in_palette = False
         self._mouse_in_invoker = False
@@ -187,6 +188,9 @@ class _PaletteMenuWidget(Gtk.Menu):
     def _enter_notify_cb(self, widget, event):
         if event.mode in (Gdk.CrossingMode.GRAB, Gdk.CrossingMode.GTK_GRAB):
             return False
+        if event.get_source_device().get_source() == \
+                Gdk.InputSource.TOUCHSCREEN:
+            return False
         if Gtk.get_event_widget(event) not in self._menus:
             return False
 
@@ -197,6 +201,9 @@ class _PaletteMenuWidget(Gtk.Menu):
     def _leave_notify_cb(self, widget, event):
         if event.mode in (Gdk.CrossingMode.GRAB, Gdk.CrossingMode.GTK_GRAB):
             return False
+        if event.get_source_device().get_source() == \
+                Gdk.InputSource.TOUCHSCREEN:
+            return False
         if Gtk.get_event_widget(event) not in self._menus:
             return False
 
@@ -205,6 +212,9 @@ class _PaletteMenuWidget(Gtk.Menu):
         return False
 
     def _motion_notify_cb(self, widget, event):
+        if event.get_source_device().get_source() == \
+                Gdk.InputSource.TOUCHSCREEN:
+            return False
         x = event.x_root
         y = event.y_root
 
@@ -218,6 +228,20 @@ class _PaletteMenuWidget(Gtk.Menu):
         if in_invoker != self._mouse_in_invoker:
             self._mouse_in_invoker = in_invoker
             self._reevaluate_state()
+
+    def _button_release_event_cb(self, widget, event):
+        x = event.x_root
+        y = event.y_root
+
+        if type(self._invoker) is CellRendererInvoker:
+            in_invoker = self._invoker.point_in_cell_renderer(x, y)
+        else:
+            rect = self._invoker.get_rect()
+            in_invoker = x >= rect.x and x < (rect.x + rect.width) \
+                and y >= rect.y and y < (rect.y + rect.height)
+
+        if in_invoker:
+            return True
 
     def _reevaluate_state(self):
         if self._entered:
@@ -1251,7 +1275,10 @@ class CellRendererInvoker(Invoker):
         self._motion_hid = None
         self._leave_hid = None
         self._release_hid = None
+        self._long_pressed_hid = None
         self.path = None
+
+        self._long_pressed_controller = SugarGestures.LongPressController()
 
     def attach_cell_renderer(self, tree_view, cell_renderer):
         self._tree_view = tree_view
@@ -1263,7 +1290,10 @@ class CellRendererInvoker(Invoker):
                                             self.__leave_notify_event_cb)
         self._release_hid = tree_view.connect('button-release-event',
                                               self.__button_release_event_cb)
-
+        self._long_pressed_hid = self._long_pressed_controller.connect( \
+                'pressed', self.__long_pressed_event_cb, tree_view)
+        self._long_pressed_controller.attach(tree_view,
+                SugarGestures.EventControllerFlags.NONE)
         Invoker.attach(self, cell_renderer)
 
     def detach(self):
@@ -1271,6 +1301,8 @@ class CellRendererInvoker(Invoker):
         self._tree_view.disconnect(self._motion_hid)
         self._tree_view.disconnect(self._leave_hid)
         self._tree_view.disconnect(self._release_hid)
+        self._long_pressed_controller.detach(self._tree_view)
+        self._long_pressed_controller.disconnect(self._long_pressed_hid)
 
     def get_rect(self):
         allocation = self._tree_view.get_allocation()
@@ -1310,11 +1342,18 @@ class CellRendererInvoker(Invoker):
                     self.palette = None
                 self.path = path
 
+            if event.get_source_device().get_source() == \
+                    Gdk.InputSource.TOUCHSCREEN:
+                return False
             self.notify_mouse_enter()
         else:
             if self.path is not None:
                 self._redraw_path(self.path)
             self.path = None
+
+            if event.get_source_device().get_source() == \
+                    Gdk.InputSource.TOUCHSCREEN:
+                return False
             self.notify_mouse_leave()
 
     def _redraw_path(self, path):
@@ -1348,6 +1387,11 @@ class CellRendererInvoker(Invoker):
             return True
         else:
             return False
+
+    def __long_pressed_event_cb(self, controller, x, y, widget):
+        if self.point_in_cell_renderer(x, y):
+            controller.reset()
+            self.notify_right_click()
 
     def point_in_cell_renderer(self, event_x, event_y):
         pos = self._tree_view.get_path_at_pos(int(event_x), int(event_y))
