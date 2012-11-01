@@ -230,8 +230,8 @@ class Palette(PaletteWindow):
     def _add_content(self):
         # The content is not shown until a widget is added
         self._content = Gtk.VBox()
-        self._content.set_border_width(style.DEFAULT_SPACING)
-        self._secondary_box.pack_start(self._content, True, True, 0)
+        self._secondary_box.pack_start(self._content, True, True,
+                                       style.DEFAULT_SPACING)
 
     def _update_accel_widget(self):
         assert self.props.invoker is not None

@@ -23,13 +23,51 @@ from sugar3.graphics.icon import Icon
 from sugar3.graphics import style
 
 
-class PaletteMenuItemSeparator(Gtk.HSeparator):
-    """A HSeparator that can be styled in the theme"""
+class PaletteMenuBox(Gtk.VBox):
+    def __init__(self):
+        Gtk.VBox.__init__(self)
+
+    def append_item(self, item_or_widget, horizontal_padding=None,
+                    vertical_padding=None):
+        item = None
+        if (isinstance(item_or_widget, PaletteMenuItem) or
+            isinstance(item_or_widget, PaletteMenuItemSeparator)):
+            item = item_or_widget
+        else:
+            item = self._wrap_widget(item_or_widget, horizontal_padding,
+                                     vertical_padding)
+
+        self.pack_start(item, False, False, 0)
+
+    def _wrap_widget(self, widget, horizontal_padding, vertical_padding):
+        vbox = Gtk.VBox()
+        vbox.show()
+
+        if horizontal_padding is None:
+            horizontal_padding = style.DEFAULT_SPACING
+
+        if vertical_padding is None:
+            vertical_padding = style.DEFAULT_SPACING
+
+        hbox = Gtk.HBox()
+        vbox.pack_start(hbox, True, True, vertical_padding)
+        hbox.show()
+
+        hbox.pack_start(widget, True, True, horizontal_padding)
+        return vbox
+
+
+class PaletteMenuItemSeparator(Gtk.EventBox):
+    """Contains a HSeparator and has the proper height for the menu."""
 
     __gtype_name__ = 'SugarPaletteMenuItemSeparator'
 
     def __init__(self):
-        Gtk.HSeparator.__init__(self)
+        Gtk.EventBox.__init__(self)
+        separator = Gtk.HSeparator()
+        self.add(separator)
+        separator.show()
+        self.set_size_request(-1, style.DEFAULT_SPACING * 2)
 
 
 class PaletteMenuItem(Gtk.EventBox):
@@ -42,13 +80,23 @@ class PaletteMenuItem(Gtk.EventBox):
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
                  xo_color=None, file_name=None):
+
         Gtk.EventBox.__init__(self)
         self.set_above_child(True)
+
         self.icon = None
+        self._hbox = Gtk.HBox()
 
         vbox = Gtk.VBox()
-        vbox.set_border_width(style.DEFAULT_PADDING)
-        self._hbox = Gtk.HBox()
+        self.add(vbox)
+        vbox.show()
+
+        hbox = Gtk.HBox()
+        vbox.pack_start(hbox, True, True, style.DEFAULT_PADDING)
+        hbox.show()
+
+        hbox.pack_start(self._hbox, True, True, style.DEFAULT_PADDING)
+
         if icon_name is not None:
             self.icon = Icon(icon_name=icon_name,
                         icon_size=Gtk.IconSize.SMALL_TOOLBAR)
@@ -69,9 +117,6 @@ class PaletteMenuItem(Gtk.EventBox):
         align.add(self.label)
         self._hbox.pack_start(align, expand=True, fill=True,
                         padding=style.DEFAULT_PADDING)
-        vbox.pack_start(self._hbox, expand=False, fill=False,
-                        padding=style.DEFAULT_PADDING)
-        self.add(vbox)
 
         self.id_bt_release_cb = self.connect('button-release-event',
                 self.__button_release_cb)

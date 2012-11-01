@@ -12,7 +12,7 @@ sugar_PYTHON =              \
 	objectchooser.py        \
 	palettegroup.py         \
 	palette.py              \
-	palettemenuitem.py	\
+	palettemenu.py          \
 	palettewindow.py        \
 	panel.py                \
 	radiopalette.py         \

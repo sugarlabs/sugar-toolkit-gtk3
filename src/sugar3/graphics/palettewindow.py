@@ -306,7 +306,7 @@ class _PaletteWindowWidget(Gtk.Window):
         if self._palette is not None:
             label_width = self._palette.get_label_width()
         size = max(natural, label_width + 2 * self.get_border_width(),
-                   style.GRID_CELL_SIZE * 2)
+                   style.GRID_CELL_SIZE * 3)
         return size, size
 
     def do_size_allocate(self, allocation):
