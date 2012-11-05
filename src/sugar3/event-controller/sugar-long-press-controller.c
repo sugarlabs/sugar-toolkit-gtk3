@@ -22,7 +22,7 @@
 #include "sugar-long-press-controller.h"
 
 #define DEFAULT_THRESHOLD     32
-#define DEFAULT_TRIGGER_DELAY 800
+#define DEFAULT_TRIGGER_DELAY 600
 
 typedef struct _SugarLongPressControllerPriv SugarLongPressControllerPriv;
 
