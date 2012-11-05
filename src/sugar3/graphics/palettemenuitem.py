@@ -43,7 +43,6 @@ class PaletteMenuItem(Gtk.EventBox):
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
                  xo_color=None, file_name=None):
         Gtk.EventBox.__init__(self)
-        self._sensitive = True
         self.set_above_child(True)
         self.icon = None
 
@@ -105,17 +104,20 @@ class PaletteMenuItem(Gtk.EventBox):
         self._hbox.reorder_child(icon, 0)
 
     def set_sensitive(self, sensitive):
-        if self._sensitive == sensitive:
+        is_sensitive = bool(not self.get_state_flags() & \
+                                Gtk.StateFlags.INSENSITIVE)
+        if is_sensitive == sensitive:
             return
 
-        self._sensitive = sensitive
         if sensitive:
             self.handler_unblock(self.id_bt_release_cb)
             self.handler_unblock(self.id_enter_notify_cb)
             self.handler_unblock(self.id_leave_notify_cb)
+            self.unset_state_flags(Gtk.StateFlags.INSENSITIVE)
         else:
             self.handler_block(self.id_bt_release_cb)
             self.handler_block(self.id_enter_notify_cb)
             self.handler_block(self.id_leave_notify_cb)
-            self.modify_bg(Gtk.StateType.NORMAL,
-                           style.COLOR_BLACK.get_gdk_color())
+            self.set_state_flags(self.get_state_flags() | \
+                                     Gtk.StateFlags.INSENSITIVE,
+                                 clear=True)
