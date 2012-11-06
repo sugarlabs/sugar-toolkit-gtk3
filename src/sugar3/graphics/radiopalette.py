@@ -27,6 +27,9 @@ class RadioMenuButton(ToolButton):
         ToolButton.__init__(self, **kwargs)
         self.selected_button = None
 
+        self.palette_invoker.props.toggle_palette = True
+        self.props.hide_tooltip_on_click = False
+
         if self.props.palette:
             self.__palette_cb(None, None)
 
@@ -36,15 +39,6 @@ class RadioMenuButton(ToolButton):
         if not isinstance(self.props.palette, RadioPalette):
             return
         self.props.palette.update_button()
-
-    def do_clicked(self):
-        if self.palette is None:
-            return
-        if self.palette.is_up() and \
-                self.palette.palette_state == Palette.SECONDARY:
-            self.palette.popdown(immediate=True)
-        else:
-            self.palette.popup(immediate=True, state=Palette.SECONDARY)
 
 
 class RadioToolsButton(RadioMenuButton):

@@ -226,6 +226,8 @@ class DescriptionItem(Gtk.ToolItem):
         description_button = ToolButton('edit-description')
         description_button.show()
         description_button.set_tooltip(_('Description'))
+        description_button.palette_invoker.props.toggle_palette = True
+        description_button.props.hide_tooltip_on_click = False
         self._palette = description_button.get_palette()
 
         description_box = Gtk.HBox()
@@ -249,8 +251,6 @@ class DescriptionItem(Gtk.ToolItem):
         description_box.show_all()
 
         self.add(description_button)
-        description_button.connect('clicked',
-                                   self.__description_button_clicked_cb)
 
         activity.metadata.connect('updated', self.__jobject_updated_cb)
 
@@ -269,9 +269,6 @@ class DescriptionItem(Gtk.ToolItem):
             return
         buf = self._text_view.get_buffer()
         buf.set_text(jobject['description'])
-
-    def __description_button_clicked_cb(self, button):
-        self._palette.popup(immediate=True, state=1)
 
     def __description_changed_cb(self, widget, event, activity):
         description = self._get_text_from_buffer()
