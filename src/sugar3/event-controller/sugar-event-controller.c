@@ -203,16 +203,21 @@ _sugar_event_controller_widget_event (GtkWidget            *widget,
           data->current_exclusive != item->controller)
         continue;
 
-      if (!sugar_event_controller_handle_event (item->controller, event))
-        continue;
+      if (event->type == GDK_GRAB_BROKEN && !event->grab_broken.keyboard)
+        sugar_event_controller_reset (item->controller);
+      else
+        {
+          if (!sugar_event_controller_handle_event (item->controller, event))
+            continue;
 
-      state = sugar_event_controller_get_state (item->controller);
+          state = sugar_event_controller_get_state (item->controller);
 
-      /* Consider events handled once the
-       * controller recognizes the action
-       */
-      if (state == SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED)
-        handled = TRUE;
+          /* Consider events handled once the
+           * controller recognizes the action
+           */
+          if (state == SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED)
+            handled = TRUE;
+        }
     }
 
   return handled;
