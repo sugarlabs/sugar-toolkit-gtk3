@@ -32,6 +32,7 @@ from sugar3.graphics.xocolor import XoColor
 from sugar3.graphics.icon import Icon
 from sugar3.bundle.activitybundle import ActivityBundle
 from sugar3.graphics import style
+from sugar3.graphics.palettemenu import PaletteMenuBox
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -230,7 +231,7 @@ class DescriptionItem(Gtk.ToolItem):
         description_button.props.hide_tooltip_on_click = False
         self._palette = description_button.get_palette()
 
-        description_box = Gtk.HBox()
+        description_box = PaletteMenuBox()
         sw = Gtk.ScrolledWindow()
         sw.set_size_request(int(Gdk.Screen.width() / 2),
                             2 * style.GRID_CELL_SIZE)
@@ -246,7 +247,7 @@ class DescriptionItem(Gtk.ToolItem):
         self._text_view.connect('focus-out-event',
                                self.__description_changed_cb, activity)
         sw.add(self._text_view)
-        description_box.pack_start(sw, False, True, 0)
+        description_box.append_item(sw, vertical_padding=0)
         self._palette.set_content(description_box)
         description_box.show_all()
 
