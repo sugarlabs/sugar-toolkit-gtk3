@@ -1391,7 +1391,6 @@ class CellRendererInvoker(Invoker):
     def __long_pressed_event_cb(self, controller, x, y, widget):
         if self.point_in_cell_renderer(x, y):
             self.notify_right_click()
-        controller.reset()
 
     def point_in_cell_renderer(self, event_x, event_y):
         pos = self._tree_view.get_path_at_pos(int(event_x), int(event_y))
