@@ -46,6 +46,13 @@ button = Gtk.Button('Button')
 vbox.pack_start(button, False, False, 1)
 button.show()
 
+# test Gtk.Button insensitive:
+
+insensitive_button = Gtk.Button('Insensitive Button')
+vbox.pack_start(insensitive_button, False, False, 1)
+insensitive_button.props.sensitive = False
+insensitive_button.show()
+
 # test Gtk.ToggleButton:
 
 toggle_button = Gtk.ToggleButton('ToggleButton')
