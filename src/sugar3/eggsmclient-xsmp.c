@@ -26,6 +26,7 @@
 #endif
 
 #include "eggsmclient.h"
+#include "eggsmclient-xsmp.h"
 #include "eggsmclient-private.h"
 
 #include "eggdesktopfile.h"
@@ -39,35 +40,6 @@
 
 #include <gdk/gdk.h>
 
-#define EGG_TYPE_SM_CLIENT_XSMP            (egg_sm_client_xsmp_get_type ())
-#define EGG_SM_CLIENT_XSMP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EGG_TYPE_SM_CLIENT_XSMP, EggSMClientXSMP))
-#define EGG_SM_CLIENT_XSMP_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EGG_TYPE_SM_CLIENT_XSMP, EggSMClientXSMPClass))
-#define EGG_IS_SM_CLIENT_XSMP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EGG_TYPE_SM_CLIENT_XSMP))
-#define EGG_IS_SM_CLIENT_XSMP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EGG_TYPE_SM_CLIENT_XSMP))
-#define EGG_SM_CLIENT_XSMP_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_TYPE_SM_CLIENT_XSMP, EggSMClientXSMPClass))
-
-typedef struct _EggSMClientXSMP        EggSMClientXSMP;
-typedef struct _EggSMClientXSMPClass   EggSMClientXSMPClass;
-
-/* These mostly correspond to the similarly-named states in section
- * 9.1 of the XSMP spec. Some of the states there aren't represented
- * here, because we don't need them. SHUTDOWN_CANCELLED is slightly
- * different from the spec; we use it when the client is IDLE after a
- * ShutdownCancelled message, but the application is still interacting
- * and doesn't know the shutdown has been cancelled yet.
- */
-typedef enum
-{
-  XSMP_STATE_START,
-  XSMP_STATE_IDLE,
-  XSMP_STATE_SAVE_YOURSELF,
-  XSMP_STATE_INTERACT_REQUEST,
-  XSMP_STATE_INTERACT,
-  XSMP_STATE_SAVE_YOURSELF_DONE,
-  XSMP_STATE_SHUTDOWN_CANCELLED,
-  XSMP_STATE_CONNECTION_CLOSED,
-} EggSMClientXSMPState;
-
 static const char *state_names[] = {
   "start",
   "idle",
@@ -80,40 +52,6 @@ static const char *state_names[] = {
 };
 
 #define EGG_SM_CLIENT_XSMP_STATE(xsmp) (state_names[(xsmp)->state])
-
-struct _EggSMClientXSMP
-{
-  EggSMClient parent;
-
-  SmcConn connection;
-  char *client_id;
-
-  EggSMClientXSMPState state;
-  char **restart_command;
-  gboolean set_restart_command;
-  int restart_style;
-
-  guint idle;
-
-  /* Current SaveYourself state */
-  guint expecting_initial_save_yourself : 1;
-  guint need_save_state : 1;
-  guint need_quit_requested : 1;
-  guint interact_errors : 1;
-  guint shutting_down : 1;
-
-  /* Todo list */
-  guint waiting_to_emit_quit : 1;
-  guint waiting_to_emit_quit_cancelled : 1;
-  guint waiting_to_save_myself : 1;
-
-};
-
-struct _EggSMClientXSMPClass
-{
-  EggSMClientClass parent_class;
-
-};
 
 static void     sm_client_xsmp_startup (EggSMClient *client,
 					const char  *client_id);

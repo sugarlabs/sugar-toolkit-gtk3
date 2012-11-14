@@ -24,10 +24,8 @@ import os
 from gi.repository import SugarExt
 
 
-class XSMPClient(SugarExt.Client):
-
-    def __init__(self):
-        SugarExt.Client.__init__(self)
+class XSMPClient(SugarExt.ClientXSMP):
+    pass
 
 
 class SessionManager(object):
