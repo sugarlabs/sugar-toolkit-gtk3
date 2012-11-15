@@ -219,17 +219,15 @@ class TitleEntry(Gtk.ToolItem):
             shared_activity.props.name = title
 
 
-class DescriptionItem(Gtk.ToolItem):
+class DescriptionItem(ToolButton):
 
     def __init__(self, activity, **kwargs):
-        Gtk.ToolItem.__init__(self)
-
-        description_button = ToolButton('edit-description')
-        description_button.show()
-        description_button.set_tooltip(_('Description'))
-        description_button.palette_invoker.props.toggle_palette = True
-        description_button.props.hide_tooltip_on_click = False
-        self._palette = description_button.get_palette()
+        ToolButton.__init__(self, 'edit-description', **kwargs)
+        self.set_tooltip(_('Description'))
+        self.palette_invoker.props.toggle_palette = True
+        self.palette_invoker.props.lock_palette = True
+        self.props.hide_tooltip_on_click = False
+        self._palette = self.get_palette()
 
         description_box = PaletteMenuBox()
         sw = Gtk.ScrolledWindow()
@@ -251,9 +249,30 @@ class DescriptionItem(Gtk.ToolItem):
         self._palette.set_content(description_box)
         description_box.show_all()
 
-        self.add(description_button)
-
         activity.metadata.connect('updated', self.__jobject_updated_cb)
+
+    def set_expanded(self, expanded):
+        box = self.toolbar_box
+        if not box:
+            return
+
+        if not expanded:
+            self.palette_invoker.notify_popdown()
+            return
+
+        if box.expanded_button is not None:
+            box.expanded_button.queue_draw()
+            if box.expanded_button != self:
+                box.expanded_button.set_expanded(False)
+        box.expanded_button = self
+
+    def get_toolbar_box(self):
+        parent = self.get_parent()
+        if not hasattr(parent, 'owner'):
+            return None
+        return parent.owner
+
+    toolbar_box = property(get_toolbar_box)
 
     def _get_text_from_buffer(self):
         buf = self._text_view.get_buffer()

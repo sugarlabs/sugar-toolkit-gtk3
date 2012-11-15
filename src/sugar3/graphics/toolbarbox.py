@@ -89,6 +89,7 @@ class ToolbarButton(ToolButton):
 
     def set_expanded(self, expanded):
         self.popdown()
+        palettegroup.popdown_all()
 
         if self.page is None or self.is_expanded() == expanded:
             return

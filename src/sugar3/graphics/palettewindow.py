@@ -24,6 +24,7 @@ STABLE.
 """
 
 import logging
+import math
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -655,25 +656,29 @@ class PaletteWindow(GObject.GObject):
         self.popdown()
 
     def _invoker_mouse_enter_cb(self, invoker):
-        self.on_invoker_enter()
+        if not self._invoker.locked:
+            self.on_invoker_enter()
 
     def _invoker_mouse_leave_cb(self, invoker):
-        self.on_invoker_leave()
+        if not self._invoker.locked:
+            self.on_invoker_leave()
 
     def _invoker_right_click_cb(self, invoker):
         self.popup(immediate=True, state=self.SECONDARY)
 
     def _invoker_toggle_state_cb(self, invoker):
-        if self.is_up():
+        if self.is_up() and self._palette_state == self.SECONDARY:
             self.popdown(immediate=True)
         else:
             self.popup(immediate=True, state=self.SECONDARY)
 
     def __enter_notify_cb(self, widget):
-        self.on_enter()
+        if not self._invoker.locked:
+            self.on_enter()
 
     def __leave_notify_cb(self, widget):
-        self.on_leave()
+        if not self._invoker.locked:
+            self.on_leave()
 
     def __show_cb(self, widget):
         if self._invoker is not None:
@@ -774,6 +779,8 @@ class Invoker(GObject.GObject):
         self._palette = None
         self._cache_palette = True
         self._toggle_palette = False
+        self._lock_palette = False
+        self.locked = False
 
     def attach(self, parent):
         self.parent = parent
@@ -1012,6 +1019,18 @@ class Invoker(GObject.GObject):
     button left click/touch tap. Defaults to False.
     """
 
+    def get_lock_palette(self):
+        return self._lock_palette
+
+    def set_lock_palette(self, lock_palette):
+        self._lock_palette = lock_palette
+
+    lock_palette = GObject.property(type=object, setter=set_lock_palette,
+                                      getter=get_lock_palette)
+    """Whether the invoker will lock the Palette and
+    ignore mouse events. Defaults to False.
+    """
+
     def __palette_popdown_cb(self, palette):
         if not self.props.cache_palette:
             self.set_palette(None)
@@ -1023,11 +1042,13 @@ class WidgetInvoker(Invoker):
         Invoker.__init__(self)
 
         self._widget = None
+        self._expanded = False
         self._enter_hid = None
         self._leave_hid = None
         self._release_hid = None
         self._click_hid = None
         self._touch_hid = None
+        self._draw_hid = None
         self._long_pressed_recognized = False
         self._long_pressed_hid = None
         self._long_pressed_controller = SugarGestures.LongPressController()
@@ -1054,11 +1075,13 @@ class WidgetInvoker(Invoker):
             self.__touch_event_cb)
         self._release_hid = self._widget.connect('button-release-event',
             self.__button_release_event_cb)
+        self._draw_hid = self._widget.connect_after('draw', self.__drawing_cb)
 
         self._long_pressed_hid = self._long_pressed_controller.connect(
             'pressed', self.__long_pressed_event_cb, self._widget)
         self._long_pressed_controller.attach(self._widget,
             SugarGestures.EventControllerFlags.NONE)
+
         self.attach(parent)
 
     def detach(self):
@@ -1066,6 +1089,7 @@ class WidgetInvoker(Invoker):
         self._widget.disconnect(self._enter_hid)
         self._widget.disconnect(self._leave_hid)
         self._widget.disconnect(self._release_hid)
+        self._widget.disconnect(self._draw_hid)
         if self._click_hid:
             self._widget.disconnect(self._click_hid)
         self._widget.disconnect(self._touch_hid)
@@ -1126,6 +1150,11 @@ class WidgetInvoker(Invoker):
         return False
 
     def __click_event_cb(self, button):
+        if self.props.lock_palette:
+            if not self.locked:
+                self.locked = True
+                self.parent.set_expanded(True)
+
         if self.props.toggle_palette:
             self.notify_toggle_state()
 
@@ -1151,12 +1180,27 @@ class WidgetInvoker(Invoker):
         self._widget.queue_draw()
 
     def notify_popdown(self):
+        self.locked = False
         Invoker.notify_popdown(self)
         self._widget.queue_draw()
 
     def _get_widget(self):
         return self._widget
     widget = GObject.property(type=object, getter=_get_widget, setter=None)
+
+    def __drawing_cb(self, widget, cr):
+        if not self.props.lock_palette:
+            return False
+        alloc = widget.get_allocation()
+        arrow_size = style.TOOLBAR_ARROW_SIZE / 2
+        y = alloc.height - arrow_size
+        x = (alloc.width - arrow_size) / 2
+        context = widget.get_style_context()
+        context.add_class('toolitem')
+        if self.locked:
+            Gtk.render_arrow(context, cr, 0, x, y, arrow_size)
+        else:
+            Gtk.render_arrow(context, cr, math.pi, x, y, arrow_size)
 
 
 class CursorInvoker(Invoker):
