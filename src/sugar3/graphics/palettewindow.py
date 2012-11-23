@@ -1150,9 +1150,9 @@ class WidgetInvoker(Invoker):
         return False
 
     def __click_event_cb(self, button):
-        if self.props.lock_palette:
-            if not self.locked:
-                self.locked = True
+        if self.props.lock_palette and not self.locked:
+            self.locked = True
+            if hasattr(self.parent, 'set_expanded'):
                 self.parent.set_expanded(True)
 
         if self.props.toggle_palette:
@@ -1160,6 +1160,11 @@ class WidgetInvoker(Invoker):
 
     def __button_release_event_cb(self, widget, event):
         if event.button == 1 and not self._click_hid:
+            if self.props.lock_palette and not self.locked:
+                self.locked = True
+                if hasattr(self.parent, 'set_expanded'):
+                    self.parent.set_expanded(True)
+
             if self.props.toggle_palette:
                 self.notify_toggle_state()
         elif event.button == 3:
