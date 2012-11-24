@@ -37,7 +37,7 @@ msgstr "Nezaustavljaj se"
 
 #: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
-msgstr ""
+msgstr "Ipak se zaustavi"
 
 #: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
@@ -78,7 +78,7 @@ msgstr "Poništi"
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479
 msgid "Ok"
-msgstr ""
+msgstr "Uredu"
 
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
@@ -111,7 +111,7 @@ msgstr ", "
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
 msgid "Seconds ago"
-msgstr ""
+msgstr "Prije par sekundi"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
@@ -157,9 +157,9 @@ msgstr[2] ""
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d sat"
+msgstr[1] "%d sata"
+msgstr[2] "%d sati"
 
 #: ../src/sugar3/util.py:245
 #, python-format
@@ -212,3 +212,21 @@ msgstr ""
 #: ../src/sugar3/mime.py:72
 msgid "Link"
 msgstr ""
+
+#~ msgid "Untitled"
+#~ msgstr "Neimenovano"
+
+#~ msgid "Name this entry"
+#~ msgstr "Imenuj ovaj unos"
+
+#~ msgid "Tags:"
+#~ msgstr "Oznake:"
+
+#~ msgid "Activity"
+#~ msgstr "Aktivnost"
+
+#~ msgid "Keep"
+#~ msgstr "Zadrži"
+
+#~ msgid "Description:"
+#~ msgstr "Opis:"
