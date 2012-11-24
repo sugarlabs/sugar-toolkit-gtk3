@@ -1,124 +1,122 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# ChrisB <edresources@bickersc.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-07-09 08:40+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2012-09-15 23:14+1400\n"
+"Last-Translator: ChrisB <edresources@bickersc.com>\n"
+"Language-Team: sm\n"
 "Language: sm\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 2.0.5\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 #: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
-msgstr ""
+msgstr "%s Gāoioiga"
 
 #: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
-msgstr ""
+msgstr "Mau sesē"
 
 #: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "Mau sesē: E tia'i nei suiga 'uma"
 
 #: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
-msgstr ""
+msgstr "'Aua le tāofi"
 
 #: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
-msgstr ""
+msgstr "Tāofi so'o se mea"
 
 #: ../src/sugar3/activity/widgets.py:86
-#, fuzzy
 msgid "Stop"
-msgstr "taofi"
+msgstr "Tāofi"
 
 #: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
-msgstr ""
+msgstr "'Ave'ese"
 
 #: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
-msgstr ""
+msgstr "Toe-fa'aaogā"
 
 #: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
-msgstr ""
+msgstr "Lōmiga"
 
 #: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
-msgstr ""
+msgstr "Fa'apipi'i"
 
 #: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
-msgstr ""
+msgstr "Patino"
 
 #: ../src/sugar3/activity/widgets.py:139
-#, fuzzy
 msgid "My Neighborhood"
-msgstr "autafa o au va'aiga"
+msgstr "Lo'u Tuā'oi"
 
 #: ../src/sugar3/activity/widgets.py:226
 msgid "Description"
-msgstr ""
+msgstr "Fa'amatala"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
-msgstr ""
+msgstr "Sōloia"
 
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479
 msgid "Ok"
-msgstr ""
+msgstr "Uā lelei"
 
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
-msgstr ""
+msgstr "Fa'aauau"
 
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
-msgstr ""
+msgstr "Filifili le lanu"
 
 #: ../src/sugar3/graphics/colorbutton.py:274
 msgid "Red"
-msgstr ""
+msgstr "Mūmū"
 
 #: ../src/sugar3/graphics/colorbutton.py:276
 msgid "Green"
-msgstr ""
+msgstr "Meamata"
 
 #: ../src/sugar3/graphics/colorbutton.py:278
 msgid "Blue"
-msgstr ""
+msgstr "Moana"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
-msgstr ""
+msgstr " ma "
 
 #: ../src/sugar3/util.py:218
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
 msgid "Seconds ago"
-msgstr ""
+msgstr "Setone ua mavai"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s ua mavai"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
@@ -165,43 +163,43 @@ msgstr[1] ""
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
-msgstr ""
+msgstr "Gaogao"
 
 #: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d B"
 
 #: ../src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d KB"
 
 #: ../src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: ../src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: ../src/sugar3/mime.py:43
 msgid "Text"
-msgstr "Tusitusiga"
+msgstr ""
 
 #: ../src/sugar3/mime.py:52
 msgid "Image"
-msgstr "Ata"
+msgstr ""
 
 #: ../src/sugar3/mime.py:58
 msgid "Audio"
-msgstr "mea tau leo"
+msgstr ""
 
 #: ../src/sugar3/mime.py:66
 msgid "Video"
-msgstr "mea tau video"
+msgstr ""
 
 #: ../src/sugar3/mime.py:72
 msgid "Link"
