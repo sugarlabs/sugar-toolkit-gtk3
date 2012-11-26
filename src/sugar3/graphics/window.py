@@ -297,11 +297,18 @@ class Window(Gtk.Window):
 
     def __request_clear_area_cb(self, activity, osk_rect, cursor_rect):
         self._clear_area_dy = cursor_rect.y + cursor_rect.height - osk_rect.y
+
+        if self._clear_area_dy < 0:
+            self._clear_area_dy = 0
+            return False
+
         self.queue_resize()
+        return True
 
     def __unset_clear_area_cb(self, activity, snap_back):
         self._clear_area_dy = 0
         self.queue_resize()
+        return True
 
     def __size_allocate_cb(self, widget, allocation):
         self.set_allocation(allocation)
