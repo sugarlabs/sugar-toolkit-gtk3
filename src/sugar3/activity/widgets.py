@@ -178,6 +178,7 @@ class TitleEntry(Gtk.ToolItem):
         self.entry.set_size_request(int(Gdk.Screen.width() / 3), -1)
         self.entry.set_text(activity.metadata['title'])
         self.entry.connect('focus-out-event', self.__title_changed_cb, activity)
+        self.entry.connect('button-press-event', self.__button_press_event_cb)
         self.entry.show()
         self.add(self.entry)
 
@@ -202,6 +203,14 @@ class TitleEntry(Gtk.ToolItem):
     def __title_changed_cb(self, editable, event, activity):
         self.save_title(activity)
         return False
+
+    def __button_press_event_cb(self, widget, event):
+        if widget.is_focus():
+            return False
+        else:
+            widget.grab_focus()
+            widget.select_region(0, -1)
+            return True
 
     def save_title(self, activity):
         title = self.entry.get_text()
