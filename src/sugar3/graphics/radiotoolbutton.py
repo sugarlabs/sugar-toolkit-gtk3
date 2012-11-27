@@ -42,6 +42,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         GObject.GObject.__init__(self, **kwargs)
 
         self._palette_invoker.attach_tool(self)
+        self._hide_tooltip_on_click = True
 
         if icon_name:
             self.set_icon_name(icon_name)
@@ -143,3 +144,18 @@ class RadioToolButton(Gtk.RadioToolButton):
             cr.paint()
 
         Gtk.RadioToolButton.do_draw(self, cr)
+
+    def get_hide_tooltip_on_click(self):
+        return self._hide_tooltip_on_click
+
+    def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
+        if self._hide_tooltip_on_click != hide_tooltip_on_click:
+            self._hide_tooltip_on_click = hide_tooltip_on_click
+
+    hide_tooltip_on_click = GObject.property(
+        type=bool, default=True, getter=get_hide_tooltip_on_click,
+        setter=set_hide_tooltip_on_click)
+
+    def do_clicked(self):
+        if self._hide_tooltip_on_click and self.palette:
+            self.palette.popdown(True)
