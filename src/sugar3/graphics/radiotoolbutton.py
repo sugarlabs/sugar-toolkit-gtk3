@@ -37,12 +37,13 @@ class RadioToolButton(Gtk.RadioToolButton):
         self._accelerator = None
         self._tooltip = None
         self._xo_color = None
+        self._hide_tooltip_on_click = True
+
         self._palette_invoker = ToolInvoker()
 
         GObject.GObject.__init__(self, **kwargs)
 
         self._palette_invoker.attach_tool(self)
-        self._hide_tooltip_on_click = True
 
         if icon_name:
             self.set_icon_name(icon_name)
