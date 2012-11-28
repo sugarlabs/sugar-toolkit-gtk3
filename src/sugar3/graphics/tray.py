@@ -47,7 +47,7 @@ class _TrayViewport(Gtk.Viewport):
         self._can_scroll_next = False
         self._can_scroll_prev = False
 
-        GObject.GObject.__init__(self)
+        Gtk.Viewport.__init__(self)
 
         self.set_shadow_type(Gtk.ShadowType.NONE)
 
@@ -138,6 +138,7 @@ class _TrayViewport(Gtk.Viewport):
 
     def _size_allocate_cb(self, viewport, allocation):
         bar_minimum, bar_natural = self.traybar.get_preferred_size()
+
         if self.orientation == Gtk.Orientation.HORIZONTAL:
             scrollable = bar_minimum.width > allocation.width
         else:
@@ -169,6 +170,8 @@ class _TrayViewport(Gtk.Viewport):
 
 
 class _TrayScrollButton(ToolButton):
+
+    __gtype_name__ = 'SugarTrayScrollButton'
 
     def __init__(self, icon_name, scroll_direction):
         ToolButton.__init__(self)
@@ -224,7 +227,7 @@ ALIGN_TO_START = 0
 ALIGN_TO_END = 1
 
 
-class HTray(Gtk.HBox):
+class HTray(Gtk.EventBox):
 
     __gtype_name__ = 'SugarHTray'
 
@@ -238,17 +241,21 @@ class HTray(Gtk.HBox):
         self._drag_active = False
         self.align = ALIGN_TO_START
 
-        GObject.GObject.__init__(self, **kwargs)
+        Gtk.EventBox.__init__(self, **kwargs)
+
+        self._box = Gtk.HBox()
+        self.add(self._box)
+        self._box.show()
 
         scroll_left = _TrayScrollButton('go-left', _PREVIOUS_PAGE)
-        self.pack_start(scroll_left, False, False, 0)
+        self._box.pack_start(scroll_left, False, False, 0)
 
         self._viewport = _TrayViewport(Gtk.Orientation.HORIZONTAL)
-        self.pack_start(self._viewport, True, True, 0)
+        self._box.pack_start(self._viewport, True, True, 0)
         self._viewport.show()
 
         scroll_right = _TrayScrollButton('go-right', _NEXT_PAGE)
-        self.pack_start(scroll_right, False, False, 0)
+        self._box.pack_start(scroll_right, False, False, 0)
 
         scroll_left.viewport = self._viewport
         scroll_right.viewport = self._viewport
@@ -310,7 +317,7 @@ class HTray(Gtk.HBox):
         self._viewport.scroll_to_item(item)
 
 
-class VTray(Gtk.VBox):
+class VTray(Gtk.EventBox):
 
     __gtype_name__ = 'SugarVTray'
 
@@ -324,17 +331,21 @@ class VTray(Gtk.VBox):
         self._drag_active = False
         self.align = ALIGN_TO_START
 
-        GObject.GObject.__init__(self, **kwargs)
+        Gtk.EventBox.__init__(self, **kwargs)
+
+        self._box = Gtk.VBox()
+        self.add(self._box)
+        self._box.show()
 
         scroll_up = _TrayScrollButton('go-up', _PREVIOUS_PAGE)
-        self.pack_start(scroll_up, False, False, 0)
+        self._box.pack_start(scroll_up, False, False, 0)
 
         self._viewport = _TrayViewport(Gtk.Orientation.VERTICAL)
-        self.pack_start(self._viewport, True, True, 0)
+        self._box.pack_start(self._viewport, True, True, 0)
         self._viewport.show()
 
         scroll_down = _TrayScrollButton('go-down', _NEXT_PAGE)
-        self.pack_start(scroll_down, False, False, 0)
+        self._box.pack_start(scroll_down, False, False, 0)
 
         scroll_up.viewport = self._viewport
         scroll_down.viewport = self._viewport
@@ -407,7 +418,7 @@ class _IconWidget(Gtk.EventBox):
     __gtype_name__ = 'SugarTrayIconWidget'
 
     def __init__(self, icon_name=None, xo_color=None):
-        GObject.GObject.__init__(self)
+        Gtk.EventBox.__init__(self)
 
         self.set_app_paintable(True)
         self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
