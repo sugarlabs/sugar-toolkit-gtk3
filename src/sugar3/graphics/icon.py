@@ -727,8 +727,9 @@ class CanvasIcon(EventIcon):
         self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
 
     def __button_press_event_cb(self, icon, event):
-        self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.ACTIVE,
-                             clear=True)
+        if not self.palette.is_up():
+            self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.ACTIVE,
+                                 clear=True)
 
     def __button_release_event_cb(self, icon, event):
         self.unset_state_flags(Gtk.StateFlags.ACTIVE)
