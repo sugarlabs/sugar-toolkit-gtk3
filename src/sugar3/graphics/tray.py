@@ -137,6 +137,12 @@ class _TrayViewport(Gtk.Viewport):
             return self._can_scroll_prev
 
     def _size_allocate_cb(self, viewport, allocation):
+        if allocation.width == 1 and allocation.height == 1:
+            # HACK: the first time this callback is called 'width' and
+            # 'height' are 1 so we mark the Viewport as scrollable and
+            # we show the Prev / Next buttons
+            return
+
         bar_minimum, bar_natural = self.traybar.get_preferred_size()
 
         if self.orientation == Gtk.Orientation.HORIZONTAL:
