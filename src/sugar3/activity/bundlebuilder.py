@@ -64,9 +64,10 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 
 class Config(object):
 
-    def __init__(self):
-        self.source_dir = os.getcwd()
-        self.dist_dir = os.path.join(self.source_dir, 'dist')
+    def __init__(self, source_dir):
+        self.source_dir = source_dir
+        self.build_dir = os.getcwd()
+        self.dist_dir = os.path.join(self.build_dir, 'dist')
         self.bundle = None
         self.version = None
         self.activity_name = None
@@ -97,7 +98,7 @@ class Builder(object):
 
     def __init__(self, config):
         self.config = config
-        self.locale_dir = os.path.join(self.config.source_dir, 'locale')
+        self.locale_dir = os.path.join(self.config.build_dir, 'locale')
 
     def build(self):
         self.build_locale()
@@ -119,7 +120,7 @@ class Builder(object):
             file_name = os.path.join(po_dir, f)
             lang = f[:-3]
 
-            localedir = os.path.join(self.config.source_dir, 'locale', lang)
+            localedir = os.path.join(self.config.build_dir, 'locale', lang)
             mo_path = os.path.join(localedir, 'LC_MESSAGES')
             if not os.path.isdir(mo_path):
                 os.makedirs(mo_path)
@@ -218,7 +219,7 @@ class SourcePackager(Packager):
 
 class Installer(Packager):
     def __init__(self, builder):
-        self.config = builder.config
+        Packager.__init__(self, builder.config)
         self.builder = builder
 
     def install(self, prefix):
@@ -328,6 +329,8 @@ def cmd_genpot(config, args):
         print 'Usage: %prog genpot'
         return
 
+    os.chdir(config.source_dir)
+
     po_path = os.path.join(config.source_dir, 'po')
     if not os.path.isdir(po_path):
         os.mkdir(po_path)
@@ -394,7 +397,8 @@ def start():
     parser.disable_interspersed_args()
     (options_, args) = parser.parse_args()
 
-    config = Config()
+    source_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    config = Config(source_dir)
 
     try:
         globals()['cmd_' + args[0]](config, args[1:])
