@@ -132,12 +132,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def do_draw(self, cr):
         child = self.get_child()
-        allocation = self.get_allocation()
-
         if self.palette and self.palette.is_up():
-            invoker = self.palette.props.invoker
-            invoker.draw_rectangle(cr, self.palette)
-
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before
             cr.set_source_rgb(0, 0, 0)
@@ -145,6 +140,12 @@ class RadioToolButton(Gtk.RadioToolButton):
             cr.paint()
 
         Gtk.RadioToolButton.do_draw(self, cr)
+
+        if self.palette and self.palette.is_up():
+            invoker = self.palette.props.invoker
+            invoker.draw_rectangle(cr, self.palette)
+
+        return False
 
     def get_hide_tooltip_on_click(self):
         return self._hide_tooltip_on_click
