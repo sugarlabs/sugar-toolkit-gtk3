@@ -64,10 +64,9 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 
 class Config(object):
 
-    def __init__(self, source_dir=None, dist_dir=None, dist_name=None):
-        self.source_dir = source_dir or os.getcwd()
-        self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
-        self.dist_name = dist_name
+    def __init__(self):
+        self.source_dir = os.getcwd()
+        self.dist_dir = os.path.join(self.source_dir, 'dist')
         self.bundle = None
         self.version = None
         self.activity_name = None
@@ -90,12 +89,8 @@ class Config(object):
         self.bundle_name = reduce(operator.add, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%s' % (self.bundle_name, self.version)
-
-        if self.dist_name:
-            self.xo_name = self.tar_name = self.dist_name
-        else:
-            self.xo_name = '%s-%s.xo' % (self.bundle_name, self.version)
-            self.tar_name = '%s-%s.tar.bz2' % (self.bundle_name, self.version)
+        self.xo_name = '%s-%s.xo' % (self.bundle_name, self.version)
+        self.tar_name = '%s-%s.tar.bz2' % (self.bundle_name, self.version)
 
 
 class Builder(object):
