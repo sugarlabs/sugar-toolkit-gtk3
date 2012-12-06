@@ -37,6 +37,11 @@ class TestGit(unittest.TestCase):
 
     _share_locale_files = ["locale/es/LC_MESSAGES/org.sugarlabs.Sample.mo"]
 
+    def _get_all_locale_files(self):
+        expected = self._share_locale_files[:]
+        expected.extend(self._activity_locale_files)
+        return expected
+ 
     def _create_repo(self):
         cwd = os.getcwd()
         path = tempfile.mkdtemp()
@@ -81,8 +86,7 @@ class TestGit(unittest.TestCase):
 
         stripped_filenames = self._strip_root_dir(filenames)
         expected = self._source_files[:]
-        expected.extend(self._share_locale_files)
-        expected.extend(self._activity_locale_files)
+        expected.extend(self._get_all_locale_files())
         self.assertItemsEqual(stripped_filenames, expected)
 
         os.chdir(cwd)
@@ -102,6 +106,24 @@ class TestGit(unittest.TestCase):
 
         os.chdir(cwd)
 
+    def _test_build(self, source_path, build_path):
+        cwd = os.getcwd()
+        os.chdir(build_path)
+
+        setup_path = os.path.join(source_path, "setup.py")
+        subprocess.call([setup_path, "build"])
+
+        locale_path = os.path.join(build_path, "locale")
+
+        filenames = []
+        for root, dirs, files in os.walk(locale_path):
+            rel_root = root[len(build_path) + 1:]
+            filenames.extend([os.path.join(rel_root, name) for name in files])
+
+        self.assertItemsEqual(filenames, self._get_all_locale_files())
+
+        os.chdir(cwd)
+ 
     def _test_install(self, source_path, build_path):
         install_path = tempfile.mkdtemp()
 
@@ -162,3 +184,12 @@ class TestGit(unittest.TestCase):
         repo_path = self._create_repo()
         build_path = tempfile.mkdtemp()
         self._test_install(repo_path, build_path)
+
+    def test_build_in_source(self):
+        repo_path = self._create_repo()
+        self._test_build(repo_path, repo_path)
+
+    def test_build_out_of_source(self):
+        repo_path = self._create_repo()
+        build_path = tempfile.mkdtemp()
+        self._test_build(repo_path, build_path)
