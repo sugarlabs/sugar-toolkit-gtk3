@@ -12,3 +12,9 @@ EXTRA_DIST =                    \
 	intltool-extract.in
 
 SUBDIRS = bin src po
+
+check: test
+
+test:
+	cd $(top_srcdir)/tests && \
+	python -m unittest discover
