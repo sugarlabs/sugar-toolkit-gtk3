@@ -123,6 +123,20 @@ class TestGit(unittest.TestCase):
         self.assertItemsEqual(filenames, self._get_all_locale_files())
 
         os.chdir(cwd)
+
+    def _test_genpot(self, source_path, build_path):
+        cwd = os.getcwd()
+        os.chdir(build_path)
+
+        pot_path = os.path.join(source_path, "po", "Sample.pot")
+        os.unlink(pot_path)
+
+        setup_path = os.path.join(source_path, "setup.py")
+        subprocess.call([setup_path, "genpot"])
+
+        self.assertTrue(os.path.exists(pot_path))
+
+        os.chdir(cwd)
  
     def _test_install(self, source_path, build_path):
         install_path = tempfile.mkdtemp()
@@ -193,3 +207,12 @@ class TestGit(unittest.TestCase):
         repo_path = self._create_repo()
         build_path = tempfile.mkdtemp()
         self._test_build(repo_path, build_path)
+
+    def test_genpot_in_source(self):
+        repo_path = self._create_repo()
+        self._test_genpot(repo_path, repo_path)
+
+    def test_genpot_out_of_source(self):
+        repo_path = self._create_repo()
+        build_path = tempfile.mkdtemp()
+        self._test_genpot(repo_path, build_path)
