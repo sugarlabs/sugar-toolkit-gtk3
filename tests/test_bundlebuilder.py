@@ -124,6 +124,23 @@ class TestGit(unittest.TestCase):
 
         os.chdir(cwd)
 
+    def _test_dev(self, source_path, build_path):
+        activities_path = tempfile.mkdtemp()
+
+        cwd = os.getcwd()
+        os.chdir(build_path)
+
+        os.environ["SUGAR_ACTIVITIES_PATH"] = activities_path
+
+        setup_path = os.path.join(source_path, "setup.py")
+        subprocess.call([setup_path, "dev"])
+
+        activity_py_path = os.path.join(activities_path, "Sample.activity",
+                                        "activity.py")
+        self.assertTrue(os.path.exists(activity_py_path))
+
+        os.chdir(cwd)
+ 
     def _test_genpot(self, source_path, build_path):
         cwd = os.getcwd()
         os.chdir(build_path)
@@ -207,6 +224,15 @@ class TestGit(unittest.TestCase):
         repo_path = self._create_repo()
         build_path = tempfile.mkdtemp()
         self._test_build(repo_path, build_path)
+
+    def test_dev_in_source(self):
+        repo_path = self._create_repo()
+        self._test_genpot(repo_path, repo_path)
+
+    def test_dev_out_of_source(self):
+        repo_path = self._create_repo()
+        build_path = tempfile.mkdtemp()
+        self._test_dev(repo_path, build_path)
 
     def test_genpot_in_source(self):
         repo_path = self._create_repo()
