@@ -53,5 +53,6 @@ src/sugar3/event-controller/Makefile
 src/sugar3/presence/Makefile
 src/sugar3/datastore/Makefile
 src/sugar3/dispatch/Makefile
+src/sugar3/test/Makefile
 po/Makefile.in
 ])

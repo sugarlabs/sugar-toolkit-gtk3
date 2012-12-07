@@ -1,4 +1,11 @@
-SUBDIRS = activity bundle event-controller graphics presence datastore dispatch
+SUBDIRS = activity \
+          bundle \
+          event-controller \
+          graphics \
+          presence \
+          datastore \
+          dispatch \
+          test
 
 sugardir = $(pythondir)/sugar3
 sugar_PYTHON =		\
