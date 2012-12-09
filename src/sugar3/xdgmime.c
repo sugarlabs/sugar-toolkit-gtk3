@@ -457,6 +457,13 @@ xdg_mime_get_mime_type_for_data (const void *data,
   return XDG_MIME_TYPE_UNKNOWN;
 }
 
+/**
+ * sugar_mime_get_mime_type_for_file:
+ * @file_name: the file path
+ * @statbuf: (allow-none)
+ *
+ * Returns: (transfer none): the mime type.
+ */
 const char *
 xdg_mime_get_mime_type_for_file (const char  *file_name,
                                  struct stat *statbuf)
@@ -752,6 +759,11 @@ xdg_mime_mime_type_subclass (const char *mime,
   return _xdg_mime_mime_type_subclass (mime, base);
 }
 
+/**
+ * sugar_mime_list_mime_parents:
+ *
+ * Return value: (array zero-terminated=1) (transfer full):
+ **/
 char **
 xdg_mime_list_mime_parents (const char *mime)
 {

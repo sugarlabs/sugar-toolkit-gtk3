@@ -17,12 +17,27 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import os
 import unittest
 
-from sugar import mime
+from sugar3 import mime
 
+tests_dir = os.path.dirname(__file__)
+data_dir = os.path.join(tests_dir, "data")
 
 class TestMime(unittest.TestCase):
+    def test_split_uri_list(self):
+        self.assertSequenceEqual(mime.split_uri_list("http://one\nhttp://two"),
+                                 ("http://one", "http://two"))
+
+    def test_get_mime_parents(self):
+        self.assertListEqual(mime.get_mime_parents("image/svg+xml"),
+                             ["application/xml"])
+
+    def test_get_for_file(self):
+        self.assertEqual(mime.get_for_file(os.path.join(data_dir, "mime.svg")),
+                         'image/svg+xml')
+
     def test_from_file_name(self):
         self.assertEqual(mime.get_from_file_name('test.pdf'),
                          'application/pdf')
@@ -77,7 +92,3 @@ class TestMime(unittest.TestCase):
                  'text/plain;charset=utf-8', 'text/plain;charset=UTF-8',
                  'text/plain'])
         self.assertEqual(mime_type, 'text/plain')
-
-
-if __name__ == '__main__':
-    unittest.main()
