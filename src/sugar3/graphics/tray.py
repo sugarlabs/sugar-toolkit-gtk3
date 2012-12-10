@@ -432,11 +432,21 @@ class _IconWidget(Gtk.EventBox):
 
     def do_draw(self, cr):
         palette = self.get_parent().palette
+
+        if palette and palette.is_up():
+            allocation = self.get_allocation()
+            # draw a black background, has been done by the engine before
+            cr.set_source_rgb(0, 0, 0)
+            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.paint()
+
+        Gtk.EventBox.do_draw(self, cr)
+
         if palette and palette.is_up():
             invoker = palette.props.invoker
             invoker.draw_rectangle(cr, palette)
 
-        Gtk.EventBox.do_draw(self, cr)
+        return False
 
     def get_icon(self):
         return self._icon
