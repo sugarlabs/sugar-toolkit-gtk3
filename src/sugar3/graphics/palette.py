@@ -33,6 +33,7 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palettewindow import PaletteWindow, \
     _PaletteWindowWidget, _PaletteMenuWidget
+from sugar3.graphics.palettemenu import PaletteMenuItem
 
 # DEPRECATED
 # Import these for backwards compatibility
@@ -342,6 +343,8 @@ class Palette(PaletteWindow):
             self._content.remove(self._content.get_children()[0])
 
         if widget is not None:
+            widget.connect('button-release-event',
+                           self.__widget_button_release_cb)
             self._content.add(widget)
             self._content.show()
         else:
@@ -351,6 +354,12 @@ class Palette(PaletteWindow):
 
         self._update_accept_focus()
         self._update_separators()
+
+    def __widget_button_release_cb(self, widget, event):
+        event_widget = Gtk.get_event_widget(event)
+        if isinstance(event_widget, PaletteMenuItem):
+            self.popdown(immediate=True)
+        return False
 
     def get_label_width(self):
         # Gtk.AccelLabel request doesn't include the accelerator.
