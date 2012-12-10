@@ -28,6 +28,7 @@ import sys
 import os
 import repr as repr_
 import decorator
+import time
 
 # Let's keep this module self contained so that it can be easily
 # pasted in external sugar service like the datastore.
@@ -76,6 +77,45 @@ def _except_hook(exctype, value, traceback):
         sys.excepthook = sys.__excepthook__
 
     sys.excepthook(exctype, value, traceback)
+
+
+def cleanup():
+    """Clean up the log directory, moving old logs into a numbered backup
+    directory.  We only keep `_MAX_BACKUP_DIRS` of these backup directories
+    around; the rest are removed."""
+    logs_dir = get_logs_dir()
+
+    if not os.path.isdir(logs_dir):
+        os.makedirs(logs_dir)
+
+    backup_logs = []
+    backup_dirs = []
+    for f in os.listdir(logs_dir):
+        path = os.path.join(logs_dir, f)
+        if os.path.isfile(path):
+            backup_logs.append(f)
+        elif os.path.isdir(path):
+            backup_dirs.append(path)
+
+    if len(backup_dirs) > 3:
+        backup_dirs.sort()
+        root = backup_dirs[0]
+
+        try:
+            for f in os.listdir(root):
+                os.remove(os.path.join(root, f))
+            os.rmdir(root)
+        except OSError, e:
+            print "Could not remove old logs filesi %s" % e
+
+    if len(backup_logs) > 0:
+        name = str(int(time.time()))
+        backup_dir = os.path.join(logs_dir, name)
+        os.mkdir(backup_dir)
+        for log in backup_logs:
+            source_path = os.path.join(logs_dir, log)
+            dest_path = os.path.join(backup_dir, log)
+            os.rename(source_path, dest_path)
 
 
 def start(log_filename=None):
