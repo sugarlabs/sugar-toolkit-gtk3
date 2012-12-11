@@ -541,18 +541,20 @@ class ColorToolButton(Gtk.ToolItem):
 
     def do_draw(self, cr):
         child = self.get_child()
-        allocation = self.get_allocation()
         if self._palette and self._palette.is_up():
-            invoker = self._palette.props.invoker
-            invoker.draw_rectangle(cr, self._palette)
-
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before
             cr.set_source_rgb(0, 0, 0)
             cr.rectangle(0, 0, allocation.width, allocation.height)
             cr.paint()
 
-        Gtk.ToolButton.do_draw(self, cr)
+        Gtk.ToolItem.do_draw(self, cr)
+
+        if self._palette and self._palette.is_up():
+            invoker = self._palette.props.invoker
+            invoker.draw_rectangle(cr, self._palette)
+
+        return False
 
     def __notify_change(self, widget, pspec):
         self.notify(pspec.name)

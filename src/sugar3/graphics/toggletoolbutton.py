@@ -125,13 +125,8 @@ class ToggleToolButton(Gtk.ToggleToolButton):
                                    getter=get_accelerator)
 
     def do_draw(self, cr):
-        allocation = self.get_allocation()
         child = self.get_child()
-
         if self.palette and self.palette.is_up():
-            invoker = self.palette.props.invoker
-            invoker.draw_rectangle(cr, self.palette)
-
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before
             cr.set_source_rgb(0, 0, 0)
@@ -139,5 +134,11 @@ class ToggleToolButton(Gtk.ToggleToolButton):
             cr.paint()
 
         Gtk.ToggleToolButton.do_draw(self, cr)
+
+        if self.palette and self.palette.is_up():
+            invoker = self.palette.props.invoker
+            invoker.draw_rectangle(cr, self.palette)
+
+        return False
 
     palette = property(get_palette, set_palette)
