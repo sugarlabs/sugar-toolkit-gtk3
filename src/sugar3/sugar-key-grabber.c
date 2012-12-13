@@ -19,6 +19,7 @@
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
+#include <X11/extensions/XInput2.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 
@@ -137,6 +138,25 @@ filter_events(GdkXEvent *xevent, GdkEvent *event, gpointer data)
 		if(return_value)
 			return GDK_FILTER_REMOVE;
 	}
+
+	if (xev->type == GenericEvent) {
+		XIDeviceEvent *ev;
+		int return_value = FALSE;
+
+		ev = (XIDeviceEvent *) ((XGenericEventCookie *) xev)->data;
+
+		if (ev->evtype == XI_KeyPress) {
+			g_signal_emit (grabber, signals[KEY_PRESSED], 0,
+				       ev->detail, ev->mods.effective, ev->time, &return_value);
+		} else if (ev->evtype == XI_KeyRelease) {
+			g_signal_emit (grabber, signals[KEY_RELEASED], 0,
+				       ev->detail, ev->mods.effective, ev->time, &return_value);
+		}
+
+		if (return_value)
+			return GDK_FILTER_REMOVE;
+	}
+
 
 	return GDK_FILTER_CONTINUE;
 }
