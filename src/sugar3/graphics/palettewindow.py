@@ -278,6 +278,11 @@ class _PaletteWindowWidget(Gtk.Window):
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.NONE)
 
+        context = self.get_style_context()
+        # Just assume all borders are the same
+        border = context.get_border(Gtk.StateFlags.ACTIVE).right
+        self.set_border_width(border)
+
         accel_group = Gtk.AccelGroup()
         self.sugar_accel_group = accel_group
         self.add_accel_group(accel_group)
