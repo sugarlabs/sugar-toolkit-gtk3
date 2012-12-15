@@ -213,7 +213,7 @@ class ActivityBundle(Bundle):
                                                          suffix='.svg')
             os.write(temp_file, icon_data)
             os.close(temp_file)
-            return util.TempFilePath(temp_file_path)
+            return temp_file_path
 
     def get_activity_version(self):
         """Get the activity version"""
