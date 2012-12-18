@@ -26,6 +26,7 @@ import logging
 import gettext
 
 from gi.repository import GdkPixbuf
+from gi.repository import Gio
 
 from sugar3 import _sugarbaseext
 
@@ -149,8 +150,7 @@ def get_mime_description(mime_type):
     if generic_type:
         return generic_type['name']
 
-    import gio
-    return gio.content_type_get_description(mime_type)
+    return Gio.content_type_get_description(mime_type)
 
 
 def get_mime_parents(mime_type):
