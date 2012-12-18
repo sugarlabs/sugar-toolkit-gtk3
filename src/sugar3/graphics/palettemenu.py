@@ -18,6 +18,7 @@ import logging
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import style
@@ -114,6 +115,9 @@ class PaletteMenuItem(Gtk.EventBox):
 
         align = Gtk.Alignment(xalign=0.0, yalign=0.5, xscale=0.0, yscale=0.0)
         self.label = Gtk.Label(text_label)
+        if text_maxlen > 0:
+            self.label.set_max_width_chars(text_maxlen)
+            self.label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
         align.add(self.label)
         self._hbox.pack_start(align, expand=True, fill=True,
                         padding=style.DEFAULT_PADDING)
