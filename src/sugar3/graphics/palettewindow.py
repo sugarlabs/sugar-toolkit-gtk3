@@ -1155,6 +1155,18 @@ class WidgetInvoker(Invoker):
         return False
 
     def __click_event_cb(self, button):
+        event = Gtk.get_current_event()
+        if not event:
+            # not an event from a user interaction, this can be when
+            # the clicked event is emitted on a 'active' property
+            # change of ToggleToolButton for example
+            return
+        if event and button != Gtk.get_event_widget(event):
+            # another special case for the ToggleToolButton: this handles
+            # the case where we select an item and the active property
+            # of the other one changes to 'False'
+            return
+
         if self.props.lock_palette and not self.locked:
             self.locked = True
             if hasattr(self.parent, 'set_expanded'):
