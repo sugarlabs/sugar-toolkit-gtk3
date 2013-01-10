@@ -272,6 +272,8 @@ class _Box(Gtk.EventBox):
         self._toolbar_button = toolbar_button
 
     def do_draw(self, cr):
+        self.get_child().do_draw(self, cr)
+
         button_alloc = self._toolbar_button.get_allocation()
 
         cr.set_line_width(style.FOCUS_LINE_WIDTH * 2)
@@ -282,12 +284,9 @@ class _Box(Gtk.EventBox):
         cr.line_to(self.get_allocation().width, 0)
         cr.stroke()
 
-        self.get_child().do_draw(self, cr)
-
 
 def _setup_page(page_widget, color, hpad):
-    vpad = style.FOCUS_LINE_WIDTH
-    page_widget.get_child().set_padding(vpad, vpad, hpad, hpad)
+    page_widget.get_child().set_padding(0, 0, hpad, hpad)
 
     page = _get_embedded_page(page_widget)
     page.modify_bg(Gtk.StateType.NORMAL, color)
