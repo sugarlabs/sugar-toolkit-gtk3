@@ -80,7 +80,7 @@ class IconEntry(Gtk.Entry):
     def show_clear_button(self):
         if not self._clear_shown:
             self.set_icon_from_name(ICON_ENTRY_SECONDARY,
-                                    'dialog-cancel')
+                                    'entry-cancel')
             self._clear_shown = True
 
     def hide_clear_button(self):
