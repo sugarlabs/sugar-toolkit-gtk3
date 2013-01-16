@@ -31,7 +31,7 @@ def set_theme():
             sugar_theme = 'sugar-100'
     settings.set_property('gtk-theme-name', sugar_theme)
     settings.set_property('gtk-icon-theme-name', 'sugar')
-
+set_theme()
 
 class Test(Gtk.VBox):
     def __init__(self):
@@ -57,7 +57,6 @@ class TestPalette(Test):
 
 class TestRunner(object):
     def run(self, test):
-        set_theme()
         window = Gtk.Window()
         window.connect('destroy', lambda w: Gtk.main_quit())
         window.add(test)
