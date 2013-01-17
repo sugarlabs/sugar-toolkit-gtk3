@@ -34,12 +34,10 @@ class ProgressIcon(Gtk.DrawingArea):
 
     """
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
-                 direction=None):
+                 direction='vertical'):
         Gtk.DrawingArea.__init__(self)
 
         self._icon_name = icon_name
-        if direction == None:
-            direction = 'vertical'
         self._direction = direction
         self._progress = 0
 
