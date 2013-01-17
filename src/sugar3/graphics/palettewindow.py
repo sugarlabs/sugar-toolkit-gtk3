@@ -148,6 +148,7 @@ class _PaletteMenuWidget(Gtk.Menu):
 
         self._invoker = invoker
         self._find_all_menus(self)
+        self.realize()
         for menu in self._menus:
             if self._invoker:
                 menu.connect('motion-notify-event', self._motion_notify_cb)
