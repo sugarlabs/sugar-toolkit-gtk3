@@ -125,7 +125,7 @@ class Notebook(Gtk.Notebook):
         Returns
         -------
         Boolean
-          Returns TRUE if the page is successfully added to th notebook.
+          Returns TRUE if the page is successfully added to the notebook.
 
         """
         # Add a new page to the notebook
