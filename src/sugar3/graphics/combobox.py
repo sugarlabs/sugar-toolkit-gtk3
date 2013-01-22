@@ -43,16 +43,6 @@ class ComboBox(Gtk.ComboBox):
         self.set_row_separator_func(self._is_separator, None)
 
     def get_value(self):
-        """
-        Parameters
-        ----------
-        None :
-
-        Returns:
-        --------
-        value :
-
-        """
         row = self.get_active_item()
         if not row:
             return None
@@ -72,22 +62,6 @@ class ComboBox(Gtk.ComboBox):
         return fname
 
     def append_item(self, action_id, text, icon_name=None, file_name=None):
-        """
-        Parameters
-        ----------
-        action_id :
-
-        text :
-
-        icon_name=None :
-
-        file_name=None :
-
-        Returns
-        -------
-        None
-
-        """
         if not self._icon_renderer and (icon_name or file_name):
             self._icon_renderer = Gtk.CellRendererPixbuf()
 
@@ -122,29 +96,9 @@ class ComboBox(Gtk.ComboBox):
         self._model.append([action_id, text, pixbuf, False])
 
     def append_separator(self):
-        """
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        None
-
-        """
         self._model.append([0, None, None, True])
 
     def get_active_item(self):
-        """
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        Active_item :
-
-        """
         index = self.get_active()
         if index == -1:
             index = 0
@@ -155,16 +109,6 @@ class ComboBox(Gtk.ComboBox):
         return self._model[row]
 
     def remove_all(self):
-        """
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        None
-
-        """
         self._model.clear()
 
     def _is_separator(self, model, row, data):
