@@ -43,39 +43,13 @@ class Animator(GObject.GObject):
         self._start_time = None
 
     def add(self, animation):
-        """
-        Parameter
-        ---------
-        animation :
-
-        """
         self._animations.append(animation)
 
     def remove_all(self):
-        """
-        Parameters
-        ----------
-        None :
-
-        Returns
-        -------
-        None :
-
-        """
         self.stop()
         self._animations = []
 
     def start(self):
-        """
-        Parameters
-        ----------
-        None :
-
-        Returns
-        -------
-        None
-
-        """
         if self._timeout_sid:
             self.stop()
 
@@ -84,16 +58,6 @@ class Animator(GObject.GObject):
                     int(self._interval * 1000), self._next_frame_cb)
 
     def stop(self):
-        """
-        Parameters
-        ----------
-        None :
-
-        Returns
-        -------
-        None :
-
-        """
         if self._timeout_sid:
             GObject.source_remove(self._timeout_sid)
             self._timeout_sid = 0
@@ -120,19 +84,6 @@ class Animation(object):
         self.end = end
 
     def do_frame(self, t, duration, easing):
-        """
-        Parameters
-        ----------
-        t:
-
-        duration:
-
-        easing:
-
-        Returns
-        None:
-
-        """
         start = self.start
         change = self.end - self.start
 
