@@ -1,0 +1,2 @@
+#!/bin/sh
+sugar-activity sugar3.activity.activity.HTMLActivity $@
