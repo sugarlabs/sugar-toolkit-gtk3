@@ -1063,3 +1063,21 @@ def show_object_in_journal(object_id):
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
     journal.ShowObject(object_id)
+
+
+from gi.repository import WebKit
+
+class HTMLActivity(Activity):
+    __gtype_name__ = 'SugarHTMLActivity'
+
+    def __init__(self, handle, create_jobject=True):
+        Activity.__init__(self, handle)
+
+        self._webview = WebKit.WebView()
+        self.set_canvas(self._webview)
+        self._webview.show()
+
+        web_app_page = os.path.join(get_bundle_path(), \
+                              'index.html')
+        self._webview.load_uri('file://' + web_app_page)
+
