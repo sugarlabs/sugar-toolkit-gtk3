@@ -19,7 +19,7 @@ libsugarext_la_CFLAGS = 		\
 	$(WARN_CFLAGS)
 
 libsugarext_la_LDFLAGS = $(LDADD)
-libsugarext_la_LIBADD = $(EXT_LIBS) -lSM -lICE -lasound
+libsugarext_la_LIBADD = $(EXT_LIBS)
 
 libsugarext_la_SOURCES =		\
 	$(BUILT_SOURCES)		\
