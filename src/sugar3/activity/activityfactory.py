@@ -211,11 +211,6 @@ class ActivityCreationHandler(GObject.GObject):
         if self._handle.activity_id is None:
             self._handle.activity_id = create_activity_id()
 
-        self._shell.NotifyLaunch(
-                    self._service_name, self._handle.activity_id,
-                    reply_handler=self._no_reply_handler,
-                    error_handler=self._notify_launch_error_handler)
-
         environ = get_environment(self._bundle)
         (log_path, log_file) = open_log_file(self._bundle)
         command = get_command(self._bundle, self._handle.activity_id,
@@ -258,6 +253,13 @@ class ActivityCreationHandler(GObject.GObject):
             stdout=log_file.fileno(),
             stderr=log_file.fileno())
 
+        self._shell.NotifyLaunch(
+                    self._service_name,
+                    self._handle.activity_id,
+                    child.pid,
+                    reply_handler=self._no_reply_handler,
+                    error_handler=self._notify_launch_error_handler)
+ 
         GObject.child_watch_add(child.pid,
                                 _child_watch_cb,
                                 (environment_dir, log_file,
