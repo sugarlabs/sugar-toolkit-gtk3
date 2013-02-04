@@ -96,6 +96,8 @@ J_DBUS_INTERFACE = 'org.laptop.Journal'
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
+PREVIEW_SIZE = style.zoom(300), style.zoom(225)
+
 
 class _ActivitySession(GObject.GObject):
 
@@ -639,8 +641,7 @@ class Activity(Window, Gtk.Container):
         this is what the user is seeing in this moment.
 
         Activities can override this method, which should return a str with the
-        binary content of a png image with a width of 300 and a height of 225
-        pixels.
+        binary content of a png image with a width of PREVIEW_SIZE pixels.
 
         The method does create a cairo surface similar to that of the canvas'
         window and draws on that. Then we create a cairo image surface with
@@ -666,7 +667,7 @@ class Activity(Window, Gtk.Container):
         self.canvas.draw(cr)
         del cr
 
-        preview_width, preview_height = style.zoom(300), style.zoom(225)
+        preview_width, preview_height = PREVIEW_SIZE
         preview_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
                                              preview_width, preview_height)
         cr = cairo.Context(preview_surface)
