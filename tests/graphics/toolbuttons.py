@@ -37,6 +37,7 @@ toolbar_box.toolbar.insert(color_button, -1)
 color_button.show()
 
 favorite_button = ToggleToolButton('emblem-favorite')
+favorite_button.set_tooltip('Favorite')
 toolbar_box.toolbar.insert(favorite_button, -1)
 favorite_button.show()
 

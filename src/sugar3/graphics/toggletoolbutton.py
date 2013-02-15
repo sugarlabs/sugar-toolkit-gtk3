@@ -141,4 +141,8 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
         return False
 
+    def do_clicked(self):
+        if self.palette:
+            self.palette.popdown(True)
+
     palette = property(get_palette, set_palette)
