@@ -107,9 +107,10 @@ def main():
 
     # must be done early, some activities set translations globally, SL #3654
     locale_path = i18n.get_locale_path(bundle.get_bundle_id())
-    gettext.bindtextdomain(bundle.get_bundle_id(), locale_path)
-    gettext.bindtextdomain('sugar-toolkit', sugar3.locale_path)
-    gettext.textdomain(bundle.get_bundle_id())
+    if locale_path:
+        gettext.bindtextdomain(bundle.get_bundle_id(), locale_path)
+        gettext.bindtextdomain('sugar-toolkit', sugar3.locale_path)
+        gettext.textdomain(bundle.get_bundle_id())
 
     splitted_module = args[0].rsplit('.', 1)
     module_name = splitted_module[0]
