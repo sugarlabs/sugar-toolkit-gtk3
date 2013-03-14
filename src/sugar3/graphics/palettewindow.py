@@ -623,7 +623,13 @@ class PaletteWindow(GObject.GObject):
             self._alignment = self._invoker.get_alignment(full_size_request)
 
             self.update_position()
-            self._widget.set_transient_for(self._invoker.get_toplevel())
+            try:
+                self._widget.set_transient_for(self._invoker.get_toplevel())
+            except TypeError:
+                # the expected parent window did likely change e.g. SL #4221
+                # popdown the Palette
+                self.emit('popdown')
+                return
 
         self._popdown_anim.stop()
 
