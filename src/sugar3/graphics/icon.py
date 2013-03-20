@@ -34,9 +34,6 @@ import cairo
 
 from sugar3.graphics import style
 from sugar3.graphics.xocolor import XoColor
-from sugar3.graphics.palette import CursorInvoker
-from sugar3.graphics.palette import Palette
-from sugar3.graphics.palette import CellRendererInvoker
 from sugar3.util import LRU
 
 _BADGE_SIZE = 0.45
@@ -500,6 +497,7 @@ class EventIcon(Gtk.EventBox):
         for key, value in kwargs.iteritems():
             self.set_property(key, value)
 
+        from sugar3.graphics.palette import CursorInvoker
         self._palette_invoker = CursorInvoker()
         self._palette_invoker.attach(self)
         self.connect('destroy', self.__destroy_cb)
@@ -679,6 +677,8 @@ class EventIcon(Gtk.EventBox):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
+        from sugar3.graphics.palette import Palette
+
         self.set_palette(Palette(text))
 
 
@@ -750,6 +750,8 @@ class CellRendererIcon(Gtk.CellRenderer):
     }
 
     def __init__(self, tree_view):
+        from sugar3.graphics.palette import CellRendererInvoker
+
         self._buffer = _IconBuffer()
         self._buffer.cache = True
         self._xo_color = None
