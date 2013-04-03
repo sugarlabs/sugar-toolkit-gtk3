@@ -2,7 +2,6 @@ from gi.repository import Gtk
 
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.toolbarbox import ToolbarBox, ToolbarButton
-from sugar3.graphics import style
 
 window = Gtk.Window()
 

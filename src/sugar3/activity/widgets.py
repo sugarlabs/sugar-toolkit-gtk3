@@ -21,13 +21,11 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 import gettext
 from gi.repository import GConf
-import logging
 
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.toolbarbox import ToolbarButton
 from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton
 from sugar3.graphics.radiotoolbutton import RadioToolButton
-from sugar3.graphics.toolbox import Toolbox
 from sugar3.graphics.xocolor import XoColor
 from sugar3.graphics.icon import Icon
 from sugar3.bundle.activitybundle import ActivityBundle

@@ -23,7 +23,6 @@ Test the sugar3.graphics.progressicon.ProgressIcon widget.
 from gi.repository import GObject
 
 from sugar3.graphics.progressicon import ProgressIcon
-from sugar3.graphics.icon import Icon, get_surface
 from sugar3.graphics import style
 
 import common

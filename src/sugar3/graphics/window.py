@@ -24,7 +24,6 @@ from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import GdkX11
 from gi.repository import Gtk
-import warnings
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import palettegroup

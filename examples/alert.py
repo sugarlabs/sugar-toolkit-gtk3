@@ -1,6 +1,6 @@
 from gi.repository import Gtk
 
-from sugar3.graphics.alert import Alert, TimeoutAlert
+from sugar3.graphics.alert import TimeoutAlert
 
 def _destroy_cb(widget, data=None):
     Gtk.main_quit()
