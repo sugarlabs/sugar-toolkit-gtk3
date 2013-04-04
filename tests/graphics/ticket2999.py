@@ -21,9 +21,6 @@ Spec in ticket #2999.
 
 from gi.repository import Gtk
 
-from sugar3.graphics.palette import Palette
-from sugar3.graphics.icon import Icon
-
 import common
 
 test = common.Test()

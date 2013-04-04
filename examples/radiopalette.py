@@ -3,8 +3,6 @@ from gi.repository import Gtk
 from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton, \
                                         RadioToolsButton
 from sugar3.graphics.radiotoolbutton import RadioToolButton
-from sugar3.graphics.toolbutton import ToolButton
-from sugar3.graphics import style
 
 window = Gtk.Window()
 

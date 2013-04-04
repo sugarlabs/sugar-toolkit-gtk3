@@ -32,7 +32,6 @@ from gi.repository import GdkPixbuf
 from gi.repository import Rsvg
 import cairo
 
-from sugar3.graphics import style
 from sugar3.graphics.xocolor import XoColor
 from sugar3.util import LRU
 
