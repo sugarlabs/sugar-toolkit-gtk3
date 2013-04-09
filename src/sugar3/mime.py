@@ -25,10 +25,11 @@ import os
 import logging
 import gettext
 
+from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 
-from sugar3 import _sugarbaseext
+from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-base', msg)
 
@@ -123,7 +124,7 @@ def get_for_file(file_name):
 
     file_name = os.path.realpath(file_name)
 
-    mime_type = _sugarbaseext.get_mime_type_for_file(file_name)
+    mime_type = SugarExt.mime_get_mime_type_for_file(file_name, None)
     if mime_type == 'application/octet-stream':
         if _file_looks_like_text(file_name):
             return 'text/plain'
@@ -134,7 +135,7 @@ def get_for_file(file_name):
 
 
 def get_from_file_name(file_name):
-    return _sugarbaseext.get_mime_type_from_file_name(file_name)
+    return SugarExt.mime_get_mime_type_from_file_name(file_name)
 
 
 def get_mime_icon(mime_type):
@@ -154,7 +155,7 @@ def get_mime_description(mime_type):
 
 
 def get_mime_parents(mime_type):
-    return _sugarbaseext.list_mime_parents(mime_type)
+    return SugarExt.mime_list_mime_parents(mime_type)
 
 
 def get_primary_extension(mime_type):
@@ -254,7 +255,7 @@ def choose_most_significant(mime_types):
 
 
 def split_uri_list(uri_list):
-    return _sugarbaseext.uri_list_extract_uris(uri_list)
+    return GLib.uri_list_extract_uris(uri_list)
 
 
 def _file_looks_like_text(file_name):

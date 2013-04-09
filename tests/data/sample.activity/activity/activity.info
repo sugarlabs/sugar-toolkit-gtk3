@@ -1,0 +1,7 @@
+[Activity]
+name = Sample
+activity_version = 1
+bundle_id = org.sugarlabs.Sample
+exec = sugar-activity activity.SampleActivity
+icon = activity-sample
+license = GPLv2+

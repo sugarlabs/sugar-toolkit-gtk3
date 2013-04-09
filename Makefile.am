@@ -1,6 +1,9 @@
 ACLOCAL_AMFLAGS = -I m4
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
+TESTS_TMPDIR=$(abs_builddir)/tests-tmp
+TESTS_PYTHONPATH=$(abs_srcdir)/src:$(PYTHONPATH)
+
 DISTCLEANFILES =		\
 	intltool-extract	\
 	intltool-merge		\
@@ -12,3 +15,12 @@ EXTRA_DIST =                    \
 	intltool-extract.in
 
 SUBDIRS = bin src po
+
+check: test
+
+test:
+	cd $(top_srcdir)/tests && \
+    mkdir -p $(TESTS_TMPDIR) && \
+    TMPDIR=$(TESTS_TMPDIR) PYTHONPATH=$(TESTS_PYTHONPATH) \
+    python -m unittest discover && \
+    rm -rf $(TESTS_TMPDIR)

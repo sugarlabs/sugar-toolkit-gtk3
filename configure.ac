@@ -18,13 +18,8 @@ AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AM_PATH_PYTHON
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
-AC_PATH_PROG(PYGTK_CODEGEN, pygtk-codegen-2.0, no)
-
 PKG_CHECK_MODULES(EXT, gtk+-3.0 gdk-3.0 gdk-pixbuf-2.0 sm ice alsa
                        librsvg-2.0 xfixes xi x11)
-
-PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
-AC_SUBST(PYGTK_DEFSDIR)
 
 GLIB_MKENUMS=`$PKG_CONFIG glib-2.0 --variable=glib_mkenums`
 AC_SUBST(GLIB_MKENUMS)
@@ -53,5 +48,6 @@ src/sugar3/event-controller/Makefile
 src/sugar3/presence/Makefile
 src/sugar3/datastore/Makefile
 src/sugar3/dispatch/Makefile
+src/sugar3/test/Makefile
 po/Makefile.in
 ])

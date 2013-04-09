@@ -64,10 +64,10 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 
 class Config(object):
 
-    def __init__(self, source_dir=None, dist_dir=None, dist_name=None):
-        self.source_dir = source_dir or os.getcwd()
-        self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
-        self.dist_name = dist_name
+    def __init__(self, source_dir):
+        self.source_dir = source_dir
+        self.build_dir = os.getcwd()
+        self.dist_dir = os.path.join(self.build_dir, 'dist')
         self.bundle = None
         self.version = None
         self.activity_name = None
@@ -90,18 +90,15 @@ class Config(object):
         self.bundle_name = reduce(operator.add, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%s' % (self.bundle_name, self.version)
-
-        if self.dist_name:
-            self.xo_name = self.tar_name = self.dist_name
-        else:
-            self.xo_name = '%s-%s.xo' % (self.bundle_name, self.version)
-            self.tar_name = '%s-%s.tar.bz2' % (self.bundle_name, self.version)
+        self.xo_name = '%s-%s.xo' % (self.bundle_name, self.version)
+        self.tar_name = '%s-%s.tar.bz2' % (self.bundle_name, self.version)
 
 
 class Builder(object):
 
     def __init__(self, config):
         self.config = config
+        self.locale_dir = os.path.join(self.config.build_dir, 'locale')
 
     def build(self):
         self.build_locale()
@@ -113,10 +110,8 @@ class Builder(object):
             logging.warn('Missing po/ dir, cannot build_locale')
             return
 
-        locale_dir = os.path.join(self.config.source_dir, 'locale')
-
-        if os.path.exists(locale_dir):
-            shutil.rmtree(locale_dir)
+        if os.path.exists(self.locale_dir):
+            shutil.rmtree(self.locale_dir)
 
         for f in os.listdir(po_dir):
             if not f.endswith('.po') or f == 'pseudo.po':
@@ -125,7 +120,7 @@ class Builder(object):
             file_name = os.path.join(po_dir, f)
             lang = f[:-3]
 
-            localedir = os.path.join(self.config.source_dir, 'locale', lang)
+            localedir = os.path.join(self.config.build_dir, 'locale', lang)
             mo_path = os.path.join(localedir, 'LC_MESSAGES')
             if not os.path.isdir(mo_path):
                 os.makedirs(mo_path)
@@ -145,10 +140,8 @@ class Builder(object):
             f.write('summary = %s\n' % translated_summary)
             f.close()
 
-    def get_files(self):
-        allfiles = list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
-        return allfiles
+    def get_locale_files(self):
+        return list_files(self.locale_dir, IGNORE_DIRS, IGNORE_FILES)
 
 
 class Packager(object):
@@ -200,10 +193,9 @@ class XOPackager(Packager):
         for f in self.get_files_in_git():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
-        locale_dir = os.path.join(self.config.source_dir, 'locale')
-        locale_files = list_files(locale_dir, IGNORE_DIRS, IGNORE_FILES)
-        for f in locale_files:
-            bundle_zip.write(os.path.join(locale_dir, f),
+
+        for f in self.builder.get_locale_files():
+            bundle_zip.write(os.path.join(self.builder.locale_dir, f),
                              os.path.join(self.config.bundle_root_dir,
                                           'locale', f))
 
@@ -225,18 +217,10 @@ class SourcePackager(Packager):
         tar.close()
 
 
-class Installer(object):
-    IGNORES = ['po/*', 'MANIFEST', 'AUTHORS']
-
+class Installer(Packager):
     def __init__(self, builder):
-        self.config = builder.config
+        Packager.__init__(self, builder.config)
         self.builder = builder
-
-    def should_ignore(self, f):
-        for pattern in self.IGNORES:
-            if fnmatch(f, pattern):
-                return True
-        return False
 
     def install(self, prefix):
         self.builder.build()
@@ -245,13 +229,21 @@ class Installer(object):
                                      self.config.bundle_root_dir)
 
         source_to_dest = {}
-        for f in self.builder.get_files():
-            if self.should_ignore(f):
-                pass
-            elif f.startswith('locale/') and f.endswith('.mo'):
-                source_to_dest[f] = os.path.join(prefix, 'share', f)
+
+        for f in self.get_files_in_git():
+            source_path = os.path.join(self.config.source_dir, f)
+            dest_path = os.path.join(activity_path, f)
+            source_to_dest[source_path] = dest_path
+
+        for f in self.builder.get_locale_files():
+            source_path = os.path.join(self.builder.locale_dir, f)
+
+            if source_path.endswith(".mo"):
+                dest_path = os.path.join(prefix, 'share', 'locale', f)
             else:
-                source_to_dest[f] = os.path.join(activity_path, f)
+                dest_path = os.path.join(activity_path, 'locale', f)
+
+            source_to_dest[source_path] = dest_path
 
         for source, dest in source_to_dest.items():
             print 'Install %s to %s.' % (source, dest)
@@ -337,6 +329,8 @@ def cmd_genpot(config, args):
         print 'Usage: %prog genpot'
         return
 
+    os.chdir(config.source_dir)
+
     po_path = os.path.join(config.source_dir, 'po')
     if not os.path.isdir(po_path):
         os.mkdir(po_path)
@@ -403,7 +397,8 @@ def start():
     parser.disable_interspersed_args()
     (options_, args) = parser.parse_args()
 
-    config = Config()
+    source_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    config = Config(source_dir)
 
     try:
         globals()['cmd_' + args[0]](config, args[1:])

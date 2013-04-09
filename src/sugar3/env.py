@@ -51,8 +51,8 @@ def get_logs_path(path=None):
 
 
 def get_user_activities_path():
-    return os.path.expanduser('~/Activities')
-
+    return os.environ.get("SUGAR_ACTIVITIES_PATH",
+                          os.path.expanduser('~/Activities'))
 
 def get_user_library_path():
     return os.path.expanduser('~/Library')
