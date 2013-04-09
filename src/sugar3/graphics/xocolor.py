@@ -239,7 +239,7 @@ class XoColor:
                           'fallback to default', color_string)
             client = GConf.Client.get_default()
             color_string = client.get_string('/desktop/sugar/user/color')
-            randomize = False
+            randomize = is_valid(color_string)
         else:
             randomize = False
 
