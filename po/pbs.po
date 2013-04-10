@@ -1,0 +1,207 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-20 21:07-0500\n"
+"PO-Revision-Date: 2013-04-10 05:28+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pbs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ../src/sugar3/activity/activity.py:376
+#, python-format
+msgid "%s Activity"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:873
+msgid "Keep error"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:874
+msgid "Keep error: all changes will be lost"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:877
+msgid "Don't stop"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:880
+msgid "Stop anyway"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:89
+msgid "Stop"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:101
+msgid "Undo"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:109
+msgid "Redo"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:116
+msgid "Copy"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:124
+msgid "Paste"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:135
+msgid "Private"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:142
+msgid "My Neighborhood"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:235
+msgid "Description"
+msgstr ""
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+msgid "Cancel"
+msgstr ""
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+msgid "Ok"
+msgstr ""
+
+#: ../src/sugar3/graphics/alert.py:434
+msgid "Continue"
+msgstr ""
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+msgid "Choose a color"
+msgstr ""
+
+#: ../src/sugar3/graphics/colorbutton.py:271
+msgid "Red"
+msgstr ""
+
+#: ../src/sugar3/graphics/colorbutton.py:273
+msgid "Green"
+msgstr ""
+
+#: ../src/sugar3/graphics/colorbutton.py:275
+msgid "Blue"
+msgstr ""
+
+#: ../src/sugar3/util.py:217
+msgid " and "
+msgstr ""
+
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ""
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+msgid "Seconds ago"
+msgstr ""
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+msgid "%s ago"
+msgstr ""
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:241
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:242
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:243
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:244
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:245
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:346
+msgid "Empty"
+msgstr ""
+
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr ""
+
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr ""
+
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr ""
+
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr ""
+
+#: ../src/sugar3/mime.py:54
+msgid "Text"
+msgstr "Keich´kily´´e"
+
+#: ../src/sugar3/mime.py:63
+msgid "Image"
+msgstr "kutau"
+
+#: ../src/sugar3/mime.py:69
+msgid "Audio"
+msgstr "Li´jio"
+
+#: ../src/sugar3/mime.py:77
+msgid "Video"
+msgstr "Ndaka´an leet"
+
+#: ../src/sugar3/mime.py:89
+msgid "Link"
+msgstr "Maje´uts"
