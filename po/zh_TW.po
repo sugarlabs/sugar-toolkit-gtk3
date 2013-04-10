@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"POT-Creation-Date: 2013-01-20 21:07-0500\n"
 "PO-Revision-Date: 2012-06-18 06:09+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,56 +17,56 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:376
 #, python-format
 msgid "%s Activity"
 msgstr "%s 活動"
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:873
 msgid "Keep error"
 msgstr "保存時發生錯誤"
 
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error: all changes will be lost"
 msgstr "保存時發生錯誤：所作的變動將遺失"
 
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:877
 msgid "Don't stop"
 msgstr "不停止"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:880
 msgid "Stop anyway"
 msgstr "確定停止"
 
-#: ../src/sugar3/activity/widgets.py:86
+#: ../src/sugar3/activity/widgets.py:89
 msgid "Stop"
 msgstr "停止"
 
-#: ../src/sugar3/activity/widgets.py:98
+#: ../src/sugar3/activity/widgets.py:101
 msgid "Undo"
 msgstr "復原"
 
-#: ../src/sugar3/activity/widgets.py:106
+#: ../src/sugar3/activity/widgets.py:109
 msgid "Redo"
 msgstr "取消復原"
 
-#: ../src/sugar3/activity/widgets.py:113
+#: ../src/sugar3/activity/widgets.py:116
 msgid "Copy"
 msgstr "複製"
 
-#: ../src/sugar3/activity/widgets.py:121
+#: ../src/sugar3/activity/widgets.py:124
 msgid "Paste"
 msgstr "貼上"
 
-#: ../src/sugar3/activity/widgets.py:132
+#: ../src/sugar3/activity/widgets.py:135
 msgid "Private"
 msgstr "私人"
 
-#: ../src/sugar3/activity/widgets.py:139
+#: ../src/sugar3/activity/widgets.py:142
 msgid "My Neighborhood"
 msgstr "我的鄰居"
 
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:235
 msgid "Description"
 msgstr "描述"
 
@@ -87,15 +87,15 @@ msgstr "繼續"
 msgid "Choose a color"
 msgstr "選擇喜歡的顏色"
 
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:271
 msgid "Red"
 msgstr "紅色"
 
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:273
 msgid "Green"
 msgstr "綠色"
 
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:275
 msgid "Blue"
 msgstr "藍色"
 
@@ -184,22 +184,22 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:54
 msgid "Text"
 msgstr "文字"
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:63
 msgid "Image"
 msgstr "圖片"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:69
 msgid "Audio"
 msgstr "聲音"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:77
 msgid "Video"
 msgstr "影像"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:89
 msgid "Link"
 msgstr "連結"
