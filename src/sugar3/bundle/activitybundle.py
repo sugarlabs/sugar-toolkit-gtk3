@@ -21,7 +21,7 @@ UNSTABLE.
 """
 
 from ConfigParser import ConfigParser
-import locale
+from locale import normalize
 import os
 import shutil
 import tempfile
@@ -34,6 +34,52 @@ from sugar3.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
 from sugar3.bundle.bundleversion import NormalizedVersion
 from sugar3.bundle.bundleversion import InvalidVersionError
+
+
+def _expand_lang(locale):
+    # Private method from gettext.py
+    locale = normalize(locale)
+    COMPONENT_CODESET = 1 << 0
+    COMPONENT_TERRITORY = 1 << 1
+    COMPONENT_MODIFIER = 1 << 2
+
+    # split up the locale into its base components
+    mask = 0
+    pos = locale.find('@')
+    if pos >= 0:
+        modifier = locale[pos:]
+        locale = locale[:pos]
+        mask |= COMPONENT_MODIFIER
+    else:
+        modifier = ''
+
+    pos = locale.find('.')
+    if pos >= 0:
+        codeset = locale[pos:]
+        locale = locale[:pos]
+        mask |= COMPONENT_CODESET
+    else:
+        codeset = ''
+
+    pos = locale.find('_')
+    if pos >= 0:
+        territory = locale[pos:]
+        locale = locale[:pos]
+        mask |= COMPONENT_TERRITORY
+    else:
+        territory = ''
+
+    language = locale
+    ret = []
+    for i in range(mask + 1):
+        if not (i & ~mask):  # if all components for this combo exist ...
+            val = language
+            if i & COMPONENT_TERRITORY: val += territory
+            if i & COMPONENT_CODESET: val += codeset
+            if i & COMPONENT_MODIFIER: val += modifier
+            ret.append(val)
+    ret.reverse()
+    return ret
 
 
 class ActivityBundle(Bundle):
@@ -135,20 +181,27 @@ class ActivityBundle(Bundle):
             self._summary = cp.get(section, 'summary')
 
     def _get_linfo_file(self):
-        lang = locale.getdefaultlocale()[0]
-        if not lang:
-            return None
+        # Using method from gettext.py, first find languages from environ
+        languages = []
+        for envar in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
+            val = os.environ.get(envar)
+            if val:
+                languages = val.split(':')
+                break
 
-        linfo_path = os.path.join('locale', lang, 'activity.linfo')
-        linfo_file = self.get_file(linfo_path)
-        if linfo_file is not None:
-            return linfo_file
+        # Next, normalize and expand the languages
+        nelangs = []
+        for lang in languages:
+            for nelang in _expand_lang(lang):
+                if nelang not in nelangs:
+                    nelangs.append(nelang)
 
-        linfo_path = os.path.join('locale', lang[:2], 'activity.linfo')
-        linfo_file = self.get_file(linfo_path)
-        if linfo_file is not None:
-            return linfo_file
-
+        # Finally, select a language
+        for lang in nelangs:
+            linfo_path = os.path.join('locale', lang, 'activity.linfo')
+            linfo_file = self.get_file(linfo_path)
+            if linfo_file is not None:
+                return linfo_file
         return None
 
     def _parse_linfo(self, linfo_file):
