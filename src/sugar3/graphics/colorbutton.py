@@ -255,7 +255,12 @@ class _ColorPalette(Palette):
         self.connect('popdown', self.__popdown_cb)
 
         self._picker_hbox = Gtk.HBox()
-        self.set_content(self._picker_hbox)
+        alignment = Gtk.Alignment()
+        alignment.set_padding(0, 0, style.DEFAULT_SPACING,
+                              style.DEFAULT_SPACING)
+        alignment.add(self._picker_hbox)
+        self.set_content(alignment)
+        alignment.show()
 
         self._swatch_tray = Gtk.Table()
 
