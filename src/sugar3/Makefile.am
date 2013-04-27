@@ -50,6 +50,8 @@ libsugarext_la_SOURCES =		\
 	sugar-grid.h			\
 	sugar-cursor-tracker.c		\
 	sugar-cursor-tracker.h		\
+	sugar-gconf.c			\
+	sugar-gconf.h			\
 	sugar-gesture-grabber.c		\
 	sugar-gesture-grabber.h		\
 	sugar-key-grabber.c		\
@@ -139,13 +141,15 @@ SugarExt_1_0_gir_FILES = \
 	sugar-gesture-grabber.h \
 	sugar-key-grabber.c \
 	sugar-key-grabber.h \
+	sugar-gconf.c \
+	sugar-gconf.h \
 	sugar-grid.c \
 	sugar-grid.h \
         sugar-wm.c    \
         sugar-wm.h
 
-SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
-SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
+SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0 GConf-2.0
+SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0 gconf-2.0
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
 
 girdir = $(datadir)/gir-1.0
