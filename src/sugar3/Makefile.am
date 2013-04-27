@@ -79,6 +79,7 @@ libsugarext_la_SOURCES =		\
 	sugar-key-grabber.c		\
 	sugar-key-grabber.h		\
 	sugar-wm.c			\
+    sugar-gconf.c       \
 	$(XDG_MIME_SOURCES)
 
 BUILT_SOURCES = 			\
@@ -99,7 +100,7 @@ EXTRA_DIST = sugar-marshal.list
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS = SugarExt-1.0.gir
 INTROSPECTION_SCANNER_ARGS = \
-	-D XDG_PREFIX=sugar_mime \	
+	-D XDG_PREFIX=sugar_mime \
         --identifier-prefix=Sugar --symbol-prefix=sugar \
 	--identifier-prefix=EggSM --symbol-prefix=egg_sm \
 	--identifier-prefix=Gsm --symbol-prefix=gsm \
@@ -128,12 +129,14 @@ SugarExt_1_0_gir_FILES = \
 	sugar-key-grabber.h \
 	sugar-grid.c \
 	sugar-grid.h \
-        sugar-wm.c    \
-        sugar-wm.h \
+    sugar-wm.c \
+    sugar-wm.h \
+    sugar-gconf.c \
+    sugar-gconf.h \
 	$(XDG_MIME_SOURCES)
 
-SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
-SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
+SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0 GConf-2.0
+SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0 gconf-2.0
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
 
 girdir = $(datadir)/gir-1.0
