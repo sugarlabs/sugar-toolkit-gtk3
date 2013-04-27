@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"POT-Creation-Date: 2013-01-20 21:07-0500\n"
 "PO-Revision-Date: 2012-10-13 21:31+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,68 +18,68 @@ msgstr ""
 "X-Generator: Pootle 2.0.5\n"
 
 #  "Actividad %s"
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:376
 #, python-format
 msgid "%s Activity"
 msgstr "%s Luräwi"
 
 #  "Error al guardar"
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:873
 msgid "Keep error"
 msgstr "Pantjasa imaña"
 
 #  "Error al guardar: todos los cambios se perderán"
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error: all changes will be lost"
 msgstr "Pantjasa imaña: taqi wakichatanakawa chhaqani"
 
 #  "No detener"
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:877
 msgid "Don't stop"
 msgstr "Jan sayt'amti"
 
 #  "Detener de todas formas"
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:880
 msgid "Stop anyway"
 msgstr "Mäpita sayt'ayaña"
 
 #  "Parar"
-#: ../src/sugar3/activity/widgets.py:86
+#: ../src/sugar3/activity/widgets.py:89
 msgid "Stop"
 msgstr "Sayt'ayaña"
 
 #  "Deshacer"
-#: ../src/sugar3/activity/widgets.py:98
+#: ../src/sugar3/activity/widgets.py:101
 msgid "Undo"
 msgstr "Kutiña"
 
 #  "Rehacer"
-#: ../src/sugar3/activity/widgets.py:106
+#: ../src/sugar3/activity/widgets.py:109
 msgid "Redo"
 msgstr "Wasitata luraña"
 
 #  "Copiar"
-#: ../src/sugar3/activity/widgets.py:113
+#: ../src/sugar3/activity/widgets.py:116
 msgid "Copy"
 msgstr "Apaqaña"
 
 #  "Pegar"
-#: ../src/sugar3/activity/widgets.py:121
+#: ../src/sugar3/activity/widgets.py:124
 msgid "Paste"
 msgstr "Lip'katayaña"
 
 #  "Privado"
-#: ../src/sugar3/activity/widgets.py:132
+#: ../src/sugar3/activity/widgets.py:135
 msgid "Private"
 msgstr "Yaqhankiri"
 
 #  "Mi Vecindario"
-#: ../src/sugar3/activity/widgets.py:139
+#: ../src/sugar3/activity/widgets.py:142
 msgid "My Neighborhood"
 msgstr "Mayachäwisa Masinaka"
 
 # "Descripción:"
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:235
 msgid "Description"
 msgstr "Yatiyaña"
 
@@ -105,17 +105,17 @@ msgid "Choose a color"
 msgstr "Maya samichaña katma"
 
 #  "Rojo"
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:271
 msgid "Red"
 msgstr "Wila"
 
 #  "Verde"
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:273
 msgid "Green"
 msgstr "Ch'uxña"
 
 #  "Azul"
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:275
 msgid "Blue"
 msgstr "Larama"
 
@@ -227,22 +227,22 @@ msgstr "%d MB wakichata"
 msgid "%d GB"
 msgstr "%d GB wakichata"
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:54
 msgid "Text"
 msgstr "Qillqata"
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:63
 msgid "Image"
 msgstr "Rixita"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:69
 msgid "Audio"
 msgstr "Ist'aña"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:77
 msgid "Video"
 msgstr "Uñjaña"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:89
 msgid "Link"
 msgstr "Mayachäwi"
