@@ -41,12 +41,16 @@ class HTMLActivity(activity.Activity):
         self.set_canvas(self._web_view)
         self._web_view.show()
 
+        self._authenticated = False
+
         self._server = Server()
         self._server.connect("session-started", self._session_started_cb)
         port = self._server.start()
 
         index_path = os.path.join(activity.get_bundle_path(), "index.html")
-        self._web_view.load_uri('file://' + index_path + "?port=%s" % port)
+        self._key = os.urandom(16).encode("hex")
+        self._web_view.load_uri("file://%s?port=%s&key=%s" %
+                                (index_path, port, self._key))
 
         self._apis = {}
         self._apis["activity"] = ActivityAPI(self)
@@ -56,6 +60,15 @@ class HTMLActivity(activity.Activity):
 
     def _message_received_cb(self, session, message):
         request = json.loads(message.data)
+
+        if request["method"] == "authenticate":
+            if self._key == request["params"][0]:
+                self._authenticated = True
+                return
+
+        if not self._authenticated:
+            return
+
         api_name, method_name = request["method"].split(".")
         method = getattr(self._apis[api_name], method_name)
 
