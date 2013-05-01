@@ -15,27 +15,54 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import json
 import os
 
 from gi.repository import Gtk
 from gi.repository import WebKit2
+from gwebsockets.server import Server
 
 from sugar3.activity import activity
+
+
+class ActivityAPI:
+    def __init__(self, activity):
+        self._activity = activity
+
+    def close(self):
+        self._activity.close()
 
 
 class HTMLActivity(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
 
-        scrolled_window = Gtk.ScrolledWindow()
-
         self._web_view = WebKit2.WebView()
-        scrolled_window.add(self._web_view)
+        self.set_canvas(self._web_view)
         self._web_view.show()
 
+        self._server = Server()
+        self._server.connect("session-started", self._session_started_cb)
+        port = self._server.start()
+
         index_path = os.path.join(activity.get_bundle_path(), "index.html")
-        self._web_view.load_uri('file://' + index_path)
+        self._web_view.load_uri('file://' + index_path + "?port=%s" % port)
 
-        self.set_canvas(scrolled_window)
-        scrolled_window.show()
+        self._apis = {}
+        self._apis["activity"] = ActivityAPI(self)
 
+    def _session_started_cb(self, server, session):
+        session.connect("message-received", self._message_received_cb)
+
+    def _message_received_cb(self, session, message):
+        request = json.loads(message.data)
+        api_name, method_name = request["method"].split(".")
+        method = getattr(self._apis[api_name], method_name)
+
+        result = method(*request["params"])
+
+        response = {"result": result,
+                    "error": None,
+                    "id": request["id"]}
+
+        session.send_message(json.dumps(response))
