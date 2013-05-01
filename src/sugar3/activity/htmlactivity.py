@@ -19,6 +19,7 @@ import json
 import os
 
 from gi.repository import Gtk
+from gi.repository import GConf
 from gi.repository import WebKit2
 from gwebsockets.server import Server
 
@@ -28,6 +29,11 @@ from sugar3.activity import activity
 class ActivityAPI:
     def __init__(self, activity):
         self._activity = activity
+
+    def get_xo_color(self):
+        client = GConf.Client.get_default()
+        color_string = client.get_string('/desktop/sugar/user/color')
+        return color_string.split(",")
 
     def close(self):
         self._activity.close()
