@@ -225,29 +225,23 @@ def _parse_string(color_string):
         return None
 
 
-def is_valid(color_string):
-    return (_parse_string(color_string) != None)
-
-
 class XoColor:
 
     def __init__(self, color_string=None):
-        if color_string == None:
-            randomize = True
-        elif not is_valid(color_string):
-            logging.debug('Color string is not valid: %s, '
-                          'fallback to default', color_string)
+        parsed_color = None
+
+        if color_string is None:
             client = GConf.Client.get_default()
             color_string = client.get_string('/desktop/sugar/user/color')
-            randomize = is_valid(color_string)
-        else:
-            randomize = False
 
-        if randomize:
+        if color_string is not None:
+            parsed_color = _parse_string(color_string)
+
+        if parsed_color is None:
             n = int(random.random() * (len(colors) - 1))
             [self.stroke, self.fill] = colors[n]
         else:
-            [self.stroke, self.fill] = _parse_string(color_string)
+            [self.stroke, self.fill] = parsed_color
 
     def __cmp__(self, other):
         if isinstance(other, XoColor):
