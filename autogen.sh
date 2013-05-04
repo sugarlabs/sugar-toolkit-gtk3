@@ -6,8 +6,6 @@ test -n "${srcdir}" || srcdir="$(pwd)"
 olddir="$(pwd)"
 cd "$srcdir"
 
-export ACLOCAL="aclocal -I m4"
-
 intltoolize
 autoreconf -i
 
