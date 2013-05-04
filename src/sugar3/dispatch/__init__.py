@@ -7,3 +7,4 @@ Heavily modified for Django's purposes.
 """
 
 from sugar3.dispatch.dispatcher import Signal
+assert Signal
