@@ -545,7 +545,6 @@ class ColorToolButton(Gtk.ToolItem):
     title = GObject.property(type=str, getter=get_title, setter=set_title)
 
     def do_draw(self, cr):
-        child = self.get_child()
         if self._palette and self._palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before

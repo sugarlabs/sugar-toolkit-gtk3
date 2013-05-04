@@ -18,7 +18,6 @@
 import json
 import os
 
-from gi.repository import Gtk
 from gi.repository import GConf
 from gi.repository import WebKit2
 from gwebsockets.server import Server

@@ -35,7 +35,6 @@ class TestUITree(unittest.TestCase):
 
 def show_window1():
     from gi.repository import Gtk
-    from gi.repository import GLib
 
     window = Gtk.Window()
     window.set_title("window1")

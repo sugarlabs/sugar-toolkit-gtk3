@@ -131,7 +131,6 @@ class RadioToolButton(Gtk.RadioToolButton):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_draw(self, cr):
-        child = self.get_child()
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before

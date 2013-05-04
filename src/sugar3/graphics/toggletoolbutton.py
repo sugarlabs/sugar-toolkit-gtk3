@@ -125,7 +125,6 @@ class ToggleToolButton(Gtk.ToggleToolButton):
                                    getter=get_accelerator)
 
     def do_draw(self, cr):
-        child = self.get_child()
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before
