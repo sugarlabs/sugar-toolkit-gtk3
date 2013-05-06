@@ -34,8 +34,6 @@ from sugar3.graphics.palettewindow import PaletteWindow, \
     _PaletteWindowWidget, _PaletteMenuWidget
 from sugar3.graphics.palettemenu import PaletteMenuItem
 
-# DEPRECATED
-# Import these for backwards compatibility
 from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
         WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
 assert MouseSpeedDetector
