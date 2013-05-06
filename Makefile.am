@@ -17,6 +17,7 @@ EXTRA_DIST =                    \
 SUBDIRS = bin src po
 
 check: test
+	pyflakes $(top_srcdir)
 
 test:
 	cd $(top_srcdir)/tests && \

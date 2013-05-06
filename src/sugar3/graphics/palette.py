@@ -38,7 +38,12 @@ from sugar3.graphics.palettemenu import PaletteMenuItem
 # Import these for backwards compatibility
 from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
         WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
-
+assert MouseSpeedDetector
+assert Invoker
+assert WidgetInvoker
+assert CursorInvoker
+assert ToolInvoker
+assert CellRendererInvoker
 
 class _HeaderItem(Gtk.MenuItem):
     """A MenuItem with a custom child widget that gets all the
