@@ -29,6 +29,7 @@ import math
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GObject
+from gi.repository import GLib
 
 from gi.repository import SugarGestures
 from sugar3.graphics import palettegroup
@@ -429,7 +430,7 @@ class MouseSpeedDetector(GObject.GObject):
         self.stop()
 
         self._mouse_pos = self._get_mouse_position()
-        self._timeout_hid = GObject.timeout_add(self._delay, self._timer_cb)
+        self._timeout_hid = GLib.timeout_add(self._delay, self._timer_cb)
 
     def stop(self):
         if self._timeout_hid is not None:

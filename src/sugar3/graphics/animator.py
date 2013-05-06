@@ -22,6 +22,7 @@ STABLE.
 import time
 
 from gi.repository import GObject
+from gi.repository import GLib
 
 EASE_OUT_EXPO = 0
 EASE_IN_EXPO = 1
@@ -54,7 +55,7 @@ class Animator(GObject.GObject):
             self.stop()
 
         self._start_time = time.time()
-        self._timeout_sid = GObject.timeout_add(
+        self._timeout_sid = GLib.timeout_add(
                     int(self._interval * 1000), self._next_frame_cb)
 
     def stop(self):

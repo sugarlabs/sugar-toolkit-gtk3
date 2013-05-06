@@ -434,7 +434,7 @@ class TimeoutAlert(Alert):
         self.add_button(Gtk.ResponseType.OK, _('Continue'), self._timeout_text)
         self._timeout_text.show()
 
-        GObject.timeout_add_seconds(1, self.__timeout)
+        GLib.timeout_add_seconds(1, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1
@@ -479,7 +479,7 @@ class NotifyAlert(Alert):
         self.add_button(Gtk.ResponseType.OK, _('Ok'), self._timeout_text)
         self._timeout_text.show()
 
-        GObject.timeout_add(1000, self.__timeout)
+        GLib.timeout_add(1000, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1

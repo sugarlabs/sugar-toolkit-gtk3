@@ -20,7 +20,7 @@ Test the sugar3.graphics.progressicon.ProgressIcon widget.
 """
 
 
-from gi.repository import GObject
+from gi.repository import GLib
 
 from sugar3.graphics.progressicon import ProgressIcon
 from sugar3.graphics import style
@@ -59,7 +59,7 @@ def timeout_cb():
         return False
     return True
 
-GObject.timeout_add(50, timeout_cb)
+GLib.timeout_add(50, timeout_cb)
 
 if __name__ == '__main__':
     common.main(test)
