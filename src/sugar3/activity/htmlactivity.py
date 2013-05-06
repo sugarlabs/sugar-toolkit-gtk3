@@ -18,6 +18,7 @@
 import json
 import os
 
+from gi.repository import Gdk
 from gi.repository import GConf
 from gi.repository import Gio
 from gi.repository import WebKit2
@@ -43,12 +44,17 @@ class HTMLActivity(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
 
+        self.connect("key-press-event", self._key_press_event_cb)
+
         context = WebKit2.WebContext.get_default()
         context.register_uri_scheme("activity", self._app_scheme_cb, None)
 
         self._web_view = WebKit2.WebView()
         self.set_canvas(self._web_view)
         self._web_view.show()
+
+        settings = self._web_view.get_settings()
+        settings.set_property("enable-developer-extras", True)
 
         self._authenticated = False
 
@@ -65,6 +71,18 @@ class HTMLActivity(activity.Activity):
 
         self._apis = {}
         self._apis["activity"] = ActivityAPI(self)
+
+    def _key_press_event_cb(self, window, event):
+        key_name = Gdk.keyval_name(event.keyval)
+
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
+           event.get_state() & Gdk.ModifierType.SHIFT_MASK:
+            if key_name == "I":
+                inspector = self._web_view.get_inspector()
+                if inspector.is_attached():
+                    inspector.close()
+                else:
+                    inspector.show()
 
     def _app_scheme_cb(self, request, user_data):
         path = os.path.join(activity.get_bundle_path(), request.get_path())
