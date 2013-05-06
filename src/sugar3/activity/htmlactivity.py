@@ -19,6 +19,7 @@ import json
 import os
 
 from gi.repository import GConf
+from gi.repository import Gio
 from gi.repository import WebKit2
 from gwebsockets.server import Server
 
@@ -42,6 +43,9 @@ class HTMLActivity(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
 
+        context = WebKit2.WebContext.get_default()
+        context.register_uri_scheme("activity", self._app_scheme_cb, None)
+
         self._web_view = WebKit2.WebView()
         self.set_canvas(self._web_view)
         self._web_view.show()
@@ -54,11 +58,19 @@ class HTMLActivity(activity.Activity):
 
         index_path = os.path.join(activity.get_bundle_path(), "index.html")
         self._key = os.urandom(16).encode("hex")
-        self._web_view.load_uri("file://%s?port=%s&key=%s" %
-                                (index_path, port, self._key))
+        self._web_view.load_uri("activity://%s/%s?port=%s&key=%s" %
+                                (self.get_bundle_id(),
+                                 index_path,
+                                 port, self._key))
 
         self._apis = {}
         self._apis["activity"] = ActivityAPI(self)
+
+    def _app_scheme_cb(self, request, user_data):
+        path = os.path.join(activity.get_bundle_path(), request.get_path())
+
+        request.finish(Gio.File.new_for_path(path).read(None),
+                       -1, Gio.content_type_guess(path, None)[0])
 
     def _session_started_cb(self, server, session):
         session.connect("message-received", self._message_received_cb)
