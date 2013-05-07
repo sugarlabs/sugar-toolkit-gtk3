@@ -20,11 +20,14 @@
 STABLE.
 """
 
+import logging
 import os
 
 
+# DEPRECATED
 def is_emulator():
-    return os.environ.get('SUGAR_EMULATOR', 'no') == 'yes'
+    logging.error("sugar.env.is_emulator is deprecated")
+    return False
 
 
 def get_profile_path(path=None):
