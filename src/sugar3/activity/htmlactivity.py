@@ -15,29 +15,13 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-import json
 import os
 
 from gi.repository import Gdk
-from gi.repository import GConf
 from gi.repository import Gio
 from gi.repository import WebKit2
-from gwebsockets.server import Server
 
 from sugar3.activity import activity
-
-
-class ActivityAPI:
-    def __init__(self, activity):
-        self._activity = activity
-
-    def get_xo_color(self):
-        client = GConf.Client.get_default()
-        color_string = client.get_string('/desktop/sugar/user/color')
-        return color_string.split(",")
-
-    def close(self):
-        self._activity.close()
 
 
 class HTMLActivity(activity.Activity):
@@ -58,26 +42,20 @@ class HTMLActivity(activity.Activity):
         settings = self._web_view.get_settings()
         settings.set_property("enable-developer-extras", True)
 
-        self._authenticated = False
-
-        self._server = Server()
-        self._server.connect("session-started", self._session_started_cb)
-        self._port = self._server.start()
-        self._key = os.urandom(16).encode("hex")
-
         index_path = os.path.join(activity.get_bundle_path(), "index.html")
         self._web_view.load_uri("activity://%s/%s" %
                                 (self.get_bundle_id(), index_path))
 
-        self._apis = {}
-        self._apis["activity"] = ActivityAPI(self)
-
     def _loading_changed_cb(self, web_view, load_event):
         if load_event == WebKit2.LoadEvent.FINISHED:
+            key = os.environ["SUGAR_APISOCKET_KEY"]
+            port = os.environ["SUGAR_APISOCKET_PORT"]
+
             script = "window.sugarKey = '%s'; " \
-                     "window.sugarPort = %d; " \
-                     "if (window.onSugarKeySet) " \
-                     "window.onSugarKeySet();" % (self._key, self._port)
+                     "window.sugarPort = '%s'; " \
+                     "window.sugarId = '%s'; " \
+                     "if (window.onSugarAuthSet) " \
+                     "window.onSugarAuthSet();" % (key, port, self.get_id())
 
             self._web_view.run_javascript(script, None, None, None)
 
@@ -98,28 +76,3 @@ class HTMLActivity(activity.Activity):
 
         request.finish(Gio.File.new_for_path(path).read(None),
                        -1, Gio.content_type_guess(path, None)[0])
-
-    def _session_started_cb(self, server, session):
-        session.connect("message-received", self._message_received_cb)
-
-    def _message_received_cb(self, session, message):
-        request = json.loads(message.data)
-
-        if request["method"] == "authenticate":
-            if self._key == request["params"][0]:
-                self._authenticated = True
-                return
-
-        if not self._authenticated:
-            return
-
-        api_name, method_name = request["method"].split(".")
-        method = getattr(self._apis[api_name], method_name)
-
-        result = method(*request["params"])
-
-        response = {"result": result,
-                    "error": None,
-                    "id": request["id"]}
-
-        session.send_message(json.dumps(response))
