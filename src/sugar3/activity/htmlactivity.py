@@ -21,9 +21,10 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import WebKit2
 from gi.repository import Gtk
+from gi.repository import GdkX11
+assert GdkX11
 
 from gi.repository import SugarExt
-from sugar3.activity import activity
 
 
 class HTMLActivity(Gtk.Window):
@@ -52,8 +53,7 @@ class HTMLActivity(Gtk.Window):
         settings = self._web_view.get_settings()
         settings.set_property("enable-developer-extras", True)
 
-        self._web_view.load_uri("activity://%s/%s/index.html" %
-                                (self._bundle_id, self._bundle_path))
+        self._web_view.load_uri("activity://%s/index.html" % self._bundle_id)
 
     def run_main_loop(self):
         Gtk.main()
@@ -90,7 +90,8 @@ class HTMLActivity(Gtk.Window):
                     inspector.show()
 
     def _app_scheme_cb(self, request, user_data):
-        path = os.path.join(activity.get_bundle_path(), request.get_path())
+        path = os.path.join(self._bundle_path,
+                            os.path.relpath(request.get_path(), "/"))
 
         request.finish(Gio.File.new_for_path(path).read(None),
                        -1, Gio.content_type_guess(path, None)[0])
