@@ -20,15 +20,25 @@ import os
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import WebKit2
+from gi.repository import Gtk
 
+from gi.repository import SugarExt
 from sugar3.activity import activity
 
 
-class HTMLActivity(activity.Activity):
+class HTMLActivity(Gtk.Window):
     def __init__(self, handle):
-        activity.Activity.__init__(self, handle)
+        Gtk.Window.__init__(self)
+
+        self._activity_id = handle.activity_id
+        self._bundle_id = os.environ["SUGAR_BUNDLE_ID"]
+        self._bundle_path = os.environ["SUGAR_BUNDLE_PATH"]
+
+        self.set_decorated(False)
+        self.maximize()
 
         self.connect("key-press-event", self._key_press_event_cb)
+        self.connect('realize', self._realize_cb)
 
         context = WebKit2.WebContext.get_default()
         context.register_uri_scheme("activity", self._app_scheme_cb, None)
@@ -36,15 +46,22 @@ class HTMLActivity(activity.Activity):
         self._web_view = WebKit2.WebView()
         self._web_view.connect("load-changed", self._loading_changed_cb)
 
-        self.set_canvas(self._web_view)
+        self.add(self._web_view)
         self._web_view.show()
 
         settings = self._web_view.get_settings()
         settings.set_property("enable-developer-extras", True)
 
-        index_path = os.path.join(activity.get_bundle_path(), "index.html")
-        self._web_view.load_uri("activity://%s/%s" %
-                                (self.get_bundle_id(), index_path))
+        self._web_view.load_uri("activity://%s/%s/index.html" %
+                                (self._bundle_id, self._bundle_path))
+
+    def run_main_loop(self):
+        Gtk.main()
+
+    def _realize_cb(self, window):
+        xid = window.get_window().get_xid()
+        SugarExt.wm_set_bundle_id(xid, self._bundle_id)
+        SugarExt.wm_set_activity_id(xid, str(self._activity_id))
 
     def _loading_changed_cb(self, web_view, load_event):
         if load_event == WebKit2.LoadEvent.FINISHED:
@@ -55,7 +72,8 @@ class HTMLActivity(activity.Activity):
                      "window.sugarPort = '%s'; " \
                      "window.sugarId = '%s'; " \
                      "if (window.onSugarAuthSet) " \
-                     "window.onSugarAuthSet();" % (key, port, self.get_id())
+                     "window.onSugarAuthSet();" % \
+                     (key, port, self._activity_id)
 
             self._web_view.run_javascript(script, None, None, None)
 
