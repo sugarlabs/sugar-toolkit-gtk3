@@ -50,6 +50,8 @@ class HTMLActivity(activity.Activity):
         context.register_uri_scheme("activity", self._app_scheme_cb, None)
 
         self._web_view = WebKit2.WebView()
+        self._web_view.connect("load-changed", self._loading_changed_cb)
+
         self.set_canvas(self._web_view)
         self._web_view.show()
 
@@ -60,17 +62,24 @@ class HTMLActivity(activity.Activity):
 
         self._server = Server()
         self._server.connect("session-started", self._session_started_cb)
-        port = self._server.start()
+        self._port = self._server.start()
+        self._key = os.urandom(16).encode("hex")
 
         index_path = os.path.join(activity.get_bundle_path(), "index.html")
-        self._key = os.urandom(16).encode("hex")
-        self._web_view.load_uri("activity://%s/%s?port=%s&key=%s" %
-                                (self.get_bundle_id(),
-                                 index_path,
-                                 port, self._key))
+        self._web_view.load_uri("activity://%s/%s" %
+                                (self.get_bundle_id(), index_path))
 
         self._apis = {}
         self._apis["activity"] = ActivityAPI(self)
+
+    def _loading_changed_cb(self, web_view, load_event):
+        if load_event == WebKit2.LoadEvent.FINISHED:
+            script = "window.sugarKey = '%s'; " \
+                     "window.sugarPort = %d; " \
+                     "if (window.onSugarKeySet) " \
+                     "window.onSugarKeySet();" % (self._key, self._port)
+
+            self._web_view.run_javascript(script, None, None, None)
 
     def _key_press_event_cb(self, window, event):
         key_name = Gdk.keyval_name(event.keyval)
