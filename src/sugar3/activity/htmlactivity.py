@@ -34,6 +34,7 @@ class HTMLActivity(Gtk.Window):
         self._activity_id = handle.activity_id
         self._bundle_id = os.environ["SUGAR_BUNDLE_ID"]
         self._bundle_path = os.environ["SUGAR_BUNDLE_PATH"]
+        self._inspector_visible = False
 
         self.set_decorated(False)
         self.maximize()
@@ -84,10 +85,14 @@ class HTMLActivity(Gtk.Window):
            event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             if key_name == "I":
                 inspector = self._web_view.get_inspector()
-                if inspector.is_attached():
+                if self._inspector_visible:
                     inspector.close()
+                    self._inspector_visible = False
                 else:
                     inspector.show()
+                    self._inspector_visible = True
+
+                return True
 
     def _app_scheme_cb(self, request, user_data):
         path = os.path.join(self._bundle_path,
