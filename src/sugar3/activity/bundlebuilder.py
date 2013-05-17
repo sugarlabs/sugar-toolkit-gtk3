@@ -160,16 +160,16 @@ class Packager(object):
                                       stdout=subprocess.PIPE,
                                       cwd=self.config.source_dir)
         except OSError:
-            logging.warn('Packager: git is not installed, ' \
-                             'fall back to filtered list')
+            logging.warn('Packager: git is not installed, '
+                         'fall back to filtered list')
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
 
         stdout, _ = git_ls.communicate()
         if git_ls.returncode:
             # Fall back to filtered list
-            logging.warn('Packager: this is not a git repository, ' \
-                             'fall back to filtered list')
+            logging.warn('Packager: this is not a git repository, '
+                         'fall back to filtered list')
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
 
@@ -363,7 +363,7 @@ def cmd_genpot(config, args):
     f.close()
 
     args = ['xgettext', '--join-existing', '--language=Python',
-        '--keyword=_', '--add-comments=TRANS:', '--output=%s' % pot_file]
+            '--keyword=_', '--add-comments=TRANS:', '--output=%s' % pot_file]
 
     args += python_files
     retcode = subprocess.call(args)
