@@ -66,7 +66,7 @@ class ContentBundle(Bundle):
         self._parse_info(info_file)
 
         if (self.get_file('index.html') is None and
-            self.get_file('library/library.xml') is None):
+                self.get_file('library/library.xml') is None):
             raise MalformedBundleException(
                 'Content bundle %s has neither index.html nor library.xml' %
                 self._path)
@@ -220,7 +220,7 @@ class ContentBundle(Bundle):
             return True
         elif os.path.isdir(self.get_root_dir()):
             return ContentBundle(self.get_root_dir()).get_library_version() \
-                    == self.get_library_version()
+                == self.get_library_version()
         else:
             return False
 

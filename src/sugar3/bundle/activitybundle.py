@@ -72,9 +72,12 @@ def _expand_lang(locale):
     for i in range(mask + 1):
         if not (i & ~mask):  # if all components for this combo exist ...
             val = language
-            if i & COMPONENT_TERRITORY: val += territory
-            if i & COMPONENT_CODESET: val += codeset
-            if i & COMPONENT_MODIFIER: val += modifier
+            if i & COMPONENT_TERRITORY:
+                val += territory
+            if i & COMPONENT_CODESET:
+                val += codeset
+            if i & COMPONENT_MODIFIER:
+                val += modifier
             ret.append(val)
     ret.reverse()
     return ret
@@ -315,8 +318,9 @@ class ActivityBundle(Bundle):
 
         mime_types = self.get_mime_types()
         if mime_types is not None:
-            installed_icons_dir = os.path.join(xdg_data_home,
-                'icons/sugar/scalable/mimetypes')
+            installed_icons_dir = \
+                os.path.join(xdg_data_home,
+                             'icons/sugar/scalable/mimetypes')
             if not os.path.isdir(installed_icons_dir):
                 os.makedirs(installed_icons_dir)
 
@@ -326,11 +330,11 @@ class ActivityBundle(Bundle):
                 svg_file = mime_icon_base + '.svg'
                 info_file = mime_icon_base + '.icon'
                 self._symlink(svg_file,
-                        os.path.join(installed_icons_dir,
-                            os.path.basename(svg_file)))
+                              os.path.join(installed_icons_dir,
+                                           os.path.basename(svg_file)))
                 self._symlink(info_file,
-                        os.path.join(installed_icons_dir,
-                            os.path.basename(info_file)))
+                              os.path.join(installed_icons_dir,
+                                           os.path.basename(info_file)))
 
     def _symlink(self, src, dst):
         if not os.path.isfile(src):
@@ -364,8 +368,9 @@ class ActivityBundle(Bundle):
 
         mime_types = self.get_mime_types()
         if mime_types is not None:
-            installed_icons_dir = os.path.join(xdg_data_home,
-                'icons/sugar/scalable/mimetypes')
+            installed_icons_dir = \
+                os.path.join(xdg_data_home,
+                             'icons/sugar/scalable/mimetypes')
             if os.path.isdir(installed_icons_dir):
                 for f in os.listdir(installed_icons_dir):
                     path = os.path.join(installed_icons_dir, f)
