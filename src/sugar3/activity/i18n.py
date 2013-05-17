@@ -53,7 +53,7 @@ def _extract_header(file_path):
 
     version_, num_of_strings = _read_bin(handle, format_string, 8)
 
-    msgids_hash_offset, msgstrs_hash_offset = _read_bin(handle, \
+    msgids_hash_offset, msgstrs_hash_offset = _read_bin(handle,
                                                         format_string, 8)
     handle.seek(msgids_hash_offset)
 
@@ -142,9 +142,9 @@ def get_locale_path(bundle_id):
 
     for candidate_dir in candidate_dirs.keys():
         if os.path.exists(candidate_dir):
-            full_path = os.path.join(candidate_dir, \
-                default_locale, 'LC_MESSAGES', \
-                bundle_id + '.mo')
+            full_path = os.path.join(candidate_dir,
+                                     default_locale, 'LC_MESSAGES',
+                                     bundle_id + '.mo')
             if os.path.exists(full_path):
                 try:
                     candidate_dirs[candidate_dir] = \
@@ -154,7 +154,7 @@ def get_locale_path(bundle_id):
                     # Set lowest priority
                     candidate_dirs[candidate_dir] = -1
 
-    available_paths = sorted(candidate_dirs.iteritems(), key=lambda (k, v): \
-        (v, k), reverse=True)
+    available_paths = sorted(candidate_dirs.iteritems(), key=lambda (k, v):
+                            (v, k), reverse=True)
     preferred_path = available_paths[0][0]
     return preferred_path

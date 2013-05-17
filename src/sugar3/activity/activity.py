@@ -67,9 +67,9 @@ import dbus.service
 from dbus import PROPERTIES_IFACE
 from telepathy.server import DBusProperties
 from telepathy.interfaces import CHANNEL, \
-                                 CHANNEL_TYPE_TEXT, \
-                                 CLIENT, \
-                                 CLIENT_HANDLER
+    CHANNEL_TYPE_TEXT, \
+    CLIENT, \
+    CLIENT_HANDLER
 from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
@@ -111,7 +111,7 @@ class _ActivitySession(GObject.GObject):
 
         self._xsmp_client = XSMPClient()
         self._xsmp_client.connect('quit-requested',
-            self.__sm_quit_requested_cb)
+                                  self.__sm_quit_requested_cb)
         self._xsmp_client.connect('quit', self.__sm_quit_cb)
         self._xsmp_client.startup()
 
@@ -346,8 +346,8 @@ class Activity(Window, Gtk.Container):
         if handle.invited:
             wait_loop = GObject.MainLoop()
             self._client_handler = _ClientHandler(
-                    self.get_bundle_id(),
-                    partial(self.__got_channel_cb, wait_loop))
+                self.get_bundle_id(),
+                partial(self.__got_channel_cb, wait_loop))
             # FIXME: The current API requires that self.shared_activity is set
             # before exiting from __init__, so we wait until we have got the
             # shared activity. http://bugs.sugarlabs.org/ticket/2168
@@ -422,7 +422,7 @@ class Activity(Window, Gtk.Container):
                 self.__joined_cb(self.shared_activity, True, None)
         elif share_scope != SCOPE_PRIVATE:
             logging.debug('*** Act %s no existing mesh instance, but used to '
-                'be shared, will share', self._activity_id)
+                          'be shared, will share', self._activity_id)
             # no existing mesh instance, but activity used to be shared, so
             # restart the share
             if share_scope == SCOPE_INVITE_ONLY:
@@ -470,8 +470,8 @@ class Activity(Window, Gtk.Container):
         self._max_participants = participants
 
     max_participants = GObject.property(
-            type=int, default=0, getter=get_max_participants,
-            setter=set_max_participants)
+        type=int, default=0, getter=get_max_participants,
+        setter=set_max_participants)
 
     def get_id(self):
         """Returns the activity id of the current instance of your activity.
@@ -630,7 +630,7 @@ class Activity(Window, Gtk.Container):
         if self._jobject:
             if self._owns_file and os.path.isfile(self._jobject.file_path):
                 logging.debug('_cleanup_jobject: removing %r',
-                    self._jobject.file_path)
+                              self._jobject.file_path)
                 os.remove(self._jobject.file_path)
             self._owns_file = False
             self._jobject.destroy()
@@ -752,9 +752,9 @@ class Activity(Window, Gtk.Container):
         else:
             self._updating_jobject = True
             datastore.write(self._jobject,
-                    transfer_ownership=True,
-                    reply_handler=self.__save_cb,
-                    error_handler=self.__save_error_cb)
+                            transfer_ownership=True,
+                            reply_handler=self.__save_cb,
+                            error_handler=self.__save_error_cb)
 
     def copy(self):
         """Request that the activity 'Keep in Journal' the current state
@@ -803,7 +803,7 @@ class Activity(Window, Gtk.Container):
     def __share_cb(self, ps, success, activity, err):
         if not success:
             logging.debug('Share of activity %s failed: %s.',
-                self._activity_id, err)
+                          self._activity_id, err)
             return
 
         logging.debug('Share of activity %s successful, PS activity is %r.',
@@ -813,7 +813,7 @@ class Activity(Window, Gtk.Container):
 
         self.shared_activity = activity
         self.shared_activity.connect('notify::private',
-                self.__privacy_changed_cb)
+                                     self.__privacy_changed_cb)
         self.emit('shared')
         self.__privacy_changed_cb(self.shared_activity, None)
 
@@ -830,7 +830,7 @@ class Activity(Window, Gtk.Container):
             buddy = pservice.get_buddy(account_path, contact_id)
             if buddy:
                 self.shared_activity.invite(
-                            buddy, '', self._invite_response_cb)
+                    buddy, '', self._invite_response_cb)
             else:
                 logging.error('Cannot invite %s %s, no such buddy',
                               account_path, contact_id)
@@ -845,7 +845,7 @@ class Activity(Window, Gtk.Container):
         self._invites_queue.append((account_path, contact_id))
 
         if (self.shared_activity is None
-            or not self.shared_activity.props.joined):
+                or not self.shared_activity.props.joined):
             self.share(True)
         else:
             self._send_invites()
@@ -864,7 +864,7 @@ class Activity(Window, Gtk.Container):
                                self._activity_id)
         verb = private and 'private' or 'public'
         logging.debug('Requesting %s share of activity %s.', verb,
-            self._activity_id)
+                      self._activity_id)
         pservice = presenceservice.get_instance()
         pservice.connect('activity-shared', self.__share_cb)
         pservice.share_activity(self, private=private)
@@ -875,7 +875,8 @@ class Activity(Window, Gtk.Container):
         alert.props.msg = _('Keep error: all changes will be lost')
 
         cancel_icon = Icon(icon_name='dialog-cancel')
-        alert.add_button(Gtk.ResponseType.CANCEL, _('Don\'t stop'), cancel_icon)
+        alert.add_button(Gtk.ResponseType.CANCEL, _('Don\'t stop'),
+                         cancel_icon)
 
         stop_icon = Icon(icon_name='dialog-ok')
         alert.add_button(Gtk.ResponseType.OK, _('Stop anyway'), stop_icon)
@@ -997,17 +998,17 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
 
         self._implement_property_get(CLIENT, {
             'Interfaces': lambda: list(self._interfaces),
-          })
+        })
         self._implement_property_get(CLIENT_HANDLER, {
             'HandlerChannelFilter': self.__get_filters_cb,
-          })
+        })
 
     def __get_filters_cb(self):
         logging.debug('__get_filters_cb')
         filters = {
             CHANNEL + '.ChannelType': CHANNEL_TYPE_TEXT,
             CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
-            }
+        }
         filter_dict = dbus.Dictionary(filters, signature='sv')
         logging.debug('__get_filters_cb %r', dbus.Array([filter_dict],
                                                         signature='a{sv}'))
@@ -1016,10 +1017,10 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
     @dbus.service.method(dbus_interface=CLIENT_HANDLER,
                          in_signature='ooa(oa{sv})aota{sv}', out_signature='')
     def HandleChannels(self, account, connection, channels, requests_satisfied,
-                        user_action_time, handler_info):
+                       user_action_time, handler_info):
         logging.debug('HandleChannels\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r',
-                account, connection, channels, requests_satisfied,
-                user_action_time, handler_info)
+                      account, connection, channels, requests_satisfied,
+                      user_action_time, handler_info)
         try:
             for object_path, properties in channels:
                 channel_type = properties[CHANNEL + '.ChannelType']

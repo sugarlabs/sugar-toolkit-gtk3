@@ -129,14 +129,14 @@ class ShareButton(RadioMenuButton):
         palette = RadioPalette()
 
         self.private = RadioToolButton(
-                icon_name='zoom-home')
+            icon_name='zoom-home')
         palette.append(self.private, _('Private'))
 
         self.neighborhood = RadioToolButton(
-                icon_name='zoom-neighborhood',
-                group=self.private)
+            icon_name='zoom-neighborhood',
+            group=self.private)
         self._neighborhood_handle = self.neighborhood.connect(
-                'clicked', self.__neighborhood_clicked_cb, activity)
+            'clicked', self.__neighborhood_clicked_cb, activity)
         palette.append(self.neighborhood, _('My Neighborhood'))
 
         activity.connect('shared', self.__update_share_cb)
@@ -175,7 +175,8 @@ class TitleEntry(Gtk.ToolItem):
         self.entry = Gtk.Entry(**kwargs)
         self.entry.set_size_request(int(Gdk.Screen.width() / 3), -1)
         self.entry.set_text(activity.metadata['title'])
-        self.entry.connect('focus-out-event', self.__title_changed_cb, activity)
+        self.entry.connect(
+            'focus-out-event', self.__title_changed_cb, activity)
         self.entry.connect('button-press-event', self.__button_press_event_cb)
         self.entry.show()
         self.add(self.entry)
@@ -250,7 +251,7 @@ class DescriptionItem(ToolButton):
             text_buffer.set_text(activity.metadata['description'])
         self._text_view.set_buffer(text_buffer)
         self._text_view.connect('focus-out-event',
-                               self.__description_changed_cb, activity)
+                                self.__description_changed_cb, activity)
         sw.add(self._text_view)
         description_box.append_item(sw, vertical_padding=0)
         self._palette.set_content(description_box)
@@ -322,7 +323,7 @@ class ActivityToolbar(Gtk.Toolbar):
             self.insert(title_button, -1)
             self.title = title_button.entry
 
-        if orientation_left == False:
+        if not orientation_left:
             separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
