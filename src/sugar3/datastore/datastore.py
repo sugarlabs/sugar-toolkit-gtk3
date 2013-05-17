@@ -157,7 +157,7 @@ class DSObject(object):
             self._update_signal_match.remove()
         if object_id is not None:
             self._update_signal_match = _get_data_store().connect_to_signal(
-                    'Updated', self.__object_updated_cb, arg0=object_id)
+                'Updated', self.__object_updated_cb, arg0=object_id)
 
         self._object_id = object_id
 
@@ -228,15 +228,15 @@ class RawObject(object):
         stat = os.stat(file_path)
         client = GConf.Client.get_default()
         metadata = {
-                'uid': file_path,
-                'title': os.path.basename(file_path),
-                'timestamp': stat.st_mtime,
-                'mime_type': Gio.content_type_guess(file_path, None)[0],
-                'activity': '',
-                'activity_id': '',
-                'icon-color': client.get_string('/desktop/sugar/user/color'),
-                'description': file_path,
-                }
+            'uid': file_path,
+            'title': os.path.basename(file_path),
+            'timestamp': stat.st_mtime,
+            'mime_type': Gio.content_type_guess(file_path, None)[0],
+            'activity': '',
+            'activity_id': '',
+            'icon-color': client.get_string('/desktop/sugar/user/color'),
+            'description': file_path,
+        }
 
         self.object_id = file_path
         self._metadata = DSMetadata(metadata)
@@ -255,7 +255,7 @@ class RawObject(object):
         if self._file_path is None:
             data_path = os.path.join(env.get_profile_path(), 'data')
             self._file_path = tempfile.mktemp(
-                    prefix='rawobject', dir=data_path)
+                prefix='rawobject', dir=data_path)
             if not os.path.exists(data_path):
                 os.makedirs(data_path)
             os.symlink(self.object_id, self._file_path)
@@ -314,18 +314,18 @@ def create():
 
 
 def _update_ds_entry(uid, properties, filename, transfer_ownership=False,
-        reply_handler=None, error_handler=None, timeout=-1):
+                     reply_handler=None, error_handler=None, timeout=-1):
     debug_properties = properties.copy()
     if 'preview' in debug_properties:
         debug_properties['preview'] = '<omitted>'
     logging.debug('dbus_helpers.update: %s, %s, %s, %s', uid, filename,
-        debug_properties, transfer_ownership)
+                  debug_properties, transfer_ownership)
     if reply_handler and error_handler:
         _get_data_store().update(uid, dbus.Dictionary(properties), filename,
-                transfer_ownership,
-                reply_handler=reply_handler,
-                error_handler=error_handler,
-                timeout=timeout)
+                                 transfer_ownership,
+                                 reply_handler=reply_handler,
+                                 error_handler=error_handler,
+                                 timeout=timeout)
     else:
         _get_data_store().update(uid, dbus.Dictionary(properties),
                                  filename, transfer_ownership)
@@ -333,7 +333,7 @@ def _update_ds_entry(uid, properties, filename, transfer_ownership=False,
 
 def _create_ds_entry(properties, filename, transfer_ownership=False):
     object_id = _get_data_store().create(dbus.Dictionary(properties), filename,
-    transfer_ownership)
+                                         transfer_ownership)
     return object_id
 
 
@@ -379,7 +379,7 @@ def write(ds_object, update_mtime=True, transfer_ownership=False,
                          timeout=timeout)
     else:
         if reply_handler or error_handler:
-            logging.warning('datastore.write() cannot currently be called' \
+            logging.warning('datastore.write() cannot currently be called'
                             'async for creates, see ticket 3071')
         ds_object.object_id = _create_ds_entry(properties, file_path,
                                                transfer_ownership)
@@ -505,4 +505,4 @@ def get_unique_values(key):
 
     """
     return _get_data_store().get_uniquevaluesfor(
-                                key, dbus.Dictionary({}, signature='ss'))
+        key, dbus.Dictionary({}, signature='ss'))
