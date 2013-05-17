@@ -123,7 +123,7 @@ class NormalizedVersion(object):
 
     def __str__(self):
         version_string = '.'.join(str(v) for v in self.parts)
-        if self._local != None:
+        if self._local is not None:
             version_string += self._local
         return version_string
 
@@ -132,7 +132,7 @@ class NormalizedVersion(object):
 
     def _cannot_compare(self, other):
         raise TypeError("Can not compare %s and %s"
-                % (type(self).__name__, type(other).__name__))
+                        % (type(self).__name__, type(other).__name__))
 
     def __eq__(self, other):
         if not isinstance(other, NormalizedVersion):
