@@ -43,8 +43,9 @@ def _add_accelerator(tool_button):
     keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
     # the accelerator needs to be set at the child, so the Gtk.AccelLabel
     # in the palette can pick it up.
-    tool_button.get_child().add_accelerator('clicked', accel_group, keyval, mask,
-                                      Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE)
+    tool_button.get_child(
+    ).add_accelerator('clicked', accel_group, keyval, mask,
+                      Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE)
 
 
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
@@ -103,7 +104,7 @@ class ToolButton(Gtk.ToolButton):
         return self._tooltip
 
     tooltip = GObject.property(type=str, setter=set_tooltip,
-        getter=get_tooltip)
+                               getter=get_tooltip)
 
     def get_hide_tooltip_on_click(self):
         return self._hide_tooltip_on_click
@@ -124,7 +125,7 @@ class ToolButton(Gtk.ToolButton):
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
-            getter=get_accelerator)
+                                   getter=get_accelerator)
 
     def set_icon_name(self, icon_name):
         icon = Icon(icon_name=icon_name)

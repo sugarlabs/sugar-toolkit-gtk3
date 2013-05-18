@@ -139,7 +139,7 @@ class _IconBuffer(object):
             theme = Gtk.IconTheme.get_default()
 
             size = 50
-            if self.width != None:
+            if self.width is not None:
                 size = self.width
 
             info = theme.lookup_icon(self.icon_name, int(size), 0)
@@ -153,7 +153,7 @@ class _IconBuffer(object):
                 del info
             else:
                 logging.warning('No icon with the name %s was found in the '
-                    'theme.', self.icon_name)
+                                'theme.', self.icon_name)
 
         return icon_info
 
@@ -205,7 +205,7 @@ class _IconBuffer(object):
         if info.attach_x < 0 or info.attach_y < 0:
             info.icon_padding = max(-info.attach_x, -info.attach_y)
         elif info.attach_x + info.size > icon_width or \
-             info.attach_y + info.size > icon_height:
+                info.attach_y + info.size > icon_height:
             x_padding = info.attach_x + info.size - icon_width
             y_padding = info.attach_y + info.size - icon_height
             info.icon_padding = max(x_padding, y_padding)
@@ -397,9 +397,9 @@ class Icon(Gtk.Image):
 
         allocation = self.get_allocation()
         x = math.floor(xpad +
-            (allocation.width - requisition.width) * xalign)
+                      (allocation.width - requisition.width) * xalign)
         y = math.floor(ypad +
-            (allocation.height - requisition.height) * yalign)
+                      (allocation.height - requisition.height) * yalign)
 
         if self._scale != 1.0:
             cr.scale(self._scale, self._scale)
@@ -727,8 +727,9 @@ class CanvasIcon(EventIcon):
 
     def __button_press_event_cb(self, icon, event):
         if self.palette and not self.palette.is_up():
-            self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.ACTIVE,
-                                 clear=True)
+            self.set_state_flags(
+                self.get_state_flags() | Gtk.StateFlags.ACTIVE,
+                clear=True)
 
     def __button_release_event_cb(self, icon, event):
         self.unset_state_flags(Gtk.StateFlags.ACTIVE)
@@ -807,7 +808,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._xo_color = value
 
     xo_color = GObject.property(type=object,
-            getter=get_xo_color, setter=set_xo_color)
+                                getter=get_xo_color, setter=set_xo_color)
 
     def set_fill_color(self, value):
         if self._fill_color != value:
@@ -918,9 +919,9 @@ class CellRendererIcon(Gtk.CellRenderer):
             else:
                 context.set_state(Gtk.StateFlags.NORMAL)
 
-
-        Gtk.render_background(context, cr, background_area.x, background_area.y,
-                              background_area.width, background_area.height)
+        Gtk.render_background(
+            context, cr, background_area.x, background_area.y,
+            background_area.width, background_area.height)
 
         Gtk.render_frame(context, cr, background_area.x, background_area.y,
                          background_area.width, background_area.height)

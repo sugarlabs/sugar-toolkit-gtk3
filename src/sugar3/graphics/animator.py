@@ -56,7 +56,7 @@ class Animator(GObject.GObject):
 
         self._start_time = time.time()
         self._timeout_sid = GLib.timeout_add(
-                    int(self._interval * 1000), self._next_frame_cb)
+            int(self._interval * 1000), self._next_frame_cb)
 
     def stop(self):
         if self._timeout_sid:

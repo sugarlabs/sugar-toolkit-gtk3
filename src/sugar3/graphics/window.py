@@ -46,7 +46,7 @@ class UnfullscreenButton(Gtk.Window):
 
         self.props.accept_focus = False
 
-        #Setup estimate of width, height
+        # Setup estimate of width, height
         valid_, w, h = Gtk.icon_size_lookup(Gtk.IconSize.LARGE_TOOLBAR)
         self._width = w
         self._height = h
@@ -58,7 +58,7 @@ class UnfullscreenButton(Gtk.Window):
         self._button.set_relief(Gtk.ReliefStyle.NONE)
 
         self._icon = Icon(icon_name='view-return',
-                            icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+                          icon_size=Gtk.IconSize.LARGE_TOOLBAR)
         self._icon.show()
         self._button.add(self._icon)
 
@@ -162,8 +162,8 @@ class Window(Gtk.Window):
                 self._unfullscreen_button_timeout_id = None
 
             self._unfullscreen_button_timeout_id = \
-                GLib.timeout_add_seconds( \
-                    _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
+                GLib.timeout_add_seconds(
+                    _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT,
                     self.__unfullscreen_button_timeout_cb)
 
     def unfullscreen(self):
@@ -259,7 +259,7 @@ class Window(Gtk.Window):
                 self.tray.props.visible = not self.tray.props.visible
                 return True
         elif key == 'Escape' and self._is_fullscreen and \
-            self.props.enable_fullscreen_mode:
+                self.props.enable_fullscreen_mode:
             self.unfullscreen()
             return True
         return False
@@ -286,8 +286,8 @@ class Window(Gtk.Window):
                 self._unfullscreen_button_timeout_id = None
 
             self._unfullscreen_button_timeout_id = \
-                GLib.timeout_add_seconds( \
-                    _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
+                GLib.timeout_add_seconds(
+                    _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT,
                     self.__unfullscreen_button_timeout_cb)
 
     def __unfullscreen_button_timeout_cb(self):
@@ -321,5 +321,7 @@ class Window(Gtk.Window):
     def get_enable_fullscreen_mode(self):
         return self._enable_fullscreen_mode
 
-    enable_fullscreen_mode = GObject.property(type=object,
-        setter=set_enable_fullscreen_mode, getter=get_enable_fullscreen_mode)
+    enable_fullscreen_mode = GObject.property(
+        type=object,
+        setter=set_enable_fullscreen_mode,
+        getter=get_enable_fullscreen_mode)

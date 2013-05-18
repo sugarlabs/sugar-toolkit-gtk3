@@ -35,13 +35,14 @@ from sugar3.graphics.palettewindow import PaletteWindow, \
 from sugar3.graphics.palettemenu import PaletteMenuItem
 
 from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
-        WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
+    WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
 assert MouseSpeedDetector
 assert Invoker
 assert WidgetInvoker
 assert CursorInvoker
 assert ToolInvoker
 assert CellRendererInvoker
+
 
 class _HeaderItem(Gtk.MenuItem):
     """A MenuItem with a custom child widget that gets all the
@@ -269,7 +270,7 @@ class Palette(PaletteWindow):
         return self._secondary_text
 
     secondary_text = GObject.property(type=str, getter=get_secondary_text,
-        setter=set_secondary_text)
+                                      setter=set_secondary_text)
 
     def _show_icon(self):
         self._label_alignment.set_padding(0, 0, 0, style.DEFAULT_SPACING)
@@ -326,7 +327,7 @@ class Palette(PaletteWindow):
 
     def set_content(self, widget):
         assert self._widget is None \
-                or isinstance(self._widget, _PaletteWindowWidget)
+            or isinstance(self._widget, _PaletteWindowWidget)
 
         if self._widget is None:
             self._widget = _PaletteWindowWidget(self)
@@ -366,7 +367,7 @@ class Palette(PaletteWindow):
     def get_label_width(self):
         # Gtk.AccelLabel request doesn't include the accelerator.
         label_width = self._label_alignment.get_preferred_width()[1] + \
-                      self._label.get_accel_width()
+            self._label.get_accel_width()
         return label_width
 
     def _update_separators(self):

@@ -30,7 +30,7 @@ class PaletteMenuBox(Gtk.VBox):
                     vertical_padding=None):
         item = None
         if (isinstance(item_or_widget, PaletteMenuItem) or
-            isinstance(item_or_widget, PaletteMenuItemSeparator)):
+                isinstance(item_or_widget, PaletteMenuItemSeparator)):
             item = item_or_widget
         else:
             item = self._wrap_widget(item_or_widget, horizontal_padding,
@@ -98,7 +98,7 @@ class PaletteMenuItem(Gtk.EventBox):
 
         if icon_name is not None:
             self.icon = Icon(icon_name=icon_name,
-                        icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+                             icon_size=Gtk.IconSize.SMALL_TOOLBAR)
             if xo_color is not None:
                 self.icon.props.xo_color = xo_color
             self._hbox.pack_start(self.icon, expand=False, fill=False,
@@ -118,10 +118,10 @@ class PaletteMenuItem(Gtk.EventBox):
             self.label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
         align.add(self.label)
         self._hbox.pack_start(align, expand=True, fill=True,
-                        padding=style.DEFAULT_PADDING)
+                              padding=style.DEFAULT_PADDING)
 
         self.id_bt_release_cb = self.connect('button-release-event',
-                self.__button_release_cb)
+                                             self.__button_release_cb)
         self.id_enter_notify_cb = self.connect('enter-notify-event',
                                                self.__enter_notify_cb)
         self.id_leave_notify_cb = self.connect('leave-notify-event',
@@ -142,7 +142,7 @@ class PaletteMenuItem(Gtk.EventBox):
 
     def set_label(self, text_label):
         text = '<span foreground="%s">' % style.COLOR_WHITE.get_html() + \
-                    text_label + '</span>'
+            text_label + '</span>'
         self.label.set_markup(text)
 
     def set_image(self, icon):
@@ -151,8 +151,8 @@ class PaletteMenuItem(Gtk.EventBox):
         self._hbox.reorder_child(icon, 0)
 
     def set_sensitive(self, sensitive):
-        is_sensitive = bool(not self.get_state_flags() & \
-                                Gtk.StateFlags.INSENSITIVE)
+        is_sensitive = bool(not self.get_state_flags() &
+                            Gtk.StateFlags.INSENSITIVE)
         if is_sensitive == sensitive:
             return
 
@@ -165,6 +165,6 @@ class PaletteMenuItem(Gtk.EventBox):
             self.handler_block(self.id_bt_release_cb)
             self.handler_block(self.id_enter_notify_cb)
             self.handler_block(self.id_leave_notify_cb)
-            self.set_state_flags(self.get_state_flags() | \
-                                     Gtk.StateFlags.INSENSITIVE,
+            self.set_state_flags(self.get_state_flags() |
+                                 Gtk.StateFlags.INSENSITIVE,
                                  clear=True)

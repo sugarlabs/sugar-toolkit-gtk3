@@ -34,7 +34,8 @@ class Notebook(Gtk.Notebook):
 
     __gproperties__ = {
         'can-close-tabs': (bool, None, None, False,
-            GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
+                           GObject.PARAM_READWRITE |
+                           GObject.PARAM_CONSTRUCT_ONLY),
     }
 
     def __init__(self, **kwargs):

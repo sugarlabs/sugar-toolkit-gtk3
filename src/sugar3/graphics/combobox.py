@@ -89,7 +89,7 @@ class ComboBox(Gtk.ComboBox):
                 file_name = self._get_real_name_from_theme(icon_name, size)
 
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-                                                file_name, width, height)
+                file_name, width, height)
         else:
             pixbuf = None
 

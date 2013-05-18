@@ -67,11 +67,11 @@ class Color(object):
 
     def get_int(self):
         return int(self._a * 255) + (int(self._b * 255) << 8) + \
-                (int(self._g * 255) << 16) + (int(self._r * 255) << 24)
+            (int(self._g * 255) << 16) + (int(self._r * 255) << 24)
 
     def get_gdk_color(self):
         return Gdk.Color(int(self._r * 65535), int(self._g * 65535),
-                             int(self._b * 65535))
+                         int(self._b * 65535))
 
     def get_html(self):
         return '#%02x%02x%02x' % (self._r * 255, self._g * 255, self._b * 255)
