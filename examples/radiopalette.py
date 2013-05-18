@@ -1,7 +1,7 @@
 from gi.repository import Gtk
 
 from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton, \
-                                        RadioToolsButton
+    RadioToolsButton
 from sugar3.graphics.radiotoolbutton import RadioToolButton
 
 window = Gtk.Window()
@@ -26,19 +26,19 @@ def echo(button, label):
 palette = RadioPalette()
 
 group = RadioToolButton(
-        icon_name='document-open')
+    icon_name='document-open')
 group.connect('clicked', lambda button: echo(button, 'document-open'))
 palette.append(group, 'menu.document-open')
 
 button = RadioToolButton(
-        icon_name='document-save',
-        group=group)
+    icon_name='document-save',
+    group=group)
 button.connect('clicked', lambda button: echo(button, 'document-save'))
 palette.append(button, 'menu.document-save')
 
 button = RadioToolButton(
-        icon_name='document-send',
-        group=group)
+    icon_name='document-send',
+    group=group)
 button.connect('clicked', lambda button: echo(button, 'document-send'))
 palette.append(button, 'menu.document-send')
 
@@ -50,19 +50,19 @@ toolbar.insert(button, -1)
 palette = RadioPalette()
 
 group = RadioToolButton(
-        icon_name='document-open')
+    icon_name='document-open')
 group.connect('clicked', lambda button: echo(button, 'document-open'))
 palette.append(group, 'menu.document-open')
 
 button = RadioToolButton(
-        icon_name='document-save',
-        group=group)
+    icon_name='document-save',
+    group=group)
 button.connect('clicked', lambda button: echo(button, 'document-save'))
 palette.append(button, 'menu.document-save')
 
 button = RadioToolButton(
-        icon_name='document-send',
-        group=group)
+    icon_name='document-send',
+    group=group)
 button.connect('clicked', lambda button: echo(button, 'document-send'))
 palette.append(button, 'menu.document-send')
 

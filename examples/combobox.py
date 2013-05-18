@@ -2,8 +2,10 @@ from gi.repository import Gtk
 
 from sugar3.graphics.combobox import ComboBox
 
+
 def _destroy_cb(widget, data=None):
     Gtk.main_quit()
+
 
 def __combo_changed_cb(widget, data=None):
     print 'combo-changed'
