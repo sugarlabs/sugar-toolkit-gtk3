@@ -27,8 +27,8 @@ from gi.repository import GObject
 import dbus
 from gi.repository import GConf
 from telepathy.interfaces import CONNECTION, \
-                                 CONNECTION_INTERFACE_ALIASING, \
-                                 CONNECTION_INTERFACE_CONTACTS
+    CONNECTION_INTERFACE_ALIASING, \
+    CONNECTION_INTERFACE_CONTACTS
 from telepathy.constants import HANDLE_TYPE_CONTACT
 
 from sugar3.presence.connectionmanager import get_connection_manager
@@ -58,11 +58,11 @@ class BaseBuddy(GObject.GObject):
 
     __gsignals__ = {
         'joined-activity': (GObject.SignalFlags.RUN_FIRST, None,
-            ([GObject.TYPE_PYOBJECT])),
+                            ([GObject.TYPE_PYOBJECT])),
         'left-activity': (GObject.SignalFlags.RUN_FIRST, None,
-            ([GObject.TYPE_PYOBJECT])),
+                          ([GObject.TYPE_PYOBJECT])),
         'property-changed': (GObject.SignalFlags.RUN_FIRST, None,
-            ([GObject.TYPE_PYOBJECT])),
+                             ([GObject.TYPE_PYOBJECT])),
     }
 
     def __init__(self):
@@ -165,27 +165,27 @@ class Buddy(BaseBuddy):
         self.contact_handle = handles[0]
 
         self._get_properties_call = bus.call_async(
-                connection_name,
-                connection.object_path,
-                CONN_INTERFACE_BUDDY_INFO,
-                'GetProperties',
-                'u',
-                (self.contact_handle,),
-                reply_handler=self.__got_properties_cb,
-                error_handler=self.__error_handler_cb,
-                utf8_strings=True,
-                byte_arrays=True)
+            connection_name,
+            connection.object_path,
+            CONN_INTERFACE_BUDDY_INFO,
+            'GetProperties',
+            'u',
+            (self.contact_handle,),
+            reply_handler=self.__got_properties_cb,
+            error_handler=self.__error_handler_cb,
+            utf8_strings=True,
+            byte_arrays=True)
 
         self._get_attributes_call = bus.call_async(
-                connection_name,
-                connection.object_path,
-                CONNECTION_INTERFACE_CONTACTS,
-                'GetContactAttributes',
-                'auasb',
-                ([self.contact_handle], [CONNECTION_INTERFACE_ALIASING],
-                 False),
-                reply_handler=self.__got_attributes_cb,
-                error_handler=self.__error_handler_cb)
+            connection_name,
+            connection.object_path,
+            CONNECTION_INTERFACE_CONTACTS,
+            'GetContactAttributes',
+            'auasb',
+            ([self.contact_handle], [CONNECTION_INTERFACE_ALIASING],
+             False),
+            reply_handler=self.__got_attributes_cb,
+            error_handler=self.__error_handler_cb)
 
     def __got_properties_cb(self, properties):
         _logger.debug('__got_properties_cb %r', properties)

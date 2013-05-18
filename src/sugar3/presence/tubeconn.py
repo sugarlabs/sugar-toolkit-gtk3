@@ -62,11 +62,13 @@ class TubeConnection(Connection):
         # pylint: disable=W0201
         # Confused by __new__
         self.self_handle = handle
-        match = self._tubes_iface.connect_to_signal('DBusNamesChanged',
-                self._on_dbus_names_changed)
-        self._tubes_iface.GetDBusNames(self.tube_id,
-                reply_handler=self._on_get_dbus_names_reply,
-                error_handler=self._on_get_dbus_names_error)
+        match = self._tubes_iface.connect_to_signal(
+            'DBusNamesChanged',
+            self._on_dbus_names_changed)
+        self._tubes_iface.GetDBusNames(
+            self.tube_id,
+            reply_handler=self._on_get_dbus_names_reply,
+            error_handler=self._on_get_dbus_names_error)
         self._dbus_names_changed_match = match
 
     def _on_get_self_handle_error(self, e):
