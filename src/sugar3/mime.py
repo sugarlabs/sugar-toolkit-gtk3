@@ -50,15 +50,15 @@ def _get_supported_image_mime_types():
 _extensions = {}
 _globs_timestamps = []
 _generic_types = [
-{
-    'id': GENERIC_TYPE_TEXT,
-    'name': _('Text'),
-    'icon': 'text-x-generic',
-    'types': [
+    {
+        'id': GENERIC_TYPE_TEXT,
+        'name': _('Text'),
+        'icon': 'text-x-generic',
+        'types': [
         'text/plain', 'text/rtf', 'application/pdf', 'application/x-pdf',
         'text/html', 'application/vnd.oasis.opendocument.text',
         'application/rtf', 'text/rtf', 'application/epub+zip'],
-},
+    },
 {
     'id': GENERIC_TYPE_IMAGE,
     'name': _('Image'),

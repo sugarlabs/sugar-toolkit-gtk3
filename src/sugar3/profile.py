@@ -73,9 +73,9 @@ class Profile(object):
         color = client.get_string('/desktop/sugar/user/color')
 
         return nick is not '' and \
-               color is not '' and \
-               self.pubkey is not None and \
-               self.privkey_hash is not None
+            color is not '' and \
+            self.pubkey is not None and \
+            self.privkey_hash is not None
 
     def _load_pubkey(self):
         key_path = os.path.join(env.get_profile_path(), 'owner.key.pub')
