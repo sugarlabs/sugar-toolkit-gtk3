@@ -2,26 +2,29 @@ import weakref
 try:
     set
 except NameError:
-    from sets import Set as set # Python 2.3 fallback
+    from sets import Set as set  # Python 2.3 fallback
 
 from sugar3.dispatch import saferef
 
 WEAKREF_TYPES = (weakref.ReferenceType, saferef.BoundMethodWeakref)
+
 
 def _make_id(target):
     if hasattr(target, 'im_func'):
         return (id(target.im_self), id(target.im_func))
     return id(target)
 
+
 class Signal(object):
     """Base class for all signals
-    
+
     Internal attributes:
         receivers -- { receriverkey (id) : weakref(receiver) }
     """
-    
+
     def __init__(self, providing_args=None):
-        """providing_args -- A list of the arguments this signal can pass along in
+        """providing_args -- A list of the arguments
+                       this signal can pass along in
                        a send() call.
         """
         self.receivers = []
@@ -31,7 +34,7 @@ class Signal(object):
 
     def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
         """Connect receiver to sender for signal
-    
+
         receiver -- a function or an instance method which is to
             receive signals.  Receivers must be
             hashable objects.
@@ -39,7 +42,7 @@ class Signal(object):
             if weak is True, then receiver must be weak-referencable
             (more precisely saferef.safeRef() must be able to create
             a reference to the receiver).
-        
+
             Receivers must be able to accept keyword arguments.
 
             If receivers have a dispatch_uid attribute, the receiver will
@@ -54,20 +57,21 @@ class Signal(object):
             By default, the module will attempt to use weak
             references to the receiver objects.  If this parameter
             is false, then strong references will be used.
-        
+
         dispatch_uid -- an identifier used to uniquely identify a particular
             instance of a receiver. This will usually be a string, though it
             may be anything hashable.
 
         returns None
-        """       
+        """
         if dispatch_uid:
             lookup_key = (dispatch_uid, _make_id(sender))
         else:
             lookup_key = (_make_id(receiver), _make_id(sender))
 
         if weak:
-            receiver = saferef.safeRef(receiver, onDelete=self._remove_receiver)
+            receiver = saferef.safeRef(
+                receiver, onDelete=self._remove_receiver)
 
         for r_key, _ in self.receivers:
             if r_key == lookup_key:
@@ -75,15 +79,16 @@ class Signal(object):
         else:
             self.receivers.append((lookup_key, receiver))
 
-    def disconnect(self, receiver=None, sender=None, weak=True, dispatch_uid=None):
+    def disconnect(self, receiver=None, sender=None, weak=True,
+                   dispatch_uid=None):
         """Disconnect receiver from sender for signal
-    
+
         receiver -- the registered receiver to disconnect. May be none if
             dispatch_uid is specified.
         sender -- the registered sender to disconnect
         weak -- the weakref state to disconnect
         dispatch_uid -- the unique identifier of the receiver to disconnect
-    
+
         disconnect reverses the process of connect.
 
         If weak references are used, disconnect need not be called.
@@ -106,7 +111,7 @@ class Signal(object):
 
         sender -- the sender of the signal
             Either a specific object or None.
-    
+
         named -- named arguments which will be passed to receivers.
 
         Returns a list of tuple pairs [(receiver, response), ... ].
@@ -140,7 +145,8 @@ class Signal(object):
         Return a list of tuple pairs [(receiver, response), ... ],
         may raise DispatcherKeyError
 
-        if any receiver raises an error (specifically any subclass of Exception),
+        if any receiver raises an error (specifically any subclass of
+        Exception),
         the error instance is returned as the result for that receiver.
         """
 
