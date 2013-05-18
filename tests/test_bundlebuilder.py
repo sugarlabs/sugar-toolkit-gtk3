@@ -25,6 +25,7 @@ import zipfile
 tests_dir = os.path.dirname(__file__)
 data_dir = os.path.join(tests_dir, "data")
 
+
 class TestGit(unittest.TestCase):
     _source_files = ["activity.py",
                      "setup.py",
@@ -41,7 +42,7 @@ class TestGit(unittest.TestCase):
         expected = self._share_locale_files[:]
         expected.extend(self._activity_locale_files)
         return expected
- 
+
     def _create_repo(self):
         cwd = os.getcwd()
         path = tempfile.mkdtemp()
@@ -140,7 +141,7 @@ class TestGit(unittest.TestCase):
         self.assertTrue(os.path.exists(activity_py_path))
 
         os.chdir(cwd)
- 
+
     def _test_genpot(self, source_path, build_path):
         cwd = os.getcwd()
         os.chdir(build_path)
@@ -154,7 +155,7 @@ class TestGit(unittest.TestCase):
         self.assertTrue(os.path.exists(pot_path))
 
         os.chdir(cwd)
- 
+
     def _test_install(self, source_path, build_path):
         install_path = tempfile.mkdtemp()
 
@@ -188,7 +189,7 @@ class TestGit(unittest.TestCase):
         self.assertItemsEqual(filenames, self._share_locale_files)
 
         os.chdir(cwd)
- 
+
     def test_dist_xo_in_source(self):
         repo_path = self._create_repo()
         self._test_dist_xo(repo_path, repo_path)

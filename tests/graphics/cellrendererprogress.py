@@ -15,7 +15,10 @@ test = common.Test()
 test.show()
 
 model = Gtk.ListStore(str, int, int)
-for item in [('one', 72, -1), ('two', 50, -1), ('three', 35, -1), ('four', 0, 5)]:
+for item in [('one', 72, -1),
+             ('two', 50, -1),
+             ('three', 35, -1),
+             ('four', 0, 5)]:
     model.append(item)
 
 treeview = Gtk.TreeView()
