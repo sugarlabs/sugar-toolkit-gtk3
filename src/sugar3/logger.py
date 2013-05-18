@@ -72,7 +72,7 @@ def _except_hook(exctype, value, traceback):
     try:
         from IPython.ultraTB import AutoFormattedTB
         sys.excepthook = AutoFormattedTB(mode='Verbose',
-            color_scheme='NoColor')
+                                         color_scheme='NoColor')
     except ImportError:
         sys.excepthook = sys.__excepthook__
 
@@ -147,9 +147,10 @@ def start(log_filename=None):
                 if e.errno != errno.ENOSPC:
                     raise e
 
-    logging.basicConfig(level=logging.WARNING,
-            format="%(created)f %(levelname)s %(name)s: %(message)s",
-                        stream=SafeLogWrapper(sys.stderr))
+    logging.basicConfig(
+        level=logging.WARNING,
+        format="%(created)f %(levelname)s %(name)s: %(message)s",
+        stream=SafeLogWrapper(sys.stderr))
 
     if 'SUGAR_LOGGER_LEVEL' in os.environ:
         set_level(os.environ['SUGAR_LOGGER_LEVEL'])
@@ -177,7 +178,7 @@ class TraceRepr(repr_.Repr):
 
     # better handling of subclasses of basic types, e.g. for DBus
     _TYPES = [int, long, bool, tuple, list, array.array, set, frozenset,
-        collections.deque, dict, str]
+              collections.deque, dict, str]
 
     def repr1(self, x, level):
         for t in self._TYPES:
@@ -194,7 +195,7 @@ class TraceRepr(repr_.Repr):
 
 
 def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
-    maxsize_list=30, maxsize_dict=30, maxsize_string=300):
+          maxsize_list=30, maxsize_dict=30, maxsize_string=300):
 
     if skip_args is None:
         skip_args = []
@@ -218,12 +219,12 @@ def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
 
         params_formatted = ", ".join(
             [trace_repr.repr(a)
-                for (idx, a) in enumerate(args) if idx not in skip_args] + \
+                for (idx, a) in enumerate(args) if idx not in skip_args] +
             ['%s=%s' % (k, trace_repr.repr(v))
                 for (k, v) in kwargs.items() if k not in skip_kwargs])
 
         trace_logger.log(TRACE, "%s(%s) invoked", f.__name__,
-            params_formatted)
+                         params_formatted)
 
         try:
             res = f(*args, **kwargs)
@@ -232,7 +233,7 @@ def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
             raise
 
         trace_logger.log(TRACE, "%s(%s) returned %s", f.__name__,
-            params_formatted, trace_repr.repr(res))
+                         params_formatted, trace_repr.repr(res))
 
         return res
 

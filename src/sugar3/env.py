@@ -39,7 +39,7 @@ def get_profile_path(path=None):
         except OSError:
             print 'Could not create user directory.'
 
-    if path != None:
+    if path is not None:
         return os.path.join(base, path)
     else:
         return base
@@ -47,7 +47,7 @@ def get_profile_path(path=None):
 
 def get_logs_path(path=None):
     base = os.environ.get('SUGAR_LOGS_DIR', get_profile_path('logs'))
-    if path != None:
+    if path is not None:
         return os.path.join(base, path)
     else:
         return base
@@ -56,6 +56,7 @@ def get_logs_path(path=None):
 def get_user_activities_path():
     return os.environ.get("SUGAR_ACTIVITIES_PATH",
                           os.path.expanduser('~/Activities'))
+
 
 def get_user_library_path():
     return os.path.expanduser('~/Library')
