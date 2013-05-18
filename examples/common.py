@@ -33,6 +33,7 @@ def set_theme():
     settings.set_property('gtk-icon-theme-name', 'sugar')
 set_theme()
 
+
 class Test(Gtk.VBox):
     def __init__(self):
         GObject.GObject.__init__(self)

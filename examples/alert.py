@@ -2,8 +2,10 @@ from gi.repository import Gtk
 
 from sugar3.graphics.alert import TimeoutAlert
 
+
 def _destroy_cb(widget, data=None):
     Gtk.main_quit()
+
 
 def __start_response_cb(widget, data=None):
     print 'Response: start download'

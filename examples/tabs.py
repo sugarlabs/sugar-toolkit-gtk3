@@ -22,7 +22,7 @@ for i in range(3):
     notebook.append_page(hbox, Gtk.Label('Page %d' % (i + 1)))
     hbox.show()
 
-# notebook with buttons 
+# notebook with buttons
 
 notebook = Gtk.Notebook()
 box.pack_start(notebook, True, True, 0)

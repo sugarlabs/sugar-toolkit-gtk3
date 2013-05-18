@@ -2,11 +2,14 @@ from gi.repository import Gtk
 
 from sugar3.graphics import iconentry
 
+
 def _destroy_cb(widget, data=None):
     Gtk.main_quit()
 
+
 def __go_next_cb(entry, icon_pos, data=None):
     print 'Go next'
+
 
 def __entry_activate_cb(widget, data=None):
     print 'Entry activate'
