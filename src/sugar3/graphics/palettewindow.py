@@ -55,11 +55,13 @@ def _calculate_gap(a, b):
         gap = False
 
     if gap:
-        if gap_side == Gtk.PositionType.BOTTOM or gap_side == Gtk.PositionType.TOP:
+        if gap_side == Gtk.PositionType.BOTTOM or \
+                gap_side == Gtk.PositionType.TOP:
             gap_start = min(a.width, max(0, b.x - a.x))
             gap_size = max(0, min(a.width,
                                   (b.x + b.width) - a.x) - gap_start)
-        elif gap_side == Gtk.PositionType.RIGHT or gap_side == Gtk.PositionType.LEFT:
+        elif gap_side == Gtk.PositionType.RIGHT or \
+                gap_side == Gtk.PositionType.LEFT:
             gap_start = min(a.height, max(0, b.y - a.y))
             gap_size = max(0, min(a.height,
                                   (b.y + b.height) - a.y) - gap_start)
@@ -295,7 +297,7 @@ class _PaletteWindowWidget(Gtk.Window):
 
     def set_accept_focus(self, focus):
         self._should_accept_focus = focus
-        if self.get_window() != None:
+        if self.get_window() is not None:
             self.get_window().set_accept_focus(focus)
 
     def get_origin(self):
@@ -368,10 +370,12 @@ class _PaletteWindowWidget(Gtk.Window):
         context = self.get_style_context()
         context.add_class('toolitem')
         if gap:
-            Gtk.render_frame_gap(context, cr, 0, 0, allocation.width, allocation.height,
-                                 gap[0], gap[1], gap[1] + gap[2])
+            Gtk.render_frame_gap(
+                context, cr, 0, 0, allocation.width, allocation.height,
+                gap[0], gap[1], gap[1] + gap[2])
         else:
-            Gtk.render_frame(context, cr, 0, 0, allocation.width, allocation.height)
+            Gtk.render_frame(
+                context, cr, 0, 0, allocation.width, allocation.height)
         return False
 
     def __enter_notify_event_cb(self, widget, event):
@@ -847,9 +851,9 @@ class Invoker(GObject.GObject):
 
     def _in_screen(self, rect):
         return rect.x >= self._screen_area.x and \
-               rect.y >= self._screen_area.y and \
-               rect.x + rect.width <= self._screen_area.width and \
-               rect.y + rect.height <= self._screen_area.height
+            rect.y >= self._screen_area.y and \
+            rect.x + rect.width <= self._screen_area.width and \
+            rect.y + rect.height <= self._screen_area.height
 
     def _get_area_in_screen(self, rect):
         """Return area of rectangle visible in the screen"""
@@ -857,9 +861,9 @@ class Invoker(GObject.GObject):
         x1 = max(rect.x, self._screen_area.x)
         y1 = max(rect.y, self._screen_area.y)
         x2 = min(rect.x + rect.width,
-                self._screen_area.x + self._screen_area.width)
+                 self._screen_area.x + self._screen_area.width)
         y2 = min(rect.y + rect.height,
-                self._screen_area.y + self._screen_area.height)
+                 self._screen_area.y + self._screen_area.height)
 
         return (x2 - x1) * (y2 - y1)
 
@@ -931,7 +935,7 @@ class Invoker(GObject.GObject):
             # Set palette_valign to align to screen on the bottom
             else:
                 pv = -float(palette_dim.height - dbottom - rect.height) \
-                        / palette_dim.height
+                    / palette_dim.height
 
         elif best_alignment in self.TOP or best_alignment in self.BOTTOM:
             dleft = rect.x - screen_area.x
@@ -946,7 +950,7 @@ class Invoker(GObject.GObject):
             # Set palette_halign to align to screen on right
             else:
                 ph = -float(palette_dim.width - dright - rect.width) \
-                        / palette_dim.width
+                    / palette_dim.width
 
         return (ph, pv, ih, iv)
 
@@ -1039,7 +1043,7 @@ class Invoker(GObject.GObject):
         self._lock_palette = lock_palette
 
     lock_palette = GObject.property(type=object, setter=set_lock_palette,
-                                      getter=get_lock_palette)
+                                    getter=get_lock_palette)
     """Whether the invoker will lock the Palette and
     ignore mouse events. Defaults to False.
     """
@@ -1078,21 +1082,23 @@ class WidgetInvoker(Invoker):
         self.notify('widget')
 
         self._enter_hid = self._widget.connect('enter-notify-event',
-            self.__enter_notify_event_cb)
+                                               self.__enter_notify_event_cb)
         self._leave_hid = self._widget.connect('leave-notify-event',
-            self.__leave_notify_event_cb)
+                                               self.__leave_notify_event_cb)
         if GObject.signal_lookup('clicked', self._widget) != 0:
             self._click_hid = self._widget.connect('clicked',
-                self.__click_event_cb)
+                                                   self.__click_event_cb)
         self._touch_hid = self._widget.connect('touch-event',
-            self.__touch_event_cb)
-        self._release_hid = self._widget.connect('button-release-event',
-            self.__button_release_event_cb)
+                                               self.__touch_event_cb)
+        self._release_hid = \
+            self._widget.connect('button-release-event',
+                                 self.__button_release_event_cb)
         self._draw_hid = self._widget.connect_after('draw', self.__drawing_cb)
 
         self._long_pressed_hid = self._long_pressed_controller.connect(
             'pressed', self.__long_pressed_event_cb, self._widget)
-        self._long_pressed_controller.attach(self._widget,
+        self._long_pressed_controller.attach(
+            self._widget,
             SugarGestures.EventControllerFlags.NONE)
 
         self.attach(parent)
@@ -1260,10 +1266,12 @@ class CursorInvoker(Invoker):
                                              self.__leave_notify_event_cb)
         self._release_hid = self._item.connect('button-release-event',
                                                self.__button_release_event_cb)
-        self._long_pressed_hid = self._long_pressed_controller.connect('pressed', \
-                self.__long_pressed_event_cb, self._item)
-        self._long_pressed_controller.attach(self._item, \
-                SugarGestures.EventControllerFlags.NONE)
+        self._long_pressed_hid = self._long_pressed_controller.connect(
+            'pressed',
+            self.__long_pressed_event_cb, self._item)
+        self._long_pressed_controller.attach(
+            self._item,
+            SugarGestures.EventControllerFlags.NONE)
 
     def detach(self):
         Invoker.detach(self)
@@ -1364,10 +1372,11 @@ class CellRendererInvoker(Invoker):
                                             self.__leave_notify_event_cb)
         self._release_hid = tree_view.connect('button-release-event',
                                               self.__button_release_event_cb)
-        self._long_pressed_hid = self._long_pressed_controller.connect( \
-                'pressed', self.__long_pressed_event_cb, tree_view)
-        self._long_pressed_controller.attach(tree_view,
-                SugarGestures.EventControllerFlags.NONE)
+        self._long_pressed_hid = self._long_pressed_controller.connect(
+            'pressed', self.__long_pressed_event_cb, tree_view)
+        self._long_pressed_controller.attach(
+            tree_view,
+            SugarGestures.EventControllerFlags.NONE)
         Invoker.attach(self, cell_renderer)
 
     def detach(self):
@@ -1448,7 +1457,7 @@ class CellRendererInvoker(Invoker):
 
     def __button_release_event_cb(self, widget, event):
         if event.button == 1 and self.point_in_cell_renderer(event.x,
-            event.y):
+                                                             event.y):
             tree_view = self._tree_view
             path, column_, x_, y_ = tree_view.get_path_at_pos(int(event.x),
                                                               int(event.y))
@@ -1456,7 +1465,7 @@ class CellRendererInvoker(Invoker):
             # So the treeview receives it and knows a drag isn't going on
             return False
         if event.button == 3 and self.point_in_cell_renderer(event.x,
-            event.y):
+                                                             event.y):
             self.notify_right_click()
             return True
         else:
