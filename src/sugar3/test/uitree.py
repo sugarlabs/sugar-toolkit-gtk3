@@ -24,8 +24,10 @@ from gi.repository import Atspi
 
 Atspi.set_timeout(-1, -1)
 
+
 def get_root():
     return Node(Atspi.get_desktop(0))
+
 
 def _retry_find(func):
     def wrapped(*args, **kwargs):
@@ -52,6 +54,7 @@ def _retry_find(func):
         return result
 
     return wrapped
+
 
 class Node:
     def __init__(self, accessible):
