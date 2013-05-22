@@ -29,6 +29,7 @@ import math
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GObject
+from gi.repository import GLib
 
 from gi.repository import SugarGestures
 from sugar3.graphics import palettegroup
@@ -994,9 +995,9 @@ class Invoker(GObject.GObject):
             # menu item. We need to postpone destruction of the palette until
             # after all signals have propagated from the menu item to the
             # palette owner.
-            GObject.idle_add(lambda old_palette=self._palette:
-                             old_palette.destroy(),
-                             priority=GObject.PRIORITY_LOW)
+            GLib.idle_add(lambda old_palette=self._palette:
+                              old_palette.destroy(),
+                          priority=GObject.PRIORITY_LOW)
 
         self._palette = palette
 
