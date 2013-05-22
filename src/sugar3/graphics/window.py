@@ -21,6 +21,7 @@ STABLE.
 """
 
 from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gdk
 from gi.repository import GdkX11
 from gi.repository import Gtk
@@ -162,7 +163,7 @@ class Window(Gtk.Window):
                 self._unfullscreen_button_timeout_id = None
 
             self._unfullscreen_button_timeout_id = \
-                GObject.timeout_add_seconds( \
+                GLib.timeout_add_seconds( \
                     _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
                     self.__unfullscreen_button_timeout_cb)
 
@@ -286,7 +287,7 @@ class Window(Gtk.Window):
                 self._unfullscreen_button_timeout_id = None
 
             self._unfullscreen_button_timeout_id = \
-                GObject.timeout_add_seconds( \
+                GLib.timeout_add_seconds( \
                     _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT, \
                     self.__unfullscreen_button_timeout_cb)
 

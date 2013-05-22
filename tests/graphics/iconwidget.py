@@ -80,8 +80,8 @@ test.show()
 #    test.queue_draw()
 #    return True
 #
-#from gi.repository import GObject
-#GObject.idle_add(idle_cb)
+#from gi.repository import GLib
+#GLib.idle_add(idle_cb)
 
 if __name__ == '__main__':
     common.main(test)
