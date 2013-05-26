@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-06-18 06:04+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2013-05-26 06:37+0200\n"
+"Last-Translator: Jasmine <udea_jasmine@yahoo.com>\n"
 "Language-Team: Sugar Labs\n"
 "Language: hy\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr "Պատճենել"
 
 #: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
-msgstr "փակցնել"
+msgstr "Փակցնել"
 
 #: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
