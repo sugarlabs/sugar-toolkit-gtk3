@@ -27,7 +27,7 @@ assert GdkX11
 from gi.repository import SugarExt
 
 
-class HTMLActivity(Gtk.Window):
+class WebActivity(Gtk.Window):
     def __init__(self, handle):
         Gtk.Window.__init__(self)
 

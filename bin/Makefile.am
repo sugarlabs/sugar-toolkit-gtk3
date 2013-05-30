@@ -1,1 +1,1 @@
-dist_bin_SCRIPTS = sugar-activity sugar-activity-html
+dist_bin_SCRIPTS = sugar-activity sugar-activity-web
