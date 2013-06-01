@@ -69,12 +69,20 @@ class WebActivity(Gtk.Window):
             key = os.environ["SUGAR_APISOCKET_KEY"]
             port = os.environ["SUGAR_APISOCKET_PORT"]
 
-            script = "window.sugarKey = '%s'; " \
-                     "window.sugarPort = '%s'; " \
-                     "window.sugarId = '%s'; " \
-                     "if (window.onSugarAuthSet) " \
-                     "window.onSugarAuthSet();" % \
-                     (key, port, self._activity_id)
+            script = """
+                     var environment = {apiSocketKey: "%s",
+                                        apiSocketPort: "%s",
+                                        activityId: "%s"};
+
+                    if (window.sugar === undefined) {
+                        window.sugar = {};
+                    }
+
+                    window.sugar.environment = environment;
+
+                    if (window.sugar.onEnvironmentSet)
+                        window.sugar.onEnvironmentSet();
+                    """ % (key, port, self._activity_id)
 
             self._web_view.run_javascript(script, None, None, None)
 
