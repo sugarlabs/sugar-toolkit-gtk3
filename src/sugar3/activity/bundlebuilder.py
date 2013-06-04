@@ -82,9 +82,10 @@ class Config(object):
         self.update()
 
     def update(self):
-        self.bundle = bundle = ActivityBundle(self.source_dir)
+        self.bundle = bundle = ActivityBundle(self.source_dir,
+                                              translated=False)
         self.version = bundle.get_activity_version()
-        self.activity_name = bundle.get_bundle_name()
+        self.activity_name = bundle.get_name()
         self.bundle_id = bundle.get_bundle_id()
         self.summary = bundle.get_summary()
         self.bundle_name = reduce(operator.add, self.activity_name.split())

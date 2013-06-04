@@ -92,13 +92,12 @@ class ActivityBundle(Bundle):
     _unzipped_extension = '.activity'
     _infodir = 'activity'
 
-    def __init__(self, path):
+    def __init__(self, path, translated=True):
         Bundle.__init__(self, path)
         self.activity_class = None
         self.bundle_exec = None
 
         self._name = None
-        self._local_name = None
         self._icon = None
         self._bundle_id = None
         self._mime_types = None
@@ -107,22 +106,16 @@ class ActivityBundle(Bundle):
         self._activity_version = '0'
         self._installation_time = os.stat(path).st_mtime
         self._summary = None
-        self._local_summary = None
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
             raise MalformedBundleException('No activity.info file')
         self._parse_info(info_file)
 
-        linfo_file = self._get_linfo_file()
-        if linfo_file:
-            self._parse_linfo(linfo_file)
-
-        if self._local_name == None:
-            self._local_name = self._name
-
-        if self._local_summary == None:
-            self._local_summary = self._summary
+        if translated:
+            linfo_file = self._get_linfo_file()
+            if linfo_file:
+                self._parse_linfo(linfo_file)
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
@@ -209,10 +202,10 @@ class ActivityBundle(Bundle):
         section = 'Activity'
 
         if cp.has_option(section, 'name'):
-            self._local_name = cp.get(section, 'name')
+            self._name = cp.get(section, 'name')
 
         if cp.has_option(section, 'summary'):
-            self._local_summary = cp.get(section, 'summary')
+            self._summary = cp.get(section, 'summary')
 
         if cp.has_option(section, 'tags'):
             tag_list = cp.get(section, 'tags').strip(';')
@@ -236,10 +229,6 @@ class ActivityBundle(Bundle):
 
     def get_name(self):
         """Get the activity user-visible name."""
-        return self._local_name
-
-    def get_bundle_name(self):
-        """Get the activity bundle name."""
         return self._name
 
     def get_installation_time(self):
@@ -289,7 +278,7 @@ class ActivityBundle(Bundle):
 
     def get_summary(self):
         """Get the summary that describe the activity"""
-        return self._local_summary
+        return self._summary
 
     def get_show_launcher(self):
         """Get whether there should be a visible launcher for the activity"""
