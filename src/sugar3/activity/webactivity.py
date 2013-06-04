@@ -15,6 +15,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import json
 import os
 
 from gi.repository import Gdk
@@ -32,6 +33,7 @@ class WebActivity(Gtk.Window):
         Gtk.Window.__init__(self)
 
         self._activity_id = handle.activity_id
+        self._object_id = handle.object_id
         self._bundle_id = os.environ["SUGAR_BUNDLE_ID"]
         self._bundle_path = os.environ["SUGAR_BUNDLE_PATH"]
         self._inspector_visible = False
@@ -69,20 +71,24 @@ class WebActivity(Gtk.Window):
             key = os.environ["SUGAR_APISOCKET_KEY"]
             port = os.environ["SUGAR_APISOCKET_PORT"]
 
+            env_json = json.dumps({"apiSocketKey": key,
+                                   "apiSocketPort": port,
+                                   "activityId": self._activity_id,
+                                   "bundleId": self._bundle_id,
+                                   "objectId": self._object_id})
+
             script = """
-                     var environment = {apiSocketKey: "%s",
-                                        apiSocketPort: "%s",
-                                        activityId: "%s"};
+                     var environment = %s;
 
-                    if (window.sugar === undefined) {
-                        window.sugar = {};
-                    }
+                     if (window.sugar === undefined) {
+                         window.sugar = {};
+                     }
 
-                    window.sugar.environment = environment;
+                     window.sugar.environment = environment;
 
-                    if (window.sugar.onEnvironmentSet)
-                        window.sugar.onEnvironmentSet();
-                    """ % (key, port, self._activity_id)
+                     if (window.sugar.onEnvironmentSet)
+                         window.sugar.onEnvironmentSet();
+                    """ % env_json
 
             self._web_view.run_javascript(script, None, None, None)
 
