@@ -26,8 +26,7 @@ import os
 import urllib
 
 from sugar3 import env
-from sugar3.bundle.bundle import Bundle, NotInstalledException, \
-    MalformedBundleException
+from sugar3.bundle.bundle import Bundle, MalformedBundleException
 
 from sugar3.bundle.bundleversion import NormalizedVersion
 from sugar3.bundle.bundleversion import InvalidVersionError
@@ -185,6 +184,10 @@ class ContentBundle(Bundle):
     def get_activity_start(self):
         return self._activity_start
 
+    def get_icon(self):
+        # To be implemented later
+        return None
+
     def _run_indexer(self):
         xdg_data_dirs = os.getenv('XDG_DATA_DIRS',
                                   '/usr/local/share/:/usr/share/')
@@ -215,29 +218,17 @@ class ContentBundle(Bundle):
         # needs rethinking while fixing ContentBundle support
         return self._library_version
 
-    def is_installed(self):
-        if self._zip_file is None:
-            return True
-        elif os.path.isdir(self.get_root_dir()):
-            return ContentBundle(self.get_root_dir()).get_library_version() \
-                == self.get_library_version()
-        else:
-            return False
-
     def install(self):
-        # TODO ignore passed install_path argument
-        # needs rethinking while fixing ContentBundle support
         install_path = env.get_user_library_path()
         self._unzip(install_path)
         self._run_indexer()
         return self.get_root_dir()
 
-    def uninstall(self):
-        if self._zip_file is None:
-            if not self.is_installed():
-                raise NotInstalledException
-            install_dir = self._path
-        else:
-            install_dir = os.path.join(self.get_root_dir())
+    def uninstall(self, force=False, delete_profile=False):
+        install_dir = self._path
         self._uninstall(install_dir)
         self._run_indexer()
+
+    def is_user_activity(self):
+        # All content bundles are installed in user storage
+        return True

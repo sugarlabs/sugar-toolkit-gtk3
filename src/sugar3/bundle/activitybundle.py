@@ -226,10 +226,6 @@ class ActivityBundle(Bundle):
             raise NotInstalledException
         return os.path.join(self._path, 'icons')
 
-    def get_path(self):
-        """Get the activity bundle path."""
-        return self._path
-
     def get_name(self):
         """Get the activity user-visible name."""
         return self._name
@@ -287,9 +283,8 @@ class ActivityBundle(Bundle):
         """Get whether there should be a visible launcher for the activity"""
         return self._show_launcher
 
-    def install(self, install_dir=None):
-        if install_dir is None:
-            install_dir = env.get_user_activities_path()
+    def install(self):
+        install_dir = env.get_user_activities_path()
 
         self._unzip(install_dir)
 
@@ -348,7 +343,9 @@ class ActivityBundle(Bundle):
             os.unlink(dst)
         os.symlink(src, dst)
 
-    def uninstall(self, install_path, force=False, delete_profile=False):
+    def uninstall(self, force=False, delete_profile=False):
+        install_path = self.get_path()
+
         if os.path.islink(install_path):
             # Don't remove the actual activity dir if it's a symbolic link
             # because we may be removing user data.
