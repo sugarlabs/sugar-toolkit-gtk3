@@ -18,9 +18,11 @@
 UNSTABLE.
 """
 
+import logging
 import time
 
 from gi.repository import Atspi
+from gi.repository import GLib
 
 Atspi.set_timeout(-1, -1)
 
@@ -34,22 +36,29 @@ def _retry_find(func):
         result = None
         n_retries = 1
 
-        while n_retries <= 10:
-            print "Try %d, name=%s role_name=%s" % \
-                  (n_retries,
-                   kwargs.get("name", None),
-                   kwargs.get("role_name", None))
+        while n_retries <= 50:
+            logging.info("Try %d, name=%s role_name=%s" %
+                         (n_retries,
+                          kwargs.get("name", None),
+                          kwargs.get("role_name", None)))
 
-            result = func(*args, **kwargs)
+            try:
+                result = func(*args, **kwargs)
+            except GLib.GError, e:
+                # The application is not responding, try again
+                if e.code == Atspi.Error.IPC:
+                    continue
+
+                logging.error("GError code %d", e.code)
+                raise
+
             expect_none = kwargs.get("expect_none", False)
             if (not expect_none and result) or \
                (expect_none and not result):
                 return result
 
-            time.sleep(5)
+            time.sleep(1)
             n_retries = n_retries + 1
-
-        get_root().dump()
 
         return result
 
@@ -61,11 +70,19 @@ class Node:
         self._accessible = accessible
 
     def dump(self):
-        self._crawl_accessible(self, 0)
+        lines = []
+        self._crawl_accessible(self, 0, lines)
+        return "\n".join(lines)
 
     def do_action(self, name):
         for i in range(self._accessible.get_n_actions()):
-            if Atspi.Action.get_name(self._accessible, i) == name:
+            # New, incompatible API
+            if hasattr(self._accessible, "get_action_name"):
+                action_name = self._accessible.get_action_name(i)
+            else:
+                action_name = Atspi.Action.get_name(self._accessible, i)
+
+            if action_name == name:
                 self._accessible.do_action(i)
 
     def click(self, button=1):
@@ -149,8 +166,8 @@ class Node:
         for child in node.get_children():
             self._find_all_descendants(child, predicate, matches)
 
-    def _crawl_accessible(self, node, depth):
-        print "  " * depth + str(node)
+    def _crawl_accessible(self, node, depth, lines):
+        lines.append("  " * depth + str(node))
 
         for child in node.get_children():
-            self._crawl_accessible(child, depth + 1)
+            self._crawl_accessible(child, depth + 1, lines)
