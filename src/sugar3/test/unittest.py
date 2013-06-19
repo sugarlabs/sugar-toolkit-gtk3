@@ -51,7 +51,7 @@ class UITestCase(unittest.TestCase):
         try:
             yield
         except:
-            uitree.get_root().dump()
+            logging.debug(uitree.get_root().dump())
             raise
         finally:
             process.terminate()
