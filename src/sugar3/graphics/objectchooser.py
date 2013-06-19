@@ -33,10 +33,12 @@ J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 
+FILTER_TYPE_MIME_BY_ACTIVITY = 'mime_by_activity'
+
 
 class ObjectChooser(object):
 
-    def __init__(self, parent=None, what_filter=None):
+    def __init__(self, parent=None, what_filter=None, filter_type=None):
         if parent is None:
             parent_xid = 0
         elif hasattr(parent, 'get_window') and hasattr(parent.get_window(),
@@ -52,6 +54,13 @@ class ObjectChooser(object):
         self._chooser_id = None
         self._response_code = Gtk.ResponseType.NONE
         self._what_filter = what_filter
+        if filter_type is not None:
+            # verify is one of the availables types
+            # add here more types if needed
+            if filter_type not in [FILTER_TYPE_MIME_BY_ACTIVITY]:
+                raise Exception('filter_type not implemented')
+
+        self._filter_type = filter_type
 
     def run(self):
         self._object_id = None
@@ -77,7 +86,8 @@ class ObjectChooser(object):
         else:
             what_filter = self._what_filter
 
-        self._chooser_id = journal.ChooseObject(self._parent_xid, what_filter)
+        self._chooser_id = journal.ChooseObject(self._parent_xid, what_filter,
+                                                self._filter_type)
 
         Gdk.threads_leave()
         try:
