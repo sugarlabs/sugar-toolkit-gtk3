@@ -33,10 +33,39 @@ J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 
+FILTER_TYPE_MIME_BY_ACTIVITY = 'mime_by_activity'
+FILTER_TYPE_GENERIC_MIME = 'generic_mime'
+FILTER_TYPE_ACTIVITY = 'activity'
+
 
 class ObjectChooser(object):
 
-    def __init__(self, parent=None, what_filter=None):
+    def __init__(self, parent=None, what_filter=None, filter_type=None):
+        """Initialise the ObjectChoser
+
+        parent -- the Activity starting the ObjectChooser
+
+        what_filter -- string
+            can be a bundle_id or a generic mime type as defined in mime.py
+
+        filter_type --string
+
+            should by one of [FILTER_TYPE_GENERIC_MIME, FILTER_TYPE_ACTIVITY,
+            FILTER_TYPE_MIME_BY_ACTIVITY] or None
+
+            if is equal to FILTER_TYPE_GENERIC_MIME, what_filter should be a
+            generic mime type defined in mime.py, and the object chooser
+            will filter based in the 'mime_type' field.
+
+            if is FILTER_TYPE_ACTIVITY, what_filter should by a bundle_id,
+            and the object chooser will filter based in the 'activity' field.
+
+            if is equal to FILTER_TYPE_MIME_BY_ACTIVITY, what filter should be
+            a bundle_id, and the object chooser will filter based on the
+            'mime_type' field, and the mime types defined by the activity
+            in the activity.info file.
+        """
+
         if parent is None:
             parent_xid = 0
         elif hasattr(parent, 'get_window') and hasattr(parent.get_window(),
@@ -52,6 +81,15 @@ class ObjectChooser(object):
         self._chooser_id = None
         self._response_code = Gtk.ResponseType.NONE
         self._what_filter = what_filter
+        if filter_type is not None:
+            # verify is one of the availables types
+            # add here more types if needed
+            if filter_type not in [FILTER_TYPE_MIME_BY_ACTIVITY,
+                                   FILTER_TYPE_GENERIC_MIME,
+                                   FILTER_TYPE_ACTIVITY]:
+                raise Exception('filter_type not implemented')
+
+        self._filter_type = filter_type
 
     def run(self):
         self._object_id = None
@@ -77,7 +115,8 @@ class ObjectChooser(object):
         else:
             what_filter = self._what_filter
 
-        self._chooser_id = journal.ChooseObject(self._parent_xid, what_filter)
+        self._chooser_id = journal.ChooseObject(self._parent_xid, what_filter,
+                                                self._filter_type)
 
         Gdk.threads_leave()
         try:
