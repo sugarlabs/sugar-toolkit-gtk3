@@ -37,6 +37,7 @@ def main():
 
     os.chdir(args.tests_dir)
     os.environ["TMPDIR"] = temp_dir
+    os.environ["AT_SPI_CLIENT"] = "yes"
 
     try:
         test = unittest.defaultTestLoader.discover(".")

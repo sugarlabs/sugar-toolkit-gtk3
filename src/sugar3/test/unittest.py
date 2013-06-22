@@ -35,13 +35,9 @@ class UITestCase(unittest.TestCase):
         self._orig_level = logger.getEffectiveLevel()
         logger.setLevel(logging.DEBUG)
 
-        os.environ["AT_SPI_CLIENT"] = "yes"
-
     def tearDown(self):
         logger = logging.getLogger()
         logger.setLevel(self._orig_level)
-
-        del os.environ["AT_SPI_CLIENT"]
 
     @contextmanager
     def run_view(self, name):
