@@ -1,9 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
-TESTS_TMPDIR=$(abs_builddir)/tests-tmp
-TESTS_PYTHONPATH=$(abs_srcdir)/src:$(PYTHONPATH)
-
 DISTCLEANFILES =		\
 	intltool-extract	\
 	intltool-merge		\
@@ -21,10 +18,4 @@ check: test
 	pep8 $(top_srcdir)
 
 test:
-	mkdir -p $(TESTS_TMPDIR)
-	cd $(top_srcdir)/tests; \
-	TMPDIR=$(TESTS_TMPDIR) PYTHONPATH=$(TESTS_PYTHONPATH) \
-	python -m unittest discover; \
-	status=$$?; \
-	rm -rf $(TESTS_TMPDIR); \
-	exit $$status
+	python -m sugar3.test.discover $(top_srcdir)/tests

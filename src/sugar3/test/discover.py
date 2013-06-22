@@ -1,4 +1,4 @@
-# Copyright (C) 2012, Daniel Narvaez
+# Copyright (C) 2013, Daniel Narvaez
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,34 +20,33 @@ UNSTABLE.
 
 from __future__ import absolute_import
 
-import logging
+import argparse
+import sys
 import os
+import tempfile
+import shutil
 import unittest
-import subprocess
-from contextlib import contextmanager
-
-from sugar3.test import uitree
 
 
-class UITestCase(unittest.TestCase):
-    def setUp(self):
-        logger = logging.getLogger()
-        self._orig_level = logger.getEffectiveLevel()
-        logger.setLevel(logging.DEBUG)
+def main():
+    parser = argparse.ArgumentParser(description="Discover unit tests.")
+    parser.add_argument("tests_dir", help="Base tests directory")
+    args = parser.parse_args()
 
-    def tearDown(self):
-        logger = logging.getLogger()
-        logger.setLevel(self._orig_level)
+    temp_dir = tempfile.mkdtemp()
 
-    @contextmanager
-    def run_view(self, name):
-        view_path = os.path.join("views", "%s.py" % name)
-        process = subprocess.Popen(["python", view_path])
+    os.chdir(args.tests_dir)
+    os.environ["TMPDIR"] = temp_dir
+    os.environ["AT_SPI_CLIENT"] = "yes"
 
-        try:
-            yield
-        except:
-            logging.debug(uitree.get_root().dump())
-            raise
-        finally:
-            process.terminate()
+    try:
+        test = unittest.defaultTestLoader.discover(".")
+        result = unittest.TextTestRunner().run(test)
+        if not result.wasSuccessful():
+            sys.exit(1)
+    finally:
+        shutil.rmtree(temp_dir)
+
+
+if __name__ == "__main__":
+    main()
