@@ -125,8 +125,12 @@ class ObjectChooser(object):
         else:
             what_filter = self._what_filter
 
-        self._chooser_id = journal.ChooseObjectWithFilter(
-            self._parent_xid, what_filter, self._filter_type)
+        if self._filter_type is None:
+            self._chooser_id = journal.ChooseObject(
+                self._parent_xid, what_filter)
+        else:
+            self._chooser_id = journal.ChooseObjectWithFilter(
+                self._parent_xid, what_filter, self._filter_type)
 
         Gdk.threads_leave()
         try:
