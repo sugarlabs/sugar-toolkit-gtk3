@@ -1,0 +1,10 @@
+[Library]
+name = sample
+long_name = sample
+global_name = org.sugarlabs.samplecontent
+library_version = 1
+host_version = 1
+l10n = false
+locale = en
+license = CC-BY 2.0
+category = media
