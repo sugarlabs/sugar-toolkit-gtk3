@@ -122,6 +122,7 @@ msgstr "%s kupex"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
+#, python-format
 #, python-format, fuzzy
 #, python-format,
 msgid "%d year"
@@ -130,6 +131,7 @@ msgstr[0] "Niñgijii"
 msgstr[1] "Riñgijii"
 
 #: ../src/sugar3/util.py:241
+#, python-format
 #, python-format, fuzzy
 #, python-format,
 msgid "%d month"
@@ -138,6 +140,7 @@ msgstr[0] "ngum'au'"
 msgstr[1] "m'au'"
 
 #: ../src/sugar3/util.py:242
+#, python-format
 #, python-format, fuzzy
 #, python-format,
 msgid "%d week"
@@ -161,7 +164,7 @@ msgstr[0] "% kulejeing kunju'"
 msgstr[1] ""
 
 #: ../src/sugar3/util.py:245
-#, python-format, 
+#, python-format
 #, python-format,
 msgid "%d minute"
 msgid_plural "%d minutes"

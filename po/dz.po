@@ -2,24 +2,26 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-06-18 20:51+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: dz\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.1.1rc4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: ../src/sugar3/activity/activity.py:378
 #, python-format
+#, python-format, fuzzy
 msgid "%s Activity"
-msgstr ""
+msgstr "%s ལཱ།"
 
 #: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
@@ -38,65 +40,78 @@ msgid "Stop anyway"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:86
+#, fuzzy
 msgid "Stop"
-msgstr ""
+msgstr "བཀག"
 
 #: ../src/sugar3/activity/widgets.py:98
+#, fuzzy
 msgid "Undo"
-msgstr ""
+msgstr "འབད་བཤོལ།"
 
 #: ../src/sugar3/activity/widgets.py:106
+#, fuzzy
 msgid "Redo"
-msgstr ""
+msgstr "ལོག་འབད།"
 
 #: ../src/sugar3/activity/widgets.py:113
+#, fuzzy
 msgid "Copy"
-msgstr ""
+msgstr "འདྲ་བཤུས།"
 
 #: ../src/sugar3/activity/widgets.py:121
+#, fuzzy
 msgid "Paste"
-msgstr ""
+msgstr "སྦྱར།"
 
 #: ../src/sugar3/activity/widgets.py:132
+#, fuzzy
 msgid "Private"
-msgstr ""
+msgstr "སྒེར་དོན།"
 
 #: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
 msgid "Description"
-msgstr ""
+msgstr "འགྲེལ་བཤད།"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+#, fuzzy
 msgid "Cancel"
-msgstr ""
+msgstr "ཆ་མེད་གཏང་།"
 
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479
+#, fuzzy
 msgid "Ok"
-msgstr ""
+msgstr "བཏུབ།"
 
 #: ../src/sugar3/graphics/alert.py:434
+#, fuzzy
 msgid "Continue"
-msgstr ""
+msgstr "འཕྲོ་མཐུད།"
 
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
 msgstr ""
 
 #: ../src/sugar3/graphics/colorbutton.py:274
+#, fuzzy
 msgid "Red"
-msgstr ""
+msgstr "དམརཔོ།"
 
 #: ../src/sugar3/graphics/colorbutton.py:276
+#, fuzzy
 msgid "Green"
-msgstr ""
+msgstr "ལྗང་ཁུ།"
 
 #: ../src/sugar3/graphics/colorbutton.py:278
+#, fuzzy
 msgid "Blue"
-msgstr ""
+msgstr "ཧོནམ།"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
@@ -115,8 +130,9 @@ msgstr ""
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225
 #, python-format
+#, python-format, fuzzy
 msgid "%s ago"
-msgstr ""
+msgstr "%s ཧེ་མ།"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
@@ -124,46 +140,41 @@ msgstr ""
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:346
+#, fuzzy
 msgid "Empty"
-msgstr ""
+msgstr "སྟོངམ།"
 
 #: ../src/sugar3/util.py:348
 #, python-format
@@ -186,21 +197,26 @@ msgid "%d GB"
 msgstr ""
 
 #: ../src/sugar3/mime.py:43
+#, fuzzy
 msgid "Text"
-msgstr ""
+msgstr "ཚིག་ཡིག"
 
 #: ../src/sugar3/mime.py:52
+#, fuzzy
 msgid "Image"
-msgstr ""
+msgstr "གཟུགས་བརྙན།"
 
 #: ../src/sugar3/mime.py:58
+#, fuzzy
 msgid "Audio"
-msgstr ""
+msgstr "རྣར་ཉན།"
 
 #: ../src/sugar3/mime.py:66
+#, fuzzy
 msgid "Video"
-msgstr ""
+msgstr "ཝི་ཌིའོ།"
 
 #: ../src/sugar3/mime.py:72
+#, fuzzy
 msgid "Link"
-msgstr ""
+msgstr "འབྲེལ་ལམ།"
