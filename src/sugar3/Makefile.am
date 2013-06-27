@@ -80,8 +80,10 @@ libsugarext_la_SOURCES =		\
 	sugar-gesture-grabber.h		\
 	sugar-key-grabber.c		\
 	sugar-key-grabber.h		\
+	sugar-wm.h			\
 	sugar-wm.c			\
-    sugar-gconf.c       \
+	sugar-gconf.h       		\
+	sugar-gconf.c       		\
 	$(XDG_MIME_SOURCES)
 
 BUILT_SOURCES = 			\
