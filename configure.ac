@@ -5,7 +5,7 @@ AC_PREREQ([2.59])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([configure.ac])
 
-AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
+AM_INIT_AUTOMAKE([1.9 foreign dist-xz no-dist-gzip])
 
 AM_MAINTAINER_MODE
 AC_DISABLE_STATIC
