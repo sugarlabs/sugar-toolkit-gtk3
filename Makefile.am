@@ -13,9 +13,7 @@ EXTRA_DIST =                    \
 
 SUBDIRS = bin src po
 
-check: test
+test:
 	pyflakes $(top_srcdir)
 	pep8 $(top_srcdir)
-
-test:
 	python -m sugar3.test.discover $(top_srcdir)/tests
