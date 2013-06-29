@@ -59,4 +59,5 @@ def get_user_activities_path():
 
 
 def get_user_library_path():
-    return os.path.expanduser('~/Library')
+    return os.environ.get("SUGAR_LIBRARY_PATH",
+                          os.path.expanduser('~/Library'))
