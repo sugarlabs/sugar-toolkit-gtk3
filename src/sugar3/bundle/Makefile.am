@@ -4,4 +4,5 @@ sugar_PYTHON =				\
 	bundle.py			\
 	activitybundle.py		\
 	bundleversion.py		\
-	contentbundle.py
+	contentbundle.py		\
+	helpers.py
