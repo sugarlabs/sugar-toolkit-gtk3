@@ -107,7 +107,6 @@ class ActivityBundle(Bundle):
         self._show_launcher = True
         self._tags = None
         self._activity_version = '0'
-        self._installation_time = os.stat(path).st_mtime
         self._summary = None
 
         info_file = self.get_file('activity/activity.info')
@@ -229,11 +228,6 @@ class ActivityBundle(Bundle):
     def get_name(self):
         """Get the activity user-visible name."""
         return self._name
-
-    def get_installation_time(self):
-        """Get a timestamp representing the time at which this activity was
-        installed."""
-        return self._installation_time
 
     def get_bundle_id(self):
         """Get the activity bundle id"""

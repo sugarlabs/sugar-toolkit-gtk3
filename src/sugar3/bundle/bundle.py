@@ -69,6 +69,7 @@ class Bundle(object):
         self._path = path
         self._zip_root_dir = None
         self._zip_file = None
+        self._installation_time = os.stat(path).st_mtime
 
         if not os.path.isdir(self._path):
             try:
@@ -154,6 +155,11 @@ class Bundle(object):
     def get_path(self):
         """Get the bundle path."""
         return self._path
+
+    def get_installation_time(self):
+        """Get a timestamp representing the time at which this activity was
+        installed."""
+        return self._installation_time
 
     def _unzip(self, install_dir):
         if self._zip_file is None:
