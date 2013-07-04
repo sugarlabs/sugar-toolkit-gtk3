@@ -643,8 +643,7 @@ class _JoinCommand(_BaseCommand):
                 group.AddMembers([self_handle], '',
                                  reply_handler=lambda: None,
                                  error_handler=lambda e: self._join_failed_cb(
-                                     e,
-                                 'got_all_members AddMembers'))
+                                     e, 'got_all_members AddMembers'))
 
             if members:
                 self.__text_channel_members_changed_cb('', members, (),

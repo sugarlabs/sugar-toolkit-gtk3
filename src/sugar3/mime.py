@@ -49,31 +49,26 @@ def _get_supported_image_mime_types():
 
 _extensions = {}
 _globs_timestamps = []
-_generic_types = [
-    {
-        'id': GENERIC_TYPE_TEXT,
-        'name': _('Text'),
-        'icon': 'text-x-generic',
-        'types': [
-        'text/plain', 'text/rtf', 'application/pdf', 'application/x-pdf',
-        'text/html', 'application/vnd.oasis.opendocument.text',
-        'application/rtf', 'text/rtf', 'application/epub+zip'],
-    },
-{
+_generic_types = [{
+    'id': GENERIC_TYPE_TEXT,
+    'name': _('Text'),
+    'icon': 'text-x-generic',
+    'types': ['text/plain', 'text/rtf', 'application/pdf', 'application/x-pdf',
+              'text/html', 'application/vnd.oasis.opendocument.text',
+              'application/rtf', 'text/rtf', 'application/epub+zip'],
+}, {
     'id': GENERIC_TYPE_IMAGE,
     'name': _('Image'),
     'icon': 'image-x-generic',
     'types': _get_supported_image_mime_types(),
-},
-{
+}, {
     'id': GENERIC_TYPE_AUDIO,
     'name': _('Audio'),
     'icon': 'audio-x-generic',
     'types': [
         'audio/ogg', 'audio/x-wav', 'audio/wav', 'audio/x-vorbis+ogg',
         'audio/x-mpegurl', 'audio/mpegurl', 'audio/mpeg', 'audio/x-scpls'],
-},
-{
+}, {
     'id': GENERIC_TYPE_VIDEO,
     'name': _('Video'),
     'icon': 'video-x-generic',
@@ -84,8 +79,7 @@ _generic_types = [
               'video/mp4', 'video/x-matroska', 'video/x-msvideo',
               'application/x-ogm-video', 'video/quicktime', 'video/x-quicktime'
               'video/avi'],
-},
-{
+}, {
     'id': GENERIC_TYPE_LINK,
     'name': _('Link'),
     'icon': 'text-uri-list',

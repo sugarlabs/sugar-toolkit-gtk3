@@ -93,8 +93,8 @@ class NormalizedVersion(object):
         """
         if len(version_string) > 1 and version_string[0] == '0':
             raise InvalidVersionError("Can not have leading zero in segment"
-                                      " %s in %r" % (version_string,
-                                      self._activity_version))
+                                      " %s in %r" %
+                                      (version_string, self._activity_version))
 
         return int(version_string)
 
@@ -112,8 +112,8 @@ class NormalizedVersion(object):
         for n in extraversion_string.split("."):
             if len(n) > 1 and n[0] == '0':
                 raise InvalidVersionError("Can not have leading zero in "
-                                          "segment %s in %r" % (n,
-                                          self._activity_version))
+                                          "segment %s in %r"
+                                          % (n, self._activity_version))
             nums.append(int(n))
 
         while nums and nums[-1] == 0:
