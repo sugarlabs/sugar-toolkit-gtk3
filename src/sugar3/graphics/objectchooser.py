@@ -100,7 +100,8 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
 
 class ObjectChooser(object):
 
-    def __init__(self, parent=None, what_filter=None, filter_type=None):
+    def __init__(self, parent=None, what_filter=None, filter_type=None,
+                 show_preview=False):
         """Initialise the ObjectChoser
 
         parent -- the widget calling ObjectChooser
@@ -134,6 +135,12 @@ class ObjectChooser(object):
             chooser will filter based on the 'mime_type' metadata
             field and the mime types defined by the activity in the
             activity.info file.
+
+        show_preview -- boolean
+
+            if True will show the preview image asociated with
+            the object in the Journal. This option is only available
+            if filter_type is selected.
         """
 
         if parent is None:
@@ -145,6 +152,7 @@ class ObjectChooser(object):
             parent_xid = parent
 
         self._parent_xid = parent_xid
+        self._show_preview = show_preview
         self._main_loop = None
         self._object_id = None
         self._bus = None
@@ -190,7 +198,8 @@ class ObjectChooser(object):
                 self._parent_xid, what_filter)
         else:
             self._chooser_id = journal.ChooseObjectWithFilter(
-                self._parent_xid, what_filter, self._filter_type)
+                self._parent_xid, what_filter, self._filter_type,
+                self._show_preview)
 
         Gdk.threads_leave()
         try:
