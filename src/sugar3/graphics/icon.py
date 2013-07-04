@@ -250,20 +250,46 @@ class _IconBuffer(object):
         if cache_key in self._surface_cache:
             return self._surface_cache[cache_key]
 
-        icon_info = self._get_icon_info()
-        if icon_info.file_name is None:
+        # We run two attempts at finding the icon. First, we try the icon
+        # requested by the user. If that fails, we fall back on
+        # document-generic. If that doesn't work out, bail.
+        icon_width = None
+        for attempt in range(2):
+            if attempt > 0:
+                logging.warning("Failed to load icon %s/%s")
+                self.file_name = None
+                self.icon_name = 'document-generic'
+
+            icon_info = self._get_icon_info()
+            if icon_info.file_name is None:
+                return None
+
+            is_svg = icon_info.file_name.endswith('.svg')
+
+            if is_svg:
+                try:
+                    handle = self._load_svg(icon_info.file_name)
+                except IOError:
+                    # trigger fallback
+                    continue
+                icon_width = handle.props.width
+                icon_height = handle.props.height
+            else:
+                try:
+                    path = icon_info.file_name
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+                except GObject.GError:
+                    # trigger fallback
+                    continue
+                icon_width = pixbuf.get_width()
+                icon_height = pixbuf.get_height()
+
+            # icon loaded successfully
+            break
+
+        if icon_width is None:
+            # Neither attempt found an icon for us to use
             return None
-
-        is_svg = icon_info.file_name.endswith('.svg')
-
-        if is_svg:
-            handle = self._load_svg(icon_info.file_name)
-            icon_width = handle.props.width
-            icon_height = handle.props.height
-        else:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.file_name)
-            icon_width = pixbuf.get_width()
-            icon_height = pixbuf.get_height()
 
         badge_info = self._get_badge_info(icon_info, icon_width, icon_height)
 
