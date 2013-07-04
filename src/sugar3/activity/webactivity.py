@@ -26,7 +26,7 @@ from gi.repository import GdkX11
 assert GdkX11
 
 from gi.repository import SugarExt
-
+from sugar3.activity import activity
 
 class WebActivity(Gtk.Window):
     def __init__(self, handle):
@@ -75,7 +75,8 @@ class WebActivity(Gtk.Window):
                                    "apiSocketPort": port,
                                    "activityId": self._activity_id,
                                    "bundleId": self._bundle_id,
-                                   "objectId": self._object_id})
+                                   "objectId": self._object_id,
+                                   "activityName": activity.get_bundle_name()})
 
             script = """
                      var environment = %s;
