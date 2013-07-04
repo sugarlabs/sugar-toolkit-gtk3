@@ -23,7 +23,6 @@ the moment there is no reason to stabilize this API.
 """
 
 import logging
-import uuid
 
 import dbus
 from gi.repository import GObject
@@ -65,7 +64,7 @@ def _close_fds():
 
 def create_activity_id():
     """Generate a new, unique ID for this activity"""
-    return util.unique_id(uuid.getnode())
+    return util.unique_id()
 
 
 def get_environment(activity):
