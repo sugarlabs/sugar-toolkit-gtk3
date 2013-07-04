@@ -130,19 +130,19 @@ class _IconBuffer(object):
 
         return attach_x, attach_y
 
-    def _get_icon_info(self):
+    def _get_icon_info(self, file_name, icon_name):
         icon_info = _IconInfo()
 
-        if self.file_name:
-            icon_info.file_name = self.file_name
-        elif self.icon_name:
+        if file_name:
+            icon_info.file_name = file_name
+        elif icon_name:
             theme = Gtk.IconTheme.get_default()
 
             size = 50
             if self.width is not None:
                 size = self.width
 
-            info = theme.lookup_icon(self.icon_name, int(size), 0)
+            info = theme.lookup_icon(icon_name, int(size), 0)
             if info:
                 attach_x, attach_y = self._get_attach_points(info, size)
 
@@ -153,7 +153,7 @@ class _IconBuffer(object):
                 del info
             else:
                 logging.warning('No icon with the name %s was found in the '
-                                'theme.', self.icon_name)
+                                'theme.', icon_name)
 
         return icon_info
 
@@ -250,20 +250,39 @@ class _IconBuffer(object):
         if cache_key in self._surface_cache:
             return self._surface_cache[cache_key]
 
-        icon_info = self._get_icon_info()
-        if icon_info.file_name is None:
+        # We run two attempts at finding the icon. First, we try the icon
+        # requested by the user. If that fails, we fall back on
+        # document-generic. If that doesn't work out, bail.
+        icon_width = None
+        for (file_name, icon_name) in ((self.file_name, self.icon_name),
+                                      (None, 'document-generic')):
+            icon_info = self._get_icon_info(file_name, icon_name)
+            if icon_info.file_name is None:
+                return None
+
+            is_svg = icon_info.file_name.endswith('.svg')
+
+            if is_svg:
+                try:
+                    handle = self._load_svg(icon_info.file_name)
+                    icon_width = handle.props.width
+                    icon_height = handle.props.height
+                    break
+                except IOError:
+                    pass
+            else:
+                try:
+                    path = icon_info.file_name
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+                    icon_width = pixbuf.get_width()
+                    icon_height = pixbuf.get_height()
+                    break
+                except GObject.GError:
+                    pass
+
+        if icon_width is None:
+            # Neither attempt found an icon for us to use
             return None
-
-        is_svg = icon_info.file_name.endswith('.svg')
-
-        if is_svg:
-            handle = self._load_svg(icon_info.file_name)
-            icon_width = handle.props.width
-            icon_height = handle.props.height
-        else:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.file_name)
-            icon_width = pixbuf.get_width()
-            icon_height = pixbuf.get_height()
 
         badge_info = self._get_badge_info(icon_info, icon_width, icon_height)
 
