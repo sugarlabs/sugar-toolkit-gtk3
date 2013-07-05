@@ -28,12 +28,18 @@ import tempfile
 from gi.repository import GObject
 from gi.repository import GConf
 from gi.repository import Gio
+from gi.repository import Gdk
 import dbus
 import dbus.glib
 
 from sugar3 import env
 from sugar3 import mime
 from sugar3 import dispatch
+
+import StringIO
+import cairo
+from sugar3.graphics import style
+
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
@@ -506,3 +512,60 @@ def get_unique_values(key):
     """
     return _get_data_store().get_uniquevaluesfor(
         key, dbus.Dictionary({}, signature='ss'))
+
+
+def get_preview_pixbuf(preview_data, width=-1, height=-1):
+    """Retrive a pixbuf with the content of the preview field
+
+    Keyword arguments:
+    metadata -- the metadata dictionary.
+                Can't be None, use metadata.get('preview', '')
+    width -- the pixbuf width, if is not set, the default width will be used
+    height -- the pixbuf width, if is not set, the default height will be used
+
+    Return: a Pixbuf or None if couldn't create it
+
+    """
+    if width == -1:
+        width = style.zoom(320)
+
+    if height == -1:
+        height = style.zoom(240)
+
+    pixbuf = None
+
+    if len(preview_data) > 4:
+        if preview_data[1:4] != 'PNG':
+            # TODO: We are close to be able to drop this.
+            import base64
+            preview_data = base64.b64decode(preview_data)
+
+        png_file = StringIO.StringIO(preview_data)
+        try:
+            # Load image and scale to dimensions
+            surface = cairo.ImageSurface.create_from_png(png_file)
+            png_width = surface.get_width()
+            png_height = surface.get_height()
+
+            preview_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                                                 width, height)
+            cr = cairo.Context(preview_surface)
+
+            scale_w = width * 1.0 / png_width
+            scale_h = height * 1.0 / png_height
+            scale = min(scale_w, scale_h)
+
+            cr.scale(scale, scale)
+
+            cr.set_source_rgba(1, 1, 1, 0)
+            cr.set_operator(cairo.OPERATOR_SOURCE)
+            cr.paint()
+            cr.set_source_surface(surface)
+            cr.paint()
+
+            pixbuf = Gdk.pixbuf_get_from_surface(preview_surface, 0, 0,
+                                                 width, height)
+        except Exception:
+            logging.exception('Error while loading the preview')
+
+    return pixbuf
