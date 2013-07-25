@@ -118,15 +118,15 @@ class Palette(PaletteWindow):
         self._icon_box.set_size_request(style.GRID_CELL_SIZE, -1)
         self._primary_box.pack_start(self._icon_box, False, True, 0)
 
-        labels_box = Gtk.VBox()
+        self.labels_box = Gtk.VBox()
         self._label_alignment = Gtk.Alignment(xalign=0, yalign=0.5, xscale=1,
                                               yscale=0.33)
         self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING,
                                           style.DEFAULT_SPACING)
-        self._label_alignment.add(labels_box)
+        self._label_alignment.add(self.labels_box)
         self._label_alignment.show()
         self._primary_box.pack_start(self._label_alignment, True, True, 0)
-        labels_box.show()
+        self.labels_box.show()
 
         self._label = Gtk.AccelLabel(label='')
         self._label.set_alignment(0, 0.5)
@@ -134,7 +134,7 @@ class Palette(PaletteWindow):
         if text_maxlen > 0:
             self._label.set_max_width_chars(text_maxlen)
             self._label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
-        labels_box.pack_start(self._label, True, True, 0)
+        self.labels_box.pack_start(self._label, True, True, 0)
 
         self._secondary_label = Gtk.Label()
         self._secondary_label.set_alignment(0, 0.5)
@@ -143,7 +143,9 @@ class Palette(PaletteWindow):
             self._secondary_label.set_max_width_chars(text_maxlen)
             self._secondary_label.set_ellipsize(Pango.EllipsizeMode.END)
 
-        labels_box.pack_start(self._secondary_label, True, True, 0)
+        self.labels_box.pack_start(self._secondary_label, True, True, 0)
+
+        self._image = None
 
         self._secondary_box = Gtk.VBox()
 
@@ -271,6 +273,17 @@ class Palette(PaletteWindow):
 
     secondary_text = GObject.property(type=str, getter=get_secondary_text,
                                       setter=set_secondary_text)
+
+    def set_pixbuf(self, pixbuf):
+        if self._image is None:
+            self._image = Gtk.Image()
+            self._image.set_alignment(0.5, 0.5)
+            self.labels_box.pack_start(self._image, True, True, 5)
+        if pixbuf is not None:
+            self._image.set_from_pixbuf(pixbuf)
+            self._image.show()
+        else:
+            self._image.hide()
 
     def _show_icon(self):
         self._label_alignment.set_padding(0, 0, 0, style.DEFAULT_SPACING)
