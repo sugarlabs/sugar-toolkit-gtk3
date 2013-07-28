@@ -30,6 +30,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Rsvg
+from gi.repository.Gio import ThemedIcon
 import cairo
 
 from sugar3.graphics.xocolor import XoColor
@@ -1004,6 +1005,20 @@ def get_icon_file_name(icon_name):
     filename = info.get_filename()
     del info
     return filename
+
+
+def find_icon_name(mount):
+    name = 'drive'
+    icon = mount.get_icon()
+    if isinstance(icon, ThemedIcon):
+        icon_theme = Gtk.IconTheme.get_default()
+        for icon_name in icon.props.names:
+            if icon_theme.has_icon(icon_name):
+                name = icon_name
+                break
+    else:
+        logging.error('Cannot find icon names for %s, %s', icon, mount)
+    return name
 
 
 def get_surface(**kwargs):
