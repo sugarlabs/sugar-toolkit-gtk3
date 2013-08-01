@@ -82,6 +82,11 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
             scale_h = height * 1.0 / png_height
             scale = min(scale_w, scale_h)
 
+            # center the image if the scales are not equal
+            translate_x = int((width - (png_width * scale)) / 2)
+            translate_y = int((height - (png_height * scale)) / 2)
+            cr.translate(translate_x, translate_y)
+
             cr.scale(scale, scale)
 
             cr.set_source_rgba(1, 1, 1, 0)
