@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
 "PO-Revision-Date: 2012-06-18 06:12+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,39 +34,39 @@ msgstr "Keep error: all changes will be lost"
 msgid "Don't stop"
 msgstr "Don't stop"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:882
 msgid "Stop anyway"
 msgstr "Stop anyway"
 
-#: ../src/sugar3/activity/widgets.py:86
+#: ../src/sugar3/activity/widgets.py:87
 msgid "Stop"
 msgstr "Stop"
 
-#: ../src/sugar3/activity/widgets.py:98
+#: ../src/sugar3/activity/widgets.py:99
 msgid "Undo"
 msgstr "Undo"
 
-#: ../src/sugar3/activity/widgets.py:106
+#: ../src/sugar3/activity/widgets.py:107
 msgid "Redo"
 msgstr "Redo"
 
-#: ../src/sugar3/activity/widgets.py:113
+#: ../src/sugar3/activity/widgets.py:114
 msgid "Copy"
 msgstr "Copy"
 
-#: ../src/sugar3/activity/widgets.py:121
+#: ../src/sugar3/activity/widgets.py:122
 msgid "Paste"
 msgstr "Paste"
 
-#: ../src/sugar3/activity/widgets.py:132
+#: ../src/sugar3/activity/widgets.py:133
 msgid "Private"
 msgstr "Private"
 
-#: ../src/sugar3/activity/widgets.py:139
+#: ../src/sugar3/activity/widgets.py:140
 msgid "My Neighborhood"
 msgstr "My Neighborhood"
 
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:234
 msgid "Description"
 msgstr "Description"
 
@@ -87,15 +87,15 @@ msgstr "Continue"
 msgid "Choose a color"
 msgstr "Choose a color"
 
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
 msgstr "Red"
 
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
 msgstr "Green"
 
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
 msgstr "Blue"
 
@@ -186,22 +186,22 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:55
 msgid "Text"
 msgstr "Text"
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:64
 msgid "Image"
 msgstr "Image"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:70
 msgid "Audio"
 msgstr "Audio"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:78
 msgid "Video"
 msgstr "Video"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:90
 msgid "Link"
 msgstr "Link"
