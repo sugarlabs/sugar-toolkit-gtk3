@@ -762,7 +762,7 @@ xdg_mime_mime_type_subclass (const char *mime,
 /**
  * sugar_mime_list_mime_parents:
  *
- * Return value: (array zero-terminated=1) (transfer full):
+ * Return value: (transfer container):
  **/
 char **
 xdg_mime_list_mime_parents (const char *mime)
@@ -788,6 +788,11 @@ xdg_mime_list_mime_parents (const char *mime)
   return result;
 }
 
+/**
+ * sugar_mime_get_mime_parents:
+ *
+ * Return value: (transfer none):
+ **/
 const char **
 xdg_mime_get_mime_parents (const char *mime)
 {
