@@ -30,6 +30,7 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 
 // This function is wrapped by getattrs/setattrs
 static int _ioctl_attrs(char *file, __u32 *attrs, int ioctlnum, char *verb)
