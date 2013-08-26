@@ -121,7 +121,7 @@ class _IconBuffer(object):
         return self._loader.load(file_name, entities, self.cache)
 
     def _get_attach_points(self, info, size_request):
-        return 0,0;has_attach_points_, attach_points = info.get_attach_points()
+        has_attach_points_, attach_points = info.get_attach_points()
 
         if attach_points:
             attach_x = float(attach_points[0].x) / size_request
@@ -166,8 +166,8 @@ class _IconBuffer(object):
             if badge_file_name.endswith('.svg'):
                 handle = self._loader.load(badge_file_name, {}, self.cache)
 
-                icon_width = handle.get_width()
-                icon_height = handle.get_height()
+                icon_width = handle.props.width
+                icon_height = handle.props.height
 
                 pixbuf = handle.get_pixbuf()
             else:
@@ -278,7 +278,6 @@ class _IconBuffer(object):
             surface = cairo.ImageSurface(cairo.FORMAT_RGB24, int(width),
                                          int(height))
             context = cairo.Context(surface)
-            context = Gdk.CairoContext(context)
             context.set_source_color(self.background_color)
             context.paint()
 
@@ -385,16 +384,6 @@ class Icon(Gtk.Image):
         return (width, width)
 
     def do_draw(self, cr):
-        """
-        Parameters
-        ----------
-        event :
-
-        Returns:
-        --------
-        None
-
-        """
         self._sync_image_properties()
         sensitive = (self.is_sensitive())
         surface = self._buffer.get_surface(sensitive, self)
@@ -430,16 +419,6 @@ class Icon(Gtk.Image):
             cr.paint_with_alpha(self._alpha)
 
     def set_xo_color(self, value):
-        """
-        Parameters
-        ----------
-        value :
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.xo_color != value:
             self._buffer.xo_color = value
             self.queue_draw()
@@ -448,78 +427,28 @@ class Icon(Gtk.Image):
         type=object, getter=None, setter=set_xo_color)
 
     def set_fill_color(self, value):
-        """
-        Parameters
-        ----------
-        value :
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.fill_color != value:
             self._buffer.fill_color = value
             self.queue_draw()
 
     def get_fill_color(self):
-        """
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        fill_color :
-
-        """
         return self._buffer.fill_color
 
     fill_color = GObject.property(
         type=object, getter=get_fill_color, setter=set_fill_color)
 
     def set_stroke_color(self, value):
-        """
-        Parameters
-        ----------
-        value :
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.stroke_color != value:
             self._buffer.stroke_color = value
             self.queue_draw()
 
     def get_stroke_color(self):
-        """
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        stroke_color :
-
-        """
         return self._buffer.stroke_color
 
     stroke_color = GObject.property(
         type=object, getter=get_stroke_color, setter=set_stroke_color)
 
     def set_badge_name(self, value):
-        """
-        Parameters
-        ----------
-        value:
-
-        Returns
-        -------
-        None
-
-        """
         if self._buffer.badge_name != value:
             self._buffer.badge_name = value
             self.queue_resize()
@@ -553,43 +482,180 @@ class EventIcon(Gtk.EventBox):
     cursor-positioned palette invoker.
     """
 
-    __gtype_name__ = 'EventIcon'
-    __gsignals__ = {
-        'activated': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, []),
-    }
+    __gtype_name__ = 'SugarEventIcon'
 
     def __init__(self, **kwargs):
-        Gtk.EventBox.__init__(self)
+        self._buffer = _IconBuffer()
+        self._alpha = 1.0
 
-        self._icon = Icon()
+        Gtk.EventBox.__init__(self)
+        self.set_visible_window(False)
+        self.set_above_child(True)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
+                        Gdk.EventMask.TOUCH_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK)
         for key, value in kwargs.iteritems():
-            self._icon.set_property(key, value)
-        self.add(self._icon)
-        self._icon.show()
+            self.set_property(key, value)
 
         from sugar3.graphics.palette import CursorInvoker
         self._palette_invoker = CursorInvoker()
         self._palette_invoker.attach(self)
-
-        self.modify_bg(Gtk.StateType.NORMAL, style.COLOR_WHITE.get_gdk_color())
         self.connect('destroy', self.__destroy_cb)
+
+    def do_draw(self, cr):
+        surface = self._buffer.get_surface()
+        if surface:
+            allocation = self.get_allocation()
+
+            x = (allocation.width - surface.get_width()) / 2
+            y = (allocation.height - surface.get_height()) / 2
+
+            cr.set_source_surface(surface, x, y)
+            if self._alpha == 1.0:
+                cr.paint()
+            else:
+                cr.paint_with_alpha(self._alpha)
+
+    def do_get_preferred_height(self):
+        surface = self._buffer.get_surface()
+        if surface:
+            height = surface.get_height()
+        elif self._buffer.height:
+            height = self._buffer.height
+        else:
+            height = 0
+        return (height, height)
+
+    def do_get_preferred_width(self):
+        surface = self._buffer.get_surface()
+        if surface:
+            width = surface.get_width()
+        elif self._buffer.width:
+            width = self._buffer.width
+        else:
+            width = 0
+        return (width, width)
 
     def __destroy_cb(self, icon):
         if self._palette_invoker is not None:
             self._palette_invoker.detach()
 
-    def do_button_press_event(self, event):
-        if event.button == 1:
-            self.emit('activated')
-            return True
-        else:
-            return False
+    def set_file_name(self, value):
+        if self._buffer.file_name != value:
+            self._buffer.file_name = value
+            self.queue_draw()
 
-    def get_icon(self):
-        return self._icon
+    def get_file_name(self):
+        return self._buffer.file_name
 
-    icon = GObject.property(
-        type=object, getter=get_icon)
+    file_name = GObject.property(
+        type=object, getter=get_file_name, setter=set_file_name)
+
+    def set_icon_name(self, value):
+        if self._buffer.icon_name != value:
+            self._buffer.icon_name = value
+            self.queue_draw()
+
+    def get_icon_name(self):
+        return self._buffer.icon_name
+
+    icon_name = GObject.property(
+        type=object, getter=get_icon_name, setter=set_icon_name)
+
+    def set_xo_color(self, value):
+        if self._buffer.xo_color != value:
+            self._buffer.xo_color = value
+            self.queue_draw()
+
+    xo_color = GObject.property(
+        type=object, getter=None, setter=set_xo_color)
+
+    def set_fill_color(self, value):
+        if self._buffer.fill_color != value:
+            self._buffer.fill_color = value
+            self.queue_draw()
+
+    def get_fill_color(self):
+        return self._buffer.fill_color
+
+    fill_color = GObject.property(
+        type=object, getter=get_fill_color, setter=set_fill_color)
+
+    def set_stroke_color(self, value):
+        if self._buffer.stroke_color != value:
+            self._buffer.stroke_color = value
+            self.queue_draw()
+
+    def get_stroke_color(self):
+        return self._buffer.stroke_color
+
+    stroke_color = GObject.property(
+        type=object, getter=get_stroke_color, setter=set_stroke_color)
+
+    def set_background_color(self, value):
+        if self._buffer.background_color != value:
+            self._buffer.background_color = value
+            self.queue_draw()
+
+    def get_background_color(self):
+        return self._buffer.background_color
+
+    background_color = GObject.property(
+        type=object, getter=get_background_color, setter=set_background_color)
+
+    def set_size(self, value):
+        if self._buffer.width != value:
+            self._buffer.width = value
+            self._buffer.height = value
+            self.queue_resize()
+
+    def get_size(self):
+        return self._buffer.width
+
+    pixel_size = GObject.property(
+        type=object, getter=get_size, setter=set_size)
+
+    def set_scale(self, value):
+        if self._buffer.scale != value:
+            self._buffer.scale = value
+            self.queue_resize()
+
+    def get_scale(self):
+        return self._buffer.scale
+
+    scale = GObject.property(
+        type=float, getter=get_scale, setter=set_scale)
+
+    def set_alpha(self, alpha):
+        if self._alpha != alpha:
+            self._alpha = alpha
+            self.queue_draw()
+
+    alpha = GObject.property(
+        type=float, setter=set_alpha)
+
+    def set_cache(self, value):
+        self._buffer.cache = value
+
+    def get_cache(self):
+        return self._buffer.cache
+
+    cache = GObject.property(
+        type=bool, default=False, getter=get_cache, setter=set_cache)
+
+    def set_badge_name(self, value):
+        if self._buffer.badge_name != value:
+            self._buffer.badge_name = value
+            self.queue_draw()
+
+    def get_badge_name(self):
+        return self._buffer.badge_name
+
+    badge_name = GObject.property(
+        type=object, getter=get_badge_name, setter=set_badge_name)
+
+    def create_palette(self):
+        return None
 
     def get_palette(self):
         return self._palette_invoker.palette
@@ -616,6 +682,65 @@ class EventIcon(Gtk.EventBox):
         self.set_palette(Palette(text))
 
 
+class CanvasIcon(EventIcon):
+    """
+    An EventIcon with active and prelight states, and a styleable
+    background.
+
+    If the icon pops up a palette, the prelight state is set until the
+    palette pops down.
+
+    """
+
+    __gtype_name__ = 'SugarCanvasIcon'
+
+    def __init__(self, **kwargs):
+        EventIcon.__init__(self, **kwargs)
+
+        self.connect('enter-notify-event', self.__enter_notify_event_cb)
+        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+        self.connect('button-press-event', self.__button_press_event_cb)
+        self.connect('button-release-event', self.__button_release_event_cb)
+
+    def connect_to_palette_pop_events(self, palette):
+        palette.connect('popup', self.__palette_popup_cb)
+        palette.connect('popdown', self.__palette_popdown_cb)
+
+    def do_draw(self, cr):
+        """Render a background that fits the allocated space."""
+        allocation = self.get_allocation()
+        context = self.get_style_context()
+        Gtk.render_background(context, cr, 0, 0,
+                              allocation.width,
+                              allocation.height)
+
+        EventIcon.do_draw(self, cr)
+
+    def __enter_notify_event_cb(self, icon, event):
+        self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.PRELIGHT,
+                             clear=True)
+
+    def __leave_notify_event_cb(self, icon, event):
+        if self.palette and self.palette.is_up():
+            return
+
+        self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
+
+    def __button_press_event_cb(self, icon, event):
+        if self.palette and not self.palette.is_up():
+            self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.ACTIVE,
+                                 clear=True)
+
+    def __button_release_event_cb(self, icon, event):
+        self.unset_state_flags(Gtk.StateFlags.ACTIVE)
+
+    def __palette_popup_cb(self, palette):
+        self.set_state_flags(Gtk.StateFlags.PRELIGHT, clear=True)
+
+    def __palette_popdown_cb(self, palette):
+        self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
+
+
 class CellRendererIcon(Gtk.CellRenderer):
 
     __gtype_name__ = 'SugarCellRendererIcon'
@@ -634,16 +759,27 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._stroke_color = None
         self._prelit_fill_color = None
         self._prelit_stroke_color = None
+        self._active_state = False
         self._palette_invoker = CellRendererInvoker()
 
-        GObject.GObject.__init__(self)
+        Gtk.CellRenderer.__init__(self)
+
+        tree_view.connect('button-press-event',
+                          self.__button_press_event_cb)
+        tree_view.connect('button-release-event',
+                          self.__button_release_event_cb)
 
         self._palette_invoker.attach_cell_renderer(tree_view, self)
 
-        self.connect('destroy', self.__destroy_cb)
-
-    def __destroy_cb(self, icon):
+    def __del__(self):
         self._palette_invoker.detach()
+
+    def __button_press_event_cb(self, widget, event):
+        if self._point_in_cell_renderer(widget, event.x, event.y):
+            self._active_state = True
+
+    def __button_release_event_cb(self, widget, event):
+        self._active_state = False
 
     def create_palette(self):
         return None
@@ -714,7 +850,8 @@ class CellRendererIcon(Gtk.CellRenderer):
 
     size = GObject.property(type=object, setter=set_size)
 
-    def on_get_size(self, widget, cell_area):
+    def do_get_size(self, widget, cell_area, x_offset=None, y_offset=None,
+                    width=None, height=None):
         width = self._buffer.width + self.props.xpad * 2
         height = self._buffer.height + self.props.ypad * 2
         xoffset = 0
@@ -732,24 +869,31 @@ class CellRendererIcon(Gtk.CellRenderer):
 
         return xoffset, yoffset, width, height
 
-    def on_activate(self, event, widget, path, background_area, cell_area,
+    def do_activate(self, event, widget, path, background_area, cell_area,
                     flags):
         pass
 
-    def on_start_editing(self, event, widget, path, background_area, cell_area,
+    def do_start_editing(self, event, widget, path, background_area, cell_area,
                          flags):
         pass
 
-    def _is_prelit(self, tree_view):
-        x, y = tree_view.get_pointer()
-        x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
-        pos = tree_view.get_path_at_pos(x, y)
+    def _point_in_cell_renderer(self, tree_view, x=None, y=None):
+        """Check if the point with coordinates x, y is inside this icon.
+
+        If the x, y coordinates are not given, they are taken from the
+        pointer current position.
+
+        """
+        if x is None and y is None:
+            x, y = tree_view.get_pointer()
+            x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
+        pos = tree_view.get_path_at_pos(int(x), int(y))
         if pos is None:
             return False
 
-        path_, column, x, y = pos
+        path_, column, x, y_ = pos
 
-        for cell_renderer in column.get_cell_renderers():
+        for cell_renderer in column.get_cells():
             if cell_renderer == self:
                 cell_x, cell_width = column.cell_get_position(cell_renderer)
                 if x > cell_x and x < (cell_x + cell_width):
@@ -758,8 +902,30 @@ class CellRendererIcon(Gtk.CellRenderer):
 
         return False
 
-    def on_render(self, window, widget, background_area, cell_area,
-            expose_area, flags):
+    def do_render(self, cr, widget, background_area, cell_area, flags):
+        context = widget.get_style_context()
+        context.save()
+        context.add_class("sugar-icon-cell")
+
+        pointer_inside = self._point_in_cell_renderer(widget)
+
+        # The context will have prelight state if the mouse pointer is
+        # in the entire row, but we want that state if the pointer is
+        # in this cell only:
+        if flags & Gtk.CellRendererState.PRELIT:
+            if pointer_inside:
+                if self._active_state:
+                    context.set_state(Gtk.StateFlags.ACTIVE)
+            else:
+                context.set_state(Gtk.StateFlags.NORMAL)
+
+
+        Gtk.render_background(context, cr, background_area.x, background_area.y,
+                              background_area.width, background_area.height)
+
+        Gtk.render_frame(context, cr, background_area.x, background_area.y,
+                         background_area.width, background_area.height)
+
         if self._xo_color is not None:
             stroke_color = self._xo_color.get_stroke_color()
             fill_color = self._xo_color.get_fill_color()
@@ -774,8 +940,8 @@ class CellRendererIcon(Gtk.CellRenderer):
         has_prelit_colors = None not in [prelit_fill_color,
                                          prelit_stroke_color]
 
-        if flags & Gtk.CELL_RENDERER_PRELIT and has_prelit_colors and \
-                self._is_prelit(widget):
+        if flags & Gtk.CellRendererState.PRELIT and has_prelit_colors and \
+                pointer_inside:
 
             self._buffer.fill_color = prelit_fill_color
             self._buffer.stroke_color = prelit_stroke_color
@@ -787,14 +953,15 @@ class CellRendererIcon(Gtk.CellRenderer):
         if surface is None:
             return
 
-        xoffset, yoffset, width_, height_ = self.on_get_size(widget, cell_area)
+        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
 
         x = cell_area.x + xoffset
         y = cell_area.y + yoffset
 
-        cr = window.cairo_create()
         cr.set_source_surface(surface, math.floor(x), math.floor(y))
-        cr.rectangle(expose_area)
+        cr.rectangle(cell_area.x, cell_area.y, cell_area.width,
+                     cell_area.height)
+        cr.clip()
         cr.paint()
 
 

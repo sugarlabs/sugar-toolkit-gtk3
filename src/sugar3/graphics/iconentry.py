@@ -15,6 +15,8 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import logging
+
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -42,6 +44,10 @@ class IconEntry(Gtk.Entry):
         icon_info = icon_theme.lookup_icon(name,
                                            Gtk.IconSize.SMALL_TOOLBAR,
                                            0)
+        if not icon_info:
+            logging.warning('IconEntry set_icon_from_name: icon \'%s\' not '
+                            'found in the theme.', name)
+            return
 
         if icon_info.get_filename().endswith('.svg'):
             loader = _SVGLoader()
@@ -74,7 +80,7 @@ class IconEntry(Gtk.Entry):
     def show_clear_button(self):
         if not self._clear_shown:
             self.set_icon_from_name(ICON_ENTRY_SECONDARY,
-                                    'dialog-cancel')
+                                    'entry-cancel')
             self._clear_shown = True
 
     def hide_clear_button(self):

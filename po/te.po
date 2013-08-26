@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
-"PO-Revision-Date: 2012-02-16 17:29+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-10-21 08:54+0200\n"
+"Last-Translator: ratnakumar <kumar2dumbu@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: te\n"
 "MIME-Version: 1.0\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s వ్యాపకం"
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "పొరబాటు జరిగింది"
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "పొరబాటు జరిగింది : అన్ని మార్పులూ పోతాయి"
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "ఆపవద్దు"
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr "ఏదేమైనా ఆపువేయి"
 
@@ -164,24 +164,45 @@ msgstr[1] ""
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
-msgstr ""
+msgstr "ఖాళీ"
 
 #: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d బైట్"
 
 #: ../src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d కిలోల బైట్"
 
 #: ../src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d మెగా బైట్"
 
 #: ../src/sugar3/util.py:354
 #, python-format
+#, python-format,
 msgid "%d GB"
-msgstr ""
+msgstr "%d గీగా బైట్"
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr "వచనం"
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr "బొమ్మ"
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr "ధ్వని"
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr "చలనచిత్రము"
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr "జోడిక"

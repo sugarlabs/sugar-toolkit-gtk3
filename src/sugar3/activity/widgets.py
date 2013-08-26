@@ -32,6 +32,7 @@ from sugar3.graphics.xocolor import XoColor
 from sugar3.graphics.icon import Icon
 from sugar3.bundle.activitybundle import ActivityBundle
 from sugar3.graphics import style
+from sugar3.graphics.palettemenu import PaletteMenuBox
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -60,6 +61,8 @@ class ActivityButton(ToolButton):
         self.set_icon_widget(icon)
         icon.show()
 
+        self.props.hide_tooltip_on_click = False
+        self.palette_invoker.props.toggle_palette = True
         self.props.tooltip = activity.metadata['title']
         activity.metadata.connect('updated', self.__jobject_updated_cb)
 
@@ -175,6 +178,7 @@ class TitleEntry(Gtk.ToolItem):
         self.entry.set_size_request(int(Gdk.Screen.width() / 3), -1)
         self.entry.set_text(activity.metadata['title'])
         self.entry.connect('focus-out-event', self.__title_changed_cb, activity)
+        self.entry.connect('button-press-event', self.__button_press_event_cb)
         self.entry.show()
         self.add(self.entry)
 
@@ -200,6 +204,14 @@ class TitleEntry(Gtk.ToolItem):
         self.save_title(activity)
         return False
 
+    def __button_press_event_cb(self, widget, event):
+        if widget.is_focus():
+            return False
+        else:
+            widget.grab_focus()
+            widget.select_region(0, -1)
+            return True
+
     def save_title(self, activity):
         title = self.entry.get_text()
         if title == activity.metadata['title']:
@@ -216,17 +228,17 @@ class TitleEntry(Gtk.ToolItem):
             shared_activity.props.name = title
 
 
-class DescriptionItem(Gtk.ToolItem):
+class DescriptionItem(ToolButton):
 
     def __init__(self, activity, **kwargs):
-        Gtk.ToolItem.__init__(self)
+        ToolButton.__init__(self, 'edit-description', **kwargs)
+        self.set_tooltip(_('Description'))
+        self.palette_invoker.props.toggle_palette = True
+        self.palette_invoker.props.lock_palette = True
+        self.props.hide_tooltip_on_click = False
+        self._palette = self.get_palette()
 
-        description_button = ToolButton('edit-description')
-        description_button.show()
-        description_button.set_tooltip(_('Description'))
-        self._palette = description_button.get_palette()
-
-        description_box = Gtk.HBox()
+        description_box = PaletteMenuBox()
         sw = Gtk.ScrolledWindow()
         sw.set_size_request(int(Gdk.Screen.width() / 2),
                             2 * style.GRID_CELL_SIZE)
@@ -234,6 +246,7 @@ class DescriptionItem(Gtk.ToolItem):
         self._text_view = Gtk.TextView()
         self._text_view.set_left_margin(style.DEFAULT_PADDING)
         self._text_view.set_right_margin(style.DEFAULT_PADDING)
+        self._text_view.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
         text_buffer = Gtk.TextBuffer()
         if 'description' in activity.metadata:
             text_buffer.set_text(activity.metadata['description'])
@@ -241,15 +254,34 @@ class DescriptionItem(Gtk.ToolItem):
         self._text_view.connect('focus-out-event',
                                self.__description_changed_cb, activity)
         sw.add(self._text_view)
-        description_box.pack_start(sw, False, True, 0)
+        description_box.append_item(sw, vertical_padding=0)
         self._palette.set_content(description_box)
         description_box.show_all()
 
-        self.add(description_button)
-        description_button.connect('clicked',
-                                   self.__description_button_clicked_cb)
-
         activity.metadata.connect('updated', self.__jobject_updated_cb)
+
+    def set_expanded(self, expanded):
+        box = self.toolbar_box
+        if not box:
+            return
+
+        if not expanded:
+            self.palette_invoker.notify_popdown()
+            return
+
+        if box.expanded_button is not None:
+            box.expanded_button.queue_draw()
+            if box.expanded_button != self:
+                box.expanded_button.set_expanded(False)
+        box.expanded_button = self
+
+    def get_toolbar_box(self):
+        parent = self.get_parent()
+        if not hasattr(parent, 'owner'):
+            return None
+        return parent.owner
+
+    toolbar_box = property(get_toolbar_box)
 
     def _get_text_from_buffer(self):
         buf = self._text_view.get_buffer()
@@ -266,9 +298,6 @@ class DescriptionItem(Gtk.ToolItem):
             return
         buf = self._text_view.get_buffer()
         buf.set_text(jobject['description'])
-
-    def __description_button_clicked_cb(self, button):
-        self._palette.popup(immediate=True, state=1)
 
     def __description_changed_cb(self, widget, event, activity):
         description = self._get_text_from_buffer()

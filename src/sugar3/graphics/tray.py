@@ -21,6 +21,7 @@ STABLE.
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from sugar3.graphics import style
 from sugar3.graphics.palette import ToolInvoker
@@ -46,7 +47,7 @@ class _TrayViewport(Gtk.Viewport):
         self._can_scroll_next = False
         self._can_scroll_prev = False
 
-        GObject.GObject.__init__(self)
+        Gtk.Viewport.__init__(self)
 
         self.set_shadow_type(Gtk.ShadowType.NONE)
 
@@ -136,7 +137,14 @@ class _TrayViewport(Gtk.Viewport):
             return self._can_scroll_prev
 
     def _size_allocate_cb(self, viewport, allocation):
+        if allocation.width == 1 and allocation.height == 1:
+            # HACK: the first time this callback is called 'width' and
+            # 'height' are 1 so we mark the Viewport as scrollable and
+            # we show the Prev / Next buttons
+            return
+
         bar_minimum, bar_natural = self.traybar.get_preferred_size()
+
         if self.orientation == Gtk.Orientation.HORIZONTAL:
             scrollable = bar_minimum.width > allocation.width
         else:
@@ -168,6 +176,8 @@ class _TrayViewport(Gtk.Viewport):
 
 
 class _TrayScrollButton(ToolButton):
+
+    __gtype_name__ = 'SugarTrayScrollButton'
 
     def __init__(self, icon_name, scroll_direction):
         ToolButton.__init__(self)
@@ -223,7 +233,7 @@ ALIGN_TO_START = 0
 ALIGN_TO_END = 1
 
 
-class HTray(Gtk.HBox):
+class HTray(Gtk.EventBox):
 
     __gtype_name__ = 'SugarHTray'
 
@@ -237,17 +247,21 @@ class HTray(Gtk.HBox):
         self._drag_active = False
         self.align = ALIGN_TO_START
 
-        GObject.GObject.__init__(self, **kwargs)
+        Gtk.EventBox.__init__(self, **kwargs)
+
+        self._box = Gtk.HBox()
+        self.add(self._box)
+        self._box.show()
 
         scroll_left = _TrayScrollButton('go-left', _PREVIOUS_PAGE)
-        self.pack_start(scroll_left, False, False, 0)
+        self._box.pack_start(scroll_left, False, False, 0)
 
         self._viewport = _TrayViewport(Gtk.Orientation.HORIZONTAL)
-        self.pack_start(self._viewport, True, True, 0)
+        self._box.pack_start(self._viewport, True, True, 0)
         self._viewport.show()
 
         scroll_right = _TrayScrollButton('go-right', _NEXT_PAGE)
-        self.pack_start(scroll_right, False, False, 0)
+        self._box.pack_start(scroll_right, False, False, 0)
 
         scroll_left.viewport = self._viewport
         scroll_right.viewport = self._viewport
@@ -309,7 +323,7 @@ class HTray(Gtk.HBox):
         self._viewport.scroll_to_item(item)
 
 
-class VTray(Gtk.VBox):
+class VTray(Gtk.EventBox):
 
     __gtype_name__ = 'SugarVTray'
 
@@ -323,17 +337,21 @@ class VTray(Gtk.VBox):
         self._drag_active = False
         self.align = ALIGN_TO_START
 
-        GObject.GObject.__init__(self, **kwargs)
+        Gtk.EventBox.__init__(self, **kwargs)
+
+        self._box = Gtk.VBox()
+        self.add(self._box)
+        self._box.show()
 
         scroll_up = _TrayScrollButton('go-up', _PREVIOUS_PAGE)
-        self.pack_start(scroll_up, False, False, 0)
+        self._box.pack_start(scroll_up, False, False, 0)
 
         self._viewport = _TrayViewport(Gtk.Orientation.VERTICAL)
-        self.pack_start(self._viewport, True, True, 0)
+        self._box.pack_start(self._viewport, True, True, 0)
         self._viewport.show()
 
         scroll_down = _TrayScrollButton('go-down', _NEXT_PAGE)
-        self.pack_start(scroll_down, False, False, 0)
+        self._box.pack_start(scroll_down, False, False, 0)
 
         scroll_up.viewport = self._viewport
         scroll_down.viewport = self._viewport
@@ -406,22 +424,35 @@ class _IconWidget(Gtk.EventBox):
     __gtype_name__ = 'SugarTrayIconWidget'
 
     def __init__(self, icon_name=None, xo_color=None):
-        GObject.GObject.__init__(self)
+        Gtk.EventBox.__init__(self)
 
         self.set_app_paintable(True)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
+                        Gdk.EventMask.TOUCH_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK)
 
         self._icon = Icon(icon_name=icon_name, xo_color=xo_color,
                           icon_size=Gtk.IconSize.LARGE_TOOLBAR)
         self.add(self._icon)
         self._icon.show()
 
-    def do_expose_event(self, event):
+    def do_draw(self, cr):
         palette = self.get_parent().palette
+
+        if palette and palette.is_up():
+            allocation = self.get_allocation()
+            # draw a black background, has been done by the engine before
+            cr.set_source_rgb(0, 0, 0)
+            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.paint()
+
+        Gtk.EventBox.do_draw(self, cr)
+
         if palette and palette.is_up():
             invoker = palette.props.invoker
-            invoker.draw_rectangle(event, palette)
+            invoker.draw_rectangle(cr, palette)
 
-        Gtk.EventBox.do_expose_event(self, event)
+        return False
 
     def get_icon(self):
         return self._icon

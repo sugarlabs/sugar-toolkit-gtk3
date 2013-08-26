@@ -73,10 +73,8 @@ from telepathy.interfaces import CHANNEL, \
 from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
-import sugar3
 from sugar3 import util
 from sugar3.presence import presenceservice
-from sugar3.activity import i18n
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
 from sugar3.graphics.window import Window
@@ -84,8 +82,7 @@ from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
 from sugar3.session import XSMPClient
-from sugar3 import wm
-
+from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
@@ -259,12 +256,6 @@ class Activity(Window, Gtk.Container):
 
         """
         # Stuff that needs to be done early
-
-        locale_path = i18n.get_locale_path(self.get_bundle_id())
-        gettext.bindtextdomain(self.get_bundle_id(), locale_path)
-        gettext.bindtextdomain('sugar-toolkit', sugar3.locale_path)
-        gettext.textdomain(self.get_bundle_id())
-
         icons_path = os.path.join(get_bundle_path(), 'icons')
         Gtk.IconTheme.get_default().append_search_path(icons_path)
 
@@ -322,7 +313,7 @@ class Activity(Window, Gtk.Container):
         self._session.connect('quit', self.__session_quit_cb)
 
         accel_group = Gtk.AccelGroup()
-        self.set_data('sugar-accel-group', accel_group)
+        self.sugar_accel_group = accel_group
         self.add_accel_group(accel_group)
 
         self._bus = ActivityService(self)
@@ -335,6 +326,13 @@ class Activity(Window, Gtk.Container):
 
             if 'share-scope' in self._jobject.metadata:
                 share_scope = self._jobject.metadata['share-scope']
+
+            if 'launch-times' in self._jobject.metadata:
+                self._jobject.metadata['launch-times'] += ', %d' % \
+                    int(time.time())
+            else:
+                self._jobject.metadata['launch-times'] = \
+                    str(int(time.time()))
 
         self.shared_activity = None
         self._join_id = None
@@ -388,6 +386,7 @@ class Activity(Window, Gtk.Container):
         jobject.metadata['preview'] = ''
         jobject.metadata['share-scope'] = SCOPE_PRIVATE
         jobject.metadata['icon-color'] = icon_color
+        jobject.metadata['launch-times'] = str(int(time.time()))
         jobject.file_path = ''
 
         # FIXME: We should be able to get an ID synchronously from the DS,
@@ -937,6 +936,7 @@ class Activity(Window, Gtk.Container):
         if not self.can_close():
             return
 
+        self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
         self.emit('_closing')
 
         if not self._closing:
@@ -947,8 +947,9 @@ class Activity(Window, Gtk.Container):
             self._complete_close()
 
     def __realize_cb(self, window):
-        wm.set_bundle_id(window.get_window(), self.get_bundle_id())
-        wm.set_activity_id(window.get_window(), str(self._activity_id))
+        xid = window.get_window().get_xid()
+        SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
+        SugarExt.wm_set_activity_id(xid, str(self._activity_id))
 
     def __delete_event_cb(self, widget, event):
         self.close()

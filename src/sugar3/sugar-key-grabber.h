@@ -56,7 +56,8 @@ struct _SugarKeyGrabberClass {
 
 GType	 sugar_key_grabber_get_type	(void);
 void     sugar_key_grabber_grab_keys (SugarKeyGrabber *grabber,
-									  const char     **keys);
+				      const gchar     *keys[],
+				      gint          n_elements);
 char    *sugar_key_grabber_get_key  (SugarKeyGrabber *grabber,
 									 guint            keycode,
 									 guint            state);
