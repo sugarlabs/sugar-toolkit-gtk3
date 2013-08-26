@@ -25,6 +25,9 @@ import os
 import logging
 import gettext
 
+from gi.repository import GdkPixbuf
+from gi.repository import Gio
+
 from sugar3 import _sugarbaseext
 
 _ = lambda msg: gettext.dgettext('sugar-base', msg)
@@ -34,6 +37,14 @@ GENERIC_TYPE_IMAGE = 'Image'
 GENERIC_TYPE_AUDIO = 'Audio'
 GENERIC_TYPE_VIDEO = 'Video'
 GENERIC_TYPE_LINK = 'Link'
+
+
+def _get_supported_image_mime_types():
+    mime_types = []
+    for image_format in GdkPixbuf.Pixbuf.get_formats():
+        mime_types.extend(image_format.get_mime_types())
+    return mime_types
+
 
 _extensions = {}
 _globs_timestamps = []
@@ -51,7 +62,7 @@ _generic_types = [
     'id': GENERIC_TYPE_IMAGE,
     'name': _('Image'),
     'icon': 'image-x-generic',
-    'types': ['image/png', 'image/gif', 'image/jpeg'],
+    'types': _get_supported_image_mime_types(),
 },
 {
     'id': GENERIC_TYPE_AUDIO,
@@ -65,7 +76,13 @@ _generic_types = [
     'id': GENERIC_TYPE_VIDEO,
     'name': _('Video'),
     'icon': 'video-x-generic',
-    'types': ['video/ogg', 'application/ogg', 'video/x-theora+ogg'],
+    'types': ['video/ogg', 'application/ogg', 'video/x-theora+ogg',
+              'video/x-theora', 'video/x-mng', 'video/mpeg4',
+              'video/mpeg-stream', 'video/mpeg', 'video/mpegts', 'video/mpeg2',
+              'video/mpeg1', 'video/x-cdxa', 'video/x-ogm+ogg', 'video/x-flv',
+              'video/mp4', 'video/x-matroska', 'video/x-msvideo',
+              'application/x-ogm-video', 'video/quicktime', 'video/x-quicktime'
+              'video/avi'],
 },
 {
     'id': GENERIC_TYPE_LINK,
@@ -133,8 +150,7 @@ def get_mime_description(mime_type):
     if generic_type:
         return generic_type['name']
 
-    import gio
-    return gio.content_type_get_description(mime_type)
+    return Gio.content_type_get_description(mime_type)
 
 
 def get_mime_parents(mime_type):

@@ -369,8 +369,8 @@ class _TimeoutIcon(Gtk.Alignment):
         y = h * 0.5
         radius = w / 2
         context.arc(x, y, radius, 0, 2 * math.pi)
-        widget_style = self.get_style()
-        color = widget_style.bg[self.get_state()]
+        widget_style = self.get_style_context()
+        color = widget_style.get_background_color(self.get_state_flags())
         context.set_source_rgb(color.red, color.green, color.blue)
         context.fill_preserve()
 
@@ -434,7 +434,7 @@ class TimeoutAlert(Alert):
         self.add_button(Gtk.ResponseType.OK, _('Continue'), self._timeout_text)
         self._timeout_text.show()
 
-        GObject.timeout_add_seconds(1, self.__timeout)
+        GLib.timeout_add_seconds(1, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1

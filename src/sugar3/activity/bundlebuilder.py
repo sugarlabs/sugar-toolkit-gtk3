@@ -77,6 +77,7 @@ class Config(object):
         self.tar_root_dir = None
         self.xo_name = None
         self.tar_name = None
+        self.summary = None
 
         self.update()
 
@@ -85,6 +86,7 @@ class Config(object):
         self.version = bundle.get_activity_version()
         self.activity_name = bundle.get_bundle_name()
         self.bundle_id = bundle.get_bundle_id()
+        self.summary = bundle.get_summary()
         self.bundle_name = reduce(operator.add, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%s' % (self.bundle_name, self.version)
@@ -136,9 +138,11 @@ class Builder(object):
 
             cat = gettext.GNUTranslations(open(mo_file, 'r'))
             translated_name = cat.gettext(self.config.activity_name)
+            translated_summary = cat.gettext(self.config.summary)
             linfo_file = os.path.join(localedir, 'activity.linfo')
             f = open(linfo_file, 'w')
             f.write('[Activity]\nname = %s\n' % translated_name)
+            f.write('summary = %s\n' % translated_summary)
             f.close()
 
     def get_files(self):
@@ -157,11 +161,21 @@ class Packager(object):
             os.mkdir(self.config.dist_dir)
 
     def get_files_in_git(self):
-        git_ls = subprocess.Popen(['git', 'ls-files'], stdout=subprocess.PIPE,
-                                  cwd=self.config.source_dir)
+        try:
+            git_ls = subprocess.Popen(['git', 'ls-files'],
+                                      stdout=subprocess.PIPE,
+                                      cwd=self.config.source_dir)
+        except OSError:
+            logging.warn('Packager: git is not installed, ' \
+                             'fall back to filtered list')
+            return list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
+
         stdout, _ = git_ls.communicate()
         if git_ls.returncode:
             # Fall back to filtered list
+            logging.warn('Packager: this is not a git repository, ' \
+                             'fall back to filtered list')
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
 
@@ -346,6 +360,11 @@ def cmd_genpot(config, args):
     f.write('#: activity/activity.info:2\n')
     f.write('msgid "%s"\n' % escaped_name)
     f.write('msgstr ""\n')
+    if config.summary is not None:
+        escaped_summary = re.sub('([\\\\"])', '\\\\\\1', config.summary)
+        f.write('#: activity/activity.info:3\n')
+        f.write('msgid "%s"\n' % escaped_summary)
+        f.write('msgstr ""\n')
     f.close()
 
     args = ['xgettext', '--join-existing', '--language=Python',
