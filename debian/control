@@ -21,6 +21,7 @@ Build-Depends: cdbs (>= 0.4.97~),
  gettext,
  intltool,
  libxml-parser-perl,
+ gir1.2-gconf-2.0,
  d-shlibs (>= 0.48)
 Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/collab-maint/sugar-toolkit-gtk3
