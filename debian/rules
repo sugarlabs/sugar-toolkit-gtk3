@@ -50,7 +50,7 @@ CDBS_BUILD_DEPENDS += , libice-dev, libasound2-dev | libasound-dev
 CDBS_BUILD_DEPENDS += , librsvg2-dev, python-gtk2-dev
 CDBS_BUILD_DEPENDS += , libgirepository1.0-dev (>= 1.30.0)
 CDBS_BUILD_DEPENDS += , gettext, intltool, libxml-parser-perl
-CDBS_BUILD_DEPENDS += , gir1.2-gconf-2.0
+CDBS_BUILD_DEPENDS += , gir1.2-gconf-2.0, libgconf-dev
 
 # Needed (always/often/seldom) at runtime
 #  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
