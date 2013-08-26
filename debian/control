@@ -3,10 +3,10 @@ Section: python
 Priority: optional
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
 Uploaders: Jonas Smedegaard <dr@jones.dk>
-Build-Depends: autotools-dev,
+Build-Depends: cdbs (>= 0.4.97~),
+ autotools-dev,
  devscripts,
- python (>= 2.6.5),
- cdbs (>= 0.4.97~),
+ python,
  python-all-dev,
  debhelper,
  dh-buildinfo,

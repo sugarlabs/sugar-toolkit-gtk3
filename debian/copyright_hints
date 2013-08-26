@@ -93,8 +93,6 @@ Files: AUTHORS
  debian/control
  debian/control.in
  debian/gbp.conf
- debian/gir1.2-sugarext-1.0.install
- debian/libsugarext0.install
  debian/patches/2002_ignore_debian_and_quilt-patches.patch
  debian/patches/2003_bundlebuilder_exit_nonzero_on_error.patch
  debian/patches/README
@@ -120,6 +118,11 @@ Files: AUTHORS
  src/sugar3/dispatch/__init__.py
  src/sugar3/dispatch/dispatcher.py
  src/sugar3/dispatch/saferef.py
+ src/sugar3/event-controller/Makefile.am
+ src/sugar3/event-controller/sugar-enum-types.c
+ src/sugar3/event-controller/sugar-enum-types.c.template
+ src/sugar3/event-controller/sugar-enum-types.h
+ src/sugar3/event-controller/sugar-enum-types.h.template
  src/sugar3/graphics/Makefile.am
  src/sugar3/presence/Makefile.am
  src/sugar3/sugar-marshal.c
@@ -145,7 +148,6 @@ Files: src/sugar3/_sugarbaseextmodule.c
  src/sugar3/graphics/palettegroup.py
  src/sugar3/graphics/panel.py
  src/sugar3/graphics/style.py
- src/sugar3/graphics/toggletoolbutton.py
  src/sugar3/graphics/toolbox.py
  src/sugar3/graphics/toolcombobox.py
  src/sugar3/graphics/xocolor.py
@@ -158,7 +160,6 @@ Files: src/sugar3/_sugarbaseextmodule.c
  src/sugar3/sugar-grid.h
  src/sugar3/sugar-key-grabber.c
  src/sugar3/sugar-key-grabber.h
- src/sugar3/wm.py
 Copyright: 2002, Red Hat, Inc
   2006-2007, Red Hat, Inc
   2007, Red Hat, Inc
@@ -166,17 +167,49 @@ Copyright: 2002, Red Hat, Inc
 License: LGPL-2+
  FIXME
 
+Files: src/sugar3/activity/i18n.py
+ src/sugar3/datastore/__init__.py
+ src/sugar3/event-controller/sugar-event-controller.c
+ src/sugar3/event-controller/sugar-event-controller.h
+ src/sugar3/event-controller/sugar-event-controllers.h
+ src/sugar3/event-controller/sugar-long-press-controller.c
+ src/sugar3/event-controller/sugar-long-press-controller.h
+ src/sugar3/event-controller/sugar-rotate-controller.c
+ src/sugar3/event-controller/sugar-rotate-controller.h
+ src/sugar3/event-controller/sugar-swipe-controller.c
+ src/sugar3/event-controller/sugar-swipe-controller.h
+ src/sugar3/event-controller/sugar-touch-controller.c
+ src/sugar3/event-controller/sugar-touch-controller.h
+ src/sugar3/event-controller/sugar-zoom-controller.c
+ src/sugar3/event-controller/sugar-zoom-controller.h
+ src/sugar3/graphics/combobox.py
+ src/sugar3/graphics/iconentry.py
+ src/sugar3/graphics/objectchooser.py
+ src/sugar3/graphics/tray.py
+Copyright: 2007, One Laptop Per Child
+  2010, One Laptop Per Child
+  2012, One Laptop Per Child
+License: LGPL-2+
+ FIXME
+
 Files: Makefile.in
  bin/Makefile.in
+ m4/ltsugar.m4
+ m4/ltversion.m4
+ m4/lt~obsolete.m4
  src/Makefile.in
  src/sugar3/Makefile.in
  src/sugar3/activity/Makefile.in
  src/sugar3/bundle/Makefile.in
  src/sugar3/datastore/Makefile.in
  src/sugar3/dispatch/Makefile.in
+ src/sugar3/event-controller/Makefile.in
  src/sugar3/graphics/Makefile.in
  src/sugar3/presence/Makefile.in
-Copyright: 1994-2002
+Copyright: 1994-2012, Free Software Foundation, Inc
+  2004, Free Software Foundation, Inc
+  2004-2005, 2007, 2009, Free Software Foundation, Inc
+  2004-2005, 2007-2008, Free Software Foundation, Inc
 License: UNKNOWN
  FIXME
 
@@ -208,14 +241,12 @@ Copyright: 2003, Jonathan Blandford <jrb@alum.mit.edu>
 License: LGPL-2+
  FIXME
 
-Files: src/sugar3/activity/i18n.py
- src/sugar3/datastore/__init__.py
- src/sugar3/graphics/combobox.py
- src/sugar3/graphics/iconentry.py
- src/sugar3/graphics/objectchooser.py
- src/sugar3/graphics/tray.py
-Copyright: 2007, One Laptop Per Child
-  2010, One Laptop Per Child
+Files: src/sugar3/eggdesktopfile.h
+ src/sugar3/eggsmclient-private.h
+ src/sugar3/eggsmclient-xsmp.h
+ src/sugar3/eggsmclient.c
+ src/sugar3/eggsmclient.h
+Copyright: 2007, Novell, Inc
 License: LGPL-2+
  FIXME
 
@@ -237,6 +268,15 @@ Copyright: 2006-2007, Red Hat, Inc
 License: LGPL-2+
  FIXME
 
+Files: src/sugar3/sugar-gconf.c
+ src/sugar3/sugar-gconf.h
+ src/sugar3/sugar-wm.c
+ src/sugar3/sugar-wm.h
+Copyright: 2012, Daniel Narvaez
+  2013, Daniel Narvaez
+License: LGPL-2+
+ FIXME
+
 Files: src/sugar3/xdgmimealias.c
  src/sugar3/xdgmimealias.h
  src/sugar3/xdgmimeparent.c
@@ -244,14 +284,6 @@ Files: src/sugar3/xdgmimealias.c
 Copyright: 200 Matthias Clasen <mclasen@redhat.com>
   2004, Matthias Clasen <mclasen@redhat.com>
   2004, Red Hat, Inc
-License: LGPL-2+
- FIXME
-
-Files: src/sugar3/eggdesktopfile.h
- src/sugar3/eggsmclient-private.h
- src/sugar3/eggsmclient.c
- src/sugar3/eggsmclient.h
-Copyright: 2007, Novell, Inc
 License: LGPL-2+
  FIXME
 
@@ -267,22 +299,28 @@ Copyright: 2006-2007, Red Hat, Inc
 License: LGPL-2+
  FIXME
 
-Files: config.guess
- config.sub
+Files: src/sugar3/sugar-cursor-tracker.c
+ src/sugar3/sugar-cursor-tracker.h
+ src/sugar3/sugar-gesture-grabber.c
+ src/sugar3/sugar-gesture-grabber.h
+Copyright: 2012, One laptop per child
+License: LGPL-2+
+ FIXME
+
+Files: depcomp
  missing
-Copyright: 1992-1999,
-  1992-2001
-  1996-1997, 1999-2000, 2002-2006
+ py-compile
+Copyright: 1996-2012, Free Software Foundation, Inc
+  1999-2012, Free Software Foundation, Inc
+  2000-2012, Free Software Foundation, Inc
 License: GPL-2+
  FIXME
 
-Files: m4/ltsugar.m4
- m4/ltversion.m4
- m4/lt~obsolete.m4
-Copyright: 2004, Free Software Foundation, Inc
-  2004-2005, 2007, 2009, Free Software Foundation, Inc
-  2004-2005, 2007-2008, Free Software Foundation, Inc
-License: UNKNOWN
+Files: config.guess
+ config.sub
+Copyright: 1992-1999
+  1992-2000,
+License: GPL-2+
  FIXME
 
 Files: src/sugar3/graphics/radiopalette.py
@@ -314,47 +352,26 @@ Copyright: 2001-2003, Patrick K. O'Brien and Contributors
   HOLDERS AND CONTRIBUTORS "AS IS" AND
   HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT
   OWNER OR CONTRIBUTORS BE LIABLE FOR
-License: BSD (3 clause)
+License: BSD-3-clause
+ FIXME
+
+Files: install-sh
+Copyright: 1994, X Consortium
+License: Expat
  FIXME
 
 Files: configure
 Copyright: (ISLOWER ? 'A' + ( - 'a') : )
   (ISLOWER ? ( | 0x40) : )
-  1992-1996, 1998-2001,
+  1992-1996, 1998-2012, Free Software Foundation, Inc
   1996-2001, 2003-2005
-  2010, Free Software Foundation, Inc
-License: GPL-2+
- FIXME
-
-Files: aclocal.m4
-Copyright: 1995-2002, Free Software Foundation, Inc
-  1995-2003, 2005-2006, 2008-2010, Free Software Foundation
-  1996, 1998, 2000-2005, 2008
-  1996-1997, 2000-2001, 2003, 2005, 2008
-  1996-2004,
-  1997, 1999-2001, 2003-2005, 2008
-  1997, 2000-2001, 2003-2006, 2008
-  1999-2005, 2008
-  1999-2005, 2008-2009,
-  1999-2006, 2009
-  2001, 2003, 2005, 2008 Free Software Foundation, Inc
-  2001, 2003, 2005, Free Software Foundation, Inc
-  2001-2003, 2005, 2008, Free Software Foundation, Inc
-  2001-2003, 2005, 2009, Free Software Foundation, Inc
-  2001-2004, Red Hat, Inc
-  2002-2003, 2005-2008, Free Software Foundation, Inc
-  2003, 2005 Free Software Foundation, Inc
-  2003-2006, Free Software Foundation, Inc
-  2004, Scott James Remnant <scott@netsplit.com>
-  2004-2005, Free Software Foundation, Inc
-  2006, 2008 Free Software Foundation, Inc
-  2009, Johan Dahlin
+  2012, Free Software Foundation, Inc
 License: GPL-2+
  FIXME
 
 Files: m4/libtool.m4
 Copyright: 1996-2001, 2003-2005
-  2010, Free Software Foundation, Inc
+  2011, Free Software Foundation, Inc
 License: GPL-2+
  FIXME
 
@@ -369,13 +386,20 @@ Copyright: 2001, Eazel, Inc
 License: GPL-2+
  FIXME
 
-Files: depcomp
-Copyright: 1999-2000, 2003-2007, 2009 Free
-License: GPL-2+
- FIXME
-
-Files: py-compile
-Copyright: 2000-2001, 2003-2005, 2008-2009, Free Software
+Files: aclocal.m4
+Copyright: 1995-2002, Free Software Foundation, Inc
+  1995-2003, 2005-2006, 2008-2010, Free Software Foundation
+  1996-2012, Free Software Foundation, Inc
+  1997-2012, Free Software Foundation, Inc
+  1999-2012, Free Software Foundation, Inc
+  2001-2004, Red Hat, Inc
+  2001-2012, Free Software Foundation, Inc
+  2002-2012, Free Software Foundation, Inc
+  2003-2012, Free Software Foundation, Inc
+  2004, Scott James Remnant <scott@netsplit.com>
+  2004-2012, Free Software Foundation, Inc
+  2006-2012, Free Software Foundation, Inc
+  2009, Johan Dahlin
 License: GPL-2+
  FIXME
 
@@ -384,14 +408,8 @@ Copyright: 2012, Jonas Smedegaard <dr@jones.dk>
 License: GPL-2+
  FIXME
 
-Files: src/sugar3/gdk-wrapper.c
-Copyright: 1995-2007, Peter Mattis, Spencer Kimball
-  2011, Raul Gutierrez Segales
-License: GPL-2+
- FIXME
-
-Files: src/sugar3/gdk-wrapper.h
-Copyright: 2011, Raul Gutierrez Segales
+Files: src/sugar3/graphics/palettemenu.py
+Copyright: 2012, One Laptop Per Child
 License: GPL-2+
  FIXME
 
@@ -450,6 +468,12 @@ Copyright: 2006-2007, Red Hat, Inc
 License: LGPL-2+
  FIXME
 
+Files: src/sugar3/graphics/toggletoolbutton.py
+Copyright: 2007, Red Hat, Inc
+  2012, Daniel Francis
+License: LGPL-2+
+ FIXME
+
 Files: src/sugar3/graphics/notebook.py
 Copyright: 2007, Eduardo Silva (edsiper@gmail.com)
 License: LGPL-2+
@@ -489,6 +513,16 @@ Copyright: 2002, Red Hat, Inc.; 1998, 2001 Tim Janik
 License: LGPL-2+
  FIXME
 
+Files: src/sugar3/presence/tubeconn.py
+Copyright: 2007, Collabora Ltd. <http://www.collabora.co.uk/>
+License: LGPL-2.1+
+ FIXME
+
+Files: src/sugar3/presence/sugartubeconn.py
+Copyright: 2008, One Laptop Per Child
+License: LGPL-2.1+
+ FIXME
+
 Files: COPYING
 Copyright: 1991, 1999 Free Software Foundation, Inc
   <year> <name of author>
@@ -501,22 +535,7 @@ Copyright: 1991, 1999 Free Software Foundation, Inc
   law: that is to say, a work containing the Library or a
   notices, you must include the
   the
-License: LGPL-2.1+
- FIXME
-
-Files: src/sugar3/presence/tubeconn.py
-Copyright: 2007, Collabora Ltd. <http://www.collabora.co.uk/>
-License: LGPL-2.1+
- FIXME
-
-Files: src/sugar3/presence/sugartubeconn.py
-Copyright: 2008, One Laptop Per Child
-License: LGPL-2.1+
- FIXME
-
-Files: install-sh
-Copyright: 1994, X Consortium
-License: MIT/X11 (BSD like)
+License: LGPL-ever
  FIXME
 
 Files: m4/ltoptions.m4
