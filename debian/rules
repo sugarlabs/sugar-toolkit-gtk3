@@ -95,6 +95,7 @@ debian/stamp-local-shlibs-$(lib): binary-install/$(libpkg) debian/stamp-local-st
 		--override s/libgdk-3-0-dev/libgtk-3-dev/ \
 		--override s/libgtk-3-0-dev/libgtk-3-dev/ \
 		--override s/librsvg-2-2-dev/librsvg2-dev/ \
+		--override s/libgconf-2-4-dev/libgconf2-dev/ \
 		--devunversioned --ignorelibdep \
 		--movedev debian/tmp/usr/share/gir-1.0 usr/share/ \
 		debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/$(lib).so
