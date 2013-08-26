@@ -59,6 +59,8 @@ class WebActivity(Gtk.Window):
 
         self._web_view.load_uri("activity://%s/index.html" % self._bundle_id)
 
+        self.set_title(activity.get_bundle_name())
+
     def run_main_loop(self):
         Gtk.main()
 
