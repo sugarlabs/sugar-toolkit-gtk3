@@ -79,6 +79,10 @@ LDFLAGS += -Wl,--as-needed
 DEB_DH_INSTALL_ARGS_$(girpkg) = usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0 usr/lib
 DEB_DH_INSTALL_ARGS_$(datapkg) = usr/share/locale
 
+DEB_DH_INSTALL_ARGS_$(libpkg) += usr/lib/$(DEB_HOST_MULTIARCH)/libsugar-eventcontroller.so.0.0.0
+DEB_DH_LINK_$(libpkg) += usr/lib/$(DEB_HOST_MULTIARCH)/libsugar-eventcontroller.so.0.0.0 usr/lib/$(DEB_HOST_MULTIARCH)/libsugar-eventcontroller.so.0
+DEB_DH_LINK_$(devpkg) += usr/lib/$(DEB_HOST_MULTIARCH)/libsugar-eventcontroller.so.0.0.0 usr/lib/$(DEB_HOST_MULTIARCH)/libsugar-eventcontroller.so
+
 # Drop created dir if empty to please lintian
 binary-post-install/$(datapkg)::
 	rmdir --ignore-fail-on-non-empty --parents $(DEB_DESTDIR)/usr/share/locale
