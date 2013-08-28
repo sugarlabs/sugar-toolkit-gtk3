@@ -2,7 +2,7 @@ Source: sugar-toolkit-gtk3
 Section: python
 Priority: optional
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
-Uploaders: Jonas Smedegaard <dr@jones.dk>
+Uploaders: Jonas Smedegaard <dr@jones.dk>, Santiago Ruano Rincón <santiago@debian.org>
 Build-Depends: @cdbs@
 Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/collab-maint/sugar-toolkit-gtk3
