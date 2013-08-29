@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2013-08-29 14:04+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2013-08-29 16:14+0200\n"
+"Last-Translator: Mohona <mohonabose@gmail.com>\n"
 "Language-Team: Sugar Labs\n"
 "Language: bn_IN\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "%s খেলা"
 
 #: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
-msgstr ""
+msgstr "ত্রুটি সংরক্ষণ করে রাখো"
 
 #: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
@@ -178,22 +178,22 @@ msgstr "শূন্য"
 #: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d বি. (বাইট)"
 
 #: ../src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d কে.বি. (কিলোবাইট)"
 
 #: ../src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d এম.বি. (মেগাবাইট)"
 
 #: ../src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d জি.বি. (গিগাবাইট)"
 
 #: ../src/sugar3/mime.py:55
 msgid "Text"
