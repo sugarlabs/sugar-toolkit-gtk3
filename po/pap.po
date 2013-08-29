@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2013-08-28 16:53-0400\n"
-"Last-Translator: User <juneleonora@yahoo.com>\n"
+"PO-Revision-Date: 2013-08-29 19:13+0200\n"
+"Last-Translator: Manuel <themaduros@gmail.com>\n"
 "Language-Team: JuneLeonora\n"
 "Language: pap\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 # ../src/sugar/activity/activity.py:329
 #: ../src/sugar3/activity/activity.py:378
@@ -29,7 +29,7 @@ msgstr "Warda eror"
 
 #: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
-msgstr "Warda eror: tur kambio lo bai perdí"
+msgstr "Warda eror: tur kambio lo bai pèrdí"
 
 #: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
@@ -117,11 +117,10 @@ msgstr "Sekònde pasá"
 
 # TRANS: indikashon ku ora a pasa, por ehemplo. "[10 dia, 5 ora] pasá",
 # "[2 minuto] den pasado", of "[3 aña, 1 luna] anterior"
-#
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225
-#, fuzzy, python-format
+#, python-format
 msgid "%s ago"
 msgstr "%s pasá"
 
