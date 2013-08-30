@@ -81,7 +81,6 @@ from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
-from sugar3.session import XSMPClient
 from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
@@ -109,7 +108,7 @@ class _ActivitySession(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
 
-        self._xsmp_client = XSMPClient()
+        self._xsmp_client = SugarExt.ClientXSMP()
         self._xsmp_client.connect('quit-requested',
                                   self.__sm_quit_requested_cb)
         self._xsmp_client.connect('quit', self.__sm_quit_cb)
