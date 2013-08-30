@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
 "PO-Revision-Date: 2013-05-17 00:44+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,39 +34,39 @@ msgstr "ndich'u se nikjiat"
 msgid "Don't stop"
 msgstr "Kande nama'ai"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:882
 msgid "Stop anyway"
 msgstr "Tumei nama'ai"
 
-#: ../src/sugar3/activity/widgets.py:86
+#: ../src/sugar3/activity/widgets.py:87
 msgid "Stop"
 msgstr "Ndama'ai"
 
-#: ../src/sugar3/activity/widgets.py:98
+#: ../src/sugar3/activity/widgets.py:99
 msgid "Undo"
 msgstr "Majuát"
 
-#: ../src/sugar3/activity/widgets.py:106
+#: ../src/sugar3/activity/widgets.py:107
 msgid "Redo"
 msgstr "Kue'e manastjau"
 
-#: ../src/sugar3/activity/widgets.py:113
+#: ../src/sugar3/activity/widgets.py:114
 msgid "Copy"
 msgstr "Make'eik"
 
-#: ../src/sugar3/activity/widgets.py:121
+#: ../src/sugar3/activity/widgets.py:122
 msgid "Paste"
 msgstr "Makua'al"
 
-#: ../src/sugar3/activity/widgets.py:132
+#: ../src/sugar3/activity/widgets.py:133
 msgid "Private"
 msgstr "Mam'ajai"
 
-#: ../src/sugar3/activity/widgets.py:139
+#: ../src/sugar3/activity/widgets.py:140
 msgid "My Neighborhood"
 msgstr "Ka'ius"
 
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:234
 msgid "Description"
 msgstr "Mamang pe vakja"
 
@@ -87,15 +87,15 @@ msgstr "N'juin"
 msgid "Choose a color"
 msgstr "Kiji't nda xikjia'"
 
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
 msgstr "Na'ua"
 
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
 msgstr "Niñgijily'"
 
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
 msgstr "Skusua'"
 
@@ -199,22 +199,22 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:55
 msgid "Text"
 msgstr "Kily'e ma'ets'"
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:64
 msgid "Image"
 msgstr "Kutau"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:70
 msgid "Audio"
 msgstr "Ta'eu be'eí"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:78
 msgid "Video"
 msgstr "Ndaka'an leet"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:90
 msgid "Link"
 msgstr "Livie'et"
