@@ -15,7 +15,6 @@ sugar_PYTHON =		\
 	mime.py		\
         network.py	\
 	profile.py	\
-	session.py	\
 	util.py
 
 XDG_MIME_SOURCES = \
