@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
 "PO-Revision-Date: 2012-08-19 17:20+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,39 +34,39 @@ msgstr "Panatilihin ang pagkakamali: lahat ng pagbabago ay mawawala"
 msgid "Don't stop"
 msgstr "huwag huminto"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:882
 msgid "Stop anyway"
 msgstr "Ihinto gayon pa man"
 
-#: ../src/sugar3/activity/widgets.py:86
+#: ../src/sugar3/activity/widgets.py:87
 msgid "Stop"
 msgstr "Ihinto"
 
-#: ../src/sugar3/activity/widgets.py:98
+#: ../src/sugar3/activity/widgets.py:99
 msgid "Undo"
 msgstr "Bawiin"
 
-#: ../src/sugar3/activity/widgets.py:106
+#: ../src/sugar3/activity/widgets.py:107
 msgid "Redo"
 msgstr "Ulitin"
 
-#: ../src/sugar3/activity/widgets.py:113
+#: ../src/sugar3/activity/widgets.py:114
 msgid "Copy"
 msgstr "Kopyahin"
 
-#: ../src/sugar3/activity/widgets.py:121
+#: ../src/sugar3/activity/widgets.py:122
 msgid "Paste"
 msgstr "Idikit"
 
-#: ../src/sugar3/activity/widgets.py:132
+#: ../src/sugar3/activity/widgets.py:133
 msgid "Private"
 msgstr "Pribado"
 
-#: ../src/sugar3/activity/widgets.py:139
+#: ../src/sugar3/activity/widgets.py:140
 msgid "My Neighborhood"
 msgstr "Aking kapitbahayan"
 
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:234
 msgid "Description"
 msgstr "Paglalarawan"
 
@@ -87,16 +87,16 @@ msgstr "Magpatuloy"
 msgid "Choose a color"
 msgstr "Pumili ng kulay"
 
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
 msgstr "Pula"
 
 # berde (from the spanish verde) is more commonly known and used.  Luntian is more filipino but uncommon
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
 msgstr "berde"
 
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
 msgstr "Bughaw"
 
@@ -189,22 +189,22 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:55
 msgid "Text"
 msgstr "Teksto"
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:64
 msgid "Image"
 msgstr "Larawan"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:70
 msgid "Audio"
 msgstr "Audio"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:78
 msgid "Video"
 msgstr "Video"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:90
 msgid "Link"
 msgstr ""
