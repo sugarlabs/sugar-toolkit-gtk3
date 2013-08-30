@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2013-08-29 21:33+0200\n"
+"PO-Revision-Date: 2013-08-29 23:13+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: bi\n"
@@ -28,7 +28,7 @@ msgstr "Problem blong sevem"
 
 #: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
-msgstr "Problem blong sevem: ol samting we yu jenisim, mbae yu lusum."
+msgstr "Problem blong sevem: ol samting we yu jenisim, mbae yu lusum"
 
 #: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
