@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
+"PO-Revision-Date: 2013-06-23 04:01+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ../src/sugar3/activity/activity.py:378
+#, python-format
+msgid "%s Activity"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:874
+msgid "Keep error"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:875
+msgid "Keep error: all changes will be lost"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:878
+msgid "Don't stop"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:882
+msgid "Stop anyway"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:87
+#, fuzzy
+msgid "Stop"
+msgstr "Deter"
+
+#: ../src/sugar3/activity/widgets.py:99
+#, fuzzy
+msgid "Undo"
+msgstr "Desfacer"
+
+#: ../src/sugar3/activity/widgets.py:107
+#, fuzzy
+msgid "Redo"
+msgstr "Refacer"
+
+#: ../src/sugar3/activity/widgets.py:114
+#, fuzzy
+msgid "Copy"
+msgstr "Copiar"
+
+#: ../src/sugar3/activity/widgets.py:122
+#, fuzzy
+msgid "Paste"
+msgstr "Pegar"
+
+#: ../src/sugar3/activity/widgets.py:133
+#, fuzzy
+msgid "Private"
+msgstr "Privado"
+
+#: ../src/sugar3/activity/widgets.py:140
+msgid "My Neighborhood"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:234
+#, fuzzy
+msgid "Description"
+msgstr "Descrición"
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+#, fuzzy
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+#, fuzzy
+msgid "Ok"
+msgstr "Aceptar"
+
+#: ../src/sugar3/graphics/alert.py:434
+#, fuzzy
+msgid "Continue"
+msgstr "Continuar"
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+#, fuzzy
+msgid "Choose a color"
+msgstr "Escoller unha cor"
+
+#: ../src/sugar3/graphics/colorbutton.py:279
+#, fuzzy
+msgid "Red"
+msgstr "Vermello"
+
+#: ../src/sugar3/graphics/colorbutton.py:281
+#, fuzzy
+msgid "Green"
+msgstr "Verde"
+
+#: ../src/sugar3/graphics/colorbutton.py:283
+#, fuzzy
+msgid "Blue"
+msgstr "Blue"
+
+#: ../src/sugar3/util.py:217
+#, fuzzy
+msgid " and "
+msgstr " e "
+
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ", "
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+#, fuzzy
+msgid "Seconds ago"
+msgstr "Hai segundos"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+msgid "%s ago"
+msgstr ""
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+#, python-format, fuzzy
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d ano"
+msgstr[1] "%d anos"
+
+#: ../src/sugar3/util.py:241
+#, python-format
+#, python-format, fuzzy
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d mes"
+msgstr[1] "%d meses"
+
+#: ../src/sugar3/util.py:242
+#, python-format
+#, python-format, fuzzy
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d semana"
+msgstr[1] "%d semanas"
+
+#: ../src/sugar3/util.py:243
+#, python-format
+#, python-format, fuzzy
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d día"
+msgstr[1] "%d días"
+
+#: ../src/sugar3/util.py:244
+#, python-format
+#, python-format, fuzzy
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d hora"
+msgstr[1] "%d horas"
+
+#: ../src/sugar3/util.py:245
+#, python-format
+#, python-format, fuzzy
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minutos"
+
+#: ../src/sugar3/util.py:346
+#, fuzzy
+msgid "Empty"
+msgstr "Baleiro"
+
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr "%d B"
+
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr "%d KB"
+
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr "%d MB"
+
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr "%d GB"
+
+#: ../src/sugar3/mime.py:55
+msgid "Text"
+msgstr "Texto"
+
+#: ../src/sugar3/mime.py:64
+#, fuzzy
+msgid "Image"
+msgstr "Imaxe"
+
+#: ../src/sugar3/mime.py:70
+#, fuzzy
+msgid "Audio"
+msgstr "Son"
+
+#: ../src/sugar3/mime.py:78
+#, fuzzy
+msgid "Video"
+msgstr "Vídeo"
+
+#: ../src/sugar3/mime.py:90
+#, fuzzy
+msgid "Link"
+msgstr "Ligazón"
