@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2013-08-29 23:13+0200\n"
+"PO-Revision-Date: 2013-09-01 01:47+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: bi\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
-msgstr "%s  Aktiviti"
+msgstr "%s Aktiviti"
 
 #: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
