@@ -29,7 +29,6 @@ from gi.repository import GObject
 from gi.repository import GConf
 from gi.repository import Gio
 import dbus
-import dbus.glib
 
 from sugar3 import env
 from sugar3 import mime

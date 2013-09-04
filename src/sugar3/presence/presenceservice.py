@@ -25,7 +25,6 @@ import logging
 from gi.repository import GObject
 import dbus
 import dbus.exceptions
-import dbus.glib
 from dbus import PROPERTIES_IFACE
 
 from sugar3.presence.buddy import Buddy, Owner
