@@ -55,6 +55,8 @@ class _SVGLoader(object):
                 self._cache[file_name] = icon
 
         for entity, value in entities.items():
+            if isinstance(value, unicode):
+                value = value.encode('ascii', 'replace')
             if isinstance(value, basestring):
                 xml = '<!ENTITY %s "%s">' % (entity, value)
                 icon = re.sub('<!ENTITY %s .*>' % entity, xml, icon)
