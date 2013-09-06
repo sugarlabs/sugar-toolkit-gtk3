@@ -1,8 +1,9 @@
-sugar-toolkit-gtk3 (0.98.7-1~1) UNRELEASED; urgency=low
+sugar-toolkit-gtk3 (0.98.7-1) unstable; urgency=low
 
   * New upstream release 
+  * Adding myself to Uploaders
 
- -- Santiago Ruano Rincón <santiago@debian.org>  Mon, 26 Aug 2013 17:58:49 +0200
+ -- Santiago Ruano Rincón <santiago@debian.org>  Fri, 06 Sep 2013 18:14:56 +0200
 
 sugar-toolkit-gtk3 (0.96.1-2) unstable; urgency=low
 
