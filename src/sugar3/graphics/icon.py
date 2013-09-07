@@ -113,9 +113,10 @@ class _IconBuffer(object):
     def _load_svg(self, file_name):
         entities = {}
         if self.fill_color:
-            entities['fill_color'] = self.fill_color
+            entities['fill_color'] = self.fill_color.encode('utf-8', 'replace')
         if self.stroke_color:
-            entities['stroke_color'] = self.stroke_color
+            entities['stroke_color'] = self.stroke_color.encode('utf-8',
+                                                                'replace')
 
         return self._loader.load(file_name, entities, self.cache)
 
