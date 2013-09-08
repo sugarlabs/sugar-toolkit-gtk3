@@ -62,7 +62,7 @@ class _SVGLoader(object):
                 logging.error(
                     'Icon %s, entity %s is invalid.', file_name, entity)
 
-        return Rsvg.Handle.new_from_data(icon)
+        return Rsvg.Handle.new_from_data(icon.encode('utf-8'))
 
 
 class _IconInfo(object):
