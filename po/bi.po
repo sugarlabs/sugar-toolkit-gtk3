@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2013-09-01 01:47+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"PO-Revision-Date: 2013-09-05 16:35+0200\n"
+"Last-Translator: Gwen <woods.gwen@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: bi\n"
 "MIME-Version: 1.0\n"
@@ -24,21 +24,22 @@ msgstr "%s Aktiviti"
 
 #: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
-msgstr "Problem blong sevem"
+msgstr "Trabol blong sevem"
 
 #: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
-msgstr "Problem blong sevem: ol samting we yu jenisim, mbae yu lusum"
+msgstr "Trabol blong sevem: ol samting we yu jenisim, mbae yu lusum"
 
 #: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "No stopem"
 
 #: ../src/sugar3/activity/activity.py:882
-#, fuzzy
 msgid "Stop anyway"
 msgstr "Stopem nomo"
 
+# intransitive "stop"
+# transitive "stopem"
 #: ../src/sugar3/activity/widgets.py:87
 msgid "Stop"
 msgstr "Stopem"
@@ -57,7 +58,6 @@ msgstr "Kopiem"
 
 # Literally, "put it" -- I don't think people really use a word for paste.
 #: ../src/sugar3/activity/widgets.py:122
-#, fuzzy
 msgid "Paste"
 msgstr "Putum"
 
@@ -70,9 +70,8 @@ msgid "My Neighborhood"
 msgstr "Smol vilij blong mi"
 
 #: ../src/sugar3/activity/widgets.py:234
-#, fuzzy
 msgid "Description"
-msgstr "Samting we yu raetem blong talemaot ol ting"
+msgstr "Deskripsen"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -81,7 +80,7 @@ msgstr "Kanselem"
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479
 msgid "Ok"
-msgstr "Talem se i oraet"
+msgstr "I oraet"
 
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
@@ -201,6 +200,5 @@ msgid "Video"
 msgstr "Vidio"
 
 #: ../src/sugar3/mime.py:90
-#, fuzzy
 msgid "Link"
 msgstr "Link"
