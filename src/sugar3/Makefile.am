@@ -17,6 +17,8 @@ sugar_PYTHON =		\
 	profile.py	\
 	util.py
 
+nodist_sugar_PYTHON = config.py
+
 XDG_MIME_SOURCES = \
 	xdgmime.c \
         xdgmime.h \

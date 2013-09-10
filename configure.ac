@@ -49,5 +49,6 @@ src/sugar3/presence/Makefile
 src/sugar3/datastore/Makefile
 src/sugar3/dispatch/Makefile
 src/sugar3/test/Makefile
+src/sugar3/config.py
 po/Makefile.in
 ])
