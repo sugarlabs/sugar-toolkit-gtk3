@@ -112,7 +112,7 @@ def main():
                                           config.locale_path)
 
     gettext.bindtextdomain(bundle.get_bundle_id(), activity_locale_path)
-    gettext.bindtextdomain('sugar-toolkit-gtk3', config.locale_path)
+    gettext.bindtextdomain('sugar-toolkit', config.locale_path)
     gettext.textdomain(bundle.get_bundle_id())
 
     splitted_module = args[0].rsplit('.', 1)

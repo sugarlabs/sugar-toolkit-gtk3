@@ -32,7 +32,8 @@ from sugar3.bundle.activitybundle import ActivityBundle
 from sugar3.graphics import style
 from sugar3.graphics.palettemenu import PaletteMenuBox
 
-from gettext import gettext as _
+
+_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 
 def _create_activity_icon(metadata):

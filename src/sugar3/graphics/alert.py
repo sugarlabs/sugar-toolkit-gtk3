@@ -55,7 +55,8 @@ import math
 from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 
-from gettext import gettext as _
+
+_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 
 class Alert(Gtk.EventBox):

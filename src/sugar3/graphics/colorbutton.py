@@ -28,7 +28,8 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 
-from gettext import gettext as _
+
+_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
 
 
 def get_svg_color_string(color):
