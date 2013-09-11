@@ -30,6 +30,8 @@ import repr as repr_
 import decorator
 import time
 
+from sugar3 import env
+
 # Let's keep this module self contained so that it can be easily
 # pasted in external sugar service like the datastore.
 
@@ -46,12 +48,9 @@ _LEVELS = {
 logging.addLevelName(TRACE, 'TRACE')
 
 
+# DEPRECATED
 def get_logs_dir():
-    profile = os.environ.get('SUGAR_PROFILE', 'default')
-    logs_dir = os.environ.get('SUGAR_LOGS_DIR',
-                              os.path.join(os.path.expanduser('~'),
-                                           '.sugar', profile, 'logs'))
-    return logs_dir
+    return env.get_logs_path()
 
 
 def set_level(level):
