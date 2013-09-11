@@ -30,8 +30,7 @@ import tempfile
 import logging
 import atexit
 
-
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+from gettext import gettext as _
 
 
 def printable_hash(in_hash):
@@ -270,10 +269,9 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
             if key in _i18n_timestamps_cache:
                 time_period += _i18n_timestamps_cache[key]
             else:
-                tmp = gettext.dngettext('sugar-toolkit',
-                                        name_singular,
-                                        name_plural,
-                                        elapsed_units)
+                tmp = gettext.ngettext(name_singular,
+                                       name_plural,
+                                       elapsed_units)
                 # FIXME: This is a hack so we don't crash when a translation
                 # doesn't contain the expected number of placeholders (#2354)
                 try:

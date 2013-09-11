@@ -31,7 +31,7 @@ from gi.repository import Gio
 
 from gi.repository import SugarExt
 
-_ = lambda msg: gettext.dgettext('sugar-base', msg)
+from gettext import gettext as _
 
 GENERIC_TYPE_TEXT = 'Text'
 GENERIC_TYPE_IMAGE = 'Image'
