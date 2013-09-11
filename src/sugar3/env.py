@@ -32,7 +32,8 @@ def is_emulator():
 
 def get_profile_path(path=None):
     profile_id = os.environ.get('SUGAR_PROFILE', 'default')
-    base = os.path.join(os.path.expanduser('~/.sugar'), profile_id)
+    home_dir = os.environ.get('SUGAR_HOME', os.path.expanduser('~/.sugar'))
+    base = os.path.join(home_dir, profile_id)
     if not os.path.isdir(base):
         try:
             os.makedirs(base, 0770)
