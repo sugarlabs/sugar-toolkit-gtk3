@@ -83,7 +83,7 @@ from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
 from gi.repository import SugarExt
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 SCOPE_PRIVATE = 'private'
 SCOPE_INVITE_ONLY = 'invite'  # shouldn't be shown in UI, it's implicit

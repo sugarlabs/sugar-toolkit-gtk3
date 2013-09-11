@@ -31,7 +31,7 @@ import logging
 import atexit
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 def printable_hash(in_hash):
@@ -270,7 +270,7 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
             if key in _i18n_timestamps_cache:
                 time_period += _i18n_timestamps_cache[key]
             else:
-                tmp = gettext.dngettext('sugar-toolkit',
+                tmp = gettext.dngettext('sugar-toolkit-gtk3',
                                         name_singular,
                                         name_plural,
                                         elapsed_units)

@@ -56,7 +56,7 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 class Alert(Gtk.EventBox):
