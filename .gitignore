@@ -7,6 +7,8 @@
 .deps
 .libs
 
+/src/sugar3/config.py
+/src/sugar3/event-controller/sugar-enum-types.*
 py-compile
 Makefile
 Makefile.in
