@@ -187,31 +187,6 @@ class Profile(object):
         except OSError:
             logging.error('Error removing old profile.')
 
-    def create_debug_file(self):
-        path = os.path.join(env.get_logs_path(), 'debug')
-        fd = open(path, 'w')
-        text = '# Uncomment the following lines to turn on many' \
-            'sugar debugging\n'\
-            '# log files and features\n'\
-            '#export LM_DEBUG=net\n' \
-            '#export GABBLE_DEBUG=all\n' \
-            '#export GABBLE_LOGFILE=' \
-            '$HOME/.sugar/$SUGAR_PROFILE/logs/telepathy-gabble.log\n' \
-            '#export SALUT_DEBUG=all\n' \
-            '#export SALUT_LOGFILE=' \
-            '$HOME/.sugar/$SUGAR_PROFILE/logs/telepathy-salut.log\n' \
-            '#export GIBBER_DEBUG=all\n' \
-            '#export WOCKY_DEBUG=all\n' \
-            '#export MC_LOGFILE=' \
-            '$HOME/.sugar/$SUGAR_PROFILE/logs/mission-control.log\n' \
-            '#export MC_DEBUG=all\n' \
-            '#export PRESENCESERVICE_DEBUG=1\n' \
-            '#export SUGAR_LOGGER_LEVEL=debug\n\n' \
-            '# Uncomment the following line to enable core dumps\n' \
-            '#ulimit -c unlimited\n'
-        fd.write(text)
-        fd.close()
-
 
 def get_profile():
     global _profile
