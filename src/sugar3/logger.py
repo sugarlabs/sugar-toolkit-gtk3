@@ -118,6 +118,13 @@ def cleanup():
 
 
 def start(log_filename=None):
+    logs_path = env.get_logs_path()
+
+    try:
+        os.makedirs(logs_path)
+    except OSError:
+        pass
+
     # remove existing handlers, or logging.basicConfig() won't have no effect.
     root_logger = logging.getLogger('')
     for handler in root_logger.handlers:
@@ -156,7 +163,7 @@ def start(log_filename=None):
 
     if log_filename:
         try:
-            log_path = os.path.join(get_logs_dir(), log_filename + '.log')
+            log_path = os.path.join(logs_path, log_filename + '.log')
 
             log_fd = os.open(log_path, os.O_WRONLY | os.O_CREAT)
             os.dup2(log_fd, sys.stdout.fileno())
