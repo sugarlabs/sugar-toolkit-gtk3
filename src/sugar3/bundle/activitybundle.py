@@ -128,9 +128,15 @@ class ActivityBundle(Bundle):
         if cp.has_option(section, 'bundle_id'):
             self._bundle_id = cp.get(section, 'bundle_id')
         else:
-            raise MalformedBundleException(
-                'Activity bundle %s does not specify a bundle id' %
-                self._path)
+            if cp.has_option(section, 'service_name'):
+                self._bundle_id = cp.get(section, 'service_name')
+                logging.error('ATTENTION: service_name property in the '
+                              'activity.info file is deprecated, should be '
+                              ' changed to bundle_id')
+            else:
+                raise MalformedBundleException(
+                    'Activity bundle %s does not specify a bundle id' %
+                    self._path)
 
         if cp.has_option(section, 'name'):
             self._name = cp.get(section, 'name')
