@@ -142,6 +142,7 @@ SugarExt_1_0_gir_FILES = \
     sugar-gconf.h \
 	$(XDG_MIME_SOURCES)
 
+SugarExt_1_0_gir: libsugarext.la
 SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0 GConf-2.0
 SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0 gconf-2.0
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
