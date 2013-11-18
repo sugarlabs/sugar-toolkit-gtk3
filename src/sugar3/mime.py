@@ -38,6 +38,7 @@ GENERIC_TYPE_IMAGE = 'Image'
 GENERIC_TYPE_AUDIO = 'Audio'
 GENERIC_TYPE_VIDEO = 'Video'
 GENERIC_TYPE_LINK = 'Link'
+GENERIC_TYPE_BUNDLE = 'Bundle'
 
 
 def _get_supported_image_mime_types():
@@ -84,6 +85,11 @@ _generic_types = [{
     'name': _('Link'),
     'icon': 'text-uri-list',
     'types': ['text/x-moz-url', 'text/uri-list'],
+}, {
+    'id': GENERIC_TYPE_BUNDLE,
+    'name': _('Bundle'),
+    'icon': 'user-documents',
+    'types': ['application/vnd.olpc-sugar'],
 }]
 
 
