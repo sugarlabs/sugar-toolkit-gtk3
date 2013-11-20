@@ -145,6 +145,9 @@ class Window(Gtk.Window):
             timestamp = GdkX11.x11_get_server_time(window)
         window.focus(timestamp)
 
+    def is_fullscreen(self):
+        return self._is_fullscreen
+
     def fullscreen(self):
         palettegroup.popdown_all()
         if self._toolbar_box is not None:
