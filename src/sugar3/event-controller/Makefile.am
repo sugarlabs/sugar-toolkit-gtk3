@@ -58,6 +58,7 @@ SugarGestures_1_0_gir_FILES =	\
 SugarGestures_1_0_gir_CFLAGS =	\
 	-DSUGAR_TOOLKIT_COMPILATION --warn-all
 
+SugarGestures-1.0.gir: libsugar-eventcontroller.la
 SugarGestures_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
 SugarGestures_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
 SugarGestures_1_0_gir_EXPORT_PACKAGES = SugarGestures-1.0
