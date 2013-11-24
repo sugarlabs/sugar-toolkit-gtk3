@@ -57,6 +57,7 @@ from functools import partial
 import StringIO
 import cairo
 import json
+import tempfile
 
 from gi.repository import GConf
 from gi.repository import Gtk
@@ -74,6 +75,7 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
+from sugar3 import env
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
@@ -293,6 +295,7 @@ class Activity(Window, Gtk.Container):
 
         self.connect('realize', self.__realize_cb)
         self.connect('delete-event', self.__delete_event_cb)
+        self.connect("key-press-event", self.keypress)
 
         self._active = False
         self._activity_id = handle.activity_id
@@ -635,6 +638,47 @@ class Activity(Window, Gtk.Container):
             self._jobject.destroy()
             self._jobject = None
 
+    def keypress(self, widget, event):
+        keyname = Gdk.keyval_name(event.keyval)
+        control = event.state & \
+                Gdk.ModifierType.CONTROL_MASK
+
+        if control:
+            if keyname == "1" or keyname == "KP_1":
+                self.get_screenshot()
+
+    def get_screenshot(self):
+        tmp_dir = os.path.join(env.get_profile_path(), 'data')
+        fd, file_path = tempfile.mkstemp(dir=tmp_dir)
+        os.close(fd)
+
+        client = GConf.Client.get_default()
+        icon_color = client.get_string('/desktop/sugar/user/color')
+
+        alloc = self.canvas.get_allocation()
+        canvas_width, canvas_height = alloc.width, alloc.height
+        screenshot_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                          canvas_width, canvas_height)
+
+        cr = cairo.Context(screenshot_surface)
+        self._canvas.draw(cr)
+        screenshot_surface.write_to_png(file_path)
+
+        jobject = datastore.create()
+        try:
+            title = "%s Canvas Screenshot" % get_bundle_name()
+            jobject.metadata['title'] = title
+            jobject.metadata['keep'] = '0'
+            jobject.metadata['buddies'] = ''
+            jobject.metadata['preview'] = self.get_preview()
+            jobject.metadata['icon-color'] = icon_color
+            jobject.metadata['mime_type'] = 'image/png'
+            jobject.file_path = file_path
+            datastore.write(jobject, transfer_ownership=False)
+        finally:
+            jobject.destroy()
+            del jobject
+
     def get_preview(self):
         """Returns an image representing the state of the activity. Generally
         this is what the user is seeing in this moment.
@@ -689,7 +733,7 @@ class Activity(Window, Gtk.Container):
 
         preview_str = StringIO.StringIO()
         preview_surface.write_to_png(preview_str)
-        return preview_str.getvalue()
+        return dbus.ByteArray(preview_str.getvalue())
 
     def _get_buddies(self):
         if self.shared_activity is not None:
