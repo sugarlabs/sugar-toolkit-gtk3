@@ -57,6 +57,7 @@ from functools import partial
 import StringIO
 import cairo
 import json
+import tempfile
 
 from gi.repository import GConf
 from gi.repository import Gtk
@@ -293,6 +294,7 @@ class Activity(Window, Gtk.Container):
 
         self.connect('realize', self.__realize_cb)
         self.connect('delete-event', self.__delete_event_cb)
+        self.connect('key-press-event', self.__keypress_event_cb)
 
         self._active = False
         self._activity_id = handle.activity_id
@@ -690,6 +692,41 @@ class Activity(Window, Gtk.Container):
         preview_str = StringIO.StringIO()
         preview_surface.write_to_png(preview_str)
         return preview_str.getvalue()
+
+    def savecanvas_to_journal(self, canvas):
+        tmp_dir = os.path.join(self.get_activity_root(), 'tmp')
+        fd, file_path = tempfile.mkstemp(dir=tmp_dir)
+        os.close(fd)
+
+        alloc = self.canvas.get_allocation()
+        screenshot_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                          alloc.width, alloc.height)
+        cr = cairo.Context(screenshot_surface)
+        canvas.draw(cr)
+        screenshot_surface.write_to_png(file_path)
+
+        client = GConf.Client.get_default()
+        jobject = datastore.create()
+        try:
+            jobject.metadata['title'] = _('Screenshot of \"%s\" Canvas') % get_bundle_name()
+            jobject.metadata['keep'] = '0'
+            jobject.metadata['buddies'] = ''
+            jobject.metadata['preview'] = dbus.ByteArray(self.get_preview())
+            jobject.metadata['icon-color'] = client.get_string('/desktop/sugar/user/color')
+            jobject.metadata['mime_type'] = 'image/png'
+            jobject.file_path = file_path
+            datastore.write(jobject, transfer_ownership=False)
+        finally:
+            jobject.destroy()
+            del jobject
+
+    def __keypress_event_cb(self, widget, event):
+        keyname = Gdk.keyval_name(event.keyval)
+        alt = event.state & \
+                Gdk.ModifierType.MOD1_MASK
+
+        if alt and keyname in ['2', 'KP_2']:
+            self.savecanvas_to_journal(self._canvas)
 
     def _get_buddies(self):
         if self.shared_activity is not None:
