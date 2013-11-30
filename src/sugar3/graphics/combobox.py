@@ -61,7 +61,7 @@ class ComboBox(Gtk.ComboBox):
         del info
         return fname
 
-    def append_item(self, action_id, text, icon_name=None, file_name=None):
+    def append_item(self, action_id, text, icon_name=None, file_name=None, align=None, size_width=None):
         if not self._icon_renderer and (icon_name or file_name):
             self._icon_renderer = Gtk.CellRendererPixbuf()
 
@@ -94,6 +94,20 @@ class ComboBox(Gtk.ComboBox):
             pixbuf = None
 
         self._model.append([action_id, text, pixbuf, False])
+
+	if align == "start" or "center" or "end":
+	    if align == "start":
+		self._text_renderer.set_property("xalign", 0.0)
+	    if align == "center":
+		self._text_renderer.set_property("xalign", 0.5)
+	    if align == "end":
+		self._text_renderer.set_property("xalign", 1.0)
+
+	else:
+	    self._text_renderer.set_property("xalign", 0.0)
+
+	if size_width:
+	    self._text_renderer.set_fixed_size(size_width, 18)
 
     def append_separator(self):
         self._model.append([0, None, None, True])
