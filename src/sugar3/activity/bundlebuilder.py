@@ -67,7 +67,7 @@ class Config(object):
     def __init__(self, source_dir, dist_dir=None, dist_name=None):
         self.source_dir = source_dir
         self.build_dir = os.getcwd()
-        self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
+        self.dist_dir = dist_dir or os.path.join(self.build_dir, 'dist')
         self.dist_name = dist_name
         self.bundle = None
         self.version = None
