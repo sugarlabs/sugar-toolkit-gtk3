@@ -8,7 +8,7 @@
 #
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public
@@ -55,7 +55,7 @@ class PresenceService(GObject.GObject):
 
     def __init__(self):
         """Initialise the service and attempt to connect to events
-		"""
+        """
         GObject.GObject.__init__(self)
 
         self._activity_cache = None
@@ -64,11 +64,11 @@ class PresenceService(GObject.GObject):
     def get_activity(self, activity_id, warn_if_none=True):
         """Retrieve single Activity object for the given unique id
 
-		activity_id -- unique ID for the activity
+        activity_id -- unique ID for the activity
 
-		returns single Activity object or None if the activity
-			is not found using GetActivityById on the service
-		"""
+        returns single Activity object or None if the activity
+            is not found using GetActivityById on the service
+        """
         if self._activity_cache is not None:
             if self._activity_cache.props.id != activity_id:
                 raise RuntimeError('Activities can only access their own'
@@ -133,17 +133,17 @@ class PresenceService(GObject.GObject):
                                       handle):
         """Retrieve single Buddy object for the given public key
 
-		:Parameters:
-			`tp_conn_name` : str
-				The well-known bus name of a Telepathy connection
-			`tp_conn_path` : dbus.ObjectPath
-				The object path of the Telepathy connection
-			`handle` : int or long
-				The handle of a Telepathy contact on that connection,
-				of type HANDLE_TYPE_CONTACT. This may not be a
-				channel-specific handle.
-		:Returns: the Buddy object, or None if the buddy is not found
-		"""
+        :Parameters:
+            `tp_conn_name` : str
+                The well-known bus name of a Telepathy connection
+            `tp_conn_path` : dbus.ObjectPath
+                The object path of the Telepathy connection
+            `handle` : int or long
+                The handle of a Telepathy contact on that connection,
+                of type HANDLE_TYPE_CONTACT. This may not be a
+                channel-specific handle.
+        :Returns: the Buddy object, or None if the buddy is not found
+        """
 
         bus = dbus.Bus()
         obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, ACCOUNT_MANAGER_PATH)
@@ -171,12 +171,12 @@ class PresenceService(GObject.GObject):
 
     def __share_activity_cb(self, activity):
         """Finish sharing the activity
-"""
+        """
         self.emit('activity-shared', True, activity, None)
 
     def __share_activity_error_cb(self, activity, error):
         """Notify with GObject event of unsuccessful sharing of activity
-"""
+        """
         self.emit('activity-shared', False, activity, error)
 
     def share_activity(self, activity, properties=None, private=True):
@@ -223,10 +223,10 @@ class PresenceService(GObject.GObject):
 
     def get_preferred_connection(self):
         """Gets the preferred telepathy connection object that an activity
-		should use when talking directly to telepathy
+        should use when talking directly to telepathy
 
-		returns the bus name and the object path of the Telepathy connection
-		"""
+        returns the bus name and the object path of the Telepathy connection
+        """
         manager = get_connection_manager()
         account_path, connection = manager.get_preferred_connection()
         if connection is None:
