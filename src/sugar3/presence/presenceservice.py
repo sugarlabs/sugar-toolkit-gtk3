@@ -259,7 +259,7 @@ _ps = None
 
 
 def get_instance(allow_offline_iface=False):
-    """Retrieve this process' view of the PresenceService"""
+    """ Retrieve this process' view of the PresenceService"""
     global _ps
     if not _ps:
         _ps = PresenceService()
