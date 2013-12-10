@@ -22,8 +22,8 @@
 """
 STABLE.
 """
-
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
 
@@ -107,11 +107,15 @@ class Palette(PaletteWindow):
 
         self._primary_text = None
         self._secondary_text = None
+        self._parent_widget = None
         self._icon = None
         self._icon_visible = True
         self._palette_state = self.PRIMARY
 
+        self._primary_event_box = Gtk.EventBox()
+        self._primary_event_box.show()
         self._primary_box = Gtk.HBox()
+        self._primary_event_box.add(self._primary_box)
         self._primary_box.show()
 
         self._icon_box = Gtk.HBox()
@@ -135,6 +139,9 @@ class Palette(PaletteWindow):
             self._label.set_max_width_chars(text_maxlen)
             self._label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
         labels_box.pack_start(self._label, True, True, 0)
+        self._primary_event_box.connect('button-release-event',
+                                        self.__button_release_event_cb)
+        self._primary_event_box.set_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
 
         self._secondary_label = Gtk.Label()
         self._secondary_label.set_alignment(0, 0.5)
@@ -255,6 +262,13 @@ class Palette(PaletteWindow):
                                     getter=get_primary_text,
                                     setter=set_primary_text)
 
+    def set_parent_widget(self, widget):
+        self._parent_widget = widget
+
+    def __button_release_event_cb(self, widget, event):
+        if self._parent_widget is not None:
+            self._parent_widget.emit('clicked')
+
     def set_secondary_text(self, label):
         if label is not None:
             label = label.split('\n', 1)[0]
@@ -334,13 +348,14 @@ class Palette(PaletteWindow):
             self._setup_widget()
 
             self._palette_box = Gtk.VBox()
-            self._palette_box.pack_start(self._primary_box, False, True, 0)
+            self._palette_box.pack_start(self._primary_event_box, False, True,
+                                         0)
             self._palette_box.pack_start(self._secondary_box, True, True, 0)
 
             self._widget.add(self._palette_box)
             self._palette_box.show()
             height = style.GRID_CELL_SIZE - 2 * self._widget.get_border_width()
-            self._primary_box.set_size_request(-1, height)
+            self._primary_event_box.set_size_request(-1, height)
 
         if self._content.get_children():
             self._content.remove(self._content.get_children()[0])

@@ -97,6 +97,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
+        self.palette.set_parent_widget(self)
 
     palette = GObject.property(
         type=object, setter=set_palette, getter=get_palette)
