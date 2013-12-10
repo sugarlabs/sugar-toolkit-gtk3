@@ -73,7 +73,7 @@ class TubeConnection(Connection):
 
     def _on_get_self_handle_error(self, e):
         logging.basicConfig()
-        logger.error('GetSelfHandle failed: %s', e)
+        logger.error('GetSelfHandle failed: %s' % e)
 
     def close(self):
         self._dbus_names_changed_match.remove()
@@ -85,7 +85,7 @@ class TubeConnection(Connection):
 
     def _on_get_dbus_names_error(self, e):
         logging.basicConfig()
-        logger.error('GetDBusNames failed: %s', e)
+        logger.error('GetDBusNames failed: %s' % e)
 
     def _on_dbus_names_changed(self, tube_id, added, removed):
         if tube_id == self.tube_id:

@@ -188,20 +188,20 @@ class Buddy(BaseBuddy):
             error_handler=self.__error_handler_cb)
 
     def __got_properties_cb(self, properties):
-        _logger.debug('__got_properties_cb %r', properties)
+        _logger.debug('__got_properties_cb %r' % properties)
         self._get_properties_call = None
         self._update_properties(properties)
 
     def __got_attributes_cb(self, attributes):
-        _logger.debug('__got_attributes_cb %r', attributes)
+        _logger.debug('__got_attributes_cb %r' % attributes)
         self._get_attributes_call = None
         self._update_attributes(attributes[self.contact_handle])
 
     def __error_handler_cb(self, error):
-        _logger.debug('__error_handler_cb %r', error)
+        _logger.debug('__error_handler_cb %r' % error)
 
     def __properties_changed_cb(self, new_props):
-        _logger.debug('%r: Buddy properties changed to %r', self, new_props)
+        _logger.debug('%r: Buddy properties changed to %r' % (self, new_props))
         self._update_properties(new_props)
 
     def _update_properties(self, properties):
@@ -226,11 +226,11 @@ class Buddy(BaseBuddy):
     def do_get_property(self, pspec):
         if pspec.name == 'nick' and self._get_attributes_call is not None:
             _logger.debug('%r: Blocking on GetContactAttributes() because '
-                          'someone wants property nick', self)
+                          'someone wants property nick' % self)
             self._get_attributes_call.block()
         elif pspec.name != 'nick' and self._get_properties_call is not None:
             _logger.debug('%r: Blocking on GetProperties() because someone '
-                          'wants property %s', self, pspec.name)
+                          'wants property %s' % (self, pspec.name))
             self._get_properties_call.block()
 
         return BaseBuddy.do_get_property(self, pspec)

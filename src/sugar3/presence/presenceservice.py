@@ -81,7 +81,7 @@ class PresenceService(GObject.GObject):
             for account_path, connection in connections_per_account.items():
                 if not connection.connected:
                     continue
-                logging.debug('Calling GetActivity on %s', account_path)
+                logging.debug('Calling GetActivity on %s' % account_path)
                 try:
                     room_handle = connection.connection.GetActivity(
                         activity_id,
@@ -90,7 +90,7 @@ class PresenceService(GObject.GObject):
                     name = 'org.freedesktop.Telepathy.Error.NotAvailable'
                     if e.get_dbus_name() == name:
                         logging.debug("There's no shared activity with the id "
-                                      "%s", activity_id)
+                                      "%s" % activity_id)
                     else:
                         raise
                 else:
@@ -162,8 +162,8 @@ class PresenceService(GObject.GObject):
                     dbus_interface=CONNECTION)
                 return self.get_buddy(account_path, contact_ids[0])
 
-        raise ValueError('Unknown buddy in connection %s with handle %d',
-                         tp_conn_path, handle)
+        raise ValueError('Unknown buddy in connection %s with handle %d' % \
+                         (tp_conn_path, handle))
 
     def get_owner(self):
         """Retrieves the laptop Buddy object."""
@@ -198,7 +198,7 @@ class PresenceService(GObject.GObject):
         properties['private'] = private
 
         if self._activity_cache is not None:
-            raise ValueError('Activity %s is already tracked',
+            raise ValueError('Activity %s is already tracked' % \
                              activity.get_id())
 
         connection_manager = get_connection_manager()
@@ -215,7 +215,7 @@ class PresenceService(GObject.GObject):
         self._activity_cache = shared_activity
 
         if shared_activity.props.joined:
-            raise RuntimeError('Activity %s is already shared.' %
+            raise RuntimeError('Activity %s is already shared.' % \
                                activity.props.id)
 
         shared_activity.share(self.__share_activity_cb,
@@ -259,7 +259,7 @@ _ps = None
 
 
 def get_instance(allow_offline_iface=False):
-    """Retrieve this process' view of the PresenceService"""
+    """ Retrieve this process' view of the PresenceService"""
     global _ps
     if not _ps:
         _ps = PresenceService()
