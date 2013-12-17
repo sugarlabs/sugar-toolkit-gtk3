@@ -191,6 +191,8 @@ def get_primary_extension(mime_type):
         _extensions['audio/ogg'] = 'ogg'
         _extensions['video/ogg'] = 'ogg'
 
+        _extensions['application/vnd.olpc-journal-backup'] = 'xob'
+
         for globs_path in globs_path_list:
             globs_file = open(globs_path)
             for line in globs_file.readlines():
