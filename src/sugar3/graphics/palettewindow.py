@@ -1052,6 +1052,10 @@ class Invoker(GObject.GObject):
         if not self.props.cache_palette:
             self.set_palette(None)
 
+    def primary_text_clicked(self):
+        """ Implemented in ToolInvoker"""
+        pass
+
 
 class WidgetInvoker(Invoker):
 
@@ -1344,6 +1348,9 @@ class ToolInvoker(WidgetInvoker):
             return self.BOTTOM + self.TOP
         else:
             return self.LEFT + self.RIGHT
+
+    def primary_text_clicked(self):
+        self._widget.emit('clicked')
 
 
 class CellRendererInvoker(Invoker):
