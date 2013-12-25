@@ -124,7 +124,7 @@ class Bundle(object):
                 data = self._zip_file.read(path)
                 f = StringIO.StringIO(data)
             except KeyError:
-                logging.debug('%s not found.', filename)
+                logging.debug('%s not found.' % filename)
 
         return f
 
