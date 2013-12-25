@@ -139,6 +139,9 @@ class ActivityBundle(Bundle):
                     'Activity bundle %s does not specify a bundle id' %
                     self._path)
 
+        if ' ' in self._bundle_id:
+            raise MalformedBundleException('Space in bundle_id')
+
         if cp.has_option(section, 'name'):
             self._name = cp.get(section, 'name')
         else:
