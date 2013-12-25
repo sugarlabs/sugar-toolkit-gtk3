@@ -47,7 +47,7 @@ def _retry_find(func):
                 if e.code == Atspi.Error.IPC:
                     continue
 
-                logging.error("GError code %d", e.code)
+                logging.error("GError code %d" % e.code)
                 raise
 
             expect_none = kwargs.get("expect_none", False)

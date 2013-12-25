@@ -61,7 +61,7 @@ def set_level(level):
     try:
         logging.getLogger('').setLevel(int(level))
     except ValueError:
-        logging.warning('Invalid log level: %r', level)
+        logging.warning('Invalid log level: %r' % level)
 
 
 # pylint: disable-msg=E1101,F0401
@@ -235,7 +235,7 @@ def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
         try:
             res = f(*args, **kwargs)
         except:
-            trace_logger.exception("Exception occured in %s", f.__name__)
+            trace_logger.exception("Exception occured in %s" % f.__name__)
             raise
 
         trace_logger.log(TRACE, "%s(%s) returned %s", f.__name__,

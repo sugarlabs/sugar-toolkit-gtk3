@@ -404,12 +404,12 @@ class Activity(Window, Gtk.Container):
 
     def _set_up_sharing(self, mesh_instance, share_scope):
         # handle activity share/join
-        logging.debug('*** Act %s, mesh instance %r, scope %s',
-                      self._activity_id, mesh_instance, share_scope)
+        logging.debug('*** Act %s, mesh instance %r, scope %s' %
+                     (self._activity_id, mesh_instance, share_scope))
         if mesh_instance is not None:
             # There's already an instance on the mesh, join it
-            logging.debug('*** Act %s joining existing mesh instance %r',
-                          self._activity_id, mesh_instance)
+            logging.debug('*** Act %s joining existing mesh instance %r' %
+                         (self._activity_id, mesh_instance))
             self.shared_activity = mesh_instance
             self.shared_activity.connect('notify::private',
                                          self.__privacy_changed_cb)
@@ -421,7 +421,7 @@ class Activity(Window, Gtk.Container):
                 self.__joined_cb(self.shared_activity, True, None)
         elif share_scope != SCOPE_PRIVATE:
             logging.debug('*** Act %s no existing mesh instance, but used to '
-                          'be shared, will share', self._activity_id)
+                          'be shared, will share' % self._activity_id)
             # no existing mesh instance, but activity used to be shared, so
             # restart the share
             if share_scope == SCOPE_INVITE_ONLY:
@@ -429,7 +429,7 @@ class Activity(Window, Gtk.Container):
             elif share_scope == SCOPE_NEIGHBORHOOD:
                 self.share(private=False)
             else:
-                logging.debug('Unknown share scope %r', share_scope)
+                logging.debug('Unknown share scope %r' % share_scope)
 
     def __got_channel_cb(self, wait_loop, connection_path, channel_path,
                          handle_type):
@@ -544,7 +544,7 @@ class Activity(Window, Gtk.Container):
         pass
 
     def __jobject_error_cb(self, err):
-        logging.debug('Error creating activity datastore object: %s', err)
+        logging.debug('Error creating activity datastore object: %s' % err)
 
     def get_activity_root(self):
         """ FIXME: Deprecated. This part of the API has been moved
@@ -622,13 +622,13 @@ class Activity(Window, Gtk.Container):
         if self._closing:
             self._show_keep_failed_dialog()
             self._closing = False
-        raise RuntimeError('Error saving activity object to datastore: %s',
+        raise RuntimeError('Error saving activity object to datastore: %s' %
                            err)
 
     def _cleanup_jobject(self):
         if self._jobject:
             if self._owns_file and os.path.isfile(self._jobject.file_path):
-                logging.debug('_cleanup_jobject: removing %r',
+                logging.debug('_cleanup_jobject: removing %r' %
                               self._jobject.file_path)
                 os.remove(self._jobject.file_path)
             self._owns_file = False
@@ -715,7 +715,7 @@ class Activity(Window, Gtk.Container):
             logging.debug('Cannot save, no journal object.')
             return
 
-        logging.debug('Activity.save: %r', self._jobject.object_id)
+        logging.debug('Activity.save: %r' % self._jobject.object_id)
 
         if self._updating_jobject:
             logging.info('Activity.save: still processing a previous request.')
@@ -762,12 +762,13 @@ class Activity(Window, Gtk.Container):
         Activities should not override this method. Instead, like save() do any
         copy work that needs to be done in write_file()
         """
-        logging.debug('Activity.copy: %r', self._jobject.object_id)
+        logging.debug('Activity.copy: %r' % self._jobject.object_id)
         self.save()
         self._jobject.object_id = None
 
     def __privacy_changed_cb(self, shared_activity, param_spec):
-        logging.debug('__privacy_changed_cb %r', shared_activity.props.private)
+        logging.debug('__privacy_changed_cb %r' %
+                      shared_activity.props.private)
         if shared_activity.props.private:
             self._jobject.metadata['share-scope'] = SCOPE_INVITE_ONLY
         else:
@@ -775,11 +776,11 @@ class Activity(Window, Gtk.Container):
 
     def __joined_cb(self, activity, success, err):
         """Callback when join has finished"""
-        logging.debug('Activity.__joined_cb %r', success)
+        logging.debug('Activity.__joined_cb %r' % success)
         self.shared_activity.disconnect(self._join_id)
         self._join_id = None
         if not success:
-            logging.debug('Failed to join activity: %s', err)
+            logging.debug('Failed to join activity: %s' % err)
             return
 
         self.reveal()
@@ -801,12 +802,12 @@ class Activity(Window, Gtk.Container):
 
     def __share_cb(self, ps, success, activity, err):
         if not success:
-            logging.debug('Share of activity %s failed: %s.',
-                          self._activity_id, err)
+            logging.debug('Share of activity %s failed: %s.' %
+                         (self._activity_id, err))
             return
 
-        logging.debug('Share of activity %s successful, PS activity is %r.',
-                      self._activity_id, activity)
+        logging.debug('Share of activity %s successful, PS activity is %r.' %
+                      (self._activity_id, activity))
 
         activity.props.name = self._jobject.metadata['title']
 
@@ -862,8 +863,8 @@ class Activity(Window, Gtk.Container):
             raise RuntimeError('Activity %s already shared.' %
                                self._activity_id)
         verb = private and 'private' or 'public'
-        logging.debug('Requesting %s share of activity %s.', verb,
-                      self._activity_id)
+        logging.debug('Requesting %s share of activity %s.' % (verb,
+                      self._activity_id))
         pservice = presenceservice.get_instance()
         pservice.connect('activity-shared', self.__share_cb)
         pservice.share_activity(self, private=private)
@@ -1009,17 +1010,17 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
             CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
         }
         filter_dict = dbus.Dictionary(filters, signature='sv')
-        logging.debug('__get_filters_cb %r', dbus.Array([filter_dict],
-                                                        signature='a{sv}'))
+        logging.debug('__get_filters_cb %r' % dbus.Array([filter_dict],
+                      signature='a{sv}'))
         return dbus.Array([filter_dict], signature='a{sv}')
 
     @dbus.service.method(dbus_interface=CLIENT_HANDLER,
                          in_signature='ooa(oa{sv})aota{sv}', out_signature='')
     def HandleChannels(self, account, connection, channels, requests_satisfied,
                        user_action_time, handler_info):
-        logging.debug('HandleChannels\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r',
-                      account, connection, channels, requests_satisfied,
-                      user_action_time, handler_info)
+        logging.debug('HandleChannels\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r' %
+                      (account, connection, channels, requests_satisfied,
+                          user_action_time, handler_info))
         try:
             for object_path, properties in channels:
                 channel_type = properties[CHANNEL + '.ChannelType']
