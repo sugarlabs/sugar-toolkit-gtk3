@@ -26,7 +26,6 @@ from datetime import datetime
 import os
 import tempfile
 from gi.repository import GObject
-from gi.repository import GConf
 from gi.repository import Gio
 import dbus
 
@@ -225,7 +224,7 @@ class RawObject(object):
 
     def __init__(self, file_path):
         stat = os.stat(file_path)
-        client = GConf.Client.get_default()
+        settings = Gio.Settings('org.sugarlabs.user')
         metadata = {
             'uid': file_path,
             'title': os.path.basename(file_path),
@@ -233,7 +232,7 @@ class RawObject(object):
             'mime_type': Gio.content_type_guess(file_path, None)[0],
             'activity': '',
             'activity_id': '',
-            'icon-color': client.get_string('/desktop/sugar/user/color'),
+            'icon-color': settings.get_string('color'),
             'description': file_path,
         }
 

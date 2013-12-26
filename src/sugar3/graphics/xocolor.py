@@ -22,7 +22,7 @@ STABLE.
 import random
 import logging
 
-from gi.repository import GConf
+from gi.repository import Gio
 
 colors = [['#B20008', '#FF2B34'],
           ['#FF2B34', '#B20008'],
@@ -229,8 +229,8 @@ class XoColor:
         parsed_color = None
 
         if color_string is None:
-            client = GConf.Client.get_default()
-            color_string = client.get_string('/desktop/sugar/user/color')
+            settings = Gio.Settings('org.sugarlabs.user')
+            color_string = settings.get_string('color')
 
         if color_string is not None:
             parsed_color = _parse_string(color_string)
