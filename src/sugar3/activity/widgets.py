@@ -20,7 +20,6 @@
 from gi.repository import Gdk
 from gi.repository import Gtk
 import gettext
-from gi.repository import GConf
 
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.toolbarbox import ToolbarButton
@@ -31,6 +30,7 @@ from sugar3.graphics.icon import Icon
 from sugar3.bundle.activitybundle import ActivityBundle
 from sugar3.graphics import style
 from sugar3.graphics.palettemenu import PaletteMenuBox
+from sugar3 import profile
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
@@ -40,8 +40,7 @@ def _create_activity_icon(metadata):
     if metadata is not None and metadata.get('icon-color'):
         color = XoColor(metadata['icon-color'])
     else:
-        client = GConf.Client.get_default()
-        color = XoColor(client.get_string('/desktop/sugar/user/color'))
+        color = profile.get_color()
 
     from sugar3.activity.activity import get_bundle_path
     bundle = ActivityBundle(get_bundle_path())

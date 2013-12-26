@@ -20,7 +20,7 @@
 DEPRECATED. We are using GConf now to store preferences.
 """
 
-from gi.repository import GConf
+from gi.repository import Gio
 import os
 import logging
 from ConfigParser import ConfigParser
@@ -68,9 +68,9 @@ class Profile(object):
     privkey_hash = property(fget=_get_privkey_hash)
 
     def is_valid(self):
-        client = GConf.Client.get_default()
-        nick = client.get_string('/desktop/sugar/user/nick')
-        color = client.get_string('/desktop/sugar/user/color')
+        settings = Gio.Settings('org.sugarlabs.user')
+        nick = settings.get_string('nick')
+        color = settings.get_string('color')
 
         return nick is not '' and \
             color is not '' and \
@@ -140,47 +140,58 @@ class Profile(object):
         path = os.path.join(env.get_profile_path(), 'config')
         cp.read([path])
 
-        client = GConf.Client.get_default()
-
+        settings = Gio.Settings('org.sugarlabs.user')
         if cp.has_option('Buddy', 'NickName'):
             name = cp.get('Buddy', 'NickName')
             # decode nickname from ascii-safe chars to unicode
             nick = name.decode('utf-8')
-            client.set_string('/desktop/sugar/user/nick', nick)
+            settings.set_string('nick', nick)
         if cp.has_option('Buddy', 'Color'):
             color = cp.get('Buddy', 'Color')
-            client.set_string('/desktop/sugar/user/color', color)
+            settings.set_string('color', color)
+
         if cp.has_option('Jabber', 'Server'):
             server = cp.get('Jabber', 'Server')
-            client.set_string('/desktop/sugar/collaboration/jabber_server',
-                              server)
+            settings = Gio.Settings('org.sugarlabs.collaboration')
+            settings.set_string('jabber-server', server)
+
         if cp.has_option('Date', 'Timezone'):
             timezone = cp.get('Date', 'Timezone')
-            client.set_string('/desktop/sugar/date/timezone', timezone)
+            settings = Gio.Settings('org.sugarlabs.date')
+            settings.set_string('timezone', timezone)
+
+        settings = Gio.Settings('org.sugarlabs.frame')
         if cp.has_option('Frame', 'HotCorners'):
             delay = float(cp.get('Frame', 'HotCorners'))
-            client.set_int('/desktop/sugar/frame/corner_delay', int(delay))
+            settings.set_int('corner-delay', int(delay))
         if cp.has_option('Frame', 'WarmEdges'):
             delay = float(cp.get('Frame', 'WarmEdges'))
-            client.set_int('/desktop/sugar/frame/edge_delay', int(delay))
+            settings.set_int('edge-delay', int(delay))
+
         if cp.has_option('Server', 'Backup1'):
             backup1 = cp.get('Server', 'Backup1')
-            client.set_string('/desktop/sugar/backup_url', backup1)
+            settings = Gio.Settings('org.sugarlabs')
+            settings.set_string('backup-url', backup1)
+
         if cp.has_option('Sound', 'Volume'):
             volume = float(cp.get('Sound', 'Volume'))
-            client.set_int('/desktop/sugar/sound/volume', int(volume))
+            settings = Gio.Settings('org.sugarlabs.sound')
+            settings.set_int('volume', int(volume))
+
+        settings = Gio.Settings('org.sugarlabs.power')
         if cp.has_option('Power', 'AutomaticPM'):
             state = cp.get('Power', 'AutomaticPM')
             if state.lower() == 'true':
-                client.set_bool('/desktop/sugar/power/automatic', True)
+                settings.set_boolean('automatic', True)
         if cp.has_option('Power', 'ExtremePM'):
             state = cp.get('Power', 'ExtremePM')
             if state.lower() == 'true':
-                client.set_bool('/desktop/sugar/power/extreme', True)
+                settings.set_boolean('extreme', True)
+
         if cp.has_option('Shell', 'FavoritesLayout'):
             layout = cp.get('Shell', 'FavoritesLayout')
-            client.set_string('/desktop/sugar/desktop/favorites_layout',
-                              layout)
+            settings = Gio.Settings('org.sugarlabs.desktop')
+            settings.set_string('favorites-layout', layout)
         del cp
         try:
             os.unlink(path)
@@ -199,13 +210,13 @@ def get_profile():
 
 
 def get_nick_name():
-    client = GConf.Client.get_default()
-    return client.get_string('/desktop/sugar/user/nick')
+    settings = Gio.Settings('org.sugarlabs.user')
+    return settings.get_string('nick')
 
 
 def get_color():
-    client = GConf.Client.get_default()
-    color = client.get_string('/desktop/sugar/user/color')
+    settings = Gio.Settings('org.sugarlabs.user')
+    color = settings.get_string('color')
     return XoColor(color)
 
 

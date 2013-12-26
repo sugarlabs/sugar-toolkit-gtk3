@@ -58,10 +58,10 @@ import StringIO
 import cairo
 import json
 
-from gi.repository import GConf
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+from gi.repository import Gio
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
@@ -375,8 +375,8 @@ class Activity(Window, Gtk.Container):
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
-        client = GConf.Client.get_default()
-        icon_color = client.get_string('/desktop/sugar/user/color')
+        settings = Gio.Settings('org.sugarlabs.user')
+        icon_color = settings.get_string('color')
 
         jobject = datastore.create()
         jobject.metadata['title'] = title
