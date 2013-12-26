@@ -27,7 +27,7 @@ import logging
 
 from gi.repository import Gdk
 from gi.repository import Pango
-from gi.repository import GConf
+from gi.repository import Gio
 
 
 FOCUS_LINE_WIDTH = 2
@@ -115,9 +115,9 @@ MEDIUM_ICON_SIZE = zoom(55 * 1.5)
 LARGE_ICON_SIZE = zoom(55 * 2.0)
 XLARGE_ICON_SIZE = zoom(55 * 2.75)
 
-client = GConf.Client.get_default()
-FONT_SIZE = client.get_float('/desktop/sugar/font/default_size')
-FONT_FACE = client.get_string('/desktop/sugar/font/default_face')
+settings = Gio.Settings('org.sugarlabs.font')
+FONT_SIZE = settings.get_double('default-size')
+FONT_FACE = settings.get_string('default-face')
 
 FONT_NORMAL = Font('%s %f' % (FONT_FACE, FONT_SIZE))
 FONT_BOLD = Font('%s bold %f' % (FONT_FACE, FONT_SIZE))

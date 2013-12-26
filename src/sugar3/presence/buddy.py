@@ -24,8 +24,8 @@ STABLE.
 import logging
 
 from gi.repository import GObject
+from gi.repository import Gio
 import dbus
-from gi.repository import GConf
 from telepathy.interfaces import CONNECTION, \
     CONNECTION_INTERFACE_ALIASING, \
     CONNECTION_INTERFACE_CONTACTS
@@ -243,6 +243,6 @@ class Owner(BaseBuddy):
     def __init__(self):
         BaseBuddy.__init__(self)
 
-        client = GConf.Client.get_default()
-        self.props.nick = client.get_string('/desktop/sugar/user/nick')
-        self.props.color = client.get_string('/desktop/sugar/user/color')
+        settings = Gio.Settings('org.sugarlabs.user')
+        self.props.nick = settings.get_string('nick')
+        self.props.color = settings.get_string('color')
