@@ -161,6 +161,9 @@ class Bundle(object):
         installed."""
         return self._installation_time
 
+    def get_show_launcher(self):
+        return True
+
     def _unzip(self, install_dir):
         if self._zip_file is None:
             raise AlreadyInstalledException
