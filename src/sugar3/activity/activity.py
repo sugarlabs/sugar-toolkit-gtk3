@@ -93,6 +93,8 @@ J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 
+POWERD_INHIBIT_DIR = '/var/run/powerd-inhibit-suspend'
+
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
 PREVIEW_SIZE = style.zoom(300), style.zoom(225)
@@ -774,6 +776,18 @@ class Activity(Window, Gtk.Container):
         else:
             self._jobject.metadata['share-scope'] = SCOPE_NEIGHBORHOOD
 
+    def _inhibit_suspend(self):
+        if not os.path.exists(POWERD_INHIBIT_DIR):
+            return
+
+        path = os.path.join(POWERD_INHIBIT_DIR, str(os.getpid()))
+        try:
+            fd = open(path, 'w')
+        except IOError:
+            logging.error("Inhibit Suspend: Could not create file %s", path)
+        else:
+            fd.close()
+
     def __joined_cb(self, activity, success, err):
         """Callback when join has finished"""
         logging.debug('Activity.__joined_cb %r' % success)
@@ -782,6 +796,8 @@ class Activity(Window, Gtk.Container):
         if not success:
             logging.debug('Failed to join activity: %s' % err)
             return
+
+        self._inhibit_suspend()
 
         self.reveal()
         self.emit('joined')
@@ -810,6 +826,8 @@ class Activity(Window, Gtk.Container):
                       (self._activity_id, activity))
 
         activity.props.name = self._jobject.metadata['title']
+
+        self._inhibit_suspend()
 
         self.shared_activity = activity
         self.shared_activity.connect('notify::private',
@@ -925,6 +943,11 @@ class Activity(Window, Gtk.Container):
 
         # Make the exported object inaccessible
         dbus.service.Object.remove_from_connection(self._bus)
+
+        if os.path.exists(POWERD_INHIBIT_DIR):
+            path = os.path.join(POWERD_INHIBIT_DIR, str(os.getpid()))
+            if os.path.exists(path):
+                os.unlink(path)
 
         self._session.unregister(self)
 
