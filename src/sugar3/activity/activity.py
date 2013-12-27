@@ -74,6 +74,7 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
+from sugar3 import power
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
@@ -319,6 +320,8 @@ class Activity(Window, Gtk.Container):
 
         self._bus = ActivityService(self)
         self._owns_file = False
+
+        self.power_manager = power.PowerManager()
 
         share_scope = SCOPE_PRIVATE
 
@@ -783,6 +786,8 @@ class Activity(Window, Gtk.Container):
             logging.debug('Failed to join activity: %s' % err)
             return
 
+        self.power_manager.inhibit_suspend()
+
         self.reveal()
         self.emit('joined')
         self.__privacy_changed_cb(self.shared_activity, None)
@@ -810,6 +815,8 @@ class Activity(Window, Gtk.Container):
                       (self._activity_id, activity))
 
         activity.props.name = self._jobject.metadata['title']
+
+        self.power_manager.inhibit_suspend()
 
         self.shared_activity = activity
         self.shared_activity.connect('notify::private',
