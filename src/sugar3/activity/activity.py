@@ -74,6 +74,7 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
+from sugar3 import power
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
@@ -809,6 +810,10 @@ class Activity(Window, Gtk.Container):
             logging.debug('Failed to join activity: %s' % err)
             return
 
+        power_manager = power.get_power_manager()
+        if power_manager.suspend_breaks_collaboration():
+            power_manager.inhibit_suspend()
+
         self.reveal()
         self.emit('joined')
         self.__privacy_changed_cb(self.shared_activity, None)
@@ -836,6 +841,10 @@ class Activity(Window, Gtk.Container):
                       (self._activity_id, activity))
 
         activity.props.name = self._jobject.metadata['title']
+
+        power_manager = power.get_power_manager()
+        if power_manager.suspend_breaks_collaboration():
+            power_manager.inhibit_suspend()
 
         self.shared_activity = activity
         self.shared_activity.connect('notify::private',
@@ -953,6 +962,7 @@ class Activity(Window, Gtk.Container):
         dbus.service.Object.remove_from_connection(self._bus)
 
         self._session.unregister(self)
+        power.get_power_manager().shutdown()
 
     def close(self, skip_save=False):
         """Request that the activity be stopped and saved to the Journal
