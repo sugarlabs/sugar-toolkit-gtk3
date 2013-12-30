@@ -24,6 +24,7 @@ import os
 import sys
 import zipfile
 import tarfile
+import unittest
 import shutil
 import subprocess
 import re
@@ -261,6 +262,56 @@ class Installer(Packager):
             shutil.copy(source, dest)
 
         self.config.bundle.install_mime_type(self.config.source_dir)
+
+
+def cmd_check(config, args):
+    """Run tests for the activity"""
+
+    if len(args) > 1:
+        print "Usage: %prog check {integration.unit}"
+        return
+
+    run_unit_test = True
+    run_integration_test = True
+
+    if len(args) == 1:
+        if args[0] == "unit":
+            run_integration_test = False
+        elif args[0] == "integration":
+            run_unit_test = False
+        else:
+            print "Invalid argument: should be either integration or unit"
+
+    print "Running Tests"
+
+    test_path = os.path.join(config.source_dir, "tests")
+
+    if os.path.isdir(test_path):
+        unit_test_path = os.path.join(test_path, "unit")
+        integration_test_path = os.path.join(test_path, "integration")
+        sys.path.append(config.source_dir)
+
+        # Run Tests
+        if os.path.isdir(unit_test_path) and run_unit_test:
+            all_tests = unittest.defaultTestLoader.discover(unit_test_path)
+            unittest.TextTestRunner().run(all_tests)
+        elif not run_unit_test:
+            print "Not running unit tests"
+        else:
+            print 'No "unit" directory found.'
+
+        if os.path.isdir(integration_test_path) and run_integration_test:
+            all_tests = unittest.defaultTestLoader.discover(
+                integration_test_path)
+            unittest.TextTestRunner().run(all_tests)
+        elif not run_integration_test:
+            print "Not running integration tests"
+        else:
+            print 'No "integration" directory found.'
+
+        print "Finished testing"
+    else:
+        print "Error: No tests/ directory"
 
 
 def cmd_dev(config, args):

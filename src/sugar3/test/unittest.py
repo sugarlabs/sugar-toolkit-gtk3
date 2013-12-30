@@ -22,14 +22,26 @@ from __future__ import absolute_import
 
 import logging
 import os
+import time
 import unittest
 import subprocess
 from contextlib import contextmanager
 
 from sugar3.test import uitree
 
+import dbus
+from dbus.mainloop.glib import DBusGMainLoop
+DBusGMainLoop(set_as_default=True)
+bus = dbus.SessionBus()
+
 
 class UITestCase(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        unittest.TestCase(*args, **kwargs)
+
+        self.bundle_id = None
+
     def setUp(self):
         logger = logging.getLogger()
         self._orig_level = logger.getEffectiveLevel()
@@ -43,6 +55,22 @@ class UITestCase(unittest.TestCase):
     def run_view(self, name):
         view_path = os.path.join("views", "%s.py" % name)
         process = subprocess.Popen(["python", view_path])
+
+        try:
+            yield
+        except:
+            logging.debug(uitree.get_root().dump())
+            raise
+        finally:
+            process.terminate()
+
+    @contextmanager
+    def run_activity(self):
+        if bundle_id is not None:
+            process = subprocess.Popen(["sugar-launch", self.bundle_id])
+        else:
+            print "No bundle_id specified."
+            return
 
         try:
             yield
