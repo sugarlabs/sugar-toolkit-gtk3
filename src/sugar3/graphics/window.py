@@ -92,7 +92,7 @@ class Window(Gtk.Window):
         self.set_decorated(False)
         self.maximize()
         self.connect('realize', self.__window_realize_cb)
-        self.connect('key-press-event', self.__key_press_cb)
+        self.connect_after('key-press-event', self.__key_press_cb)
 
         # OSK support: canvas auto panning based on input focus
         if GObject.signal_lookup('request-clear-area', Window) != 0 and \
