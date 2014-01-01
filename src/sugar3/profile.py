@@ -16,8 +16,6 @@
 # Boston, MA 02111-1307, USA.
 
 """User settings/configuration loading.
-
-DEPRECATED. We are using GConf now to store preferences.
 """
 
 from gi.repository import Gio
@@ -35,10 +33,6 @@ _profile = None
 
 class Profile(object):
     """Local user's current options/profile information
-
-    User settings were previously stored in an INI-style
-    configuration file. We moved to gconf now. The deprected
-    API is kept around to not break activities still using it.
 
     The profile is also responsible for loading the user's
     public and private ssh keys from disk.
