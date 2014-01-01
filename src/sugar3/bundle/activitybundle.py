@@ -109,6 +109,7 @@ class ActivityBundle(Bundle):
         self._activity_version = '0'
         self._summary = None
         self._single_instance = False
+        self._action_text = 'Did a'
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
@@ -126,14 +127,21 @@ class ActivityBundle(Bundle):
 
         section = 'Activity'
 
+        if cp.has_option(section, 'action_text'):
+            self._action_text = cp.get(section, 'action_text')
+
         if cp.has_option(section, 'bundle_id'):
             self._bundle_id = cp.get(section, 'bundle_id')
+            if ' ' in self._bundle_id:
+                raise MalformedBundleException('Space in bundle_id')
         else:
             if cp.has_option(section, 'service_name'):
                 self._bundle_id = cp.get(section, 'service_name')
                 logging.error('ATTENTION: service_name property in the '
                               'activity.info file is deprecated, should be '
                               ' changed to bundle_id')
+                if ' ' in self._bundle_id:
+                    raise MalformedBundleException('Space in bundle_id')
             else:
                 raise MalformedBundleException(
                     'Activity bundle %s does not specify a bundle id' %
@@ -243,6 +251,13 @@ class ActivityBundle(Bundle):
     def get_bundle_id(self):
         """Get the activity bundle id"""
         return self._bundle_id
+
+    def get_action_text(self):
+        """
+        Get the action text of an activity.
+        This is the thing before the name in the journal
+        """
+        return self._action_text
 
     def get_icon(self):
         """Get the activity icon name"""
