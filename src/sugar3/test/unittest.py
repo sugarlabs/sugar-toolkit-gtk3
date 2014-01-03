@@ -22,7 +22,6 @@ from __future__ import absolute_import
 
 import logging
 import os
-import time
 import unittest
 import subprocess
 from contextlib import contextmanager
@@ -38,7 +37,7 @@ bus = dbus.SessionBus()
 class UITestCase(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
-        unittest.TestCase(*args, **kwargs)
+        unittest.TestCase(self, *args, **kwargs)
 
         self.bundle_id = None
 
@@ -66,7 +65,7 @@ class UITestCase(unittest.TestCase):
 
     @contextmanager
     def run_activity(self):
-        if bundle_id is not None:
+        if self.bundle_id is not None:
             process = subprocess.Popen(["sugar-launch", self.bundle_id])
         else:
             print "No bundle_id specified."
