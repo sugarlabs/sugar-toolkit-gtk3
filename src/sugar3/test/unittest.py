@@ -37,8 +37,7 @@ bus = dbus.SessionBus()
 class UITestCase(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
-        unittest.TestCase(self, *args, **kwargs)
-
+        super(UITestCase, self).__init__(*args, **kwargs)
         self.bundle_id = None
 
     def setUp(self):
