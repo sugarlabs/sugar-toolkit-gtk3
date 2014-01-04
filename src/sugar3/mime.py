@@ -88,7 +88,7 @@ _generic_types = [{
 }, {
     'id': GENERIC_TYPE_BUNDLE,
     'name': _('Bundle'),
-    'icon': 'user-documents',
+    'icon': 'xo-bundle',
     'types': ['application/vnd.olpc-sugar'],
 }]
 
