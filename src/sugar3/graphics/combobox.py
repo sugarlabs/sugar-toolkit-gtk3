@@ -21,7 +21,12 @@ STABLE.
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
+import logging
+
+from sugar3.graphics.icon import _IconBuffer
+from sugar3.graphics.xocolor import XoColor
 
 
 class ComboBox(Gtk.ComboBox):
@@ -61,7 +66,8 @@ class ComboBox(Gtk.ComboBox):
         del info
         return fname
 
-    def append_item(self, action_id, text, icon_name=None, file_name=None):
+    def append_item(self, action_id, text, icon_name=None, file_name=None,
+                    svg_color_replace=False):
         if not self._icon_renderer and (icon_name or file_name):
             self._icon_renderer = Gtk.CellRendererPixbuf()
 
@@ -88,8 +94,27 @@ class ComboBox(Gtk.ComboBox):
             if icon_name:
                 file_name = self._get_real_name_from_theme(icon_name, size)
 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-                file_name, width, height)
+            if svg_color_replace:
+                b = _IconBuffer()
+                b.icon_size = size
+                b.file_name = file_name
+                xoc = (XoColor('#ffffff,#000000'))
+                b.stroke_color = xoc.get_stroke_color()
+                b.fill_color = xoc.get_fill_color()
+                svg = b.get_surface()
+                if svg is None:
+                    pixbuf = None
+                else:
+
+                    pixbuf1 = Gdk.pixbuf_get_from_surface(svg, 0, 0,
+                                                          55, 55)
+                    pixbuf1.scale(pixbuf1, 0, 0, 55, 55,
+                                  0, 0, 0.4, 0.4,
+                                  GdkPixbuf.InterpType.BILINEAR)
+                    pixbuf = pixbuf1.new_subpixbuf(0, 0, 22, 22)
+            else:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+                    file_name, width, height)
         else:
             pixbuf = None
 
