@@ -17,7 +17,6 @@ AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 
 PYTHON=python2
 AM_PATH_PYTHON
-AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
 PKG_CHECK_MODULES(EXT, gtk+-3.0 gdk-3.0 gdk-pixbuf-2.0 sm ice alsa
                        librsvg-2.0 xfixes xi x11)
