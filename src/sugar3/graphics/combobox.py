@@ -21,7 +21,12 @@ STABLE.
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
+import logging
+
+from sugar3.graphics.icon import get_icon_as_pixbuf
+from sugar3.graphics.xocolor import XoColor
 
 
 class ComboBox(Gtk.ComboBox):
@@ -61,7 +66,8 @@ class ComboBox(Gtk.ComboBox):
         del info
         return fname
 
-    def append_item(self, action_id, text, icon_name=None, file_name=None):
+    def append_item(self, action_id, text, icon_name=None, file_name=None,
+                    high_contrast=False):
         if not self._icon_renderer and (icon_name or file_name):
             self._icon_renderer = Gtk.CellRendererPixbuf()
 
@@ -88,8 +94,12 @@ class ComboBox(Gtk.ComboBox):
             if icon_name:
                 file_name = self._get_real_name_from_theme(icon_name, size)
 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-                file_name, width, height)
+            if high_contrast:
+                pixbuf = get_icon_as_pixbuf(file_name,
+                                            XoColor('#ffffff,#000000'))
+            else:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+                    file_name, width, height)
         else:
             pixbuf = None
 
