@@ -26,12 +26,14 @@ from gi.repository import Pango
 from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
+from sugar3.graphics import style
 
 
 class MenuItem(Gtk.ImageMenuItem):
 
-    def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
-                 xo_color=None, file_name=None):
+    def __init__(self, text_label=None, icon_name=None,
+                 text_maxlen=style.MENU_WIDTH_CHARS, xo_color=None,
+                 file_name=None):
         GObject.GObject.__init__(self)
         self._accelerator = None
 

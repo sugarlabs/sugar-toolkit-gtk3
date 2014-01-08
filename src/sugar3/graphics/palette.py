@@ -101,7 +101,7 @@ class Palette(PaletteWindow):
     __gtype_name__ = 'SugarPalette'
 
     def __init__(self, label=None, accel_path=None,
-                 text_maxlen=60, **kwargs):
+                 text_maxlen=style.MENU_WIDTH_CHARS, **kwargs):
         # DEPRECATED: label is passed with the primary-text property,
         # accel_path is set via the invoker property
 
