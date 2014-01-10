@@ -330,6 +330,21 @@ class _IconBuffer(object):
 
     xo_color = property(_get_xo_color, _set_xo_color)
 
+def get_icon_as_pixbuf(file_name, xocolor):
+    """
+    This returns any svg icon as a GdkPixbuf.Pixbuf
+    The icon will be 55px by 55px
+    """
+    buffer_ = _IconBuffer()
+    #b.icon_size = size
+    buffer_.file_name = file_name
+    buffer_.stroke_color = xocolor.get_stroke_color()
+    buffer_.fill_color = xocolor.get_fill_color()
+    svg = buffer_.get_surface()
+    if svg is None:
+        return None
+    else:
+        return Gdk.pixbuf_get_from_surface(svg, 0, 0, 55, 55)
 
 class Icon(Gtk.Image):
 
