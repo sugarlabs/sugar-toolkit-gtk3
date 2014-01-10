@@ -27,6 +27,7 @@ from sugar3.graphics import style
 from sugar3.graphics.palette import ToolInvoker
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.icon import Icon
+from sugar3.graphics.pulsingicon import PulsingIcon
 
 
 _PREVIOUS_PAGE = 0
@@ -422,55 +423,20 @@ class TrayButton(ToolButton):
         ToolButton.__init__(self, **kwargs)
 
 
-class _IconWidget(Gtk.EventBox):
-
-    __gtype_name__ = 'SugarTrayIconWidget'
-
-    def __init__(self, icon_name=None, xo_color=None):
-        Gtk.EventBox.__init__(self)
-
-        self.set_app_paintable(True)
-        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
-                        Gdk.EventMask.TOUCH_MASK |
-                        Gdk.EventMask.BUTTON_RELEASE_MASK)
-
-        self._icon = Icon(icon_name=icon_name, xo_color=xo_color,
-                          icon_size=Gtk.IconSize.LARGE_TOOLBAR)
-        self.add(self._icon)
-        self._icon.show()
-
-    def do_draw(self, cr):
-        palette = self.get_parent().palette
-
-        if palette and palette.is_up():
-            allocation = self.get_allocation()
-            # draw a black background, has been done by the engine before
-            cr.set_source_rgb(0, 0, 0)
-            cr.rectangle(0, 0, allocation.width, allocation.height)
-            cr.paint()
-
-        Gtk.EventBox.do_draw(self, cr)
-
-        if palette and palette.is_up():
-            invoker = palette.props.invoker
-            invoker.draw_rectangle(cr, palette)
-
-        return False
-
-    def get_icon(self):
-        return self._icon
-
-
-class TrayIcon(Gtk.ToolItem):
+class TrayIcon(ToolButton):
 
     __gtype_name__ = 'SugarTrayIcon'
 
     def __init__(self, icon_name=None, xo_color=None):
-        Gtk.ToolItem.__init__(self)
+        ToolButton.__init__(self)
 
-        self._icon_widget = _IconWidget(icon_name, xo_color)
-        self.add(self._icon_widget)
-        self._icon_widget.show()
+        self._icon = PulsingIcon()
+        self._icon.props.icon_name = icon_name
+        self._icon.props.pulse_color = xo_color
+        self._icon.props.base_color = xo_color
+
+        self.set_icon_widget(self._icon)
+        self._icon.show()
 
         self._palette_invoker = ToolInvoker(self)
 
@@ -505,5 +471,5 @@ class TrayIcon(Gtk.ToolItem):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def get_icon(self):
-        return self._icon_widget.get_icon()
+        return self._icon
     icon = property(get_icon, None)
