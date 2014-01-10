@@ -1,5 +1,6 @@
 # Copyright (C) 2007, Red Hat, Inc.
 # Copyright (C) 2009, Aleksey Lim, Sayamindu Dasgupta
+# Copyright (C) 2014, Ignacio Rodriguez
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,6 +27,7 @@ from gi.repository import Gdk
 from gi.repository import GdkX11
 from gi.repository import Gtk
 
+from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import palettegroup
 
@@ -47,7 +49,7 @@ class UnfullscreenButton(Gtk.Window):
         self.props.accept_focus = False
 
         # Setup estimate of width, height
-        valid_, w, h = Gtk.icon_size_lookup(Gtk.IconSize.LARGE_TOOLBAR)
+        valid_, w, h = Gtk.icon_size_lookup(style.STANDARD_ICON_SIZE)
         self._width = w
         self._height = h
 
@@ -58,7 +60,7 @@ class UnfullscreenButton(Gtk.Window):
         self._button.set_relief(Gtk.ReliefStyle.NONE)
 
         self._icon = Icon(icon_name='view-return',
-                          icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+                          pixel_size=style.STANDARD_ICON_SIZE)
         self._icon.show()
         self._button.add(self._icon)
 

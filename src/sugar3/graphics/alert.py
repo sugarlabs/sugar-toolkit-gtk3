@@ -29,6 +29,7 @@ STABLE.
 """
 # Copyright (C) 2007, One Laptop Per Child
 # Copyright (C) 2010, Anish Mangal <anishmangal2002@gmail.com>
+# Copyright (C) 2014, Ignacio Rodriguez <ignacio@sugarlabs.org>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -355,11 +356,11 @@ class _TimeoutIcon(Gtk.Alignment):
         return False
 
     def do_get_preferred_width(self):
-        width = Gtk.icon_size_lookup(Gtk.IconSize.BUTTON)[1]
+        width = Gtk.icon_size_lookup(style.SMALL_ICON_SIZE)[1]
         return width, width
 
     def do_get_preferred_height(self):
-        height = Gtk.icon_size_lookup(Gtk.IconSize.BUTTON)[2]
+        height = Gtk.icon_size_lookup(style.SMALL_ICON_SIZE)[2]
         return height, height
 
     def _draw(self, context):
