@@ -3,6 +3,7 @@
 # Copyright (C) 2009, Tomeu Vizoso
 # Copyright (C) 2011, Benjamin Berg <benjamin@sipsolutions.net>
 # Copyright (C) 2011, Marco Pesenti Gritti <marco@marcopg.org>
+# Copyright (C) 2014, Ignacio Rodriguez <ignacio@sugarlabs.org>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -306,7 +307,7 @@ class Palette(PaletteWindow):
             event_box.show()
 
             self._icon = icon
-            self._icon.props.icon_size = Gtk.IconSize.LARGE_TOOLBAR
+            self._icon.props.pixel_size = style.STANDARD_ICON_SIZE
             event_box.add(self._icon)
             self._icon.show()
             self._show_icon()

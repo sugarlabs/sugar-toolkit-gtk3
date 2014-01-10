@@ -1,4 +1,5 @@
 # Copyright (C) 2006-2007 Red Hat, Inc.
+# Copyright (C) 2014 Ignacio Rodriguez
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -998,7 +999,8 @@ def get_icon_state(base_name, perc, step=5):
 
 def get_icon_file_name(icon_name):
     icon_theme = Gtk.IconTheme.get_default()
-    info = icon_theme.lookup_icon(icon_name, Gtk.IconSize.LARGE_TOOLBAR, 0)
+    from sugar3.graphics import style
+    info = icon_theme.lookup_icon(icon_name, style.STANDARD_ICON_SIZE, 0)
     if not info:
         return None
     filename = info.get_filename()

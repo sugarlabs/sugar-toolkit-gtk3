@@ -1,5 +1,6 @@
 # Copyright (C) 2007, Red Hat, Inc.
 # Copyright (C) 2008, One Laptop Per Child
+# Copyright (C) 2014, Ignacio Rodriguez
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -25,6 +26,7 @@ import logging
 from gi.repository import Gtk
 from gi.repository import GObject
 
+from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
 
@@ -72,7 +74,10 @@ class ToolButton(Gtk.ToolButton):
         self._palette_invoker.attach_tool(self)
 
         if icon_name:
-            self.set_icon_name(icon_name)
+            icon = Icon(icon_name=icon_name,
+                        pixel_size=style.STANDARD_ICON_SIZE)
+            self.set_icon_widget(icon)
+            icon.show()
 
         self.get_child().connect('can-activate-accel',
                                  self.__button_can_activate_accel_cb)
@@ -128,7 +133,8 @@ class ToolButton(Gtk.ToolButton):
                                    getter=get_accelerator)
 
     def set_icon_name(self, icon_name):
-        icon = Icon(icon_name=icon_name)
+        icon = Icon(icon_name=icon_name,
+                    pixel_size=style.STANDARD_ICON_SIZE)
         self.set_icon_widget(icon)
         icon.show()
 

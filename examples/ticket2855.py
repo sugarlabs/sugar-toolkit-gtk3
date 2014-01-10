@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
+# Copyright (C) 2014, Ignacio Rodriguez
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -23,6 +24,7 @@ controls. Ticket #2855.
 
 from gi.repository import Gtk
 
+from sugar3.graphics import style
 from sugar3.graphics.palette import Palette
 from sugar3.graphics.icon import Icon
 
@@ -37,7 +39,7 @@ box = Gtk.HBox()
 
 toggle = Gtk.ToggleButton()
 
-icon = Icon(icon_name='go-previous', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+icon = Icon(icon_name='go-previous', pixel_size=style.STANDARD_ICON_SIZE)
 toggle.set_image(icon)
 
 box.pack_start(toggle, False)
@@ -45,7 +47,7 @@ toggle.show()
 
 radio = Gtk.RadioButton()
 
-icon = Icon(icon_name='go-next', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+icon = Icon(icon_name='go-next', pixel_size=style.STANDARD_ICON_SIZE)
 radio.set_image(icon)
 
 radio.set_mode(False)

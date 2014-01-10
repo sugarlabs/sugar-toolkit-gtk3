@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
+# Copyright (C) 2014, Ignacio Rodriguez
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,6 +22,7 @@ Test the sugar3.graphics.icon.* cache.
 
 from gi.repository import Gtk
 
+from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.xocolor import XoColor
 
@@ -54,7 +56,7 @@ def _button_activated_cb(button):
 
 for d in data:
     icon = Icon(icon_name=d[0],
-                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
+                pixel_size=style.STANDARD_ICON_SIZE,
                 xo_color=XoColor(d[1]))
     test.pack_start(icon, True, True, 0)
     icon.show()

@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
+# Copyright (C) 2014, Ignacio Rodriguez
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,6 +22,7 @@ Test the sugar3.graphics.icon.Icon widget.
 
 from gi.repository import Gtk
 
+from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.xocolor import XoColor
 
@@ -40,27 +42,27 @@ hbox.show_all()
 
 def create_icon_widgets(box, sensitive=True):
     icon = Icon(icon_name='go-previous')
-    icon.props.icon_size = Gtk.IconSize.LARGE_TOOLBAR
+    icon.props.pixel_size = style.STANDARD_ICON_SIZE
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='computer-xo',
-                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
+                pixel_size=style.STANDARD_ICON_SIZE,
                 xo_color=XoColor())
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='battery-000',
-                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
+                pixel_size=style.STANDARD_ICON_SIZE,
                 badge_name='emblem-busy')
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='gtk-new',
-                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
+                pixel_size=style.STANDARD_ICON_SIZE,
                 badge_name='gtk-cancel')
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)

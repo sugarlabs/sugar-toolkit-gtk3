@@ -1,4 +1,5 @@
 # Copyright (C) 2007, One Laptop Per Child
+# Copyright (C) 2014, Ignacio Rodriguez
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -42,7 +43,7 @@ class IconEntry(Gtk.Entry):
     def set_icon_from_name(self, position, name):
         icon_theme = Gtk.IconTheme.get_default()
         icon_info = icon_theme.lookup_icon(name,
-                                           Gtk.IconSize.SMALL_TOOLBAR,
+                                           style.SMALL_ICON_SIZE,
                                            0)
         if not icon_info:
             logging.warning('IconEntry set_icon_from_name: icon \'%s\' not '

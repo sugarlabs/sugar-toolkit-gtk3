@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Eduardo Silva (edsiper@gmail.com)
+# Copyright (C) 2014, Ignacio Rodriguez <ignacio@sugarlabs.org>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,6 +27,8 @@ STABLE.
 
 from gi.repository import Gtk
 from gi.repository import GObject
+
+from sugar3.graphics import style
 
 
 class Notebook(Gtk.Notebook):
@@ -77,12 +80,12 @@ class Notebook(Gtk.Notebook):
     def _add_icon_to_button(self, button):
         icon_box = Gtk.HBox()
         image = Gtk.Image()
-        image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
+        image.set_from_stock(Gtk.STOCK_CLOSE, style.SMALL_ICON_SIZE)
         Gtk.Button.set_relief(button, Gtk.ReliefStyle.NONE)
 
         settings = Gtk.Widget.get_settings(button)
         valid_, w, h = Gtk.icon_size_lookup_for_settings(settings,
-                                                         Gtk.IconSize.MENU)
+                                                         style.SMALL_ICON_SIZE)
         Gtk.Widget.set_size_request(button, w + 4, h + 4)
         image.show()
         icon_box.pack_start(image, True, False, 0)
