@@ -16,6 +16,7 @@ sugar_PYTHON =              \
 	palettemenu.py          \
 	palettewindow.py        \
 	panel.py                \
+	pulsingicon.py		\
 	radiopalette.py         \
 	radiotoolbutton.py      \
 	style.py                \

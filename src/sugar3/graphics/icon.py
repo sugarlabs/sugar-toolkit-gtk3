@@ -35,6 +35,7 @@ import cairo
 from sugar3.graphics import style
 from sugar3.graphics.xocolor import XoColor
 from sugar3.util import LRU
+from sugar3.graphics import style
 
 _BADGE_SIZE = 0.45
 
