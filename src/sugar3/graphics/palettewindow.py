@@ -1487,13 +1487,12 @@ class CellRendererInvoker(Invoker):
         if pos is None:
             return False
 
-        path, column, x, y_ = pos
+        path_, column, x, y_ = pos
 
         for cell_renderer in column.get_cells():
             if cell_renderer == self._cell_renderer:
                 cell_x, cell_width = column.cell_get_position(cell_renderer)
                 if x > cell_x and x < (cell_x + cell_width):
-                    self.path = path
                     return True
                 return False
 
