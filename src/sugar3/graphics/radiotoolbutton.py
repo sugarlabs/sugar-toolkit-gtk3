@@ -38,6 +38,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         self._tooltip = None
         self._xo_color = None
         self._hide_tooltip_on_click = True
+        self.needs_bg_drawn = False
 
         self._palette_invoker = ToolInvoker()
 
@@ -131,6 +132,12 @@ class RadioToolButton(Gtk.RadioToolButton):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_draw(self, cr):
+        if self.get_active() and self.needs_bg_drawn:
+            allocation = self.get_allocation()
+            cr.set_source_rgb(0.5, 0.5, 0.5)
+            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.paint()
+
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before

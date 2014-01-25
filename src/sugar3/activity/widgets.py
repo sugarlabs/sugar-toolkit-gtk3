@@ -129,11 +129,13 @@ class ShareButton(RadioMenuButton):
 
         self.private = RadioToolButton(
             icon_name='zoom-home')
+        self.private.needs_bg_drawn = True
         palette.append(self.private, _('Private'))
 
         self.neighborhood = RadioToolButton(
             icon_name='zoom-neighborhood',
             group=self.private)
+        self.neighborhood.needs_bg_drawn = True
         self._neighborhood_handle = self.neighborhood.connect(
             'clicked', self.__neighborhood_clicked_cb, activity)
         palette.append(self.neighborhood, _('My Neighborhood'))
@@ -154,12 +156,8 @@ class ShareButton(RadioMenuButton):
         try:
             if activity.shared_activity is not None and \
                     not activity.shared_activity.props.private:
-                self.private.props.sensitive = False
-                self.neighborhood.props.sensitive = False
                 self.neighborhood.props.active = True
             else:
-                self.private.props.sensitive = True
-                self.neighborhood.props.sensitive = True
                 self.private.props.active = True
         finally:
             self.neighborhood.handler_unblock(self._neighborhood_handle)
