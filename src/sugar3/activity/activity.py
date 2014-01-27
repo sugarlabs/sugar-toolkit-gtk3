@@ -159,9 +159,33 @@ class Activity(Window, Gtk.Container):
 
         1. implement an __init__() method for your Activity class.
 
-           Use your init method to create your own ActivityToolbar which will
-           contain some standard buttons:
-                toolbox = activity.ActivityToolbox(self)
+           Use your init method to create your own ToolbarBox.
+           This is the code to make a basic toolbar with the activity
+           toolbar and a stop button.
+                from sugar3.graphics.toolbarbox import ToolbarBox
+                from sugar3.activity.widgets import ActivityToolbarButton
+                from sugar3.activity.widgets import StopButton
+
+                ...
+
+                toolbar_box = ToolbarBox()
+                activity_button = ActivityToolbarButton(self)
+                toolbar_box.toolbar.insert(activity_button, 0)
+                activity_button.show()
+
+                ... Your toolbars ...
+
+                separator = Gtk.SeparatorToolItem(draw=False)
+                separator.set_expand(True)
+                toolbar_box.toolbar.insert(separator, -1)
+                separator.show()
+
+                stop_button = StopButton(self)
+                toolbar_box.toolbar.insert(stop_button, -1)
+                stop_button.show()
+
+                self.set_toolbar_box(toolbar_box)
+                toolbar_box.show()
 
            Add extra Toolbars to your toolbox.
 
@@ -195,7 +219,9 @@ class Activity(Window, Gtk.Container):
            Usually, you will also need the standard EditToolbar. This is the
            one which has the standard copy and paste buttons. You need to
            derive your own EditToolbar class from sugar3.EditToolbar:
-                class EditToolbar(activity.EditToolbar):
+                from sugar3.activity.widgets import EditToolbar
+
+                class MyEditToolbar(EditToolbar):
                     ...
 
            See EditToolbar for the methods you should implement in your class.
