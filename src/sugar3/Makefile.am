@@ -14,6 +14,7 @@ sugar_PYTHON =		\
 	logger.py	\
 	mime.py		\
         network.py	\
+	power.py \
 	profile.py	\
 	util.py
 
