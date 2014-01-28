@@ -25,6 +25,7 @@ import logging
 import shutil
 import StringIO
 import zipfile
+import subprocess
 
 
 class AlreadyInstalledException(Exception):
@@ -124,7 +125,7 @@ class Bundle(object):
                 data = self._zip_file.read(path)
                 f = StringIO.StringIO(data)
             except KeyError:
-                logging.debug('%s not found.', filename)
+                logging.debug('%s not found.' % filename)
 
         return f
 
@@ -161,12 +162,34 @@ class Bundle(object):
         installed."""
         return self._installation_time
 
+    def get_show_launcher(self):
+        return True
+
     def _unzip(self, install_dir):
         if self._zip_file is None:
             raise AlreadyInstalledException
 
         if not os.path.isdir(install_dir):
             os.mkdir(install_dir, 0775)
+
+        z_obj = zipfile.ZipFile(self._path)
+        z_bytes = 0
+        for i in z_obj.infolist():
+            z_bytes += i.file_size
+        z_kb = float(z_bytes) / 1000
+        # Make room for some overhead
+        z_kb *= 1.1
+
+        df_process = subprocess.Popen(['df', install_dir],
+                                      stdout=subprocess.PIPE)
+        df_out = df_process.communicate()[0]
+        df_data = df_out.split('\n')[1].split()
+        kb_left = int(df_data[3])
+
+        logging.error('{} > {}?'.format(z_kb, kb_left))
+
+        if z_kb > kb_left:
+            raise ZipExtractException("Not enough space")
 
         # zipfile provides API that in theory would let us do this
         # correctly by hand, but handling all the oddities of
@@ -204,3 +227,4 @@ class Bundle(object):
                 else:
                     os.rmdir(path)
         os.rmdir(install_path)
+
