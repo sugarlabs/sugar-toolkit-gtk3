@@ -46,6 +46,8 @@ class LocalRequestHandler(BaseHTTPRequestHandler):
         new_path = self.server.path + '/' + self.path
         if not os.path.exists(new_path):
             logging.error('file %s not found.', new_path)
+            self.send_response(404)
+            self.end_headers()
             return False
 
         with open(new_path) as f:
