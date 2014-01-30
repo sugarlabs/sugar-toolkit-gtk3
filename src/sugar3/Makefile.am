@@ -19,27 +19,10 @@ sugar_PYTHON =		\
 
 nodist_sugar_PYTHON = config.py
 
-XDG_MIME_SOURCES = \
-	xdgmime.c \
-        xdgmime.h \
-        xdgmimealias.c \
-        xdgmimealias.h \
-        xdgmimecache.c \
-        xdgmimecache.h \
-        xdgmimeglob.c \
-        xdgmimeglob.h \
-        xdgmimeint.c \
-        xdgmimeint.h \
-        xdgmimemagic.c \
-        xdgmimemagic.h \
-        xdgmimeparent.c \
-        xdgmimeparent.h
-
 lib_LTLIBRARIES = libsugarext.la
 
 libsugarext_la_CFLAGS = \
 	-DHAVE_ALSA \
-	-DXDG_PREFIX=sugar_mime \
 	$(EXT_CFLAGS) \
 	$(WARN_CFLAGS)
 
@@ -82,8 +65,7 @@ libsugarext_la_SOURCES =		\
 	sugar-key-grabber.c		\
 	sugar-key-grabber.h		\
 	sugar-wm.h			\
-	sugar-wm.c			\
-	$(XDG_MIME_SOURCES)
+	sugar-wm.c
 
 BUILT_SOURCES = 			\
 	sugar-marshal.c			\
@@ -103,7 +85,6 @@ EXTRA_DIST = sugar-marshal.list
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS = SugarExt-1.0.gir
 INTROSPECTION_SCANNER_ARGS = \
-	-D XDG_PREFIX=sugar_mime \
         --identifier-prefix=Sugar --symbol-prefix=sugar \
 	--identifier-prefix=EggSM --symbol-prefix=egg_sm \
 	--identifier-prefix=Gsm --symbol-prefix=gsm \
@@ -135,8 +116,7 @@ SugarExt_1_0_gir_FILES = \
 	sugar-grid.c \
 	sugar-grid.h \
     sugar-wm.c \
-    sugar-wm.h \
-	$(XDG_MIME_SOURCES)
+    sugar-wm.h
 
 SugarExt_1_0_gir: libsugarext.la
 SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
