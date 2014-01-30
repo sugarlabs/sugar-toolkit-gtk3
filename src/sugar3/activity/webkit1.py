@@ -19,7 +19,6 @@ import json
 import os
 import logging
 
-from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import GdkX11
 assert GdkX11
@@ -196,10 +195,3 @@ class WebActivity(Gtk.Window):
                     """ % env_json
 
             self._web_view.execute_script(script)
-
-    def _app_scheme_cb(self, request, user_data):
-        path = os.path.join(self._bundle_path,
-                            os.path.relpath(request.get_path(), "/"))
-
-        request.finish(Gio.File.new_for_path(path).read(None),
-                       -1, Gio.content_type_guess(path, None)[0])
