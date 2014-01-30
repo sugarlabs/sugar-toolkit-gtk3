@@ -29,8 +29,6 @@ from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 
-from gi.repository import SugarExt
-
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 GENERIC_TYPE_TEXT = 'Text'
@@ -50,6 +48,9 @@ def _get_supported_image_mime_types():
 
 _extensions = {}
 _globs_timestamps = []
+_subclasses = {}
+_subclasses_timestamps = []
+
 _generic_types = [{
     'id': GENERIC_TYPE_TEXT,
     'name': _('Text'),
@@ -159,13 +160,39 @@ def get_mime_description(mime_type):
 
 
 def get_mime_parents(mime_type):
-    return SugarExt.mime_list_mime_parents(mime_type)
+    global _subclasses
+    global _subclasses_timestamps
+
+    dirs = _get_mime_data_directories()
+
+    timestamps = []
+    subclasses_path_list = []
+    for f in dirs:
+        subclasses_path = os.path.join(f, 'mime', 'subclasses')
+        try:
+            mtime = os.stat(subclasses_path).st_mtime
+            timestamps.append([subclasses_path, mtime])
+            subclasses_path_list.append(subclasses_path)
+        except OSError:
+            pass
+
+    if timestamps != _subclasses_timestamps:
+        _subclasses = {}
+        for subclasses_path in subclasses_path_list:
+            with open(subclasses_path) as parents_file:
+                for line in parents_file:
+                    subclass, parent = line.split()
+                    if subclass not in _subclasses.keys():
+                        _subclasses[subclass] = [parent]
+                    else:
+                        _subclasses[subclass].append(parent)
+
+        _subclasses_timestamps = timestamps
+
+    return _subclasses[mime_type]
 
 
-def get_primary_extension(mime_type):
-    global _extensions
-    global _globs_timestamps
-
+def _get_mime_data_directories():
     dirs = []
 
     if 'XDG_DATA_HOME' in os.environ:
@@ -177,6 +204,14 @@ def get_primary_extension(mime_type):
         dirs.extend(os.environ['XDG_DATA_DIRS'].split(':'))
     else:
         dirs.extend(['/usr/local/share/', '/usr/share/'])
+    return dirs
+
+
+def get_primary_extension(mime_type):
+    global _extensions
+    global _globs_timestamps
+
+    dirs = _get_mime_data_directories()
 
     timestamps = []
     globs_path_list = []
