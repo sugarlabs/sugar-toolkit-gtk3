@@ -124,18 +124,12 @@ def get_for_file(file_name):
 
     file_name = os.path.realpath(file_name)
 
-    mime_type = SugarExt.mime_get_mime_type_for_file(file_name, None)
-    if mime_type == 'application/octet-stream':
-        if _file_looks_like_text(file_name):
-            return 'text/plain'
-        else:
-            return 'application/octet-stream'
-
-    return mime_type
+    return Gio.content_type_guess(file_name, None)[0]
 
 
 def get_from_file_name(file_name):
-    return SugarExt.mime_get_mime_type_from_file_name(file_name)
+    # DEPRECATED
+    return Gio.content_type_guess(file_name, None)[0]
 
 
 def get_mime_icon(mime_type):
@@ -256,26 +250,6 @@ def choose_most_significant(mime_types):
 
 def split_uri_list(uri_list):
     return GLib.uri_list_extract_uris(uri_list)
-
-
-def _file_looks_like_text(file_name):
-    f = open(file_name, 'r')
-    try:
-        sample = f.read(256)
-    finally:
-        f.close()
-
-    if '\000' in sample:
-        return False
-
-    for encoding in ('ascii', 'latin_1', 'utf_8', 'utf_16'):
-        try:
-            unicode(sample, encoding)
-            return True
-        except Exception:
-            pass
-
-    return False
 
 
 def _get_generic_type_for_mime(mime_type):
