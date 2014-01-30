@@ -35,6 +35,10 @@ class TestMime(unittest.TestCase):
         self.assertListEqual(mime.get_mime_parents("image/svg+xml"),
                              ["application/xml"])
 
+        # If the mime type don't have parents, should return a empty array
+        self.assertListEqual(mime.get_mime_parents("application/octet-stream"),
+                             [])
+
     def test_get_for_file(self):
         self.assertEqual(mime.get_for_file(os.path.join(data_dir, "mime.svg")),
                          'image/svg+xml')
