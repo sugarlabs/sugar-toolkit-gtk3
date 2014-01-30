@@ -24,6 +24,7 @@ STABLE.
 import os
 import logging
 import gettext
+import mimetypes
 
 from gi.repository import GLib
 from gi.repository import GdkPixbuf
@@ -128,7 +129,7 @@ def get_for_file(file_name):
 
 
 def get_from_file_name(file_name):
-    return SugarExt.mime_get_mime_type_from_file_name(file_name)
+    return mimetypes.guess_type(file_name)[0]
 
 
 def get_mime_icon(mime_type):
