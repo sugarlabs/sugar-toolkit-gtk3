@@ -78,7 +78,31 @@ class PaletteMenuItem(Gtk.EventBox):
     }
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
-                 xo_color=None, file_name=None):
+                 xo_color=None, file_name=None, accelerator=None):
+
+        """
+            text_label -- str
+                a text to display in the menu.
+
+            icon_name -- str
+                the name of a sugar icon to be displayed. Takse precedence
+                over file_name.
+
+            text_maxlen -- int
+                the desired maximum width of the label, in characters.
+                By default is 60.
+
+            xo_color -- sugar.graphics.XoColor
+                the color to be applied to the icon.
+
+            file_name -- str
+                the path to a svg file used as icon.
+
+            accelerator -- str
+                a text used to display the keyboard shortcut associated
+                to the menu.
+
+        """
 
         Gtk.EventBox.__init__(self)
         self.set_above_child(True)
@@ -120,6 +144,12 @@ class PaletteMenuItem(Gtk.EventBox):
         self._hbox.pack_start(align, expand=True, fill=True,
                               padding=style.DEFAULT_PADDING)
 
+        self._accelerator_label = Gtk.AccelLabel('')
+        if accelerator is not None:
+            self._accelerator_label.set_text(accelerator)
+        self._hbox.pack_start(self._accelerator_label, expand=False,
+                              fill=False, padding=style.DEFAULT_PADDING)
+
         self.id_bt_release_cb = self.connect('button-release-event',
                                              self.__button_release_cb)
         self.id_enter_notify_cb = self.connect('enter-notify-event',
@@ -149,6 +179,9 @@ class PaletteMenuItem(Gtk.EventBox):
         self._hbox.pack_start(icon, expand=False, fill=False,
                               padding=style.DEFAULT_PADDING)
         self._hbox.reorder_child(icon, 0)
+
+    def set_accelerator(self, text):
+        self._accelerator_label.set_text(text)
 
     def set_sensitive(self, sensitive):
         is_sensitive = bool(not self.get_state_flags() &
