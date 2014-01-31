@@ -1091,3 +1091,10 @@ def show_object_in_journal(object_id):
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
     journal.ShowObject(object_id)
+
+def launch_bundle(bundle_id="", object_id="", mime_type=""):
+    bus = dbus.SessionBus()
+    obj = bus.get_object('org.sugarlabs.BundleLauncher',
+                         '/org/sugarlabs/BundleLauncher')
+    bundle_launcher = dbus.Interface(obj, 'org.sugarlabs.BundleLauncher')
+    bundle_launcher.launch(bundle_id, object_id, mime_type)
