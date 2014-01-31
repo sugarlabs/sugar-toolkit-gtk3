@@ -149,6 +149,7 @@ class _ActivitySession(GObject.GObject):
 
 
 class Activity(Window, Gtk.Container):
+
     """This is the base Activity class that all other Activities derive from.
        This is where your activity starts.
 
@@ -431,11 +432,11 @@ class Activity(Window, Gtk.Container):
     def _set_up_sharing(self, mesh_instance, share_scope):
         # handle activity share/join
         logging.debug('*** Act %s, mesh instance %r, scope %s' %
-                     (self._activity_id, mesh_instance, share_scope))
+                      (self._activity_id, mesh_instance, share_scope))
         if mesh_instance is not None:
             # There's already an instance on the mesh, join it
             logging.debug('*** Act %s joining existing mesh instance %r' %
-                         (self._activity_id, mesh_instance))
+                          (self._activity_id, mesh_instance))
             self.shared_activity = mesh_instance
             self.shared_activity.connect('notify::private',
                                          self.__privacy_changed_cb)
@@ -829,7 +830,7 @@ class Activity(Window, Gtk.Container):
     def __share_cb(self, ps, success, activity, err):
         if not success:
             logging.debug('Share of activity %s failed: %s.' %
-                         (self._activity_id, err))
+                          (self._activity_id, err))
             return
 
         logging.debug('Share of activity %s successful, PS activity is %r.' %
@@ -889,8 +890,9 @@ class Activity(Window, Gtk.Container):
             raise RuntimeError('Activity %s already shared.' %
                                self._activity_id)
         verb = private and 'private' or 'public'
-        logging.debug('Requesting %s share of activity %s.' % (verb,
-                      self._activity_id))
+        logging.debug(
+            'Requesting %s share of activity %s.' %
+            (verb, self._activity_id))
         pservice = presenceservice.get_instance()
         pservice.connect('activity-shared', self.__share_cb)
         pservice.share_activity(self, private=private)
@@ -1010,6 +1012,7 @@ class Activity(Window, Gtk.Container):
 
 
 class _ClientHandler(dbus.service.Object, DBusProperties):
+
     def __init__(self, bundle_id, got_channel_cb):
         self._interfaces = set([CLIENT, CLIENT_HANDLER, PROPERTIES_IFACE])
         self._got_channel_cb = got_channel_cb
@@ -1037,7 +1040,7 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
         }
         filter_dict = dbus.Dictionary(filters, signature='sv')
         logging.debug('__get_filters_cb %r' % dbus.Array([filter_dict],
-                      signature='a{sv}'))
+                                                         signature='a{sv}'))
         return dbus.Array([filter_dict], signature='a{sv}')
 
     @dbus.service.method(dbus_interface=CLIENT_HANDLER,
@@ -1053,7 +1056,7 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
                 handle_type = properties[CHANNEL + '.TargetHandleType']
                 if channel_type == CHANNEL_TYPE_TEXT:
                     self._got_channel_cb(connection, object_path, handle_type)
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
 
 _session = None
@@ -1091,3 +1094,11 @@ def show_object_in_journal(object_id):
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
     journal.ShowObject(object_id)
+
+
+def launch_bundle(bundle_id="", object_id="", mime_type=""):
+    bus = dbus.SessionBus()
+    obj = bus.get_object('org.sugarlabs.BundleLauncher',
+                         '/org/sugarlabs/BundleLauncher')
+    bundle_launcher = dbus.Interface(obj, 'org.sugarlabs.BundleLauncher')
+    bundle_launcher.launch(bundle_id, object_id, mime_type)
