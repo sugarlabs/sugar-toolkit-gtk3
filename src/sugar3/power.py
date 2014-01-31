@@ -80,6 +80,6 @@ class PowerManager():
         path = os.path.join(_POWERD_INHIBIT_DIR, str(os.getpid()))
         try:
             os.unlink(path)
-        except IOError:
+        except OSError:
             logging.error("Inhibit Suspend: Could not delete file %s", path)
         self._suspend_inhibit_counter = 0
