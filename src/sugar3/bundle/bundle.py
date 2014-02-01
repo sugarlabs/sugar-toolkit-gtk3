@@ -164,6 +164,15 @@ class Bundle(object):
     def get_show_launcher(self):
         return True
 
+    def get_toolkit_type(self):
+        return None
+
+    def get_toolkit_version(self):
+        return -1
+
+    def has_toolkit_info(self):
+        return False
+
     def _unzip(self, install_dir):
         if self._zip_file is None:
             raise AlreadyInstalledException
