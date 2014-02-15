@@ -33,6 +33,7 @@ from sugar3.bundle.bundle import Bundle, \
 from sugar3.bundle.bundleversion import NormalizedVersion
 from sugar3.bundle.bundleversion import InvalidVersionError
 
+TOOLKIT_TYPES = ['gtk', 'web']
 
 def _expand_lang(locale):
     # Private method from gettext.py
@@ -109,6 +110,8 @@ class ActivityBundle(Bundle):
         self._activity_version = '0'
         self._summary = None
         self._single_instance = False
+        self._toolkit_version = -1
+        self._toolkit_type = None
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
@@ -186,6 +189,22 @@ class ActivityBundle(Bundle):
         if cp.has_option(section, 'single_instance'):
             if cp.get(section, 'single_instance') == 'yes':
                 self._single_instance = True
+
+        if cp.has_option(section, 'toolkit_type'):
+            toolkit_type = cp.get(section, 'toolkit_type').lower()
+            if toolkit_type in TOOLKIT_TYPES:
+                self._toolkit_type = toolkit_type
+            else:
+                logging.error('Invalid toolkit_type %s in bundle %s' \
+                                    % (toolkit_type, self.get_bundle_id()))
+
+        if cp.has_option(section, 'toolkit_version'):
+            toolkit_version = cp.get(section, 'toolkit_version')
+            if toolkit_version.isalnum():
+                self._toolkit_version = int(toolkit_version)
+            else:
+                logging.error('Invalid toolkit_version %s in bundle %s' \
+                                    % (toolkit_version, self.get_bundle_id()))
 
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
@@ -294,6 +313,18 @@ class ActivityBundle(Bundle):
     def get_show_launcher(self):
         """Get whether there should be a visible launcher for the activity"""
         return self._show_launcher
+
+    def get_toolkit_type(self):
+        """Get what toolkit is used, currently gtk or web"""
+        return self._toolkit_type
+
+    def get_toolkit_version(self):
+        """Get the version of the toolkit used as an int, -1 if not given"""
+        return self._toolkit_version
+
+    def has_toolkit_info(self):
+        """Get whether the bundle has info on the toolkit version/type"""
+        return self._toolkit_type and (self._toolkit_version > -1)
 
     def install(self):
         install_dir = env.get_user_activities_path()
