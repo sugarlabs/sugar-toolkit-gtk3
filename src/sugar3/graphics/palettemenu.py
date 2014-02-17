@@ -78,11 +78,17 @@ class PaletteMenuItem(Gtk.EventBox):
     }
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
-                 xo_color=None, file_name=None, accelerator=None):
+                 xo_color=None, file_name=None, accelerator=None,
+                 markup_label=None):
 
         """
             text_label -- str
                 a text to display in the menu.
+
+            __or__
+
+            markup_label -- str
+               markup text to display in the menu.
 
             icon_name -- str
                 the name of a sugar icon to be displayed. Takse precedence
@@ -136,7 +142,12 @@ class PaletteMenuItem(Gtk.EventBox):
                                   padding=style.DEFAULT_PADDING)
 
         align = Gtk.Alignment(xalign=0.0, yalign=0.5, xscale=0.0, yscale=0.0)
-        self.label = Gtk.Label(text_label)
+        self.label = Gtk.Label()
+        if markup_label:
+            self.label.set_markup(markup_label)
+        elif text_label:
+            self.label.set_text(text_label)
+
         if text_maxlen > 0:
             self.label.set_max_width_chars(text_maxlen)
             self.label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)

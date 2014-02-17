@@ -82,6 +82,7 @@ from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
+from sugar3.bundle.activitybundle import ActivityBundle
 from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
@@ -93,6 +94,10 @@ SCOPE_NEIGHBORHOOD = 'public'
 J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
+
+N_BUS_NAME = 'org.freedesktop.Notifications'
+N_OBJ_PATH = '/org/freedesktop/Notifications'
+N_IFACE_NAME = 'org.freedesktop.Notifications'
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
@@ -632,6 +637,21 @@ class Activity(Window, Gtk.Container):
         this file_path.
         """
         raise NotImplementedError
+
+    def notify(self, summary, body, actions=None):
+        """
+        Display a notification with the given summary and body.
+        The notification will have the activity's icon as the icon.
+        **actions currently does nothing, so watch this space**
+        """
+        bundle = ActivityBundle(get_bundle_path())
+        icon = bundle.get_icon()
+
+        bus = dbus.SessionBus()
+        notify_obj = bus.get_object(N_BUS_NAME, N_OBJ_PATH)
+        notifications = dbus.Interface(notify_obj, N_IFACE_NAME)
+        notifications.Notify(self.get_id(), 0, '', summary, body, [],
+                             {'x-sugar-icon-file-name': icon}, -1)
 
     def __save_cb(self):
         logging.debug('Activity.__save_cb')
