@@ -29,8 +29,6 @@ from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 
-from gi.repository import SugarExt
-
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 GENERIC_TYPE_TEXT = 'Text'
@@ -50,6 +48,9 @@ def _get_supported_image_mime_types():
 
 _extensions = {}
 _globs_timestamps = []
+_subclasses = {}
+_subclasses_timestamps = []
+
 _generic_types = [{
     'id': GENERIC_TYPE_TEXT,
     'name': _('Text'),
@@ -124,18 +125,22 @@ def get_for_file(file_name):
 
     file_name = os.path.realpath(file_name)
 
-    mime_type = SugarExt.mime_get_mime_type_for_file(file_name, None)
-    if mime_type == 'application/octet-stream':
-        if _file_looks_like_text(file_name):
-            return 'text/plain'
-        else:
-            return 'application/octet-stream'
+    f = Gio.File.new_for_path(file_name)
+    try:
+        info = f.query_info(Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE, 0, None)
+        mime_type = info.get_content_type()
+    except GLib.GError:
+        mime_type = Gio.content_type_guess(file_name, None)[0]
 
     return mime_type
 
 
 def get_from_file_name(file_name):
-    return SugarExt.mime_get_mime_type_from_file_name(file_name)
+    """
+    DEPRECATED: 0.102 (removed in 4 releases)
+    Use Gio.content_type_guess(file_name, None)[0] instead.
+    """
+    return Gio.content_type_guess(file_name, None)[0]
 
 
 def get_mime_icon(mime_type):
@@ -155,13 +160,39 @@ def get_mime_description(mime_type):
 
 
 def get_mime_parents(mime_type):
-    return SugarExt.mime_list_mime_parents(mime_type)
+    global _subclasses
+    global _subclasses_timestamps
+
+    dirs = _get_mime_data_directories()
+
+    timestamps = []
+    subclasses_path_list = []
+    for f in dirs:
+        subclasses_path = os.path.join(f, 'mime', 'subclasses')
+        try:
+            mtime = os.stat(subclasses_path).st_mtime
+            timestamps.append([subclasses_path, mtime])
+            subclasses_path_list.append(subclasses_path)
+        except OSError:
+            pass
+
+    if timestamps != _subclasses_timestamps:
+        _subclasses = {}
+        for subclasses_path in subclasses_path_list:
+            with open(subclasses_path) as parents_file:
+                for line in parents_file:
+                    subclass, parent = line.split()
+                    if subclass not in _subclasses.keys():
+                        _subclasses[subclass] = [parent]
+                    else:
+                        _subclasses[subclass].append(parent)
+
+        _subclasses_timestamps = timestamps
+
+    return _subclasses[mime_type]
 
 
-def get_primary_extension(mime_type):
-    global _extensions
-    global _globs_timestamps
-
+def _get_mime_data_directories():
     dirs = []
 
     if 'XDG_DATA_HOME' in os.environ:
@@ -173,6 +204,14 @@ def get_primary_extension(mime_type):
         dirs.extend(os.environ['XDG_DATA_DIRS'].split(':'))
     else:
         dirs.extend(['/usr/local/share/', '/usr/share/'])
+    return dirs
+
+
+def get_primary_extension(mime_type):
+    global _extensions
+    global _globs_timestamps
+
+    dirs = _get_mime_data_directories()
 
     timestamps = []
     globs_path_list = []
@@ -256,26 +295,6 @@ def choose_most_significant(mime_types):
 
 def split_uri_list(uri_list):
     return GLib.uri_list_extract_uris(uri_list)
-
-
-def _file_looks_like_text(file_name):
-    f = open(file_name, 'r')
-    try:
-        sample = f.read(256)
-    finally:
-        f.close()
-
-    if '\000' in sample:
-        return False
-
-    for encoding in ('ascii', 'latin_1', 'utf_8', 'utf_16'):
-        try:
-            unicode(sample, encoding)
-            return True
-        except Exception:
-            pass
-
-    return False
 
 
 def _get_generic_type_for_mime(mime_type):
