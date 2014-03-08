@@ -30,6 +30,10 @@ def is_emulator():
     return False
 
 
+def is_runner():
+    return os.environ.get('SUGAR_RUNNER_PID') is not None
+
+
 def get_profile_path(path=None):
     profile_id = os.environ.get('SUGAR_PROFILE', 'default')
     home_dir = os.environ.get('SUGAR_HOME', os.path.expanduser('~/.sugar'))
