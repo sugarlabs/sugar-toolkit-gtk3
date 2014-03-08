@@ -268,14 +268,14 @@ def cmd_check(config, args):
     """Run tests for the activity"""
 
     if len(args) > 1:
-        print "Usage: %prog check {integration.unit}"
+        print "Usage: %prog check {integration/unit/unit_verbose}"
         return
 
     run_unit_test = True
     run_integration_test = True
 
     if len(args) == 1:
-        if args[0] == "unit":
+        if (args[0] == "unit") or (args[0] == "unit_verbose"):
             run_integration_test = False
         elif args[0] == "integration":
             run_unit_test = False
@@ -294,7 +294,10 @@ def cmd_check(config, args):
         # Run Tests
         if os.path.isdir(unit_test_path) and run_unit_test:
             all_tests = unittest.defaultTestLoader.discover(unit_test_path)
-            unittest.TextTestRunner().run(all_tests)
+            if len(args)==1 and "unit_verbose" in args[0]:
+                unittest.TextTestRunner(verbosity=2).run(all_tests)
+            else:
+                unittest.TextTestRunner().run(all_tests)
         elif not run_unit_test:
             print "Not running unit tests"
         else:
