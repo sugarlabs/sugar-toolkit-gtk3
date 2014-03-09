@@ -19,6 +19,7 @@
 STABLE.
 """
 
+import argparse
 import operator
 import os
 import sys
@@ -29,7 +30,6 @@ import shutil
 import subprocess
 import re
 import gettext
-from optparse import OptionParser
 import logging
 from fnmatch import fnmatch
 
@@ -225,6 +225,7 @@ class SourcePackager(Packager):
 
 
 class Installer(Packager):
+
     def __init__(self, builder):
         Packager.__init__(self, builder.config)
         self.builder = builder
@@ -264,23 +265,16 @@ class Installer(Packager):
         self.config.bundle.install_mime_type(self.config.source_dir)
 
 
-def cmd_check(config, args):
+def cmd_check(config, options):
     """Run tests for the activity"""
-
-    if len(args) > 1:
-        print "Usage: %prog check {integration.unit}"
-        return
 
     run_unit_test = True
     run_integration_test = True
 
-    if len(args) == 1:
-        if args[0] == "unit":
-            run_integration_test = False
-        elif args[0] == "integration":
-            run_unit_test = False
-        else:
-            print "Invalid argument: should be either integration or unit"
+    if options.choice == 'unit':
+        run_integration_test = False
+    if options.choice == 'integration':
+        run_unit_test = False
 
     print "Running Tests"
 
@@ -314,12 +308,8 @@ def cmd_check(config, args):
         print "Error: No tests/ directory"
 
 
-def cmd_dev(config, args):
+def cmd_dev(config, options):
     """Setup for development"""
-
-    if args:
-        print 'Usage: %prog dev'
-        return
 
     bundle_path = env.get_user_activities_path()
     if not os.path.isdir(bundle_path):
@@ -334,18 +324,14 @@ def cmd_dev(config, args):
             print 'ERROR - A bundle with the same name is already installed.'
 
 
-def cmd_dist_xo(config, args):
+def cmd_dist_xo(config, options):
     """Create a xo bundle package"""
-
-    if args:
-        print 'Usage: %prog dist_xo'
-        return
 
     packager = XOPackager(Builder(config))
     packager.package()
 
 
-def cmd_fix_manifest(config, args):
+def cmd_fix_manifest(config, options):
     '''Add missing files to the manifest (OBSOLETE)'''
 
     print 'WARNING: The fix_manifest command is obsolete.'
@@ -353,38 +339,22 @@ def cmd_fix_manifest(config, args):
     print '         please remove it.'
 
 
-def cmd_dist_source(config, args):
+def cmd_dist_source(config, options):
     """Create a tar source package"""
-
-    if args:
-        print 'Usage: %prog dist_source'
-        return
 
     packager = SourcePackager(config)
     packager.package()
 
 
-def cmd_install(config, args):
+def cmd_install(config, options):
     """Install the activity in the system"""
 
-    parser = OptionParser(usage='usage: %prog install [options]')
-    parser.add_option('--prefix', dest='prefix', default=sys.prefix,
-                      help='Prefix to install files to')
-    (suboptions, subargs) = parser.parse_args(args)
-    if subargs:
-        parser.print_help()
-        return
-
     installer = Installer(Builder(config))
-    installer.install(suboptions.prefix)
+    installer.install(options.prefix)
 
 
-def cmd_genpot(config, args):
+def cmd_genpot(config, options):
     """Generate the gettext pot file"""
-
-    if args:
-        print 'Usage: %prog genpot'
-        return
 
     os.chdir(config.source_dir)
 
@@ -427,40 +397,45 @@ def cmd_genpot(config, args):
         print 'ERROR - xgettext failed with return code %i.' % retcode
 
 
-def cmd_build(config, args):
+def cmd_build(config, options):
     """Build generated files"""
-
-    if args:
-        print 'Usage: %prog build'
-        return
 
     builder = Builder(config)
     builder.build()
 
 
-def print_commands():
-    print 'Available commands:\n'
-
-    for name, func in globals().items():
-        if name.startswith('cmd_'):
-            print '%-20s %s' % (name.replace('cmd_', ''), func.__doc__)
-
-    print '\n(Type "./setup.py <command> --help" for help about a ' \
-          'particular command\'s options.'
-
-
 def start():
-    parser = OptionParser(usage='[action] [options]')
-    parser.disable_interspersed_args()
-    (options_, args) = parser.parse_args()
+    parser = argparse.ArgumentParser(prog='./setup.py')
+    subparsers = parser.add_subparsers(
+        dest="command", help="Options for %(prog)s")
+
+    install_parser = subparsers.add_parser(
+        "install", help="Install the activity in the system")
+    install_parser.add_argument(
+        "--prefix", dest="prefix", default=sys.prefix, help="Path for installing")
+
+    check_parser = subparsers.add_parser(
+        "check", help="Run tests for the activity")
+    check_parser.add_argument("choice", nargs='?', choices=[
+                              'unit', 'integration'], help="run unit/integration test")
+
+    subparsers.add_parser("dist_xo", help="Create a xo bundle package")
+    subparsers.add_parser("dist_source", help="Create a tar source package")
+    subparsers.add_parser("build", help="Build generated files")
+    subparsers.add_parser(
+        "fix_manifest", help="Add missing files to the manifest (OBSOLETE)")
+    subparsers.add_parser("genpot", help="Generate the gettext pot file")
+    subparsers.add_parser("dev", help="Setup for development")
+
+    options = parser.parse_args()
 
     source_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
     config = Config(source_dir)
 
     try:
-        globals()['cmd_' + args[0]](config, args[1:])
+        globals()['cmd_' + options.command](config, options)
     except (KeyError, IndexError):
-        print_commands()
+        parser.print_help()
 
 
 if __name__ == '__main__':
