@@ -275,6 +275,10 @@ def cmd_check(config, options):
     if options.choice == 'integration':
         run_unit_test = False
 
+    if run_unit_test is False and options.verbose:
+        print "Usage: %prog check {'integration'/'unit'/''} {-v=[0/1/2]}"
+        return
+
     print "Running Tests"
 
     test_path = os.path.join(config.source_dir, "tests")
@@ -287,7 +291,11 @@ def cmd_check(config, options):
         # Run Tests
         if os.path.isdir(unit_test_path) and run_unit_test:
             all_tests = unittest.defaultTestLoader.discover(unit_test_path)
-            unittest.TextTestRunner().run(all_tests)
+            if options.verbose:
+                suite = unittest.TextTestRunner(verbosity=options.verbose)
+                suite.run(all_tests)
+            else:
+                unittest.TextTestRunner().run(all_tests)
         elif not run_unit_test:
             print "Not running unit tests"
         else:
@@ -419,6 +427,9 @@ def start():
     check_parser.add_argument("choice", nargs='?',
                               choices=['unit', 'integration'],
                               help="run unit/integration test")
+    check_parser.add_argument("--verbose", "-v", dest="verbose",
+                              type=int, choices=range(0, 3),
+                              help="verbosity for the unit tests")
 
     subparsers.add_parser("dist_xo", help="Create a xo bundle package")
     subparsers.add_parser("dist_source", help="Create a tar source package")
