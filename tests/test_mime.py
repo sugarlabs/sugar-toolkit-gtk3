@@ -20,6 +20,8 @@
 import os
 import unittest
 
+from gi.repository import Gio
+
 from sugar3 import mime
 
 tests_dir = os.path.dirname(__file__)
@@ -107,3 +109,26 @@ class TestMime(unittest.TestCase):
              'text/plain;charset=utf-8', 'text/plain;charset=UTF-8',
              'text/plain'])
         self.assertEqual(mime_type, 'text/plain')
+
+    def test_mime_install(self):
+        # Test instalation of mime types
+        # Verify the mime type is not installed previously
+        uninstalled_mime_type = 'application/sugar-test-type'
+        registered_mime_types = Gio.content_types_get_registered()
+        is_registered = uninstalled_mime_type in registered_mime_types
+        self.assertEqual(is_registered, False)
+
+        # Install the mime type and verify again
+        mime.install_mime_type(uninstalled_mime_type,
+                               'This is a testing mime', '*.sugartest')
+        registered_mime_types = Gio.content_types_get_registered()
+        is_registered = uninstalled_mime_type in registered_mime_types
+        self.assertEqual(is_registered, True)
+
+        # Uninstall the mime type and check if was uninstalled
+        mime.install_mime_type(uninstalled_mime_type,
+                               'This is a testing mime', '*.sugartest',
+                               uninstall=True)
+        registered_mime_types = Gio.content_types_get_registered()
+        is_registered = uninstalled_mime_type in registered_mime_types
+        self.assertEqual(is_registered, False)

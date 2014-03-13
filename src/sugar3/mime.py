@@ -24,6 +24,7 @@ STABLE.
 import os
 import logging
 import gettext
+import subprocess
 
 from gi.repository import GLib
 from gi.repository import GdkPixbuf
@@ -305,3 +306,50 @@ def _get_generic_type_for_mime(mime_type):
         if mime_type in generic_type['types']:
             return generic_type
     return None
+
+
+def install_custom_mime_types(custom_mime_types):
+    """
+    custom_mime_types -- array of dict as:
+         [{'mime_type': 'application/vnd.olpc-journal-backup',
+         'description': 'Journal backup files',
+         'pattern': '*.xob'}]
+    """
+
+    registered_mime_types = Gio.content_types_get_registered()
+    for custom_type in custom_mime_types:
+        if custom_type['mime_type'] not in registered_mime_types:
+            install_mime_type(custom_type['mime_type'],
+                              custom_type['description'],
+                              custom_type['pattern'])
+
+
+def install_mime_type(mime_type, description, pattern, uninstall=False):
+    """
+    mime_type: str
+    description: str
+    pattern: str
+    uninstall: bool - only used by tests
+    """
+    definition = \
+        '<?xml version="1.0"?>\n' \
+        '<mime-info xmlns="' \
+        'http://www.freedesktop.org/standards/shared-mime-info">\n' \
+        '<mime-type type="%s">\n' \
+        '<comment>%s</comment>\n' \
+        '<glob pattern="%s"/>\n' \
+        '</mime-type>\n' \
+        '</mime-info>' % (mime_type, description, pattern)
+    file_name = 'sugar-%s.xml' % mime_type.replace('/', '-')
+    with open(os.path.join('/tmp', file_name), 'w') as xdg_file:
+        xdg_file.write(definition)
+        xdg_file_name = xdg_file.name
+
+    if uninstall:
+        operation = 'uninstall'
+    else:
+        operation = 'install'
+
+    command = ['/usr/bin/xdg-mime', operation, xdg_file_name]
+    subprocess.call(command)
+    os.remove(xdg_file_name)
