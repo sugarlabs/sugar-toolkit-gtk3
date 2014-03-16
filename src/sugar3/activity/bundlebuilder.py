@@ -287,7 +287,7 @@ def cmd_check(config, options):
         # Run Tests
         if os.path.isdir(unit_test_path) and run_unit_test:
             all_tests = unittest.defaultTestLoader.discover(unit_test_path)
-            unittest.TextTestRunner().run(all_tests)
+            unittest.TextTestRunner(verbosity=options.verbose).run(all_tests)
         elif not run_unit_test:
             print "Not running unit tests"
         else:
@@ -296,7 +296,7 @@ def cmd_check(config, options):
         if os.path.isdir(integration_test_path) and run_integration_test:
             all_tests = unittest.defaultTestLoader.discover(
                 integration_test_path)
-            unittest.TextTestRunner().run(all_tests)
+            unittest.TextTestRunner(verbosity=options.verbose).run(all_tests)
         elif not run_integration_test:
             print "Not running integration tests"
         else:
@@ -419,6 +419,10 @@ def start():
     check_parser.add_argument("choice", nargs='?',
                               choices=['unit', 'integration'],
                               help="run unit/integration test")
+    check_parser.add_argument("--verbosity", "-v", dest="verbose",
+                              type=int, choices=range(0, 3),
+                              default=1, nargs='?',
+                              help="verbosity for the unit tests")
 
     subparsers.add_parser("dist_xo", help="Create a xo bundle package")
     subparsers.add_parser("dist_source", help="Create a tar source package")
