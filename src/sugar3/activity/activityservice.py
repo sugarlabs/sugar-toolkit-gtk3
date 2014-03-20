@@ -52,6 +52,11 @@ class ActivityService(dbus.service.Object):
         activity.realize()
 
         activity_id = activity.get_id()
+        if (activity_id is None):
+            logging.debug("activity %s" % activity)
+            raise Exception("Activity ID cannot be Null")
+
+        logging.debug("activity_id %s" % activity_id)
         service_name = _ACTIVITY_SERVICE_NAME + activity_id
         object_path = _ACTIVITY_SERVICE_PATH + '/' + activity_id
 
