@@ -247,6 +247,31 @@ class _IconBuffer(object):
 
         return pixbuf
 
+    def cache_from_pixbuf(self, pixbuf):
+        icon_width = pixbuf.get_width()
+        icon_height = pixbuf.get_height()
+        padding = abs(style.STANDARD_ICON_SIZE - icon_width) / 2.0
+
+        width, height = self._get_size(icon_width, icon_height, padding)
+
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width),
+                                     int(height))
+        context = cairo.Context(surface)
+
+        context.scale(float(width) / (icon_width + padding * 2),
+                      float(height) / (icon_height + padding * 2))
+        context.save()
+        self.width = icon_width + padding * 2
+        self.height = icon_height + padding * 2
+
+        context.translate(padding, padding)
+
+        Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
+        context.paint()
+
+        cache_key = self._get_cache_key(True)
+        self._surface_cache[cache_key] = surface
+
     def get_surface(self, sensitive=True, widget=None):
         cache_key = self._get_cache_key(sensitive)
         if cache_key in self._surface_cache:
@@ -364,6 +389,10 @@ class Icon(Gtk.Image):
         self._buffer.file_name = file_name
 
     file = GObject.property(type=object, setter=set_file, getter=get_file)
+
+    def cache_from_pixbuf(self, pixbuf):
+        self._buffer.icon_name = self.props.icon_name
+        self._buffer.cache_from_pixbuf(pixbuf)
 
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
