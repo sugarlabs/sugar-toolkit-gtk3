@@ -24,6 +24,8 @@
 #include <glib-object.h>
 #include "acme-volume.h"
 
+G_BEGIN_DECLS
+
 #define ACME_TYPE_VOLUME_ALSA		(acme_volume_alsa_get_type ())
 #define ACME_VOLUME_ALSA(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), ACME_TYPE_VOLUME_ALSA, AcmeVolumeAlsa))
 #define ACME_VOLUME_ALSA_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), ACME_TYPE_VOLUME_ALSA, AcmeVolumeAlsaClass))
@@ -43,5 +45,10 @@ struct AcmeVolumeAlsaClass {
 	AcmeVolumeClass parent;
 };
 
-GType acme_volume_alsa_get_type		(void);
+#define _PLAYBACK 0
+#define _CAPTURE 1
 
+GType acme_volume_alsa_get_type		   (void);
+AcmeVolumeAlsa *acme_volume_alsa_new   (gint);
+
+G_END_DECLS
