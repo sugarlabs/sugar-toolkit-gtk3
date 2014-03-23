@@ -24,6 +24,7 @@ STABLE.
 import re
 import math
 import logging
+import binascii
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -100,6 +101,7 @@ class _IconBuffer(object):
         self.height = None
         self.cache = False
         self.scale = 1.0
+        self._pixbuf = None
 
     def _get_cache_key(self, sensitive):
         if self.background_color is None:
@@ -107,7 +109,12 @@ class _IconBuffer(object):
         else:
             color = (self.background_color.red, self.background_color.green,
                      self.background_color.blue)
-        return (self.icon_name, self.file_name, self.fill_color,
+        if self._pixbuf is None:
+            pixbuf_hash = None
+        else:
+            pixbuf_hash = binascii.crc32(str(self._pixbuf.serialize()))
+
+        return (self.icon_name, self.file_name, pixbuf_hash, self.fill_color,
                 self.stroke_color, self.badge_name, self.width, self.height,
                 color, sensitive)
 
@@ -247,40 +254,76 @@ class _IconBuffer(object):
 
         return pixbuf
 
+    def _get_pixbuf(self):
+        return _pixbuf
+
+    def _set_pixbuf(self, pixbuf):
+        self._pixbuf = pixbuf
+        icon_width = pixbuf.get_width()
+        icon_height = pixbuf.get_height()
+        padding = abs(style.STANDARD_ICON_SIZE - icon_width) / 2.0
+
+        width, height = self._get_size(icon_width, icon_height, padding)
+
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width),
+                                     int(height))
+        context = cairo.Context(surface)
+
+        context.scale(float(width) / (icon_width + padding * 2),
+                      float(height) / (icon_height + padding * 2))
+        context.save()
+        self.width = icon_width + padding * 2
+        self.height = icon_height + padding * 2
+
+        context.translate(padding, padding)
+
+        Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
+        context.paint()
+
+        cache_key = self._get_cache_key(True)
+        self._surface_cache[cache_key] = surface
+
+    pixbuf = property(_get_pixbuf, _set_pixbuf)
+
     def get_surface(self, sensitive=True, widget=None):
         cache_key = self._get_cache_key(sensitive)
         if cache_key in self._surface_cache:
             return self._surface_cache[cache_key]
 
-        # We run two attempts at finding the icon. First, we try the icon
-        # requested by the user. If that fails, we fall back on
-        # document-generic. If that doesn't work out, bail.
-        icon_width = None
-        for (file_name, icon_name) in ((self.file_name, self.icon_name),
-                                      (None, 'document-generic')):
-            icon_info = self._get_icon_info(file_name, icon_name)
-            if icon_info.file_name is None:
-                return None
+        if self._pixbuf:
+            pixbuf = self._pixbuf
+            icon_width = pixbuf.get_width()
+            icon_height = pixbuf.get_height()
+        else:
+            # We run two attempts at finding the icon. First, we try the icon
+            # requested by the user. If that fails, we fall back on
+            # document-generic. If that doesn't work out, bail.
+            icon_width = None
+            for (file_name, icon_name) in ((self.file_name, self.icon_name),
+                                          (None, 'document-generic')):
+                icon_info = self._get_icon_info(file_name, icon_name)
+                if icon_info.file_name is None:
+                    return None
 
-            is_svg = icon_info.file_name.endswith('.svg')
+                is_svg = icon_info.file_name.endswith('.svg')
 
-            if is_svg:
-                try:
-                    handle = self._load_svg(icon_info.file_name)
-                    icon_width = handle.props.width
-                    icon_height = handle.props.height
-                    break
-                except IOError:
-                    pass
-            else:
-                try:
-                    path = icon_info.file_name
-                    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-                    icon_width = pixbuf.get_width()
-                    icon_height = pixbuf.get_height()
-                    break
-                except GObject.GError:
-                    pass
+                if is_svg:
+                    try:
+                        handle = self._load_svg(icon_info.file_name)
+                        icon_width = handle.props.width
+                        icon_height = handle.props.height
+                        break
+                    except IOError:
+                        pass
+                else:
+                    try:
+                        path = icon_info.file_name
+                        pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+                        icon_width = pixbuf.get_width()
+                        icon_height = pixbuf.get_height()
+                        break
+                    except GObject.GError:
+                        pass
 
         if icon_width is None:
             # Neither attempt found an icon for us to use
@@ -364,6 +407,14 @@ class Icon(Gtk.Image):
         self._buffer.file_name = file_name
 
     file = GObject.property(type=object, setter=set_file, getter=get_file)
+
+    def _get_pixbuf(self):
+        return self._buffer.pixbuf
+
+    def _set_pixbuf(self, pixbuf):
+        self._buffer.pixbuf = pixbuf
+
+    pixbuf = property(_get_pixbuf, _set_pixbuf)
 
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
