@@ -381,7 +381,8 @@ class Icon(Gtk.Image):
     def set_pixbuf(self, pixbuf):
         self._buffer.pixbuf = pixbuf
 
-    pixbuf = GObject.property(type=object, setter=set_pixbuf, getter=get_pixbuf)
+    pixbuf = GObject.property(type=object, setter=set_pixbuf,
+                              getter=get_pixbuf)
 
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
