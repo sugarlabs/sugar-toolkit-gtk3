@@ -100,6 +100,7 @@ class _IconBuffer(object):
         self.height = None
         self.cache = False
         self.scale = 1.0
+        self.pixbuf = None
 
     def _get_cache_key(self, sensitive):
         if self.background_color is None:
@@ -107,7 +108,8 @@ class _IconBuffer(object):
         else:
             color = (self.background_color.red, self.background_color.green,
                      self.background_color.blue)
-        return (self.icon_name, self.file_name, self.fill_color,
+
+        return (self.icon_name, self.file_name, self.pixbuf, self.fill_color,
                 self.stroke_color, self.badge_name, self.width, self.height,
                 color, sensitive)
 
@@ -252,35 +254,43 @@ class _IconBuffer(object):
         if cache_key in self._surface_cache:
             return self._surface_cache[cache_key]
 
-        # We run two attempts at finding the icon. First, we try the icon
-        # requested by the user. If that fails, we fall back on
-        # document-generic. If that doesn't work out, bail.
-        icon_width = None
-        for (file_name, icon_name) in ((self.file_name, self.icon_name),
-                                      (None, 'document-generic')):
-            icon_info = self._get_icon_info(file_name, icon_name)
-            if icon_info.file_name is None:
-                return None
+        if self.pixbuf:
+            # We alredy have the pixbuf for this icon.
+            pixbuf = self.pixbuf
+            icon_width = pixbuf.get_width()
+            icon_height = pixbuf.get_height()
+            icon_info = self._get_icon_info(self.file_name, self.icon_name)
+            is_svg = False
+        else:
+            # We run two attempts at finding the icon. First, we try the icon
+            # requested by the user. If that fails, we fall back on
+            # document-generic. If that doesn't work out, bail.
+            icon_width = None
+            for (file_name, icon_name) in ((self.file_name, self.icon_name),
+                                          (None, 'document-generic')):
+                icon_info = self._get_icon_info(file_name, icon_name)
+                if icon_info.file_name is None:
+                    return None
 
-            is_svg = icon_info.file_name.endswith('.svg')
+                is_svg = icon_info.file_name.endswith('.svg')
 
-            if is_svg:
-                try:
-                    handle = self._load_svg(icon_info.file_name)
-                    icon_width = handle.props.width
-                    icon_height = handle.props.height
-                    break
-                except IOError:
-                    pass
-            else:
-                try:
-                    path = icon_info.file_name
-                    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-                    icon_width = pixbuf.get_width()
-                    icon_height = pixbuf.get_height()
-                    break
-                except GObject.GError:
-                    pass
+                if is_svg:
+                    try:
+                        handle = self._load_svg(icon_info.file_name)
+                        icon_width = handle.props.width
+                        icon_height = handle.props.height
+                        break
+                    except IOError:
+                        pass
+                else:
+                    try:
+                        path = icon_info.file_name
+                        pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+                        icon_width = pixbuf.get_width()
+                        icon_height = pixbuf.get_height()
+                        break
+                    except GObject.GError:
+                        pass
 
         if icon_width is None:
             # Neither attempt found an icon for us to use
@@ -364,6 +374,14 @@ class Icon(Gtk.Image):
         self._buffer.file_name = file_name
 
     file = GObject.property(type=object, setter=set_file, getter=get_file)
+
+    def get_pixbuf(self):
+        return self._buffer.pixbuf
+
+    def set_pixbuf(self, pixbuf):
+        self._buffer.pixbuf = pixbuf
+
+    pixbuf = GObject.property(type=object, setter=set_pixbuf, getter=get_pixbuf)
 
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
