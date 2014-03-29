@@ -74,14 +74,14 @@ test.show()
 
 # This can be used to test for leaks by setting the LRU cache size
 # in icon.py to 1.
-#def idle_cb():
-#    import gc
-#    gc.collect()
-#    test.queue_draw()
-#    return True
+# def idle_cb():
+#     import gc
+#     gc.collect()
+#     test.queue_draw()
+#     return True
 #
-#from gi.repository import GLib
-#GLib.idle_add(idle_cb)
+# from gi.repository import GLib
+# GLib.idle_add(idle_cb)
 
 if __name__ == '__main__':
     common.main(test)
