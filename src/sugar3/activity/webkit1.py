@@ -36,6 +36,7 @@ import mimetypes
 
 from gi.repository import SugarExt
 from sugar3.activity import activity
+from sugar3.activity.webactivity import FilePicker
 
 
 class LocalRequestHandler(BaseHTTPRequestHandler):
@@ -135,6 +136,11 @@ class WebActivity(Gtk.Window):
                                self._loading_changed_cb)
         self._web_view.connect("resource-request-starting",
                                self._resource_request_starting_cb)
+        try:
+            self._web_view.connect('run-file-chooser', self.__run_file_chooser)
+        except TypeError:
+            # Only present in WebKit1 > 1.9.3 and WebKit2
+            pass
 
         self.add(self._web_view)
         self._web_view.show()
@@ -195,3 +201,12 @@ class WebActivity(Gtk.Window):
                     """ % env_json
 
             self._web_view.execute_script(script)
+
+    def __run_file_chooser(self, browser, request):
+        picker = FilePicker(self)
+        chosen = picker.run()
+        picker.destroy()
+
+        if chosen:
+            request.select_files([chosen])
+        return True

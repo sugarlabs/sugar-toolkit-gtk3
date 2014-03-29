@@ -17,6 +17,7 @@
 
 import json
 import os
+import logging
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -25,8 +26,32 @@ from gi.repository import Gtk
 from gi.repository import GdkX11
 assert GdkX11
 
+from sugar3.graphics.objectchooser import ObjectChooser
 from gi.repository import SugarExt
 from sugar3.activity import activity
+
+
+class FilePicker(ObjectChooser):
+    def __init__(self, parent):
+        ObjectChooser.__init__(self, parent)
+
+    def run(self):
+        jobject = None
+        _file = None
+        try:
+            result = ObjectChooser.run(self)
+            if result == Gtk.ResponseType.ACCEPT:
+                jobject = self.get_selected_object()
+                logging.debug('FilePicker.run: %r', jobject)
+
+                if jobject and jobject.file_path:
+                    _file = jobject.file_path
+                    logging.debug('FilePicker.run: file=%r', _file)
+        finally:
+            if jobject is not None:
+                jobject.destroy()
+
+        return _file
 
 
 class WebActivity(Gtk.Window):
@@ -51,6 +76,7 @@ class WebActivity(Gtk.Window):
 
         self._web_view = WebKit2.WebView()
         self._web_view.connect("load-changed", self._loading_changed_cb)
+        self._web_view.connect('run-file-chooser', self.__run_file_chooser)
 
         self.add(self._web_view)
         self._web_view.show()
@@ -100,6 +126,17 @@ class WebActivity(Gtk.Window):
                     """ % env_json
 
             self._web_view.run_javascript(script, None, None, None)
+
+    def __run_file_chooser(self, browser, request):
+        picker = FilePicker(self)
+        chosen = picker.run()
+        picker.destroy()
+
+        if chosen:
+            request.select_files([chosen])
+        else:
+            request.cancel()
+        return True
 
     def _key_press_event_cb(self, window, event):
         key_name = Gdk.keyval_name(event.keyval)
