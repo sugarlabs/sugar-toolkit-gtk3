@@ -167,7 +167,7 @@ class DSObject(object):
         self._metadata.update(properties)
 
     def get_metadata(self):
-        if self._metadata is None and not self.object_id is None:
+        if self._metadata is None and self.object_id is not None:
             properties = _get_data_store().get_properties(self.object_id)
             metadata = DSMetadata(properties)
             self._metadata = metadata
@@ -180,7 +180,7 @@ class DSObject(object):
     metadata = property(get_metadata, set_metadata)
 
     def get_file_path(self, fetch=True):
-        if fetch and self._file_path is None and not self.object_id is None:
+        if fetch and self._file_path is None and self.object_id is not None:
             self.set_file_path(_get_data_store().get_filename(self.object_id))
             self._owns_file = True
         return self._file_path

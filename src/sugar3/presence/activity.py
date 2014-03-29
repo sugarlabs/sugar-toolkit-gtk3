@@ -114,7 +114,7 @@ class Activity(GObject.GObject):
         self._joined_buddies = {}
 
         self._get_properties_call = None
-        if not self.room_handle is None:
+        if self.room_handle is not None:
             self._start_tracking_properties()
 
     def _start_tracking_properties(self):
@@ -390,7 +390,7 @@ class Activity(GObject.GObject):
         self._join_command.run()
 
     def share(self, share_activity_cb, share_activity_error_cb):
-        if not self.room_handle is None:
+        if self.room_handle is not None:
             raise ValueError('Already have a room handle')
 
         self._share_command = _ShareCommand(self.telepathy_conn, self._id)

@@ -171,7 +171,7 @@ class ToolbarBox(Gtk.VBox):
         return self.toolbar.get_nth_item(self._expanded_button_index)
 
     def set_expanded_button(self, button):
-        if not button in self.toolbar:
+        if button not in self.toolbar:
             self._expanded_button_index = -1
             return
         self._expanded_button_index = self.toolbar.get_item_index(button)

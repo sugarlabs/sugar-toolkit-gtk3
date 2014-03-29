@@ -40,7 +40,7 @@ from sugar3.activity import activity
 
 class LocalRequestHandler(BaseHTTPRequestHandler):
 
-    #Handler for the GET requests
+    # Handler for the GET requests
     def do_GET(self):
         new_path = self.server.path + '/' + self.path
         if not os.path.exists(new_path):
