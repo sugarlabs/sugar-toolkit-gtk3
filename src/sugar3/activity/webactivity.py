@@ -101,7 +101,7 @@ class WebActivity(Gtk.Window):
         Gtk.main_quit()
 
     def _loading_changed_cb(self, web_view, load_event):
-        if load_event == WebKit2.LoadEvent.FINISHED:
+        if load_event == WebKit2.LoadEvent.COMMITTED:
             key = os.environ["SUGAR_APISOCKET_KEY"]
             port = os.environ["SUGAR_APISOCKET_PORT"]
 

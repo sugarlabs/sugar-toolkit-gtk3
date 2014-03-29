@@ -176,7 +176,7 @@ class WebActivity(Gtk.Window):
 
         status = web_view.get_load_status()
 
-        if status == WebKit.LoadStatus.FINISHED:
+        if status == WebKit.LoadStatus.COMMITTED:
             key = os.environ["SUGAR_APISOCKET_KEY"]
             port = os.environ["SUGAR_APISOCKET_PORT"]
 
