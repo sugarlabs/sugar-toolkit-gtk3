@@ -24,14 +24,9 @@ PKG_CHECK_MODULES(EXT, gtk+-3.0 gdk-3.0 gdk-pixbuf-2.0 sm ice alsa
 GLIB_MKENUMS=`$PKG_CONFIG glib-2.0 --variable=glib_mkenums`
 AC_SUBST(GLIB_MKENUMS)
 
-# Setup GETTEXT
-#
-ALL_LINGUAS="af am ar aym bg bi bn_IN bn ca cs da de dz el en es fa_AF fa ff fil fr gu ha he hi ht hu id ig is it ja km ko kos mg mi mk ml mn mr ms mvo nb ne nl pa pap pl ps pt_BR pt quz ro ru rw sd si sk sl sq sv sw ta te th tr tvl tzo ug ur vi wa yo zh_CN zh_TW"
-
+IT_PROG_INTLTOOL([0.35.0])
 GETTEXT_PACKAGE=sugar-toolkit-gtk3
-AC_PROG_INTLTOOL([0.33])
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
+AC_SUBST([GETTEXT_PACKAGE])
 AM_GLIB_GNU_GETTEXT
 
 GOBJECT_INTROSPECTION_REQUIRE([1.30.0])
