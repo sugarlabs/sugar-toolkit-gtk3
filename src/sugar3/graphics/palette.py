@@ -22,6 +22,8 @@
 """
 STABLE.
 """
+import textwrap
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -124,8 +126,9 @@ class Palette(PaletteWindow):
         labels_box = Gtk.VBox()
         self._label_alignment = Gtk.Alignment(xalign=0, yalign=0.5, xscale=1,
                                               yscale=0.33)
-        self._label_alignment.set_padding(0, 0, style.DEFAULT_SPACING,
-                                          style.DEFAULT_SPACING)
+        self._label_alignment.set_padding(
+            style.DEFAULT_SPACING, style.DEFAULT_SPACING,
+            style.DEFAULT_SPACING, style.DEFAULT_SPACING)
         self._label_alignment.add(labels_box)
         self._label_alignment.show()
         self._primary_box.pack_start(self._label_alignment, True, True, 0)
@@ -266,13 +269,41 @@ class Palette(PaletteWindow):
             self.props.invoker.primary_text_clicked()
 
     def set_secondary_text(self, label):
-        if label is not None:
-            label = label.split('\n', 1)[0]
-        self._secondary_text = label
-
         if label is None:
             self._secondary_label.hide()
         else:
+            NO_OF_LINES = 3
+            ELLIPSIS_LENGTH = 6
+
+            label = label.replace('\n', ' ')
+
+            self._secondary_label.modify_fg(Gtk.StateType.INSENSITIVE,
+                                            Gdk.color_parse('white'))
+            self._secondary_label.set_justify(Gtk.Justification.FILL)
+            self._secondary_label.set_alignment(0, 0)
+
+            # for Gtk >= 3.10
+            if hasattr(self._secondary_label, 'set_lines'):
+                self._secondary_label.set_max_width_chars(
+                    style.MENU_WIDTH_CHARS)
+                self._secondary_label.set_line_wrap(True)
+                self._secondary_label.set_ellipsize(
+                    Pango.EllipsizeMode.END)
+                self._secondary_label.set_lines(3)
+            else:
+                # FIXME: fallback for Gtk < 3.10
+                body_width = NO_OF_LINES * style.MENU_WIDTH_CHARS
+                body_width -= ELLIPSIS_LENGTH
+                if len(label) > body_width:
+                    label = ' '.join(label[:body_width].split()[:-1]) + '...'
+                label = textwrap.fill(label, width=style.MENU_WIDTH_CHARS)
+
+            if len(label) > style.MENU_WIDTH_CHARS:
+                self._label_alignment.set_padding(
+                    style.DEFAULT_SPACING, style.DEFAULT_SPACING,
+                    0, style.DEFAULT_SPACING)
+
+            self._secondary_text = label
             self._secondary_label.set_text(label)
             self._secondary_label.show()
 
