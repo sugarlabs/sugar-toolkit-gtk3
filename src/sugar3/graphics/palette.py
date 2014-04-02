@@ -133,23 +133,30 @@ class Palette(PaletteWindow):
 
         self._label = Gtk.AccelLabel(label='')
         self._label.set_alignment(0, 0.5)
+        self._primary_label_alignment = Gtk.Alignment(xalign=0, yalign=0.5,
+                                                      xscale=1, yscale=1)
+        self._primary_label_alignment.add(self._label)
+        self._primary_label_alignment.show()
 
         if text_maxlen > 0:
             self._label.set_max_width_chars(text_maxlen)
             self._label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
-        labels_box.pack_start(self._label, True, True, 0)
+        labels_box.pack_start(self._primary_label_alignment, True, True, 0)
         self._primary_event_box.connect('button-release-event',
                                         self.__button_release_event_cb)
         self._primary_event_box.set_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
 
         self._secondary_label = Gtk.Label()
         self._secondary_label.set_alignment(0, 0.5)
+        self._secondary_label_alignment = Gtk.Alignment(xalign=0, yalign=0.5,
+                                                        xscale=1, yscale=1)
+        self._secondary_label_alignment.add(self._secondary_label)
 
         if text_maxlen > 0:
             self._secondary_label.set_max_width_chars(text_maxlen)
             self._secondary_label.set_ellipsize(Pango.EllipsizeMode.END)
 
-        labels_box.pack_start(self._secondary_label, True, True, 0)
+        labels_box.pack_start(self._secondary_label_alignment, True, True, 0)
 
         self._secondary_box = Gtk.VBox()
 
