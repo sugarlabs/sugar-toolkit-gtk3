@@ -36,7 +36,7 @@ import mimetypes
 
 from gi.repository import SugarExt
 from sugar3.activity import activity
-from sugar3.activity.webactivity import FilePicker
+from sugar3.graphics.objectchooser import ObjectChooser
 
 
 class LocalRequestHandler(BaseHTTPRequestHandler):
@@ -96,6 +96,29 @@ class LocalHTTPServer(HTTPServer):
         _host, port = self.socket.getsockname()[:2]
         self.server_name = 'localhost'
         self.server_port = port
+
+
+class FilePicker(ObjectChooser):
+    def __init__(self, parent):
+        ObjectChooser.__init__(self, parent)
+
+    def run(self):
+        jobject = None
+        _file = None
+        try:
+            result = ObjectChooser.run(self)
+            if result == Gtk.ResponseType.ACCEPT:
+                jobject = self.get_selected_object()
+                logging.debug('FilePicker.run: %r', jobject)
+
+                if jobject and jobject.file_path:
+                    _file = jobject.file_path
+                    logging.debug('FilePicker.run: file=%r', _file)
+        finally:
+            if jobject is not None:
+                jobject.destroy()
+
+        return _file
 
 
 class WebActivity(Gtk.Window):
