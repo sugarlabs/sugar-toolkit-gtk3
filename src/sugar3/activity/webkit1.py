@@ -158,7 +158,7 @@ class WebActivity(Gtk.Window):
         uri = web_resource.get_uri()
         if uri.startswith('activity://'):
             prefix = "activity://%s" % self._bundle_id
-            new_prefix = "http://0.0.0.0:%d" % self.port
+            new_prefix = "http://127.0.0.1:%d" % self.port
             new_uri = new_prefix + uri[len(prefix):]
 
             request.set_uri(new_uri)
