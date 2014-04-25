@@ -210,7 +210,7 @@ def _get_mime_data_directories():
     return dirs
 
 
-def get_primary_extension(mime_type):
+def _init_mime_information():
     global _extensions
     global _globs_timestamps
 
@@ -230,8 +230,8 @@ def get_primary_extension(mime_type):
         _extensions = {}
 
         # FIXME Properly support these types in the system. (#4855)
-        _extensions['audio/ogg'] = 'ogg'
-        _extensions['video/ogg'] = 'ogg'
+        _extensions['audio/ogg'] = ['ogg']
+        _extensions['video/ogg'] = ['ogg']
 
         for globs_path in globs_path_list:
             globs_file = open(globs_path)
@@ -240,14 +240,28 @@ def get_primary_extension(mime_type):
                 if not line.startswith('#'):
                     line_type, glob = line.split(':')
                     if glob.startswith('*.'):
-                        _extensions[line_type] = glob[2:]
+                        if line_type in _extensions:
+                            _extensions[line_type].append(glob[2:])
+                        else:
+                            _extensions[line_type] = [glob[2:]]
 
         _globs_timestamps = timestamps
 
+
+def get_primary_extension(mime_type):
+    _init_mime_information()
+    if mime_type in _extensions:
+        return _extensions[mime_type][0]
+    else:
+        return None
+
+
+def get_extensions_by_mimetype(mime_type):
+    _init_mime_information()
     if mime_type in _extensions:
         return _extensions[mime_type]
     else:
-        return None
+        return []
 
 
 _MIME_TYPE_BLACK_LIST = [
