@@ -514,6 +514,9 @@ class Icon(Gtk.Image):
     badge_name = GObject.property(
         type=str, getter=get_badge_name, setter=set_badge_name)
 
+    def get_badge_size(self):
+        return int(_BADGE_SIZE * self.props.pixel_size)
+
     def set_alpha(self, value):
         if self._alpha != value:
             self._alpha = value
