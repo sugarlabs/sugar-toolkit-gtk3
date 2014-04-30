@@ -34,6 +34,9 @@ from sugar3.bundle.bundleversion import NormalizedVersion
 from sugar3.bundle.bundleversion import InvalidVersionError
 
 
+_bundle_instances = {}
+
+
 def _expand_lang(locale):
     # Private method from gettext.py
     locale = normalize(locale)
@@ -86,7 +89,8 @@ def _expand_lang(locale):
 class ActivityBundle(Bundle):
     """A Sugar activity bundle
 
-    See http://wiki.laptop.org/go/Activity_bundles for details
+    See http://wiki.sugarlabs.org/go/Development_Team/Almanac/Activity_Bundles
+    for details
     """
 
     MIME_TYPE = 'application/vnd.olpc-sugar'
@@ -109,6 +113,7 @@ class ActivityBundle(Bundle):
         self._activity_version = '0'
         self._summary = None
         self._single_instance = False
+        self._max_participants = 1
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
@@ -119,6 +124,8 @@ class ActivityBundle(Bundle):
             linfo_file = self._get_linfo_file()
             if linfo_file:
                 self._parse_linfo(linfo_file)
+
+        _bundle_instances[path] = self
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
@@ -186,6 +193,15 @@ class ActivityBundle(Bundle):
         if cp.has_option(section, 'single_instance'):
             if cp.get(section, 'single_instance') == 'yes':
                 self._single_instance = True
+
+        if cp.has_option(section, 'max_participants'):
+            max_participants = cp.get(section, 'max_participants')
+            try:
+                self._max_participants = int(max_participants)
+            except ValueError:
+                raise MalformedBundleException(
+                    'Activity bundle %s has invalid max_participants %s' %
+                    (self._path, max_participants))
 
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
@@ -290,6 +306,10 @@ class ActivityBundle(Bundle):
     def get_single_instance(self):
         """Get whether there should be a single instance for the activity"""
         return self._single_instance
+
+    def get_max_participants(self):
+        """Get maximum number of participants in share"""
+        return self._max_participants
 
     def get_show_launcher(self):
         """Get whether there should be a visible launcher for the activity"""
@@ -397,3 +417,10 @@ class ActivityBundle(Bundle):
 
     def is_user_activity(self):
         return self.get_path().startswith(env.get_user_activities_path())
+
+
+def get_bundle_instance(path, translated=True):
+    global _bundle_instances
+    if path not in _bundle_instances:
+        _bundle_instances[path] = ActivityBundle(path, translated=translated)
+    return _bundle_instances[path]

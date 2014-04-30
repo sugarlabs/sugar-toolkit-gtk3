@@ -82,7 +82,7 @@ from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
-from sugar3.bundle.activitybundle import ActivityBundle
+from sugar3.bundle.activitybundle import get_bundle_instance
 from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
@@ -334,7 +334,7 @@ class Activity(Window, Gtk.Container):
         self._closing = False
         self._quit_requested = False
         self._deleting = False
-        self._max_participants = 0
+        self._max_participants = None
         self._invites_queue = []
         self._jobject = None
         self._read_file_called = False
@@ -495,6 +495,11 @@ class Activity(Window, Gtk.Container):
         type=bool, default=False, getter=get_active, setter=set_active)
 
     def get_max_participants(self):
+        # If max_participants has not been set in the activity, get it
+        # from the bundle.
+        if self._max_participants is None:
+            bundle = get_bundle_instance(get_bundle_path())
+            self._max_participants = bundle.get_max_participants()
         return self._max_participants
 
     def set_max_participants(self, participants):
@@ -643,7 +648,7 @@ class Activity(Window, Gtk.Container):
         Display a notification with the given summary and body.
         The notification will go under the activities icon in the frame.
         """
-        bundle = ActivityBundle(get_bundle_path())
+        bundle = get_bundle_instance(get_bundle_path())
         icon = bundle.get_icon()
 
         bus = dbus.SessionBus()
