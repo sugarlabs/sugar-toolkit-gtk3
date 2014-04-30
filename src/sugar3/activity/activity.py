@@ -495,6 +495,13 @@ class Activity(Window, Gtk.Container):
         type=bool, default=False, getter=get_active, setter=set_active)
 
     def get_max_participants(self):
+        # If max_participants has not been set in the activity, get it
+        # from the bundle.
+        if self._max_participants == 0:
+            bundle = ActivityBundle(get_bundle_path())
+            max_participants = bundle.get_max_participants()
+            if max_participants is not None:
+                self._max_participants = max_participants
         return self._max_participants
 
     def set_max_participants(self, participants):
