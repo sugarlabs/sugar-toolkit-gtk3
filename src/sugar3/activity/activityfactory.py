@@ -200,11 +200,10 @@ class ActivityCreationHandler(GObject.GObject):
 
     def _launch_activity(self):
         if self._handle.activity_id is not None:
-            self._shell.ActivateActivity(self._handle.activity_id,
-                                         reply_handler=
-                                         self._activate_reply_handler,
-                                         error_handler=
-                                         self._activate_error_handler)
+            self._shell.ActivateActivity(
+                self._handle.activity_id,
+                reply_handler=self._activate_reply_handler,
+                error_handler=self._activate_error_handler)
         else:
             self._create_activity()
 
