@@ -820,6 +820,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._prelit_stroke_color = None
         self._active_state = False
         self._palette_invoker = CellRendererInvoker()
+        self._cached_offsets = None
 
         Gtk.CellRenderer.__init__(self)
 
@@ -907,6 +908,8 @@ class CellRendererIcon(Gtk.CellRenderer):
             self._buffer.width = value
             self._buffer.height = value
 
+            self._cached_offsets = None
+
     size = GObject.property(type=object, setter=set_size)
 
     def do_get_size(self, widget, cell_area, x_offset=None, y_offset=None,
@@ -925,8 +928,16 @@ class CellRendererIcon(Gtk.CellRenderer):
 
             xoffset = max(xoffset * (cell_area.width - width), 0)
             yoffset = max(self.props.yalign * (cell_area.height - height), 0)
+            self._cached_offsets = xoffset, yoffset
 
         return xoffset, yoffset, width, height
+
+    def _get_offsets(self, widget, cell_area):
+        if self._cached_offsets is not None:
+            return self._cached_offsets
+
+        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
+        return xoffset, yoffset
 
     def do_activate(self, event, widget, path, background_area, cell_area,
                     flags):
@@ -1016,7 +1027,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         if surface is None:
             return
 
-        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
+        xoffset, yoffset = self._get_offsets(widget, cell_area)
 
         x = cell_area.x + xoffset
         y = cell_area.y + yoffset
