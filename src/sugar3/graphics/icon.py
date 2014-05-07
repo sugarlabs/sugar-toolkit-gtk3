@@ -848,6 +848,24 @@ class CellRendererIcon(Gtk.CellRenderer):
 
         self._palette_invoker.attach_cell_renderer(tree_view, self)
 
+        self._tree_view = tree_view
+        self._is_scrolling = False
+
+    def connect_to_scroller(self, scrolled):
+        scrolled.connect('scroll-start', self._scroll_start_cb)
+        scrolled.connect('scroll-end', self._scroll_end_cb)
+
+    def _scroll_start_cb(self, event):
+        self._palette_invoker.detach()
+        self._is_scrolling = True
+
+    def _scroll_end_cb(self, event):
+        self._palette_invoker.attach_cell_renderer(self._tree_view, self)
+        self._is_scrolling = False
+
+    def is_scrolling(self):
+        return self._is_scrolling
+
     def __del__(self):
         self._palette_invoker.detach()
 
@@ -990,55 +1008,65 @@ class CellRendererIcon(Gtk.CellRenderer):
         return False
 
     def do_render(self, cr, widget, background_area, cell_area, flags):
-        context = widget.get_style_context()
-        context.save()
-        context.add_class("sugar-icon-cell")
+        if not self._is_scrolling:
 
-        def is_pointer_inside():
-            # widget is the treeview
-            x, y = widget.get_pointer()
-            x, y = widget.convert_widget_to_bin_window_coords(x, y)
-            return ((cell_area.x <= x <= cell_area.x + cell_area.width)
-                    and (cell_area.y <= y <= cell_area.y + cell_area.height))
+            context = widget.get_style_context()
+            context.save()
+            context.add_class("sugar-icon-cell")
 
-        pointer_inside = is_pointer_inside()
+            def is_pointer_inside():
+                # widget is the treeview
+                x, y = widget.get_pointer()
+                x, y = widget.convert_widget_to_bin_window_coords(x, y)
+                return ((cell_area.x <= x <= cell_area.x + cell_area.width)
+                        and
+                        (cell_area.y <= y <= cell_area.y + cell_area.height))
 
-        # The context will have prelight state if the mouse pointer is
-        # in the entire row, but we want that state if the pointer is
-        # in this cell only:
-        if flags & Gtk.CellRendererState.PRELIT:
-            if pointer_inside:
-                if self._active_state:
-                    context.set_state(Gtk.StateFlags.ACTIVE)
+            pointer_inside = is_pointer_inside()
+
+            # The context will have prelight state if the mouse pointer is
+            # in the entire row, but we want that state if the pointer is
+            # in this cell only:
+            if flags & Gtk.CellRendererState.PRELIT:
+                if pointer_inside:
+                    if self._active_state:
+                        context.set_state(Gtk.StateFlags.ACTIVE)
+                else:
+                    context.set_state(Gtk.StateFlags.NORMAL)
+
+            Gtk.render_background(
+                context, cr, background_area.x, background_area.y,
+                background_area.width, background_area.height)
+
+            if self._xo_color is not None:
+                stroke_color = self._xo_color.get_stroke_color()
+                fill_color = self._xo_color.get_fill_color()
+                prelit_fill_color = None
+                prelit_stroke_color = None
             else:
-                context.set_state(Gtk.StateFlags.NORMAL)
+                stroke_color = self._stroke_color
+                fill_color = self._fill_color
+                prelit_fill_color = self._prelit_fill_color
+                prelit_stroke_color = self._prelit_stroke_color
 
-        Gtk.render_background(
-            context, cr, background_area.x, background_area.y,
-            background_area.width, background_area.height)
+            has_prelit_colors = None not in [prelit_fill_color,
+                                             prelit_stroke_color]
 
-        if self._xo_color is not None:
-            stroke_color = self._xo_color.get_stroke_color()
-            fill_color = self._xo_color.get_fill_color()
-            prelit_fill_color = None
-            prelit_stroke_color = None
+            if flags & Gtk.CellRendererState.PRELIT and has_prelit_colors and \
+                    pointer_inside:
+
+                self._buffer.fill_color = prelit_fill_color
+                self._buffer.stroke_color = prelit_stroke_color
+            else:
+                self._buffer.fill_color = fill_color
+                self._buffer.stroke_color = stroke_color
         else:
-            stroke_color = self._stroke_color
-            fill_color = self._fill_color
-            prelit_fill_color = self._prelit_fill_color
-            prelit_stroke_color = self._prelit_stroke_color
-
-        has_prelit_colors = None not in [prelit_fill_color,
-                                         prelit_stroke_color]
-
-        if flags & Gtk.CellRendererState.PRELIT and has_prelit_colors and \
-                pointer_inside:
-
-            self._buffer.fill_color = prelit_fill_color
-            self._buffer.stroke_color = prelit_stroke_color
-        else:
-            self._buffer.fill_color = fill_color
-            self._buffer.stroke_color = stroke_color
+            if self._xo_color is not None:
+                self._buffer.fill_color = self._xo_color.get_fill_color()
+                self._buffer.stroke_color = self._xo_color.get_stroke_color()
+            else:
+                self._buffer.fill_color = self._fill_color
+                self._buffer.stroke_color = self._stroke_color
 
         surface = self._buffer.get_surface()
         if surface is None:
