@@ -966,7 +966,14 @@ class CellRendererIcon(Gtk.CellRenderer):
         context.save()
         context.add_class("sugar-icon-cell")
 
-        pointer_inside = self._point_in_cell_renderer(widget)
+        def is_pointer_inside():
+            # widget is the treeview
+            x, y = widget.get_pointer()
+            x, y = widget.convert_widget_to_bin_window_coords(x, y)
+            return ((cell_area.x <= x <= cell_area.x + cell_area.width)
+                    and (cell_area.y <= y <= cell_area.y + cell_area.height))
+
+        pointer_inside = is_pointer_inside()
 
         # The context will have prelight state if the mouse pointer is
         # in the entire row, but we want that state if the pointer is
