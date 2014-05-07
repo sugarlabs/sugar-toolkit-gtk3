@@ -989,9 +989,6 @@ class CellRendererIcon(Gtk.CellRenderer):
             context, cr, background_area.x, background_area.y,
             background_area.width, background_area.height)
 
-        Gtk.render_frame(context, cr, background_area.x, background_area.y,
-                         background_area.width, background_area.height)
-
         if self._xo_color is not None:
             stroke_color = self._xo_color.get_stroke_color()
             fill_color = self._xo_color.get_fill_color()
