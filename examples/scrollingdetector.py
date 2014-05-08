@@ -38,7 +38,7 @@ col = Gtk.TreeViewColumn()
 treeview.append_column(col)
 
 xo_color = XoColor('#FF0000,#00FF00')
-cell_icon = CellRendererIcon(treeview)
+cell_icon = CellRendererIcon()
 cell_icon.props.width = style.GRID_CELL_SIZE
 cell_icon.props.height = style.GRID_CELL_SIZE
 cell_icon.props.size = style.STANDARD_ICON_SIZE

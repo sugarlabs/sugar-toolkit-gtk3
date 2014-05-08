@@ -18,8 +18,6 @@
 from gi.repository import GObject
 from gi.repository import GLib
 
-from sugar3.graphics.icon import CellRendererIcon
-
 
 class ScrollingDetector(GObject.GObject):
     """
@@ -59,13 +57,9 @@ class ScrollingDetector(GObject.GObject):
         self._prev_value = adj.props.value
         GLib.timeout_add(self._timeout, self._check_scroll_cb, adj)
 
-
     def connect_treeview(self, treeview):
         """
-        treeview -- Gtk.TreeView: a TreeView with CellRendererIcons already
-                    added.
+        treeview -- Gtk.TreeView
         """
-        for column in treeview.get_columns():
-            for cell_renderer in column.get_cells():
-                if isinstance(cell_renderer, CellRendererIcon):
-                    cell_renderer.connect_to_scroller(self)
+        if hasattr(treeview, 'connect_to_scroller'):
+            treeview.connect_to_scroller(self)
