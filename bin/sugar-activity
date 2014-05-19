@@ -33,9 +33,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 DBusGMainLoop(set_as_default=True)
 
 from sugar3.activity import activityhandle
-from sugar3.activity import i18n
 from sugar3 import config
-import sugar3
 from sugar3.bundle.activitybundle import ActivityBundle
 from sugar3 import logger
 
@@ -68,6 +66,7 @@ class SingleProcess(dbus.service.Object):
     def create(self, handle_dict):
         handle = activityhandle.create_from_dict(handle_dict)
         create_activity_instance(self.constructor, handle)
+
 
 def main():
     parser = OptionParser()
@@ -125,9 +124,9 @@ def main():
 
     activity_constructor = getattr(module, class_name)
     activity_handle = activityhandle.ActivityHandle(
-            activity_id=options.activity_id,
-            object_id=options.object_id, uri=options.uri,
-            invited=options.invited)
+        activity_id=options.activity_id,
+        object_id=options.object_id, uri=options.uri,
+        invited=options.invited)
 
     if options.single_process is True:
         sessionbus = dbus.SessionBus()
@@ -136,11 +135,11 @@ def main():
         service_path = get_single_process_path(options.bundle_id)
 
         bus_object = sessionbus.get_object(
-                'org.freedesktop.DBus', '/org/freedesktop/DBus')
+            'org.freedesktop.DBus', '/org/freedesktop/DBus')
         try:
             name = bus_object.GetNameOwner(
-                    service_name, dbus_interface='org.freedesktop.DBus')
-        except  dbus.DBusException:
+                service_name, dbus_interface='org.freedesktop.DBus')
+        except dbus.DBusException:
             name = None
 
         if not name:
