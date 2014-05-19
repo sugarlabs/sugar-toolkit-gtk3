@@ -146,12 +146,17 @@ def main():
         if not name:
             SingleProcess(service_name, activity_constructor)
         else:
-            single_process = sessionbus.get_object(service_name, service_path)
-            single_process.create(activity_handle.get_dict(),
-                                  dbus_interface='org.laptop.SingleProcess')
+            try:
+                single_process = sessionbus.get_object(service_name,
+                                                       service_path)
+                single_process.create(
+                    activity_handle.get_dict(),
+                    dbus_interface='org.laptop.SingleProcess')
 
-            print 'Created %s in a single process.' % service_name
-            sys.exit(0)
+                print 'Created %s in a single process.' % service_name
+                sys.exit(0)
+            except (TypeError, dbus.DBusException):
+                print 'dbus error trying to start a single instance'
 
     if hasattr(module, 'start'):
         module.start()
