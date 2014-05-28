@@ -612,10 +612,19 @@ class PaletteWindow(GObject.GObject):
             logging.error('Cannot update the palette position.')
             return
 
-        rect = self._widget.size_request()
-        position = invoker.get_position_for_alignment(self._alignment, rect)
+        req = self._widget.size_request()
+        # on Gtk 3.10, menu at the bottom of the screen are resized
+        # to not fall out, and report a wrong size.
+        # measure the children and move the menu - SL #4673
+        total_height = 0
+        for child in self._widget.get_children():
+            child_req = child.size_request()
+            total_height += child_req.height
+        req.height = total_height
+
+        position = invoker.get_position_for_alignment(self._alignment, req)
         if position is None:
-            position = invoker.get_position(rect)
+            position = invoker.get_position(req)
 
         self._widget.move(position.x, position.y)
 

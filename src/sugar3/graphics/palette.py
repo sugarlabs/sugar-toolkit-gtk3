@@ -276,6 +276,7 @@ class Palette(PaletteWindow):
             ELLIPSIS_LENGTH = 6
 
             label = label.replace('\n', ' ')
+            label = label.replace('\r', ' ')
 
             self._secondary_label.modify_fg(Gtk.StateType.INSENSITIVE,
                                             Gdk.color_parse('white'))
