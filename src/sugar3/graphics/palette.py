@@ -147,11 +147,6 @@ class Palette(PaletteWindow):
 
         self._secondary_label = Gtk.Label()
         self._secondary_label.set_alignment(0, 0.5)
-
-        if text_maxlen > 0:
-            self._secondary_label.set_max_width_chars(text_maxlen)
-            self._secondary_label.set_ellipsize(Pango.EllipsizeMode.END)
-
         labels_box.pack_start(self._secondary_label, True, True, 0)
 
         self._secondary_box = Gtk.VBox()
@@ -278,19 +273,12 @@ class Palette(PaletteWindow):
             label = label.replace('\n', ' ')
             label = label.replace('\r', ' ')
 
-            self._secondary_label.modify_fg(Gtk.StateType.INSENSITIVE,
-                                            Gdk.color_parse('white'))
-            self._secondary_label.set_justify(Gtk.Justification.FILL)
-            self._secondary_label.set_alignment(0, 0)
-
-            # for Gtk >= 3.10
             if hasattr(self._secondary_label, 'set_lines'):
-                self._secondary_label.set_max_width_chars(
-                    style.MENU_WIDTH_CHARS)
+                self._secondary_label.set_max_width_chars(style.MENU_WIDTH_CHARS)
                 self._secondary_label.set_line_wrap(True)
-                self._secondary_label.set_ellipsize(
-                    Pango.EllipsizeMode.END)
-                self._secondary_label.set_lines(3)
+                self._secondary_label.set_ellipsize(Pango.EllipsizeMode.END)
+                self._secondary_label.set_lines(NO_OF_LINES)
+                self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:
                 # FIXME: fallback for Gtk < 3.10
                 body_width = NO_OF_LINES * style.MENU_WIDTH_CHARS
@@ -298,11 +286,6 @@ class Palette(PaletteWindow):
                 if len(label) > body_width:
                     label = ' '.join(label[:body_width].split()[:-1]) + '...'
                 label = textwrap.fill(label, width=style.MENU_WIDTH_CHARS)
-
-            if len(label) > style.MENU_WIDTH_CHARS:
-                self._label_alignment.set_padding(
-                    style.DEFAULT_SPACING, style.DEFAULT_SPACING,
-                    0, style.DEFAULT_SPACING)
 
             self._secondary_text = label
             self._secondary_label.set_text(label)
