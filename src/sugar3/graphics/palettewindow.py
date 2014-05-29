@@ -370,6 +370,12 @@ class _PaletteWindowWidget(Gtk.Window):
         context = self.get_style_context()
         context.add_class('toolitem')
         if gap:
+            cr.save()
+            cr.set_source_rgb(0, 0, 0)
+            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.set_line_width(4)
+            cr.stroke()
+            cr.restore()
             Gtk.render_frame_gap(
                 context, cr, 0, 0, allocation.width, allocation.height,
                 gap[0], gap[1], gap[1] + gap[2])
