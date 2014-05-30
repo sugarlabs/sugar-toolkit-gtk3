@@ -626,6 +626,10 @@ class PaletteWindow(GObject.GObject):
         for child in self._widget.get_children():
             child_req = child.size_request()
             total_height += child_req.height
+
+        # need add the border line width as defined in sugar-artwork
+        line_width = 2
+        total_height += line_width * 2
         req.height = total_height
 
         position = invoker.get_position_for_alignment(self._alignment, req)
