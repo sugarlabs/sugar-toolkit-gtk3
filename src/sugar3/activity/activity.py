@@ -327,6 +327,8 @@ class Activity(Window, Gtk.Container):
         self.connect('delete-event', self.__delete_event_cb)
 
         self._active = False
+        self._active_time = None
+        self._spent_time = 0
         self._activity_id = handle.activity_id
         self.shared_activity = None
         self._join_id = None
@@ -366,6 +368,11 @@ class Activity(Window, Gtk.Container):
             else:
                 self._jobject.metadata['launch-times'] = \
                     str(int(time.time()))
+
+            if 'spent-times' in self._jobject.metadata:
+                self._jobject.metadata['spent-times'] += ', 0'
+            else:
+                self._jobject.metadata['spent-times'] = '0'
 
         self.shared_activity = None
         self._join_id = None
@@ -420,6 +427,7 @@ class Activity(Window, Gtk.Container):
         jobject.metadata['share-scope'] = SCOPE_PRIVATE
         jobject.metadata['icon-color'] = icon_color
         jobject.metadata['launch-times'] = str(int(time.time()))
+        jobject.metadata['spent-times'] = '0'
         jobject.file_path = ''
 
         # FIXME: We should be able to get an ID synchronously from the DS,
@@ -485,9 +493,21 @@ class Activity(Window, Gtk.Container):
     def get_active(self):
         return self._active
 
+    def _update_spent_time(self):
+        if self._active is True and self._active_time is None:
+            self._active_time = time.time()
+        elif self._active is False and self._active_time is not None:
+            self._spent_time += time.time() - self._active_time
+            self._active_time = None
+        elif self._active is True and self._active_time is not None:
+            current = time.time()
+            self._spent_time += current - self._active_time
+            self._active_time = current
+
     def set_active(self, active):
         if self._active != active:
             self._active = active
+            self._update_spent_time()
             if not self._active and self._jobject:
                 self.save()
 
@@ -777,6 +797,19 @@ class Activity(Window, Gtk.Container):
         if buddies_dict:
             self.metadata['buddies_id'] = json.dumps(buddies_dict.keys())
             self.metadata['buddies'] = json.dumps(self._get_buddies())
+
+        # update spent time before saving
+        self._update_spent_time()
+
+        def set_last_value(values_list, new_value):
+            if ', ' not in values_list:
+                return '%d' % new_value
+            else:
+                partial_list = ', '.join(values_list.split(', ')[:-1])
+                return partial_list + ', %d' % new_value
+
+        self.metadata['spent-times'] = set_last_value(
+            self.metadata['spent-times'], self._spent_time)
 
         preview = self.get_preview()
         if preview is not None:
