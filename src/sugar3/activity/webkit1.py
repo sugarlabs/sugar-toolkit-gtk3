@@ -43,7 +43,7 @@ class LocalRequestHandler(BaseHTTPRequestHandler):
 
     # Handler for the GET requests
     def do_GET(self):
-        new_path = self.server.path + '/' + self.path
+        new_path = self.server.path + self.path
         if not os.path.exists(new_path):
             logging.error('file %s not found.', new_path)
             self.send_response(404)
