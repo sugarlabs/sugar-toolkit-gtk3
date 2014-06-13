@@ -113,7 +113,7 @@ class ActivityBundle(Bundle):
         self._activity_version = '0'
         self._summary = None
         self._single_instance = False
-        self._max_participants = 1
+        self._max_participants = 0
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
