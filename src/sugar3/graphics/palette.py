@@ -211,8 +211,6 @@ class Palette(PaletteWindow):
         if self._invoker is not None:
             self._update_full_request()
 
-        PaletteWindow.popup(self, immediate)
-
         if state is None:
             state = self.PRIMARY
         self.set_palette_state(state)
@@ -221,6 +219,8 @@ class Palette(PaletteWindow):
             self._secondary_anim.start()
         else:
             self._secondary_anim.stop()
+
+        PaletteWindow.popup(self, immediate)
 
     def popdown(self, immediate=False):
         if immediate:
