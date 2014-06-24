@@ -456,6 +456,15 @@ class Palette(PaletteWindow):
 
     menu = GObject.property(type=object, getter=get_menu)
 
+    def _invoker_right_click_cb(self, invoker):
+        self.popup(immediate=True, state=self.SECONDARY)
+
+    def _invoker_toggle_state_cb(self, invoker):
+        if self.is_up() and self._palette_state == self.SECONDARY:
+            self.popdown(immediate=True)
+        else:
+            self.popup(immediate=True, state=self.SECONDARY)
+
 
 class PaletteActionBar(Gtk.HButtonBox):
 
