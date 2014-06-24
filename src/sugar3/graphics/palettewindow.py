@@ -700,13 +700,10 @@ class PaletteWindow(GObject.GObject):
             self.on_invoker_leave()
 
     def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True, state=self.SECONDARY)
+        self.popup(immediate=True)
 
     def _invoker_toggle_state_cb(self, invoker):
-        if self.is_up() and self._palette_state == self.SECONDARY:
-            self.popdown(immediate=True)
-        else:
-            self.popup(immediate=True, state=self.SECONDARY)
+        self.popdown(immediate=True)
 
     def __enter_notify_cb(self, widget):
         if not self._invoker.locked:
