@@ -24,6 +24,7 @@ import logging
 import dbus
 import dbus.service
 
+from sugar3.graphics.alert import ErrorAlert
 
 _ACTIVITY_SERVICE_NAME = 'org.laptop.Activity'
 _ACTIVITY_SERVICE_PATH = '/org/laptop/Activity'
@@ -65,6 +66,19 @@ class ActivityService(dbus.service.Object):
     def SetActive(self, active):
         logging.debug('ActivityService.set_active: %s.', active)
         self._activity.props.active = active
+
+    @dbus.service.method(_ACTIVITY_INTERFACE)
+    def ShowAlert(self, title, message):
+        logging.debug('ActivityService.show_alert: %s %s', title, message)
+        alert = ErrorAlert()
+        alert.props.title = title
+        alert.props.msg = message
+
+        def _alert_response_cb(alert, response_id, window):
+            window.remove_alert(alert)
+
+        alert.connect('response', _alert_response_cb, self._activity)
+        self._activity.add_alert(alert)
 
     @dbus.service.method(_ACTIVITY_INTERFACE)
     def InviteContact(self, account_path, contact_id):
