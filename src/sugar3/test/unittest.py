@@ -63,9 +63,12 @@ class UITestCase(unittest.TestCase):
             process.terminate()
 
     @contextmanager
-    def run_activity(self):
+    def run_activity(self, options=None):
         if self.bundle_id is not None:
-            process = subprocess.Popen(["sugar-launch", self.bundle_id])
+            cmd = ["sugar-launch", self.bundle_id]
+            if options is not None:
+                cmd += options
+            process = subprocess.Popen(cmd)
         else:
             print "No bundle_id specified."
             return
@@ -77,3 +80,7 @@ class UITestCase(unittest.TestCase):
             raise
         finally:
             process.terminate()
+
+    @contextmanager
+    def run_activity_with_uri(self, uri):
+        self.run_activity(['--uri', uri])
