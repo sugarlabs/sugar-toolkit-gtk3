@@ -77,3 +77,20 @@ class UITestCase(unittest.TestCase):
             raise
         finally:
             process.terminate()
+
+    @contextmanager
+    def run_activity_with_uri(self, uri):
+        if self.bundle_id is not None:
+            process = subprocess.Popen(["sugar-launch", self.bundle_id,
+                                        "-u", uri])
+        else:
+            print "No bundle_id specified."
+            return
+
+        try:
+            yield
+        except:
+            logging.debug(uitree.get_root().dump())
+            raise
+        finally:
+            process.terminate()
