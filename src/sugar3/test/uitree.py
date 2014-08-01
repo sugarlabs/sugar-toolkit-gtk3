@@ -20,10 +20,28 @@ UNSTABLE.
 
 import logging
 import time
-
+import gi
+gi.require_version('Gtk' , '3.0')
+gi.require_version('Gdk' , '3.0')
 from gi.repository import Atspi
 from gi.repository import GLib
+from gi.repository import Gdk
 
+key_name_aliases = {
+    'enter': 'Return',
+    'esc': 'Escape',
+    'alt': 'Alt_L',
+    'control': 'Control_L',
+    'ctrl': 'Control_L',
+    'shift': 'Shift_L',
+    'del': 'Delete',
+    'ins': 'Insert',
+    'pageup': 'Page_Up',
+    'pagedown': 'Page_Down',
+    ' ': 'space',
+    '\t': 'Tab',
+    '\n': 'Return'
+}
 
 def get_root():
     return Node(Atspi.get_desktop(0))
@@ -62,6 +80,59 @@ def _retry_find(func):
 
     return wrapped
 
+def type_text(string):
+    if isinstance(string, unicode):
+            string = string.decode('utf-8')
+    for char in string:
+            key_press(char)
+
+def key_press(key_name):
+    key_sym = name_to_sym(key_name)
+    check = Atspi.generate_keyboard_event(key_sym,
+                                          None,
+                                          Atspi.KeySynthType.SYM)
+
+def uniChar_to_keySym(uniChar):
+    if not isinstance(uniChar, unicode):
+        uniChar = unicode(uniChar, 'utf-8')
+    i = ord(uniChar)
+    keySym = Gdk.unicode_to_keyval(i)
+    return keySym
+
+def name_to_sym(key_name):
+    key_name = key_name_aliases.get(key_name.lower(), key_name)
+    key_sym = Gdk.keyval_from_name(key_name)
+    if key_sym == 0xffffff or key_sym == 0x0 or key_sym is None:
+        try:
+            key_sym = uniChar_to_keySym(key_name)
+        except: # not even valid utf-8 char
+            try: # Last attempt run at a keyName ('Meta_L', 'Dash' ...)
+                key_sym = getattr(Gdk, 'KEY_' + key_name)
+            except AttributeError:
+                raise KeyError(key_name)
+    return key_sym
+
+
+
+def press(button=1, x_offset=0, y_offset=0):
+    Atspi.generate_mouse_event(x_offset, y_offset, "b%sp" % button)
+    time.sleep(0.5)
+
+def release(button=1, x_offset=0, y_offset=0):
+    Atspi.generate_mouse_event(x_offset, y_offset, "b%sr" % button)
+    time.sleep(0.5)
+
+def absMotion(x_offset=0, y_offset=0):
+    Atspi.generate_mouse_event(x_offset, y_offset, "abs")
+    time.sleep(0.5)
+
+def drag(x1,y1,x2,y2):
+    press(1,x1,y1)
+    time.sleep(0.5)
+    absMotion(x2,y2)
+    time.sleep(0.5)
+    release(1,x2,y2)
+    time.sleep(0.5)
 
 class Node:
     def __init__(self, accessible):
@@ -83,9 +154,9 @@ class Node:
             if action_name == name:
                 self._accessible.do_action(i)
 
-    def click(self, button=1):
+    def click(self, button=1, x_offset=0, y_offset=0):
         point = self._accessible.get_position(Atspi.CoordType.SCREEN)
-        Atspi.generate_mouse_event(point.x, point.y, "b%sc" % button)
+        Atspi.generate_mouse_event(point.x+x_offset, point.y+y_offset, "b%sc" % button)
 
     @property
     def name(self):
@@ -145,7 +216,7 @@ class Node:
             return False
 
         return True
-
+    
     def _find_descendant(self, node, predicate):
         if predicate(node):
             return node
