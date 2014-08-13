@@ -17,6 +17,8 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+import dbus
+
 from gi.repository import Gdk
 from gi.repository import Gtk
 import gettext
@@ -34,6 +36,10 @@ from sugar3 import profile
 
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
+
+_DBUS_SERVICE = 'org.laptop.Shell'
+_DBUS_SHELL_IFACE = 'org.laptop.Shell'
+_DBUS_PATH = '/org/laptop/Shell'
 
 
 def _create_activity_icon(metadata):
@@ -163,6 +169,26 @@ class ShareButton(RadioMenuButton):
                 self.private.props.active = True
         finally:
             self.neighborhood.handler_unblock(self._neighborhood_handle)
+
+
+class SocialHelpButton(ToolButton):
+
+    def __init__(self, activity, **kwargs):
+        #TODO: Change the icon
+        ToolButton.__init__(self, 'edit-copy', **kwargs)
+        self.props.tooltip = _('Social Help')
+        self.props.accelerator = '<alt><shift>c'
+
+        self.connect('clicked', self._social_button_clicked_cb, activity)
+
+    def _social_button_clicked_cb(self, widget, activity):
+        bus = dbus.SessionBus()
+        proxy_obj = bus.get_object(_DBUS_SERVICE, _DBUS_PATH)
+        shell_iface = dbus.Interface(proxy_obj, _DBUS_SHELL_IFACE)
+        print "PRA: ", activity.get_bundle_id()
+        shell_iface.DelegateFunctionCall(
+            'jarabe.view.viewsocial', 'setup_view_social',
+            [activity.get_bundle_id()])
 
 
 class TitleEntry(Gtk.ToolItem):
@@ -337,6 +363,12 @@ class ActivityToolbar(Gtk.Toolbar):
         self.share = ShareButton(activity)
         self.share.show()
         self.insert(self.share, -1)
+
+        activity_bundle_id = activity.get_bundle_id()
+
+        self.socialhelp = SocialHelpButton(activity)
+        self.insert(self.socialhelp, -1)
+        self.socialhelp.show()
 
 
 class EditToolbar(Gtk.Toolbar):
