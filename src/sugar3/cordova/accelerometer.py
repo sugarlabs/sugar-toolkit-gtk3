@@ -6,7 +6,7 @@ class Accelerometer(object):
         timestamp = time.time()
         ACCELEROMETER_DEVICE = '/sys/devices/platform/lis3lv02d/position'
         try:
-            fh = open(ACCELEROMETER_DEVICE)
+            fh = open(ACCELEROMETER_DEVICE,"r")
             string = fh.read()
             xyz = string[1:-2].split(',')
             fh.close()
