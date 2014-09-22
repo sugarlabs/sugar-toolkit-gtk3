@@ -14,8 +14,10 @@ class Accelerometer(object):
                                  'z': int(xyz[2]), 'timestamp': timestamp,
                                  'keepCallback': True}
             parent._client.send_result(request, accelerometer_obj)
-        except:
+        except IOError:
             accelerometer_obj = {'x': 0, 'y': 0, 'z': 0,
                                  'timestamp': timestamp,
                                  'keepCallback': True}
-            parent._client.send_error(request, "Accelerometer File not found")
+            parent._client.send_error(request, "Error accessing the Accelerometer File")
+        except:
+            parent._client.send_error(request, "Error accessing the Accelerometer File")
