@@ -5,6 +5,7 @@ SUBDIRS = activity \
           presence \
           datastore \
           dispatch \
+          cordova \
           test
 
 sugardir = $(pythondir)/sugar3
