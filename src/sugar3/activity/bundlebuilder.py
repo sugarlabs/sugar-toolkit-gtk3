@@ -178,9 +178,12 @@ class Packager(object):
                          'fall back to filtered list')
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
-
-        # pylint: disable=E1103
-        return [path.strip() for path in stdout.strip('\n').split('\n')]
+        if stdout:
+            # pylint: disable=E1103
+            return [path.strip() for path in stdout.strip('\n').split('\n')]
+        else:
+            return list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
 
 
 class XOPackager(Packager):
