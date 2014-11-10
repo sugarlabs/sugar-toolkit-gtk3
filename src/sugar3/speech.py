@@ -299,9 +299,16 @@ class _GstSpeechPlayer(GObject.GObject):
         for voice in Gst.ElementFactory.make('espeak', None).props.voices:
             name, language, dialect = voice
             if dialect != 'none':
-                self._all_voices[language + '_' + dialect] = name
+                lang_code = language + '_' + dialect
             else:
-                self._all_voices[language] = name
+                lang_code = language
+
+            if lang_code in translated_espeak_voices:
+                self._all_voices[lang_code] = translated_espeak_voices[
+                    lang_code]
+            else:
+                self._all_voices[lang_code] = name
+
         return self._all_voices
 
     def get_default_voice(self):
