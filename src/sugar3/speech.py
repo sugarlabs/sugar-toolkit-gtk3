@@ -16,6 +16,7 @@
 
 import os
 import logging
+from gettext import gettext as _
 
 from gi.repository import Gio
 from gi.repository import Gst
@@ -32,6 +33,81 @@ DEFAULT_RATE = 0
 
 
 _SAVE_TIMEOUT = 500
+
+
+# This voice names are use dto allow the translation of the voice names.
+# If espeak add new voices, we need update this list.
+
+translated_espeak_voices = {
+    'af': _('Afrikaans'),
+    'an': _('Aragonese'),
+    'bg': _('Bulgarian'),
+    'bs': _('Bosnian'),
+    'ca': _('Catalan'),
+    'cs': _('Czech'),
+    'cy': _('Welsh'),
+    'da': _('Danish'),
+    'de': _('German'),
+    'el': _('Greek'),
+    'en': _('Default'),
+    'en_gb': _('English Britain'),
+    'en_sc': _('English scottish'),
+    'en_uk-north': _('English-north'),
+    'en_uk-rp': _('English_rp'),
+    'en_uk-wmids': _('English_wmids'),
+    'en_us': _('English USA'),
+    'en_wi': _('English west indies'),
+    'eo': _('Esperanto'),
+    'es': _('Spanish'),
+    'es_la': _('Spanish latin american'),
+    'et': _('Estonian'),
+    'fa': _('Farsi'),
+    'fa_pin': _('Farsi-pinglish'),
+    'fi': _('Finnish'),
+    'fr_be': _('French belgium'),
+    'fr_fr': _('French'),
+    'ga': _('Irish-gaeilge'),
+    'grc': _('Greek-ancient'),
+    'hi': _('Hindi'),
+    'hr': _('Croatian'),
+    'hu': _('Hungarian'),
+    'hy': _('Armenian'),
+    'hy_west': _('Armenian (west)'),
+    'id': _('Indonesian'),
+    'is': _('Icelandic'),
+    'it': _('Italian'),
+    'jbo': _('Lojban'),
+    'ka': _('Georgian'),
+    'kn': _('Kannada'),
+    'ku': _('Kurdish'),
+    'la': _('Latin'),
+    'lt': _('Lithuanian'),
+    'lv': _('Latvian'),
+    'mk': _('Macedonian'),
+    'ml': _('Malayalam'),
+    'ms': _('Malay'),
+    'ne': _('Nepali'),
+    'nl': _('Dutch'),
+    'no': _('Norwegian'),
+    'pa': _('Punjabi'),
+    'pl': _('Polish'),
+    'pt_br': _('Portuguese (Brazil)'),
+    'pt_pt': _('Portuguese (Portugal)'),
+    'ro': _('Romanian'),
+    'ru': _('Russian'),
+    'sk': _('Slovak'),
+    'sq': _('Albanian'),
+    'sr': _('Serbian'),
+    'sv': _('Swedish'),
+    'sw': _('Swahili-test'),
+    'ta': _('Tamil'),
+    'tr': _('Turkish'),
+    'vi': _('Vietnam'),
+    'vi_hue': _('Vietnam_hue'),
+    'vi_sgn': _('Vietnam_sgn'),
+    'zh': _('Mandarin'),
+    'zh_yue': _('Cantonese')
+}
 
 
 class SpeechManager(GObject.GObject):
