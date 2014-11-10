@@ -132,7 +132,7 @@ class SpeechManager(GObject.GObject):
         self._player.connect('play', self._update_state, 'play')
         self._player.connect('stop', self._update_state, 'stop')
         self._player.connect('pause', self._update_state, 'pause')
-        self._voice_name = self._player.get_default_voice()
+        self._default_voice_name = self._player.get_default_voice()
         self._pitch = DEFAULT_PITCH
         self._rate = DEFAULT_RATE
         self._is_playing = False
@@ -175,9 +175,18 @@ class SpeechManager(GObject.GObject):
             GObject.source_remove(self._save_timeout_id)
         self._save_timeout_id = GObject.timeout_add(_SAVE_TIMEOUT, self.save)
 
-    def say_text(self, text):
+    def say_text(self, text, pitch=None, rate=None, lang_code=None):
+        if pitch is None:
+            pitch = self._pitch
+        if rate is None:
+            rate = self._rate
+        if lang_code is None:
+            voice_name = self._default_voice_name
+        else:
+            voice_name = self._player.get_all_voices()[lang_code]
         if text:
-            self._player.speak(self._pitch, self._rate, self._voice_name, text)
+            logging.debug('PLAYING "%s" lang %s', text, voice_name)
+            self._player.speak(pitch, rate, voice_name, text)
 
     def say_selected_text(self):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
@@ -216,6 +225,12 @@ class SpeechManager(GObject.GObject):
         self._rate = settings.get_int('rate')
         logging.debug('loading speech configuration pitch %s rate %s',
                       self._pitch, self._rate)
+
+    def get_all_voices(self):
+        return self._player.get_all_voices()
+
+    def get_all_traslated_voices(self):
+        return self._player.get_all_translated_voices()
 
 
 class _GstSpeechPlayer(GObject.GObject):
