@@ -227,6 +227,7 @@ class _GstSpeechPlayer(GObject.GObject):
     }
 
     def __init__(self):
+        Gst.init(None)
         GObject.GObject.__init__(self)
         self._pipeline = None
         self._all_voices = None
