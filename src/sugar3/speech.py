@@ -229,6 +229,7 @@ class _GstSpeechPlayer(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
         self._pipeline = None
+        self._all_voices = None
 
     def restart_sound_device(self):
         if self._pipeline is None:
@@ -290,14 +291,17 @@ class _GstSpeechPlayer(GObject.GObject):
         self.restart_sound_device()
 
     def get_all_voices(self):
-        all_voices = {}
+        if self._all_voices is not None:
+            return self._all_voices
+        self._all_voices = {}
+
         for voice in Gst.ElementFactory.make('espeak', None).props.voices:
             name, language, dialect = voice
             if dialect != 'none':
-                all_voices[language + '_' + dialect] = name
+                self._all_voices[language + '_' + dialect] = name
             else:
-                all_voices[language] = name
-        return all_voices
+                self._all_voices[language] = name
+        return self._all_voices
 
     def get_default_voice(self):
         """Try to figure out the default voice, from the current locale ($LANG)
