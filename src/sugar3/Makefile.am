@@ -16,6 +16,7 @@ sugar_PYTHON =		\
         network.py	\
 	power.py \
 	profile.py	\
+	speech.py	\
 	util.py
 
 nodist_sugar_PYTHON = config.py
