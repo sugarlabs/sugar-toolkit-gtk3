@@ -137,6 +137,8 @@ class Builder(object):
             retcode = subprocess.call(args)
             if retcode:
                 print 'ERROR - msgfmt failed with return code %i.' % retcode
+                print 'Continuing build without %s translation' % lang
+                continue
 
             cat = gettext.GNUTranslations(open(mo_file, 'r'))
             translated_name = cat.gettext(self.config.activity_name)
