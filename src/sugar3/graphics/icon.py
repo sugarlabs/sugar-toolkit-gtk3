@@ -827,6 +827,9 @@ class CellRendererIcon(Gtk.CellRenderer):
 
     def __init__(self, treeview=None):
         # treeview is not used anymore, is here just to not break the API
+        if treeview is not None:
+            logging.warning('CellRendererIcon: treeview parameter in '
+                            'constructor is deprecated')
         self._buffer = _IconBuffer()
         self._buffer.cache = True
         self._xo_color = None
