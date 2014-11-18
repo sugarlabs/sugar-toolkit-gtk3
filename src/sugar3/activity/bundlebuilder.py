@@ -103,8 +103,9 @@ class Config(object):
 
 class Builder(object):
 
-    def __init__(self, config):
+    def __init__(self, config, fail=False):
         self.config = config
+        self.fail = fail
         self.locale_dir = os.path.join(self.config.build_dir, 'locale')
 
     def build(self):
@@ -137,6 +138,8 @@ class Builder(object):
             retcode = subprocess.call(args)
             if retcode:
                 print 'ERROR - msgfmt failed with return code %i.' % retcode
+                if not self.fail:
+                    continue
 
             cat = gettext.GNUTranslations(open(mo_file, 'r'))
             translated_name = cat.gettext(self.config.activity_name)
@@ -329,7 +332,7 @@ def cmd_dev(config, options):
 def cmd_dist_xo(config, options):
     """Create a xo bundle package"""
 
-    packager = XOPackager(Builder(config))
+    packager = XOPackager(Builder(config, options.fail))
     packager.package()
 
 
@@ -427,7 +430,12 @@ def start():
                               default=1, nargs='?',
                               help="verbosity for the unit tests")
 
-    subparsers.add_parser("dist_xo", help="Create a xo bundle package")
+    dist_parser = subparsers.add_parser("dist_xo",
+                                         help="Create a xo bundle package")
+    dist_parser.add_argument("--no-fail", dest="fail", action="store_false",
+                             default=True,
+                             help="continue past failure when building xo file")
+
     subparsers.add_parser("dist_source", help="Create a tar source package")
     subparsers.add_parser("build", help="Build generated files")
     subparsers.add_parser(
