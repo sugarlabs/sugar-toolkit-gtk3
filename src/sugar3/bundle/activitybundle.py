@@ -229,19 +229,22 @@ class ActivityBundle(Bundle):
 
     def _parse_linfo(self, linfo_file):
         cp = ConfigParser()
-        cp.readfp(linfo_file)
+        try:
+            cp.readfp(linfo_file)
 
-        section = 'Activity'
+            section = 'Activity'
 
-        if cp.has_option(section, 'name'):
-            self._name = cp.get(section, 'name')
+            if cp.has_option(section, 'name'):
+                self._name = cp.get(section, 'name')
 
-        if cp.has_option(section, 'summary'):
-            self._summary = cp.get(section, 'summary')
+            if cp.has_option(section, 'summary'):
+                self._summary = cp.get(section, 'summary')
 
-        if cp.has_option(section, 'tags'):
-            tag_list = cp.get(section, 'tags').strip(';')
-            self._tags = [tag.strip() for tag in tag_list.split(';')]
+            if cp.has_option(section, 'tags'):
+                tag_list = cp.get(section, 'tags').strip(';')
+                self._tags = [tag.strip() for tag in tag_list.split(';')]
+        except ConfigParser.ParsingError as e:
+            logging.exception('Exception reading linfo file: %s', e)
 
     def get_locale_path(self):
         """Get the locale path inside the (installed) activity bundle."""
