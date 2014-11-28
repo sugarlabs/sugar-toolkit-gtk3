@@ -18,6 +18,7 @@ sugar_PYTHON =              \
 	panel.py                \
 	radiopalette.py         \
 	radiotoolbutton.py      \
+	scrollingdetector.py    \
 	style.py                \
 	toggletoolbutton.py     \
 	toolbarbox.py           \
