@@ -825,9 +825,8 @@ class CellRendererIcon(Gtk.CellRenderer):
         'clicked': (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
-    def __init__(self, tree_view):
-        from sugar3.graphics.palette import CellRendererInvoker
-
+    def __init__(self, treeview=None):
+        # treeview is not used anymore, is here just to not break the API
         self._buffer = _IconBuffer()
         self._buffer.cache = True
         self._xo_color = None
@@ -836,19 +835,10 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._prelit_fill_color = None
         self._prelit_stroke_color = None
         self._active_state = False
-        self._palette_invoker = CellRendererInvoker()
         self._cached_offsets = None
 
         Gtk.CellRenderer.__init__(self)
 
-        tree_view.connect('button-press-event',
-                          self.__button_press_event_cb)
-        tree_view.connect('button-release-event',
-                          self.__button_release_event_cb)
-
-        self._palette_invoker.attach_cell_renderer(tree_view, self)
-
-        self._tree_view = tree_view
         self._is_scrolling = False
 
     def connect_to_scroller(self, scrolled):
@@ -856,33 +846,16 @@ class CellRendererIcon(Gtk.CellRenderer):
         scrolled.connect('scroll-end', self._scroll_end_cb)
 
     def _scroll_start_cb(self, event):
-        self._palette_invoker.detach()
         self._is_scrolling = True
 
     def _scroll_end_cb(self, event):
-        self._palette_invoker.attach_cell_renderer(self._tree_view, self)
         self._is_scrolling = False
 
     def is_scrolling(self):
         return self._is_scrolling
 
-    def __del__(self):
-        self._palette_invoker.detach()
-
-    def __button_press_event_cb(self, widget, event):
-        if self._point_in_cell_renderer(widget, event.x, event.y):
-            self._active_state = True
-
-    def __button_release_event_cb(self, widget, event):
-        self._active_state = False
-
     def create_palette(self):
         return None
-
-    def get_palette_invoker(self):
-        return self._palette_invoker
-
-    palette_invoker = GObject.property(type=object, getter=get_palette_invoker)
 
     def set_file_name(self, value):
         if self._buffer.file_name != value:
@@ -981,31 +954,6 @@ class CellRendererIcon(Gtk.CellRenderer):
     def do_start_editing(self, event, widget, path, background_area, cell_area,
                          flags):
         pass
-
-    def _point_in_cell_renderer(self, tree_view, x=None, y=None):
-        """Check if the point with coordinates x, y is inside this icon.
-
-        If the x, y coordinates are not given, they are taken from the
-        pointer current position.
-
-        """
-        if x is None and y is None:
-            x, y = tree_view.get_pointer()
-            x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
-        pos = tree_view.get_path_at_pos(int(x), int(y))
-        if pos is None:
-            return False
-
-        path_, column, x, y_ = pos
-
-        for cell_renderer in column.get_cells():
-            if cell_renderer == self:
-                cell_x, cell_width = column.cell_get_position(cell_renderer)
-                if x > cell_x and x < (cell_x + cell_width):
-                    return True
-                return False
-
-        return False
 
     def do_render(self, cr, widget, background_area, cell_area, flags):
         if not self._is_scrolling:
