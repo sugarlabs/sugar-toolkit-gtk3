@@ -18,11 +18,12 @@
 from gi.repository import GObject
 from gi.repository import GLib
 
-from sugar3.graphics.icon import CellRendererIcon
-
 
 class ScrollingDetector(GObject.GObject):
     """
+    ScollingDetector emit signals when a ScrolledWindow starts and
+    finish scrolling. Other widets can use that information to
+    avoid do performance expensive operations.
     """
 
     scroll_start_signal = GObject.Signal('scroll-start')
@@ -58,15 +59,3 @@ class ScrollingDetector(GObject.GObject):
         self.scroll_start_signal.emit()
         self._prev_value = adj.props.value
         GLib.timeout_add(self._timeout, self._check_scroll_cb, adj)
-
-    def connect_treeview(self, treeview):
-        """
-        treeview -- Gtk.TreeView: a TreeView with CellRendererIcons already
-                    added.
-        This method need be executed after all the columns and renderers
-        were added to the treeview.
-        """
-        for column in treeview.get_columns():
-            for cell_renderer in column.get_cells():
-                if isinstance(cell_renderer, CellRendererIcon):
-                    cell_renderer.connect_to_scroller(self)

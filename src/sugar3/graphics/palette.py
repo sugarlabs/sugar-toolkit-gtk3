@@ -37,13 +37,14 @@ from sugar3.graphics.palettewindow import PaletteWindow, \
 from sugar3.graphics.palettemenu import PaletteMenuItem
 
 from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
-    WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
+    WidgetInvoker, CursorInvoker, ToolInvoker, TreeViewInvoker
+
 assert MouseSpeedDetector
 assert Invoker
 assert WidgetInvoker
 assert CursorInvoker
 assert ToolInvoker
-assert CellRendererInvoker
+assert TreeViewInvoker
 
 
 class _HeaderItem(Gtk.MenuItem):
@@ -412,7 +413,8 @@ class Palette(PaletteWindow):
         if self._palette_state == self.PRIMARY:
             self._secondary_box.show()
 
-        self._full_request = self._widget.size_request()
+        if self._widget is not None:
+            self._full_request = self._widget.size_request()
 
         if self._palette_state == self.PRIMARY:
             self._secondary_box.hide()
