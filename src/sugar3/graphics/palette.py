@@ -277,7 +277,8 @@ class Palette(PaletteWindow):
                 self._secondary_label.set_max_width_chars(
                     style.MENU_WIDTH_CHARS)
                 self._secondary_label.set_line_wrap(True)
-                self._secondary_label.set_ellipsize(Pango.EllipsizeMode.END)
+                self._secondary_label.set_ellipsize(
+                    style.DEFAULT_ELLIPSIS_MODE)
                 self._secondary_label.set_lines(NO_OF_LINES)
                 self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:
@@ -285,7 +286,8 @@ class Palette(PaletteWindow):
                 body_width = NO_OF_LINES * style.MENU_WIDTH_CHARS
                 body_width -= ELLIPSIS_LENGTH
                 if len(label) > body_width:
-                    label = ' '.join(label[:body_width].split()[:-1]) + '...'
+                    label = label[0:style.DEFAULT_ELLIPSIS_CHARACTERS] + \
+                        '...' + label[-style.DEFAULT_ELLIPSIS_CHARACTERS:]
                 label = textwrap.fill(label, width=style.MENU_WIDTH_CHARS)
 
             self._secondary_text = label
