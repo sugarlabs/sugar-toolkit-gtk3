@@ -20,7 +20,7 @@
 UNSTABLE.
 """
 
-from ConfigParser import ConfigParser
+from ConfigParser import ConfigParser, ParsingError
 from locale import normalize
 import os
 import shutil
@@ -243,7 +243,7 @@ class ActivityBundle(Bundle):
             if cp.has_option(section, 'tags'):
                 tag_list = cp.get(section, 'tags').strip(';')
                 self._tags = [tag.strip() for tag in tag_list.split(';')]
-        except ConfigParser.ParsingError as e:
+        except ParsingError as e:
             logging.exception('Exception reading linfo file: %s', e)
 
     def get_locale_path(self):
