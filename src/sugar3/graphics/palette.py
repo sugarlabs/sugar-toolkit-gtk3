@@ -24,6 +24,7 @@ STABLE.
 """
 import textwrap
 
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -247,8 +248,8 @@ class Palette(PaletteWindow):
 
     def set_primary_text(self, label, accel_path=None):
         self._primary_text = label
-
         if label is not None:
+            label = GLib.markup_escape_text(label)
             self._label.set_markup('<b>%s</b>' % label)
             self._label.show()
 
