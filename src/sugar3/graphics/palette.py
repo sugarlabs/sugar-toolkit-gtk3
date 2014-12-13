@@ -128,8 +128,7 @@ class Palette(PaletteWindow):
         self._label_alignment = Gtk.Alignment(xalign=0, yalign=0.5, xscale=1,
                                               yscale=0.33)
         self._label_alignment.set_padding(
-            style.DEFAULT_SPACING, style.DEFAULT_SPACING,
-            style.DEFAULT_SPACING, style.DEFAULT_SPACING)
+            0, 0, style.DEFAULT_SPACING, style.DEFAULT_SPACING)
         self._label_alignment.add(labels_box)
         self._label_alignment.show()
         self._primary_box.pack_start(self._label_alignment, True, True, 0)
