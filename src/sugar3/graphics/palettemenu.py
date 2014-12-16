@@ -139,7 +139,7 @@ class PaletteMenuItem(Gtk.EventBox):
         self.label = Gtk.Label(text_label)
         if text_maxlen > 0:
             self.label.set_max_width_chars(text_maxlen)
-            self.label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+            self.label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
         align.add(self.label)
         self._hbox.pack_start(align, expand=True, fill=True,
                               padding=style.DEFAULT_PADDING)

@@ -41,7 +41,7 @@ class MenuItem(Gtk.ImageMenuItem):
         label.set_alignment(0.0, 0.5)
         label.set_accel_widget(self)
         if text_maxlen > 0:
-            label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+            label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
             label.set_max_width_chars(text_maxlen)
         self.add(label)
         label.show()

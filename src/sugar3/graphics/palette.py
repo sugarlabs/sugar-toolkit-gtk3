@@ -140,7 +140,7 @@ class Palette(PaletteWindow):
 
         if text_maxlen > 0:
             self._label.set_max_width_chars(text_maxlen)
-            self._label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+            self._label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
         labels_box.pack_start(self._label, True, True, 0)
         self._primary_event_box.connect('button-release-event',
                                         self.__button_release_event_cb)
@@ -278,7 +278,7 @@ class Palette(PaletteWindow):
                 self._secondary_label.set_max_width_chars(
                     style.MENU_WIDTH_CHARS)
                 self._secondary_label.set_line_wrap(True)
-                self._secondary_label.set_ellipsize(Pango.EllipsizeMode.END)
+                self._secondary_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
                 self._secondary_label.set_lines(NO_OF_LINES)
                 self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:
