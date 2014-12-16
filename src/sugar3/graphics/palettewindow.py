@@ -223,7 +223,7 @@ class _PaletteMenuWidget(Gtk.Menu):
         x = event.x_root
         y = event.y_root
 
-        if type(self._invoker) is CellRendererInvoker:
+        if isinstance(self._invoker, CellRendererInvoker):
             in_invoker = self._invoker.point_in_cell_renderer(x, y)
         else:
             rect = self._invoker.get_rect()
@@ -238,7 +238,7 @@ class _PaletteMenuWidget(Gtk.Menu):
         x = event.x_root
         y = event.y_root
 
-        if type(self._invoker) is CellRendererInvoker:
+        if isinstance(self._invoker, CellRendererInvoker):
             in_invoker = self._invoker.point_in_cell_renderer(x, y)
         else:
             rect = self._invoker.get_rect()
@@ -481,6 +481,7 @@ class MouseSpeedDetector(GObject.GObject):
 
 
 class PaletteWindow(GObject.GObject):
+
     """
     Base class for _ToolbarPalette and Palette.
 

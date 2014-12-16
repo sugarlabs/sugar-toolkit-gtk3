@@ -24,6 +24,7 @@ import re
 
 
 class InvalidVersionError(Exception):
+
     """The passed activity version can not be normalized."""
     pass
 
@@ -38,6 +39,7 @@ VERSION_RE = re.compile(r'''
 
 
 class NormalizedVersion(object):
+
     """A normalized version.
 
     Good:

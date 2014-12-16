@@ -36,7 +36,7 @@ def get_profile_path(path=None):
     base = os.path.join(home_dir, profile_id)
     if not os.path.isdir(base):
         try:
-            os.makedirs(base, 0770)
+            os.makedirs(base, 0o770)
         except OSError:
             print 'Could not create user directory.'
 

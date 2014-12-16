@@ -32,6 +32,7 @@ _profile = None
 
 
 class Profile(object):
+
     """Local user's current options/profile information
 
     The profile is also responsible for loading the user's

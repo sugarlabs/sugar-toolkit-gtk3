@@ -134,10 +134,10 @@ def open_log_file(activity):
     while True:
         path = env.get_logs_path('%s-%s.log' % (activity.get_bundle_id(), i))
         try:
-            fd = os.open(path, os.O_EXCL | os.O_CREAT | os.O_WRONLY, 0644)
+            fd = os.open(path, os.O_EXCL | os.O_CREAT | os.O_WRONLY, 0o644)
             f = os.fdopen(fd, 'w', 0)
             return (path, f)
-        except OSError, e:
+        except OSError as e:
             if e.errno == EEXIST:
                 i += 1
             elif e.errno == ENOSPC:
@@ -148,6 +148,7 @@ def open_log_file(activity):
 
 
 class ActivityCreationHandler(GObject.GObject):
+
     """Sugar-side activity creation interface
 
     This object uses a dbus method on the ActivityFactory

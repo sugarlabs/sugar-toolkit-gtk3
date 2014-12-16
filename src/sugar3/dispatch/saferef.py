@@ -39,6 +39,7 @@ def safeRef(target, onDelete=None):
 
 
 class BoundMethodWeakref(object):
+
     """'Safe' and reusable weak references to instance methods
 
     BoundMethodWeakref objects provide a mechanism for
@@ -123,7 +124,7 @@ class BoundMethodWeakref(object):
                 try:
                     if callable(function):
                         function(self)
-                except Exception, e:
+                except Exception as e:
                     try:
                         traceback.print_exc()
                     except AttributeError:
@@ -185,6 +186,7 @@ class BoundMethodWeakref(object):
 
 
 class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
+
     """A specialized BoundMethodWeakref, for platforms where instance methods
     are not descriptors.
 
@@ -201,6 +203,7 @@ class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
     aren't descriptors (such as Jython) this implementation has the advantage
     of working in the most cases.
     """
+
     def __init__(self, target, onDelete=None):
         """Return a weak-reference-like instance for a bound method
 

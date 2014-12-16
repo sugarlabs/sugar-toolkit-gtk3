@@ -61,7 +61,7 @@ class IconEntry(Gtk.Entry):
         self.set_icon(position, pixbuf)
 
     def set_icon(self, position, pixbuf):
-        if type(pixbuf) is not GdkPixbuf.Pixbuf:
+        if not isinstance(pixbuf, GdkPixbuf.Pixbuf):
             raise ValueError('Argument must be a pixbuf, not %r.' % pixbuf)
         self.set_icon_from_pixbuf(position, pixbuf)
 

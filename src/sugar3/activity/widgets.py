@@ -309,6 +309,7 @@ class DescriptionItem(ToolButton):
 
 
 class ActivityToolbar(Gtk.Toolbar):
+
     """The Activity toolbar with the Journal entry title and sharing button"""
 
     def __init__(self, activity, orientation_left=False):
@@ -340,6 +341,7 @@ class ActivityToolbar(Gtk.Toolbar):
 
 
 class EditToolbar(Gtk.Toolbar):
+
     """Provides the standard edit toolbar for Activities.
 
     Members:
