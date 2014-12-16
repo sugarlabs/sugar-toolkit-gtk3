@@ -32,6 +32,7 @@ from gi.repository import Gio
 
 FOCUS_LINE_WIDTH = 2
 _TAB_CURVATURE = 1
+ELLIPSIZE_MODE_DEFAULT = Pango.EllipsizeMode.END
 
 
 def _compute_zoom_factor():
