@@ -18,6 +18,7 @@ import os
 import logging
 from gettext import gettext as _
 
+from gi.repository.GLib import GError
 from gi.repository import Gio
 from gi.repository import Gst
 from gi.repository import Gtk
@@ -277,8 +278,13 @@ class _GstSpeechPlayer(GObject.GObject):
         if self._pipeline is not None:
             self.stop_sound_device()
             del self._pipeline
+            self._pipeline = None
 
-        self._pipeline = Gst.parse_launch(command)
+        try:
+            self._pipeline = Gst.parse_launch(command)
+        except GError:
+            logging.error('The speech plugin is not installed in the system.')
+            return
 
         bus = self._pipeline.get_bus()
         bus.add_signal_watch()
@@ -297,6 +303,9 @@ class _GstSpeechPlayer(GObject.GObject):
             return
 
         self.make_pipeline('espeak name=espeak ! autoaudiosink')
+        if self._pipeline is None:
+            return
+
         src = self._pipeline.get_by_name('espeak')
 
         src.props.text = text
