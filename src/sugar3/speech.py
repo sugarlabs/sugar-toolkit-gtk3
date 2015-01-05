@@ -18,11 +18,17 @@ import os
 import logging
 from gettext import gettext as _
 
+from gi.repository.GLib import GError
 from gi.repository import Gio
-from gi.repository import Gst
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+
+_HAS_GST = True
+try:
+    from gi.repository import Gst
+except:
+    _HAS_GST = False
 
 from sugar3 import power
 
@@ -110,6 +116,24 @@ translated_espeak_voices = {
 }
 
 
+def _has_espeak_module():
+    try:
+        Gst.parse_launch('espeak')
+    except GError:
+        logging.error('The speech plugin is not installed in the system.')
+        return False
+    return True
+
+
+def _check_modules():
+    if not _HAS_GST:
+        logging.error('GST is not installed in the system.')
+        return False
+    if not _has_espeak_module():
+        return False
+    return True
+
+
 class SpeechManager(GObject.GObject):
 
     __gtype_name__ = 'SpeechManager'
@@ -128,6 +152,10 @@ class SpeechManager(GObject.GObject):
 
     def __init__(self, **kwargs):
         GObject.GObject.__init__(self, **kwargs)
+        self._player = None
+        if not self.enabled():
+            return
+
         self._player = _GstSpeechPlayer()
         self._player.connect('play', self._update_state, 'play')
         self._player.connect('stop', self._update_state, 'stop')
@@ -139,6 +167,9 @@ class SpeechManager(GObject.GObject):
         self._is_paused = False
         self._save_timeout_id = -1
         self.restore()
+
+    def enabled(self):
+        return _check_modules()
 
     def _update_state(self, player, signal):
         self._is_playing = (signal == 'play')
@@ -227,10 +258,14 @@ class SpeechManager(GObject.GObject):
                       self._pitch, self._rate)
 
     def get_all_voices(self):
-        return self._player.get_all_voices()
+        if self._player:
+            return self._player.get_all_voices()
+        return None
 
     def get_all_traslated_voices(self):
-        return self._player.get_all_translated_voices()
+        if self._player:
+            return self._player.get_all_voices()
+        return None
 
 
 class _GstSpeechPlayer(GObject.GObject):
