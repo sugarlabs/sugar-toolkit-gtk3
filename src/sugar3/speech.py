@@ -18,11 +18,17 @@ import os
 import logging
 from gettext import gettext as _
 
+from gi.repository.GLib import GError
 from gi.repository import Gio
-from gi.repository import Gst
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+
+HAS_GST = True
+try:
+    from gi.repository import Gst
+except:
+    HAS_GST = False
 
 from sugar3 import power
 
@@ -128,6 +134,9 @@ class SpeechManager(GObject.GObject):
 
     def __init__(self, **kwargs):
         GObject.GObject.__init__(self, **kwargs)
+        if not HAS_GST:
+            logging.error('GST is not installed in the system.')
+            return
         self._player = _GstSpeechPlayer()
         self._player.connect('play', self._update_state, 'play')
         self._player.connect('stop', self._update_state, 'stop')
@@ -277,8 +286,13 @@ class _GstSpeechPlayer(GObject.GObject):
         if self._pipeline is not None:
             self.stop_sound_device()
             del self._pipeline
+            self._pipeline = None
 
-        self._pipeline = Gst.parse_launch(command)
+        try:
+            self._pipeline = Gst.parse_launch(command)
+        except GError:
+            logging.error('The speech plugin is not installed in the system.')
+            return
 
         bus = self._pipeline.get_bus()
         bus.add_signal_watch()
@@ -286,10 +300,11 @@ class _GstSpeechPlayer(GObject.GObject):
 
     def __pipe_message_cb(self, bus, message):
         if message.type in (Gst.MessageType.EOS, Gst.MessageType.ERROR):
-            self._pipeline.set_state(Gst.State.NULL)
-            self._pipeline = None
-            power.get_power_manager().restore_suspend()
-            self.emit('stop')
+            if self._pipeline:
+                self._pipeline.set_state(Gst.State.NULL)
+                self._pipeline = None
+                power.get_power_manager().restore_suspend()
+                self.emit('stop')
 
     def speak(self, pitch, rate, voice_name, text):
         # TODO workaround for http://bugs.sugarlabs.org/ticket/1801
@@ -297,6 +312,9 @@ class _GstSpeechPlayer(GObject.GObject):
             return
 
         self.make_pipeline('espeak name=espeak ! autoaudiosink')
+        if self._pipeline is None:
+            return
+
         src = self._pipeline.get_by_name('espeak')
 
         src.props.text = text
