@@ -21,13 +21,19 @@
 STABLE.
 """
 
+import re
 import os
+import json
 import logging
 import gettext
+from subprocess import check_output
 
 from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
+from gi.repository import GObject
+
+from sugar3.env import get_profile_path
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
@@ -37,6 +43,11 @@ GENERIC_TYPE_AUDIO = 'Audio'
 GENERIC_TYPE_VIDEO = 'Video'
 GENERIC_TYPE_LINK = 'Link'
 GENERIC_TYPE_BUNDLE = 'Bundle'
+
+_AUDIO_RE = re.compile('audio/[A-Za-z0-9\-]+$', re.M)
+_VIDEO_RE = re.compile('video/[A-Za-z0-9\-]+$', re.M)
+_APPLICATION_RE = re.compile('application/[A-Za-z0-9\-]+$', re.M)
+_GST_MIMES_CACHE = get_profile_path('gst_mimes.json')
 
 
 def _get_supported_image_mime_types():
@@ -67,20 +78,12 @@ _generic_types = [{
     'id': GENERIC_TYPE_AUDIO,
     'name': _('Audio'),
     'icon': 'audio-x-generic',
-    'types': [
-        'audio/ogg', 'audio/x-wav', 'audio/wav', 'audio/x-vorbis+ogg',
-        'audio/x-mpegurl', 'audio/mpegurl', 'audio/mpeg', 'audio/x-scpls'],
+    'types': [],
 }, {
     'id': GENERIC_TYPE_VIDEO,
     'name': _('Video'),
     'icon': 'video-x-generic',
-    'types': ['video/ogg', 'application/ogg', 'video/x-theora+ogg',
-              'video/x-theora', 'video/x-mng', 'video/mpeg4',
-              'video/mpeg-stream', 'video/mpeg', 'video/mpegts', 'video/mpeg2',
-              'video/mpeg1', 'video/x-cdxa', 'video/x-ogm+ogg', 'video/x-flv',
-              'video/mp4', 'video/x-matroska', 'video/x-msvideo',
-              'application/x-ogm-video', 'video/quicktime', 'video/x-quicktime'
-              'video/avi'],
+    'types': [],
 }, {
     'id': GENERIC_TYPE_LINK,
     'name': _('Link'),
@@ -92,6 +95,50 @@ _generic_types = [{
     'icon': 'user-documents',
     'types': ['application/vnd.olpc-sugar'],
 }]
+
+
+def _get_generic_type_raw(type_id):
+    for generic_type in _generic_types:
+        if type_id == generic_type['id']:
+            return generic_type
+
+
+def _set_av_mimes():
+    audio = _get_generic_type_raw(GENERIC_TYPE_AUDIO)
+    video = _get_generic_type_raw(GENERIC_TYPE_VIDEO)
+    audio['types'] = set()
+    video['types'] = set()
+
+    for line in check_output(['gst-inspect-1.0']).splitlines():
+        if 'demux' not in line:
+            continue
+
+        component = line.split()[1].strip(':')
+        doc = check_output(['gst-inspect-1.0', component])
+        audio['types'].update(set(_AUDIO_RE.findall(doc)))
+        video['types'].update(set(_VIDEO_RE.findall(doc)))
+
+        # Most application/* mimes are either video container formats
+        # that can have audio and video or subtitle formats.
+        applications = set([m for m in _APPLICATION_RE.findall(doc) \
+                            if 'subtitle' not in m])
+        audio['types'].update(applications)
+        video['types'].update(applications)
+
+    with open(_GST_MIMES_CACHE, 'w') as f:
+        json.dump({'audio': list(audio['types']),
+                   'video': list(video['types'])}, f)
+
+
+if os.path.isfile(_GST_MIMES_CACHE):
+    with open(_GST_MIMES_CACHE) as f:
+        j = json.load(f)
+    _get_generic_type_raw(GENERIC_TYPE_AUDIO)['types'] = j['audio']
+    _get_generic_type_raw(GENERIC_TYPE_VIDEO)['types'] = j['video']
+
+    _set_av_mimes_timeout = 0
+else:
+    _set_av_mimes_timeout = GObject.idle_add(_set_av_mimes)
 
 
 class ObjectType(object):
@@ -111,6 +158,10 @@ def get_generic_type(type_id):
 
 
 def get_all_generic_types():
+    if not _get_generic_type_raw(GENERIC_TYPE_AUDIO)['types']:
+        GObject.source_remove(_set_av_mimes_timeout)
+        _set_av_mimes()
+
     types = []
     for generic_type in _generic_types:
         object_type = ObjectType(generic_type['id'], generic_type['name'],
@@ -315,6 +366,11 @@ def split_uri_list(uri_list):
 
 
 def _get_generic_type_for_mime(mime_type):
+    if mime_type.startswith(('audio', 'video')) \
+       and not _get_generic_type_raw(GENERIC_TYPE_AUDIO)['types']:
+        GObject.source_remove(_set_av_mimes_timeout)
+        _set_av_mimes()
+
     for generic_type in _generic_types:
         if mime_type in generic_type['types']:
             return generic_type
