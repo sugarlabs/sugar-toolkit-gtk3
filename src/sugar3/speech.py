@@ -18,11 +18,17 @@ import os
 import logging
 from gettext import gettext as _
 
+from gi.repository.GLib import GError
 from gi.repository import Gio
-from gi.repository import Gst
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+
+_HAS_GST = True
+try:
+    from gi.repository import Gst
+except:
+    _HAS_GST = False
 
 from sugar3 import power
 
@@ -110,6 +116,24 @@ translated_espeak_voices = {
 }
 
 
+def has_espeak_module():
+    try:
+        Gst.parse_launch('espeak')
+    except GError:
+        logging.error('The speech plugin is not installed in the system.')
+        return False
+    return True
+
+
+def check_modules():
+    if not _HAS_GST:
+        logging.error('GST is not installed in the system.')
+        return False
+    if not has_espeak_module():
+        return False
+    return True
+
+
 class SpeechManager(GObject.GObject):
 
     __gtype_name__ = 'SpeechManager'
@@ -128,6 +152,10 @@ class SpeechManager(GObject.GObject):
 
     def __init__(self, **kwargs):
         GObject.GObject.__init__(self, **kwargs)
+
+        if not check_modules():
+            return
+
         self._player = _GstSpeechPlayer()
         self._player.connect('play', self._update_state, 'play')
         self._player.connect('stop', self._update_state, 'stop')
@@ -227,10 +255,14 @@ class SpeechManager(GObject.GObject):
                       self._pitch, self._rate)
 
     def get_all_voices(self):
-        return self._player.get_all_voices()
+        if self._player:
+            return self._player.get_all_voices()
+        return None
 
     def get_all_traslated_voices(self):
-        return self._player.get_all_translated_voices()
+        if self._player:
+            return self._player.get_all_voices()
+        return None
 
 
 class _GstSpeechPlayer(GObject.GObject):
@@ -277,6 +309,7 @@ class _GstSpeechPlayer(GObject.GObject):
         if self._pipeline is not None:
             self.stop_sound_device()
             del self._pipeline
+            self._pipeline = None
 
         self._pipeline = Gst.parse_launch(command)
 
@@ -297,6 +330,7 @@ class _GstSpeechPlayer(GObject.GObject):
             return
 
         self.make_pipeline('espeak name=espeak ! autoaudiosink')
+
         src = self._pipeline.get_by_name('espeak')
 
         src.props.text = text
