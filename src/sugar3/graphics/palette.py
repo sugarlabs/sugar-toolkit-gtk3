@@ -184,6 +184,10 @@ class Palette(PaletteWindow):
     def _setup_widget(self):
         PaletteWindow._setup_widget(self)
         self._widget.connect('destroy', self.__destroy_cb)
+        self._widget.connect('map', self.__map_cb)
+
+    def __map_cb(self, *args):
+        self._widget.present()
 
     def __destroy_cb(self, palette):
         self._secondary_anim.stop()
