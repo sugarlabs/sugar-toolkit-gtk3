@@ -16,8 +16,8 @@ nb = Notebook(can_close_tabs=True)
 box.pack_start(nb, False, False, 0)
 
 for i in range(5):
-    bufferf = "Prepend Frame %d" % (i+1)
-    bufferl = "PPage %d" % (i+1)
+    bufferf = "Prepend Frame %d" % (i + 1)
+    bufferl = "PPage %d" % (i + 1)
 
     frame = Gtk.Frame()
     frame.set_border_width(10)

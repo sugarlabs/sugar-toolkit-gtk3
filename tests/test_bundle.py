@@ -29,6 +29,7 @@ SAMPLE_CONTENT_PATH = os.path.join(data_dir, 'sample.content')
 
 
 class TestBundle(unittest.TestCase):
+
     def test_bundle_from_dir(self):
         bundle = bundle_from_dir(SAMPLE_ACTIVITY_PATH)
         self.assertIsInstance(bundle, ActivityBundle)

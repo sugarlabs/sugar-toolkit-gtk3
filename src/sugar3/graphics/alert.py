@@ -60,6 +60,7 @@ _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 class Alert(Gtk.EventBox):
+
     """
     UI interface for Alerts
 
@@ -240,6 +241,7 @@ class Alert(Gtk.EventBox):
 
 
 class ConfirmationAlert(Alert):
+
     """
     This is a ready-made two button (Cancel,Ok) alert.
 
@@ -293,6 +295,7 @@ class ConfirmationAlert(Alert):
 
 
 class ErrorAlert(Alert):
+
     """
     This is a ready-made one button (Ok) alert.
 
@@ -379,6 +382,7 @@ class _TimeoutIcon(Gtk.Alignment):
 
 
 class TimeoutAlert(Alert):
+
     """
     This is a ready-made two button (Cancel,Continue) alert
 
@@ -446,6 +450,7 @@ class TimeoutAlert(Alert):
 
 
 class NotifyAlert(Alert):
+
     """
     Timeout alert with only an "OK" button - just for notifications
 

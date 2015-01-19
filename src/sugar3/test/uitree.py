@@ -42,7 +42,7 @@ def _retry_find(func):
 
             try:
                 result = func(*args, **kwargs)
-            except GLib.GError, e:
+            except GLib.GError as e:
                 # The application is not responding, try again
                 if e.code == Atspi.Error.IPC:
                     continue
@@ -64,6 +64,7 @@ def _retry_find(func):
 
 
 class Node:
+
     def __init__(self, accessible):
         self._accessible = accessible
 

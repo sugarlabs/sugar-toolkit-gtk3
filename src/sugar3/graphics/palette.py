@@ -28,7 +28,6 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
-from gi.repository import Pango
 
 from sugar3.graphics import animator
 from sugar3.graphics import style
@@ -48,6 +47,7 @@ assert CellRendererInvoker
 
 
 class _HeaderItem(Gtk.MenuItem):
+
     """A MenuItem with a custom child widget that gets all the
     available space.
 
@@ -71,6 +71,7 @@ class _HeaderItem(Gtk.MenuItem):
 
 
 class _HeaderSeparator(Gtk.SeparatorMenuItem):
+
     """A SeparatorMenuItem that can be styled in the theme."""
 
     __gtype_name__ = 'SugarPaletteHeaderSeparator'
@@ -80,6 +81,7 @@ class _HeaderSeparator(Gtk.SeparatorMenuItem):
 
 
 class Palette(PaletteWindow):
+
     """Floating palette implementation.
 
     This class dynamically switches between one of two encapsulated child
@@ -283,7 +285,8 @@ class Palette(PaletteWindow):
                 self._secondary_label.set_max_width_chars(
                     style.MENU_WIDTH_CHARS)
                 self._secondary_label.set_line_wrap(True)
-                self._secondary_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
+                self._secondary_label.set_ellipsize(
+                    style.ELLIPSIZE_MODE_DEFAULT)
                 self._secondary_label.set_lines(NO_OF_LINES)
                 self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:

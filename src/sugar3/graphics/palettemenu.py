@@ -16,13 +16,13 @@
 
 from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import style
 
 
 class PaletteMenuBox(Gtk.VBox):
+
     def __init__(self):
         Gtk.VBox.__init__(self)
 
@@ -57,6 +57,7 @@ class PaletteMenuBox(Gtk.VBox):
 
 
 class PaletteMenuItemSeparator(Gtk.EventBox):
+
     """Contains a HSeparator and has the proper height for the menu."""
 
     __gtype_name__ = 'SugarPaletteMenuItemSeparator'
@@ -79,7 +80,6 @@ class PaletteMenuItem(Gtk.EventBox):
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
                  xo_color=None, file_name=None, accelerator=None):
-
         """
             text_label -- str
                 a text to display in the menu.

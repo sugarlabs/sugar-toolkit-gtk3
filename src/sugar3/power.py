@@ -31,6 +31,7 @@ def get_power_manager():
 
 
 class PowerManager():
+
     """ control of powerd idle suspend,
         reference counted,
         does nothing if powerd is not present

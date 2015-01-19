@@ -38,6 +38,7 @@ def get_svg_color_string(color):
 
 
 class _ColorButton(Gtk.Button):
+
     """This is a ColorButton for Sugar. It is similar to the Gtk.ColorButton,
     but does not have any alpha support.
     Instead of a color selector dialog it will pop up a Sugar palette.
@@ -233,6 +234,7 @@ class _ColorButton(Gtk.Button):
 
 
 class _ColorPalette(Palette):
+
     """This is a color picker palette. It will usually be used indirectly
     trough a sugar3.graphics.ColorButton.
     """

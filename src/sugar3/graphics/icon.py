@@ -535,6 +535,7 @@ class Icon(Gtk.Image):
 
 
 class EventIcon(Gtk.EventBox):
+
     """
     An Icon class that provides access to mouse events and that can act as a
     cursor-positioned palette invoker.
@@ -741,6 +742,7 @@ class EventIcon(Gtk.EventBox):
 
 
 class CanvasIcon(EventIcon):
+
     """
     An EventIcon with active and prelight states, and a styleable
     background.

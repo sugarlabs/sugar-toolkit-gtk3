@@ -22,6 +22,7 @@ from sugar3.test import uitree
 
 
 class TestUITree(unittest.TestCase):
+
     def test_tree(self):
         process = subprocess.Popen(["python", __file__, "show_window1"])
 

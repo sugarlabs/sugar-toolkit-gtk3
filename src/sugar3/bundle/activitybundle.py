@@ -87,6 +87,7 @@ def _expand_lang(locale):
 
 
 class ActivityBundle(Bundle):
+
     """A Sugar activity bundle
 
     See http://wiki.sugarlabs.org/go/Development_Team/Almanac/Activity_Bundles
@@ -413,7 +414,7 @@ class ActivityBundle(Bundle):
         if delete_profile:
             bundle_profile_path = env.get_profile_path(self._bundle_id)
             if os.path.exists(bundle_profile_path):
-                os.chmod(bundle_profile_path, 0775)
+                os.chmod(bundle_profile_path, 0o775)
                 shutil.rmtree(bundle_profile_path, ignore_errors=True)
 
         self._uninstall(install_path)
