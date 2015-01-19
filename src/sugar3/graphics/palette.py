@@ -48,6 +48,7 @@ assert CellRendererInvoker
 
 
 class _HeaderItem(Gtk.MenuItem):
+
     """A MenuItem with a custom child widget that gets all the
     available space.
 
@@ -71,6 +72,7 @@ class _HeaderItem(Gtk.MenuItem):
 
 
 class _HeaderSeparator(Gtk.SeparatorMenuItem):
+
     """A SeparatorMenuItem that can be styled in the theme."""
 
     __gtype_name__ = 'SugarPaletteHeaderSeparator'
@@ -80,6 +82,7 @@ class _HeaderSeparator(Gtk.SeparatorMenuItem):
 
 
 class Palette(PaletteWindow):
+
     """Floating palette implementation.
 
     This class dynamically switches between one of two encapsulated child

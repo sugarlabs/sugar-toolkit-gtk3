@@ -34,6 +34,7 @@ from sugar3.bundle.bundleversion import InvalidVersionError
 
 
 class ContentBundle(Bundle):
+
     """A Sugar content bundle
 
     See http://wiki.laptop.org/go/Content_bundles for details

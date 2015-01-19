@@ -46,6 +46,7 @@ def _del_authinfo():
 
 
 class GlibTCPServer(SocketServer.TCPServer):
+
     """GlibTCPServer
 
     Integrate socket accept into glib mainloop.
@@ -83,6 +84,7 @@ class GlibTCPServer(SocketServer.TCPServer):
 
 
 class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+
     """RequestHandler class that integrates with Glib mainloop.  It writes
        the specified file to the client in chunks, returning control to the
        mainloop between chunks.
@@ -184,6 +186,7 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 
 class GlibURLDownloader(GObject.GObject):
+
     """Grabs a URL in chunks, returning to the mainloop after each chunk"""
 
     __gsignals__ = {
@@ -225,7 +228,7 @@ class GlibURLDownloader(GObject.GObject):
                 self._outf = destfd
             else:
                 self._outf = os.open(self._fname, os.O_RDWR |
-                                     os.O_TRUNC | os.O_CREAT, 0644)
+                                     os.O_TRUNC | os.O_CREAT, 0o644)
         else:
             fname = self._get_filename_from_headers(self._info.headers)
             self._suggested_fname = fname
@@ -290,7 +293,7 @@ class GlibURLDownloader(GObject.GObject):
                 self.cleanup()
                 self.emit('finished', self._fname, self._suggested_fname)
                 return False
-        except Exception, err:
+        except Exception as err:
             self.cleanup(remove=True)
             self.emit('error', 'Error downloading file: %r' % err)
             return False

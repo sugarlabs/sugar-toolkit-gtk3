@@ -52,6 +52,7 @@ class MalformedBundleException(Exception):
 
 
 class Bundle(object):
+
     """A Sugar activity, content module, etc.
 
     The bundle itself may be either a zip file or a directory
@@ -74,7 +75,7 @@ class Bundle(object):
         if not os.path.isdir(self._path):
             try:
                 self._zip_file = zipfile.ZipFile(self._path)
-            except zipfile.error, exception:
+            except zipfile.error as exception:
                 raise MalformedBundleException('Error accessing zip file %r: '
                                                '%s' % (self._path, exception))
             self._check_zip_bundle()
@@ -171,7 +172,7 @@ class Bundle(object):
             raise AlreadyInstalledException
 
         if not os.path.isdir(install_dir):
-            os.mkdir(install_dir, 0775)
+            os.mkdir(install_dir, 0o775)
 
         # zipfile provides API that in theory would let us do this
         # correctly by hand, but handling all the oddities of

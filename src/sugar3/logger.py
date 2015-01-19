@@ -104,7 +104,7 @@ def cleanup():
             for f in os.listdir(root):
                 os.remove(os.path.join(root, f))
             os.rmdir(root)
-        except OSError, e:
+        except OSError as e:
             print "Could not remove old logs filesi %s" % e
 
     if len(backup_logs) > 0:
@@ -131,6 +131,7 @@ def start(log_filename=None):
         root_logger.removeHandler(handler)
 
     class SafeLogWrapper(object):
+
         """Small file-like wrapper to gracefully handle ENOSPC errors when
         logging."""
 
@@ -140,7 +141,7 @@ def start(log_filename=None):
         def write(self, s):
             try:
                 self._stream.write(s)
-            except IOError, e:
+            except IOError as e:
                 # gracefully deal w/ disk full
                 if e.errno != errno.ENOSPC:
                     raise e
@@ -148,7 +149,7 @@ def start(log_filename=None):
         def flush(self):
             try:
                 self._stream.flush()
-            except IOError, e:
+            except IOError as e:
                 # gracefully deal w/ disk full
                 if e.errno != errno.ENOSPC:
                     raise e
@@ -172,7 +173,7 @@ def start(log_filename=None):
 
             sys.stdout = SafeLogWrapper(sys.stdout)
             sys.stderr = SafeLogWrapper(sys.stderr)
-        except OSError, e:
+        except OSError as e:
             # if we're out of space, just continue
             if e.errno != errno.ENOSPC:
                 raise e
@@ -189,7 +190,7 @@ class TraceRepr(repr_.Repr):
     def repr1(self, x, level):
         for t in self._TYPES:
             if isinstance(x, t):
-                return getattr(self, 'repr_'+t.__name__)(x, level)
+                return getattr(self, 'repr_' + t.__name__)(x, level)
 
         return repr_.Repr.repr1(self, x, level)
 

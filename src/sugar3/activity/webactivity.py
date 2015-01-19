@@ -32,6 +32,7 @@ from sugar3.activity import activity
 
 
 class FilePicker(ObjectChooser):
+
     def __init__(self, parent):
         ObjectChooser.__init__(self, parent)
 
@@ -55,6 +56,7 @@ class FilePicker(ObjectChooser):
 
 
 class WebActivity(Gtk.Window):
+
     def __init__(self, handle):
         Gtk.Window.__init__(self)
 

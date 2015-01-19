@@ -76,6 +76,7 @@ _get_data_store()
 
 
 class DSMetadata(GObject.GObject):
+
     """A representation of the metadata associated with a DS entry."""
     __gsignals__ = {
         'updated': (GObject.SignalFlags.RUN_FIRST, None, ([])),
@@ -134,6 +135,7 @@ class DSMetadata(GObject.GObject):
 
 
 class DSObject(object):
+
     """A representation of a DS entry."""
 
     def __init__(self, object_id, metadata=None, file_path=None):
@@ -217,6 +219,7 @@ class DSObject(object):
 
 
 class RawObject(object):
+
     """A representation for objects not in the DS but
     in the file system.
 

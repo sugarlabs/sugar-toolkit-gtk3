@@ -31,6 +31,7 @@ _ACTIVITY_INTERFACE = 'org.laptop.Activity'
 
 
 class ActivityService(dbus.service.Object):
+
     """Base dbus service object that each Activity uses to export dbus methods.
 
     The dbus service is separate from the actual Activity object so that we can
@@ -79,5 +80,5 @@ class ActivityService(dbus.service.Object):
     def GetDocumentPath(self, async_cb, async_err_cb):
         try:
             self._activity.get_document_path(async_cb, async_err_cb)
-        except Exception, e:
+        except Exception as e:
             async_err_cb(e)

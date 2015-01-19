@@ -80,7 +80,7 @@ class LocalHTTPServer(HTTPServer):
             # shutdown request and wastes cpu at all other times.
             try:
                 r, w, e = select.select([self], [], [], poll_interval)
-            except select.error, e:
+            except select.error as e:
                 if e[0] == errno.EINTR:
                     logging.debug("got eintr")
                     continue
@@ -99,6 +99,7 @@ class LocalHTTPServer(HTTPServer):
 
 
 class FilePicker(ObjectChooser):
+
     def __init__(self, parent):
         ObjectChooser.__init__(self, parent)
 
@@ -122,6 +123,7 @@ class FilePicker(ObjectChooser):
 
 
 class WebActivity(Gtk.Window):
+
     def __init__(self, handle):
         Gtk.Window.__init__(self)
 
