@@ -6,6 +6,7 @@ from sugar3.graphics import style
 
 
 class _Animation(animator.Animation):
+
     def __init__(self, icon, start_size, end_size):
         animator.Animation.__init__(self, 0.0, 1.0)
 

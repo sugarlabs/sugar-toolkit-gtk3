@@ -124,6 +124,7 @@ class Node(object):
 
 
 class LRU:
+
     """
     Implementation of a length-limited O(1) LRU queue.
     Built for and used by PyPE:

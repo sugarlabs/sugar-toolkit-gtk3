@@ -35,11 +35,13 @@ set_theme()
 
 
 class Test(Gtk.VBox):
+
     def __init__(self):
         GObject.GObject.__init__(self)
 
 
 class TestPalette(Test):
+
     def __init__(self):
         Test.__init__(self)
 
@@ -57,6 +59,7 @@ class TestPalette(Test):
 
 
 class TestRunner(object):
+
     def run(self, test):
         window = Gtk.Window()
         window.connect('destroy', lambda w: Gtk.main_quit())

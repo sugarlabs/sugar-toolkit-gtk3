@@ -29,6 +29,7 @@ from sugar3.graphics import toolbutton
 
 
 class RadioToolButton(Gtk.RadioToolButton):
+
     """An implementation of a "push" button."""
 
     __gtype_name__ = 'SugarRadioToolButton'

@@ -21,6 +21,7 @@ STABLE.
 
 
 class ActivityHandle(object):
+
     """Data structure storing simple activity metadata"""
 
     def __init__(self, activity_id=None, object_id=None, uri=None,

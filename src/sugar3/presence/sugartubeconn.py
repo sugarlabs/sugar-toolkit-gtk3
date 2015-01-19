@@ -27,6 +27,7 @@ from sugar3.presence import presenceservice
 
 
 class SugarTubeConnection(TubeConnection):
+
     """Subclass of TubeConnection that converts handles to Sugar Buddies"""
 
     def __new__(cls, conn, tubes_iface, tube_id, address=None,

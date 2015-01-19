@@ -40,6 +40,7 @@ _logger = logging.getLogger('sugar3.presence.buddy')
 
 
 class BaseBuddy(GObject.GObject):
+
     """UI interface for a Buddy in the presence service
 
     Each buddy interface tracks a set of activities and properties

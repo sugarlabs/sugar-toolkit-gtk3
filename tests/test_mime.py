@@ -27,6 +27,7 @@ data_dir = os.path.join(tests_dir, "data")
 
 
 class TestMime(unittest.TestCase):
+
     def test_split_uri_list(self):
         self.assertSequenceEqual(mime.split_uri_list("http://one\nhttp://two"),
                                  ("http://one", "http://two"))

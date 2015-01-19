@@ -50,6 +50,7 @@ _logger = logging.getLogger('sugar3.presence.activity')
 
 
 class Activity(GObject.GObject):
+
     """UI interface for an Activity in the presence service
 
     Activities in the presence service represent your and other user's
@@ -139,7 +140,7 @@ class Activity(GObject.GObject):
 
     def __activity_properties_changed_cb(self, room_handle, properties):
         _logger.debug('%r: Activity properties changed to %r' % (self,
-                      properties))
+                                                                 properties))
         self._update_properties(properties)
 
     def __got_properties_cb(self, properties):
@@ -295,8 +296,9 @@ class Activity(GObject.GObject):
         channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
     def __get_all_members_cb(self, members, local_pending, remote_pending):
-        _logger.debug('__get_all_members_cb %r %r' % (members,
-                      self._text_channel_group_flags))
+        _logger.debug(
+            '__get_all_members_cb %r %r' %
+            (members, self._text_channel_group_flags))
         if self._channel_self_handle in members:
             members.remove(self._channel_self_handle)
 
@@ -494,6 +496,7 @@ class _BaseCommand(GObject.GObject):
 
 
 class _ShareCommand(_BaseCommand):
+
     def __init__(self, connection, activity_id):
         _BaseCommand.__init__(self)
 
@@ -547,6 +550,7 @@ class _ShareCommand(_BaseCommand):
 
 
 class _JoinCommand(_BaseCommand):
+
     def __init__(self, connection, room_handle):
         _BaseCommand.__init__(self)
 
@@ -616,8 +620,9 @@ class _JoinCommand(_BaseCommand):
         self._add_self_to_channel()
 
     def __text_channel_group_flags_changed_cb(self, added, removed):
-        _logger.debug('__text_channel_group_flags_changed_cb %r %r' % (added,
-                      removed))
+        _logger.debug(
+            '__text_channel_group_flags_changed_cb %r %r' %
+            (added, removed))
         self.text_channel_group_flags |= added
         self.text_channel_group_flags &= ~removed
 
