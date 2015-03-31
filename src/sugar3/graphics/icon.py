@@ -37,6 +37,7 @@ from sugar3.graphics.xocolor import XoColor
 from sugar3.util import LRU
 
 _BADGE_SIZE = 0.45
+_ATTACH_POINTS_RE = re.compile('sugar:attach-points="([0-9,]+)"')
 
 
 class _SVGLoader(object):
@@ -44,7 +45,7 @@ class _SVGLoader(object):
     def __init__(self):
         self._cache = LRU(50)
 
-    def load(self, file_name, entities, cache):
+    def _get_icon(self, file_name, cache):
         if file_name in self._cache:
             icon = self._cache[file_name]
         else:
@@ -54,6 +55,10 @@ class _SVGLoader(object):
 
             if cache:
                 self._cache[file_name] = icon
+        return icon
+
+    def load(self, file_name, entities, cache):
+        icon = self._get_icon(file_name, cache)
 
         for entity, value in entities.items():
             if isinstance(value, basestring):
@@ -64,6 +69,17 @@ class _SVGLoader(object):
                     'Icon %s, entity %s is invalid.', file_name, entity)
 
         return Rsvg.Handle.new_from_data(icon.encode('utf-8'))
+
+    def get_attach_points(self, file_name, cache):
+        icon = self._get_icon(file_name, cache)
+
+        attach_points = (0, 0)
+        match = _ATTACH_POINTS_RE.search(icon)
+        if match:
+            # The attach_points are in fractions out of 1000
+            attach_points = map(lambda x: int(x) / 1000.0,
+                                match.group(1).split(','))
+        return attach_points
 
 
 class _IconInfo(object):
@@ -122,17 +138,6 @@ class _IconBuffer(object):
 
         return self._loader.load(file_name, entities, self.cache)
 
-    def _get_attach_points(self, info, size_request):
-        has_attach_points_, attach_points = info.get_attach_points()
-
-        if attach_points:
-            attach_x = float(attach_points[0].x) / size_request
-            attach_y = float(attach_points[0].y) / size_request
-        else:
-            attach_x = attach_y = 0
-
-        return attach_x, attach_y
-
     def _get_icon_info(self, file_name, icon_name):
         icon_info = _IconInfo()
 
@@ -147,11 +152,11 @@ class _IconBuffer(object):
 
             info = theme.lookup_icon(icon_name, int(size), 0)
             if info:
-                attach_x, attach_y = self._get_attach_points(info, size)
-
                 icon_info.file_name = info.get_filename()
-                icon_info.attach_x = attach_x
-                icon_info.attach_y = attach_y
+
+                icon_info.attach_x, icon_info.attach_y = \
+                    self._loader.get_attach_points(icon_info.file_name,
+                                                   self.cache)
 
                 del info
             else:
