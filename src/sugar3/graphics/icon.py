@@ -24,6 +24,8 @@ STABLE.
 import re
 import math
 import logging
+import os
+from ConfigParser import ConfigParser, ParsingError
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -124,12 +126,29 @@ class _IconBuffer(object):
 
     def _get_attach_points(self, info, size_request):
         has_attach_points_, attach_points = info.get_attach_points()
-
+        attach_x = attach_y = 0
         if attach_points:
+            # this works only for Gtk < 3.14
+            # https://developer.gnome.org/gtk3/stable/GtkIconTheme.html
+            # #gtk-icon-info-get-attach-points
             attach_x = float(attach_points[0].x) / size_request
             attach_y = float(attach_points[0].y) / size_request
-        else:
-            attach_x = attach_y = 0
+        elif info.get_filename():
+            # try read from the .icon file
+            icon_filename = info.get_filename().replace('.svg', '.icon')
+            if os.path.exists(icon_filename):
+                try:
+                    with open(icon_filename) as config_file:
+                        cp = ConfigParser()
+                        cp.readfp(config_file)
+                        if cp.has_option('Icon Data', 'AttachPoints'):
+                            attach_points_str = cp.get(
+                                'Icon Data', 'AttachPoints')
+                            attach_points = attach_points_str.split(',')
+                            attach_x = float(attach_points[0].strip()) / 1000
+                            attach_y = float(attach_points[1].strip()) / 1000
+                except ParsingError as e:
+                    logging.exception('Exception reading icon info: %s', e)
 
         return attach_x, attach_y
 
