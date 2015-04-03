@@ -3,7 +3,7 @@ Upstream-Name: sugar-toolkit-gtk3
 Upstream-Contact: Sugar Labs <sugar-devel@lists.sugarlabs.org>
  irc://irc.freenode.net/sugar
 Source: http://download.sugarlabs.org/sources/sucrose/glucose/sugar-toolkit-gtk3/
- git://git.sugarlabs.org/sugar-toolkit-gtk3/sugar-toolkit-gtk3
+ git://github.com/sugarlabs/sugar-toolkit-gtk3
 
 Files: *
 Copyright: 1998, Carsten Schaar, and twm
