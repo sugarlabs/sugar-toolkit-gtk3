@@ -35,6 +35,11 @@ Comment:
  gsm-app.h contains copyright but no licensing.  It is assumed the same
  licensing applies as for gsm-app.c.
 
+Files: src/sugar3/dispatch/*
+Copyright: Django Software Foundation and individual contributors
+  2001-2003, Patrick K. O'Brien and Contributors
+License: BSD-3-clause~Django and BSD-3-clause~Patrick
+
 Files: */Makefile.in
 Copyright: 1994-2012, Free Software Foundation, Inc.
 License: GAP~Makefile.in
@@ -81,11 +86,6 @@ Files: src/sugar3/presence/sugartubeconn.py
 Copyright: 2007, Collabora Ltd. <http://www.collabora.co.uk/>
   2008, One Laptop Per Child
 License: LGPL-2.1+
-
-Files: src/sugar3/dispatch/*
-Copyright: Django Software Foundation and individual contributors
-  2001-2003, Patrick K. O'Brien and Contributors
-License: BSD-3-clause~Django and BSD-3-clause~Patrick
 
 Files: install-sh
 Copyright: 1994, X Consortium
