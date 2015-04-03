@@ -38,7 +38,7 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_U
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
 
 # Needed by upstream build process
-dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 gconf2
+dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 gconf2 xi
 
 # Needed (always/often/seldom) at runtime
 #  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
