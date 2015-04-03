@@ -6,7 +6,7 @@ Uploaders: Jonas Smedegaard <dr@jones.dk>, Santiago Ruano Rincón <santiago@debi
 Build-Depends: @cdbs@
 Standards-Version: 3.9.6
 Vcs-Git: git://git.debian.org/collab-maint/sugar-toolkit-gtk3
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sugar-toolkit-gtk3.git
+Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/sugar-toolkit-gtk3.git
 Homepage: http://wiki.sugarlabs.org/go/Sugar
 
 Package: libsugarext0
