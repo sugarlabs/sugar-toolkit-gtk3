@@ -2,7 +2,8 @@ Source: sugar-toolkit-gtk3
 Section: python
 Priority: optional
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
-Uploaders: Jonas Smedegaard <dr@jones.dk>, Santiago Ruano Rincón <santiago@debian.org>
+Uploaders: Jonas Smedegaard <dr@jones.dk>,
+ Santiago Ruano Rincón <santiago@debian.org>
 Build-Depends: @cdbs@
 Standards-Version: 3.9.6
 Vcs-Git: git://git.debian.org/collab-maint/sugar-toolkit-gtk3
@@ -97,7 +98,7 @@ Depends: ${cdbs:Depends},
  ${misc:Depends},
  ${python:Depends},
  ${shlibs:Depends},
- gir1.2-sugarext-1.0 (= ${binary:Version}),
+ gir1.2-sugarext-1.0 (= ${binary:Version})
 Recommends: ${cdbs:Recommends}
 Suggests: ${cdbs:Suggests}
 Provides: ${cdbs:Provides},
