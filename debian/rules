@@ -38,11 +38,13 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_U
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
 
 # Needed by upstream build process
+#  * linux-libc-dev/hurd-dev needed by sugar-fatattr
 dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 xfixes xi x11
 bdeps = $(patsubst %,$(comma) lib%-dev,$(dev-bdeps))
 bdeps +=, gettext, intltool, libxml-parser-perl, x11proto-core-dev
 bdeps +=, libasound2-dev | libasound-dev
 bdeps +=, libgirepository1.0-dev (>= 1.30.0)
+bdeps +=, linux-libc-dev [linux-any], hurd-dev [hurd-any]
 
 # Needed (always/often/seldom) at runtime
 #  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
