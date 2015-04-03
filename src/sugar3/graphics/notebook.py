@@ -34,7 +34,8 @@ class Notebook(Gtk.Notebook):
 
     __gproperties__ = {
         'can-close-tabs': (bool, None, None, False,
-            GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
+                           GObject.PARAM_READWRITE |
+                           GObject.PARAM_CONSTRUCT_ONLY),
     }
 
     def __init__(self, **kwargs):
@@ -125,7 +126,7 @@ class Notebook(Gtk.Notebook):
         Returns
         -------
         Boolean
-          Returns TRUE if the page is successfully added to th notebook.
+          Returns TRUE if the page is successfully added to the notebook.
 
         """
         # Add a new page to the notebook

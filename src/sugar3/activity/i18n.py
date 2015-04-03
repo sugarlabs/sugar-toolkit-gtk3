@@ -18,10 +18,7 @@
 # Boston, MA 02111-1307, USA.
 
 from gettext import gettext
-import locale
-import os
 import struct
-import sys
 
 import dateutil.parser
 import time
@@ -53,7 +50,7 @@ def _extract_header(file_path):
 
     version_, num_of_strings = _read_bin(handle, format_string, 8)
 
-    msgids_hash_offset, msgstrs_hash_offset = _read_bin(handle, \
+    msgids_hash_offset, msgstrs_hash_offset = _read_bin(handle,
                                                         format_string, 8)
     handle.seek(msgids_hash_offset)
 
@@ -108,53 +105,3 @@ def pgettext(context, message):
     if '\x04' in translation:
         return message
     return translation
-
-
-def get_locale_path(bundle_id):
-    """ Returns the locale path, which is the directory where the preferred
-        MO file is located.
-
-        The preferred MO file is the one with the latest translation.
-
-        @type   bundle_id:      string
-        @param  bundle_id:      The bundle id of the activity in question
-        @rtype:                 string
-        @return:                the preferred locale path or None in the
-                                case of an error
-    """
-
-    # Note: We pre-assign weights to the directories so that if no translations
-    # exist, the appropriate fallbacks (eg: bn for bn_BD) can be loaded
-    # The directory with the highest weight is returned, and if a MO file is
-    # found, the weight of the directory is set to the MO's modification time
-    # (as described in the MO header, and _not_ the filesystem mtime)
-
-    candidate_dirs = {}
-
-    if 'SUGAR_LOCALEDIR' in os.environ:
-        candidate_dirs[os.environ['SUGAR_LOCALEDIR']] = 2
-
-    candidate_dirs[os.path.join(sys.prefix, 'share', 'locale')] = 0
-
-    default_locale = locale.getdefaultlocale()[0]
-    if not default_locale:
-        return None
-
-    for candidate_dir in candidate_dirs.keys():
-        if os.path.exists(candidate_dir):
-            full_path = os.path.join(candidate_dir, \
-                default_locale, 'LC_MESSAGES', \
-                bundle_id + '.mo')
-            if os.path.exists(full_path):
-                try:
-                    candidate_dirs[candidate_dir] = \
-                        _extract_modification_time(full_path)
-                except (IOError, ValueError):
-                    # The mo file is damaged or has not been initialized
-                    # Set lowest priority
-                    candidate_dirs[candidate_dir] = -1
-
-    available_paths = sorted(candidate_dirs.iteritems(), key=lambda (k, v): \
-        (v, k), reverse=True)
-    preferred_path = available_paths[0][0]
-    return preferred_path

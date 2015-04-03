@@ -37,7 +37,7 @@ class ToolbarButton(ToolButton):
         self.set_page(page)
 
         self.connect('clicked',
-                lambda widget: self.set_expanded(not self.is_expanded()))
+                     lambda widget: self.set_expanded(not self.is_expanded()))
         self.connect_after('draw', self.__drawing_cb)
         self.connect('hierarchy-changed', self.__hierarchy_changed_cb)
 
@@ -77,11 +77,11 @@ class ToolbarButton(ToolButton):
 
     def is_in_palette(self):
         return self.page is not None and \
-                self.page_widget.get_parent() == self.props.palette._widget
+            self.page_widget.get_parent() == self.props.palette._widget
 
     def is_expanded(self):
         return self.page is not None and \
-                not self.is_in_palette()
+            not self.is_in_palette()
 
     def popdown(self):
         if self.props.palette is not None:
@@ -153,12 +153,12 @@ class ToolbarBox(Gtk.VBox):
         self._toolbar.connect('remove', self.__remove_cb)
 
         self._toolbar_widget, self._toolbar_alignment = \
-                _embed_page(Gtk.EventBox(), self._toolbar)
+            _embed_page(Gtk.EventBox(), self._toolbar)
         self.pack_start(self._toolbar_widget, True, True, 0)
 
         self.props.padding = padding
         self.modify_bg(Gtk.StateType.NORMAL,
-                style.COLOR_TOOLBAR_GREY.get_gdk_color())
+                       style.COLOR_TOOLBAR_GREY.get_gdk_color())
 
     def get_toolbar(self):
         return self._toolbar
@@ -171,7 +171,7 @@ class ToolbarBox(Gtk.VBox):
         return self.toolbar.get_nth_item(self._expanded_button_index)
 
     def set_expanded_button(self, button):
-        if not button in self.toolbar:
+        if button not in self.toolbar:
             self._expanded_button_index = -1
             return
         self._expanded_button_index = self.toolbar.get_item_index(button)
@@ -185,7 +185,7 @@ class ToolbarBox(Gtk.VBox):
         self._toolbar_alignment.set_padding(0, 0, pad, pad)
 
     padding = GObject.property(type=object,
-            getter=get_padding, setter=set_padding)
+                               getter=get_padding, setter=set_padding)
 
     def modify_bg(self, state, color):
         if state == Gtk.StateType.NORMAL:
@@ -257,7 +257,7 @@ class _ToolbarPalette(PaletteWindow):
             return
         box = button.toolbar_box
         _setup_page(button.page_widget, style.COLOR_BLACK.get_gdk_color(),
-                box.props.padding)
+                    box.props.padding)
         PaletteWindow.popup(self, immediate)
 
     def __group_popdown_cb(self, group):
@@ -280,7 +280,8 @@ class _Box(Gtk.EventBox):
         cr.set_source_rgba(*style.COLOR_BUTTON_GREY.get_rgba())
         cr.move_to(0, 0)
         cr.line_to(button_alloc.x + style.FOCUS_LINE_WIDTH, 0)
-        cr.move_to(button_alloc.x + button_alloc.width - style.FOCUS_LINE_WIDTH, 0)
+        cr.move_to(
+            button_alloc.x + button_alloc.width - style.FOCUS_LINE_WIDTH, 0)
         cr.line_to(self.get_allocation().width, 0)
         cr.stroke()
 
@@ -306,7 +307,7 @@ def _embed_page(page_widget, page):
     alignment.show()
 
     page_widget.modify_bg(Gtk.StateType.ACTIVE,
-            style.COLOR_BUTTON_GREY.get_gdk_color())
+                          style.COLOR_BUTTON_GREY.get_gdk_color())
     page_widget.add(alignment)
     page_widget.show()
 

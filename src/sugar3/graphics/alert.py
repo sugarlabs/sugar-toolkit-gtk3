@@ -56,7 +56,7 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 class Alert(Gtk.EventBox):
@@ -479,7 +479,7 @@ class NotifyAlert(Alert):
         self.add_button(Gtk.ResponseType.OK, _('Ok'), self._timeout_text)
         self._timeout_text.show()
 
-        GObject.timeout_add(1000, self.__timeout)
+        GLib.timeout_add(1000, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1

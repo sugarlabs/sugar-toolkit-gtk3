@@ -20,23 +20,27 @@
 STABLE.
 """
 
+import logging
 import os
 
 
+# DEPRECATED
 def is_emulator():
-    return os.environ.get('SUGAR_EMULATOR', 'no') == 'yes'
+    logging.error("sugar.env.is_emulator is deprecated")
+    return False
 
 
 def get_profile_path(path=None):
     profile_id = os.environ.get('SUGAR_PROFILE', 'default')
-    base = os.path.join(os.path.expanduser('~/.sugar'), profile_id)
+    home_dir = os.environ.get('SUGAR_HOME', os.path.expanduser('~/.sugar'))
+    base = os.path.join(home_dir, profile_id)
     if not os.path.isdir(base):
         try:
             os.makedirs(base, 0770)
         except OSError:
             print 'Could not create user directory.'
 
-    if path != None:
+    if path is not None:
         return os.path.join(base, path)
     else:
         return base
@@ -44,15 +48,17 @@ def get_profile_path(path=None):
 
 def get_logs_path(path=None):
     base = os.environ.get('SUGAR_LOGS_DIR', get_profile_path('logs'))
-    if path != None:
+    if path is not None:
         return os.path.join(base, path)
     else:
         return base
 
 
 def get_user_activities_path():
-    return os.path.expanduser('~/Activities')
+    return os.environ.get("SUGAR_ACTIVITIES_PATH",
+                          os.path.expanduser('~/Activities'))
 
 
 def get_user_library_path():
-    return os.path.expanduser('~/Library')
+    return os.environ.get("SUGAR_LIBRARY_PATH",
+                          os.path.expanduser('~/Library'))

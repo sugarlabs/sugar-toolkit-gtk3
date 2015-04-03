@@ -94,7 +94,7 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self._file = None
         self._srcid = 0
         SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(
-                                        self, request, client_address, server)
+            self, request, client_address, server)
 
     def log_request(self, code='-', size='-'):
         pass
@@ -188,11 +188,11 @@ class GlibURLDownloader(GObject.GObject):
 
     __gsignals__ = {
         'finished': (GObject.SignalFlags.RUN_FIRST, None,
-            ([GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT])),
+                     ([GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT])),
         'error': (GObject.SignalFlags.RUN_FIRST, None,
-            ([GObject.TYPE_PYOBJECT])),
+                  ([GObject.TYPE_PYOBJECT])),
         'progress': (GObject.SignalFlags.RUN_FIRST, None,
-            ([GObject.TYPE_PYOBJECT])),
+                     ([GObject.TYPE_PYOBJECT])),
     }
 
     CHUNK_SIZE = 4096

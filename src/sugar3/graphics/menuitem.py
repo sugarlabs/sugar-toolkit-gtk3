@@ -26,12 +26,14 @@ from gi.repository import Pango
 from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
+from sugar3.graphics import style
 
 
 class MenuItem(Gtk.ImageMenuItem):
 
-    def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
-                 xo_color=None, file_name=None):
+    def __init__(self, text_label=None, icon_name=None,
+                 text_maxlen=style.MENU_WIDTH_CHARS, xo_color=None,
+                 file_name=None):
         GObject.GObject.__init__(self)
         self._accelerator = None
 
@@ -39,7 +41,7 @@ class MenuItem(Gtk.ImageMenuItem):
         label.set_alignment(0.0, 0.5)
         label.set_accel_widget(self)
         if text_maxlen > 0:
-            label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+            label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
             label.set_max_width_chars(text_maxlen)
         self.add(label)
         label.show()
@@ -92,4 +94,4 @@ class MenuItem(Gtk.ImageMenuItem):
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
-            getter=get_accelerator)
+                                   getter=get_accelerator)

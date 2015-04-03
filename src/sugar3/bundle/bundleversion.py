@@ -93,8 +93,8 @@ class NormalizedVersion(object):
         """
         if len(version_string) > 1 and version_string[0] == '0':
             raise InvalidVersionError("Can not have leading zero in segment"
-                                      " %s in %r" % (version_string,
-                                      self._activity_version))
+                                      " %s in %r" %
+                                      (version_string, self._activity_version))
 
         return int(version_string)
 
@@ -112,8 +112,8 @@ class NormalizedVersion(object):
         for n in extraversion_string.split("."):
             if len(n) > 1 and n[0] == '0':
                 raise InvalidVersionError("Can not have leading zero in "
-                                          "segment %s in %r" % (n,
-                                          self._activity_version))
+                                          "segment %s in %r"
+                                          % (n, self._activity_version))
             nums.append(int(n))
 
         while nums and nums[-1] == 0:
@@ -123,7 +123,7 @@ class NormalizedVersion(object):
 
     def __str__(self):
         version_string = '.'.join(str(v) for v in self.parts)
-        if self._local != None:
+        if self._local is not None:
             version_string += self._local
         return version_string
 
@@ -132,7 +132,7 @@ class NormalizedVersion(object):
 
     def _cannot_compare(self, other):
         raise TypeError("Can not compare %s and %s"
-                % (type(self).__name__, type(other).__name__))
+                        % (type(self).__name__, type(other).__name__))
 
     def __eq__(self, other):
         if not isinstance(other, NormalizedVersion):

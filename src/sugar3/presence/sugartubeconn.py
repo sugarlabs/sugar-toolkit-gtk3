@@ -49,7 +49,7 @@ class SugarTubeConnection(TubeConnection):
             # It's me, just get my global handle
             handle = self._conn.GetSelfHandle()
         elif self._group_iface.GetGroupFlags() & \
-            CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
+                CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
             # The group (channel) has channel specific handles
             handle = self._group_iface.GetHandleOwners([cs_handle])[0]
         else:

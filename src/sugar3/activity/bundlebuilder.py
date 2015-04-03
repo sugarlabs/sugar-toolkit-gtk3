@@ -19,16 +19,17 @@
 STABLE.
 """
 
+import argparse
 import operator
 import os
 import sys
 import zipfile
 import tarfile
+import unittest
 import shutil
 import subprocess
 import re
 import gettext
-from optparse import OptionParser
 import logging
 from fnmatch import fnmatch
 
@@ -64,9 +65,10 @@ def list_files(base_dir, ignore_dirs=None, ignore_files=None):
 
 class Config(object):
 
-    def __init__(self, source_dir=None, dist_dir=None, dist_name=None):
-        self.source_dir = source_dir or os.getcwd()
-        self.dist_dir = dist_dir or os.path.join(self.source_dir, 'dist')
+    def __init__(self, source_dir, dist_dir=None, dist_name=None):
+        self.source_dir = source_dir
+        self.build_dir = os.getcwd()
+        self.dist_dir = dist_dir or os.path.join(self.build_dir, 'dist')
         self.dist_name = dist_name
         self.bundle = None
         self.version = None
@@ -82,17 +84,18 @@ class Config(object):
         self.update()
 
     def update(self):
-        self.bundle = bundle = ActivityBundle(self.source_dir)
+        self.bundle = bundle = ActivityBundle(self.source_dir,
+                                              translated=False)
         self.version = bundle.get_activity_version()
-        self.activity_name = bundle.get_bundle_name()
+        self.activity_name = bundle.get_name()
         self.bundle_id = bundle.get_bundle_id()
         self.summary = bundle.get_summary()
         self.bundle_name = reduce(operator.add, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%s' % (self.bundle_name, self.version)
-
         if self.dist_name:
-            self.xo_name = self.tar_name = self.dist_name
+            self.xo_name = '%s.xo' % self.dist_name
+            self.tar_name = '%s.tar.bz2' % self.dist_name
         else:
             self.xo_name = '%s-%s.xo' % (self.bundle_name, self.version)
             self.tar_name = '%s-%s.tar.bz2' % (self.bundle_name, self.version)
@@ -100,8 +103,10 @@ class Config(object):
 
 class Builder(object):
 
-    def __init__(self, config):
+    def __init__(self, config, no_fail=False):
         self.config = config
+        self._no_fail = no_fail
+        self.locale_dir = os.path.join(self.config.build_dir, 'locale')
 
     def build(self):
         self.build_locale()
@@ -113,10 +118,8 @@ class Builder(object):
             logging.warn('Missing po/ dir, cannot build_locale')
             return
 
-        locale_dir = os.path.join(self.config.source_dir, 'locale')
-
-        if os.path.exists(locale_dir):
-            shutil.rmtree(locale_dir)
+        if os.path.exists(self.locale_dir):
+            shutil.rmtree(self.locale_dir)
 
         for f in os.listdir(po_dir):
             if not f.endswith('.po') or f == 'pseudo.po':
@@ -125,7 +128,7 @@ class Builder(object):
             file_name = os.path.join(po_dir, f)
             lang = f[:-3]
 
-            localedir = os.path.join(self.config.source_dir, 'locale', lang)
+            localedir = os.path.join(self.config.build_dir, 'locale', lang)
             mo_path = os.path.join(localedir, 'LC_MESSAGES')
             if not os.path.isdir(mo_path):
                 os.makedirs(mo_path)
@@ -135,6 +138,8 @@ class Builder(object):
             retcode = subprocess.call(args)
             if retcode:
                 print 'ERROR - msgfmt failed with return code %i.' % retcode
+                if self._no_fail:
+                    continue
 
             cat = gettext.GNUTranslations(open(mo_file, 'r'))
             translated_name = cat.gettext(self.config.activity_name)
@@ -145,10 +150,8 @@ class Builder(object):
             f.write('summary = %s\n' % translated_summary)
             f.close()
 
-    def get_files(self):
-        allfiles = list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
-        return allfiles
+    def get_locale_files(self):
+        return list_files(self.locale_dir, IGNORE_DIRS, IGNORE_FILES)
 
 
 class Packager(object):
@@ -166,21 +169,24 @@ class Packager(object):
                                       stdout=subprocess.PIPE,
                                       cwd=self.config.source_dir)
         except OSError:
-            logging.warn('Packager: git is not installed, ' \
-                             'fall back to filtered list')
+            logging.warn('Packager: git is not installed, '
+                         'fall back to filtered list')
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
 
         stdout, _ = git_ls.communicate()
         if git_ls.returncode:
             # Fall back to filtered list
-            logging.warn('Packager: this is not a git repository, ' \
-                             'fall back to filtered list')
+            logging.warn('Packager: this is not a git repository, '
+                         'fall back to filtered list')
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
-
-        # pylint: disable=E1103
-        return [path.strip() for path in stdout.strip('\n').split('\n')]
+        if stdout:
+            # pylint: disable=E1103
+            return [path.strip() for path in stdout.strip('\n').split('\n')]
+        else:
+            return list_files(self.config.source_dir,
+                              IGNORE_DIRS, IGNORE_FILES)
 
 
 class XOPackager(Packager):
@@ -200,10 +206,9 @@ class XOPackager(Packager):
         for f in self.get_files_in_git():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
-        locale_dir = os.path.join(self.config.source_dir, 'locale')
-        locale_files = list_files(locale_dir, IGNORE_DIRS, IGNORE_FILES)
-        for f in locale_files:
-            bundle_zip.write(os.path.join(locale_dir, f),
+
+        for f in self.builder.get_locale_files():
+            bundle_zip.write(os.path.join(self.builder.locale_dir, f),
                              os.path.join(self.config.bundle_root_dir,
                                           'locale', f))
 
@@ -225,18 +230,10 @@ class SourcePackager(Packager):
         tar.close()
 
 
-class Installer(object):
-    IGNORES = ['po/*', 'MANIFEST', 'AUTHORS']
-
+class Installer(Packager):
     def __init__(self, builder):
-        self.config = builder.config
+        Packager.__init__(self, builder.config)
         self.builder = builder
-
-    def should_ignore(self, f):
-        for pattern in self.IGNORES:
-            if fnmatch(f, pattern):
-                return True
-        return False
 
     def install(self, prefix):
         self.builder.build()
@@ -245,13 +242,21 @@ class Installer(object):
                                      self.config.bundle_root_dir)
 
         source_to_dest = {}
-        for f in self.builder.get_files():
-            if self.should_ignore(f):
-                pass
-            elif f.startswith('locale/') and f.endswith('.mo'):
-                source_to_dest[f] = os.path.join(prefix, 'share', f)
+
+        for f in self.get_files_in_git():
+            source_path = os.path.join(self.config.source_dir, f)
+            dest_path = os.path.join(activity_path, f)
+            source_to_dest[source_path] = dest_path
+
+        for f in self.builder.get_locale_files():
+            source_path = os.path.join(self.builder.locale_dir, f)
+
+            if source_path.endswith(".mo"):
+                dest_path = os.path.join(prefix, 'share', 'locale', f)
             else:
-                source_to_dest[f] = os.path.join(activity_path, f)
+                dest_path = os.path.join(activity_path, 'locale', f)
+
+            source_to_dest[source_path] = dest_path
 
         for source, dest in source_to_dest.items():
             print 'Install %s to %s.' % (source, dest)
@@ -265,12 +270,51 @@ class Installer(object):
         self.config.bundle.install_mime_type(self.config.source_dir)
 
 
-def cmd_dev(config, args):
-    """Setup for development"""
+def cmd_check(config, options):
+    """Run tests for the activity"""
 
-    if args:
-        print 'Usage: %prog dev'
-        return
+    run_unit_test = True
+    run_integration_test = True
+
+    if options.choice == 'unit':
+        run_integration_test = False
+    if options.choice == 'integration':
+        run_unit_test = False
+
+    print "Running Tests"
+
+    test_path = os.path.join(config.source_dir, "tests")
+
+    if os.path.isdir(test_path):
+        unit_test_path = os.path.join(test_path, "unit")
+        integration_test_path = os.path.join(test_path, "integration")
+        sys.path.append(config.source_dir)
+
+        # Run Tests
+        if os.path.isdir(unit_test_path) and run_unit_test:
+            all_tests = unittest.defaultTestLoader.discover(unit_test_path)
+            unittest.TextTestRunner(verbosity=options.verbose).run(all_tests)
+        elif not run_unit_test:
+            print "Not running unit tests"
+        else:
+            print 'No "unit" directory found.'
+
+        if os.path.isdir(integration_test_path) and run_integration_test:
+            all_tests = unittest.defaultTestLoader.discover(
+                integration_test_path)
+            unittest.TextTestRunner(verbosity=options.verbose).run(all_tests)
+        elif not run_integration_test:
+            print "Not running integration tests"
+        else:
+            print 'No "integration" directory found.'
+
+        print "Finished testing"
+    else:
+        print "Error: No tests/ directory"
+
+
+def cmd_dev(config, options):
+    """Setup for development"""
 
     bundle_path = env.get_user_activities_path()
     if not os.path.isdir(bundle_path):
@@ -285,18 +329,14 @@ def cmd_dev(config, args):
             print 'ERROR - A bundle with the same name is already installed.'
 
 
-def cmd_dist_xo(config, args):
+def cmd_dist_xo(config, options):
     """Create a xo bundle package"""
 
-    if args:
-        print 'Usage: %prog dist_xo'
-        return
-
-    packager = XOPackager(Builder(config))
+    packager = XOPackager(Builder(config, options.no_fail))
     packager.package()
 
 
-def cmd_fix_manifest(config, args):
+def cmd_fix_manifest(config, options):
     '''Add missing files to the manifest (OBSOLETE)'''
 
     print 'WARNING: The fix_manifest command is obsolete.'
@@ -304,38 +344,24 @@ def cmd_fix_manifest(config, args):
     print '         please remove it.'
 
 
-def cmd_dist_source(config, args):
+def cmd_dist_source(config, options):
     """Create a tar source package"""
-
-    if args:
-        print 'Usage: %prog dist_source'
-        return
 
     packager = SourcePackager(config)
     packager.package()
 
 
-def cmd_install(config, args):
+def cmd_install(config, options):
     """Install the activity in the system"""
 
-    parser = OptionParser(usage='usage: %prog install [options]')
-    parser.add_option('--prefix', dest='prefix', default=sys.prefix,
-                      help='Prefix to install files to')
-    (suboptions, subargs) = parser.parse_args(args)
-    if subargs:
-        parser.print_help()
-        return
-
     installer = Installer(Builder(config))
-    installer.install(suboptions.prefix)
+    installer.install(options.prefix)
 
 
-def cmd_genpot(config, args):
+def cmd_genpot(config, options):
     """Generate the gettext pot file"""
 
-    if args:
-        print 'Usage: %prog genpot'
-        return
+    os.chdir(config.source_dir)
 
     po_path = os.path.join(config.source_dir, 'po')
     if not os.path.isdir(po_path):
@@ -368,7 +394,7 @@ def cmd_genpot(config, args):
     f.close()
 
     args = ['xgettext', '--join-existing', '--language=Python',
-        '--keyword=_', '--add-comments=TRANS:', '--output=%s' % pot_file]
+            '--keyword=_', '--add-comments=TRANS:', '--output=%s' % pot_file]
 
     args += python_files
     retcode = subprocess.call(args)
@@ -376,39 +402,56 @@ def cmd_genpot(config, args):
         print 'ERROR - xgettext failed with return code %i.' % retcode
 
 
-def cmd_build(config, args):
+def cmd_build(config, options):
     """Build generated files"""
-
-    if args:
-        print 'Usage: %prog build'
-        return
 
     builder = Builder(config)
     builder.build()
 
 
-def print_commands():
-    print 'Available commands:\n'
-
-    for name, func in globals().items():
-        if name.startswith('cmd_'):
-            print '%-20s %s' % (name.replace('cmd_', ''), func.__doc__)
-
-    print '\n(Type "./setup.py <command> --help" for help about a ' \
-          'particular command\'s options.'
-
-
 def start():
-    parser = OptionParser(usage='[action] [options]')
-    parser.disable_interspersed_args()
-    (options_, args) = parser.parse_args()
+    parser = argparse.ArgumentParser(prog='./setup.py')
+    subparsers = parser.add_subparsers(
+        dest="command", help="Options for %(prog)s")
 
-    config = Config()
+    install_parser = subparsers.add_parser(
+        "install", help="Install the activity in the system")
+    install_parser.add_argument(
+        "--prefix", dest="prefix", default=sys.prefix,
+        help="Path for installing")
+
+    check_parser = subparsers.add_parser(
+        "check", help="Run tests for the activity")
+    check_parser.add_argument("choice", nargs='?',
+                              choices=['unit', 'integration'],
+                              help="run unit/integration test")
+    check_parser.add_argument("--verbosity", "-v", dest="verbose",
+                              type=int, choices=range(0, 3),
+                              default=1, nargs='?',
+                              help="verbosity for the unit tests")
+
+    dist_parser = subparsers.add_parser("dist_xo",
+                                         help="Create a xo bundle package")
+    dist_parser.add_argument("--no-fail", dest="no_fail", action="store_true",
+                             default=False,
+                             help="continue past failure when building xo file")
+
+    subparsers.add_parser("dist_source", help="Create a tar source package")
+    subparsers.add_parser("build", help="Build generated files")
+    subparsers.add_parser(
+        "fix_manifest", help="Add missing files to the manifest (OBSOLETE)")
+    subparsers.add_parser("genpot", help="Generate the gettext pot file")
+    subparsers.add_parser("dev", help="Setup for development")
+
+    options = parser.parse_args()
+
+    source_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    config = Config(source_dir)
 
     try:
-        globals()['cmd_' + args[0]](config, args[1:])
+        globals()['cmd_' + options.command](config, options)
     except (KeyError, IndexError):
-        print_commands()
+        parser.print_help()
 
 
 if __name__ == '__main__':

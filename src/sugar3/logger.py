@@ -28,6 +28,9 @@ import sys
 import os
 import repr as repr_
 import decorator
+import time
+
+from sugar3 import env
 
 # Let's keep this module self contained so that it can be easily
 # pasted in external sugar service like the datastore.
@@ -45,12 +48,9 @@ _LEVELS = {
 logging.addLevelName(TRACE, 'TRACE')
 
 
+# DEPRECATED
 def get_logs_dir():
-    profile = os.environ.get('SUGAR_PROFILE', 'default')
-    logs_dir = os.environ.get('SUGAR_LOGS_DIR',
-                              os.path.join(os.path.expanduser('~'),
-                                           '.sugar', profile, 'logs'))
-    return logs_dir
+    return env.get_logs_path()
 
 
 def set_level(level):
@@ -61,7 +61,7 @@ def set_level(level):
     try:
         logging.getLogger('').setLevel(int(level))
     except ValueError:
-        logging.warning('Invalid log level: %r', level)
+        logging.warning('Invalid log level: %r' % level)
 
 
 # pylint: disable-msg=E1101,F0401
@@ -71,14 +71,60 @@ def _except_hook(exctype, value, traceback):
     try:
         from IPython.ultraTB import AutoFormattedTB
         sys.excepthook = AutoFormattedTB(mode='Verbose',
-            color_scheme='NoColor')
+                                         color_scheme='NoColor')
     except ImportError:
         sys.excepthook = sys.__excepthook__
 
     sys.excepthook(exctype, value, traceback)
 
 
+def cleanup():
+    """Clean up the log directory, moving old logs into a numbered backup
+    directory.  We only keep `_MAX_BACKUP_DIRS` of these backup directories
+    around; the rest are removed."""
+    logs_dir = get_logs_dir()
+
+    if not os.path.isdir(logs_dir):
+        os.makedirs(logs_dir)
+
+    backup_logs = []
+    backup_dirs = []
+    for f in os.listdir(logs_dir):
+        path = os.path.join(logs_dir, f)
+        if os.path.isfile(path):
+            backup_logs.append(f)
+        elif os.path.isdir(path):
+            backup_dirs.append(path)
+
+    if len(backup_dirs) > 3:
+        backup_dirs.sort()
+        root = backup_dirs[0]
+
+        try:
+            for f in os.listdir(root):
+                os.remove(os.path.join(root, f))
+            os.rmdir(root)
+        except OSError, e:
+            print "Could not remove old logs filesi %s" % e
+
+    if len(backup_logs) > 0:
+        name = str(int(time.time()))
+        backup_dir = os.path.join(logs_dir, name)
+        os.mkdir(backup_dir)
+        for log in backup_logs:
+            source_path = os.path.join(logs_dir, log)
+            dest_path = os.path.join(backup_dir, log)
+            os.rename(source_path, dest_path)
+
+
 def start(log_filename=None):
+    logs_path = env.get_logs_path()
+
+    try:
+        os.makedirs(logs_path)
+    except OSError:
+        pass
+
     # remove existing handlers, or logging.basicConfig() won't have no effect.
     root_logger = logging.getLogger('')
     for handler in root_logger.handlers:
@@ -107,16 +153,17 @@ def start(log_filename=None):
                 if e.errno != errno.ENOSPC:
                     raise e
 
-    logging.basicConfig(level=logging.WARNING,
-            format="%(created)f %(levelname)s %(name)s: %(message)s",
-                        stream=SafeLogWrapper(sys.stderr))
+    logging.basicConfig(
+        level=logging.WARNING,
+        format="%(created)f %(levelname)s %(name)s: %(message)s",
+        stream=SafeLogWrapper(sys.stderr))
 
     if 'SUGAR_LOGGER_LEVEL' in os.environ:
         set_level(os.environ['SUGAR_LOGGER_LEVEL'])
 
     if log_filename:
         try:
-            log_path = os.path.join(get_logs_dir(), log_filename + '.log')
+            log_path = os.path.join(logs_path, log_filename + '.log')
 
             log_fd = os.open(log_path, os.O_WRONLY | os.O_CREAT)
             os.dup2(log_fd, sys.stdout.fileno())
@@ -137,7 +184,7 @@ class TraceRepr(repr_.Repr):
 
     # better handling of subclasses of basic types, e.g. for DBus
     _TYPES = [int, long, bool, tuple, list, array.array, set, frozenset,
-        collections.deque, dict, str]
+              collections.deque, dict, str]
 
     def repr1(self, x, level):
         for t in self._TYPES:
@@ -154,7 +201,7 @@ class TraceRepr(repr_.Repr):
 
 
 def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
-    maxsize_list=30, maxsize_dict=30, maxsize_string=300):
+          maxsize_list=30, maxsize_dict=30, maxsize_string=300):
 
     if skip_args is None:
         skip_args = []
@@ -178,21 +225,21 @@ def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
 
         params_formatted = ", ".join(
             [trace_repr.repr(a)
-                for (idx, a) in enumerate(args) if idx not in skip_args] + \
+                for (idx, a) in enumerate(args) if idx not in skip_args] +
             ['%s=%s' % (k, trace_repr.repr(v))
                 for (k, v) in kwargs.items() if k not in skip_kwargs])
 
         trace_logger.log(TRACE, "%s(%s) invoked", f.__name__,
-            params_formatted)
+                         params_formatted)
 
         try:
             res = f(*args, **kwargs)
         except:
-            trace_logger.exception("Exception occured in %s", f.__name__)
+            trace_logger.exception("Exception occured in %s" % f.__name__)
             raise
 
         trace_logger.log(TRACE, "%s(%s) returned %s", f.__name__,
-            params_formatted, trace_repr.repr(res))
+                         params_formatted, trace_repr.repr(res))
 
         return res
 

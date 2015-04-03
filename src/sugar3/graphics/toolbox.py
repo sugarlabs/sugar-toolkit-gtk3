@@ -31,7 +31,7 @@ class Toolbox(Gtk.VBox):
 
     __gsignals__ = {
         'current-toolbar-changed': (GObject.SignalFlags.RUN_FIRST,
-            None, ([int])),
+                                    None, ([int])),
     }
 
     def __init__(self):

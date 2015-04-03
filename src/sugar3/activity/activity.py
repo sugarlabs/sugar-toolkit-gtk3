@@ -58,22 +58,23 @@ import StringIO
 import cairo
 import json
 
-from gi.repository import GConf
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+from gi.repository import Gio
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
 from telepathy.server import DBusProperties
 from telepathy.interfaces import CHANNEL, \
-                                 CHANNEL_TYPE_TEXT, \
-                                 CLIENT, \
-                                 CLIENT_HANDLER
+    CHANNEL_TYPE_TEXT, \
+    CLIENT, \
+    CLIENT_HANDLER
 from telepathy.constants import CONNECTION_HANDLE_TYPE_CONTACT
 from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
+from sugar3 import power
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
@@ -81,10 +82,10 @@ from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
-from sugar3.session import XSMPClient
+from sugar3.bundle.activitybundle import get_bundle_instance
 from gi.repository import SugarExt
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 SCOPE_PRIVATE = 'private'
 SCOPE_INVITE_ONLY = 'invite'  # shouldn't be shown in UI, it's implicit
@@ -94,7 +95,13 @@ J_DBUS_SERVICE = 'org.laptop.Journal'
 J_DBUS_PATH = '/org/laptop/Journal'
 J_DBUS_INTERFACE = 'org.laptop.Journal'
 
+N_BUS_NAME = 'org.freedesktop.Notifications'
+N_OBJ_PATH = '/org/freedesktop/Notifications'
+N_IFACE_NAME = 'org.freedesktop.Notifications'
+
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
+
+PREVIEW_SIZE = style.zoom(300), style.zoom(225)
 
 
 class _ActivitySession(GObject.GObject):
@@ -107,9 +114,9 @@ class _ActivitySession(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
 
-        self._xsmp_client = XSMPClient()
+        self._xsmp_client = SugarExt.ClientXSMP()
         self._xsmp_client.connect('quit-requested',
-            self.__sm_quit_requested_cb)
+                                  self.__sm_quit_requested_cb)
         self._xsmp_client.connect('quit', self.__sm_quit_cb)
         self._xsmp_client.startup()
 
@@ -158,9 +165,33 @@ class Activity(Window, Gtk.Container):
 
         1. implement an __init__() method for your Activity class.
 
-           Use your init method to create your own ActivityToolbar which will
-           contain some standard buttons:
-                toolbox = activity.ActivityToolbox(self)
+           Use your init method to create your own ToolbarBox.
+           This is the code to make a basic toolbar with the activity
+           toolbar and a stop button.
+                from sugar3.graphics.toolbarbox import ToolbarBox
+                from sugar3.activity.widgets import ActivityToolbarButton
+                from sugar3.activity.widgets import StopButton
+
+                ...
+
+                toolbar_box = ToolbarBox()
+                activity_button = ActivityToolbarButton(self)
+                toolbar_box.toolbar.insert(activity_button, 0)
+                activity_button.show()
+
+                ... Your toolbars ...
+
+                separator = Gtk.SeparatorToolItem(draw=False)
+                separator.set_expand(True)
+                toolbar_box.toolbar.insert(separator, -1)
+                separator.show()
+
+                stop_button = StopButton(self)
+                toolbar_box.toolbar.insert(stop_button, -1)
+                stop_button.show()
+
+                self.set_toolbar_box(toolbar_box)
+                toolbar_box.show()
 
            Add extra Toolbars to your toolbox.
 
@@ -194,7 +225,9 @@ class Activity(Window, Gtk.Container):
            Usually, you will also need the standard EditToolbar. This is the
            one which has the standard copy and paste buttons. You need to
            derive your own EditToolbar class from sugar3.EditToolbar:
-                class EditToolbar(activity.EditToolbar):
+                from sugar3.activity.widgets import EditToolbar
+
+                class MyEditToolbar(EditToolbar):
                     ...
 
            See EditToolbar for the methods you should implement in your class.
@@ -294,6 +327,8 @@ class Activity(Window, Gtk.Container):
         self.connect('delete-event', self.__delete_event_cb)
 
         self._active = False
+        self._active_time = None
+        self._spent_time = 0
         self._activity_id = handle.activity_id
         self.shared_activity = None
         self._join_id = None
@@ -301,7 +336,7 @@ class Activity(Window, Gtk.Container):
         self._closing = False
         self._quit_requested = False
         self._deleting = False
-        self._max_participants = 0
+        self._max_participants = None
         self._invites_queue = []
         self._jobject = None
         self._read_file_called = False
@@ -334,6 +369,11 @@ class Activity(Window, Gtk.Container):
                 self._jobject.metadata['launch-times'] = \
                     str(int(time.time()))
 
+            if 'spent-times' in self._jobject.metadata:
+                self._jobject.metadata['spent-times'] += ', 0'
+            else:
+                self._jobject.metadata['spent-times'] = '0'
+
         self.shared_activity = None
         self._join_id = None
 
@@ -344,8 +384,8 @@ class Activity(Window, Gtk.Container):
         if handle.invited:
             wait_loop = GObject.MainLoop()
             self._client_handler = _ClientHandler(
-                    self.get_bundle_id(),
-                    partial(self.__got_channel_cb, wait_loop))
+                self.get_bundle_id(),
+                partial(self.__got_channel_cb, wait_loop))
             # FIXME: The current API requires that self.shared_activity is set
             # before exiting from __init__, so we wait until we have got the
             # shared activity. http://bugs.sugarlabs.org/ticket/2168
@@ -374,8 +414,8 @@ class Activity(Window, Gtk.Container):
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
-        client = GConf.Client.get_default()
-        icon_color = client.get_string('/desktop/sugar/user/color')
+        settings = Gio.Settings('org.sugarlabs.user')
+        icon_color = settings.get_string('color')
 
         jobject = datastore.create()
         jobject.metadata['title'] = title
@@ -387,6 +427,7 @@ class Activity(Window, Gtk.Container):
         jobject.metadata['share-scope'] = SCOPE_PRIVATE
         jobject.metadata['icon-color'] = icon_color
         jobject.metadata['launch-times'] = str(int(time.time()))
+        jobject.metadata['spent-times'] = '0'
         jobject.file_path = ''
 
         # FIXME: We should be able to get an ID synchronously from the DS,
@@ -403,12 +444,12 @@ class Activity(Window, Gtk.Container):
 
     def _set_up_sharing(self, mesh_instance, share_scope):
         # handle activity share/join
-        logging.debug('*** Act %s, mesh instance %r, scope %s',
-                      self._activity_id, mesh_instance, share_scope)
+        logging.debug('*** Act %s, mesh instance %r, scope %s' %
+                      (self._activity_id, mesh_instance, share_scope))
         if mesh_instance is not None:
             # There's already an instance on the mesh, join it
-            logging.debug('*** Act %s joining existing mesh instance %r',
-                          self._activity_id, mesh_instance)
+            logging.debug('*** Act %s joining existing mesh instance %r' %
+                          (self._activity_id, mesh_instance))
             self.shared_activity = mesh_instance
             self.shared_activity.connect('notify::private',
                                          self.__privacy_changed_cb)
@@ -420,7 +461,7 @@ class Activity(Window, Gtk.Container):
                 self.__joined_cb(self.shared_activity, True, None)
         elif share_scope != SCOPE_PRIVATE:
             logging.debug('*** Act %s no existing mesh instance, but used to '
-                'be shared, will share', self._activity_id)
+                          'be shared, will share' % self._activity_id)
             # no existing mesh instance, but activity used to be shared, so
             # restart the share
             if share_scope == SCOPE_INVITE_ONLY:
@@ -428,7 +469,7 @@ class Activity(Window, Gtk.Container):
             elif share_scope == SCOPE_NEIGHBORHOOD:
                 self.share(private=False)
             else:
-                logging.debug('Unknown share scope %r', share_scope)
+                logging.debug('Unknown share scope %r' % share_scope)
 
     def __got_channel_cb(self, wait_loop, connection_path, channel_path,
                          handle_type):
@@ -452,9 +493,21 @@ class Activity(Window, Gtk.Container):
     def get_active(self):
         return self._active
 
+    def _update_spent_time(self):
+        if self._active is True and self._active_time is None:
+            self._active_time = time.time()
+        elif self._active is False and self._active_time is not None:
+            self._spent_time += time.time() - self._active_time
+            self._active_time = None
+        elif self._active is True and self._active_time is not None:
+            current = time.time()
+            self._spent_time += current - self._active_time
+            self._active_time = current
+
     def set_active(self, active):
         if self._active != active:
             self._active = active
+            self._update_spent_time()
             if not self._active and self._jobject:
                 self.save()
 
@@ -462,14 +515,19 @@ class Activity(Window, Gtk.Container):
         type=bool, default=False, getter=get_active, setter=set_active)
 
     def get_max_participants(self):
+        # If max_participants has not been set in the activity, get it
+        # from the bundle.
+        if self._max_participants is None:
+            bundle = get_bundle_instance(get_bundle_path())
+            self._max_participants = bundle.get_max_participants()
         return self._max_participants
 
     def set_max_participants(self, participants):
         self._max_participants = participants
 
     max_participants = GObject.property(
-            type=int, default=0, getter=get_max_participants,
-            setter=set_max_participants)
+        type=int, default=0, getter=get_max_participants,
+        setter=set_max_participants)
 
     def get_id(self):
         """Returns the activity id of the current instance of your activity.
@@ -543,7 +601,7 @@ class Activity(Window, Gtk.Container):
         pass
 
     def __jobject_error_cb(self, err):
-        logging.debug('Error creating activity datastore object: %s', err)
+        logging.debug('Error creating activity datastore object: %s' % err)
 
     def get_activity_root(self):
         """ FIXME: Deprecated. This part of the API has been moved
@@ -605,6 +663,21 @@ class Activity(Window, Gtk.Container):
         """
         raise NotImplementedError
 
+    def notify_user(self, summary, body):
+        """
+        Display a notification with the given summary and body.
+        The notification will go under the activities icon in the frame.
+        """
+        bundle = get_bundle_instance(get_bundle_path())
+        icon = bundle.get_icon()
+
+        bus = dbus.SessionBus()
+        notify_obj = bus.get_object(N_BUS_NAME, N_OBJ_PATH)
+        notifications = dbus.Interface(notify_obj, N_IFACE_NAME)
+
+        notifications.Notify(self.get_id(), 0, '', summary, body, [],
+                             {'x-sugar-icon-file-name': icon}, -1)
+
     def __save_cb(self):
         logging.debug('Activity.__save_cb')
         self._updating_jobject = False
@@ -621,14 +694,14 @@ class Activity(Window, Gtk.Container):
         if self._closing:
             self._show_keep_failed_dialog()
             self._closing = False
-        raise RuntimeError('Error saving activity object to datastore: %s',
+        raise RuntimeError('Error saving activity object to datastore: %s' %
                            err)
 
     def _cleanup_jobject(self):
         if self._jobject:
             if self._owns_file and os.path.isfile(self._jobject.file_path):
-                logging.debug('_cleanup_jobject: removing %r',
-                    self._jobject.file_path)
+                logging.debug('_cleanup_jobject: removing %r' %
+                              self._jobject.file_path)
                 os.remove(self._jobject.file_path)
             self._owns_file = False
             self._jobject.destroy()
@@ -639,8 +712,7 @@ class Activity(Window, Gtk.Container):
         this is what the user is seeing in this moment.
 
         Activities can override this method, which should return a str with the
-        binary content of a png image with a width of 300 and a height of 225
-        pixels.
+        binary content of a png image with a width of PREVIEW_SIZE pixels.
 
         The method does create a cairo surface similar to that of the canvas'
         window and draws on that. Then we create a cairo image surface with
@@ -666,7 +738,7 @@ class Activity(Window, Gtk.Container):
         self.canvas.draw(cr)
         del cr
 
-        preview_width, preview_height = style.zoom(300), style.zoom(225)
+        preview_width, preview_height = PREVIEW_SIZE
         preview_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
                                              preview_width, preview_height)
         cr = cairo.Context(preview_surface)
@@ -715,7 +787,7 @@ class Activity(Window, Gtk.Container):
             logging.debug('Cannot save, no journal object.')
             return
 
-        logging.debug('Activity.save: %r', self._jobject.object_id)
+        logging.debug('Activity.save: %r' % self._jobject.object_id)
 
         if self._updating_jobject:
             logging.info('Activity.save: still processing a previous request.')
@@ -725,6 +797,19 @@ class Activity(Window, Gtk.Container):
         if buddies_dict:
             self.metadata['buddies_id'] = json.dumps(buddies_dict.keys())
             self.metadata['buddies'] = json.dumps(self._get_buddies())
+
+        # update spent time before saving
+        self._update_spent_time()
+
+        def set_last_value(values_list, new_value):
+            if ', ' not in values_list:
+                return '%d' % new_value
+            else:
+                partial_list = ', '.join(values_list.split(', ')[:-1])
+                return partial_list + ', %d' % new_value
+
+        self.metadata['spent-times'] = set_last_value(
+            self.metadata['spent-times'], self._spent_time)
 
         preview = self.get_preview()
         if preview is not None:
@@ -751,9 +836,9 @@ class Activity(Window, Gtk.Container):
         else:
             self._updating_jobject = True
             datastore.write(self._jobject,
-                    transfer_ownership=True,
-                    reply_handler=self.__save_cb,
-                    error_handler=self.__save_error_cb)
+                            transfer_ownership=True,
+                            reply_handler=self.__save_cb,
+                            error_handler=self.__save_error_cb)
 
     def copy(self):
         """Request that the activity 'Keep in Journal' the current state
@@ -762,12 +847,13 @@ class Activity(Window, Gtk.Container):
         Activities should not override this method. Instead, like save() do any
         copy work that needs to be done in write_file()
         """
-        logging.debug('Activity.copy: %r', self._jobject.object_id)
+        logging.debug('Activity.copy: %r' % self._jobject.object_id)
         self.save()
         self._jobject.object_id = None
 
     def __privacy_changed_cb(self, shared_activity, param_spec):
-        logging.debug('__privacy_changed_cb %r', shared_activity.props.private)
+        logging.debug('__privacy_changed_cb %r' %
+                      shared_activity.props.private)
         if shared_activity.props.private:
             self._jobject.metadata['share-scope'] = SCOPE_INVITE_ONLY
         else:
@@ -775,12 +861,16 @@ class Activity(Window, Gtk.Container):
 
     def __joined_cb(self, activity, success, err):
         """Callback when join has finished"""
-        logging.debug('Activity.__joined_cb %r', success)
+        logging.debug('Activity.__joined_cb %r' % success)
         self.shared_activity.disconnect(self._join_id)
         self._join_id = None
         if not success:
-            logging.debug('Failed to join activity: %s', err)
+            logging.debug('Failed to join activity: %s' % err)
             return
+
+        power_manager = power.get_power_manager()
+        if power_manager.suspend_breaks_collaboration():
+            power_manager.inhibit_suspend()
 
         self.reveal()
         self.emit('joined')
@@ -801,18 +891,22 @@ class Activity(Window, Gtk.Container):
 
     def __share_cb(self, ps, success, activity, err):
         if not success:
-            logging.debug('Share of activity %s failed: %s.',
-                self._activity_id, err)
+            logging.debug('Share of activity %s failed: %s.' %
+                          (self._activity_id, err))
             return
 
-        logging.debug('Share of activity %s successful, PS activity is %r.',
-                      self._activity_id, activity)
+        logging.debug('Share of activity %s successful, PS activity is %r.' %
+                      (self._activity_id, activity))
 
         activity.props.name = self._jobject.metadata['title']
 
+        power_manager = power.get_power_manager()
+        if power_manager.suspend_breaks_collaboration():
+            power_manager.inhibit_suspend()
+
         self.shared_activity = activity
         self.shared_activity.connect('notify::private',
-                self.__privacy_changed_cb)
+                                     self.__privacy_changed_cb)
         self.emit('shared')
         self.__privacy_changed_cb(self.shared_activity, None)
 
@@ -829,7 +923,7 @@ class Activity(Window, Gtk.Container):
             buddy = pservice.get_buddy(account_path, contact_id)
             if buddy:
                 self.shared_activity.invite(
-                            buddy, '', self._invite_response_cb)
+                    buddy, '', self._invite_response_cb)
             else:
                 logging.error('Cannot invite %s %s, no such buddy',
                               account_path, contact_id)
@@ -844,7 +938,7 @@ class Activity(Window, Gtk.Container):
         self._invites_queue.append((account_path, contact_id))
 
         if (self.shared_activity is None
-            or not self.shared_activity.props.joined):
+                or not self.shared_activity.props.joined):
             self.share(True)
         else:
             self._send_invites()
@@ -862,8 +956,8 @@ class Activity(Window, Gtk.Container):
             raise RuntimeError('Activity %s already shared.' %
                                self._activity_id)
         verb = private and 'private' or 'public'
-        logging.debug('Requesting %s share of activity %s.', verb,
-            self._activity_id)
+        logging.debug('Requesting %s share of activity %s.' % (verb,
+                      self._activity_id))
         pservice = presenceservice.get_instance()
         pservice.connect('activity-shared', self.__share_cb)
         pservice.share_activity(self, private=private)
@@ -874,7 +968,8 @@ class Activity(Window, Gtk.Container):
         alert.props.msg = _('Keep error: all changes will be lost')
 
         cancel_icon = Icon(icon_name='dialog-cancel')
-        alert.add_button(Gtk.ResponseType.CANCEL, _('Don\'t stop'), cancel_icon)
+        alert.add_button(Gtk.ResponseType.CANCEL, _('Don\'t stop'),
+                         cancel_icon)
 
         stop_icon = Icon(icon_name='dialog-ok')
         alert.add_button(Gtk.ResponseType.OK, _('Stop anyway'), stop_icon)
@@ -925,6 +1020,7 @@ class Activity(Window, Gtk.Container):
         dbus.service.Object.remove_from_connection(self._bus)
 
         self._session.unregister(self)
+        power.get_power_manager().shutdown()
 
     def close(self, skip_save=False):
         """Request that the activity be stopped and saved to the Journal
@@ -996,29 +1092,29 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
 
         self._implement_property_get(CLIENT, {
             'Interfaces': lambda: list(self._interfaces),
-          })
+        })
         self._implement_property_get(CLIENT_HANDLER, {
             'HandlerChannelFilter': self.__get_filters_cb,
-          })
+        })
 
     def __get_filters_cb(self):
         logging.debug('__get_filters_cb')
         filters = {
             CHANNEL + '.ChannelType': CHANNEL_TYPE_TEXT,
             CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
-            }
+        }
         filter_dict = dbus.Dictionary(filters, signature='sv')
-        logging.debug('__get_filters_cb %r', dbus.Array([filter_dict],
-                                                        signature='a{sv}'))
+        logging.debug('__get_filters_cb %r' % dbus.Array([filter_dict],
+                      signature='a{sv}'))
         return dbus.Array([filter_dict], signature='a{sv}')
 
     @dbus.service.method(dbus_interface=CLIENT_HANDLER,
                          in_signature='ooa(oa{sv})aota{sv}', out_signature='')
     def HandleChannels(self, account, connection, channels, requests_satisfied,
-                        user_action_time, handler_info):
-        logging.debug('HandleChannels\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r',
-                account, connection, channels, requests_satisfied,
-                user_action_time, handler_info)
+                       user_action_time, handler_info):
+        logging.debug('HandleChannels\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r' %
+                      (account, connection, channels, requests_satisfied,
+                          user_action_time, handler_info))
         try:
             for object_path, properties in channels:
                 channel_type = properties[CHANNEL + '.ChannelType']
