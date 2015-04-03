@@ -26,8 +26,10 @@ Copyright: 1998, Carsten Schaar, and twm
   2012-2013, Daniel Narvaez
 License: LGPL-2+
 
-Files: src/sugar3/gsm-*
+Files: src/sugar3/graphics/palettemenu.py
+ src/sugar3/gsm-*
 Copyright: 2006-2007, Novell, Inc
+  2012, One Laptop Per Child
 License: GPL-2+
 Comment:
  gsm-app.h contains copyright but no licensing.  It is assumed the same
@@ -73,10 +75,6 @@ License: GPL-2+ with Libtool exception
  distribute this file as part of a program or library that is built
  using GNU Libtool, you may include this file under the same
  distribution terms that you use for the rest of that program.
-
-Files: src/sugar3/graphics/palettemenu.py
-Copyright: 2012, One Laptop Per Child
-License: GPL-2+
 
 Files: src/sugar3/presence/sugartubeconn.py
  src/sugar3/presence/tubeconn.py
