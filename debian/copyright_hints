@@ -319,6 +319,8 @@ License: GPL-2+
 Files: config.guess
  config.sub
 Copyright: 1992-1999
+  1992-1999,
+  1992-2000
   1992-2000,
 License: GPL-2+
  FIXME
@@ -348,10 +350,6 @@ License: LGPL-2+
 Files: src/sugar3/dispatch/license.txt
 Copyright: 2001-2003, Patrick K. O'Brien and Contributors
   Django Software Foundation and individual contributors
-  HOLDERS AND CONTRIBUTORS
-  HOLDERS AND CONTRIBUTORS "AS IS" AND
-  HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT
-  OWNER OR CONTRIBUTORS BE LIABLE FOR
 License: BSD-3-clause
  FIXME
 
@@ -364,19 +362,19 @@ Files: configure
 Copyright: (ISLOWER ? 'A' + ( - 'a') : )
   (ISLOWER ? ( | 0x40) : )
   1992-1996, 1998-2012, Free Software Foundation, Inc
-  1996-2001, 2003-2005
+  1996-2001, 2003-2005,
   2012, Free Software Foundation, Inc
 License: GPL-2+
  FIXME
 
 Files: m4/libtool.m4
-Copyright: 1996-2001, 2003-2005
+Copyright: 1996-2001, 2003-2005,
   2011, Free Software Foundation, Inc
 License: GPL-2+
  FIXME
 
 Files: ltmain.sh
-Copyright: 1996-2001, 2003-2006
+Copyright: 1996-2001, 2003-2006,
   all begin with the string "--lt-"
 License: GPL-2+
  FIXME
@@ -403,11 +401,6 @@ Copyright: 1995-2002, Free Software Foundation, Inc
 License: GPL-2+
  FIXME
 
-Files: debian/rules
-Copyright: 2012, Jonas Smedegaard <dr@jones.dk>
-License: GPL-2+
- FIXME
-
 Files: src/sugar3/graphics/palettemenu.py
 Copyright: 2012, One Laptop Per Child
 License: GPL-2+
@@ -416,6 +409,11 @@ License: GPL-2+
 Files: bin/sugar-activity
 Copyright: 2006-2008, Red Hat, Inc
 License: GPL-2+
+ FIXME
+
+Files: debian/rules
+Copyright: 2012, 2015 Jonas Smedegaard <dr@jones.dk>
+License: GPL-3+
  FIXME
 
 Files: src/sugar3/bundle/contentbundle.py
@@ -526,14 +524,9 @@ License: LGPL-2.1+
 Files: COPYING
 Copyright: 1991, 1999 Free Software Foundation, Inc
   <year> <name of author>
-  HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY
-  HOLDERS AND/OR
   disclaimer" for the library, if
-  holder or
-  holder who places the Library under this License may add
   interest in the
   law: that is to say, a work containing the Library or a
-  notices, you must include the
   the
 License: LGPL-ever
  FIXME

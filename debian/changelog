@@ -1,6 +1,35 @@
+sugar-toolkit-gtk3 (0.98.7-2) UNRELEASED; urgency=medium
+
+  * Update copyright info:
+    + Update alternate git source URL.
+    + Extend coverage for myself, and relicense packaging as GPL-3+.
+    + Fix use SPDX shortname for X11 license.
+      Thanks to Paul Richards Tagliamonte.
+    + Fix extend coverage for autotools.
+    + Fix update and extend coverage for upstream authors.
+    + Fix cover BSD-licensed src/sugar3/dispatch/*.
+  * Bump dephelper compatibility level to 8.
+  * Declare compliance with Debian Policy 3.9.6.
+  * Update Vcs-Git field to use canonical URL.
+  * Update Vcs-Browser field to use cgit and https.
+  * Wrap Uploaders field.
+  * Track xz compressed upstream tarballs (favored over bzip2).
+  * Rewrite README.source to emphasize that control.in file is *not* a
+    show-stopper for contributions, and refer to wiki page for details.
+  * Unfuzz patch 2003.
+  * Update package relations:
+    + Fix have python-sugar3 depend on gir1.2-gconf-2.0, and stop
+      build-depend explicitly on it.
+    + Fix build-depend explicitly on libxi-dev: Needed by
+      sugar-cursor-tracker, sugar-gesture-grabber and sugar-key-grabber.
+    + Fix build-depend explicitly on libx11-dev and x11proto-core-dev:
+      Needed by sugar-wm.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 03 Apr 2015 14:51:49 +0200
+
 sugar-toolkit-gtk3 (0.98.7-1) unstable; urgency=low
 
-  * New upstream release 
+  * New upstream release
   * Adding myself to Uploaders
   * Bump Standars-Version to 3.9.4
 
