@@ -39,6 +39,10 @@ DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
 
 # Needed by upstream build process
 dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 gconf2 xi x11
+bdeps = $(patsubst %,$(comma) lib%-dev,$(dev-bdeps))
+bdeps +=, python-gtk2-dev, gettext, intltool, libxml-parser-perl, x11proto-core-dev
+bdeps +=, libasound2-dev | libasound-dev
+bdeps +=, libgirepository1.0-dev (>= 1.30.0)
 
 # Needed (always/often/seldom) at runtime
 #  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
@@ -46,6 +50,8 @@ dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 gconf2 xi x11
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0
 gir-deps += sugarext-1.0 gconf-2.0
 python-deps = gi dbus cairo telepathy dateutil
+depends = $(patsubst %,$(comma) python-%,$(python-deps))
+depends +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
 recommends = unzip, telepathy-mission-control-5 (>= 1:5.6)
 recommends +=, telepathy-gabble (>= 0.10), telepathy-salut (>= 0.4)
 suggests = git-core, subversion, ttf-dejavu-extra
@@ -55,13 +61,8 @@ suggests = git-core, subversion, ttf-dejavu-extra
 non-gtk3-branches = 0.84 0.86 0.88 0.90 0.92 0.94
 obsoletes = $(foreach ver,$(non-gtk3-branches),$(comma) sugar-tools-$(ver))
 
-CDBS_BUILD_DEPENDS +=, $(patsubst %,$(comma) lib%-dev,$(dev-bdeps))
-CDBS_BUILD_DEPENDS +=, python-gtk2-dev, gettext, intltool
-CDBS_BUILD_DEPENDS +=, libxml-parser-perl, x11proto-core-dev
-CDBS_BUILD_DEPENDS +=, libasound2-dev | libasound-dev
-CDBS_BUILD_DEPENDS +=, libgirepository1.0-dev (>= 1.30.0)
-CDBS_DEPENDS_$(pythonpkg) = $(patsubst %,$(comma) python-%,$(python-deps))
-CDBS_DEPENDS_$(pythonpkg) +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
+CDBS_BUILD_DEPENDS +=, $(bdeps)
+CDBS_DEPENDS_$(pythonpkg) +=, $(depends)
 CDBS_RECOMMENDS_$(pythonpkg) = $(recommends)
 CDBS_SUGGESTS_$(pythonpkg) = $(suggests)
 CDBS_CONFLICTS_$(binpkg) = $(obsoletes)
