@@ -29,22 +29,24 @@ from sugar3.graphics import toolbutton
 
 
 class RadioToolButton(Gtk.RadioToolButton):
-    """
-    An implementation of a "push" button.
-
-    """
+    """An implementation of a "push" button."""
 
     __gtype_name__ = 'SugarRadioToolButton'
 
-    def __init__(self, **kwargs):
+    def __init__(self, icon_name=None, **kwargs):
         self._accelerator = None
         self._tooltip = None
         self._xo_color = None
+        self._hide_tooltip_on_click = True
+
         self._palette_invoker = ToolInvoker()
 
         GObject.GObject.__init__(self, **kwargs)
 
         self._palette_invoker.attach_tool(self)
+
+        if icon_name:
+            self.set_icon_name(icon_name)
 
         self.connect('destroy', self.__destroy_cb)
 
@@ -53,18 +55,6 @@ class RadioToolButton(Gtk.RadioToolButton):
             self._palette_invoker.detach()
 
     def set_tooltip(self, tooltip):
-        """
-        Set a simple palette with just a single label.
-
-        Parameters
-        ----------
-        tooltip:
-
-        Returns
-        -------
-        None
-
-        """
         if self.palette is None or self._tooltip is None:
             self.palette = Palette(tooltip)
         elif self.palette is not None:
@@ -82,54 +72,29 @@ class RadioToolButton(Gtk.RadioToolButton):
         getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
-        """
-        Sets the accelerator.
-
-        Parameters
-        ----------
-        accelerator:
-
-        Returns
-        -------
-        None
-
-        """
         self._accelerator = accelerator
         toolbutton.setup_accelerator(self)
 
     def get_accelerator(self):
-        """
-        Returns the accelerator for the button.
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        ------
-        accelerator:
-
-        """
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)
 
-    def set_named_icon(self, named_icon):
-        icon = Icon(icon_name=named_icon,
-                    xo_color=self._xo_color,
-                    icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+    def set_icon_name(self, icon_name):
+        icon = Icon(icon_name=icon_name,
+                    xo_color=self._xo_color)
         self.set_icon_widget(icon)
         icon.show()
 
-    def get_named_icon(self):
+    def get_icon_name(self):
         if self.props.icon_widget is not None:
             return self.props.icon_widget.props.icon_name
         else:
             return None
 
-    named_icon = GObject.property(type=str, setter=set_named_icon,
-                                  getter=get_named_icon)
+    icon_name = GObject.property(type=str, setter=set_icon_name,
+                                 getter=get_icon_name)
 
     def set_xo_color(self, xo_color):
         if self._xo_color != xo_color:
@@ -165,18 +130,34 @@ class RadioToolButton(Gtk.RadioToolButton):
     palette_invoker = GObject.property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
-    def do_expose_event(self, event):
+    def do_draw(self, cr):
         child = self.get_child()
-        allocation = self.get_allocation()
+        if self.palette and self.palette.is_up():
+            allocation = self.get_allocation()
+            # draw a black background, has been done by the engine before
+            cr.set_source_rgb(0, 0, 0)
+            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.paint()
+
+        Gtk.RadioToolButton.do_draw(self, cr)
 
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker
-            invoker.draw_rectangle(event, self.palette)
-        elif child.state == Gtk.StateType.PRELIGHT:
-            child.style.paint_box(event.window, Gtk.StateType.PRELIGHT,
-                                  Gtk.ShadowType.NONE, event.area,
-                                  child, 'toolbutton-prelight',
-                                  allocation.x, allocation.y,
-                                  allocation.width, allocation.height)
+            invoker.draw_rectangle(cr, self.palette)
 
-        Gtk.RadioToolButton.do_expose_event(self, event)
+        return False
+
+    def get_hide_tooltip_on_click(self):
+        return self._hide_tooltip_on_click
+
+    def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
+        if self._hide_tooltip_on_click != hide_tooltip_on_click:
+            self._hide_tooltip_on_click = hide_tooltip_on_click
+
+    hide_tooltip_on_click = GObject.property(
+        type=bool, default=True, getter=get_hide_tooltip_on_click,
+        setter=set_hide_tooltip_on_click)
+
+    def do_clicked(self):
+        if self._hide_tooltip_on_click and self.palette:
+            self.palette.popdown(True)

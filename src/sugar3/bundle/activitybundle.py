@@ -21,7 +21,7 @@ UNSTABLE.
 """
 
 from ConfigParser import ConfigParser
-import locale
+from locale import normalize
 import os
 import shutil
 import tempfile
@@ -34,6 +34,52 @@ from sugar3.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
 from sugar3.bundle.bundleversion import NormalizedVersion
 from sugar3.bundle.bundleversion import InvalidVersionError
+
+
+def _expand_lang(locale):
+    # Private method from gettext.py
+    locale = normalize(locale)
+    COMPONENT_CODESET = 1 << 0
+    COMPONENT_TERRITORY = 1 << 1
+    COMPONENT_MODIFIER = 1 << 2
+
+    # split up the locale into its base components
+    mask = 0
+    pos = locale.find('@')
+    if pos >= 0:
+        modifier = locale[pos:]
+        locale = locale[:pos]
+        mask |= COMPONENT_MODIFIER
+    else:
+        modifier = ''
+
+    pos = locale.find('.')
+    if pos >= 0:
+        codeset = locale[pos:]
+        locale = locale[:pos]
+        mask |= COMPONENT_CODESET
+    else:
+        codeset = ''
+
+    pos = locale.find('_')
+    if pos >= 0:
+        territory = locale[pos:]
+        locale = locale[:pos]
+        mask |= COMPONENT_TERRITORY
+    else:
+        territory = ''
+
+    language = locale
+    ret = []
+    for i in range(mask + 1):
+        if not (i & ~mask):  # if all components for this combo exist ...
+            val = language
+            if i & COMPONENT_TERRITORY: val += territory
+            if i & COMPONENT_CODESET: val += codeset
+            if i & COMPONENT_MODIFIER: val += modifier
+            ret.append(val)
+    ret.reverse()
+    return ret
 
 
 class ActivityBundle(Bundle):
@@ -62,6 +108,8 @@ class ActivityBundle(Bundle):
         self._tags = None
         self._activity_version = '0'
         self._installation_time = os.stat(path).st_mtime
+        self._summary = None
+        self._local_summary = None
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
@@ -74,6 +122,9 @@ class ActivityBundle(Bundle):
 
         if self._local_name == None:
             self._local_name = self._name
+
+        if self._local_summary == None:
+            self._local_summary = self._summary
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
@@ -126,21 +177,31 @@ class ActivityBundle(Bundle):
                     (self._path, version))
             self._activity_version = version
 
+        if cp.has_option(section, 'summary'):
+            self._summary = cp.get(section, 'summary')
+
     def _get_linfo_file(self):
-        lang = locale.getdefaultlocale()[0]
-        if not lang:
-            return None
+        # Using method from gettext.py, first find languages from environ
+        languages = []
+        for envar in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
+            val = os.environ.get(envar)
+            if val:
+                languages = val.split(':')
+                break
 
-        linfo_path = os.path.join('locale', lang, 'activity.linfo')
-        linfo_file = self.get_file(linfo_path)
-        if linfo_file is not None:
-            return linfo_file
+        # Next, normalize and expand the languages
+        nelangs = []
+        for lang in languages:
+            for nelang in _expand_lang(lang):
+                if nelang not in nelangs:
+                    nelangs.append(nelang)
 
-        linfo_path = os.path.join('locale', lang[:2], 'activity.linfo')
-        linfo_file = self.get_file(linfo_path)
-        if linfo_file is not None:
-            return linfo_file
-
+        # Finally, select a language
+        for lang in nelangs:
+            linfo_path = os.path.join('locale', lang, 'activity.linfo')
+            linfo_file = self.get_file(linfo_path)
+            if linfo_file is not None:
+                return linfo_file
         return None
 
     def _parse_linfo(self, linfo_file):
@@ -151,6 +212,9 @@ class ActivityBundle(Bundle):
 
         if cp.has_option(section, 'name'):
             self._local_name = cp.get(section, 'name')
+
+        if cp.has_option(section, 'summary'):
+            self._local_summary = cp.get(section, 'summary')
 
         if cp.has_option(section, 'tags'):
             tag_list = cp.get(section, 'tags').strip(';')
@@ -202,7 +266,7 @@ class ActivityBundle(Bundle):
                                                          suffix='.svg')
             os.write(temp_file, icon_data)
             os.close(temp_file)
-            return util.TempFilePath(temp_file_path)
+            return temp_file_path
 
     def get_activity_version(self):
         """Get the activity version"""
@@ -224,6 +288,10 @@ class ActivityBundle(Bundle):
     def get_tags(self):
         """Get the tags that describe the activity"""
         return self._tags
+
+    def get_summary(self):
+        """Get the summary that describe the activity"""
+        return self._local_summary
 
     def get_show_launcher(self):
         """Get whether there should be a visible launcher for the activity"""

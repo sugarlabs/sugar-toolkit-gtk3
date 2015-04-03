@@ -1,4 +1,5 @@
 # Copyright (C) 2007, Red Hat, Inc.
+# Copyright (C) 2012, Daniel Francis
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,6 +20,8 @@
 STABLE.
 """
 
+import logging
+
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -26,15 +29,45 @@ from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
 
 
+def _add_accelerator(tool_button):
+    if not tool_button.props.accelerator or not tool_button.get_toplevel() or \
+            not tool_button.get_child():
+        return
+
+    # TODO: should we remove the accelerator from the prev top level?
+    if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
+        logging.warning('No Gtk.AccelGroup in the top level window.')
+        return
+
+    accel_group = tool_button.get_toplevel().sugar_accel_group
+    keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
+    # the accelerator needs to be set at the child, so the Gtk.AccelLabel
+    # in the palette can pick it up.
+    accel_flags = Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE
+    tool_button.get_child().add_accelerator('clicked', accel_group,
+                                            keyval, mask, accel_flags)
+
+
+def _hierarchy_changed_cb(tool_button, previous_toplevel):
+    _add_accelerator(tool_button)
+
+
+def setup_accelerator(tool_button):
+    _add_accelerator(tool_button)
+    tool_button.connect('hierarchy-changed', _hierarchy_changed_cb)
+
+
 class ToggleToolButton(Gtk.ToggleToolButton):
 
     __gtype_name__ = 'SugarToggleToolButton'
 
-    def __init__(self, named_icon=None):
+    def __init__(self, icon_name=None):
         GObject.GObject.__init__(self)
 
         self._palette_invoker = ToolInvoker(self)
-        self.set_named_icon(named_icon)
+
+        if icon_name:
+            self.set_icon_name(icon_name)
 
         self.connect('destroy', self.__destroy_cb)
 
@@ -42,10 +75,19 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         if self._palette_invoker is not None:
             self._palette_invoker.detach()
 
-    def set_named_icon(self, named_icon):
-        icon = Icon(icon_name=named_icon)
+    def set_icon_name(self, icon_name):
+        icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
+
+    def get_icon_name(self):
+        if self.props.icon_widget is not None:
+            return self.props.icon_widget.props.icon_name
+        else:
+            return None
+
+    icon_name = GObject.property(type=str, setter=set_icon_name,
+                                 getter=get_icon_name)
 
     def create_palette(self):
         return None
@@ -72,20 +114,35 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     def set_tooltip(self, text):
         self.set_palette(Palette(text))
 
-    def do_expose_event(self, event):
-        allocation = self.get_allocation()
+    def set_accelerator(self, accelerator):
+        self._accelerator = accelerator
+        setup_accelerator(self)
+
+    def get_accelerator(self):
+        return self._accelerator
+
+    accelerator = GObject.property(type=str, setter=set_accelerator,
+                                   getter=get_accelerator)
+
+    def do_draw(self, cr):
         child = self.get_child()
+        if self.palette and self.palette.is_up():
+            allocation = self.get_allocation()
+            # draw a black background, has been done by the engine before
+            cr.set_source_rgb(0, 0, 0)
+            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.paint()
+
+        Gtk.ToggleToolButton.do_draw(self, cr)
 
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker
-            invoker.draw_rectangle(event, self.palette)
-        elif child.state == Gtk.StateType.PRELIGHT:
-            child.style.paint_box(event.window, Gtk.StateType.PRELIGHT,
-                                  Gtk.ShadowType.NONE, event.area,
-                                  child, 'toolbutton-prelight',
-                                  allocation.x, allocation.y,
-                                  allocation.width, allocation.height)
+            invoker.draw_rectangle(cr, self.palette)
 
-        Gtk.ToggleToolButton.do_expose_event(self, event)
+        return False
+
+    def do_clicked(self):
+        if self.palette:
+            self.palette.popdown(True)
 
     palette = property(get_palette, set_palette)

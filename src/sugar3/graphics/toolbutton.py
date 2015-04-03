@@ -35,12 +35,11 @@ def _add_accelerator(tool_button):
         return
 
     # TODO: should we remove the accelerator from the prev top level?
-
-    accel_group = tool_button.get_toplevel().get_data('sugar-accel-group')
-    if not accel_group:
+    if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
         logging.warning('No Gtk.AccelGroup in the top level window.')
         return
 
+    accel_group = tool_button.get_toplevel().sugar_accel_group
     keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
     # the accelerator needs to be set at the child, so the Gtk.AccelLabel
     # in the palette can pick it up.
@@ -68,10 +67,11 @@ class ToolButton(Gtk.ToolButton):
 
         GObject.GObject.__init__(self, **kwargs)
 
+        self._hide_tooltip_on_click = True
         self._palette_invoker.attach_tool(self)
 
         if icon_name:
-            self.set_icon(icon_name)
+            self.set_icon_name(icon_name)
 
         self.get_child().connect('can-activate-accel',
                                  self.__button_can_activate_accel_cb)
@@ -105,6 +105,17 @@ class ToolButton(Gtk.ToolButton):
     tooltip = GObject.property(type=str, setter=set_tooltip,
         getter=get_tooltip)
 
+    def get_hide_tooltip_on_click(self):
+        return self._hide_tooltip_on_click
+
+    def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
+        if self._hide_tooltip_on_click != hide_tooltip_on_click:
+            self._hide_tooltip_on_click = hide_tooltip_on_click
+
+    hide_tooltip_on_click = GObject.property(
+        type=bool, default=True, getter=get_hide_tooltip_on_click,
+        setter=set_hide_tooltip_on_click)
+
     def set_accelerator(self, accelerator):
         self._accelerator = accelerator
         setup_accelerator(self)
@@ -115,10 +126,19 @@ class ToolButton(Gtk.ToolButton):
     accelerator = GObject.property(type=str, setter=set_accelerator,
             getter=get_accelerator)
 
-    def set_icon(self, icon_name):
+    def set_icon_name(self, icon_name):
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
+
+    def get_icon_name(self):
+        if self.props.icon_widget is not None:
+            return self.props.icon_widget.props.icon_name
+        else:
+            return None
+
+    icon_name = GObject.property(type=str, setter=set_icon_name,
+                                 getter=get_icon_name)
 
     def create_palette(self):
         return None
@@ -160,5 +180,5 @@ class ToolButton(Gtk.ToolButton):
         return False
 
     def do_clicked(self):
-        if self.palette:
+        if self._hide_tooltip_on_click and self.palette:
             self.palette.popdown(True)

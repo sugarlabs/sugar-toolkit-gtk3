@@ -1,4 +1,4 @@
-SUBDIRS = activity bundle graphics presence datastore dispatch
+SUBDIRS = activity bundle event-controller graphics presence datastore dispatch
 
 sugardir = $(pythondir)/sugar3
 sugar_PYTHON =		\
@@ -9,8 +9,7 @@ sugar_PYTHON =		\
         network.py	\
 	profile.py	\
 	session.py	\
-	util.py		\
-	wm.py
+	util.py
 
 lib_LTLIBRARIES = libsugarext.la
 
@@ -36,8 +35,7 @@ libsugarext_la_SOURCES =		\
 	eggsmclient.h			\
 	eggsmclient-private.h		\
 	eggsmclient-xsmp.c		\
-	gdk-wrapper.c			\
-	gdk-wrapper.h			\
+	eggsmclient-xsmp.h 		\
 	gsm-app.c			\
 	gsm-app.h			\
 	gsm-client.c			\
@@ -50,8 +48,16 @@ libsugarext_la_SOURCES =		\
 	gsm-xsmp.h			\
 	sugar-grid.c			\
 	sugar-grid.h			\
+	sugar-cursor-tracker.c		\
+	sugar-cursor-tracker.h		\
+	sugar-gconf.c			\
+	sugar-gconf.h			\
+	sugar-gesture-grabber.c		\
+	sugar-gesture-grabber.h		\
 	sugar-key-grabber.c		\
-	sugar-key-grabber.h
+	sugar-key-grabber.h		\
+	sugar-wm.c			\
+	sugar-wm.h
 
 sugar_LTLIBRARIES = _sugarbaseext.la
 
@@ -113,8 +119,9 @@ INTROSPECTION_SCANNER_ARGS = --identifier-prefix=Sugar --symbol-prefix=sugar \
 	--identifier-prefix=EggSM --symbol-prefix=egg_sm \
 	--identifier-prefix=Gsm --symbol-prefix=gsm \
 	--identifier-prefix=Acme --symbol-prefix=acme \
-	--identifier-prefix=GdkWrapper --symbol-prefix=gdk_wrapper
-SugarExt_1_0_gir_LIBS = libsugarext.la
+	--include-uninstalled=$(top_builddir)/src/sugar3/event-controller/SugarGestures-1.0.gir
+INTROSPECTION_COMPILER_ARGS = --includedir=$(top_builddir)/src/sugar3/event-controller
+SugarExt_1_0_gir_LIBS = libsugarext.la $(top_builddir)/src/sugar3/event-controller/libsugar-eventcontroller.la
 SugarExt_1_0_gir_FILES = \
 	acme-volume.c \
 	acme-volume.h \
@@ -122,19 +129,27 @@ SugarExt_1_0_gir_FILES = \
 	acme-volume-alsa.h \
 	eggsmclient.c \
 	eggsmclient.h \
+	eggsmclient-xsmp.c \
+	eggsmclient-xsmp.h \
 	gsm-session.c \
 	gsm-session.h \
 	gsm-xsmp.c \
 	gsm-xsmp.h \
+	sugar-cursor-tracker.c \
+	sugar-cursor-tracker.h \
+	sugar-gesture-grabber.c \
+	sugar-gesture-grabber.h \
 	sugar-key-grabber.c \
 	sugar-key-grabber.h \
+	sugar-gconf.c \
+	sugar-gconf.h \
 	sugar-grid.c \
 	sugar-grid.h \
-	gdk-wrapper.c \
-	gdk-wrapper.h
+        sugar-wm.c    \
+        sugar-wm.h
 
-SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
-SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
+SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0 GConf-2.0
+SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0 gconf-2.0
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
 
 girdir = $(datadir)/gir-1.0

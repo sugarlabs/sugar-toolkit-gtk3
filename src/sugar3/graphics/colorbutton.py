@@ -63,21 +63,21 @@ class _ColorButton(Gtk.Button):
 
         GObject.GObject.__init__(self, **kwargs)
 
+        # FIXME Drag and drop is not working, SL #3796
         if self._accept_drag:
-            Gtk.drag_dest_set(self, Gtk.DEST_DEFAULT_MOTION |
-                               Gtk.DEST_DEFAULT_HIGHLIGHT |
-                               Gtk.DEST_DEFAULT_DROP,
-                               [('application/x-color', 0, 0)],
-                               Gdk.DragAction.COPY)
-        self.drag_source_set(Gdk.EventMask.BUTTON1_MASK | Gdk.EventMask.BUTTON3_MASK,
-                             [('application/x-color', 0, 0)],
-                             Gdk.DragAction.COPY)
+            self.drag_dest_set(Gtk.DestDefaults.MOTION |
+                    Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+                    [Gtk.TargetEntry.new('application/x-color', 0, 0)],
+                    Gdk.DragAction.COPY)
+        self.drag_source_set(Gdk.ModifierType.BUTTON1_MASK |
+                    Gdk.ModifierType.BUTTON3_MASK,
+                    [Gtk.TargetEntry.new('application/x-color', 0, 0)],
+                    Gdk.DragAction.COPY)
         self.connect('drag_data_received', self.__drag_data_received_cb)
         self.connect('drag_data_get', self.__drag_data_get_cb)
 
         self._preview.fill_color = get_svg_color_string(self._color)
-        self._preview.stroke_color = \
-            get_svg_color_string(self.style.fg[Gtk.StateType.NORMAL])
+        self._preview.stroke_color = self._get_fg_style_color_str()
         self.set_image(self._preview)
 
         if self._has_palette and self._has_invoker:
@@ -103,17 +103,14 @@ class _ColorButton(Gtk.Button):
         self.color = self._palette.color
 
     def do_style_set(self, previous_style):
-        self._preview.stroke_color = \
-            get_svg_color_string(self.style.fg[Gtk.StateType.NORMAL])
+        self._preview.stroke_color = self._get_fg_style_color_str()
 
-    def do_clicked(self):
-        if self._palette:
-            if not self._palette.is_up():
-                self._palette.popup(immediate=True,
-                                    state=self._palette.SECONDARY)
-            else:
-                self._palette.popdown(immediate=True)
-            return True
+    def _get_fg_style_color_str(self):
+        context = self.get_style_context()
+        fg_color = context.get_color(Gtk.StateType.NORMAL)
+        # the color components are stored as float values between 0.0 and 1.0
+        return '#%.2X%.2X%.2X' % (fg_color.red * 255, fg_color.green * 255,
+                              fg_color.blue * 255)
 
     def set_color(self, color):
         assert isinstance(color, Gdk.Color)
@@ -396,11 +393,11 @@ def _add_accelerator(tool_button):
 
     # TODO: should we remove the accelerator from the prev top level?
 
-    accel_group = tool_button.get_toplevel().get_data('sugar-accel-group')
-    if not accel_group:
+    if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
         logging.warning('No Gtk.AccelGroup in the top level window.')
         return
 
+    accel_group = tool_button.get_toplevel().sugar_accel_group
     keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
     # the accelerator needs to be set at the child, so the Gtk.AccelLabel
     # in the palette can pick it up.
@@ -438,12 +435,15 @@ class ColorToolButton(Gtk.ToolItem):
         # Replace it with a ColorButton
         color_button = _ColorButton(icon_name=icon_name, has_invoker=False)
         self.add(color_button)
+        color_button.show()
 
         # The following is so that the behaviour on the toolbar is correct.
         color_button.set_relief(Gtk.ReliefStyle.NONE)
         color_button.icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
         self._palette_invoker.attach_tool(self)
+        self._palette_invoker.props.toggle_palette = True
+        self._palette_invoker.props.lock_palette = True
 
         # This widget just proxies the following properties to the colorbutton
         color_button.connect('notify::color', self.__notify_change)
@@ -482,6 +482,29 @@ class ColorToolButton(Gtk.ToolItem):
     palette_invoker = GObject.property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
+    def set_expanded(self, expanded):
+        box = self.toolbar_box
+        if not box:
+            return
+
+        if not expanded:
+            self._palette_invoker.notify_popdown()
+            return
+
+        if box.expanded_button is not None:
+            box.expanded_button.queue_draw()
+            if box.expanded_button != self:
+                box.expanded_button.set_expanded(False)
+        box.expanded_button = self
+
+    def get_toolbar_box(self):
+        parent = self.get_parent()
+        if not hasattr(parent, 'owner'):
+            return None
+        return parent.owner
+
+    toolbar_box = property(get_toolbar_box)
+
     def set_color(self, color):
         self.get_child().props.color = color
 
@@ -516,20 +539,22 @@ class ColorToolButton(Gtk.ToolItem):
 
     title = GObject.property(type=str, getter=get_title, setter=set_title)
 
-    def do_expose_event(self, event):
+    def do_draw(self, cr):
         child = self.get_child()
-        allocation = self.get_allocation()
+        if self._palette and self._palette.is_up():
+            allocation = self.get_allocation()
+            # draw a black background, has been done by the engine before
+            cr.set_source_rgb(0, 0, 0)
+            cr.rectangle(0, 0, allocation.width, allocation.height)
+            cr.paint()
+
+        Gtk.ToolItem.do_draw(self, cr)
+
         if self._palette and self._palette.is_up():
             invoker = self._palette.props.invoker
-            invoker.draw_rectangle(event, self._palette)
-        elif child.state == Gtk.StateType.PRELIGHT:
-            child.style.paint_box(event.window, Gtk.StateType.PRELIGHT,
-                                  Gtk.ShadowType.NONE, event.area,
-                                  child, 'toolbutton-prelight',
-                                  allocation.x, allocation.y,
-                                  allocation.width, allocation.height)
+            invoker.draw_rectangle(cr, self._palette)
 
-        Gtk.ToolButton.do_expose_event(self, event)
+        return False
 
     def __notify_change(self, widget, pspec):
         self.notify(pspec.name)

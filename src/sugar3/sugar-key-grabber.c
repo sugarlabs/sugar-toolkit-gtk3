@@ -19,6 +19,7 @@
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
+#include <X11/extensions/XInput2.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 
@@ -138,6 +139,25 @@ filter_events(GdkXEvent *xevent, GdkEvent *event, gpointer data)
 			return GDK_FILTER_REMOVE;
 	}
 
+	if (xev->type == GenericEvent) {
+		XIDeviceEvent *ev;
+		int return_value = FALSE;
+
+		ev = (XIDeviceEvent *) ((XGenericEventCookie *) xev)->data;
+
+		if (ev->evtype == XI_KeyPress) {
+			g_signal_emit (grabber, signals[KEY_PRESSED], 0,
+				       ev->detail, ev->mods.effective, ev->time, &return_value);
+		} else if (ev->evtype == XI_KeyRelease) {
+			g_signal_emit (grabber, signals[KEY_RELEASED], 0,
+				       ev->detail, ev->mods.effective, ev->time, &return_value);
+		}
+
+		if (return_value)
+			return GDK_FILTER_REMOVE;
+	}
+
+
 	return GDK_FILTER_CONTINUE;
 }
 
@@ -199,34 +219,41 @@ grab_key (SugarKeyGrabber *grabber, Key *key, gboolean grab)
         }
 }
 
-
+/**
+ * sugar_key_grabber_grab_keys:
+ * @grabber: a #SugarKeyGrabber
+ * @keys: (array length=n_elements) (element-type utf8): array of
+ *     keys the grabber will listen to
+ * @n_elements: number of elements in @keys.
+ *
+ * Pass to the key grabber the keys it should listen to.
+ **/
 void
-sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber, const char **keys)
+sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber,
+			    const gchar  *keys[],
+			    gint          n_elements)
 {
-    const char **cur = keys;
+    gint i;
     const char *key;
     Key *keyinfo = NULL;
-    int min_keycodes, max_keycodes;
+    gint min_keycodes, max_keycodes;
 
     XDisplayKeycodes(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
                      &min_keycodes, &max_keycodes);
 
-    while (*cur != NULL) {
-        key = *cur;
-        cur += 1;
+    for (i = 0; i < n_elements; i++){
+	keyinfo = g_new0 (Key, 1);
+	keyinfo->key = g_strdup(keys[i]);
 
-        keyinfo = g_new0 (Key, 1);
-        keyinfo->key = g_strdup(key);
-
-        if (!egg_accelerator_parse_virtual (key, &keyinfo->keysym,
+        if (!egg_accelerator_parse_virtual (keys[i], &keyinfo->keysym,
                                             &keyinfo->keycode,
                                             &keyinfo->state)) {
-            g_warning ("Invalid key specified: %s", key);
+            g_warning ("Invalid key specified: %s", keys[i]);
             continue;
         }
 
         if (keyinfo->keycode < min_keycodes || keyinfo->keycode > max_keycodes) {
-            g_warning ("Keycode out of bounds: %d for key %s", keyinfo->keycode, key);
+            g_warning ("Keycode out of bounds: %d for key %s", keyinfo->keycode, keys[i]);
             continue;
         }
 
@@ -239,12 +266,13 @@ sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber, const char **keys)
         if(!error_code)
             grabber->keys = g_list_append(grabber->keys, keyinfo);
         else if(error_code == BadAccess)
-            g_warning ("Grab failed, another application may already have access to key '%s'", key);
+            g_warning ("Grab failed, another application may already have access to key '%s'", keys[i]);
         else if(error_code == BadValue)
             g_warning ("Grab failed, invalid key %s specified. keysym: %u keycode: %u state: %u",
-                       key, keyinfo->keysym, keyinfo->keycode, keyinfo->state);
+                       keys[i], keyinfo->keysym, keyinfo->keycode, keyinfo->state);
         else
-            g_warning ("Grab failed for key '%s' for unknown reason '%d'", key, error_code);
+            g_warning ("Grab failed for key '%s' for unknown reason '%d'", keys[i], error_code);
+
     }
 }
 
@@ -285,4 +313,3 @@ sugar_key_grabber_is_modifier(SugarKeyGrabber *grabber, guint keycode, guint mas
 
 	return is_modifier;
 }
-

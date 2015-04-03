@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-10 00:30-0500\n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,24 +16,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.3.0\n"
 
-#: ../src/sugar3/activity/activity.py:377
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:845
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:846
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:849
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:852
+#: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
 msgstr ""
 
@@ -183,4 +183,24 @@ msgstr ""
 #: ../src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
+msgstr ""
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr ""
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr ""
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr ""
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr ""
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
 msgstr ""

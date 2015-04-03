@@ -33,6 +33,7 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palettewindow import PaletteWindow, \
     _PaletteWindowWidget, _PaletteMenuWidget
+from sugar3.graphics.palettemenu import PaletteMenuItem
 
 # DEPRECATED
 # Import these for backwards compatibility
@@ -40,9 +41,40 @@ from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
         WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
 
 
-class Palette(PaletteWindow):
+class _HeaderItem(Gtk.MenuItem):
+    """A MenuItem with a custom child widget that gets all the
+    available space.
+
     """
-    Floating palette implementation.
+
+    __gtype_name__ = 'SugarPaletteHeader'
+
+    def __init__(self, widget):
+        Gtk.MenuItem.__init__(self)
+        if self.get_child() is not None:
+            self.remove(self.get_child())
+        self.add(widget)
+        # FIXME we have to mark it as insensitive again to make it an
+        # informational element, when we realize how to get the icon
+        # displayed correctly - SL #3836
+        # self.set_sensitive(False)
+
+    def do_size_allocate(self, allocation):
+        self.set_allocation(allocation)
+        self.get_child().size_allocate(allocation)
+
+
+class _HeaderSeparator(Gtk.SeparatorMenuItem):
+    """A SeparatorMenuItem that can be styled in the theme."""
+
+    __gtype_name__ = 'SugarPaletteHeaderSeparator'
+
+    def __init__(self):
+        Gtk.SeparatorMenuItem.__init__(self)
+
+
+class Palette(PaletteWindow):
+    """Floating palette implementation.
 
     This class dynamically switches between one of two encapsulated child
     widget types: a _PaletteWindowWidget or a _PaletteMenuWidget.
@@ -58,9 +90,6 @@ class Palette(PaletteWindow):
     were provided, an initial menu entry is created containing widgets to
     display such information.
     """
-
-    PRIMARY = 0
-    SECONDARY = 1
 
     __gsignals__ = {
         'activate': (GObject.SignalFlags.RUN_FIRST, None, ([])),
@@ -148,9 +177,6 @@ class Palette(PaletteWindow):
         PaletteWindow._setup_widget(self)
         self._widget.connect('destroy', self.__destroy_cb)
 
-    def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True, state=self.SECONDARY)
-
     def __destroy_cb(self, palette):
         self._secondary_anim.stop()
         self.popdown(immediate=True)
@@ -205,8 +231,8 @@ class Palette(PaletteWindow):
     def _add_content(self):
         # The content is not shown until a widget is added
         self._content = Gtk.VBox()
-        self._content.set_border_width(style.DEFAULT_SPACING)
-        self._secondary_box.pack_start(self._content, True, True, 0)
+        self._secondary_box.pack_start(self._content, True, True,
+                                       style.DEFAULT_SPACING)
 
     def _update_accel_widget(self):
         assert self.props.invoker is not None
@@ -317,6 +343,8 @@ class Palette(PaletteWindow):
             self._content.remove(self._content.get_children()[0])
 
         if widget is not None:
+            widget.connect('button-release-event',
+                           self.__widget_button_release_cb)
             self._content.add(widget)
             self._content.show()
         else:
@@ -326,6 +354,12 @@ class Palette(PaletteWindow):
 
         self._update_accept_focus()
         self._update_separators()
+
+    def __widget_button_release_cb(self, widget, event):
+        event_widget = Gtk.get_event_widget(event)
+        if isinstance(event_widget, PaletteMenuItem):
+            self.popdown(immediate=True)
+        return False
 
     def get_label_width(self):
         # Gtk.AccelLabel request doesn't include the accelerator.
@@ -375,19 +409,13 @@ class Palette(PaletteWindow):
 
             self._widget = _PaletteMenuWidget()
 
-            self._label_menuitem = Gtk.MenuItem()
-            child = self._label_menuitem.get_child()
-            if child is not None:
-                self._label_menuitem.remove(child)
-            self._label_menuitem.add(self._primary_box)
-
-            # Mark the menuitem as insensitive so that it appears as an
-            # informational element, rather than a clickable item in the menu.
-            # TODO: see if we can do this better in GTK.
-            self._label_menuitem.set_sensitive(False)
-
+            self._label_menuitem = _HeaderItem(self._primary_box)
             self._label_menuitem.show()
             self._widget.append(self._label_menuitem)
+
+            separator = _HeaderSeparator()
+            self._widget.append(separator)
+            separator.show()
 
             self._setup_widget()
 
