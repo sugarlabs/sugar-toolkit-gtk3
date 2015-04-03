@@ -38,7 +38,7 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_U
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
 
 # Needed by upstream build process
-dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 xi x11
+dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 xfixes xi x11
 bdeps = $(patsubst %,$(comma) lib%-dev,$(dev-bdeps))
 bdeps +=, gettext, intltool, libxml-parser-perl, x11proto-core-dev
 bdeps +=, libasound2-dev | libasound-dev
