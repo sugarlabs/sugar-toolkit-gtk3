@@ -35,7 +35,7 @@ binpkg = python-sugar3
 pythonpkg = python-sugar3
 
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_UPSTREAM_PACKAGE)
-DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
+DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
 
 # Multiarch quirks
 # (unneeded since Wheezy: can be dropped after Wheezy+1)
