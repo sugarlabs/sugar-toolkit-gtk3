@@ -52,8 +52,10 @@ gir-deps += sugarext-1.0 gconf-2.0
 python-deps = gi dbus cairo telepathy dateutil
 depends = $(patsubst %,$(comma) python-%,$(python-deps))
 depends +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
+depends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0 | gir1.2-webkit-3.0
 recommends = unzip, telepathy-mission-control-5 (>= 1:5.6)
 recommends +=, telepathy-gabble (>= 0.10), telepathy-salut (>= 0.4)
+recommends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0
 suggests = git-core, subversion, ttf-dejavu-extra
 
 # Binary sugar-activity moved from sugar-tools-* to python-sugar3
