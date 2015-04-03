@@ -3,7 +3,7 @@ Author: Jonas Smedegaard <dr@jones.dk>
 Last-Update: 2010-02-08
 --- a/src/sugar3/activity/bundlebuilder.py
 +++ b/src/sugar3/activity/bundlebuilder.py
-@@ -133,6 +133,7 @@
+@@ -135,6 +135,7 @@
              retcode = subprocess.call(args)
              if retcode:
                  print 'ERROR - msgfmt failed with return code %i.' % retcode
@@ -11,7 +11,7 @@ Last-Update: 2010-02-08
  
              cat = gettext.GNUTranslations(open(mo_file, 'r'))
              translated_name = cat.gettext(self.config.activity_name)
-@@ -255,8 +256,9 @@
+@@ -269,8 +270,9 @@
      """Setup for development"""
  
      if args:
@@ -22,7 +22,7 @@ Last-Update: 2010-02-08
  
      bundle_path = env.get_user_activities_path()
      if not os.path.isdir(bundle_path):
-@@ -275,8 +277,9 @@
+@@ -289,8 +291,9 @@
      """Create a xo bundle package"""
  
      if args:
@@ -33,7 +33,7 @@ Last-Update: 2010-02-08
  
      packager = XOPackager(Builder(config))
      packager.package()
-@@ -294,8 +297,9 @@
+@@ -308,8 +311,9 @@
      """Create a tar source package"""
  
      if args:
@@ -44,7 +44,7 @@ Last-Update: 2010-02-08
  
      packager = SourcePackager(config)
      packager.package()
-@@ -309,8 +313,9 @@
+@@ -323,8 +327,9 @@
                        help='Prefix to install files to')
      (suboptions, subargs) = parser.parse_args(args)
      if subargs:
@@ -55,7 +55,7 @@ Last-Update: 2010-02-08
  
      installer = Installer(Builder(config))
      installer.install(suboptions.prefix)
-@@ -320,8 +325,9 @@
+@@ -334,8 +339,9 @@
      """Generate the gettext pot file"""
  
      if args:
@@ -66,7 +66,7 @@ Last-Update: 2010-02-08
  
      po_path = os.path.join(config.source_dir, 'po')
      if not os.path.isdir(po_path):
-@@ -355,14 +361,16 @@
+@@ -374,14 +380,16 @@
      retcode = subprocess.call(args)
      if retcode:
          print 'ERROR - xgettext failed with return code %i.' % retcode
@@ -84,7 +84,7 @@ Last-Update: 2010-02-08
  
      builder = Builder(config)
      builder.build()
-@@ -389,7 +397,9 @@
+@@ -408,7 +416,9 @@
      try:
          globals()['cmd_' + args[0]](config, args[1:])
      except (KeyError, IndexError):
