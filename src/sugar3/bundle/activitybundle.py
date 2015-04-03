@@ -101,7 +101,6 @@ class ActivityBundle(Bundle):
 
     def __init__(self, path, translated=True):
         Bundle.__init__(self, path)
-        self.activity_class = None
         self.bundle_exec = None
 
         self._name = None
@@ -158,9 +157,15 @@ class ActivityBundle(Bundle):
         if cp.has_option(section, 'exec'):
             self.bundle_exec = cp.get(section, 'exec')
         else:
-            raise MalformedBundleException(
-                'Activity bundle %s must specify either class or exec' %
-                self._path)
+            if cp.has_option(section, 'class'):
+                self.bundle_exec = 'sugar-activity ' + cp.get(section,
+                                                              'class')
+                logging.error('ATTENTION: class property in the '
+                              'activity.info file is deprecated, should be '
+                              'changed to exec')
+            else:
+                raise MalformedBundleException(
+                    'Activity bundle %s must specify exec' % self._path)
 
         if cp.has_option(section, 'mime_types'):
             mime_list = cp.get(section, 'mime_types').strip(';')
@@ -287,12 +292,7 @@ class ActivityBundle(Bundle):
 
     def get_command(self):
         """Get the command to execute to launch the activity factory"""
-        if self.bundle_exec:
-            command = os.path.expandvars(self.bundle_exec)
-        else:
-            command = 'sugar-activity ' + self.activity_class
-
-        return command
+        return os.path.expandvars(self.bundle_exec)
 
     def get_mime_types(self):
         """Get the MIME types supported by the activity"""
