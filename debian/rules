@@ -38,7 +38,7 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_U
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
 
 # Needed by upstream build process
-dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 gconf2 xi
+dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 gconf2 xi x11
 
 # Needed (always/often/seldom) at runtime
 #  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
@@ -56,7 +56,8 @@ non-gtk3-branches = 0.84 0.86 0.88 0.90 0.92 0.94
 obsoletes = $(foreach ver,$(non-gtk3-branches),$(comma) sugar-tools-$(ver))
 
 CDBS_BUILD_DEPENDS +=, $(patsubst %,$(comma) lib%-dev,$(dev-bdeps))
-CDBS_BUILD_DEPENDS +=, python-gtk2-dev, gettext, intltool, libxml-parser-perl
+CDBS_BUILD_DEPENDS +=, python-gtk2-dev, gettext, intltool
+CDBS_BUILD_DEPENDS +=, libxml-parser-perl, x11proto-core-dev
 CDBS_BUILD_DEPENDS +=, libasound2-dev | libasound-dev
 CDBS_BUILD_DEPENDS +=, libgirepository1.0-dev (>= 1.30.0)
 CDBS_DEPENDS_$(pythonpkg) = $(patsubst %,$(comma) python-%,$(python-deps))
