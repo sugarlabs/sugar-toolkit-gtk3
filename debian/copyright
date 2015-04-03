@@ -41,7 +41,7 @@ Copyright: Django Software Foundation and individual contributors
 License: BSD-3-clause~Django and BSD-3-clause~Patrick
 
 Files: */Makefile.in
-Copyright: 1994-2012, Free Software Foundation, Inc.
+Copyright: 1994-2013, Free Software Foundation, Inc.
 License: GAP~Makefile.in
 
 Files: ./src/sugar3/acme-*
@@ -55,7 +55,7 @@ Files: aclocal.m4
  m4/intltool.m4
  missing
  py-compile
-Copyright: 1992-2012, Free Software Foundation, Inc.
+Copyright: 1992-2013, Free Software Foundation, Inc.
   2001, Eazel, Inc
   2001-2004, Red Hat, Inc
 License: GPL-2+ with Autoconf exception
