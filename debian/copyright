@@ -14,7 +14,7 @@ Copyright: 1998, Carsten Schaar, and twm
   2003, Josiah Carlson
   2007, Eduardo Silva <edsiper@gmail.com>
   2007, Novell, Inc
-  2006-2010, One Laptop Per Child
+  2006-2010,2012, One Laptop Per Child
   2008, Benjamin Berg <benjamin@sipsolutions.net>
   2009, Aleksey Lim
   2009, Sayamindu Dasgupta
@@ -22,9 +22,11 @@ Copyright: 1998, Carsten Schaar, and twm
   2009, Tomeu Vizoso
   2010, Anish Mangal <anishmangal2002@gmail.com>
   2010, Collabora Ltd. <http://www.collabora.co.uk/>
+  2012, Daniel Francis
+  2012-2013, Daniel Narvaez
 License: LGPL-2+
 
-Files: src/sugar/gsm-*
+Files: src/sugar3/gsm-*
 Copyright: 2006-2007, Novell, Inc
 License: GPL-2+
 Comment:
@@ -35,7 +37,7 @@ Files: */Makefile.in
 Copyright: 1994-2012, Free Software Foundation, Inc.
 License: GAP~Makefile.in
 
-Files: ./src/sugar/acme-*
+Files: ./src/sugar3/acme-*
 Copyright: 2002-2003, Bastien Nocera
 License: LGPL-2+~Gnome
 
@@ -72,8 +74,12 @@ License: GPL-2+ with Libtool exception
  using GNU Libtool, you may include this file under the same
  distribution terms that you use for the rest of that program.
 
-Files: src/sugar/presence/sugartubeconn.py
- src/sugar/presence/tubeconn.py
+Files: src/sugar3/graphics/palettemenu.py
+Copyright: 2012, One Laptop Per Child
+License: GPL-2+
+
+Files: src/sugar3/presence/sugartubeconn.py
+ src/sugar3/presence/tubeconn.py
 Copyright: 2007, Collabora Ltd. <http://www.collabora.co.uk/>
   2008, One Laptop Per Child
 License: LGPL-2.1+
