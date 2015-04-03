@@ -1,3 +1,27 @@
+sugar-toolkit-gtk3 (0.104.1-1) experimental; urgency=medium
+
+  * Update package relations:
+    + Stop build-depend on libgconf2-dev or python-gtk2-dev.
+    + Build-depend on libxfixes-dev.
+    + Depend on and recommend gir1.2-webkit2-3.0 or gir1.2-webkit2-4.0,
+      and recommend (but not depend on) gir1.2-webkit-3.0 as ultimate
+      fallback.
+    + Build-depend on linux-libc-dev or hurd-dev.
+    + Have python-sugar3 depend on git1.2-atspi-2.0.
+  * Update copyright info:
+    + Merge Files sections with same license.
+    + Fix list Files section with joker above */Makefile.in section, to
+      not override.
+    + Fix extend coverage for autotools.
+    + Extend coverage for upstream authors.
+  * Fix tell git-buildpackage to use xz compression.
+  * Unfuzz patch 2002.
+  * Disable patch 2003: Possibly obsoleted by recent upstream changes.
+  * Use proper hash-bang in Python script (Python Policy 0.9 §3.1).
+    Thanks to lintian.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 03 Apr 2015 20:36:09 +0200
+
 sugar-toolkit-gtk3 (0.98.7-2) unstable; urgency=medium
 
   * Update copyright info:
