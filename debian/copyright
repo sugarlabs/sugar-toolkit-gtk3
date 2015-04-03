@@ -14,8 +14,9 @@ Copyright: 1998, Carsten Schaar, and twm
   2003, Josiah Carlson
   2007, Eduardo Silva <edsiper@gmail.com>
   2007, Novell, Inc
-  2006-2010,2012, One Laptop Per Child
+  2006-2010,2013, One Laptop Per Child
   2008, Benjamin Berg <benjamin@sipsolutions.net>
+  2009, Aaron Stone <aaron@serendipity.cx>
   2009, Aleksey Lim
   2009, Sayamindu Dasgupta
   2009-2010, Simon Schampijer
@@ -24,12 +25,19 @@ Copyright: 1998, Carsten Schaar, and twm
   2010, Collabora Ltd. <http://www.collabora.co.uk/>
   2012, Daniel Francis
   2012-2013, Daniel Narvaez
+  2013, Gonzalo Odiard
+  2013, Walter Bender
+  2014, Martin Abente Lahaye <tch@sugarlabs.org>
+  2014, Sugarlabs
 License: LGPL-2+
 
 Files: src/sugar3/graphics/palettemenu.py
  src/sugar3/gsm-*
+ src/sugar3/speech.py
+ src/sugar3/test/*
 Copyright: 2006-2007, Novell, Inc
-  2012, One Laptop Per Child
+  2011-2012, One Laptop Per Child
+  2012-2013, Daniel Narvaez
 License: GPL-2+
 Comment:
  gsm-app.h contains copyright but no licensing.  It is assumed the same
