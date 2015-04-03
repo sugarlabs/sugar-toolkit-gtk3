@@ -29,7 +29,7 @@ from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 def get_svg_color_string(color):
@@ -48,7 +48,7 @@ class _ColorButton(Gtk.Button):
 
     __gtype_name__ = 'SugarColorButton'
     __gsignals__ = {'color-set': (GObject.SignalFlags.RUN_FIRST, None,
-        tuple())}
+                                  tuple())}
 
     def __init__(self, **kwargs):
         self._title = _('Choose a color')
@@ -66,13 +66,16 @@ class _ColorButton(Gtk.Button):
         # FIXME Drag and drop is not working, SL #3796
         if self._accept_drag:
             self.drag_dest_set(Gtk.DestDefaults.MOTION |
-                    Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
-                    [Gtk.TargetEntry.new('application/x-color', 0, 0)],
-                    Gdk.DragAction.COPY)
+                               Gtk.DestDefaults.HIGHLIGHT |
+                               Gtk.DestDefaults.DROP,
+                               [Gtk.TargetEntry.new(
+                                'application/x-color', 0, 0)],
+                               Gdk.DragAction.COPY)
         self.drag_source_set(Gdk.ModifierType.BUTTON1_MASK |
-                    Gdk.ModifierType.BUTTON3_MASK,
-                    [Gtk.TargetEntry.new('application/x-color', 0, 0)],
-                    Gdk.DragAction.COPY)
+                             Gdk.ModifierType.BUTTON3_MASK,
+                             [Gtk.TargetEntry.new(
+                                 'application/x-color', 0, 0)],
+                             Gdk.DragAction.COPY)
         self.connect('drag_data_received', self.__drag_data_received_cb)
         self.connect('drag_data_get', self.__drag_data_get_cb)
 
@@ -92,7 +95,7 @@ class _ColorButton(Gtk.Button):
                                           primary_text=self._title)
             self._palette.connect('color-set', self.__palette_color_set_cb)
             self._palette.connect('notify::color', self.
-                __palette_color_changed)
+                                  __palette_color_changed)
 
         return self._palette
 
@@ -110,7 +113,7 @@ class _ColorButton(Gtk.Button):
         fg_color = context.get_color(Gtk.StateType.NORMAL)
         # the color components are stored as float values between 0.0 and 1.0
         return '#%.2X%.2X%.2X' % (fg_color.red * 255, fg_color.green * 255,
-                              fg_color.blue * 255)
+                                  fg_color.blue * 255)
 
     def set_color(self, color):
         assert isinstance(color, Gdk.Color)
@@ -167,7 +170,7 @@ class _ColorButton(Gtk.Button):
 
     has_invoker = GObject.property(type=bool, default=True,
                                    flags=GObject.PARAM_READWRITE |
-                                         GObject.PARAM_CONSTRUCT_ONLY,
+                                   GObject.PARAM_CONSTRUCT_ONLY,
                                    getter=_get_has_invoker,
                                    setter=_set_has_invoker)
 
@@ -179,7 +182,7 @@ class _ColorButton(Gtk.Button):
 
     has_palette = GObject.property(type=bool, default=True,
                                    flags=GObject.PARAM_READWRITE |
-                                         GObject.PARAM_CONSTRUCT_ONLY,
+                                   GObject.PARAM_CONSTRUCT_ONLY,
                                    getter=_get_has_palette,
                                    setter=_set_has_palette)
 
@@ -191,15 +194,15 @@ class _ColorButton(Gtk.Button):
 
     accept_drag = GObject.property(type=bool, default=True,
                                    flags=GObject.PARAM_READWRITE |
-                                         GObject.PARAM_CONSTRUCT_ONLY,
+                                   GObject.PARAM_CONSTRUCT_ONLY,
                                    getter=_get_accept_drag,
                                    setter=_set_accept_drag)
 
     def __drag_begin_cb(self, widget, context):
         # Drag and Drop
         pixbuf = GdkPixbuf.Pixbuf(GdkPixbuf.Colorspace.RGB, True, 8,
-                                style.SMALL_ICON_SIZE,
-                                style.SMALL_ICON_SIZE)
+                                  style.SMALL_ICON_SIZE,
+                                  style.SMALL_ICON_SIZE)
 
         red = self._color.red / 257
         green = self._color.green / 257
@@ -211,11 +214,11 @@ class _ColorButton(Gtk.Button):
 
     def __drag_data_get_cb(self, widget, context, selection_data, info, time):
         data = struct.pack('=HHHH', self._color.red, self._color.green,
-                                    self._color.blue, 65535)
+                           self._color.blue, 65535)
         selection_data.set(selection_data.target, 16, data)
 
-    def __drag_data_received_cb(self, widget, context, x, y, selection_data, \
-                               info, time):
+    def __drag_data_received_cb(self, widget, context, x, y, selection_data,
+                                info, time):
         if len(selection_data.data) != 8:
             return
 
@@ -242,7 +245,7 @@ class _ColorPalette(Palette):
     # The color-set signal is emitted when the user is finished selecting
     # a color.
     __gsignals__ = {'color-set': (GObject.SignalFlags.RUN_FIRST, None,
-        tuple())}
+                                  tuple())}
 
     def __init__(self, **kwargs):
         self._color = Gdk.Color(0, 0, 0)
@@ -255,7 +258,12 @@ class _ColorPalette(Palette):
         self.connect('popdown', self.__popdown_cb)
 
         self._picker_hbox = Gtk.HBox()
-        self.set_content(self._picker_hbox)
+        alignment = Gtk.Alignment()
+        alignment.set_padding(0, 0, style.DEFAULT_SPACING,
+                              style.DEFAULT_SPACING)
+        alignment.add(self._picker_hbox)
+        self.set_content(alignment)
+        alignment.show()
 
         self._swatch_tray = Gtk.Table()
 
@@ -401,8 +409,9 @@ def _add_accelerator(tool_button):
     keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
     # the accelerator needs to be set at the child, so the Gtk.AccelLabel
     # in the palette can pick it up.
-    tool_button.get_child().add_accelerator('clicked', accel_group, keyval, mask,
-                                      Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE)
+    tool_button.get_child(
+    ).add_accelerator('clicked', accel_group, keyval, mask,
+                      Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE)
 
 
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
@@ -421,7 +430,7 @@ class ColorToolButton(Gtk.ToolItem):
 
     __gtype_name__ = 'SugarColorToolButton'
     __gsignals__ = {'color-set': (GObject.SignalFlags.RUN_FIRST, None,
-        tuple())}
+                                  tuple())}
 
     def __init__(self, icon_name='color-preview', **kwargs):
         self._accelerator = None
@@ -466,7 +475,7 @@ class ColorToolButton(Gtk.ToolItem):
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
-            getter=get_accelerator)
+                                   getter=get_accelerator)
 
     def create_palette(self):
         self._palette = self.get_child().create_palette()
@@ -540,7 +549,6 @@ class ColorToolButton(Gtk.ToolItem):
     title = GObject.property(type=str, getter=get_title, setter=set_title)
 
     def do_draw(self, cr):
-        child = self.get_child()
         if self._palette and self._palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before

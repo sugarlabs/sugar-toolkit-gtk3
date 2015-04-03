@@ -1,0 +1,215 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
+"PO-Revision-Date: 2012-02-22 07:49+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ../src/sugar3/activity/activity.py:378
+#, python-format
+msgid "%s Activity"
+msgstr "%s Aktivnost"
+
+#: ../src/sugar3/activity/activity.py:874
+msgid "Keep error"
+msgstr "Zadrži grešku"
+
+#: ../src/sugar3/activity/activity.py:875
+msgid "Keep error: all changes will be lost"
+msgstr "Zadrži grešku: sve promjene bit će izgubljene"
+
+#: ../src/sugar3/activity/activity.py:878
+msgid "Don't stop"
+msgstr "Nemoj stati"
+
+#: ../src/sugar3/activity/activity.py:882
+msgid "Stop anyway"
+msgstr "U svakom slučaju stani"
+
+#: ../src/sugar3/activity/widgets.py:87
+msgid "Stop"
+msgstr "Zaustavi"
+
+#: ../src/sugar3/activity/widgets.py:99
+msgid "Undo"
+msgstr "Poništi učinjeno"
+
+#: ../src/sugar3/activity/widgets.py:107
+msgid "Redo"
+msgstr "Ponovi učinjeno"
+
+#: ../src/sugar3/activity/widgets.py:114
+msgid "Copy"
+msgstr "Kopiraj"
+
+#: ../src/sugar3/activity/widgets.py:122
+msgid "Paste"
+msgstr "Zalijepi"
+
+#: ../src/sugar3/activity/widgets.py:133
+msgid "Private"
+msgstr "Privatno"
+
+#: ../src/sugar3/activity/widgets.py:140
+msgid "My Neighborhood"
+msgstr "Moje susjedstvo"
+
+#: ../src/sugar3/activity/widgets.py:234
+msgid "Description"
+msgstr "Opis"
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+msgid "Cancel"
+msgstr "Odustani"
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+msgid "Ok"
+msgstr "Ok"
+
+#: ../src/sugar3/graphics/alert.py:434
+msgid "Continue"
+msgstr "Nastavi"
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+msgid "Choose a color"
+msgstr "Izaberi boju"
+
+#: ../src/sugar3/graphics/colorbutton.py:279
+msgid "Red"
+msgstr "Crvena"
+
+#: ../src/sugar3/graphics/colorbutton.py:281
+msgid "Green"
+msgstr "Zelena"
+
+#: ../src/sugar3/graphics/colorbutton.py:283
+msgid "Blue"
+msgstr "Plava"
+
+#: ../src/sugar3/util.py:217
+msgid " and "
+msgstr " i "
+
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ", "
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+msgid "Seconds ago"
+msgstr "Sekunde prije"
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+msgid "%s ago"
+msgstr "%s prije"
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d godina"
+msgstr[1] "%d godine"
+msgstr[2] ""
+
+#: ../src/sugar3/util.py:241
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d mjesec"
+msgstr[1] "%d mjeseci"
+msgstr[2] ""
+
+#: ../src/sugar3/util.py:242
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d tjedan"
+msgstr[1] "%d tjedni"
+msgstr[2] ""
+
+#: ../src/sugar3/util.py:243
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d dan"
+msgstr[1] "%d dani"
+msgstr[2] ""
+
+#: ../src/sugar3/util.py:244
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d sat"
+msgstr[1] "%d sati"
+msgstr[2] ""
+
+#: ../src/sugar3/util.py:245
+#, python-format
+#, python-format, fuzzy
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuta"
+msgstr[1] "%d minute"
+msgstr[2] ""
+
+#: ../src/sugar3/util.py:346
+msgid "Empty"
+msgstr "Prazno"
+
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr "%d B"
+
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr "%d KB"
+
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr "%d MB"
+
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr "%d GB"
+
+#: ../src/sugar3/mime.py:55
+msgid "Text"
+msgstr ""
+
+#: ../src/sugar3/mime.py:64
+msgid "Image"
+msgstr ""
+
+#: ../src/sugar3/mime.py:70
+msgid "Audio"
+msgstr ""
+
+#: ../src/sugar3/mime.py:78
+msgid "Video"
+msgstr ""
+
+#: ../src/sugar3/mime.py:90
+msgid "Link"
+msgstr ""

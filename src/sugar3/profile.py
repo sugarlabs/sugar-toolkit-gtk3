@@ -16,11 +16,9 @@
 # Boston, MA 02111-1307, USA.
 
 """User settings/configuration loading.
-
-DEPRECATED. We are using GConf now to store preferences.
 """
 
-from gi.repository import GConf
+from gi.repository import Gio
 import os
 import logging
 from ConfigParser import ConfigParser
@@ -35,10 +33,6 @@ _profile = None
 
 class Profile(object):
     """Local user's current options/profile information
-
-    User settings were previously stored in an INI-style
-    configuration file. We moved to gconf now. The deprected
-    API is kept around to not break activities still using it.
 
     The profile is also responsible for loading the user's
     public and private ssh keys from disk.
@@ -68,14 +62,14 @@ class Profile(object):
     privkey_hash = property(fget=_get_privkey_hash)
 
     def is_valid(self):
-        client = GConf.Client.get_default()
-        nick = client.get_string('/desktop/sugar/user/nick')
-        color = client.get_string('/desktop/sugar/user/color')
+        settings = Gio.Settings('org.sugarlabs.user')
+        nick = settings.get_string('nick')
+        color = settings.get_string('color')
 
         return nick is not '' and \
-               color is not '' and \
-               self.pubkey is not None and \
-               self.privkey_hash is not None
+            color is not '' and \
+            self.pubkey is not None and \
+            self.privkey_hash is not None
 
     def _load_pubkey(self):
         key_path = os.path.join(env.get_profile_path(), 'owner.key.pub')
@@ -140,77 +134,63 @@ class Profile(object):
         path = os.path.join(env.get_profile_path(), 'config')
         cp.read([path])
 
-        client = GConf.Client.get_default()
-
+        settings = Gio.Settings('org.sugarlabs.user')
         if cp.has_option('Buddy', 'NickName'):
             name = cp.get('Buddy', 'NickName')
             # decode nickname from ascii-safe chars to unicode
             nick = name.decode('utf-8')
-            client.set_string('/desktop/sugar/user/nick', nick)
+            settings.set_string('nick', nick)
         if cp.has_option('Buddy', 'Color'):
             color = cp.get('Buddy', 'Color')
-            client.set_string('/desktop/sugar/user/color', color)
+            settings.set_string('color', color)
+
         if cp.has_option('Jabber', 'Server'):
             server = cp.get('Jabber', 'Server')
-            client.set_string('/desktop/sugar/collaboration/jabber_server',
-                              server)
+            settings = Gio.Settings('org.sugarlabs.collaboration')
+            settings.set_string('jabber-server', server)
+
         if cp.has_option('Date', 'Timezone'):
             timezone = cp.get('Date', 'Timezone')
-            client.set_string('/desktop/sugar/date/timezone', timezone)
+            settings = Gio.Settings('org.sugarlabs.date')
+            settings.set_string('timezone', timezone)
+
+        settings = Gio.Settings('org.sugarlabs.frame')
         if cp.has_option('Frame', 'HotCorners'):
             delay = float(cp.get('Frame', 'HotCorners'))
-            client.set_int('/desktop/sugar/frame/corner_delay', int(delay))
+            settings.set_int('corner-delay', int(delay))
         if cp.has_option('Frame', 'WarmEdges'):
             delay = float(cp.get('Frame', 'WarmEdges'))
-            client.set_int('/desktop/sugar/frame/edge_delay', int(delay))
+            settings.set_int('edge-delay', int(delay))
+
         if cp.has_option('Server', 'Backup1'):
             backup1 = cp.get('Server', 'Backup1')
-            client.set_string('/desktop/sugar/backup_url', backup1)
+            settings = Gio.Settings('org.sugarlabs')
+            settings.set_string('backup-url', backup1)
+
         if cp.has_option('Sound', 'Volume'):
             volume = float(cp.get('Sound', 'Volume'))
-            client.set_int('/desktop/sugar/sound/volume', int(volume))
+            settings = Gio.Settings('org.sugarlabs.sound')
+            settings.set_int('volume', int(volume))
+
+        settings = Gio.Settings('org.sugarlabs.power')
         if cp.has_option('Power', 'AutomaticPM'):
             state = cp.get('Power', 'AutomaticPM')
             if state.lower() == 'true':
-                client.set_bool('/desktop/sugar/power/automatic', True)
+                settings.set_boolean('automatic', True)
         if cp.has_option('Power', 'ExtremePM'):
             state = cp.get('Power', 'ExtremePM')
             if state.lower() == 'true':
-                client.set_bool('/desktop/sugar/power/extreme', True)
+                settings.set_boolean('extreme', True)
+
         if cp.has_option('Shell', 'FavoritesLayout'):
             layout = cp.get('Shell', 'FavoritesLayout')
-            client.set_string('/desktop/sugar/desktop/favorites_layout',
-                              layout)
+            settings = Gio.Settings('org.sugarlabs.desktop')
+            settings.set_string('favorites-layout', layout)
         del cp
         try:
             os.unlink(path)
         except OSError:
             logging.error('Error removing old profile.')
-
-    def create_debug_file(self):
-        path = os.path.join(os.path.expanduser('~/.sugar'), 'debug')
-        fd = open(path, 'w')
-        text = '# Uncomment the following lines to turn on many' \
-            'sugar debugging\n'\
-            '# log files and features\n'\
-            '#export LM_DEBUG=net\n' \
-            '#export GABBLE_DEBUG=all\n' \
-            '#export GABBLE_LOGFILE=' \
-            '$HOME/.sugar/default/logs/telepathy-gabble.log\n' \
-            '#export SALUT_DEBUG=all\n' \
-            '#export SALUT_LOGFILE=' \
-            '$HOME/.sugar/default/logs/telepathy-salut.log\n' \
-            '#export GIBBER_DEBUG=all\n' \
-            '#export WOCKY_DEBUG=all\n' \
-            '#export MC_LOGFILE=' \
-            '$HOME/.sugar/default/logs/mission-control.log\n' \
-            '#export MC_DEBUG=all\n' \
-            '#export PRESENCESERVICE_DEBUG=1\n' \
-            '#export SUGAR_LOGGER_LEVEL=debug\n\n' \
-            '# Uncomment the following line to enable core dumps\n' \
-            '#ulimit -c unlimited\n'
-        fd.write(text)
-        fd.close()
 
 
 def get_profile():
@@ -224,13 +204,13 @@ def get_profile():
 
 
 def get_nick_name():
-    client = GConf.Client.get_default()
-    return client.get_string('/desktop/sugar/user/nick')
+    settings = Gio.Settings('org.sugarlabs.user')
+    return settings.get_string('nick')
 
 
 def get_color():
-    client = GConf.Client.get_default()
-    color = client.get_string('/desktop/sugar/user/color')
+    settings = Gio.Settings('org.sugarlabs.user')
+    color = settings.get_string('color')
     return XoColor(color)
 
 

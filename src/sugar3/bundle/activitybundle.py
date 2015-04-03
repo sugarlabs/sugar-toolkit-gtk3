@@ -20,20 +20,21 @@
 UNSTABLE.
 """
 
-from ConfigParser import ConfigParser
+from ConfigParser import ConfigParser, ParsingError
 from locale import normalize
 import os
 import shutil
 import tempfile
 import logging
-import warnings
 
 from sugar3 import env
-from sugar3 import util
 from sugar3.bundle.bundle import Bundle, \
     MalformedBundleException, NotInstalledException
 from sugar3.bundle.bundleversion import NormalizedVersion
 from sugar3.bundle.bundleversion import InvalidVersionError
+
+
+_bundle_instances = {}
 
 
 def _expand_lang(locale):
@@ -74,9 +75,12 @@ def _expand_lang(locale):
     for i in range(mask + 1):
         if not (i & ~mask):  # if all components for this combo exist ...
             val = language
-            if i & COMPONENT_TERRITORY: val += territory
-            if i & COMPONENT_CODESET: val += codeset
-            if i & COMPONENT_MODIFIER: val += modifier
+            if i & COMPONENT_TERRITORY:
+                val += territory
+            if i & COMPONENT_CODESET:
+                val += codeset
+            if i & COMPONENT_MODIFIER:
+                val += modifier
             ret.append(val)
     ret.reverse()
     return ret
@@ -85,7 +89,8 @@ def _expand_lang(locale):
 class ActivityBundle(Bundle):
     """A Sugar activity bundle
 
-    See http://wiki.laptop.org/go/Activity_bundles for details
+    See http://wiki.sugarlabs.org/go/Development_Team/Almanac/Activity_Bundles
+    for details
     """
 
     MIME_TYPE = 'application/vnd.olpc-sugar'
@@ -94,37 +99,33 @@ class ActivityBundle(Bundle):
     _unzipped_extension = '.activity'
     _infodir = 'activity'
 
-    def __init__(self, path):
+    def __init__(self, path, translated=True):
         Bundle.__init__(self, path)
         self.activity_class = None
         self.bundle_exec = None
 
         self._name = None
-        self._local_name = None
         self._icon = None
         self._bundle_id = None
         self._mime_types = None
         self._show_launcher = True
         self._tags = None
         self._activity_version = '0'
-        self._installation_time = os.stat(path).st_mtime
         self._summary = None
-        self._local_summary = None
+        self._single_instance = False
+        self._max_participants = 0
 
         info_file = self.get_file('activity/activity.info')
         if info_file is None:
             raise MalformedBundleException('No activity.info file')
         self._parse_info(info_file)
 
-        linfo_file = self._get_linfo_file()
-        if linfo_file:
-            self._parse_linfo(linfo_file)
+        if translated:
+            linfo_file = self._get_linfo_file()
+            if linfo_file:
+                self._parse_linfo(linfo_file)
 
-        if self._local_name == None:
-            self._local_name = self._name
-
-        if self._local_summary == None:
-            self._local_summary = self._summary
+        _bundle_instances[path] = self
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
@@ -135,9 +136,18 @@ class ActivityBundle(Bundle):
         if cp.has_option(section, 'bundle_id'):
             self._bundle_id = cp.get(section, 'bundle_id')
         else:
-            raise MalformedBundleException(
-                'Activity bundle %s does not specify a bundle id' %
-                self._path)
+            if cp.has_option(section, 'service_name'):
+                self._bundle_id = cp.get(section, 'service_name')
+                logging.error('ATTENTION: service_name property in the '
+                              'activity.info file is deprecated, should be '
+                              ' changed to bundle_id')
+            else:
+                raise MalformedBundleException(
+                    'Activity bundle %s does not specify a bundle id' %
+                    self._path)
+
+        if ' ' in self._bundle_id:
+            raise MalformedBundleException('Space in bundle_id')
 
         if cp.has_option(section, 'name'):
             self._name = cp.get(section, 'name')
@@ -180,6 +190,19 @@ class ActivityBundle(Bundle):
         if cp.has_option(section, 'summary'):
             self._summary = cp.get(section, 'summary')
 
+        if cp.has_option(section, 'single_instance'):
+            if cp.get(section, 'single_instance') == 'yes':
+                self._single_instance = True
+
+        if cp.has_option(section, 'max_participants'):
+            max_participants = cp.get(section, 'max_participants')
+            try:
+                self._max_participants = int(max_participants)
+            except ValueError:
+                raise MalformedBundleException(
+                    'Activity bundle %s has invalid max_participants %s' %
+                    (self._path, max_participants))
+
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
         languages = []
@@ -206,19 +229,22 @@ class ActivityBundle(Bundle):
 
     def _parse_linfo(self, linfo_file):
         cp = ConfigParser()
-        cp.readfp(linfo_file)
+        try:
+            cp.readfp(linfo_file)
 
-        section = 'Activity'
+            section = 'Activity'
 
-        if cp.has_option(section, 'name'):
-            self._local_name = cp.get(section, 'name')
+            if cp.has_option(section, 'name'):
+                self._name = cp.get(section, 'name')
 
-        if cp.has_option(section, 'summary'):
-            self._local_summary = cp.get(section, 'summary')
+            if cp.has_option(section, 'summary'):
+                self._summary = cp.get(section, 'summary')
 
-        if cp.has_option(section, 'tags'):
-            tag_list = cp.get(section, 'tags').strip(';')
-            self._tags = [tag.strip() for tag in tag_list.split(';')]
+            if cp.has_option(section, 'tags'):
+                tag_list = cp.get(section, 'tags').strip(';')
+                self._tags = [tag.strip() for tag in tag_list.split(';')]
+        except ParsingError as e:
+            logging.exception('Exception reading linfo file: %s', e)
 
     def get_locale_path(self):
         """Get the locale path inside the (installed) activity bundle."""
@@ -232,22 +258,9 @@ class ActivityBundle(Bundle):
             raise NotInstalledException
         return os.path.join(self._path, 'icons')
 
-    def get_path(self):
-        """Get the activity bundle path."""
-        return self._path
-
     def get_name(self):
         """Get the activity user-visible name."""
-        return self._local_name
-
-    def get_bundle_name(self):
-        """Get the activity bundle name."""
         return self._name
-
-    def get_installation_time(self):
-        """Get a timestamp representing the time at which this activity was
-        installed."""
-        return self._installation_time
 
     def get_bundle_id(self):
         """Get the activity bundle id"""
@@ -291,15 +304,22 @@ class ActivityBundle(Bundle):
 
     def get_summary(self):
         """Get the summary that describe the activity"""
-        return self._local_summary
+        return self._summary
+
+    def get_single_instance(self):
+        """Get whether there should be a single instance for the activity"""
+        return self._single_instance
+
+    def get_max_participants(self):
+        """Get maximum number of participants in share"""
+        return self._max_participants
 
     def get_show_launcher(self):
         """Get whether there should be a visible launcher for the activity"""
         return self._show_launcher
 
-    def install(self, install_dir=None):
-        if install_dir is None:
-            install_dir = env.get_user_activities_path()
+    def install(self):
+        install_dir = env.get_user_activities_path()
 
         self._unzip(install_dir)
 
@@ -328,8 +348,9 @@ class ActivityBundle(Bundle):
 
         mime_types = self.get_mime_types()
         if mime_types is not None:
-            installed_icons_dir = os.path.join(xdg_data_home,
-                'icons/sugar/scalable/mimetypes')
+            installed_icons_dir = \
+                os.path.join(xdg_data_home,
+                             'icons/sugar/scalable/mimetypes')
             if not os.path.isdir(installed_icons_dir):
                 os.makedirs(installed_icons_dir)
 
@@ -339,25 +360,27 @@ class ActivityBundle(Bundle):
                 svg_file = mime_icon_base + '.svg'
                 info_file = mime_icon_base + '.icon'
                 self._symlink(svg_file,
-                        os.path.join(installed_icons_dir,
-                            os.path.basename(svg_file)))
+                              os.path.join(installed_icons_dir,
+                                           os.path.basename(svg_file)))
                 self._symlink(info_file,
-                        os.path.join(installed_icons_dir,
-                            os.path.basename(info_file)))
+                              os.path.join(installed_icons_dir,
+                                           os.path.basename(info_file)))
 
     def _symlink(self, src, dst):
         if not os.path.isfile(src):
             return
         if not os.path.islink(dst) and os.path.exists(dst):
             raise RuntimeError('Do not remove %s if it was not '
-                               'installed by sugar', dst)
-        logging.debug('Link resource %s to %s', src, dst)
+                               'installed by sugar' % dst)
+        logging.debug('Link resource %s to %s' % (src, dst))
         if os.path.lexists(dst):
             logging.debug('Relink %s', dst)
             os.unlink(dst)
         os.symlink(src, dst)
 
-    def uninstall(self, install_path, force=False, delete_profile=False):
+    def uninstall(self, force=False, delete_profile=False):
+        install_path = self.get_path()
+
         if os.path.islink(install_path):
             # Don't remove the actual activity dir if it's a symbolic link
             # because we may be removing user data.
@@ -377,8 +400,9 @@ class ActivityBundle(Bundle):
 
         mime_types = self.get_mime_types()
         if mime_types is not None:
-            installed_icons_dir = os.path.join(xdg_data_home,
-                'icons/sugar/scalable/mimetypes')
+            installed_icons_dir = \
+                os.path.join(xdg_data_home,
+                             'icons/sugar/scalable/mimetypes')
             if os.path.isdir(installed_icons_dir):
                 for f in os.listdir(installed_icons_dir):
                     path = os.path.join(installed_icons_dir, f)
@@ -396,3 +420,10 @@ class ActivityBundle(Bundle):
 
     def is_user_activity(self):
         return self.get_path().startswith(env.get_user_activities_path())
+
+
+def get_bundle_instance(path, translated=True):
+    global _bundle_instances
+    if path not in _bundle_instances:
+        _bundle_instances[path] = ActivityBundle(path, translated=translated)
+    return _bundle_instances[path]

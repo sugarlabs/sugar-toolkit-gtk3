@@ -49,6 +49,15 @@ struct AcmeVolumeAlsaPrivate
 	snd_mixer_elem_t *elem;
 	int saved_volume;
 	guint timer_id;
+
+	const char *mixer_name;
+	int (*snd_mixer_selem_get_xxx_volume_range)(snd_mixer_elem_t *, long *, long *);
+	int (*snd_mixer_selem_get_xxx_switch)(snd_mixer_elem_t *, snd_mixer_selem_channel_id_t, int *);
+	int (*snd_mixer_selem_get_xxx_volume)(snd_mixer_elem_t *, snd_mixer_selem_channel_id_t, long *);
+	int (*snd_mixer_selem_set_xxx_switch_all)(snd_mixer_elem_t *, int);
+	int (*snd_mixer_selem_set_xxx_volume_all)(snd_mixer_elem_t *, long );
+	int (*snd_mixer_selem_has_xxx_switch)(snd_mixer_elem_t *);
+	int (*snd_mixer_selem_has_xxx_volume)(snd_mixer_elem_t *);
 };
 
 static int acme_volume_alsa_get_volume (AcmeVolume *self);
@@ -93,7 +102,7 @@ acme_volume_alsa_set_mute (AcmeVolume *vol, gboolean val)
 	/* If we have a hardware mute */
 	if (self->_priv->has_mute)
 	{
-		snd_mixer_selem_set_playback_switch_all
+		self->_priv->snd_mixer_selem_set_xxx_switch_all
 			(self->_priv->elem, !val);
 		acme_volume_alsa_close (self);
 		return;
@@ -124,7 +133,7 @@ acme_volume_alsa_get_mute (AcmeVolume *vol)
 
 	if (self->_priv->has_mute)
 	{
-		snd_mixer_selem_get_playback_switch(self->_priv->elem,
+		self->_priv->snd_mixer_selem_get_xxx_switch(self->_priv->elem,
 				SND_MIXER_SCHN_FRONT_LEFT, &ival);
 
 		acme_volume_alsa_close (self);
@@ -148,9 +157,9 @@ acme_volume_alsa_get_volume (AcmeVolume *vol)
 	if (acme_volume_alsa_open (self) == FALSE)
 		return 0;
 
-	snd_mixer_selem_get_playback_volume(self->_priv->elem,
+	self->_priv->snd_mixer_selem_get_xxx_volume(self->_priv->elem,
 			SND_MIXER_SCHN_FRONT_LEFT, &lval);
-	snd_mixer_selem_get_playback_volume(self->_priv->elem,
+	self->_priv->snd_mixer_selem_get_xxx_volume(self->_priv->elem,
 			SND_MIXER_SCHN_FRONT_RIGHT, &rval);
 
 	acme_volume_alsa_close (self);
@@ -176,7 +185,7 @@ acme_volume_alsa_set_volume (AcmeVolume *vol, int val)
 	volume = CLAMP (volume, self->_priv->pmin, self->_priv->pmax);
 	tmp = ROUND (volume);
 
-	snd_mixer_selem_set_playback_volume_all (self->_priv->elem, tmp);
+	self->_priv->snd_mixer_selem_set_xxx_volume_all (self->_priv->elem, tmp);
 
 	acme_volume_alsa_close (self);
 }
@@ -254,7 +263,7 @@ acme_volume_alsa_open (AcmeVolumeAlsa *self)
 	}
 
 	snd_mixer_selem_id_alloca (&sid);
-	snd_mixer_selem_id_set_name (sid, "Master");
+	snd_mixer_selem_id_set_name (sid, self->_priv->mixer_name);
 	elem = snd_mixer_find_selem (handle, sid);
 	if (!elem)
 	{
@@ -268,17 +277,17 @@ acme_volume_alsa_open (AcmeVolumeAlsa *self)
 		}
 	}
 
-	if (!snd_mixer_selem_has_playback_volume (elem))
+	if (!self->_priv->snd_mixer_selem_has_xxx_volume (elem))
 	{
-		D("snd_mixer_selem_has_playback_volume");
+		D("snd_mixer_selem_has_xxx_volume");
 		goto bail;
 	}
 
-	snd_mixer_selem_get_playback_volume_range (elem,
+	self->_priv->snd_mixer_selem_get_xxx_volume_range (elem,
 			&(self->_priv->pmin),
 			&(self->_priv->pmax));
 
-	self->_priv->has_mute = snd_mixer_selem_has_playback_switch (elem);
+	self->_priv->has_mute = self->_priv->snd_mixer_selem_has_xxx_switch (elem);
 	self->_priv->handle = handle;
 	self->_priv->elem = elem;
 
@@ -300,6 +309,35 @@ static void
 acme_volume_alsa_init (AcmeVolumeAlsa *self)
 {
 	self->_priv = g_new0 (AcmeVolumeAlsaPrivate, 1);
+}
+
+AcmeVolumeAlsa *
+acme_volume_alsa_new(gint type)
+{
+	AcmeVolumeAlsa *obj = g_object_new(ACME_TYPE_VOLUME_ALSA, NULL);
+
+	if (type == _CAPTURE)
+	{
+		obj->_priv->snd_mixer_selem_get_xxx_volume_range = snd_mixer_selem_get_capture_volume_range;
+		obj->_priv->snd_mixer_selem_get_xxx_switch = snd_mixer_selem_get_capture_switch;
+		obj->_priv->snd_mixer_selem_get_xxx_volume = snd_mixer_selem_get_capture_volume;
+		obj->_priv->snd_mixer_selem_set_xxx_switch_all = snd_mixer_selem_set_capture_switch_all;
+		obj->_priv->snd_mixer_selem_set_xxx_volume_all = snd_mixer_selem_set_capture_volume_all;
+		obj->_priv->snd_mixer_selem_has_xxx_switch = snd_mixer_selem_has_capture_switch;
+		obj->_priv->snd_mixer_selem_has_xxx_volume = snd_mixer_selem_has_capture_volume;
+		obj->_priv->mixer_name = "Capture";
+	} else {
+		obj->_priv->snd_mixer_selem_get_xxx_volume_range = snd_mixer_selem_get_playback_volume_range;
+		obj->_priv->snd_mixer_selem_get_xxx_switch = snd_mixer_selem_get_playback_switch;
+		obj->_priv->snd_mixer_selem_get_xxx_volume = snd_mixer_selem_get_playback_volume;
+		obj->_priv->snd_mixer_selem_set_xxx_switch_all = snd_mixer_selem_set_playback_switch_all;
+		obj->_priv->snd_mixer_selem_set_xxx_volume_all = snd_mixer_selem_set_playback_volume_all;
+		obj->_priv->snd_mixer_selem_has_xxx_switch = snd_mixer_selem_has_playback_switch;
+		obj->_priv->snd_mixer_selem_has_xxx_volume = snd_mixer_selem_has_playback_volume;
+		obj->_priv->mixer_name = "Master";
+	}
+
+	return obj;
 }
 
 static void

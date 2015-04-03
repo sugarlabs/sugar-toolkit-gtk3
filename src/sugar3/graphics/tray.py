@@ -239,7 +239,8 @@ class HTray(Gtk.EventBox):
 
     __gproperties__ = {
         'align': (int, None, None, 0, 1, ALIGN_TO_START,
-            GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
+                  GObject.PARAM_READWRITE |
+                  GObject.PARAM_CONSTRUCT_ONLY),
         'drag-active': (bool, None, None, False, GObject.PARAM_READWRITE),
     }
 
@@ -294,8 +295,9 @@ class HTray(Gtk.EventBox):
         if self._drag_active != active:
             self._drag_active = active
             if self._drag_active:
-                self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL,
-                        style.COLOR_BLACK.get_gdk_color())
+                self._viewport.traybar.modify_bg(
+                    Gtk.StateType.NORMAL,
+                    style.COLOR_BLACK.get_gdk_color())
             else:
                 self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL, None)
 
@@ -329,7 +331,7 @@ class VTray(Gtk.EventBox):
 
     __gproperties__ = {
         'align': (int, None, None, 0, 1, ALIGN_TO_START,
-            GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
+                  GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
         'drag-active': (bool, None, None, False, GObject.PARAM_READWRITE),
     }
 
@@ -384,8 +386,9 @@ class VTray(Gtk.EventBox):
         if self._drag_active != active:
             self._drag_active = active
             if self._drag_active:
-                self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL,
-                        style.COLOR_BLACK.get_gdk_color())
+                self._viewport.traybar.modify_bg(
+                    Gtk.StateType.NORMAL,
+                    style.COLOR_BLACK.get_gdk_color())
             else:
                 self._viewport.traybar.modify_bg(Gtk.StateType.NORMAL, None)
 

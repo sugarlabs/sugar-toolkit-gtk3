@@ -26,13 +26,13 @@ import os
 import logging
 
 from gi.repository import Gdk
-from gi.repository import Gtk
 from gi.repository import Pango
-from gi.repository import GConf
+from gi.repository import Gio
 
 
 FOCUS_LINE_WIDTH = 2
 _TAB_CURVATURE = 1
+ELLIPSIZE_MODE_DEFAULT = Pango.EllipsizeMode.END
 
 
 def _compute_zoom_factor():
@@ -68,11 +68,11 @@ class Color(object):
 
     def get_int(self):
         return int(self._a * 255) + (int(self._b * 255) << 8) + \
-                (int(self._g * 255) << 16) + (int(self._r * 255) << 24)
+            (int(self._g * 255) << 16) + (int(self._r * 255) << 24)
 
     def get_gdk_color(self):
         return Gdk.Color(int(self._r * 65535), int(self._g * 65535),
-                             int(self._b * 65535))
+                         int(self._b * 65535))
 
     def get_html(self):
         return '#%02x%02x%02x' % (self._r * 255, self._g * 255, self._b * 255)
@@ -111,14 +111,14 @@ GRID_CELL_SIZE = zoom(75)
 LINE_WIDTH = zoom(2)
 
 STANDARD_ICON_SIZE = zoom(55)
-SMALL_ICON_SIZE = zoom(55 * 0.5)
+SMALL_ICON_SIZE = zoom(33)
 MEDIUM_ICON_SIZE = zoom(55 * 1.5)
 LARGE_ICON_SIZE = zoom(55 * 2.0)
 XLARGE_ICON_SIZE = zoom(55 * 2.75)
 
-client = GConf.Client.get_default()
-FONT_SIZE = client.get_float('/desktop/sugar/font/default_size')
-FONT_FACE = client.get_string('/desktop/sugar/font/default_face')
+settings = Gio.Settings('org.sugarlabs.font')
+FONT_SIZE = settings.get_double('default-size')
+FONT_FACE = settings.get_string('default-face')
 
 FONT_NORMAL = Font('%s %f' % (FONT_FACE, FONT_SIZE))
 FONT_BOLD = Font('%s bold %f' % (FONT_FACE, FONT_SIZE))
@@ -146,3 +146,5 @@ COLOR_HIGHLIGHT = Color('#E7E7E7')
 PALETTE_CURSOR_DISTANCE = zoom(10)
 
 TOOLBAR_ARROW_SIZE = zoom(24)
+
+MENU_WIDTH_CHARS = 60

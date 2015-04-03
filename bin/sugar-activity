@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # Copyright (C) 2006-2008, Red Hat, Inc.
 #
@@ -29,11 +29,11 @@ from optparse import OptionParser
 
 import dbus
 import dbus.service
-import dbus.glib
+from dbus.mainloop.glib import DBusGMainLoop
+DBusGMainLoop(set_as_default=True)
 
 from sugar3.activity import activityhandle
-from sugar3.activity import i18n
-import sugar3
+from sugar3 import config
 from sugar3.bundle.activitybundle import ActivityBundle
 from sugar3 import logger
 
@@ -66,6 +66,7 @@ class SingleProcess(dbus.service.Object):
     def create(self, handle_dict):
         handle = activityhandle.create_from_dict(handle_dict)
         create_activity_instance(self.constructor, handle)
+
 
 def main():
     parser = OptionParser()
@@ -106,11 +107,12 @@ def main():
     os.environ['SUGAR_BUNDLE_VERSION'] = str(bundle.get_activity_version())
 
     # must be done early, some activities set translations globally, SL #3654
-    locale_path = i18n.get_locale_path(bundle.get_bundle_id())
-    if locale_path:
-        gettext.bindtextdomain(bundle.get_bundle_id(), locale_path)
-        gettext.bindtextdomain('sugar-toolkit', sugar3.locale_path)
-        gettext.textdomain(bundle.get_bundle_id())
+    activity_locale_path = os.environ.get("SUGAR_LOCALEDIR",
+                                          config.locale_path)
+
+    gettext.bindtextdomain(bundle.get_bundle_id(), activity_locale_path)
+    gettext.bindtextdomain('sugar-toolkit-gtk3', config.locale_path)
+    gettext.textdomain(bundle.get_bundle_id())
 
     splitted_module = args[0].rsplit('.', 1)
     module_name = splitted_module[0]
@@ -122,9 +124,9 @@ def main():
 
     activity_constructor = getattr(module, class_name)
     activity_handle = activityhandle.ActivityHandle(
-            activity_id=options.activity_id,
-            object_id=options.object_id, uri=options.uri,
-            invited=options.invited)
+        activity_id=options.activity_id,
+        object_id=options.object_id, uri=options.uri,
+        invited=options.invited)
 
     if options.single_process is True:
         sessionbus = dbus.SessionBus()
@@ -133,22 +135,28 @@ def main():
         service_path = get_single_process_path(options.bundle_id)
 
         bus_object = sessionbus.get_object(
-                'org.freedesktop.DBus', '/org/freedesktop/DBus')
+            'org.freedesktop.DBus', '/org/freedesktop/DBus')
         try:
             name = bus_object.GetNameOwner(
-                    service_name, dbus_interface='org.freedesktop.DBus')
-        except  dbus.DBusException:
+                service_name, dbus_interface='org.freedesktop.DBus')
+        except dbus.DBusException:
             name = None
 
         if not name:
             SingleProcess(service_name, activity_constructor)
         else:
-            single_process = sessionbus.get_object(service_name, service_path)
-            single_process.create(activity_handle.get_dict(),
-                                  dbus_interface='org.laptop.SingleProcess')
+            try:
+                single_process = sessionbus.get_object(service_name,
+                                                       service_path)
+                single_process.create(
+                    activity_handle.get_dict(),
+                    dbus_interface='org.laptop.SingleProcess')
 
-            print 'Created %s in a single process.' % service_name
-            sys.exit(0)
+                print 'Created %s in a single process.' % service_name
+                sys.exit(0)
+            except (TypeError, dbus.DBusException):
+                print 'Could not communicate with the instance process,' \
+                    'launching a new process'
 
     if hasattr(module, 'start'):
         module.start()

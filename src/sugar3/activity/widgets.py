@@ -20,33 +20,30 @@
 from gi.repository import Gdk
 from gi.repository import Gtk
 import gettext
-from gi.repository import GConf
-import logging
 
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.toolbarbox import ToolbarButton
 from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton
 from sugar3.graphics.radiotoolbutton import RadioToolButton
-from sugar3.graphics.toolbox import Toolbox
 from sugar3.graphics.xocolor import XoColor
 from sugar3.graphics.icon import Icon
-from sugar3.bundle.activitybundle import ActivityBundle
+from sugar3.bundle.activitybundle import get_bundle_instance
 from sugar3.graphics import style
 from sugar3.graphics.palettemenu import PaletteMenuBox
+from sugar3 import profile
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 def _create_activity_icon(metadata):
     if metadata is not None and metadata.get('icon-color'):
         color = XoColor(metadata['icon-color'])
     else:
-        client = GConf.Client.get_default()
-        color = XoColor(client.get_string('/desktop/sugar/user/color'))
+        color = profile.get_color()
 
     from sugar3.activity.activity import get_bundle_path
-    bundle = ActivityBundle(get_bundle_path())
+    bundle = get_bundle_instance(get_bundle_path())
     icon = Icon(file=bundle.get_icon(), xo_color=color)
 
     return icon
@@ -131,14 +128,14 @@ class ShareButton(RadioMenuButton):
         palette = RadioPalette()
 
         self.private = RadioToolButton(
-                icon_name='zoom-home')
+            icon_name='zoom-home')
         palette.append(self.private, _('Private'))
 
         self.neighborhood = RadioToolButton(
-                icon_name='zoom-neighborhood',
-                group=self.private)
+            icon_name='zoom-neighborhood',
+            group=self.private)
         self._neighborhood_handle = self.neighborhood.connect(
-                'clicked', self.__neighborhood_clicked_cb, activity)
+            'clicked', self.__neighborhood_clicked_cb, activity)
         palette.append(self.neighborhood, _('My Neighborhood'))
 
         activity.connect('shared', self.__update_share_cb)
@@ -177,7 +174,8 @@ class TitleEntry(Gtk.ToolItem):
         self.entry = Gtk.Entry(**kwargs)
         self.entry.set_size_request(int(Gdk.Screen.width() / 3), -1)
         self.entry.set_text(activity.metadata['title'])
-        self.entry.connect('focus-out-event', self.__title_changed_cb, activity)
+        self.entry.connect(
+            'focus-out-event', self.__title_changed_cb, activity)
         self.entry.connect('button-press-event', self.__button_press_event_cb)
         self.entry.show()
         self.add(self.entry)
@@ -252,7 +250,7 @@ class DescriptionItem(ToolButton):
             text_buffer.set_text(activity.metadata['description'])
         self._text_view.set_buffer(text_buffer)
         self._text_view.connect('focus-out-event',
-                               self.__description_changed_cb, activity)
+                                self.__description_changed_cb, activity)
         sw.add(self._text_view)
         description_box.append_item(sw, vertical_padding=0)
         self._palette.set_content(description_box)
@@ -324,7 +322,7 @@ class ActivityToolbar(Gtk.Toolbar):
             self.insert(title_button, -1)
             self.title = title_button.entry
 
-        if orientation_left == False:
+        if not orientation_left:
             separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-20 21:07-0500\n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
 "PO-Revision-Date: 2012-06-18 09:10+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,56 +17,56 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.5\n"
 
-#: ../src/sugar3/activity/activity.py:376
+#: ../src/sugar3/activity/activity.py:378
 #, python-format
 msgid "%s Activity"
 msgstr "%s क्रियाकलाप"
 
-#: ../src/sugar3/activity/activity.py:873
+#: ../src/sugar3/activity/activity.py:874
 msgid "Keep error"
 msgstr "त्रुटि राख"
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
 msgstr "त्रुटि राख: सबै परिवर्तनहरु हराँउछन्"
 
-#: ../src/sugar3/activity/activity.py:877
+#: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "नरोक"
 
-#: ../src/sugar3/activity/activity.py:880
+#: ../src/sugar3/activity/activity.py:882
 msgid "Stop anyway"
 msgstr "जसरीभएपनि रोक"
 
-#: ../src/sugar3/activity/widgets.py:89
+#: ../src/sugar3/activity/widgets.py:87
 msgid "Stop"
 msgstr "रोक"
 
-#: ../src/sugar3/activity/widgets.py:101
+#: ../src/sugar3/activity/widgets.py:99
 msgid "Undo"
 msgstr "पहिलेकै अवस्थामा फर्काउ"
 
-#: ../src/sugar3/activity/widgets.py:109
+#: ../src/sugar3/activity/widgets.py:107
 msgid "Redo"
 msgstr "फेरि गर"
 
-#: ../src/sugar3/activity/widgets.py:116
+#: ../src/sugar3/activity/widgets.py:114
 msgid "Copy"
 msgstr "प्रतिलिपी बनाऊ"
 
-#: ../src/sugar3/activity/widgets.py:124
+#: ../src/sugar3/activity/widgets.py:122
 msgid "Paste"
 msgstr "प्रतिलिपी सार"
 
-#: ../src/sugar3/activity/widgets.py:135
+#: ../src/sugar3/activity/widgets.py:133
 msgid "Private"
 msgstr "गुप्‍त"
 
-#: ../src/sugar3/activity/widgets.py:142
+#: ../src/sugar3/activity/widgets.py:140
 msgid "My Neighborhood"
 msgstr "मेरो छिमेकी"
 
-#: ../src/sugar3/activity/widgets.py:235
+#: ../src/sugar3/activity/widgets.py:234
 msgid "Description"
 msgstr "वर्णन"
 
@@ -87,15 +87,15 @@ msgstr "जारी राख"
 msgid "Choose a color"
 msgstr "एउटा रंङ छान"
 
-#: ../src/sugar3/graphics/colorbutton.py:271
+#: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
 msgstr "रातो"
 
-#: ../src/sugar3/graphics/colorbutton.py:273
+#: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
 msgstr "हरियो"
 
-#: ../src/sugar3/graphics/colorbutton.py:275
+#: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
 msgstr "निलो"
 
@@ -191,22 +191,22 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:54
+#: ../src/sugar3/mime.py:55
 msgid "Text"
 msgstr "पाठ"
 
-#: ../src/sugar3/mime.py:63
+#: ../src/sugar3/mime.py:64
 msgid "Image"
 msgstr "चित्र"
 
-#: ../src/sugar3/mime.py:69
+#: ../src/sugar3/mime.py:70
 msgid "Audio"
 msgstr "आवाज"
 
-#: ../src/sugar3/mime.py:77
+#: ../src/sugar3/mime.py:78
 msgid "Video"
 msgstr "चलचित्र"
 
-#: ../src/sugar3/mime.py:89
+#: ../src/sugar3/mime.py:90
 msgid "Link"
 msgstr "जोडान"

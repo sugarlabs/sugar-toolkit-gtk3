@@ -4,3 +4,4 @@
 src/sugar3/eggdesktopfile.c
 src/sugar3/eggsmclient.c
 src/sugar3/gsm-xsmp.c
+tests/data/sample.activity/activity.py

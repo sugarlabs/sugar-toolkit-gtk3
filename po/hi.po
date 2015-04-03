@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
 "PO-Revision-Date: 2012-06-20 16:21+0200\n"
 "Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,39 +34,39 @@ msgstr "त्रुटि को रखे रहें: सारे परि
 msgid "Don't stop"
 msgstr "बन्द न करें"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:882
 msgid "Stop anyway"
 msgstr "जैसे भी हो बन्द करें"
 
-#: ../src/sugar3/activity/widgets.py:86
+#: ../src/sugar3/activity/widgets.py:87
 msgid "Stop"
 msgstr "रूकें"
 
-#: ../src/sugar3/activity/widgets.py:98
+#: ../src/sugar3/activity/widgets.py:99
 msgid "Undo"
 msgstr "पहले जैसा"
 
-#: ../src/sugar3/activity/widgets.py:106
+#: ../src/sugar3/activity/widgets.py:107
 msgid "Redo"
 msgstr "दोहराएँ"
 
-#: ../src/sugar3/activity/widgets.py:113
+#: ../src/sugar3/activity/widgets.py:114
 msgid "Copy"
 msgstr "नक़ल"
 
-#: ../src/sugar3/activity/widgets.py:121
+#: ../src/sugar3/activity/widgets.py:122
 msgid "Paste"
 msgstr "चिपकाएँ"
 
-#: ../src/sugar3/activity/widgets.py:132
+#: ../src/sugar3/activity/widgets.py:133
 msgid "Private"
 msgstr "निजी"
 
-#: ../src/sugar3/activity/widgets.py:139
+#: ../src/sugar3/activity/widgets.py:140
 msgid "My Neighborhood"
 msgstr "मेरा पड़ोस"
 
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:234
 msgid "Description"
 msgstr "वर्णन"
 
@@ -87,15 +87,15 @@ msgstr "जारी रखें"
 msgid "Choose a color"
 msgstr "रंग चुनें"
 
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
 msgstr "लाल"
 
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
 msgstr "हरा"
 
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
 msgstr "नीला"
 
@@ -186,22 +186,22 @@ msgstr "%d मे.बा."
 msgid "%d GB"
 msgstr "%d गी.बा."
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:55
 msgid "Text"
 msgstr "पाठ"
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:64
 msgid "Image"
 msgstr "फ़ोटो"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:70
 msgid "Audio"
 msgstr "ऑडियो"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:78
 msgid "Video"
 msgstr "वीडियो"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:90
 msgid "Link"
 msgstr "कड़ी"

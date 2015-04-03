@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# User <juneleonora@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-06-20 18:43+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2013-06-26 00:33-0400\n"
+"PO-Revision-Date: 2013-08-29 19:13+0200\n"
+"Last-Translator: Manuel <themaduros@gmail.com>\n"
+"Language-Team: JuneLeonora\n"
 "Language: pap\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,46 +29,46 @@ msgstr "Warda eror"
 
 #: ../src/sugar3/activity/activity.py:875
 msgid "Keep error: all changes will be lost"
-msgstr "Warda eror: tur kambionan lo bai perdí"
+msgstr "Warda eror: tur kambio lo bai pèrdí"
 
 #: ../src/sugar3/activity/activity.py:878
 msgid "Don't stop"
 msgstr "No stòp"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:882
 msgid "Stop anyway"
-msgstr "Stòp kon ku para"
+msgstr "Stòp di tur manera"
 
 # Stòp / no si siqi
-#: ../src/sugar3/activity/widgets.py:86
+#: ../src/sugar3/activity/widgets.py:87
 msgid "Stop"
 msgstr "Stòp"
 
-#: ../src/sugar3/activity/widgets.py:98
+#: ../src/sugar3/activity/widgets.py:99
 msgid "Undo"
 msgstr "Deshasí"
 
-#: ../src/sugar3/activity/widgets.py:106
+#: ../src/sugar3/activity/widgets.py:107
 msgid "Redo"
 msgstr "Rehasí"
 
-#: ../src/sugar3/activity/widgets.py:113
+#: ../src/sugar3/activity/widgets.py:114
 msgid "Copy"
-msgstr "Kòpia"
+msgstr "Kopia"
 
-#: ../src/sugar3/activity/widgets.py:121
+#: ../src/sugar3/activity/widgets.py:122
 msgid "Paste"
-msgstr "Pèga"
+msgstr "Pega"
 
-#: ../src/sugar3/activity/widgets.py:132
+#: ../src/sugar3/activity/widgets.py:133
 msgid "Private"
 msgstr "Privá"
 
-#: ../src/sugar3/activity/widgets.py:139
+#: ../src/sugar3/activity/widgets.py:140
 msgid "My Neighborhood"
 msgstr "Mi Besindario"
 
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:234
 msgid "Description"
 msgstr "Deskripshon"
 
@@ -83,23 +83,23 @@ msgstr "Ok"
 
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
-msgstr "Kontinua"
+msgstr "Kontinuá"
 
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
-msgstr "Skohe un kóló"
+msgstr "Skohe un koló"
 
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
 msgstr "Kòrá"
 
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
-msgstr "Bèrde"
+msgstr "Bèrdè"
 
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
-msgstr "Blau"
+msgstr "Blou"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
@@ -113,11 +113,10 @@ msgstr ", "
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
 msgid "Seconds ago"
-msgstr "Algun seconde pasá"
+msgstr "Sekònde pasá"
 
 # TRANS: indikashon ku ora a pasa, por ehemplo. "[10 dia, 5 ora] pasá",
 # "[2 minuto] den pasado", of "[3 aña, 1 luna] anterior"
-#
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225
@@ -131,42 +130,42 @@ msgstr "%s pasá"
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d aña"
-msgstr[1] "%d añanan"
+msgstr[1] "%d aña"
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d luna"
-msgstr[1] "%d lunas"
+msgstr[1] "%d luna"
 
 #: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d siman"
-msgstr[1] "%d simanan"
+msgstr[1] "%d siman"
 
 #: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dia"
-msgstr[1] "%d dianan"
+msgstr[1] "%d dia"
 
 #: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d ora"
-msgstr[1] "%d oranan"
+msgstr[1] "%d ora"
 
 #: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minüt"
-msgstr[1] "%d minütnan"
+msgstr[1] "%d minüt"
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
@@ -192,22 +191,22 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:55
 msgid "Text"
 msgstr "Teksto"
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:64
 msgid "Image"
-msgstr "Imagen"
+msgstr "Imáhen"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:70
 msgid "Audio"
 msgstr "Oudio"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:78
 msgid "Video"
 msgstr "Vidio"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:90
 msgid "Link"
-msgstr "Link"
+msgstr "Lenk"

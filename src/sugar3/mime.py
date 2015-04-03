@@ -25,18 +25,18 @@ import os
 import logging
 import gettext
 
+from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 
-from sugar3 import _sugarbaseext
-
-_ = lambda msg: gettext.dgettext('sugar-base', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 GENERIC_TYPE_TEXT = 'Text'
 GENERIC_TYPE_IMAGE = 'Image'
 GENERIC_TYPE_AUDIO = 'Audio'
 GENERIC_TYPE_VIDEO = 'Video'
 GENERIC_TYPE_LINK = 'Link'
+GENERIC_TYPE_BUNDLE = 'Bundle'
 
 
 def _get_supported_image_mime_types():
@@ -48,31 +48,29 @@ def _get_supported_image_mime_types():
 
 _extensions = {}
 _globs_timestamps = []
-_generic_types = [
-{
+_subclasses = {}
+_subclasses_timestamps = []
+
+_generic_types = [{
     'id': GENERIC_TYPE_TEXT,
     'name': _('Text'),
     'icon': 'text-x-generic',
-    'types': [
-        'text/plain', 'text/rtf', 'application/pdf', 'application/x-pdf',
-        'text/html', 'application/vnd.oasis.opendocument.text',
-        'application/rtf', 'text/rtf', 'application/epub+zip'],
-},
-{
+    'types': ['text/plain', 'text/rtf', 'application/pdf', 'application/x-pdf',
+              'text/html', 'application/vnd.oasis.opendocument.text',
+              'application/rtf', 'text/rtf', 'application/epub+zip'],
+}, {
     'id': GENERIC_TYPE_IMAGE,
     'name': _('Image'),
     'icon': 'image-x-generic',
     'types': _get_supported_image_mime_types(),
-},
-{
+}, {
     'id': GENERIC_TYPE_AUDIO,
     'name': _('Audio'),
     'icon': 'audio-x-generic',
     'types': [
         'audio/ogg', 'audio/x-wav', 'audio/wav', 'audio/x-vorbis+ogg',
         'audio/x-mpegurl', 'audio/mpegurl', 'audio/mpeg', 'audio/x-scpls'],
-},
-{
+}, {
     'id': GENERIC_TYPE_VIDEO,
     'name': _('Video'),
     'icon': 'video-x-generic',
@@ -83,12 +81,16 @@ _generic_types = [
               'video/mp4', 'video/x-matroska', 'video/x-msvideo',
               'application/x-ogm-video', 'video/quicktime', 'video/x-quicktime'
               'video/avi'],
-},
-{
+}, {
     'id': GENERIC_TYPE_LINK,
     'name': _('Link'),
     'icon': 'text-uri-list',
     'types': ['text/x-moz-url', 'text/uri-list'],
+}, {
+    'id': GENERIC_TYPE_BUNDLE,
+    'name': _('Bundle'),
+    'icon': 'user-documents',
+    'types': ['application/vnd.olpc-sugar'],
 }]
 
 
@@ -123,18 +125,22 @@ def get_for_file(file_name):
 
     file_name = os.path.realpath(file_name)
 
-    mime_type = _sugarbaseext.get_mime_type_for_file(file_name)
-    if mime_type == 'application/octet-stream':
-        if _file_looks_like_text(file_name):
-            return 'text/plain'
-        else:
-            return 'application/octet-stream'
+    f = Gio.File.new_for_path(file_name)
+    try:
+        info = f.query_info(Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE, 0, None)
+        mime_type = info.get_content_type()
+    except GLib.GError:
+        mime_type = Gio.content_type_guess(file_name, None)[0]
 
     return mime_type
 
 
 def get_from_file_name(file_name):
-    return _sugarbaseext.get_mime_type_from_file_name(file_name)
+    """
+    DEPRECATED: 0.102 (removed in 4 releases)
+    Use Gio.content_type_guess(file_name, None)[0] instead.
+    """
+    return Gio.content_type_guess(file_name, None)[0]
 
 
 def get_mime_icon(mime_type):
@@ -154,13 +160,42 @@ def get_mime_description(mime_type):
 
 
 def get_mime_parents(mime_type):
-    return _sugarbaseext.list_mime_parents(mime_type)
+    global _subclasses
+    global _subclasses_timestamps
+
+    dirs = _get_mime_data_directories()
+
+    timestamps = []
+    subclasses_path_list = []
+    for f in dirs:
+        subclasses_path = os.path.join(f, 'mime', 'subclasses')
+        try:
+            mtime = os.stat(subclasses_path).st_mtime
+            timestamps.append([subclasses_path, mtime])
+            subclasses_path_list.append(subclasses_path)
+        except OSError:
+            pass
+
+    if timestamps != _subclasses_timestamps:
+        _subclasses = {}
+        for subclasses_path in subclasses_path_list:
+            with open(subclasses_path) as parents_file:
+                for line in parents_file:
+                    subclass, parent = line.split()
+                    if subclass not in _subclasses.keys():
+                        _subclasses[subclass] = [parent]
+                    else:
+                        _subclasses[subclass].append(parent)
+
+        _subclasses_timestamps = timestamps
+
+    if mime_type in _subclasses.keys():
+        return _subclasses[mime_type]
+    else:
+        return []
 
 
-def get_primary_extension(mime_type):
-    global _extensions
-    global _globs_timestamps
-
+def _get_mime_data_directories():
     dirs = []
 
     if 'XDG_DATA_HOME' in os.environ:
@@ -172,6 +207,14 @@ def get_primary_extension(mime_type):
         dirs.extend(os.environ['XDG_DATA_DIRS'].split(':'))
     else:
         dirs.extend(['/usr/local/share/', '/usr/share/'])
+    return dirs
+
+
+def _init_mime_information():
+    global _extensions
+    global _globs_timestamps
+
+    dirs = _get_mime_data_directories()
 
     timestamps = []
     globs_path_list = []
@@ -187,8 +230,8 @@ def get_primary_extension(mime_type):
         _extensions = {}
 
         # FIXME Properly support these types in the system. (#4855)
-        _extensions['audio/ogg'] = 'ogg'
-        _extensions['video/ogg'] = 'ogg'
+        _extensions['audio/ogg'] = ['ogg']
+        _extensions['video/ogg'] = ['ogg']
 
         for globs_path in globs_path_list:
             globs_file = open(globs_path)
@@ -197,14 +240,28 @@ def get_primary_extension(mime_type):
                 if not line.startswith('#'):
                     line_type, glob = line.split(':')
                     if glob.startswith('*.'):
-                        _extensions[line_type] = glob[2:]
+                        if line_type in _extensions:
+                            _extensions[line_type].append(glob[2:])
+                        else:
+                            _extensions[line_type] = [glob[2:]]
 
         _globs_timestamps = timestamps
 
+
+def get_primary_extension(mime_type):
+    _init_mime_information()
+    if mime_type in _extensions:
+        return _extensions[mime_type][0]
+    else:
+        return None
+
+
+def get_extensions_by_mimetype(mime_type):
+    _init_mime_information()
     if mime_type in _extensions:
         return _extensions[mime_type]
     else:
-        return None
+        return []
 
 
 _MIME_TYPE_BLACK_LIST = [
@@ -254,27 +311,7 @@ def choose_most_significant(mime_types):
 
 
 def split_uri_list(uri_list):
-    return _sugarbaseext.uri_list_extract_uris(uri_list)
-
-
-def _file_looks_like_text(file_name):
-    f = open(file_name, 'r')
-    try:
-        sample = f.read(256)
-    finally:
-        f.close()
-
-    if '\000' in sample:
-        return False
-
-    for encoding in ('ascii', 'latin_1', 'utf_8', 'utf_16'):
-        try:
-            unicode(sample, encoding)
-            return True
-        except Exception:
-            pass
-
-    return False
+    return GLib.uri_list_extract_uris(uri_list)
 
 
 def _get_generic_type_for_mime(mime_type):

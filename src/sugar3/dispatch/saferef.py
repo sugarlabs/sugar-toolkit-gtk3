@@ -5,9 +5,11 @@ Provides a way to safely weakref any function, including bound methods (which
 aren't handled by the core weakref module).
 """
 
-import weakref, traceback
+import weakref
+import traceback
 
-def safeRef(target, onDelete = None):
+
+def safeRef(target, onDelete=None):
     """Return a *safe* weak reference to a callable target
 
     target -- the object to be weakly referenced, if it's a
@@ -22,7 +24,9 @@ def safeRef(target, onDelete = None):
         if target.im_self is not None:
             # Turn a bound method into a BoundMethodWeakref instance.
             # Keep track of these instances for lookup by disconnect().
-            assert hasattr(target, 'im_func'), """safeRef target %r has im_self, but no im_func, don't know how to create reference"""%( target,)
+            assert hasattr(target, 'im_func'), \
+                "safeRef target %r has im_self, but no im_func, " \
+                "don't know how to create reference" % (target,)
             reference = get_bound_method_weakref(
                 target=target,
                 onDelete=onDelete
@@ -31,7 +35,8 @@ def safeRef(target, onDelete = None):
     if callable(onDelete):
         return weakref.ref(target, onDelete)
     else:
-        return weakref.ref( target )
+        return weakref.ref(target)
+
 
 class BoundMethodWeakref(object):
     """'Safe' and reusable weak references to instance methods
@@ -66,10 +71,10 @@ class BoundMethodWeakref(object):
             same BoundMethodWeakref instance.
 
     """
-    
+
     _allInstances = weakref.WeakValueDictionary()
-    
-    def __new__( cls, target, onDelete=None, *arguments,**named ):
+
+    def __new__(cls, target, onDelete=None, *arguments, **named):
         """Create new instance or return current instance
 
         Basically this method of construction allows us to
@@ -82,16 +87,16 @@ class BoundMethodWeakref(object):
         of already-referenced methods.
         """
         key = cls.calculateKey(target)
-        current =cls._allInstances.get(key)
+        current = cls._allInstances.get(key)
         if current is not None:
-            current.deletionMethods.append( onDelete)
+            current.deletionMethods.append(onDelete)
             return current
         else:
-            base = super( BoundMethodWeakref, cls).__new__( cls )
+            base = super(BoundMethodWeakref, cls).__new__(cls)
             cls._allInstances[key] = base
-            base.__init__( target, onDelete, *arguments,**named)
+            base.__init__(target, onDelete, *arguments, **named)
             return base
-    
+
     def __init__(self, target, onDelete=None):
         """Return a weak-reference-like instance for a bound method
 
@@ -111,56 +116,55 @@ class BoundMethodWeakref(object):
             methods = self.deletionMethods[:]
             del self.deletionMethods[:]
             try:
-                del self.__class__._allInstances[ self.key ]
+                del self.__class__._allInstances[self.key]
             except KeyError:
                 pass
             for function in methods:
                 try:
-                    if callable( function ):
-                        function( self )
+                    if callable(function):
+                        function(self)
                 except Exception, e:
                     try:
                         traceback.print_exc()
-                    except AttributeError, err:
-                        print '''Exception during saferef %s cleanup function %s: %s'''%(
-                            self, function, e
-                        )
+                    except AttributeError:
+                        print "Exception during saferef %s cleanup "
+                        "function %s: %s" % (self, function, e)
         self.deletionMethods = [onDelete]
-        self.key = self.calculateKey( target )
+        self.key = self.calculateKey(target)
         self.weakSelf = weakref.ref(target.im_self, remove)
         self.weakFunc = weakref.ref(target.im_func, remove)
         self.selfName = str(target.im_self)
         self.funcName = str(target.im_func.__name__)
-    
-    def calculateKey( cls, target ):
+
+    def calculateKey(cls, target):
         """Calculate the reference key for this reference
 
         Currently this is a two-tuple of the id()'s of the
         target object and the target function respectively.
         """
-        return (id(target.im_self),id(target.im_func))
-    calculateKey = classmethod( calculateKey )
-    
+        return (id(target.im_self), id(target.im_func))
+    calculateKey = classmethod(calculateKey)
+
     def __str__(self):
         """Give a friendly representation of the object"""
-        return """%s( %s.%s )"""%(
+        return """%s( %s.%s )""" % (
             self.__class__.__name__,
             self.selfName,
             self.funcName,
         )
-    
+
     __repr__ = __str__
-    
-    def __nonzero__( self ):
+
+    def __nonzero__(self):
         """Whether we are still a valid reference"""
         return self() is not None
-    
-    def __cmp__( self, other ):
+
+    def __cmp__(self, other):
         """Compare with another reference"""
-        if not isinstance (other,self.__class__):
-            return cmp( self.__class__, type(other) )
-        return cmp( self.key, other.key)
-    
+        if not isinstance(other, self.__class__):
+            return cmp(self.__class__, type(other))
+        return cmp(self.key, other.key)
+
     def __call__(self):
         """Return a strong reference to the bound method
 
@@ -179,14 +183,15 @@ class BoundMethodWeakref(object):
                 return function.__get__(target)
         return None
 
+
 class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
     """A specialized BoundMethodWeakref, for platforms where instance methods
     are not descriptors.
 
     It assumes that the function name and the target attribute name are the
     same, instead of assuming that the function is a descriptor. This approach
-    is equally fast, but not 100% reliable because functions can be stored on an
-    attribute named differenty than the function's name such as in:
+    is equally fast, but not 100% reliable because functions can be stored on
+    an attribute named differenty than the function's name such as in:
 
     class A: pass
     def foo(self): return "foo"
@@ -211,7 +216,7 @@ class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
             which will be passed a pointer to this object.
         """
         assert getattr(target.im_self, target.__name__) == target, \
-               ("method %s isn't available as the attribute %s of %s" %
+            ("method %s isn't available as the attribute %s of %s" %
                 (target, target.__name__, target.im_self))
         super(BoundNonDescriptorMethodWeakref, self).__init__(target, onDelete)
 
@@ -239,12 +244,14 @@ class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
                 return getattr(target, function.__name__)
         return None
 
+
 def get_bound_method_weakref(target, onDelete):
-    """Instantiates the appropiate BoundMethodWeakRef, depending on the details of
-    the underlying class method implementation"""
+    """Instantiates the appropiate BoundMethodWeakRef, depending on the
+    details of the underlying class method implementation"""
     if hasattr(target, '__get__'):
         # target method is a descriptor, so the default implementation works:
         return BoundMethodWeakref(target=target, onDelete=onDelete)
     else:
         # no luck, use the alternative implementation:
-        return BoundNonDescriptorMethodWeakref(target=target, onDelete=onDelete)
+        return BoundNonDescriptorMethodWeakref(target=target,
+                                               onDelete=onDelete)

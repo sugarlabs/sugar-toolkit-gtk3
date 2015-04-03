@@ -23,7 +23,6 @@ the moment there is no reason to stabilize this API.
 """
 
 import logging
-import uuid
 
 import dbus
 from gi.repository import GObject
@@ -65,7 +64,7 @@ def _close_fds():
 
 def create_activity_id():
     """Generate a new, unique ID for this activity"""
-    return util.unique_id(uuid.getnode())
+    return util.unique_id()
 
 
 def get_environment(activity):
@@ -96,7 +95,7 @@ def get_environment(activity):
 
     if activity.get_path().startswith(env.get_user_activities_path()):
         environ['SUGAR_LOCALEDIR'] = os.path.join(activity.get_path(),
-            'locale')
+                                                  'locale')
 
     return environ
 
@@ -125,7 +124,7 @@ def get_command(activity, activity_id=None, object_id=None, uri=None,
         if os.path.exists(absolute_path):
             command[0] = absolute_path
 
-    logging.debug('launching: %r', command)
+    logging.debug('launching: %r' % command)
 
     return command
 
@@ -200,10 +199,11 @@ class ActivityCreationHandler(GObject.GObject):
             self._launch_activity()
 
     def _launch_activity(self):
-        if self._handle.activity_id != None:
-            self._shell.ActivateActivity(self._handle.activity_id,
-                        reply_handler=self._activate_reply_handler,
-                        error_handler=self._activate_error_handler)
+        if self._handle.activity_id is not None:
+            self._shell.ActivateActivity(
+                self._handle.activity_id,
+                reply_handler=self._activate_reply_handler,
+                error_handler=self._activate_error_handler)
         else:
             self._create_activity()
 
@@ -212,9 +212,9 @@ class ActivityCreationHandler(GObject.GObject):
             self._handle.activity_id = create_activity_id()
 
         self._shell.NotifyLaunch(
-                    self._service_name, self._handle.activity_id,
-                    reply_handler=self._no_reply_handler,
-                    error_handler=self._notify_launch_error_handler)
+            self._service_name, self._handle.activity_id,
+            reply_handler=self._no_reply_handler,
+            error_handler=self._notify_launch_error_handler)
 
         environ = get_environment(self._bundle)
         (log_path, log_file) = open_log_file(self._bundle)
@@ -222,12 +222,9 @@ class ActivityCreationHandler(GObject.GObject):
                               self._handle.object_id, self._handle.uri,
                               self._handle.invited)
 
-        dev_null = file('/dev/null', 'w')
         environment_dir = None
-        rainbow_found = subprocess.call(['which', 'rainbow-run'],
-            stdout=dev_null, stderr=dev_null) == 0
-        use_rainbow = rainbow_found and os.path.exists('/etc/olpc-security')
-        if use_rainbow:
+        if os.path.exists('/etc/olpc-security') \
+                and os.access('/usr/bin/rainbow-run', os.X_OK):
             environment_dir = tempfile.mkdtemp()
             command = ['sudo', '-E', '--',
                        'rainbow-run',
@@ -241,7 +238,7 @@ class ActivityCreationHandler(GObject.GObject):
                        '-i', environ['SUGAR_BUNDLE_ID'],
                        '-e', environment_dir,
                        '--',
-                      ] + command
+                       ] + command
 
             for key, value in environ.items():
                 file_path = os.path.join(environment_dir, str(key))
@@ -251,12 +248,12 @@ class ActivityCreationHandler(GObject.GObject):
 
         dev_null = file('/dev/null', 'r')
         child = subprocess.Popen([str(s) for s in command],
-            env=environ,
-            cwd=str(self._bundle.get_path()),
-            close_fds=True,
-            stdin=dev_null.fileno(),
-            stdout=log_file.fileno(),
-            stderr=log_file.fileno())
+                                 env=environ,
+                                 cwd=str(self._bundle.get_path()),
+                                 close_fds=True,
+                                 stdin=dev_null.fileno(),
+                                 stdout=log_file.fileno(),
+                                 stderr=log_file.fileno())
 
         GObject.child_watch_add(child.pid,
                                 _child_watch_cb,
@@ -267,25 +264,25 @@ class ActivityCreationHandler(GObject.GObject):
         pass
 
     def _notify_launch_failure_error_handler(self, err):
-        logging.error('Notify launch failure failed %s', err)
+        logging.error('Notify launch failure failed %s' % err)
 
     def _notify_launch_error_handler(self, err):
-        logging.debug('Notify launch failed %s', err)
+        logging.debug('Notify launch failed %s' % err)
 
     def _activate_reply_handler(self, activated):
         if not activated:
             self._create_activity()
 
     def _activate_error_handler(self, err):
-        logging.error('Activity activation request failed %s', err)
+        logging.error('Activity activation request failed %s' % err)
 
     def _create_reply_handler(self):
-        logging.debug('Activity created %s (%s).',
-            self._handle.activity_id, self._service_name)
+        logging.debug('Activity created %s (%s).' %
+                      (self._handle.activity_id, self._service_name))
 
     def _create_error_handler(self, err):
-        logging.error("Couldn't create activity %s (%s): %s",
-            self._handle.activity_id, self._service_name, err)
+        logging.error("Couldn't create activity %s (%s): %s" %
+                      (self._handle.activity_id, self._service_name, err))
         self._shell.NotifyLaunchFailure(
             self._handle.activity_id, reply_handler=self._no_reply_handler,
             error_handler=self._notify_launch_failure_error_handler)
@@ -298,7 +295,7 @@ class ActivityCreationHandler(GObject.GObject):
         self._launch_activity()
 
     def _find_object_error_handler(self, err):
-        logging.error('Datastore find failed %s', err)
+        logging.error('Datastore find failed %s' % err)
         self._launch_activity()
 
 
@@ -370,5 +367,5 @@ def _child_watch_cb(pid, condition, user_data):
         # TODO send launching failure but activity could already show
         # main window, see http://bugs.sugarlabs.org/ticket/1447#comment:19
         shell.NotifyLaunchFailure(activity_id,
-                reply_handler=reply_handler_cb,
-                error_handler=error_handler_cb)
+                                  reply_handler=reply_handler_cb,
+                                  error_handler=error_handler_cb)

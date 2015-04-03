@@ -1,0 +1,216 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-06-02 00:32-0400\n"
+"PO-Revision-Date: 2012-05-24 07:59+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: kn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#: ../src/sugar3/activity/activity.py:378
+#, python-format
+#, python-format, fuzzy
+msgid "%s Activity"
+msgstr "%s ಚಟುವಟಿಕೆ"
+
+#: ../src/sugar3/activity/activity.py:874
+msgid "Keep error"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:875
+msgid "Keep error: all changes will be lost"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:878
+msgid "Don't stop"
+msgstr ""
+
+#: ../src/sugar3/activity/activity.py:881
+msgid "Stop anyway"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:86
+#, fuzzy
+msgid "Stop"
+msgstr "ನಿಲ್ಲಿಸು"
+
+#: ../src/sugar3/activity/widgets.py:98
+msgid "Undo"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:106
+msgid "Redo"
+msgstr "ಮತ್ತ ಮಾಡು"
+
+#: ../src/sugar3/activity/widgets.py:113
+msgid "Copy"
+msgstr "ನಕಲಿಸು"
+
+#: ../src/sugar3/activity/widgets.py:121
+msgid "Paste"
+msgstr "ಆಂಟಿಸು"
+
+#: ../src/sugar3/activity/widgets.py:132
+#, fuzzy
+msgid "Private"
+msgstr "ಖಾಸಗಿ"
+
+#: ../src/sugar3/activity/widgets.py:139
+msgid "My Neighborhood"
+msgstr ""
+
+#: ../src/sugar3/activity/widgets.py:226
+#, fuzzy
+msgid "Description"
+msgstr "ವಿವರಣೆ"
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+msgid "Cancel"
+msgstr "ವಜಾ"
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479
+msgid "Ok"
+msgstr ""
+
+#: ../src/sugar3/graphics/alert.py:434
+msgid "Continue"
+msgstr "ಮುಂದುವರೆ"
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+msgid "Choose a color"
+msgstr ""
+
+#: ../src/sugar3/graphics/colorbutton.py:274
+#, fuzzy
+msgid "Red"
+msgstr "ಕೆಂಪು"
+
+#: ../src/sugar3/graphics/colorbutton.py:276
+#, fuzzy
+msgid "Green"
+msgstr "ಹಸಿರು"
+
+#: ../src/sugar3/graphics/colorbutton.py:278
+#, fuzzy
+msgid "Blue"
+msgstr "ನೀಲಿ"
+
+#: ../src/sugar3/util.py:217
+msgid " and "
+msgstr ""
+
+#: ../src/sugar3/util.py:218
+msgid ", "
+msgstr ""
+
+#. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
+#: ../src/sugar3/util.py:221
+msgid "Seconds ago"
+msgstr ""
+
+#. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
+#. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
+#: ../src/sugar3/util.py:225
+#, python-format
+#, python-format, fuzzy
+msgid "%s ago"
+msgstr "%s ಹಿಂದೆ"
+
+#. TRANS: Relative dates (eg. 1 month and 5 days).
+#: ../src/sugar3/util.py:240
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:241
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:242
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:243
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:244
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:245
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/sugar3/util.py:346
+#, fuzzy
+msgid "Empty"
+msgstr "ಖಾಲಿ"
+
+#: ../src/sugar3/util.py:348
+#, python-format
+msgid "%d B"
+msgstr ""
+
+#: ../src/sugar3/util.py:350
+#, python-format
+msgid "%d KB"
+msgstr ""
+
+#: ../src/sugar3/util.py:352
+#, python-format
+msgid "%d MB"
+msgstr ""
+
+#: ../src/sugar3/util.py:354
+#, python-format
+msgid "%d GB"
+msgstr ""
+
+#: ../src/sugar3/mime.py:43
+msgid "Text"
+msgstr ""
+
+#: ../src/sugar3/mime.py:52
+msgid "Image"
+msgstr ""
+
+#: ../src/sugar3/mime.py:58
+msgid "Audio"
+msgstr ""
+
+#: ../src/sugar3/mime.py:66
+msgid "Video"
+msgstr ""
+
+#: ../src/sugar3/mime.py:72
+msgid "Link"
+msgstr ""

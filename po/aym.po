@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-09-27 18:22+0200\n"
+"PO-Revision-Date: 2012-09-28 14:09+0200\n"
 "Last-Translator: EdgarQuispeChambi <quispedgar@yahoo.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: aym\n"
@@ -41,7 +41,7 @@ msgstr "Jani sayt'ayamti"
 #  "Detener de todas formas"
 #: ../src/sugar3/activity/activity.py:881
 msgid "Stop anyway"
-msgstr "Mäpita sayt'ayaña"
+msgstr "Mäpita sayt'ayma"
 
 #  "Parar"
 #: ../src/sugar3/activity/widgets.py:86
@@ -97,12 +97,12 @@ msgstr "Ukhamawa"
 #  "Continuar"
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
-msgstr "Luraskakiña"
+msgstr "Luraskakma"
 
 #  "Escoja un color"
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
-msgstr "Samichma"
+msgstr "Maya samichaña katma"
 
 #  "Rojo"
 #: ../src/sugar3/graphics/colorbutton.py:274
@@ -207,25 +207,25 @@ msgstr "Ch'usa"
 #: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr "%d B"
+msgstr "%d B wakichata"
 
 #  "%d KB"
 #: ../src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr "%d KB"
+msgstr "%d KB wakichata"
 
 #  "%d MB"
 #: ../src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr "%d MB"
+msgstr "%d MB wakichata"
 
 #  "%d GB"
 #: ../src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr "%d GB"
+msgstr "%d GB wakichata"
 
 #: ../src/sugar3/mime.py:43
 msgid "Text"

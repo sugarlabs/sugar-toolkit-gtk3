@@ -24,7 +24,7 @@ from functools import partial
 import dbus
 from dbus import PROPERTIES_IFACE
 from telepathy.interfaces import ACCOUNT, \
-                                 ACCOUNT_MANAGER
+    ACCOUNT_MANAGER
 from telepathy.constants import CONNECTION_STATUS_CONNECTED
 
 ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
@@ -52,7 +52,8 @@ class ConnectionManager(object):
         for account_path in account_paths:
             obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
             obj.connect_to_signal('AccountPropertyChanged',
-                    partial(self.__account_property_changed_cb, account_path))
+                                  partial(self.__account_property_changed_cb,
+                                          account_path))
             connection_path = obj.Get(ACCOUNT, 'Connection')
             if connection_path != '/':
                 self._track_connection(account_path, connection_path)
@@ -71,9 +72,10 @@ class ConnectionManager(object):
         bus = dbus.SessionBus()
         connection = bus.get_object(connection_name, connection_path)
         connection.connect_to_signal('StatusChanged',
-                partial(self.__status_changed_cb, account_path))
+                                     partial(self.__status_changed_cb,
+                                             account_path))
         self._connections_per_account[account_path] = \
-                Connection(account_path, connection)
+            Connection(account_path, connection)
 
         account = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
         status = account.Get(ACCOUNT, 'ConnectionStatus')
@@ -112,6 +114,8 @@ class ConnectionManager(object):
 
 
 _connection_manager = None
+
+
 def get_connection_manager():
     global _connection_manager
     if not _connection_manager:

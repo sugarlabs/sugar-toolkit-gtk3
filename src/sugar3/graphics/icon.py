@@ -63,7 +63,7 @@ class _SVGLoader(object):
                 logging.error(
                     'Icon %s, entity %s is invalid.', file_name, entity)
 
-        return Rsvg.Handle.new_from_data(icon)
+        return Rsvg.Handle.new_from_data(icon.encode('utf-8'))
 
 
 class _IconInfo(object):
@@ -100,6 +100,7 @@ class _IconBuffer(object):
         self.height = None
         self.cache = False
         self.scale = 1.0
+        self.pixbuf = None
 
     def _get_cache_key(self, sensitive):
         if self.background_color is None:
@@ -107,7 +108,8 @@ class _IconBuffer(object):
         else:
             color = (self.background_color.red, self.background_color.green,
                      self.background_color.blue)
-        return (self.icon_name, self.file_name, self.fill_color,
+
+        return (self.icon_name, self.file_name, self.pixbuf, self.fill_color,
                 self.stroke_color, self.badge_name, self.width, self.height,
                 color, sensitive)
 
@@ -131,19 +133,19 @@ class _IconBuffer(object):
 
         return attach_x, attach_y
 
-    def _get_icon_info(self):
+    def _get_icon_info(self, file_name, icon_name):
         icon_info = _IconInfo()
 
-        if self.file_name:
-            icon_info.file_name = self.file_name
-        elif self.icon_name:
+        if file_name:
+            icon_info.file_name = file_name
+        elif icon_name:
             theme = Gtk.IconTheme.get_default()
 
             size = 50
-            if self.width != None:
+            if self.width is not None:
                 size = self.width
 
-            info = theme.lookup_icon(self.icon_name, int(size), 0)
+            info = theme.lookup_icon(icon_name, int(size), 0)
             if info:
                 attach_x, attach_y = self._get_attach_points(info, size)
 
@@ -154,7 +156,7 @@ class _IconBuffer(object):
                 del info
             else:
                 logging.warning('No icon with the name %s was found in the '
-                    'theme.', self.icon_name)
+                                'theme.', icon_name)
 
         return icon_info
 
@@ -206,7 +208,7 @@ class _IconBuffer(object):
         if info.attach_x < 0 or info.attach_y < 0:
             info.icon_padding = max(-info.attach_x, -info.attach_y)
         elif info.attach_x + info.size > icon_width or \
-             info.attach_y + info.size > icon_height:
+                info.attach_y + info.size > icon_height:
             x_padding = info.attach_x + info.size - icon_width
             y_padding = info.attach_y + info.size - icon_height
             info.icon_padding = max(x_padding, y_padding)
@@ -239,10 +241,11 @@ class _IconBuffer(object):
         icon_source.set_direction_wildcarded(False)
         icon_source.set_size_wildcarded(False)
 
-        style = widget.get_style()
-        pixbuf = style.render_icon(icon_source, widget.get_direction(),
-                                   Gtk.StateType.INSENSITIVE, -1, widget,
-                                   'sugar-icon')
+        widget_style = widget.get_style()
+        pixbuf = widget_style.render_icon(
+            icon_source, widget.get_direction(),
+            Gtk.StateType.INSENSITIVE, -1, widget,
+            'sugar-icon')
 
         return pixbuf
 
@@ -251,20 +254,47 @@ class _IconBuffer(object):
         if cache_key in self._surface_cache:
             return self._surface_cache[cache_key]
 
-        icon_info = self._get_icon_info()
-        if icon_info.file_name is None:
-            return None
-
-        is_svg = icon_info.file_name.endswith('.svg')
-
-        if is_svg:
-            handle = self._load_svg(icon_info.file_name)
-            icon_width = handle.props.width
-            icon_height = handle.props.height
-        else:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.file_name)
+        if self.pixbuf:
+            # We alredy have the pixbuf for this icon.
+            pixbuf = self.pixbuf
             icon_width = pixbuf.get_width()
             icon_height = pixbuf.get_height()
+            icon_info = self._get_icon_info(self.file_name, self.icon_name)
+            is_svg = False
+        else:
+            # We run two attempts at finding the icon. First, we try the icon
+            # requested by the user. If that fails, we fall back on
+            # document-generic. If that doesn't work out, bail.
+            icon_width = None
+            for (file_name, icon_name) in ((self.file_name, self.icon_name),
+                                           (None, 'document-generic')):
+                icon_info = self._get_icon_info(file_name, icon_name)
+                if icon_info.file_name is None:
+                    return None
+
+                is_svg = icon_info.file_name.endswith('.svg')
+
+                if is_svg:
+                    try:
+                        handle = self._load_svg(icon_info.file_name)
+                        icon_width = handle.props.width
+                        icon_height = handle.props.height
+                        break
+                    except IOError:
+                        pass
+                else:
+                    try:
+                        path = icon_info.file_name
+                        pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+                        icon_width = pixbuf.get_width()
+                        icon_height = pixbuf.get_height()
+                        break
+                    except GObject.GError:
+                        pass
+
+        if icon_width is None:
+            # Neither attempt found an icon for us to use
+            return None
 
         badge_info = self._get_badge_info(icon_info, icon_width, icon_height)
 
@@ -317,6 +347,10 @@ class Icon(Gtk.Image):
 
     __gtype_name__ = 'SugarIcon'
 
+    # FIXME: deprecate icon_size
+    _MENU_SIZES = (Gtk.IconSize.MENU, Gtk.IconSize.DND,
+                   Gtk.IconSize.SMALL_TOOLBAR, Gtk.IconSize.BUTTON)
+
     def __init__(self, **kwargs):
         self._buffer = _IconBuffer()
         # HACK: need to keep a reference to the path so it doesn't get garbage
@@ -325,6 +359,10 @@ class Icon(Gtk.Image):
         self._file = None
         self._alpha = 1.0
         self._scale = 1.0
+
+        # FIXME: deprecate icon_size
+        if 'icon_size' in kwargs:
+            logging.warning("icon_size is deprecated. Use pixel_size instead.")
 
         GObject.GObject.__init__(self, **kwargs)
 
@@ -337,6 +375,15 @@ class Icon(Gtk.Image):
 
     file = GObject.property(type=object, setter=set_file, getter=get_file)
 
+    def get_pixbuf(self):
+        return self._buffer.pixbuf
+
+    def set_pixbuf(self, pixbuf):
+        self._buffer.pixbuf = pixbuf
+
+    pixbuf = GObject.property(type=object, setter=set_pixbuf,
+                              getter=get_pixbuf)
+
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
             self._buffer.icon_name = self.props.icon_name
@@ -344,10 +391,18 @@ class Icon(Gtk.Image):
         if self._buffer.file_name != self.props.file:
             self._buffer.file_name = self.props.file
 
+        # FIXME: deprecate icon_size
+        pixel_size = None
         if self.props.pixel_size == -1:
-            valid_, width, height = Gtk.icon_size_lookup(self.props.icon_size)
+            if self.props.icon_size in self._MENU_SIZES:
+                pixel_size = style.SMALL_ICON_SIZE
+            else:
+                pixel_size = style.STANDARD_ICON_SIZE
         else:
-            width = height = self.props.pixel_size
+            pixel_size = self.props.pixel_size
+
+        width = height = pixel_size
+
         if self._buffer.width != width or self._buffer.height != height:
             self._buffer.width = width
             self._buffer.height = height
@@ -398,9 +453,9 @@ class Icon(Gtk.Image):
 
         allocation = self.get_allocation()
         x = math.floor(xpad +
-            (allocation.width - requisition.width) * xalign)
+                       (allocation.width - requisition.width) * xalign)
         y = math.floor(ypad +
-            (allocation.height - requisition.height) * yalign)
+                       (allocation.height - requisition.height) * yalign)
 
         if self._scale != 1.0:
             cr.scale(self._scale, self._scale)
@@ -458,6 +513,9 @@ class Icon(Gtk.Image):
 
     badge_name = GObject.property(
         type=str, getter=get_badge_name, setter=set_badge_name)
+
+    def get_badge_size(self):
+        return int(_BADGE_SIZE * self.props.pixel_size)
 
     def set_alpha(self, value):
         if self._alpha != value:
@@ -728,8 +786,9 @@ class CanvasIcon(EventIcon):
 
     def __button_press_event_cb(self, icon, event):
         if self.palette and not self.palette.is_up():
-            self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.ACTIVE,
-                                 clear=True)
+            self.set_state_flags(
+                self.get_state_flags() | Gtk.StateFlags.ACTIVE,
+                clear=True)
 
     def __button_release_event_cb(self, icon, event):
         self.unset_state_flags(Gtk.StateFlags.ACTIVE)
@@ -808,7 +867,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._xo_color = value
 
     xo_color = GObject.property(type=object,
-            getter=get_xo_color, setter=set_xo_color)
+                                getter=get_xo_color, setter=set_xo_color)
 
     def set_fill_color(self, value):
         if self._fill_color != value:
@@ -919,9 +978,9 @@ class CellRendererIcon(Gtk.CellRenderer):
             else:
                 context.set_state(Gtk.StateFlags.NORMAL)
 
-
-        Gtk.render_background(context, cr, background_area.x, background_area.y,
-                              background_area.width, background_area.height)
+        Gtk.render_background(
+            context, cr, background_area.x, background_area.y,
+            background_area.width, background_area.height)
 
         Gtk.render_frame(context, cr, background_area.x, background_area.y,
                          background_area.width, background_area.height)

@@ -69,7 +69,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         return self._tooltip
 
     tooltip = GObject.property(type=str, setter=set_tooltip,
-        getter=get_tooltip)
+                               getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
         self._accelerator = accelerator
@@ -79,7 +79,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
-            getter=get_accelerator)
+                                   getter=get_accelerator)
 
     def set_icon_name(self, icon_name):
         icon = Icon(icon_name=icon_name,
@@ -131,7 +131,6 @@ class RadioToolButton(Gtk.RadioToolButton):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_draw(self, cr):
-        child = self.get_child()
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before

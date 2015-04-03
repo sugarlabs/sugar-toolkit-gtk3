@@ -1,4 +1,11 @@
-SUBDIRS = activity bundle event-controller graphics presence datastore dispatch
+SUBDIRS = activity \
+          bundle \
+          event-controller \
+          graphics \
+          presence \
+          datastore \
+          dispatch \
+          test
 
 sugardir = $(pythondir)/sugar3
 sugar_PYTHON =		\
@@ -7,19 +14,22 @@ sugar_PYTHON =		\
 	logger.py	\
 	mime.py		\
         network.py	\
+	power.py \
 	profile.py	\
-	session.py	\
+	speech.py	\
 	util.py
+
+nodist_sugar_PYTHON = config.py
 
 lib_LTLIBRARIES = libsugarext.la
 
-libsugarext_la_CFLAGS = 		\
-	-DHAVE_ALSA		\
-	$(EXT_CFLAGS)	\
+libsugarext_la_CFLAGS = \
+	-DHAVE_ALSA \
+	$(EXT_CFLAGS) \
 	$(WARN_CFLAGS)
 
 libsugarext_la_LDFLAGS = $(LDADD)
-libsugarext_la_LIBADD = $(EXT_LIBS) -lSM -lICE -lasound
+libsugarext_la_LIBADD = $(EXT_LIBS)
 
 libsugarext_la_SOURCES =		\
 	$(BUILT_SOURCES)		\
@@ -46,61 +56,24 @@ libsugarext_la_SOURCES =		\
 	gsm-session.h			\
 	gsm-xsmp.c			\
 	gsm-xsmp.h			\
+	sugar-clipboard.c		\
+	sugar-clipboard.h		\
+	sugar-fatattr.c			\
+	sugar-fatattr.h			\
 	sugar-grid.c			\
 	sugar-grid.h			\
 	sugar-cursor-tracker.c		\
 	sugar-cursor-tracker.h		\
-	sugar-gconf.c			\
-	sugar-gconf.h			\
 	sugar-gesture-grabber.c		\
 	sugar-gesture-grabber.h		\
 	sugar-key-grabber.c		\
 	sugar-key-grabber.h		\
-	sugar-wm.c			\
-	sugar-wm.h
-
-sugar_LTLIBRARIES = _sugarbaseext.la
-
-_sugarbaseext_la_CFLAGS = 		\
-	-DXDG_PREFIX=sugar_mime		\
-	$(WARN_CFLAGS)			\
-	$(EXT_CFLAGS)		\
-	$(PYTHON_INCLUDES)
+	sugar-wm.h			\
+	sugar-wm.c
 
 BUILT_SOURCES = 			\
 	sugar-marshal.c			\
 	sugar-marshal.h
-
-_sugarbaseext_la_LDFLAGS = -module -avoid-version
-_sugarbaseext_la_LIBADD = $(EXT_LIBS)
-_sugarbaseext_la_SOURCES = 	\
-	_sugarbaseextmodule.c	\
-	xdgmime.c 		\
-	xdgmime.h		\
-	xdgmimealias.c		\
-	xdgmimealias.h		\
-	xdgmimecache.c		\
-	xdgmimecache.h		\
-	xdgmimeglob.c 		\
-	xdgmimeglob.h 		\
-	xdgmimeint.c 		\
-	xdgmimeint.h 		\
-	xdgmimemagic.c  	\
-	xdgmimemagic.h		\
-	xdgmimeparent.c		\
-	xdgmimeparent.h
-
-nodist__sugarbaseext_la_SOURCES = _sugarbaseext.c
-
-_sugarbaseext.c: _sugarbaseext.defs _sugarbaseext.override
-
-.defs.c:
-	(cd $(srcdir)\
-	 && $(PYGTK_CODEGEN) \
-	    --override $*.override \
-	    --prefix py$* $*.defs) > gen-$*.c \
-	&& cp gen-$*.c $*.c \
-	&& rm -f gen-$*.c
 
 sugar-marshal.c: sugar-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=sugar_marshal \
@@ -110,12 +83,13 @@ sugar-marshal.h: sugar-marshal.list
 	$(GLIB_GENMARSHAL) --prefix=sugar_marshal \
 		$(srcdir)/sugar-marshal.list --header > sugar-marshal.h
 
-CLEANFILES = $(BUILT_SOURCES) _sugarbaseext.c
-EXTRA_DIST = sugar-marshal.list _sugarbaseext.override _sugarbaseext.defs
+CLEANFILES = $(BUILT_SOURCES)
+EXTRA_DIST = sugar-marshal.list
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS = SugarExt-1.0.gir
-INTROSPECTION_SCANNER_ARGS = --identifier-prefix=Sugar --symbol-prefix=sugar \
+INTROSPECTION_SCANNER_ARGS = \
+        --identifier-prefix=Sugar --symbol-prefix=sugar \
 	--identifier-prefix=EggSM --symbol-prefix=egg_sm \
 	--identifier-prefix=Gsm --symbol-prefix=gsm \
 	--identifier-prefix=Acme --symbol-prefix=acme \
@@ -135,21 +109,24 @@ SugarExt_1_0_gir_FILES = \
 	gsm-session.h \
 	gsm-xsmp.c \
 	gsm-xsmp.h \
+	sugar-clipboard.c \
+	sugar-clipboard.h \
+	sugar-fatattr.c	\
+	sugar-fatattr.h	\
 	sugar-cursor-tracker.c \
 	sugar-cursor-tracker.h \
 	sugar-gesture-grabber.c \
 	sugar-gesture-grabber.h \
 	sugar-key-grabber.c \
 	sugar-key-grabber.h \
-	sugar-gconf.c \
-	sugar-gconf.h \
 	sugar-grid.c \
 	sugar-grid.h \
-        sugar-wm.c    \
-        sugar-wm.h
+    sugar-wm.c \
+    sugar-wm.h
 
-SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0 GConf-2.0
-SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0 gconf-2.0
+SugarExt_1_0_gir: libsugarext.la
+SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
+SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
 
 girdir = $(datadir)/gir-1.0
