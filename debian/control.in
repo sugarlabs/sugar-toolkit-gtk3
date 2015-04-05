@@ -92,7 +92,7 @@ Description: GTK3-based Sugar toolkit - debugging symbols
  This package contains detached debugging symbols.
 
 Package: python-sugar3
-Architecture: any
+Architecture: all
 Depends: ${cdbs:Depends},
  ${misc:Depends},
  ${python:Depends}
