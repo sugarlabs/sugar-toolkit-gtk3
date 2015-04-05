@@ -1,3 +1,14 @@
+sugar-toolkit-gtk3 (0.104.1-2) experimental; urgency=medium
+
+  * Update package relations:
+    + Fix have libsugarext-dev depend on auto-resolved *-dev packages.
+    + Fix relax python-sugar3 to depend unversioned on gir* package.
+    + Fix tighten gir1.2-sugarext-1.0 to depend versioned on
+      libsugarext0: API is unstable.
+  * Fix mark python-sugar3 as architecture-independent.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 05 Apr 2015 21:08:58 +0200
+
 sugar-toolkit-gtk3 (0.104.1-1) experimental; urgency=medium
 
   * Update package relations:

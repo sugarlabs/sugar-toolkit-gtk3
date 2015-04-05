@@ -79,10 +79,9 @@ Package: libsugarext-dev
 Section: libdevel
 Architecture: any
 Depends: ${cdbs:Depends},
+ ${devlibs:Depends},
  ${misc:Depends},
- ${shlibs:Depends},
- libsugarext0 (= ${binary:Version}),
- gir1.2-sugarext-1.0 (= ${binary:Version})
+ libsugarext0 (= ${binary:Version})
 Description: GTK3-based Sugar toolkit - develelopment files
  Sugar is a desktop environment. It is conceived as a platform upon
  which children learn with Sugar Activities. The platform provides
@@ -116,12 +115,10 @@ Description: GTK3-based Sugar toolkit - debugging symbols
  This package contains detached debugging symbols.
 
 Package: python-sugar3
-Architecture: any
+Architecture: all
 Depends: ${cdbs:Depends},
  ${misc:Depends},
- ${python:Depends},
- ${shlibs:Depends},
- gir1.2-sugarext-1.0 (= ${binary:Version})
+ ${python:Depends}
 Recommends: ${cdbs:Recommends}
 Suggests: ${cdbs:Suggests}
 Provides: ${cdbs:Provides},
