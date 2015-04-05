@@ -96,8 +96,7 @@ Package: python-sugar3
 Architecture: any
 Depends: ${cdbs:Depends},
  ${misc:Depends},
- ${python:Depends},
- gir1.2-sugarext-1.0 (= ${binary:Version})
+ ${python:Depends}
 Recommends: ${cdbs:Recommends}
 Suggests: ${cdbs:Suggests}
 Provides: ${cdbs:Provides},
