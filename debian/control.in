@@ -58,8 +58,7 @@ Architecture: any
 Depends: ${cdbs:Depends},
  ${devlibs:Depends},
  ${misc:Depends},
- libsugarext0 (= ${binary:Version}),
- gir1.2-sugarext-1.0 (= ${binary:Version})
+ libsugarext0 (= ${binary:Version})
 Description: GTK3-based Sugar toolkit - develelopment files
  Sugar is a desktop environment. It is conceived as a platform upon
  which children learn with Sugar Activities. The platform provides
