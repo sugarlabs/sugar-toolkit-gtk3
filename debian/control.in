@@ -56,6 +56,7 @@ Package: libsugarext-dev
 Section: libdevel
 Architecture: any
 Depends: ${cdbs:Depends},
+ ${devlibs:Depends},
  ${misc:Depends},
  ${shlibs:Depends},
  libsugarext0 (= ${binary:Version}),
