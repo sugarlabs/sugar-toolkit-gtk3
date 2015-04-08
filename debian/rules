@@ -62,7 +62,7 @@ depends-gir = $(libpkg) (= $(DEB_VERSION))
 recommends = unzip, telepathy-mission-control-5 (>= 1:5.6), alsa-utils
 recommends +=, telepathy-gabble (>= 0.10), telepathy-salut (>= 0.4)
 recommends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0
-suggests = git-core, subversion, ttf-dejavu-extra
+suggests = git-core, subversion, ttf-dejavu-extra, ipython
 
 # Binary sugar-activity moved from sugar-tools-* to python-sugar3
 # (unneeded since Wheezy: can be dropped after Wheezy+1)
