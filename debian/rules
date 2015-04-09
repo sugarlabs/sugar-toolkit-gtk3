@@ -80,6 +80,10 @@ obsoletes = $(foreach ver,$(non-gtk3-branches),$(comma) sugar-tools-$(ver))
 CDBS_CONFLICTS_$(binpkg) = $(obsoletes)
 CDBS_REPLACES_$(binpkg) = $(obsoletes)
 
+# Avoid python-sugar3 depending too relaxed on its GIR
+#  * TODO: Drop when Stretch is stable
+CDBS_BREAKS_$(girpkg) = $(pythonpkg) (<< 0.104.1)
+
 # Multiarch quirks
 # (unneeded since Wheezy: can be dropped after Wheezy+1)
 CDBS_PREDEPENDS_$(libpkg) = $(if $(DEB_HOST_MULTIARCH),multiarch-support)

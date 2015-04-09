@@ -121,6 +121,7 @@ Architecture: any
 Depends: ${cdbs:Depends},
  ${gir:Depends},
  ${misc:Depends}
+Breaks: ${cdbs:Breaks}
 Description: GTK3-based Sugar toolkit - GObject introspection
  Sugar is a desktop environment. It is conceived as a platform upon
  which children learn with Sugar Activities. The platform provides
