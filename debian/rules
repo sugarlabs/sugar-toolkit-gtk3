@@ -74,7 +74,7 @@ CDBS_RECOMMENDS_$(pythonpkg) = $(recommends)
 CDBS_SUGGESTS_$(pythonpkg) = $(suggests)
 
 # Binary sugar-activity moved from sugar-tools-* to python-sugar3
-# (unneeded since Wheezy: can be dropped after Wheezy+1)
+#  * TODO: Drop when Jessie is stable
 non-gtk3-branches = 0.84 0.86 0.88 0.90 0.92 0.94
 obsoletes = $(foreach ver,$(non-gtk3-branches),$(comma) sugar-tools-$(ver))
 CDBS_CONFLICTS_$(binpkg) = $(obsoletes)
@@ -85,7 +85,7 @@ CDBS_REPLACES_$(binpkg) = $(obsoletes)
 CDBS_BREAKS_$(girpkg) = $(pythonpkg) (<< 0.104.1)
 
 # Multiarch quirks
-# (unneeded since Wheezy: can be dropped after Wheezy+1)
+#  * TODO: Drop when Jessie is stable
 CDBS_PREDEPENDS_$(libpkg) = $(if $(DEB_HOST_MULTIARCH),multiarch-support)
 DEB_CONFIGURE_EXTRA_FLAGS += --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH)
 
