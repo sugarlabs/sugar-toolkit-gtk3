@@ -8,8 +8,8 @@ Build-Depends: cdbs (>= 0.4.90~),
  autotools-dev,
  devscripts,
  python,
- python-all-dev,
- debhelper,
+ python-dev (>= 2.3.5-7),
+ debhelper (>= 9~),
  dh-buildinfo,
  libgtk-3-dev,
  libgdk-pixbuf2.0-dev,
@@ -144,6 +144,7 @@ Architecture: any
 Depends: ${cdbs:Depends},
  ${gir:Depends},
  ${misc:Depends}
+Breaks: ${cdbs:Breaks}
 Description: GTK3-based Sugar toolkit - GObject introspection
  Sugar is a desktop environment. It is conceived as a platform upon
  which children learn with Sugar Activities. The platform provides
