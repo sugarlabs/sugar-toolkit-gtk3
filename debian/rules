@@ -64,17 +64,17 @@ recommends +=, telepathy-gabble (>= 0.10), telepathy-salut (>= 0.4)
 recommends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0
 suggests = git, subversion, ipython
 
-# Binary sugar-activity moved from sugar-tools-* to python-sugar3
-# (unneeded since Wheezy: can be dropped after Wheezy+1)
-non-gtk3-branches = 0.84 0.86 0.88 0.90 0.92 0.94
-obsoletes = $(foreach ver,$(non-gtk3-branches),$(comma) sugar-tools-$(ver))
-
 CDBS_BUILD_DEPENDS +=, $(bdeps)
 CDBS_DEPENDS_$(pythonpkg) +=, $(depends)
 CDBS_DEPENDS_$(devpkg) = $(depends-dev)
 CDBS_DEPENDS_$(girpkg) = $(depends-gir)
 CDBS_RECOMMENDS_$(pythonpkg) = $(recommends)
 CDBS_SUGGESTS_$(pythonpkg) = $(suggests)
+
+# Binary sugar-activity moved from sugar-tools-* to python-sugar3
+# (unneeded since Wheezy: can be dropped after Wheezy+1)
+non-gtk3-branches = 0.84 0.86 0.88 0.90 0.92 0.94
+obsoletes = $(foreach ver,$(non-gtk3-branches),$(comma) sugar-tools-$(ver))
 CDBS_CONFLICTS_$(binpkg) = $(obsoletes)
 CDBS_REPLACES_$(binpkg) = $(obsoletes)
 
