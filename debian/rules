@@ -92,8 +92,9 @@ LDFLAGS += -Wl,-O1
 # link only when needed
 LDFLAGS += -Wl,--as-needed
 
-DEB_DH_INSTALL_ARGS_$(pythonpkg) = --autodest usr/bin usr/lib/python*
-DEB_DH_INSTALL_ARGS_$(girpkg) = usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0 usr/lib
+DEB_DH_INSTALL_ARGS_ALL = --autodest
+DEB_DH_INSTALL_ARGS_$(pythonpkg) = usr/bin usr/lib/python*
+DEB_DH_INSTALL_ARGS_$(girpkg) = usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0
 DEB_DH_INSTALL_ARGS_$(datapkg) = usr/share/locale
 
 # Drop created dir if empty to please lintian
