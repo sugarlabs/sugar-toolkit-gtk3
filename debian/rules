@@ -54,7 +54,7 @@ bdeps +=, linux-libc-dev [linux-any], hurd-dev [hurd-any]
 #  * TODO: relax dependencies for our own GIR when its API is stable
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0
 gir-deps += gconf-2.0 atspi-2.0
-python-deps = gi dbus cairo telepathy dateutil decorator
+python-deps = gi gi-cairo dbus cairo telepathy dateutil decorator
 depends = $(patsubst %,$(comma) python-%,$(python-deps))
 depends +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
 depends +=, gir1.2-sugarext-1.0 (>= $(DEB_VERSION))
