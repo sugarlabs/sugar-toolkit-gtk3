@@ -1,3 +1,11 @@
+sugar-toolkit-gtk3 (0.104.1-4) experimental; urgency=medium
+
+  * Fix Recommend telepathy-gabble-legacy or older telepathy-gabble (not
+    recent telepathy-gabble): Old Tubes API needed.
+    Thanks to Tincho.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 11 Apr 2015 03:08:09 +0200
+
 sugar-toolkit-gtk3 (0.104.1-3) experimental; urgency=medium
 
   * Bump debhelper compatibility level to 9: Needed for multiarch-
