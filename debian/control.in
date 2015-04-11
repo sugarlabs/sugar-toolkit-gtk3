@@ -59,7 +59,7 @@ Depends: ${cdbs:Depends},
  ${devlibs:Depends},
  ${misc:Depends},
  libsugarext0 (= ${binary:Version})
-Description: GTK3-based Sugar toolkit - develelopment files
+Description: GTK3-based Sugar toolkit - development files
  Sugar is a desktop environment. It is conceived as a platform upon
  which children learn with Sugar Activities. The platform provides
  mechanisms for collaboration, reflection, and exploration. Sugar
