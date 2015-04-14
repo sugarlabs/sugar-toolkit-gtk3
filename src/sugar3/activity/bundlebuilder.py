@@ -436,10 +436,10 @@ def start():
                               help="verbosity for the unit tests")
 
     dist_parser = subparsers.add_parser("dist_xo",
-                                         help="Create a xo bundle package")
-    dist_parser.add_argument("--no-fail", dest="no_fail", action="store_true",
-                             default=False,
-                             help="continue past failure when building xo file")
+                                        help="Create a xo bundle package")
+    dist_parser.add_argument(
+        "--no-fail", dest="no_fail", action="store_true", default=False,
+        help="continue past failure when building xo file")
 
     subparsers.add_parser("dist_source", help="Create a tar source package")
     subparsers.add_parser("build", help="Build generated files")
