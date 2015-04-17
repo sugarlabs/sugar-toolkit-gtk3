@@ -26,13 +26,13 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 stem = sugarext
 abi = 0
 lib = lib$(stem)
-libpkg = lib$(stem)$(abi)
-devpkg = lib$(stem)-dev
-girpkg = gir1.2-$(stem)-1.0
-datapkg = lib$(stem)-data
-#binpkg = sugar-activity
-binpkg = python-sugar3
-pythonpkg = python-sugar3
+pkg-lib = lib$(stem)$(abi)
+pkg-dev = lib$(stem)-dev
+pkg-gir = gir1.2-$(stem)-1.0
+pkg-data = lib$(stem)-data
+#pkg-bin = sugar-activity
+pkg-bin = python-sugar3
+pkg-python = python-sugar3
 
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
@@ -60,8 +60,8 @@ depends +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
 depends +=, gir1.2-sugarext-1.0 (>= $(DEB_VERSION))
 depends +=, gir1.2-sugarext-1.0 (<< $(DEB_VERSION).1~)
 depends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0 | gir1.2-webkit-3.0
-depends-dev = $(girpkg) (= $(DEB_VERSION))
-depends-gir = $(libpkg) (= $(DEB_VERSION))
+depends-dev = $(pkg-gir) (= $(DEB_VERSION))
+depends-gir = $(pkg-lib) (= $(DEB_VERSION))
 recommends = unzip, telepathy-mission-control-5 (>= 1:5.6), alsa-utils
 recommends +=, telepathy-gabble-legacy | telepathy-gabble (<< 0.17.25)
 recommends +=, telepathy-salut (>= 0.4)
@@ -69,26 +69,26 @@ recommends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0
 suggests = git, subversion, ipython
 
 CDBS_BUILD_DEPENDS +=, $(bdeps)
-CDBS_DEPENDS_$(pythonpkg) +=, $(depends)
-CDBS_DEPENDS_$(devpkg) = $(depends-dev)
-CDBS_DEPENDS_$(girpkg) = $(depends-gir)
-CDBS_RECOMMENDS_$(pythonpkg) = $(recommends)
-CDBS_SUGGESTS_$(pythonpkg) = $(suggests)
+CDBS_DEPENDS_$(pkg-python) +=, $(depends)
+CDBS_DEPENDS_$(pkg-dev) = $(depends-dev)
+CDBS_DEPENDS_$(pkg-gir) = $(depends-gir)
+CDBS_RECOMMENDS_$(pkg-python) = $(recommends)
+CDBS_SUGGESTS_$(pkg-python) = $(suggests)
 
 # Binary sugar-activity moved from sugar-tools-* to python-sugar3
 #  * TODO: Drop when Jessie is stable
 non-gtk3-branches = 0.84 0.86 0.88 0.90 0.92 0.94
 obsoletes = $(foreach ver,$(non-gtk3-branches),$(comma) sugar-tools-$(ver))
-CDBS_CONFLICTS_$(binpkg) = $(obsoletes)
-CDBS_REPLACES_$(binpkg) = $(obsoletes)
+CDBS_CONFLICTS_$(pkg-bin) = $(obsoletes)
+CDBS_REPLACES_$(pkg-bin) = $(obsoletes)
 
 # Avoid python-sugar3 depending too relaxed on its GIR
 #  * TODO: Drop when Stretch is stable
-CDBS_BREAKS_$(girpkg) = $(pythonpkg) (<< 0.104.1)
+CDBS_BREAKS_$(pkg-gir) = $(pkg-python) (<< 0.104.1)
 
 # Multiarch quirks
 #  * TODO: Drop when Jessie is stable
-CDBS_PREDEPENDS_$(libpkg) = $(if $(DEB_HOST_MULTIARCH),multiarch-support)
+CDBS_PREDEPENDS_$(pkg-lib) = $(if $(DEB_HOST_MULTIARCH),multiarch-support)
 DEB_CONFIGURE_EXTRA_FLAGS += --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH)
 
 #DEB_AUTOMAKE_ARGS = --add-missing --copy
@@ -101,19 +101,19 @@ LDFLAGS += -Wl,-O1
 LDFLAGS += -Wl,--as-needed
 
 DEB_DH_INSTALL_ARGS_ALL = --autodest
-DEB_DH_INSTALL_ARGS_$(pythonpkg) = usr/bin usr/lib/python*
-DEB_DH_INSTALL_ARGS_$(girpkg) = usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0
-DEB_DH_INSTALL_ARGS_$(datapkg) = usr/share/locale
+DEB_DH_INSTALL_ARGS_$(pkg-python) = usr/bin usr/lib/python*
+DEB_DH_INSTALL_ARGS_$(pkg-gir) = usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0
+DEB_DH_INSTALL_ARGS_$(pkg-data) = usr/share/locale
 
 # Drop created dir if empty to please lintian
-binary-post-install/$(datapkg)::
+binary-post-install/$(pkg-data)::
 	rmdir --ignore-fail-on-non-empty --parents $(DEB_DESTDIR)/usr/share/locale
 
 # Let d-shlibs calculate development package dependencies
 #  and handle shared library install
 CDBS_BUILD_DEPENDS += , d-shlibs (>= 0.48)
-binary-post-install/$(libpkg):: debian/stamp-local-shlibs-$(lib)
-debian/stamp-local-shlibs-$(lib): binary-install/$(libpkg) debian/stamp-local-strip-la
+binary-post-install/$(pkg-lib):: debian/stamp-local-shlibs-$(lib)
+debian/stamp-local-shlibs-$(lib): binary-install/$(pkg-lib) debian/stamp-local-strip-la
 	d-shlibmove --commit \
 		--multiarch \
 		--exclude-la --exclude-a \
@@ -131,8 +131,8 @@ clean::
 	rm -f debian/stamp-local-shlibs-$(lib)
 
 # avoid unneeded .la file
-binary-post-install/$(pythonpkg):: debian/stamp-local-strip-la
-debian/stamp-local-strip-la: binary-install/$(pythonpkg)
+binary-post-install/$(pkg-python):: debian/stamp-local-strip-la
+debian/stamp-local-strip-la: binary-install/$(pkg-python)
 	find debian -type f -name '*.la' -delete
 	touch $@
 clean::
@@ -140,7 +140,7 @@ clean::
 
 # Ensure proper hash-bang in Python script (Python Policy 0.9 §3.1)
 #  * TODO: drop cdbs_python_binary fallback when cdbs 0.5 is stable
-binary-fixup/$(pythonpkg)::
+binary-fixup/$(pkg-python)::
 	egrep -r -l -Z '^#! ?/usr/bin/(env )?python[[:print:]]*$$' \
 		debian/$(cdbs_curpkg)/usr/bin/* \
 		| xargs -r -0 perl -pi -e 's,^#! ?/usr/bin/(env )?python[[:print:]]*$$,#!/usr/bin/$(strip $(or $(cdbs_curpythonruntime),$(cdbs_python_binary))),'
