@@ -1,3 +1,14 @@
+sugar-toolkit-gtk3 (0.104.1-5) unstable; urgency=medium
+
+  * Move packaging to Debian Sugar Team.
+  * Update package relations:
+    + Fix depend on python-gi-cairo.
+      Thanks to Martin Abente and James Cameron.
+  * Fix typo in libsugarext-dev short description.
+    Closes: bug#747026. Thanks to Anders Jonsson.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 17 Apr 2015 10:34:39 +0200
+
 sugar-toolkit-gtk3 (0.104.1-4) experimental; urgency=medium
 
   * Fix Recommend telepathy-gabble-legacy or older telepathy-gabble (not
