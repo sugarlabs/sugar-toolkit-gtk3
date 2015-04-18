@@ -6,7 +6,7 @@ Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Santiago Ruano Rincón <santiago@debian.org>
 Build-Depends: @cdbs@
 Standards-Version: 3.9.6
-Vcs-Git: git://git.debian.org/pkg-sugar/sugar-toolkit-gtk3
+Vcs-Git: git://anonscm.debian.org/pkg-sugar/sugar-toolkit-gtk3
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-sugar/sugar-toolkit-gtk3.git
 Homepage: http://wiki.sugarlabs.org/go/Sugar
 
