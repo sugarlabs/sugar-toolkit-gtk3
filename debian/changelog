@@ -1,3 +1,13 @@
+sugar-toolkit-gtk3 (0.104.1-6) unstable; urgency=medium
+
+  * Fix use canonical URL in Vcs-Git field.
+  * Update package relations:
+    + Fix stop suggest subversion: Unused upstream since ~2008.
+    + Fix explicitly recommend shared-mime-info.
+  * Modernize long descriptions.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 20 Apr 2015 21:38:33 +0200
+
 sugar-toolkit-gtk3 (0.104.1-5) unstable; urgency=medium
 
   * Move packaging to Debian Sugar Team.

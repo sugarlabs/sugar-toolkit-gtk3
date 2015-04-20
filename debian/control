@@ -29,7 +29,7 @@ Build-Depends: cdbs (>= 0.4.90~),
  hurd-dev [hurd-any],
  d-shlibs (>= 0.48)
 Standards-Version: 3.9.6
-Vcs-Git: git://git.debian.org/pkg-sugar/sugar-toolkit-gtk3
+Vcs-Git: git://anonscm.debian.org/pkg-sugar/sugar-toolkit-gtk3
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-sugar/sugar-toolkit-gtk3.git
 Homepage: http://wiki.sugarlabs.org/go/Sugar
 
@@ -44,11 +44,10 @@ Recommends: libsugarext-data (= ${source:Version})
 Pre-Depends: ${cdbs:Pre-Depends},
  ${misc:Pre-Depends}
 Description: GTK3-based Sugar toolkit - runtime library
- Sugar is a desktop environment. It is conceived as a platform upon
- which children learn with Sugar Activities. The platform provides
- mechanisms for collaboration, reflection, and exploration. Sugar
- Activities cover a broad range of applications: browsing, drawing,
- composing, writing, programming, etc.
+ Sugar Learning Platform promotes collaborative learning through Sugar
+ Activities that encourage critical thinking, the heart of a quality
+ education.  Designed from the ground up especially for children, Sugar
+ offers an alternative to traditional “office-desktop” software.
  .
  The sugar3 library contains a set of widgets to build HIG compliant
  applications and interfaces to interact with system services like
@@ -62,11 +61,10 @@ Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}
 Description: GTK3-based Sugar toolkit - common files
- Sugar is a desktop environment. It is conceived as a platform upon
- which children learn with Sugar Activities. The platform provides
- mechanisms for collaboration, reflection, and exploration. Sugar
- Activities cover a broad range of applications: browsing, drawing,
- composing, writing, programming, etc.
+ Sugar Learning Platform promotes collaborative learning through Sugar
+ Activities that encourage critical thinking, the heart of a quality
+ education.  Designed from the ground up especially for children, Sugar
+ offers an alternative to traditional “office-desktop” software.
  .
  The sugar3 library contains a set of widgets to build HIG compliant
  applications and interfaces to interact with system services like
@@ -83,11 +81,10 @@ Depends: ${cdbs:Depends},
  ${misc:Depends},
  libsugarext0 (= ${binary:Version})
 Description: GTK3-based Sugar toolkit - development files
- Sugar is a desktop environment. It is conceived as a platform upon
- which children learn with Sugar Activities. The platform provides
- mechanisms for collaboration, reflection, and exploration. Sugar
- Activities cover a broad range of applications: browsing, drawing,
- composing, writing, programming, etc.
+ Sugar Learning Platform promotes collaborative learning through Sugar
+ Activities that encourage critical thinking, the heart of a quality
+ education.  Designed from the ground up especially for children, Sugar
+ offers an alternative to traditional “office-desktop” software.
  .
  The sugar3 library contains a set of widgets to build HIG compliant
  applications and interfaces to interact with system services like
@@ -102,11 +99,10 @@ Architecture: any
 Depends: ${misc:Depends},
  libsugarext0 (= ${binary:Version}),
 Description: GTK3-based Sugar toolkit - debugging symbols
- Sugar is a desktop environment. It is conceived as a platform upon
- which children learn with Sugar Activities. The platform provides
- mechanisms for collaboration, reflection, and exploration. Sugar
- Activities cover a broad range of applications: browsing, drawing,
- composing, writing, programming, etc.
+ Sugar Learning Platform promotes collaborative learning through Sugar
+ Activities that encourage critical thinking, the heart of a quality
+ education.  Designed from the ground up especially for children, Sugar
+ offers an alternative to traditional “office-desktop” software.
  .
  The sugar3 library contains a set of widgets to build HIG compliant
  applications and interfaces to interact with system services like
@@ -126,11 +122,10 @@ Provides: ${cdbs:Provides},
 Conflicts: ${cdbs:Conflicts}
 Replaces: ${cdbs:Replaces}
 Description: GTK3-based Sugar toolkit - Python bindings
- Sugar is a desktop environment. It is conceived as a platform upon
- which children learn with Sugar Activities. The platform provides
- mechanisms for collaboration, reflection, and exploration. Sugar
- Activities cover a broad range of applications: browsing, drawing,
- composing, writing, programming, etc.
+ Sugar Learning Platform promotes collaborative learning through Sugar
+ Activities that encourage critical thinking, the heart of a quality
+ education.  Designed from the ground up especially for children, Sugar
+ offers an alternative to traditional “office-desktop” software.
  .
  The sugar3 library contains a set of widgets to build HIG compliant
  applications and interfaces to interact with system services like
@@ -146,11 +141,10 @@ Depends: ${cdbs:Depends},
  ${misc:Depends}
 Breaks: ${cdbs:Breaks}
 Description: GTK3-based Sugar toolkit - GObject introspection
- Sugar is a desktop environment. It is conceived as a platform upon
- which children learn with Sugar Activities. The platform provides
- mechanisms for collaboration, reflection, and exploration. Sugar
- Activities cover a broad range of applications: browsing, drawing,
- composing, writing, programming, etc.
+ Sugar Learning Platform promotes collaborative learning through Sugar
+ Activities that encourage critical thinking, the heart of a quality
+ education.  Designed from the ground up especially for children, Sugar
+ offers an alternative to traditional “office-desktop” software.
  .
  The sugar3 library contains a set of widgets to build HIG compliant
  applications and interfaces to interact with system services like
