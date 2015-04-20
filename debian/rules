@@ -49,6 +49,7 @@ bdeps +=, linux-libc-dev [linux-any], hurd-dev [hurd-any]
 # Needed (always/often/seldom) at runtime
 #  * alsa-utils (mayby still) needed to unmute devices at boot (bug#581504)
 #  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
+#  * shared-mime-info (update-mime-database) used in sugar.bundle.bundlebuilder
 #  * unzip used in sugar3.bundle.bundle
 #  * git used in sugar3.activity.bundlebuilder
 #  * legacy/older telepathy-gabble needed for its Tubes ABI
@@ -65,7 +66,7 @@ depends-dev = $(pkg-gir) (= $(DEB_VERSION))
 depends-gir = $(pkg-lib) (= $(DEB_VERSION))
 recommends = unzip, telepathy-mission-control-5 (>= 1:5.6), alsa-utils
 recommends +=, telepathy-gabble-legacy | telepathy-gabble (<< 0.17.25)
-recommends +=, telepathy-salut (>= 0.4)
+recommends +=, telepathy-salut (>= 0.4), shared-mime-info
 recommends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0
 suggests = git, ipython
 
