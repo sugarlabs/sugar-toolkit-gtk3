@@ -49,7 +49,8 @@ bdeps +=, linux-libc-dev [linux-any], hurd-dev [hurd-any]
 # Needed (always/often/seldom) at runtime
 #  * alsa-utils (mayby still) needed to unmute devices at boot (bug#581504)
 #  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
-#  * zip, git and subversion are used in .xo format packaging routines
+#  * unzip used in sugar3.bundle.bundle
+#  * git used in sugar3.activity.bundlebuilder
 #  * legacy/older telepathy-gabble needed for its Tubes ABI
 #  * TODO: relax dependencies for our own GIR when its API is stable
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0
@@ -66,7 +67,7 @@ recommends = unzip, telepathy-mission-control-5 (>= 1:5.6), alsa-utils
 recommends +=, telepathy-gabble-legacy | telepathy-gabble (<< 0.17.25)
 recommends +=, telepathy-salut (>= 0.4)
 recommends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0
-suggests = git, subversion, ipython
+suggests = git, ipython
 
 CDBS_BUILD_DEPENDS +=, $(bdeps)
 CDBS_DEPENDS_$(pkg-python) +=, $(depends)
