@@ -20,7 +20,7 @@ Depends: ${cdbs:Depends},
 Recommends: libsugarext-data (= ${source:Version})
 Pre-Depends: ${cdbs:Pre-Depends},
  ${misc:Pre-Depends}
-Description: GTK3-based Sugar toolkit - runtime library
+Description: Sugar Learning Platform - toolkit runtime library
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
  education.  Designed from the ground up especially for children, Sugar
@@ -37,7 +37,7 @@ Section: misc
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}
-Description: GTK3-based Sugar toolkit - common files
+Description: Sugar Learning Platform - toolkit common files
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
  education.  Designed from the ground up especially for children, Sugar
@@ -57,7 +57,7 @@ Depends: ${cdbs:Depends},
  ${devlibs:Depends},
  ${misc:Depends},
  libsugarext0 (= ${binary:Version})
-Description: GTK3-based Sugar toolkit - development files
+Description: Sugar Learning Platform - toolkit development files
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
  education.  Designed from the ground up especially for children, Sugar
@@ -75,7 +75,7 @@ Priority: extra
 Architecture: any
 Depends: ${misc:Depends},
  libsugarext0 (= ${binary:Version}),
-Description: GTK3-based Sugar toolkit - debugging symbols
+Description: Sugar Learning Platform - toolkit debugging symbols
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
  education.  Designed from the ground up especially for children, Sugar
@@ -98,7 +98,7 @@ Provides: ${cdbs:Provides},
  ${python:Provides}
 Conflicts: ${cdbs:Conflicts}
 Replaces: ${cdbs:Replaces}
-Description: GTK3-based Sugar toolkit - Python bindings
+Description: Sugar Learning Platform - toolkit Python bindings
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
  education.  Designed from the ground up especially for children, Sugar
@@ -117,7 +117,7 @@ Depends: ${cdbs:Depends},
  ${gir:Depends},
  ${misc:Depends}
 Breaks: ${cdbs:Breaks}
-Description: GTK3-based Sugar toolkit - GObject introspection
+Description: Sugar Learning Platform - toolkit GObject introspection
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
  education.  Designed from the ground up especially for children, Sugar
