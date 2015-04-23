@@ -34,6 +34,7 @@ from sugar3.bundle.bundleversion import InvalidVersionError
 
 
 class ContentBundle(Bundle):
+
     """A Sugar content bundle
 
     See http://wiki.laptop.org/go/Content_bundles for details
@@ -97,7 +98,7 @@ class ContentBundle(Bundle):
             self._icon = cp.get(section, 'icon')
 
         # Compatibility with old content bundles
-        if not self._global_name is None \
+        if self._global_name is not None \
                 and cp.has_option(section, 'bundle_class'):
             self._global_name = cp.get(section, 'bundle_class')
 

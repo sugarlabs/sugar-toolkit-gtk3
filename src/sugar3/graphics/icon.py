@@ -257,7 +257,7 @@ class _IconBuffer(object):
         # document-generic. If that doesn't work out, bail.
         icon_width = None
         for (file_name, icon_name) in ((self.file_name, self.icon_name),
-                                      (None, 'document-generic')):
+                                       (None, 'document-generic')):
             icon_info = self._get_icon_info(file_name, icon_name)
             if icon_info.file_name is None:
                 return None
@@ -337,7 +337,7 @@ class Icon(Gtk.Image):
 
     __gtype_name__ = 'SugarIcon'
 
-    #FIXME: deprecate icon_size
+    # FIXME: deprecate icon_size
     _MENU_SIZES = (Gtk.IconSize.MENU, Gtk.IconSize.DND,
                    Gtk.IconSize.SMALL_TOOLBAR, Gtk.IconSize.BUTTON)
 
@@ -350,7 +350,7 @@ class Icon(Gtk.Image):
         self._alpha = 1.0
         self._scale = 1.0
 
-        #FIXME: deprecate icon_size
+        # FIXME: deprecate icon_size
         if 'icon_size' in kwargs:
             logging.warning("icon_size is deprecated. Use pixel_size instead.")
 
@@ -372,7 +372,7 @@ class Icon(Gtk.Image):
         if self._buffer.file_name != self.props.file:
             self._buffer.file_name = self.props.file
 
-        #FIXME: deprecate icon_size
+        # FIXME: deprecate icon_size
         pixel_size = None
         if self.props.pixel_size == -1:
             if self.props.icon_size in self._MENU_SIZES:
@@ -434,9 +434,9 @@ class Icon(Gtk.Image):
 
         allocation = self.get_allocation()
         x = math.floor(xpad +
-                      (allocation.width - requisition.width) * xalign)
+                       (allocation.width - requisition.width) * xalign)
         y = math.floor(ypad +
-                      (allocation.height - requisition.height) * yalign)
+                       (allocation.height - requisition.height) * yalign)
 
         if self._scale != 1.0:
             cr.scale(self._scale, self._scale)
@@ -513,6 +513,7 @@ class Icon(Gtk.Image):
 
 
 class EventIcon(Gtk.EventBox):
+
     """
     An Icon class that provides access to mouse events and that can act as a
     cursor-positioned palette invoker.
@@ -719,6 +720,7 @@ class EventIcon(Gtk.EventBox):
 
 
 class CanvasIcon(EventIcon):
+
     """
     An EventIcon with active and prelight states, and a styleable
     background.
