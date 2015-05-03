@@ -37,6 +37,10 @@ pkg-python = python-sugar3
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/glucose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.xz
 
+# Build-depend unversioned on debhelper
+#  TODO: Drop when adopted in cdbs
+CDBS_BUILD_DEPENDS_rules_debhelper_v9 = debhelper
+
 # Needed by upstream build process
 #  * linux-libc-dev/hurd-dev needed by sugar-fatattr
 dev-bdeps = gtk-3 gdk-pixbuf2.0 sm ice rsvg2 xfixes xi x11
