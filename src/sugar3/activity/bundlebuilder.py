@@ -37,7 +37,7 @@ from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
 
 
-IGNORE_DIRS = ['dist', '.git']
+IGNORE_DIRS = ['dist', '.git', 'screenshots']
 IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
 
 
@@ -188,7 +188,22 @@ class Packager(object):
                               IGNORE_DIRS, IGNORE_FILES)
         if stdout:
             # pylint: disable=E1103
-            return [path.strip() for path in stdout.strip('\n').split('\n')]
+            git_output = [path.strip() for path in
+                          stdout.strip('\n').split('\n')]
+            files = []
+            for line in git_output:
+                ignore = False
+                for directory in IGNORE_DIRS:
+                    if line.startswith(directory + '/'):
+                        ignore = True
+                        break
+                if not ignore:
+                    files.append(line)
+
+            for pattern in IGNORE_FILES:
+                files = [f for f in files if not fnmatch(f, pattern)]
+
+            return files
         else:
             return list_files(self.config.source_dir,
                               IGNORE_DIRS, IGNORE_FILES)
