@@ -169,6 +169,7 @@ class Packager(object):
             os.mkdir(self.config.dist_dir)
 
     def get_files_in_git(self):
+        git_ls = None
         try:
             git_ls = subprocess.Popen(['git', 'ls-files'],
                                       stdout=subprocess.PIPE,
@@ -176,37 +177,34 @@ class Packager(object):
         except OSError:
             logging.warn('Packager: git is not installed, '
                          'fall back to filtered list')
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
 
-        stdout, _ = git_ls.communicate()
-        if git_ls.returncode:
-            # Fall back to filtered list
-            logging.warn('Packager: this is not a git repository, '
-                         'fall back to filtered list')
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
-        if stdout:
-            # pylint: disable=E1103
-            git_output = [path.strip() for path in
-                          stdout.strip('\n').split('\n')]
-            files = []
-            for line in git_output:
-                ignore = False
-                for directory in IGNORE_DIRS:
-                    if line.startswith(directory + '/'):
-                        ignore = True
-                        break
-                if not ignore:
-                    files.append(line)
+        if git_ls is not None:
+            stdout, _ = git_ls.communicate()
+            if git_ls.returncode:
+                # Fall back to filtered list
+                logging.warn('Packager: this is not a git repository, '
+                             'fall back to filtered list')
+            elif stdout:
+                # pylint: disable=E1103
+                git_output = [path.strip() for path in
+                              stdout.strip('\n').split('\n')]
+                files = []
+                for line in git_output:
+                    ignore = False
+                    for directory in IGNORE_DIRS:
+                        if line.startswith(directory + '/'):
+                            ignore = True
+                            break
+                    if not ignore:
+                        files.append(line)
 
-            for pattern in IGNORE_FILES:
-                files = [f for f in files if not fnmatch(f, pattern)]
+                for pattern in IGNORE_FILES:
+                    files = [f for f in files if not fnmatch(f, pattern)]
 
-            return files
-        else:
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
+                return files
+
+        return list_files(self.config.source_dir,
+                          IGNORE_DIRS, IGNORE_FILES)
 
 
 class XOPackager(Packager):
