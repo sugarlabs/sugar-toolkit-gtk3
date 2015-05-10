@@ -34,12 +34,13 @@ class Animator(GObject.GObject):
         'completed': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
-    def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO):
+    def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO, widget=None):
         GObject.GObject.__init__(self)
         self._animations = []
         self._duration = duration
         self._interval = 1.0 / fps
         self._easing = easing
+        self._widget = widget
         self._timeout_sid = 0
         self._start_time = None
 
@@ -55,16 +56,25 @@ class Animator(GObject.GObject):
             self.stop()
 
         self._start_time = time.time()
-        self._timeout_sid = GLib.timeout_add(
-            int(self._interval * 1000), self._next_frame_cb)
+        if hasattr(self._widget, 'add_tick_callback'):
+            self._timeout_sid = self._widget.add_tick_callback(
+                self._next_frame_cb, None)
+        else:
+            self._timeout_sid = GLib.timeout_add(
+                int(self._interval * 1000), self._next_frame_cb)
 
     def stop(self):
-        if self._timeout_sid:
+        if self._timeout_sid and \
+           not hasattr(self._widget, 'add_tick_callback'):
             GObject.source_remove(self._timeout_sid)
             self._timeout_sid = 0
             self.emit('completed')
+        if self._timeout_sid and hasattr(self._widget, 'add_tick_callback'):
+            self._widget.remove_tick_callback(self._timeout_sid)
+            self._timeout_sid = 0
+            self.emit('completed')
 
-    def _next_frame_cb(self):
+    def _next_frame_cb(self, *args):
         current_time = min(self._duration, time.time() - self._start_time)
         current_time = max(current_time, 0.0)
 
