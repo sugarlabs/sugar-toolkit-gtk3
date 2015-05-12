@@ -80,6 +80,5 @@ class PowerManager():
         try:
             os.unlink(self._path)
         except OSError:
-            logging.error("Inhibit Suspend: Could not delete file %s",
-                          self._path)
+            pass
         self._suspend_inhibit_counter = 0
