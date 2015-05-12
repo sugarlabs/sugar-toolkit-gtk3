@@ -38,7 +38,10 @@ class PowerManager():
 
     def __init__(self):
         self._suspend_inhibit_counter = 0
-        self._path = os.path.join(_POWERD_INHIBIT_DIR, str(os.getpid()))
+        if os.path.exists(_POWERD_INHIBIT_DIR):
+            self._path = os.path.join(_POWERD_INHIBIT_DIR, str(os.getpid()))
+        else:
+            self._path = None
 
     def __del__(self):
         self._remove_flag_file()
@@ -47,10 +50,7 @@ class PowerManager():
         return True
 
     def inhibit_suspend(self):
-        if not os.path.exists(_POWERD_INHIBIT_DIR):
-            return
-
-        if self._suspend_inhibit_counter == 0:
+        if self._path and self._suspend_inhibit_counter == 0:
             try:
                 with open(self._path, 'w') as flag_file:
                     flag_file.write('')
@@ -77,8 +77,9 @@ class PowerManager():
         self._remove_flag_file()
 
     def _remove_flag_file(self):
-        try:
-            os.unlink(self._path)
-        except OSError:
-            pass
+        if self._path:
+            try:
+                os.unlink(self._path)
+            except OSError:
+                pass
         self._suspend_inhibit_counter = 0
