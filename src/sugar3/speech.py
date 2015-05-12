@@ -18,7 +18,6 @@ import os
 import logging
 from gettext import gettext as _
 
-from gi.repository.GLib import GError
 from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -27,7 +26,10 @@ from gi.repository import GObject
 _HAS_GST = True
 try:
     from gi.repository import Gst
+    Gst.init(None)
+    Gst.parse_launch('espeak')
 except:
+    logging.error('Gst or the espeak plugin is not installed in the system.')
     _HAS_GST = False
 
 from sugar3 import power
@@ -116,24 +118,6 @@ translated_espeak_voices = {
 }
 
 
-def _has_espeak_module():
-    try:
-        Gst.parse_launch('espeak')
-    except GError:
-        logging.error('The speech plugin is not installed in the system.')
-        return False
-    return True
-
-
-def _check_modules():
-    if not _HAS_GST:
-        logging.error('GST is not installed in the system.')
-        return False
-    if not _has_espeak_module():
-        return False
-    return True
-
-
 class SpeechManager(GObject.GObject):
 
     __gtype_name__ = 'SpeechManager'
@@ -169,7 +153,7 @@ class SpeechManager(GObject.GObject):
         self.restore()
 
     def enabled(self):
-        return _check_modules()
+        return _HAS_GST
 
     def _update_state(self, player, signal):
         self._is_playing = (signal == 'play')
@@ -277,7 +261,6 @@ class _GstSpeechPlayer(GObject.GObject):
     }
 
     def __init__(self):
-        Gst.init(None)
         GObject.GObject.__init__(self)
         self._pipeline = None
         self._all_voices = None
