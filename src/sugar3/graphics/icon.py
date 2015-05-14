@@ -837,6 +837,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._prelit_stroke_color = None
         self._active_state = False
         self._palette_invoker = CellRendererInvoker()
+        self._cached_offsets = None
 
         Gtk.CellRenderer.__init__(self)
 
@@ -924,6 +925,8 @@ class CellRendererIcon(Gtk.CellRenderer):
             self._buffer.width = value
             self._buffer.height = value
 
+            self._cached_offsets = None
+
     size = GObject.property(type=object, setter=set_size)
 
     def do_get_size(self, widget, cell_area, x_offset=None, y_offset=None,
@@ -942,8 +945,16 @@ class CellRendererIcon(Gtk.CellRenderer):
 
             xoffset = max(xoffset * (cell_area.width - width), 0)
             yoffset = max(self.props.yalign * (cell_area.height - height), 0)
+            self._cached_offsets = xoffset, yoffset
 
         return xoffset, yoffset, width, height
+
+    def _get_offsets(self, widget, cell_area):
+        if self._cached_offsets is not None:
+            return self._cached_offsets
+
+        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
+        return xoffset, yoffset
 
     def do_activate(self, event, widget, path, background_area, cell_area,
                     flags):
@@ -983,7 +994,14 @@ class CellRendererIcon(Gtk.CellRenderer):
         context.save()
         context.add_class("sugar-icon-cell")
 
-        pointer_inside = self._point_in_cell_renderer(widget)
+        def is_pointer_inside():
+            # widget is the treeview
+            x, y = widget.get_pointer()
+            x, y = widget.convert_widget_to_bin_window_coords(x, y)
+            return ((cell_area.x <= x <= cell_area.x + cell_area.width)
+                    and (cell_area.y <= y <= cell_area.y + cell_area.height))
+
+        pointer_inside = is_pointer_inside()
 
         # The context will have prelight state if the mouse pointer is
         # in the entire row, but we want that state if the pointer is
@@ -998,9 +1016,6 @@ class CellRendererIcon(Gtk.CellRenderer):
         Gtk.render_background(
             context, cr, background_area.x, background_area.y,
             background_area.width, background_area.height)
-
-        Gtk.render_frame(context, cr, background_area.x, background_area.y,
-                         background_area.width, background_area.height)
 
         if self._xo_color is not None:
             stroke_color = self._xo_color.get_stroke_color()
@@ -1029,7 +1044,7 @@ class CellRendererIcon(Gtk.CellRenderer):
         if surface is None:
             return
 
-        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
+        xoffset, yoffset = self._get_offsets(widget, cell_area)
 
         x = cell_area.x + xoffset
         y = cell_area.y + yoffset
