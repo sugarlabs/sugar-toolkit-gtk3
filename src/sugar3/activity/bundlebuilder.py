@@ -37,7 +37,7 @@ from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
 
 
-IGNORE_DIRS = ['dist', '.git']
+IGNORE_DIRS = ['dist', '.git', 'screenshots']
 IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
 
 
@@ -173,25 +173,37 @@ class Packager(object):
             git_ls = subprocess.Popen(['git', 'ls-files'],
                                       stdout=subprocess.PIPE,
                                       cwd=self.config.source_dir)
+
+            stdout, _ = git_ls.communicate()
+            if git_ls.returncode:
+                # Fall back to filtered list
+                logging.warn('Packager: this is not a git repository, '
+                             'fall back to filtered list')
+            elif stdout:
+                # pylint: disable=E1103
+                git_output = [path.strip() for path in
+                              stdout.strip('\n').split('\n')]
+                files = []
+                for line in git_output:
+                    ignore = False
+                    for directory in IGNORE_DIRS:
+                        if line.startswith(directory + '/'):
+                            ignore = True
+                            break
+                    if not ignore:
+                        files.append(line)
+
+                for pattern in IGNORE_FILES:
+                    files = [f for f in files if not fnmatch(f, pattern)]
+
+                return files
+
         except OSError:
             logging.warn('Packager: git is not installed, '
                          'fall back to filtered list')
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
 
-        stdout, _ = git_ls.communicate()
-        if git_ls.returncode:
-            # Fall back to filtered list
-            logging.warn('Packager: this is not a git repository, '
-                         'fall back to filtered list')
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
-        if stdout:
-            # pylint: disable=E1103
-            return [path.strip() for path in stdout.strip('\n').split('\n')]
-        else:
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
+        return list_files(self.config.source_dir,
+                          IGNORE_DIRS, IGNORE_FILES)
 
 
 class XOPackager(Packager):
