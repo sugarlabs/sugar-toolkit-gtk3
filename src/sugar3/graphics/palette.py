@@ -189,7 +189,8 @@ class Palette(PaletteWindow):
 
     def __map_cb(self, *args):
         # Fixes #4463
-        self._widget.present()
+        if hasattr(self._widget, 'present'):
+            self._widget.present()
 
     def __destroy_cb(self, palette):
         self._secondary_anim.stop()
