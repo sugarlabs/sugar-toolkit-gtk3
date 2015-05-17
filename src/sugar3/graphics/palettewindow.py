@@ -113,7 +113,7 @@ class _PaletteMenuWidget(Gtk.Menu):
     def set_invoker(self, invoker):
         pass
 
-    def _position(self, widget, data):
+    def _position(self, widget, *data):
         return self._popup_position[0], self._popup_position[1], False
 
     def popup(self, invoker):
