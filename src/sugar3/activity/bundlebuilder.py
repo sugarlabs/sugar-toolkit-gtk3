@@ -253,7 +253,7 @@ class Installer(Packager):
         Packager.__init__(self, builder.config)
         self.builder = builder
 
-    def install(self, prefix):
+    def install(self, prefix, disable_update_mimedb=False):
         self.builder.build()
 
         activity_path = os.path.join(prefix, 'share', 'sugar', 'activities',
@@ -285,7 +285,8 @@ class Installer(Packager):
 
             shutil.copy(source, dest)
 
-        self.config.bundle.install_mime_type(self.config.source_dir)
+        if disable_update_mimedb is False:
+            self.config.bundle.install_mime_type(self.config.source_dir)
 
 
 def cmd_check(config, options):
@@ -373,7 +374,7 @@ def cmd_install(config, options):
     """Install the activity in the system"""
 
     installer = Installer(Builder(config))
-    installer.install(options.prefix)
+    installer.install(options.prefix, options.disable_update_mimedb)
 
 
 def cmd_genpot(config, options):
@@ -437,6 +438,10 @@ def start():
     install_parser.add_argument(
         "--prefix", dest="prefix", default=sys.prefix,
         help="Path for installing")
+    install_parser.add_argument(
+        "--disable-update-mimedb", dest="disable_update_mimedb",
+        action="store_true", default=False,
+        help="Do not run update-mime-database")
 
     check_parser = subparsers.add_parser(
         "check", help="Run tests for the activity")
