@@ -520,6 +520,7 @@ class PaletteWindow(GObject.GObject):
         self._widget.connect('destroy', self.__destroy_cb)
         self._widget.connect('enter-notify', self.__enter_notify_cb)
         self._widget.connect('leave-notify', self.__leave_notify_cb)
+        self._widget.connect('key-press-event', self.__key_press_event_cb)
 
         self._set_effective_group_id(self._group_id)
         self._widget.set_invoker(self._invoker)
@@ -533,6 +534,7 @@ class PaletteWindow(GObject.GObject):
         self._widget.disconnect_by_func(self.__destroy_cb)
         self._widget.disconnect_by_func(self.__enter_notify_cb)
         self._widget.disconnect_by_func(self.__leave_notify_cb)
+        self._widget.disconnect_by_func(self.__key_press_event_cb)
         self._set_effective_group_id(None)
 
     def destroy(self):
@@ -716,6 +718,10 @@ class PaletteWindow(GObject.GObject):
     def __leave_notify_cb(self, widget):
         if not self._invoker.locked:
             self.on_leave()
+
+    def __key_press_event_cb(self, window, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.popdown()
 
     def __show_cb(self, widget):
         if self._invoker is not None:
