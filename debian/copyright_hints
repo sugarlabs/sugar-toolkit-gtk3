@@ -120,12 +120,13 @@ Files: AUTHORS
  debian/control
  debian/control.in
  debian/gbp.conf
+ debian/patches/020150528~e8553c1.patch
  debian/patches/2002_ignore_debian_and_quilt-patches.patch
  debian/patches/2003_bundlebuilder_exit_nonzero_on_error.patch
  debian/patches/README
  debian/patches/series
- debian/python-sugar3.install
  debian/source/format
+ debian/source/lintian-overrides
  debian/watch
  intltool-extract.in
  intltool-merge.in
@@ -382,7 +383,7 @@ License: GPL-2+
  FIXME
 
 Files: m4/libtool.m4
-Copyright: 1996-2001, 2003-2005,
+Copyright: 1996-2001, 2003-2005
   2011, Free Software Foundation, Inc
 License: GPL-2+
  FIXME

@@ -1,3 +1,21 @@
+sugar-toolkit-gtk3 (0.104.1-7) unstable; urgency=medium
+
+  * Improve short descriptions.
+  * Update package relations:
+    + Relax to build-depend unversioned on debhelper: Version needed is
+      satisfied even in oldstable.
+  * Add patch cherry-picked upstream to avoid build MIME databases
+    during upstream install routine.
+    Closes: Bug#783890. Thanks to Martin Abente Lahaye.
+  * Update copyright info:
+    + Use License-Grant and License-Reference fields.
+      Thanks to Ben Finney.
+  * Add lintian overrides regarding license in License-Reference field.
+    See bug#786450.
+  * Modernize git-buildpackage config: Avoid "git-" prefix.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 30 May 2015 11:18:07 +0200
+
 sugar-toolkit-gtk3 (0.104.1-6) unstable; urgency=medium
 
   * Fix use canonical URL in Vcs-Git field.
