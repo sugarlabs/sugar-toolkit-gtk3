@@ -1,0 +1,67 @@
+Description: Add skip-install-mime option to bundlebuilder
+ Historically, distro packagers have been using bunblebuilder, via
+ "setup.py install", to populate packages directories and files.
+ .
+ The install procedure uses ActivityBundle.install_mime_type to install
+ custom mime types, by creating symlinks and updating the system mime
+ types database via the update-mime-database tool.
+ .
+ When ActivityBundle.install_mime_type is executed during packages
+ creation, the symlinks end-up broken in the final package and the use
+ of update-mime-database populates the final packages with a new copy of
+ the database files which could clash with the system copy.
+ .
+ This patch adds a new option, called --skip-install-mime to "setup.py
+ install" to skip the execution of ActivityBundle.install_mime_type and
+ avoid the issues mentioned above.
+ .
+ Activity packagers should use this new option. The creation of symlinks
+ and the execution of update-mime-database should be done in post
+ install packaging steps.
+Origin: upstream, https://github.com/sugarlabs/sugar-toolkit-gtk3/commit/e8553c1
+Author: Martin Abente Lahaye <tch@sugarlabs.org>
+Forwarded: yes
+Bug-Debian: http://bugs.debian.org/783890
+Last-Update: 2015-05-30
+
+--- a/src/sugar3/activity/bundlebuilder.py
++++ b/src/sugar3/activity/bundlebuilder.py
+@@ -235,7 +235,7 @@
+         Packager.__init__(self, builder.config)
+         self.builder = builder
+ 
+-    def install(self, prefix):
++    def install(self, prefix, install_mime=True):
+         self.builder.build()
+ 
+         activity_path = os.path.join(prefix, 'share', 'sugar', 'activities',
+@@ -267,7 +267,8 @@
+ 
+             shutil.copy(source, dest)
+ 
+-        self.config.bundle.install_mime_type(self.config.source_dir)
++        if install_mime:
++            self.config.bundle.install_mime_type(self.config.source_dir)
+ 
+ 
+ def cmd_check(config, options):
+@@ -355,7 +356,7 @@
+     """Install the activity in the system"""
+ 
+     installer = Installer(Builder(config))
+-    installer.install(options.prefix)
++    installer.install(options.prefix, options.install_mime)
+ 
+ 
+ def cmd_genpot(config, options):
+@@ -419,6 +420,10 @@
+     install_parser.add_argument(
+         "--prefix", dest="prefix", default=sys.prefix,
+         help="Path for installing")
++    install_parser.add_argument(
++        "--skip-install-mime", dest="install_mime",
++        action="store_false", default=True,
++        help="Skip the installation of custom mime types in the system")
+ 
+     check_parser = subparsers.add_parser(
+         "check", help="Run tests for the activity")
