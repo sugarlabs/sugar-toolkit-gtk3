@@ -29,6 +29,11 @@ Copyright: 1998, Carsten Schaar, and twm
   2013, Walter Bender
   2014, Martin Abente Lahaye <tch@sugarlabs.org>
   2014, Sugarlabs
+License-Grant:
+ This library is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Library General Public License as published
+ by the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
 License: LGPL-2+
 
 Files: src/sugar3/graphics/palettemenu.py
@@ -38,6 +43,11 @@ Files: src/sugar3/graphics/palettemenu.py
 Copyright: 2006-2007, Novell, Inc
   2011-2012, One Laptop Per Child
   2012-2013, Daniel Narvaez
+License-Grant:
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
 License: GPL-2+
 Comment:
  gsm-app.h contains copyright but no licensing.  It is assumed the same
@@ -54,6 +64,11 @@ License: GAP~Makefile.in
 
 Files: ./src/sugar3/acme-*
 Copyright: 2002-2003, Bastien Nocera
+License-Grant:
+ The Gnome Library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public License as
+ published by the Free Software Foundation; either version 2 of the
+ License, or (at your option) any later version.
 License: LGPL-2+~Gnome
 
 Files: aclocal.m4
@@ -66,6 +81,11 @@ Files: aclocal.m4
 Copyright: 1992-2013, Free Software Foundation, Inc.
   2001, Eazel, Inc
   2001-2004, Red Hat, Inc
+License-Grant:
+ This file is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
 License: GPL-2+ with Autoconf exception
  As a special exception to the GNU General Public License, if you
  distribute this file as part of a program that contains a
@@ -83,6 +103,11 @@ License: GAP~configure
 Files: ltmain.sh
  m4/libtool.m4
 Copyright: 1996-2001,2003-2011, Free Software Foundation, Inc.
+License-Grant:
+ GNU Libtool is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
 License: GPL-2+ with Libtool exception
  As a special exception to the GNU General Public License, if you
  distribute this file as part of a program or library that is built
@@ -93,6 +118,11 @@ Files: src/sugar3/presence/sugartubeconn.py
  src/sugar3/presence/tubeconn.py
 Copyright: 2007, Collabora Ltd. <http://www.collabora.co.uk/>
   2008, One Laptop Per Child
+License-Grant:
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Lesser General Public License as published
+ by the Free Software Foundation; either version 2.1 of the License, or
+ (at your option) any later version.
 License: LGPL-2.1+
 
 Files: install-sh
@@ -106,85 +136,27 @@ License: GAP~gettext
 
 Files: debian/*
 Copyright: 2012,2015, Jonas Smedegaard <dr@jones.dk>
-License: GPL-3+
-
-License: LGPL-2+
- This library is free software; you can redistribute it and/or modify it
- under the terms of the GNU Library General Public License as published
- by the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- .
- This library is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Library General Public License for more details.
-Comment:
- On Debian systems the 'GNU Library General Public License' version 2 is
- located in '/usr/share/common-licenses/LGPL-2'.
- .
- You should have received a copy of the 'GNU Library General Public
- License' along with this program.  If not, see
- <http://www.gnu.org/licenses/>.
-
-License: LGPL-2+~Gnome
- The Gnome Library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Library General Public License as
- published by the Free Software Foundation; either version 2 of the
- License, or (at your option) any later version.
- .
- The Gnome Library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Library General Public License for more details.
-
-License: LGPL-2.1+
- This program is free software; you can redistribute it and/or modify it
- under the terms of the GNU Lesser General Public License as published
- by the Free Software Foundation; either version 2.1 of the License, or
- (at your option) any later version.
- .
- This program is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
-Comment:
- On Debian systems the 'GNU Lesser General Public License' version 2.1
- is located in '/usr/share/common-licenses/LGPL-2.1'.
- .
- You should have received a copy of the GNU Lesser General Public
- License along with this program.  If not, see
- <http://www.gnu.org/licenses/>.
-
-License: GPL-2+
- This program is free software; you can redistribute it and/or modify it
- under the terms of the GNU General Public License as published by the
- Free Software Foundation; either version 2 of the License, or (at your
- option) any later version.
- .
- This program is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- General Public License for more details.
-Comment:
- On Debian systems the 'GNU General Public License' version 2 is located
- in '/usr/share/common-licenses/GPL-2'.
- .
- You should have received a copy of the 'GNU General Public License'
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-License: GPL-3+
+License-Grant:
  This program is free software; you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the
  Free Software Foundation; either version 3 of the License, or (at your
  option) any later version.
- .
- This program is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- General Public License for more details.
-Comment:
- On Debian systems the 'GNU General Public License' version 3 is located
- in '/usr/share/common-licenses/GPL-3'.
+License: GPL-3+
+
+License: LGPL-2+
+License-Reference: /usr/share/common-licenses/LGPL-2
+
+License: LGPL-2+~Gnome
+License-Reference: /usr/share/common-licenses/LGPL-2
+
+License: LGPL-2.1+
+License-Reference: /usr/share/common-licenses/LGPL-2.1
+
+License: GPL-2+
+License-Reference: /usr/share/common-licenses/GPL-2
+
+License: GPL-3+
+License-Reference: /usr/share/common-licenses/GPL-3
 
 License: GAP
  This file is free software; the Free Software Foundation gives
