@@ -21,13 +21,19 @@
 STABLE.
 """
 
+import re
 import os
+import json
 import logging
 import gettext
+from subprocess import check_output
+from multiprocessing import Process
 
 from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
+
+from sugar3.env import get_profile_path
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
@@ -37,6 +43,11 @@ GENERIC_TYPE_AUDIO = 'Audio'
 GENERIC_TYPE_VIDEO = 'Video'
 GENERIC_TYPE_LINK = 'Link'
 GENERIC_TYPE_BUNDLE = 'Bundle'
+
+_AUDIO_RE = re.compile('audio/[A-Za-z0-9\-]+$', re.M)
+_VIDEO_RE = re.compile('video/[A-Za-z0-9\-]+$', re.M)
+_APPLICATION_RE = re.compile('application/[A-Za-z0-9\-]+$', re.M)
+_GST_MIMES_CACHE = get_profile_path('gst_mimes.json')
 
 
 def _get_supported_image_mime_types():
@@ -67,20 +78,12 @@ _generic_types = [{
     'id': GENERIC_TYPE_AUDIO,
     'name': _('Audio'),
     'icon': 'audio-x-generic',
-    'types': [
-        'audio/ogg', 'audio/x-wav', 'audio/wav', 'audio/x-vorbis+ogg',
-        'audio/x-mpegurl', 'audio/mpegurl', 'audio/mpeg', 'audio/x-scpls'],
+    'types': [],
 }, {
     'id': GENERIC_TYPE_VIDEO,
     'name': _('Video'),
     'icon': 'video-x-generic',
-    'types': ['video/ogg', 'application/ogg', 'video/x-theora+ogg',
-              'video/x-theora', 'video/x-mng', 'video/mpeg4',
-              'video/mpeg-stream', 'video/mpeg', 'video/mpegts', 'video/mpeg2',
-              'video/mpeg1', 'video/x-cdxa', 'video/x-ogm+ogg', 'video/x-flv',
-              'video/mp4', 'video/x-matroska', 'video/x-msvideo',
-              'application/x-ogm-video', 'video/quicktime', 'video/x-quicktime'
-              'video/avi'],
+    'types': [],
 }, {
     'id': GENERIC_TYPE_LINK,
     'name': _('Link'),
@@ -92,6 +95,56 @@ _generic_types = [{
     'icon': 'user-documents',
     'types': ['application/vnd.olpc-sugar'],
 }]
+
+
+def _get_generic_type_raw(type_id):
+    for generic_type in _generic_types:
+        if type_id == generic_type['id']:
+            return generic_type
+
+
+def _gen_av_mimes():
+    audio_types = set()
+    video_types = set()
+
+    for line in check_output(['gst-inspect-1.0']).splitlines():
+        if 'demux' not in line:
+            continue
+
+        component = line.split()[1].strip(':')
+        doc = check_output(['gst-inspect-1.0', component])
+        audio_types.update(set(_AUDIO_RE.findall(doc)))
+        video_types.update(set(_VIDEO_RE.findall(doc)))
+
+        # Most application/* mimes are either video container formats
+        # that can have audio and video or subtitle formats.
+        applications = set([m for m in _APPLICATION_RE.findall(doc)
+                            if 'subtitle' not in m])
+        audio_types.update(applications)
+        video_types.update(applications)
+
+    with open(_GST_MIMES_CACHE, 'w') as f:
+        json.dump({'audio': list(audio_types),
+                   'video': list(video_types)}, f)
+
+
+_gen_av_mimes_process = None
+
+
+def _load_av_mimes():
+    if _gen_av_mimes_process:
+        _gen_av_mimes_process.join()
+
+    with open(_GST_MIMES_CACHE) as f:
+        j = json.load(f)
+    _get_generic_type_raw(GENERIC_TYPE_AUDIO)['types'] = j['audio']
+    _get_generic_type_raw(GENERIC_TYPE_VIDEO)['types'] = j['video']
+
+if os.path.isfile(_GST_MIMES_CACHE):
+    _load_av_mimes()
+else:
+    _gen_av_mimes_process = Process(target=_gen_av_mimes)
+    _gen_av_mimes_process.start()
 
 
 class ObjectType(object):
@@ -111,6 +164,9 @@ def get_generic_type(type_id):
 
 
 def get_all_generic_types():
+    if not _get_generic_type_raw(GENERIC_TYPE_AUDIO)['types']:
+        _load_av_mimes()
+
     types = []
     for generic_type in _generic_types:
         object_type = ObjectType(generic_type['id'], generic_type['name'],
@@ -315,6 +371,10 @@ def split_uri_list(uri_list):
 
 
 def _get_generic_type_for_mime(mime_type):
+    if mime_type.startswith(('audio', 'video')) \
+       and not _get_generic_type_raw(GENERIC_TYPE_AUDIO)['types']:
+        _load_av_mimes()
+
     for generic_type in _generic_types:
         if mime_type in generic_type['types']:
             return generic_type
