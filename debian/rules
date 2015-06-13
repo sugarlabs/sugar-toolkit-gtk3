@@ -110,8 +110,6 @@ CDBS_REPLACES_$(pkg-bin) = $(obsoletes)
 CDBS_BREAKS_$(pkg-gir) = $(pkg-python) (<< 0.104.1)
 
 # Multiarch quirks
-#  * TODO: Drop when Jessie is stable
-CDBS_PREDEPENDS_$(pkg-lib) = $(if $(DEB_HOST_MULTIARCH),multiarch-support)
 DEB_CONFIGURE_EXTRA_FLAGS += --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH)
 
 #DEB_AUTOMAKE_ARGS = --add-missing --copy

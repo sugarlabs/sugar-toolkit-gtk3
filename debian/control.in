@@ -18,8 +18,7 @@ Depends: ${cdbs:Depends},
  ${misc:Depends},
  ${shlibs:Depends}
 Recommends: libsugarext-data (= ${source:Version})
-Pre-Depends: ${cdbs:Pre-Depends},
- ${misc:Pre-Depends}
+Pre-Depends: ${misc:Pre-Depends}
 Description: Sugar Learning Platform - toolkit runtime library
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
