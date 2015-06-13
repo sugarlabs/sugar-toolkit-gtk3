@@ -151,14 +151,6 @@ debian/stamp-local-shlibs-$(lib): binary-install/$(pkg-lib) debian/stamp-local-s
 clean::
 	rm -f debian/stamp-local-shlibs-$(lib)
 
-# avoid unneeded .la file
-binary-post-install/$(pkg-python):: debian/stamp-local-strip-la
-debian/stamp-local-strip-la: binary-install/$(pkg-python)
-	find debian -type f -name '*.la' -delete
-	touch $@
-clean::
-	rm -f debian/stamp-local-strip-la
-
 # Ensure proper hash-bang in Python script (Python Policy 0.9 §3.1)
 #  * TODO: drop cdbs_python_binary fallback when cdbs 0.5 is stable
 binary-fixup/$(pkg-python)::
