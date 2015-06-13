@@ -24,10 +24,10 @@ Build-Depends: cdbs (>= 0.4.90~),
  libxml-parser-perl,
  x11proto-core-dev,
  libasound2-dev | libasound-dev,
- libgirepository1.0-dev (>= 1.30.0),
+ libgirepository1.0-dev,
  linux-libc-dev [linux-any],
  hurd-dev [hurd-any],
- d-shlibs (>= 0.48)
+ d-shlibs (>= 0.59~)
 Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-sugar/sugar-toolkit-gtk3
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-sugar/sugar-toolkit-gtk3.git
@@ -41,8 +41,7 @@ Depends: ${cdbs:Depends},
  ${misc:Depends},
  ${shlibs:Depends}
 Recommends: libsugarext-data (= ${source:Version})
-Pre-Depends: ${cdbs:Pre-Depends},
- ${misc:Pre-Depends}
+Pre-Depends: ${misc:Pre-Depends}
 Description: Sugar Learning Platform - toolkit runtime library
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
