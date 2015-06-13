@@ -132,17 +132,12 @@ binary-post-install/$(pkg-data)::
 
 # Let d-shlibs calculate development package dependencies
 #  and handle shared library install
-CDBS_BUILD_DEPENDS += , d-shlibs
+CDBS_BUILD_DEPENDS += , d-shlibs (>= 0.59~)
 binary-post-install/$(pkg-lib):: debian/stamp-local-shlibs-$(lib)
 debian/stamp-local-shlibs-$(lib): binary-install/$(pkg-lib) debian/stamp-local-strip-la
 	d-shlibmove --commit \
 		--multiarch \
 		--exclude-la --exclude-a \
-		--override s/libcairo-gobject2-dev/libcairo-dev/ \
-		--override s/libgdk-3-0-dev/libgtk-3-dev/ \
-		--override s/libgtk-3-0-dev/libgtk-3-dev/ \
-		--override s/librsvg-2-2-dev/librsvg2-dev/ \
-		--override s/libgconf-2-4-dev/libgconf2-dev/ \
 		--devunversioned --ignorelibdep \
 		--movedev debian/tmp/usr/share/gir-1.0 usr/share/ \
 		--extralib debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libsugar-eventcontroller.so \
