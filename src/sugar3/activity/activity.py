@@ -1159,3 +1159,10 @@ def show_object_in_journal(object_id):
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
     journal.ShowObject(object_id)
+
+
+def launch_bundle(bundle_id='', object_id=''):
+    bus = dbus.SessionBus()
+    obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
+    bundle_launcher = dbus.Interface(obj, J_DBUS_INTERFACE)
+    return bundle_launcher.LaunchBundle(bundle_id, object_id)

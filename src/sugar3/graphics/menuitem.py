@@ -22,7 +22,6 @@ STABLE.
 import logging
 
 from gi.repository import GObject
-from gi.repository import Pango
 from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon

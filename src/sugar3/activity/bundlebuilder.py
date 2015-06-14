@@ -37,7 +37,7 @@ from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
 
 
-IGNORE_DIRS = ['dist', '.git']
+IGNORE_DIRS = ['dist', '.git', 'screenshots']
 IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
 
 
@@ -144,6 +144,11 @@ class Builder(object):
             cat = gettext.GNUTranslations(open(mo_file, 'r'))
             translated_name = cat.gettext(self.config.activity_name)
             translated_summary = cat.gettext(self.config.summary)
+            if translated_summary.find('\n') > -1:
+                translated_summary = translated_summary.replace('\n', '')
+                logging.warn(
+                    'Translation of summary on file %s have \\n chars. '
+                    'Should be removed' % file_name)
             linfo_file = os.path.join(localedir, 'activity.linfo')
             f = open(linfo_file, 'w')
             f.write('[Activity]\nname = %s\n' % translated_name)
@@ -164,6 +169,7 @@ class Packager(object):
             os.mkdir(self.config.dist_dir)
 
     def get_files_in_git(self):
+        git_ls = None
         try:
             git_ls = subprocess.Popen(['git', 'ls-files'],
                                       stdout=subprocess.PIPE,
@@ -171,22 +177,34 @@ class Packager(object):
         except OSError:
             logging.warn('Packager: git is not installed, '
                          'fall back to filtered list')
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
 
-        stdout, _ = git_ls.communicate()
-        if git_ls.returncode:
-            # Fall back to filtered list
-            logging.warn('Packager: this is not a git repository, '
-                         'fall back to filtered list')
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
-        if stdout:
-            # pylint: disable=E1103
-            return [path.strip() for path in stdout.strip('\n').split('\n')]
-        else:
-            return list_files(self.config.source_dir,
-                              IGNORE_DIRS, IGNORE_FILES)
+        if git_ls is not None:
+            stdout, _ = git_ls.communicate()
+            if git_ls.returncode:
+                # Fall back to filtered list
+                logging.warn('Packager: this is not a git repository, '
+                             'fall back to filtered list')
+            elif stdout:
+                # pylint: disable=E1103
+                git_output = [path.strip() for path in
+                              stdout.strip('\n').split('\n')]
+                files = []
+                for line in git_output:
+                    ignore = False
+                    for directory in IGNORE_DIRS:
+                        if line.startswith(directory + '/'):
+                            ignore = True
+                            break
+                    if not ignore:
+                        files.append(line)
+
+                for pattern in IGNORE_FILES:
+                    files = [f for f in files if not fnmatch(f, pattern)]
+
+                return files
+
+        return list_files(self.config.source_dir,
+                          IGNORE_DIRS, IGNORE_FILES)
 
 
 class XOPackager(Packager):
@@ -235,7 +253,7 @@ class Installer(Packager):
         Packager.__init__(self, builder.config)
         self.builder = builder
 
-    def install(self, prefix):
+    def install(self, prefix, install_mime=True):
         self.builder.build()
 
         activity_path = os.path.join(prefix, 'share', 'sugar', 'activities',
@@ -267,7 +285,8 @@ class Installer(Packager):
 
             shutil.copy(source, dest)
 
-        self.config.bundle.install_mime_type(self.config.source_dir)
+        if install_mime:
+            self.config.bundle.install_mime_type(self.config.source_dir)
 
 
 def cmd_check(config, options):
@@ -355,7 +374,7 @@ def cmd_install(config, options):
     """Install the activity in the system"""
 
     installer = Installer(Builder(config))
-    installer.install(options.prefix)
+    installer.install(options.prefix, options.install_mime)
 
 
 def cmd_genpot(config, options):
@@ -419,6 +438,10 @@ def start():
     install_parser.add_argument(
         "--prefix", dest="prefix", default=sys.prefix,
         help="Path for installing")
+    install_parser.add_argument(
+        "--skip-install-mime", dest="install_mime",
+        action="store_false", default=True,
+        help="Skip the installation of custom mime types in the system")
 
     check_parser = subparsers.add_parser(
         "check", help="Run tests for the activity")
@@ -431,10 +454,10 @@ def start():
                               help="verbosity for the unit tests")
 
     dist_parser = subparsers.add_parser("dist_xo",
-                                         help="Create a xo bundle package")
-    dist_parser.add_argument("--no-fail", dest="no_fail", action="store_true",
-                             default=False,
-                             help="continue past failure when building xo file")
+                                        help="Create a xo bundle package")
+    dist_parser.add_argument(
+        "--no-fail", dest="no_fail", action="store_true", default=False,
+        help="continue past failure when building xo file")
 
     subparsers.add_parser("dist_source", help="Create a tar source package")
     subparsers.add_parser("build", help="Build generated files")
