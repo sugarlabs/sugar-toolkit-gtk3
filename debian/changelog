@@ -1,3 +1,15 @@
+sugar-toolkit-gtk3 (0.105.2-1) unstable; urgency=medium
+
+  [ upstream ]
+  * New release(s).
+
+  [ Jonas Smedegaard ]
+  * Prepare for new major branch:
+    + Switch packaging git branch.
+    + Adapt watch file to track any branch.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 14 Jun 2015 13:58:27 -0500
+
 sugar-toolkit-gtk3 (0.104.1-8) unstable; urgency=medium
 
   * Adapt packaging in maintainer mode when targeting experimental:

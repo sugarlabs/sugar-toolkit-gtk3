@@ -361,6 +361,12 @@ Copyright: 2014, Martin Abente Lahaye - tch@sugarlabs.org
 License: LGPL-2+
  FIXME
 
+Files: src/sugar3/graphics/scrollingdetector.py
+ src/sugar3/power.py
+Copyright: 2014, Sugarlabs
+License: LGPL-2+
+ FIXME
+
 Files: src/sugar3/dispatch/license.txt
 Copyright: 2001-2003, Patrick K. O'Brien and Contributors
   Django Software Foundation and individual contributors
@@ -534,11 +540,6 @@ License: LGPL-2+
 
 Files: src/sugar3/eggaccelerators.c
 Copyright: 2002, Red Hat, Inc.; 1998, 2001 Tim Janik
-License: LGPL-2+
- FIXME
-
-Files: src/sugar3/power.py
-Copyright: 2014, Sugarlabs
 License: LGPL-2+
  FIXME
 
