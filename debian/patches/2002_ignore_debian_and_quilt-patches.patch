@@ -7,8 +7,8 @@ Last-Update: 2010-02-08
  from sugar3.bundle.activitybundle import ActivityBundle
  
  
--IGNORE_DIRS = ['dist', '.git']
-+IGNORE_DIRS = ['dist', '.git', 'debian', '.pc']
+-IGNORE_DIRS = ['dist', '.git', 'screenshots']
++IGNORE_DIRS = ['dist', '.git', 'screenshots', 'debian', '.pc']
  IGNORE_FILES = ['.gitignore', 'MANIFEST', '*.pyc', '*~', '*.bak', 'pseudo.po']
  
  
