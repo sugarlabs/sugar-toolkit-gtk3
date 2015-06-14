@@ -28,7 +28,6 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
-from gi.repository import Pango
 
 from sugar3.graphics import animator
 from sugar3.graphics import style
@@ -38,13 +37,14 @@ from sugar3.graphics.palettewindow import PaletteWindow, \
 from sugar3.graphics.palettemenu import PaletteMenuItem
 
 from sugar3.graphics.palettewindow import MouseSpeedDetector, Invoker, \
-    WidgetInvoker, CursorInvoker, ToolInvoker, CellRendererInvoker
+    WidgetInvoker, CursorInvoker, ToolInvoker, TreeViewInvoker
+
 assert MouseSpeedDetector
 assert Invoker
 assert WidgetInvoker
 assert CursorInvoker
 assert ToolInvoker
-assert CellRendererInvoker
+assert TreeViewInvoker
 
 
 class _HeaderItem(Gtk.MenuItem):
@@ -188,7 +188,8 @@ class Palette(PaletteWindow):
 
     def __map_cb(self, *args):
         # Fixes #4463
-        self._widget.present()
+        if hasattr(self._widget, 'present'):
+            self._widget.present()
 
     def __destroy_cb(self, palette):
         self._secondary_anim.stop()
@@ -283,7 +284,8 @@ class Palette(PaletteWindow):
                 self._secondary_label.set_max_width_chars(
                     style.MENU_WIDTH_CHARS)
                 self._secondary_label.set_line_wrap(True)
-                self._secondary_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
+                self._secondary_label.set_ellipsize(
+                    style.ELLIPSIZE_MODE_DEFAULT)
                 self._secondary_label.set_lines(NO_OF_LINES)
                 self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:
@@ -418,7 +420,8 @@ class Palette(PaletteWindow):
         if self._palette_state == self.PRIMARY:
             self._secondary_box.show()
 
-        self._full_request = self._widget.size_request()
+        if self._widget is not None:
+            self._full_request = self._widget.size_request()
 
         if self._palette_state == self.PRIMARY:
             self._secondary_box.hide()

@@ -24,6 +24,8 @@ STABLE.
 import re
 import math
 import logging
+import os
+from ConfigParser import ConfigParser
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -124,12 +126,27 @@ class _IconBuffer(object):
 
     def _get_attach_points(self, info, size_request):
         has_attach_points_, attach_points = info.get_attach_points()
-
+        attach_x = attach_y = 0
         if attach_points:
+            # this works only for Gtk < 3.14
+            # https://developer.gnome.org/gtk3/stable/GtkIconTheme.html
+            # #gtk-icon-info-get-attach-points
             attach_x = float(attach_points[0].x) / size_request
             attach_y = float(attach_points[0].y) / size_request
-        else:
-            attach_x = attach_y = 0
+        elif info.get_filename():
+            # try read from the .icon file
+            icon_filename = info.get_filename().replace('.svg', '.icon')
+            if os.path.exists(icon_filename):
+                try:
+                    with open(icon_filename) as config_file:
+                        cp = ConfigParser()
+                        cp.readfp(config_file)
+                        attach_points_str = cp.get('Icon Data', 'AttachPoints')
+                        attach_points = attach_points_str.split(',')
+                        attach_x = float(attach_points[0].strip()) / 1000
+                        attach_y = float(attach_points[1].strip()) / 1000
+                except Exception as e:
+                    logging.exception('Exception reading icon info: %s', e)
 
         return attach_x, attach_y
 
@@ -808,9 +825,11 @@ class CellRendererIcon(Gtk.CellRenderer):
         'clicked': (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
-    def __init__(self, tree_view):
-        from sugar3.graphics.palette import CellRendererInvoker
-
+    def __init__(self, treeview=None):
+        # treeview is not used anymore, is here just to not break the API
+        if treeview is not None:
+            logging.warning('CellRendererIcon: treeview parameter in '
+                            'constructor is deprecated')
         self._buffer = _IconBuffer()
         self._buffer.cache = True
         self._xo_color = None
@@ -819,34 +838,27 @@ class CellRendererIcon(Gtk.CellRenderer):
         self._prelit_fill_color = None
         self._prelit_stroke_color = None
         self._active_state = False
-        self._palette_invoker = CellRendererInvoker()
+        self._cached_offsets = None
 
         Gtk.CellRenderer.__init__(self)
 
-        tree_view.connect('button-press-event',
-                          self.__button_press_event_cb)
-        tree_view.connect('button-release-event',
-                          self.__button_release_event_cb)
+        self._is_scrolling = False
 
-        self._palette_invoker.attach_cell_renderer(tree_view, self)
+    def connect_to_scroller(self, scrolled):
+        scrolled.connect('scroll-start', self._scroll_start_cb)
+        scrolled.connect('scroll-end', self._scroll_end_cb)
 
-    def __del__(self):
-        self._palette_invoker.detach()
+    def _scroll_start_cb(self, event):
+        self._is_scrolling = True
 
-    def __button_press_event_cb(self, widget, event):
-        if self._point_in_cell_renderer(widget, event.x, event.y):
-            self._active_state = True
+    def _scroll_end_cb(self, event):
+        self._is_scrolling = False
 
-    def __button_release_event_cb(self, widget, event):
-        self._active_state = False
+    def is_scrolling(self):
+        return self._is_scrolling
 
     def create_palette(self):
         return None
-
-    def get_palette_invoker(self):
-        return self._palette_invoker
-
-    palette_invoker = GObject.property(type=object, getter=get_palette_invoker)
 
     def set_file_name(self, value):
         if self._buffer.file_name != value:
@@ -907,6 +919,8 @@ class CellRendererIcon(Gtk.CellRenderer):
             self._buffer.width = value
             self._buffer.height = value
 
+            self._cached_offsets = None
+
     size = GObject.property(type=object, setter=set_size)
 
     def do_get_size(self, widget, cell_area, x_offset=None, y_offset=None,
@@ -925,8 +939,16 @@ class CellRendererIcon(Gtk.CellRenderer):
 
             xoffset = max(xoffset * (cell_area.width - width), 0)
             yoffset = max(self.props.yalign * (cell_area.height - height), 0)
+            self._cached_offsets = xoffset, yoffset
 
         return xoffset, yoffset, width, height
+
+    def _get_offsets(self, widget, cell_area):
+        if self._cached_offsets is not None:
+            return self._cached_offsets
+
+        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
+        return xoffset, yoffset
 
     def do_activate(self, event, widget, path, background_area, cell_area,
                     flags):
@@ -936,83 +958,72 @@ class CellRendererIcon(Gtk.CellRenderer):
                          flags):
         pass
 
-    def _point_in_cell_renderer(self, tree_view, x=None, y=None):
-        """Check if the point with coordinates x, y is inside this icon.
-
-        If the x, y coordinates are not given, they are taken from the
-        pointer current position.
-
-        """
-        if x is None and y is None:
-            x, y = tree_view.get_pointer()
-            x, y = tree_view.convert_widget_to_bin_window_coords(x, y)
-        pos = tree_view.get_path_at_pos(int(x), int(y))
-        if pos is None:
-            return False
-
-        path_, column, x, y_ = pos
-
-        for cell_renderer in column.get_cells():
-            if cell_renderer == self:
-                cell_x, cell_width = column.cell_get_position(cell_renderer)
-                if x > cell_x and x < (cell_x + cell_width):
-                    return True
-                return False
-
-        return False
-
     def do_render(self, cr, widget, background_area, cell_area, flags):
-        context = widget.get_style_context()
-        context.save()
-        context.add_class("sugar-icon-cell")
+        if not self._is_scrolling:
 
-        pointer_inside = self._point_in_cell_renderer(widget)
+            context = widget.get_style_context()
+            context.save()
+            context.add_class("sugar-icon-cell")
 
-        # The context will have prelight state if the mouse pointer is
-        # in the entire row, but we want that state if the pointer is
-        # in this cell only:
-        if flags & Gtk.CellRendererState.PRELIT:
-            if pointer_inside:
-                if self._active_state:
-                    context.set_state(Gtk.StateFlags.ACTIVE)
+            def is_pointer_inside():
+                # widget is the treeview
+                x, y = widget.get_pointer()
+                x, y = widget.convert_widget_to_bin_window_coords(x, y)
+                return ((cell_area.x <= x <= cell_area.x + cell_area.width)
+                        and
+                        (cell_area.y <= y <= cell_area.y + cell_area.height))
+
+            pointer_inside = is_pointer_inside()
+
+            # The context will have prelight state if the mouse pointer is
+            # in the entire row, but we want that state if the pointer is
+            # in this cell only:
+            if flags & Gtk.CellRendererState.PRELIT:
+                if pointer_inside:
+                    if self._active_state:
+                        context.set_state(Gtk.StateFlags.ACTIVE)
+                else:
+                    context.set_state(Gtk.StateFlags.NORMAL)
+
+            Gtk.render_background(
+                context, cr, background_area.x, background_area.y,
+                background_area.width, background_area.height)
+
+            if self._xo_color is not None:
+                stroke_color = self._xo_color.get_stroke_color()
+                fill_color = self._xo_color.get_fill_color()
+                prelit_fill_color = None
+                prelit_stroke_color = None
             else:
-                context.set_state(Gtk.StateFlags.NORMAL)
+                stroke_color = self._stroke_color
+                fill_color = self._fill_color
+                prelit_fill_color = self._prelit_fill_color
+                prelit_stroke_color = self._prelit_stroke_color
 
-        Gtk.render_background(
-            context, cr, background_area.x, background_area.y,
-            background_area.width, background_area.height)
+            has_prelit_colors = None not in [prelit_fill_color,
+                                             prelit_stroke_color]
 
-        Gtk.render_frame(context, cr, background_area.x, background_area.y,
-                         background_area.width, background_area.height)
+            if flags & Gtk.CellRendererState.PRELIT and has_prelit_colors and \
+                    pointer_inside:
 
-        if self._xo_color is not None:
-            stroke_color = self._xo_color.get_stroke_color()
-            fill_color = self._xo_color.get_fill_color()
-            prelit_fill_color = None
-            prelit_stroke_color = None
+                self._buffer.fill_color = prelit_fill_color
+                self._buffer.stroke_color = prelit_stroke_color
+            else:
+                self._buffer.fill_color = fill_color
+                self._buffer.stroke_color = stroke_color
         else:
-            stroke_color = self._stroke_color
-            fill_color = self._fill_color
-            prelit_fill_color = self._prelit_fill_color
-            prelit_stroke_color = self._prelit_stroke_color
-
-        has_prelit_colors = None not in [prelit_fill_color,
-                                         prelit_stroke_color]
-
-        if flags & Gtk.CellRendererState.PRELIT and has_prelit_colors and \
-                pointer_inside:
-
-            self._buffer.fill_color = prelit_fill_color
-            self._buffer.stroke_color = prelit_stroke_color
-        else:
-            self._buffer.fill_color = fill_color
-            self._buffer.stroke_color = stroke_color
+            if self._xo_color is not None:
+                self._buffer.fill_color = self._xo_color.get_fill_color()
+                self._buffer.stroke_color = self._xo_color.get_stroke_color()
+            else:
+                self._buffer.fill_color = self._fill_color
+                self._buffer.stroke_color = self._stroke_color
 
         surface = self._buffer.get_surface()
         if surface is None:
             return
 
-        xoffset, yoffset, width_, height_ = self.do_get_size(widget, cell_area)
+        xoffset, yoffset = self._get_offsets(widget, cell_area)
 
         x = cell_area.x + xoffset
         y = cell_area.y + yoffset
