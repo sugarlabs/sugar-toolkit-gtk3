@@ -134,7 +134,7 @@ binary-post-install/$(pkg-data)::
 #  and handle shared library install
 CDBS_BUILD_DEPENDS += , d-shlibs (>= 0.59~)
 binary-post-install/$(pkg-lib):: debian/stamp-local-shlibs-$(lib)
-debian/stamp-local-shlibs-$(lib): binary-install/$(pkg-lib) debian/stamp-local-strip-la
+debian/stamp-local-shlibs-$(lib): binary-install/$(pkg-lib)
 	d-shlibmove --commit \
 		--multiarch \
 		--exclude-la --exclude-a \
