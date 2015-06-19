@@ -286,6 +286,7 @@ class Palette(PaletteWindow):
                 self._secondary_label.set_line_wrap(True)
                 self._secondary_label.set_ellipsize(
                     style.ELLIPSIZE_MODE_DEFAULT)
+                self._secondary_label.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
                 self._secondary_label.set_lines(NO_OF_LINES)
                 self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:
