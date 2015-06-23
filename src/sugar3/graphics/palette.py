@@ -28,6 +28,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+from gi.repository import Pango
 
 from sugar3.graphics import animator
 from sugar3.graphics import style
@@ -286,7 +287,7 @@ class Palette(PaletteWindow):
                 self._secondary_label.set_line_wrap(True)
                 self._secondary_label.set_ellipsize(
                     style.ELLIPSIZE_MODE_DEFAULT)
-                self._secondary_label.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
+                self._secondary_label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
                 self._secondary_label.set_lines(NO_OF_LINES)
                 self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:
