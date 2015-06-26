@@ -82,7 +82,7 @@ depends = $(patsubst %,$(comma) python-%,$(python-deps))
 depends +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
 depends +=, gir1.2-sugarext-1.0 (>= $(DEB_VERSION))
 depends +=, gir1.2-sugarext-1.0 (<< $(DEB_VERSION).1~)
-depends +=, gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0 | gir1.2-webkit-3.0
+depends +=, gir1.2-webkit-3.0 | gir1.2-webkit2-4.0 | gir1.2-webkit2-3.0
 depends-dev = $(pkg-gir) (= $(DEB_VERSION))
 depends-gir = $(pkg-lib) (= $(DEB_VERSION))
 recommends = unzip, telepathy-mission-control-5, alsa-utils
