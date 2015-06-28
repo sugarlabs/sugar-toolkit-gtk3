@@ -69,7 +69,6 @@ bdeps +=, linux-libc-dev [linux-any], hurd-dev [hurd-any]
 
 # Needed (always/often/seldom) at runtime
 #  * alsa-utils (mayby still) needed to unmute devices at boot (bug#581504)
-#  * telepathy-* versioning follows http://wiki.sugarlabs.org/go/0.90/Notes
 #  * shared-mime-info (update-mime-database) used in sugar.bundle.bundlebuilder
 #  * unzip used in sugar3.bundle.bundle
 #  * git used in sugar3.activity.bundlebuilder
