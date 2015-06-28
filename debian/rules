@@ -73,7 +73,8 @@ bdeps +=, linux-libc-dev [linux-any], hurd-dev [hurd-any]
 #  * unzip used in sugar3.bundle.bundle
 #  * git used in sugar3.activity.bundlebuilder
 #  * legacy/older telepathy-gabble needed for its Tubes ABI
-#  * TODO: relax dependencies for our own GIR when its API is stable
+# TODO: relax dependencies for our own GIR when its API is stable
+# TODO: flip Webkit/Webkit2 relations when Browse and Jarabe uses Webkit2
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0
 gir-deps += gconf-2.0 atspi-2.0
 python-deps = gi gi-cairo dbus cairo telepathy dateutil decorator
