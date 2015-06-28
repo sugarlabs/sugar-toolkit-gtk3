@@ -2,6 +2,9 @@ sugar-toolkit-gtk3 (0.104.1-9) UNRELEASED; urgency=medium
 
   * Update package relations:
     + Favor Webkit over Webkit2: Webkit needed by Jarabe and Browse too.
+    + Drop fallback-dependency on gir1.2-webkit2-3.0: Deprecated.
+  * Relax watch file to cover any compression suffix.
+  * Stop explicitly declare compression in git-buildpackage config.
 
  -- Jonas Smedegaard <dr@jones.dk>  Sun, 28 Jun 2015 18:08:45 -0500
 
