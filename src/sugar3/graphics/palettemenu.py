@@ -121,14 +121,14 @@ class PaletteMenuItem(Gtk.EventBox):
 
         if icon_name is not None:
             self.icon = Icon(icon_name=icon_name,
-                             icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+                             pixel_size=style.SMALL_ICON_SIZE)
             if xo_color is not None:
                 self.icon.props.xo_color = xo_color
             self._hbox.pack_start(self.icon, expand=False, fill=False,
                                   padding=style.DEFAULT_PADDING)
         elif file_name is not None:
             self.icon = Icon(file=file_name,
-                             icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+                             pixel_size=style.SMALL_ICON_SIZE)
             if xo_color is not None:
                 self.icon.props.xo_color = xo_color
             self._hbox.pack_start(self.icon, expand=False, fill=False,

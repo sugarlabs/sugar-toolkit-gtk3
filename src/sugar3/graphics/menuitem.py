@@ -47,14 +47,14 @@ class MenuItem(Gtk.ImageMenuItem):
 
         if icon_name is not None:
             icon = Icon(icon_name=icon_name,
-                        icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+                        pixel_size=style.SMALL_ICON_SIZE)
             if xo_color is not None:
                 icon.props.xo_color = xo_color
             self.set_image(icon)
             icon.show()
 
         elif file_name is not None:
-            icon = Icon(file=file_name, icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+            icon = Icon(file=file_name, pixel_size=style.SMALL_ICON_SIZE)
             if xo_color is not None:
                 icon.props.xo_color = xo_color
             self.set_image(icon)
