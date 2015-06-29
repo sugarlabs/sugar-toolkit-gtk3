@@ -336,7 +336,7 @@ class Palette(PaletteWindow):
             event_box.show()
 
             self._icon = icon
-            self._icon.props.icon_size = Gtk.IconSize.LARGE_TOOLBAR
+            self._icon.props.pixel_size = style.STANDARD_ICON_SIZE
             event_box.add(self._icon)
             self._icon.show()
             self._show_icon()
