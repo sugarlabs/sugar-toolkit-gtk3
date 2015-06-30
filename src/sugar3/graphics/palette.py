@@ -89,6 +89,13 @@ class _HeaderItem(Gtk.MenuItem):
         Gtk.MenuItem.do_draw(self, cr)
         return False
 
+    def do_realize(self):
+        Gtk.SeparatorMenuItem.do_realize(self)
+        if isinstance(self.get_parent(), _PaletteMenuWidget):
+            # Add the border through CSS so we go all the way across
+            # the palette
+            self.hide()
+
 
 class Palette(PaletteWindow):
     """Floating palette implementation.
