@@ -70,14 +70,24 @@ class _HeaderItem(Gtk.MenuItem):
         self.set_allocation(allocation)
         self.get_child().size_allocate(allocation)
 
+    def do_draw(self, cr):
+        # force state normal, we don't want change color when hover
+        self.set_state(Gtk.StateType.NORMAL)
 
-class _HeaderSeparator(Gtk.SeparatorMenuItem):
-    """A SeparatorMenuItem that can be styled in the theme."""
+        # draw separator
+        allocation = self.get_allocation()
+        cr.save()
+        line_width = 2
+        cr.set_line_width(line_width)
+        cr.set_source_rgb(.5, .5, .5)  # button_grey #808080;
+        cr.move_to(0, allocation.height - line_width)
+        cr.line_to(allocation.width, allocation.height - line_width)
+        cr.stroke()
+        cr.restore()
 
-    __gtype_name__ = 'SugarPaletteHeaderSeparator'
-
-    def __init__(self):
-        Gtk.SeparatorMenuItem.__init__(self)
+        # draw content
+        Gtk.MenuItem.do_draw(self, cr)
+        return False
 
 
 class Palette(PaletteWindow):
@@ -457,10 +467,6 @@ class Palette(PaletteWindow):
             self._label_menuitem = _HeaderItem(self._primary_event_box)
             self._label_menuitem.show()
             self._widget.append(self._label_menuitem)
-
-            separator = _HeaderSeparator()
-            self._widget.append(separator)
-            separator.show()
 
             self._setup_widget()
 
