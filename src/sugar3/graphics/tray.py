@@ -188,7 +188,7 @@ class _TrayScrollButton(ToolButton):
         self.set_size_request(style.GRID_CELL_SIZE, style.GRID_CELL_SIZE)
 
         self.icon = Icon(icon_name=icon_name,
-                         icon_size=Gtk.IconSize.SMALL_TOOLBAR)
+                         pixel_size=style.SMALL_ICON_SIZE)
         # The alignment is a hack to work around Gtk.ToolButton code
         # that sets the icon_size when the icon_widget is a Gtk.Image
         alignment = Gtk.Alignment(xalign=0.5, yalign=0.5)
@@ -435,7 +435,7 @@ class _IconWidget(Gtk.EventBox):
                         Gdk.EventMask.BUTTON_RELEASE_MASK)
 
         self._icon = Icon(icon_name=icon_name, xo_color=xo_color,
-                          icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+                          pixel_size=style.STANDARD_ICON_SIZE)
         self.add(self._icon)
         self._icon.show()
 
