@@ -151,3 +151,8 @@ binary-fixup/$(pkg-python)::
 	egrep -r -l -Z '^#! ?/usr/bin/(env )?python[[:print:]]*$$' \
 		debian/$(cdbs_curpkg)/usr/bin/* \
 		| xargs -r -0 perl -pi -e 's,^#! ?/usr/bin/(env )?python[[:print:]]*$$,#!/usr/bin/$(strip $(or $(cdbs_curpythonruntime),$(cdbs_python_binary))),'
+
+# Fix favor ISO 639-1 when differing from ISO 639-2
+binary-post-install/$(pkg-data)::
+	mv debian/$(cdbs_curpkg)/usr/share/locale/aym \
+		debian/$(cdbs_curpkg)/usr/share/locale/ay
