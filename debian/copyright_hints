@@ -32,7 +32,6 @@ Files: AUTHORS
  po/af.po
  po/ak.po
  po/am.po
- po/ar.po
  po/ayc.po
  po/aym.po
  po/be.po
@@ -56,11 +55,9 @@ Files: AUTHORS
  po/es.po
  po/eu.po
  po/fa.po
- po/fa_AF.po
  po/ff.po
  po/fi.po
  po/fil.po
- po/fr.po
  po/gl.po
  po/gu.po
  po/ha.po
@@ -69,7 +66,6 @@ Files: AUTHORS
  po/hr.po
  po/ht.po
  po/hu.po
- po/hus.po
  po/hy.po
  po/id.po
  po/ig.po
@@ -87,7 +83,6 @@ Files: AUTHORS
  po/mi.po
  po/mk.po
  po/ml.po
- po/mn.po
  po/mr.po
  po/ms.po
  po/mvo.po
@@ -99,7 +94,6 @@ Files: AUTHORS
  po/pap.po
  po/pbs.po
  po/pl.po
- po/ps.po
  po/pt.po
  po/pt_BR.po
  po/quz.po
@@ -125,7 +119,6 @@ Files: AUTHORS
  po/tzm.po
  po/tzo.po
  po/ug.po
- po/ur.po
  po/wa.po
  po/yo.po
  po/zh_CN.po
@@ -222,7 +215,6 @@ Files: Makefile.in
  m4/ltsugar.m4
  m4/ltversion.m4
  m4/lt~obsolete.m4
- po/vi.po
  src/Makefile.in
  src/sugar3/Makefile.in
  src/sugar3/activity/Makefile.in
@@ -237,7 +229,6 @@ Copyright: 1994-2013, Free Software Foundation, Inc
   2004, Free Software Foundation, Inc
   2004-2005, 2007, 2009, Free Software Foundation, Inc
   2004-2005, 2007-2008, Free Software Foundation, Inc
-  2009, Free Software Foundation, Inc
 License: UNKNOWN
  FIXME
 
@@ -252,6 +243,16 @@ Files: src/sugar3/gsm-app.c
  src/sugar3/gsm-xsmp.h
 Copyright: 2007, Novell, Inc
 License: GPL-2+
+ FIXME
+
+Files: po/ar.po
+ po/fa_AF.po
+ po/fr.po
+ po/mn.po
+ po/ps.po
+ po/ur.po
+Copyright: 
+License: UNKNOWN
  FIXME
 
 Files: src/sugar3/eggdesktopfile.h
@@ -408,11 +409,11 @@ Copyright: 1995-2002, Free Software Foundation, Inc
   2001-2013, Free Software Foundation, Inc
   2002-2013, Free Software Foundation, Inc
   2003-2013, Free Software Foundation, Inc
-  2004, Scott James Remnant <scott@netsplit.com>
   2004-2013, Free Software Foundation, Inc
   2006-2013, Free Software Foundation, Inc
   2009, Johan Dahlin
   2009-2013, Free Software Foundation, Inc
+  Â 2004, Scott James Remnant <scott@netsplit.com>
 License: GPL-2+
  FIXME
 
@@ -578,6 +579,17 @@ License: UNKNOWN
 Files: po/Makefile.in.in
 Copyright: 1995-1997, Ulrich Drepper <drepper@gnu.ai.mit.edu>
   2004-2008, Rodney Dawes <dobey.pwns@gmail.com>
+License: UNKNOWN
+ FIXME
+
+Files: po/hus.po
+Copyright: la palabra, de acuerdo al contexto del inglÃs y espaÃ±ol. (Zurik)
+  por poner "TalÃlej" que indica que indica un pequeÃ±o espacio de tiempo transcurrido. (Zurik)
+License: UNKNOWN
+ FIXME
+
+Files: po/vi.po
+Copyright: Â 2009, Free Software Foundation, Inc
 License: UNKNOWN
  FIXME
 
