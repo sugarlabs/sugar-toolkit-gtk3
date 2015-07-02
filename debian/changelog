@@ -1,8 +1,12 @@
-sugar-toolkit-gtk3 (0.105.2-2) UNRELEASED; urgency=medium
+sugar-toolkit-gtk3 (0.105.3-1) experimental; urgency=medium
 
+  [ upstream ]
+  * New release.
+
+  [ Jonas Smedegaard ]
   (0.104.1-9 changes re-applied)
 
- -- Jonas Smedegaard <dr@jones.dk>  Thu, 02 Jul 2015 18:04:41 -0500
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 02 Jul 2015 18:26:23 -0500
 
 sugar-toolkit-gtk3 (0.105.2-1) experimental; urgency=medium
 
