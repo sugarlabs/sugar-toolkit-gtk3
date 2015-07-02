@@ -28,6 +28,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+from gi.repository import Pango
 
 from sugar3.graphics import animator
 from sugar3.graphics import style
@@ -69,14 +70,24 @@ class _HeaderItem(Gtk.MenuItem):
         self.set_allocation(allocation)
         self.get_child().size_allocate(allocation)
 
+    def do_draw(self, cr):
+        # force state normal, we don't want change color when hover
+        self.set_state(Gtk.StateType.NORMAL)
 
-class _HeaderSeparator(Gtk.SeparatorMenuItem):
-    """A SeparatorMenuItem that can be styled in the theme."""
+        # draw separator
+        allocation = self.get_allocation()
+        cr.save()
+        line_width = 2
+        cr.set_line_width(line_width)
+        cr.set_source_rgb(.5, .5, .5)  # button_grey #808080;
+        cr.move_to(0, allocation.height - line_width)
+        cr.line_to(allocation.width, allocation.height - line_width)
+        cr.stroke()
+        cr.restore()
 
-    __gtype_name__ = 'SugarPaletteHeaderSeparator'
-
-    def __init__(self):
-        Gtk.SeparatorMenuItem.__init__(self)
+        # draw content
+        Gtk.MenuItem.do_draw(self, cr)
+        return False
 
 
 class Palette(PaletteWindow):
@@ -286,6 +297,8 @@ class Palette(PaletteWindow):
                 self._secondary_label.set_line_wrap(True)
                 self._secondary_label.set_ellipsize(
                     style.ELLIPSIZE_MODE_DEFAULT)
+                self._secondary_label.set_line_wrap_mode(
+                    Pango.WrapMode.WORD_CHAR)
                 self._secondary_label.set_lines(NO_OF_LINES)
                 self._secondary_label.set_justify(Gtk.Justification.FILL)
             else:
@@ -333,7 +346,7 @@ class Palette(PaletteWindow):
             event_box.show()
 
             self._icon = icon
-            self._icon.props.icon_size = Gtk.IconSize.LARGE_TOOLBAR
+            self._icon.props.pixel_size = style.STANDARD_ICON_SIZE
             event_box.add(self._icon)
             self._icon.show()
             self._show_icon()
@@ -454,10 +467,6 @@ class Palette(PaletteWindow):
             self._label_menuitem = _HeaderItem(self._primary_event_box)
             self._label_menuitem.show()
             self._widget.append(self._label_menuitem)
-
-            separator = _HeaderSeparator()
-            self._widget.append(separator)
-            separator.show()
 
             self._setup_widget()
 

@@ -28,6 +28,7 @@ from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import palettegroup
+from sugar3.graphics import style
 
 
 _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT = 2
@@ -58,7 +59,7 @@ class UnfullscreenButton(Gtk.Window):
         self._button.set_relief(Gtk.ReliefStyle.NONE)
 
         self._icon = Icon(icon_name='view-return',
-                          icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+                          pixel_size=style.STANDARD_ICON_SIZE)
         self._icon.show()
         self._button.add(self._icon)
 
