@@ -83,6 +83,7 @@ from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
 from sugar3.bundle.activitybundle import get_bundle_instance
+from sugar3.bundle.helpers import bundle_from_dir
 from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
@@ -1164,5 +1165,13 @@ def show_object_in_journal(object_id):
 def launch_bundle(bundle_id='', object_id=''):
     bus = dbus.SessionBus()
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
-    bundle_launcher = dbus.Interface(obj, J_DBUS_INTERFACE)
-    return bundle_launcher.LaunchBundle(bundle_id, object_id)
+    journal = dbus.Interface(obj, J_DBUS_INTERFACE)
+    return journal.LaunchBundle(bundle_id, object_id)
+
+
+def get_bundle(bundle_id='', object_id=''):
+    bus = dbus.SessionBus()
+    obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
+    journal = dbus.Interface(obj, J_DBUS_INTERFACE)
+    bundle_path = journal.GetBundlePath(bundle_id, object_id)
+    return bundle_from_dir(bundle_path)
