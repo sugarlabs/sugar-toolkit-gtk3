@@ -147,6 +147,7 @@ class SelectorModal(Modal):
         If the user exits the modal, the 'cancel-clicked' signal is emitted'
         '''
         Modal.__init__(self)
+        self.connect('realize', self.__realize_cb)
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.modify_bg(Gtk.StateType.NORMAL, style.COLOR_WHITE.get_gdk_color())
         self.set_content(box)
@@ -160,11 +161,10 @@ class SelectorModal(Modal):
         self._search.show()
         self._search.grab_focus()
 
-        self.model = SelectorModel()
+        self.model = _SelectorModel()
         self._filter_model = self.model.filter_new()
         self._filter_model.set_visible_func(self.__model_filter_cb)
-        self._search.connect('changed',
-                             lambda *args: self._filter_model.refilter())
+        self._search.connect('changed', self.__search_change_cb)
         self._search.connect('activate', self.__search_activate_cb)
 
         self._tree_view = Gtk.TreeView(self._filter_model)
@@ -180,39 +180,48 @@ class SelectorModal(Modal):
         column.props.fixed_width = cell_icon.props.width
         column.pack_start(cell_icon, True)
         column.add_attribute(cell_icon, 'icon-name',
-                             SelectorModel.COLUMN_ICON_NAME)
+                             _SelectorModel.COLUMN_ICON_NAME)
         column.add_attribute(cell_icon, 'file-name',
-                             SelectorModel.COLUMN_ICON_FILE)
+                             _SelectorModel.COLUMN_ICON_FILE)
         column.add_attribute(cell_icon, 'xo-color',
-                             SelectorModel.COLUMN_ICON_COLOR)
+                             _SelectorModel.COLUMN_ICON_COLOR)
         self._tree_view.append_column(column)
 
         cell_text = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn()
         column.pack_start(cell_text, True)
-        column.add_attribute(cell_text, 'text', SelectorModel.COLUMN_TEXT)
+        column.add_attribute(cell_text, 'text', _SelectorModel.COLUMN_TEXT)
         self._tree_view.append_column(column)
+
+    def __realize_cb(self, widget):
+        self._tree_view.set_cursor(Gtk.TreePath.new_first())
 
     def __model_filter_cb(self, model, row, data):
         query = self._search.get_text().lower()
-        text = self.model.get_value(row, SelectorModel.COLUMN_TEXT).lower()
+        text = self.model.get_value(row, _SelectorModel.COLUMN_TEXT).lower()
         return query in text
+
+    def __search_change_cb(self, entry):
+        self._filter_model.refilter()
+        # Make sure the top entry is highlighted
+        self._tree_view.set_cursor(Gtk.TreePath.new_first())
 
     def __search_activate_cb(self, entry):
         row = self._filter_model.get_iter(Gtk.TreePath.new_first())
         if row is not None:
-            data = self._filter_model.get_value(row, SelectorModel.COLUMN_DATA)
+            data = self._filter_model.get_value(
+                row, _SelectorModel.COLUMN_DATA)
             self.item_selected_signal.emit(data)
             self.destroy()
 
     def __tree_view_activate_cb(self, tree_view, path, column):
         row = self._filter_model.get_iter(path)
-        data = self._filter_model.get_value(row, SelectorModel.COLUMN_DATA)
+        data = self._filter_model.get_value(row, _SelectorModel.COLUMN_DATA)
         self.item_selected_signal.emit(data)
         self.destroy()
 
 
-class SelectorModel(Gtk.ListStore):
+class _SelectorModel(Gtk.ListStore):
 
     COLUMN_ICON_NAME = 0
     COLUMN_ICON_FILE = 1
