@@ -48,6 +48,11 @@ class RadioToolButton(Gtk.RadioToolButton):
         if icon_name:
             self.set_icon_name(icon_name)
 
+        # HACK: stop Gtk from adding a label and expanding the size of
+        # the button. This happen when set_icon_widget is called
+        # if label_widget is None
+        self.props.label_widget = Gtk.Box()
+
         self.connect('destroy', self.__destroy_cb)
 
     def __destroy_cb(self, icon):
