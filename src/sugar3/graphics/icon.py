@@ -557,6 +557,10 @@ class EventIcon(Gtk.EventBox):
     cursor-positioned palette invoker.
     """
 
+    __gsignals__ = {
+        'activate': (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     __gtype_name__ = 'SugarEventIcon'
 
     def __init__(self, **kwargs):
@@ -569,6 +573,7 @@ class EventIcon(Gtk.EventBox):
         self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.TOUCH_MASK |
                         Gdk.EventMask.BUTTON_RELEASE_MASK)
+        self.connect('button-release-event', self.__button_release_event_cb)
         for key, value in kwargs.iteritems():
             self.set_property(key, value)
 
@@ -755,6 +760,11 @@ class EventIcon(Gtk.EventBox):
         from sugar3.graphics.palette import Palette
 
         self.set_palette(Palette(text))
+
+    def __button_release_event_cb(self, icon, event):
+        alloc = self.get_allocation()
+        if 0 < event.x < alloc.width and 0 < event.y < alloc.height:
+            self.emit('activate')
 
 
 class CanvasIcon(EventIcon):
