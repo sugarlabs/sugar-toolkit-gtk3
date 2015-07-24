@@ -1334,6 +1334,11 @@ class CursorInvoker(Invoker):
         return False
 
     def __button_release_event_cb(self, button, event):
+        # check if the release is done outside of the parent widget
+        alloc = self._item.get_allocation()
+        if not (0 < event.x < alloc.width and 0 < event.y < alloc.height):
+            return False
+
         if self._long_pressed_recognized:
             self._long_pressed_recognized = False
             return True
