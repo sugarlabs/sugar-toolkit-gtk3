@@ -159,7 +159,9 @@ class PaletteMenuItem(Gtk.EventBox):
         self.show_all()
 
     def __button_release_cb(self, widget, event):
-        self.emit('activate')
+        alloc = self.get_allocation()
+        if 0 < event.x < alloc.width and 0 < event.y < alloc.height:
+            self.emit('activate')
 
     def __enter_notify_cb(self, widget, event):
         self.modify_bg(Gtk.StateType.NORMAL,
