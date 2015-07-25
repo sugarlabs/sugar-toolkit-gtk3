@@ -781,6 +781,7 @@ class CanvasIcon(EventIcon):
 
     def __init__(self, **kwargs):
         EventIcon.__init__(self, **kwargs)
+        self._button_down = False
 
         self.connect('enter-notify-event', self.__enter_notify_event_cb)
         self.connect('leave-notify-event', self.__leave_notify_event_cb)
@@ -804,21 +805,25 @@ class CanvasIcon(EventIcon):
     def __enter_notify_event_cb(self, icon, event):
         self.set_state_flags(self.get_state_flags() | Gtk.StateFlags.PRELIGHT,
                              clear=True)
+        if self._button_down:
+            self.set_state_flags(Gtk.StateFlags.ACTIVE, clear=False)
 
     def __leave_notify_event_cb(self, icon, event):
         if self.palette and self.palette.is_up():
             return
 
-        self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
+        self.unset_state_flags(Gtk.StateFlags.PRELIGHT | Gtk.StateFlags.ACTIVE)
 
     def __button_press_event_cb(self, icon, event):
         if self.palette and not self.palette.is_up():
+            self._button_down = True
             self.set_state_flags(
                 self.get_state_flags() | Gtk.StateFlags.ACTIVE,
                 clear=True)
 
     def __button_release_event_cb(self, icon, event):
         self.unset_state_flags(Gtk.StateFlags.ACTIVE)
+        self._button_down = False
 
     def __palette_popup_cb(self, palette):
         self.set_state_flags(Gtk.StateFlags.PRELIGHT, clear=True)
