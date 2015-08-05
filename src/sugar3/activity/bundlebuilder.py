@@ -350,8 +350,11 @@ def cmd_dev(config, options):
 
 def cmd_dist_xo(config, options):
     """Create a xo bundle package"""
+    no_fail = False
+    if options is not None:
+        no_fail = options.no_fail
 
-    packager = XOPackager(Builder(config, options.no_fail))
+    packager = XOPackager(Builder(config, no_fail))
     packager.package()
 
 
