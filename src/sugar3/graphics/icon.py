@@ -762,9 +762,10 @@ class EventIcon(Gtk.EventBox):
         self.set_palette(Palette(text))
 
     def __button_release_event_cb(self, icon, event):
-        alloc = self.get_allocation()
-        if 0 < event.x < alloc.width and 0 < event.y < alloc.height:
-            self.emit('activate')
+        if event.button == 1:
+            alloc = self.get_allocation()
+            if 0 < event.x < alloc.width and 0 < event.y < alloc.height:
+                self.emit('activate')
 
 
 class CanvasIcon(EventIcon):
