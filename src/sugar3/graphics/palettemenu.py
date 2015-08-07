@@ -77,7 +77,8 @@ class PaletteMenuItem(Gtk.EventBox):
     }
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
-                 xo_color=None, file_name=None, accelerator=None):
+                 xo_color=None, file_name=None, accelerator=None,
+                 has_modal=False):
 
         """
             text_label -- str
@@ -101,6 +102,9 @@ class PaletteMenuItem(Gtk.EventBox):
                 a text used to display the keyboard shortcut associated
                 to the menu.
 
+            has_modal -- bool
+                if true, an arrow will be shown on the right of the
+                menu item indicating there is a modal attached
         """
 
         Gtk.EventBox.__init__(self)
@@ -149,6 +153,11 @@ class PaletteMenuItem(Gtk.EventBox):
         self._hbox.pack_start(self._accelerator_label, expand=False,
                               fill=False, padding=style.DEFAULT_PADDING)
 
+        self._modal_icon = Icon(icon_name='palette-modal',
+                                pixel_size=style.SMALL_ICON_SIZE)
+        self._hbox.pack_start(self._modal_icon, expand=False, fill=False,
+                              padding=style.DEFAULT_PADDING)
+
         self.id_bt_release_cb = self.connect('button-release-event',
                                              self.__button_release_cb)
         self.id_enter_notify_cb = self.connect('enter-notify-event',
@@ -157,6 +166,8 @@ class PaletteMenuItem(Gtk.EventBox):
                                                self.__leave_notify_cb)
 
         self.show_all()
+        if not has_modal:
+            self._modal_icon.hide()
 
     def __button_release_cb(self, widget, event):
         alloc = self.get_allocation()
@@ -202,3 +213,9 @@ class PaletteMenuItem(Gtk.EventBox):
             self.set_state_flags(self.get_state_flags() |
                                  Gtk.StateFlags.INSENSITIVE,
                                  clear=True)
+
+    def set_has_modal(self, has_modal):
+        if has_modal:
+            self._modal_icon.show()
+        else:
+            self._modal_icon.hide()
