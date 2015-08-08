@@ -14,6 +14,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+'''
+A module for creating modal popups.
+
+Example:
+    Show a label in a modal::
+
+        from gi.repository import Gtk
+        from sugar3.graphics.modal import Modal
+
+        m = Modal()
+        m.title = 'Modal title'
+        m.cancel_clicked_signal.connect(Gtk.main_quit)
+        m.show()
+
+        # The Modal class allows custom content
+        l = Gtk.Label()
+        l.set_text('Hello world')
+        m.set_content(l)
+        l.show()
+
+        Gtk.main()
+'''
 
 from gettext import gettext as _
 import logging
@@ -31,13 +53,38 @@ from jarabe.model import shell
 
 
 class Modal(Gtk.Window):
+    '''
+    Create a new empty modal popup.  The modal popup will have a
+    toolbar with text on the left and a cancel button on the right.
+
+    The `cancel-clicked` signal is emited with the user clicks the
+    cancel button on the default toolbar.
+
+    Args:
+        title (str): markup for the label at the top of the window
+
+    ..code-block:: python
+
+        from gi.repository import Gtk
+        from sugar3.graphics.modal import Modal
+
+        m = Modal()
+        m.title = 'Modal title'
+        m.cancel_clicked_signal.connect(Gtk.main_quit)
+        m.show()
+
+        # The Modal class allows custom content
+        l = Gtk.Label()
+        l.set_text('Hello world')
+        m.set_content(l)
+        l.show()
+
+        Gtk.main()
+    '''
 
     cancel_clicked_signal = GObject.Signal('cancel-clicked')
 
     def __init__(self):
-        '''
-        Create a new modal popup
-        '''
         Gtk.Window.__init__(self)
         self._box = Gtk.Box()
         self._box.set_orientation(Gtk.Orientation.VERTICAL)
@@ -66,6 +113,14 @@ class Modal(Gtk.Window):
         toolbar.show()
 
     def create_toolbar(self):
+        '''
+        The create toolbar created the toolbar of a modal and could
+        be overridden.  Changing the toolbar may render the `title`
+        property and `cancel-clicked` signal broken.
+
+        Returns:
+            :class:`Gtk.Toolbar`, toolbar for the modal
+        '''
         toolbar = Gtk.Toolbar()
         toolbar.props.vexpand = False
 
@@ -108,8 +163,11 @@ class Modal(Gtk.Window):
 
     def set_content(self, widget):
         '''
-        Set the main modal widget, removing any other
-        main widget if one was placed there before
+        Set the main modal widget, removing any other main widget
+        if one was placed there before.
+
+        Args:
+            widget (:class:`Gtk.Widget`): the new main widget
         '''
         if self._content_widget is not None:
             self._box.remove(self._content_widget)
@@ -136,16 +194,45 @@ class Modal(Gtk.Window):
 
 
 class SelectorModal(Modal):
+    '''
+    The SelectorModal is a Modal popup that has a list of items.  It
+    supports the user searching or clicking on an item to activate
+    it, or selecting the cancel button.  The `model` property is a
+    :class:`sugar3.graphics.modal.SelectorModel` which should be
+    used to control the contents of the modal.
+
+    The `item-selected` signal is emited when an item is activated
+    and contains the `data` object supplied when creating the item.
+
+    ..code-block:: python
+
+        from gi.repository import Gtk
+        from sugar3.graphics.modal import SelectorModal
+
+        def item_selected(modal, data):
+            print 'Selected:', data
+            Gtk.main_quit()
+
+        m = SelectorModal()
+        m.title = 'Please select something'
+        m.item_selected_signal.connect(item_selected)
+        m.cancel_clicked_signal.connect(Gtk.main_quit)
+        m.show()
+
+        # Manually setting the data
+        m.model.add_item('Item 1', icon_name='computer-xo', data=1)
+        m.model.add_item('Item 2', icon_name='computer-xo', data=2)
+        # Using the text as data
+        m.model.add_item('Item 3', icon_name='computer-xo')
+        m.model.add_item('Item 4', icon_name='computer-xo')
+
+        Gtk.main()
+    '''
 
     item_selected_signal = GObject.Signal('item-selected',
                                           arg_types=([object]))
 
     def __init__(self):
-        '''
-        A Modal popup that has a list of items.
-        The user selects one item and that emits the 'item-selected' signal.
-        If the user exits the modal, the 'cancel-clicked' signal is emitted'
-        '''
         Modal.__init__(self)
         self.connect('realize', self.__realize_cb)
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -161,7 +248,7 @@ class SelectorModal(Modal):
         self._search.show()
         self._search.grab_focus()
 
-        self.model = _SelectorModel()
+        self.model = SelectorModel()
         self._filter_model = self.model.filter_new()
         self._filter_model.set_visible_func(self.__model_filter_cb)
         self._search.connect('changed', self.__search_change_cb)
@@ -180,17 +267,17 @@ class SelectorModal(Modal):
         column.props.fixed_width = cell_icon.props.width
         column.pack_start(cell_icon, True)
         column.add_attribute(cell_icon, 'icon-name',
-                             _SelectorModel.COLUMN_ICON_NAME)
+                             SelectorModel.COLUMN_ICON_NAME)
         column.add_attribute(cell_icon, 'file-name',
-                             _SelectorModel.COLUMN_ICON_FILE)
+                             SelectorModel.COLUMN_ICON_FILE)
         column.add_attribute(cell_icon, 'xo-color',
-                             _SelectorModel.COLUMN_ICON_COLOR)
+                             SelectorModel.COLUMN_ICON_COLOR)
         self._tree_view.append_column(column)
 
         cell_text = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn()
         column.pack_start(cell_text, True)
-        column.add_attribute(cell_text, 'text', _SelectorModel.COLUMN_TEXT)
+        column.add_attribute(cell_text, 'text', SelectorModel.COLUMN_TEXT)
         self._tree_view.append_column(column)
 
     def __realize_cb(self, widget):
@@ -198,7 +285,7 @@ class SelectorModal(Modal):
 
     def __model_filter_cb(self, model, row, data):
         query = self._search.get_text().lower()
-        text = self.model.get_value(row, _SelectorModel.COLUMN_TEXT).lower()
+        text = self.model.get_value(row, SelectorModel.COLUMN_TEXT).lower()
         return query in text
 
     def __search_change_cb(self, entry):
@@ -210,18 +297,23 @@ class SelectorModal(Modal):
         row = self._filter_model.get_iter(Gtk.TreePath.new_first())
         if row is not None:
             data = self._filter_model.get_value(
-                row, _SelectorModel.COLUMN_DATA)
+                row, SelectorModel.COLUMN_DATA)
             self.item_selected_signal.emit(data)
             self.destroy()
 
     def __tree_view_activate_cb(self, tree_view, path, column):
         row = self._filter_model.get_iter(path)
-        data = self._filter_model.get_value(row, _SelectorModel.COLUMN_DATA)
+        data = self._filter_model.get_value(row, SelectorModel.COLUMN_DATA)
         self.item_selected_signal.emit(data)
         self.destroy()
 
 
-class _SelectorModel(Gtk.ListStore):
+class SelectorModel(Gtk.ListStore):
+    '''
+    The SelectorModel is used to provide data to a
+    :class:`sugar3.graphics.modal.SelectorModal` and should not
+    be created directly.
+    '''
 
     COLUMN_ICON_NAME = 0
     COLUMN_ICON_FILE = 1
@@ -236,6 +328,21 @@ class _SelectorModel(Gtk.ListStore):
 
     def add_item(self, text, icon_name=None, icon_file=None,
                  icon_color=None, data=None):
+        '''
+        Add an item to the model.
+
+        Args:
+            text (str): a text label for the item, shown to the user
+            icon_name (str, optional): icon name for the item's icon
+            icon_file (str, optional): file path for the item's icon
+            icon_color (:class:`sugar3.graphics.xocolor.XoColor`, optional):
+                a color for the icon, defaults to the profile color
+            data (object, optional): data to be passed to the model's
+                `item-selected` signal, defaults to the `text` value
+
+        Raises:
+            ValueError is no icon is given
+        '''
         if icon_name is None and icon_file is None:
             raise ValueError('Either icon_name or icon_file is required')
         if icon_color is None:
