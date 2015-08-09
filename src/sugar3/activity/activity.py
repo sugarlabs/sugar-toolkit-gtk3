@@ -268,8 +268,9 @@ class Activity(Window, Gtk.Container):
             application
 
         create_jobject -- boolean
-            define if it should create a journal object if we are
-            not resuming
+            DEPRECATED: define if it should create a journal object if we are
+            not resuming. The parameter is ignored, and always  will
+            be created a object in the Journal.
 
         Side effects:
 
@@ -378,7 +379,7 @@ class Activity(Window, Gtk.Container):
         self.shared_activity = None
         self._join_id = None
 
-        if handle.object_id is None and create_jobject:
+        if handle.object_id is None:
             logging.debug('Creating a jobject.')
             self._jobject = self._initialize_journal_object()
 
@@ -396,10 +397,6 @@ class Activity(Window, Gtk.Container):
             mesh_instance = pservice.get_activity(self._activity_id,
                                                   warn_if_none=False)
             self._set_up_sharing(mesh_instance, share_scope)
-
-        if not create_jobject:
-            self.set_title(get_bundle_name())
-            return
 
         if self.shared_activity is not None:
             self._jobject.metadata['title'] = self.shared_activity.props.name
@@ -534,8 +531,8 @@ class Activity(Window, Gtk.Container):
         """Returns the activity id of the current instance of your activity.
 
         The activity id is sort-of-like the unix process id (PID). However,
-        unlike PIDs it is only different for each new instance (with
-        create_jobject = True set) and stays the same everytime a user
+        unlike PIDs it is only different for each new instance
+        and stays the same everytime a user
         resumes an activity. This is also the identity of your Activity to
         other XOs for use when sharing.
         """
