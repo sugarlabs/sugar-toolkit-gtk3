@@ -72,8 +72,6 @@ created = dispatch.Signal()
 deleted = dispatch.Signal()
 updated = dispatch.Signal()
 
-_get_data_store()
-
 
 class DSMetadata(GObject.GObject):
     """A representation of the metadata associated with a DS entry."""
