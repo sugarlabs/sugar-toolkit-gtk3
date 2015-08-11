@@ -48,9 +48,12 @@ def _get_data_store():
         _data_store = dbus.Interface(_bus.get_object(DS_DBUS_SERVICE,
                                                      DS_DBUS_PATH),
                                      DS_DBUS_INTERFACE)
-        _data_store.connect_to_signal('Created', __datastore_created_cb)
-        _data_store.connect_to_signal('Deleted', __datastore_deleted_cb)
-        _data_store.connect_to_signal('Updated', __datastore_updated_cb)
+        try:
+            _data_store.connect_to_signal('Created', __datastore_created_cb)
+            _data_store.connect_to_signal('Deleted', __datastore_deleted_cb)
+            _data_store.connect_to_signal('Updated', __datastore_updated_cb)
+        except RuntimeError:
+            logging.error('Error trying to connect to datastore')
 
     return _data_store
 
