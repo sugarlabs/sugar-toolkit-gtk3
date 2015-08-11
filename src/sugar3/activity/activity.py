@@ -1,9 +1,10 @@
-"""Base class for activities written in Python
+'''
+Base class for activities written in Python
 
 This is currently the only definitive reference for what an
 activity must do to participate in the Sugar desktop.
 
-   A Basic Activity
+A Basic Activity
 
 All activities must implement a class derived from 'Activity' in this class.
 The convention is to call it ActivitynameActivity, but this is not required as
@@ -12,6 +13,7 @@ which class to start.
 
 For example the most minimal Activity:
 
+.. code-block:: python
 
    from sugar3.activity import activity
 
@@ -19,6 +21,9 @@ For example the most minimal Activity:
         pass
 
 To get a real, working activity, you will at least have to implement:
+
+.. code-block:: python
+
     __init__(), read_file() and write_file()
 
 Aditionally, you will probably need a at least a Toolbar so you can have some
@@ -28,7 +33,7 @@ See the methods of the Activity class below for more information on what you
 will need for a real activity.
 
 STABLE.
-"""
+'''
 # Copyright (C) 2006-2007 Red Hat, Inc.
 # Copyright (C) 2007-2009 One Laptop Per Child
 # Copyright (C) 2010 Collabora Ltd. <http://www.collabora.co.uk/>
@@ -156,98 +161,113 @@ class _ActivitySession(GObject.GObject):
 
 
 class Activity(Window, Gtk.Container):
-    """This is the base Activity class that all other Activities derive from.
-       This is where your activity starts.
+    '''
+    This is the base Activity class that all other Activities derive from.
+    This is where your activity starts.
 
     To get a working Activity:
         0. Derive your Activity from this class:
-                class MyActivity(activity.Activity):
-                    ...
+
+        .. code-block:: python
+
+            class MyActivity(activity.Activity):
+                ...
 
         1. implement an __init__() method for your Activity class.
 
-           Use your init method to create your own ToolbarBox.
-           This is the code to make a basic toolbar with the activity
-           toolbar and a stop button.
-                from sugar3.graphics.toolbarbox import ToolbarBox
-                from sugar3.activity.widgets import ActivityToolbarButton
-                from sugar3.activity.widgets import StopButton
+        Use your init method to create your own ToolbarBox.
+        This is the code to make a basic toolbar with the activity
+        toolbar and a stop button.
 
-                ...
+        .. code-block:: python
 
-                toolbar_box = ToolbarBox()
-                activity_button = ActivityToolbarButton(self)
-                toolbar_box.toolbar.insert(activity_button, 0)
-                activity_button.show()
+            from sugar3.graphics.toolbarbox import ToolbarBox
+            from sugar3.activity.widgets import ActivityToolbarButton
+            from sugar3.activity.widgets import StopButton
 
-                ... Your toolbars ...
+            ...
 
-                separator = Gtk.SeparatorToolItem(draw=False)
-                separator.set_expand(True)
-                toolbar_box.toolbar.insert(separator, -1)
-                separator.show()
+            toolbar_box = ToolbarBox()
+            activity_button = ActivityToolbarButton(self)
+            toolbar_box.toolbar.insert(activity_button, 0)
+            activity_button.show()
 
-                stop_button = StopButton(self)
-                toolbar_box.toolbar.insert(stop_button, -1)
-                stop_button.show()
+            ... Your toolbars ...
 
-                self.set_toolbar_box(toolbar_box)
-                toolbar_box.show()
+            separator = Gtk.SeparatorToolItem(draw=False)
+            separator.set_expand(True)
+            toolbar_box.toolbar.insert(separator, -1)
+            separator.show()
 
-           Add extra Toolbars to your toolbox.
+            stop_button = StopButton(self)
+            toolbar_box.toolbar.insert(stop_button, -1)
+            stop_button.show()
 
-           You should setup Activity sharing here too.
+            self.set_toolbar_box(toolbar_box)
+            toolbar_box.show()
 
-           Finaly, your Activity may need some resources which you can claim
-           here too.
+        Add extra Toolbars to your toolbox.
 
-           The __init__() method is also used to make the distinction between
-           being resumed from the Journal, or starting with a blank document.
+        You should setup Activity sharing here too.
+
+        Finaly, your Activity may need some resources which you can claim
+        here too.
+
+        The __init__() method is also used to make the distinction between
+        being resumed from the Journal, or starting with a blank document.
 
         2. Implement read_file() and write_file()
-           Most activities revolve around creating and storing Journal entries.
-           For example, Write: You create a document, it is saved to the
-           Journal and then later you resume working on the document.
+        Most activities revolve around creating and storing Journal entries.
+        For example, Write: You create a document, it is saved to the
+        Journal and then later you resume working on the document.
 
-           read_file() and write_file() will be called by sugar to tell your
-           Activity that it should load or save the document the user is
-           working on.
+        read_file() and write_file() will be called by sugar to tell your
+        Activity that it should load or save the document the user is
+        working on.
 
         3. Implement our Activity Toolbars.
-           The Toolbars are added to your Activity in step 1 (the toolbox), but
-           you need to implement them somewhere. Now is a good time.
 
-           There are a number of standard Toolbars. The most basic one, the one
-           your almost absolutely MUST have is the ActivityToolbar. Without
-           this, you're not really making a proper Sugar Activity (which may be
-           okay, but you should really stop and think about why not!) You do
-           this with the ActivityToolbox(self) call in step 1.
+        The Toolbars are added to your Activity in step 1 (the toolbox), but
+        you need to implement them somewhere. Now is a good time.
 
-           Usually, you will also need the standard EditToolbar. This is the
-           one which has the standard copy and paste buttons. You need to
-           derive your own EditToolbar class from sugar3.EditToolbar:
-                from sugar3.activity.widgets import EditToolbar
+        There are a number of standard Toolbars. The most basic one, the one
+        your almost absolutely MUST have is the ActivityToolbar. Without
+        this, you're not really making a proper Sugar Activity (which may be
+        okay, but you should really stop and think about why not!) You do
+        this with the ActivityToolbox(self) call in step 1.
 
-                class MyEditToolbar(EditToolbar):
-                    ...
+        Usually, you will also need the standard EditToolbar. This is the
+        one which has the standard copy and paste buttons. You need to
+        derive your own EditToolbar class from sugar3.EditToolbar:
 
-           See EditToolbar for the methods you should implement in your class.
+        .. code-block:: python
 
-           Finaly, your Activity will very likely need some activity specific
-           buttons and options you can create your own toolbars by deriving a
-           class from Gtk.Toolbar:
-                class MySpecialToolbar(Gtk.Toolbar):
-                    ...
+            from sugar3.activity.widgets import EditToolbar
+
+            class MyEditToolbar(EditToolbar):
+                ...
+
+        See EditToolbar for the methods you should implement in your class.
+
+        Finaly, your Activity will very likely need some activity specific
+        buttons and options you can create your own toolbars by deriving a
+        class from Gtk.Toolbar:
+
+        .. code-block:: python
+
+            class MySpecialToolbar(Gtk.Toolbar):
+            ...
 
         4. Use your creativity. Make your Activity something special and share
            it with your friends!
 
-    Read through the methods of the Activity class below, to learn more about
-    how to make an Activity work.
+        Read through the methods of the Activity class below, to learn more
+        about how to make an Activity work.
 
-    Hint: A good and simple Activity to learn from is the Read activity. To
-    create your own activity, you may want to copy it and use it as a template.
-    """
+        Hint: A good and simple Activity to learn from is the Read activity.
+        To create your own activity, you may want to copy it and use it as a
+        template.
+    '''
 
     __gtype_name__ = 'SugarActivity'
 
@@ -260,14 +280,16 @@ class Activity(Window, Gtk.Container):
     }
 
     def __init__(self, handle, create_jobject=True):
-        """Initialise the Activity
+        '''
+        Initialise the Activity
 
-        handle -- sugar3.activity.activityhandle.ActivityHandle
+        Args:
+
+        handle (sugar3.activity.activityhandle.ActivityHandle)
             instance providing the activity id and access to the
             presence service which *may* provide sharing for this
             application
-
-        create_jobject -- boolean
+        create_jobject (boolean)
             define if it should create a journal object if we are
             not resuming
 
@@ -288,7 +310,8 @@ class Activity(Window, Gtk.Container):
             If your Activity implements __init__(), it should call
             the base class __init()__ before doing Activity specific things.
 
-        """
+        '''
+
         # Stuff that needs to be done early
         icons_path = os.path.join(get_bundle_path(), 'icons')
         Gtk.IconTheme.get_default().append_search_path(icons_path)
@@ -516,6 +539,11 @@ class Activity(Window, Gtk.Container):
         type=bool, default=False, getter=get_active, setter=set_active)
 
     def get_max_participants(self):
+        '''
+        Returns:
+            int: the max number of users than can share a instance of the
+            activity. Should be configured in the activity.info file.
+        '''
         # If max_participants has not been set in the activity, get it
         # from the bundle.
         if self._max_participants is None:
@@ -531,29 +559,43 @@ class Activity(Window, Gtk.Container):
         setter=set_max_participants)
 
     def get_id(self):
-        """Returns the activity id of the current instance of your activity.
+        '''
+        Returns:
 
-        The activity id is sort-of-like the unix process id (PID). However,
-        unlike PIDs it is only different for each new instance (with
-        create_jobject = True set) and stays the same everytime a user
-        resumes an activity. This is also the identity of your Activity to
-        other XOs for use when sharing.
-        """
+            int: the activity id of the current instance of your activity.
+
+            The activity id is sort-of-like the unix process id (PID). However,
+            unlike PIDs it is only different for each new instance (with
+            create_jobject = True set) and stays the same everytime a user
+            resumes an activity. This is also the identity of your Activity to
+            other XOs for use when sharing.
+        '''
         return self._activity_id
 
     def get_bundle_id(self):
-        """Returns the bundle_id from the activity.info file"""
+        '''
+        Returns:
+            int: the bundle_id from the activity.info file
+        '''
         return os.environ['SUGAR_BUNDLE_ID']
 
     def get_canvas(self):
+        '''
+        Returns:
+            :class:`Gtk.Widget`: the widget used as canvas
+        '''
         return Window.get_canvas(self)
 
     def set_canvas(self, canvas):
-        """Sets the 'work area' of your activity with the canvas of your
-        choice.
+        '''
+        Sets the 'work area' of your activity with the canvas of your choice.
 
         One commonly used canvas is Gtk.ScrolledWindow
-        """
+
+        Args:
+            canvas (:class:`Gtk.Widget`)
+        '''
+
         Window.set_canvas(self, canvas)
         if not self._read_file_called:
             canvas.connect('map', self.__canvas_map_cb)
@@ -605,10 +647,12 @@ class Activity(Window, Gtk.Container):
         logging.debug('Error creating activity datastore object: %s' % err)
 
     def get_activity_root(self):
-        """ FIXME: Deprecated. This part of the API has been moved
+        '''
+        Deprecated. This part of the API has been moved
         out of this class to the module itself
 
-        Returns a path for saving Activity specific preferences, etc.
+        Returns:
+            str: a path for saving Activity specific preferences, etc.
 
         Returns a path to the location in the filesystem where the activity can
         store activity related data that doesn't pertain to the current
@@ -620,14 +664,14 @@ class Activity(Window, Gtk.Container):
         Activities should ONLY save settings, user preferences and other data
         which isn't specific to a journal item here. If (meta-)data is in
         anyway specific to a journal entry, it MUST be stored in the DataStore.
-        """
+        '''
         if os.environ.get('SUGAR_ACTIVITY_ROOT'):
             return os.environ['SUGAR_ACTIVITY_ROOT']
         else:
             return '/'
 
     def read_file(self, file_path):
-        """
+        '''
         Subclasses implement this method if they support resuming objects from
         the journal. 'file_path' is the file to read from.
 
@@ -642,11 +686,11 @@ class Activity(Window, Gtk.Container):
         description and other metadata['tags'] may change. So if it is
         important for you to notice changes, this is the time to record the
         originals.
-        """
+        '''
         raise NotImplementedError
 
     def write_file(self, file_path):
-        """
+        '''
         Subclasses implement this method if they support saving data to objects
         in the journal. 'file_path' is the file to write to.
 
@@ -661,14 +705,17 @@ class Activity(Window, Gtk.Container):
         received in file_read(). Even if you kept the file_path from
         file_read() open until now, you must still write the entire file to
         this file_path.
-        """
+
+        Args:
+            file_path (str): complete path of the file to write
+        '''
         raise NotImplementedError
 
     def notify_user(self, summary, body):
-        """
+        '''
         Display a notification with the given summary and body.
         The notification will go under the activities icon in the frame.
-        """
+        '''
         bundle = get_bundle_instance(get_bundle_path())
         icon = bundle.get_icon()
 
@@ -709,8 +756,11 @@ class Activity(Window, Gtk.Container):
             self._jobject = None
 
     def get_preview(self):
-        """Returns an image representing the state of the activity. Generally
-        this is what the user is seeing in this moment.
+        '''
+        Returns:
+            str: with data ready to save with an image representing the state
+            of the activity. Generally this is what the user is seeing in
+            this moment.
 
         Activities can override this method, which should return a str with the
         binary content of a png image with a width of PREVIEW_SIZE pixels.
@@ -718,7 +768,7 @@ class Activity(Window, Gtk.Container):
         The method does create a cairo surface similar to that of the canvas'
         window and draws on that. Then we create a cairo image surface with
         the desired preview size and scale the canvas surface on that.
-        """
+        '''
         if self.canvas is None or not hasattr(self.canvas, 'get_window'):
             return None
 
@@ -776,13 +826,14 @@ class Activity(Window, Gtk.Container):
             return {}
 
     def save(self):
-        """Request that the activity is saved to the Journal.
+        '''
+        Request that the activity is saved to the Journal.
 
         This method is called by the close() method below. In general,
         activities should not override this method. This method is part of the
         public API of an Acivity, and should behave in standard ways. Use your
         own implementation of write_file() to save your Activity specific data.
-        """
+        '''
 
         if self._jobject is None:
             logging.debug('Cannot save, no journal object.')
@@ -842,12 +893,13 @@ class Activity(Window, Gtk.Container):
                             error_handler=self.__save_error_cb)
 
     def copy(self):
-        """Request that the activity 'Keep in Journal' the current state
-           of the activity.
+        '''
+        Request that the activity 'Keep in Journal' the current state
+        of the activity.
 
         Activities should not override this method. Instead, like save() do any
         copy work that needs to be done in write_file()
-        """
+        '''
         logging.debug('Activity.copy: %r' % self._jobject.object_id)
         self.save()
         self._jobject.object_id = None
@@ -878,14 +930,19 @@ class Activity(Window, Gtk.Container):
         self.__privacy_changed_cb(self.shared_activity, None)
 
     def get_shared_activity(self):
-        """Returns an instance of the shared Activity or None
+        '''
+        Returns:
+            an instance of the shared Activity or None
 
         The shared activity is of type sugar3.presence.activity.Activity
-        """
+        '''
         return self.shared_activity
 
     def get_shared(self):
-        """Returns TRUE if the activity is shared on the mesh."""
+        '''
+        Returns:
+             bool: True if the activity is shared on the mesh.
+        '''
         if not self.shared_activity:
             return False
         return self.shared_activity.props.joined
@@ -930,12 +987,17 @@ class Activity(Window, Gtk.Container):
                               account_path, contact_id)
 
     def invite(self, account_path, contact_id):
-        """Invite a buddy to join this Activity.
+        '''
+        Invite a buddy to join this Activity.
+
+        Args:
+            account_path
+            contact_id
 
         Side Effects:
             Calls self.share(True) to privately share the activity if it wasn't
             shared before.
-        """
+        '''
         self._invites_queue.append((account_path, contact_id))
 
         if (self.shared_activity is None
@@ -945,14 +1007,16 @@ class Activity(Window, Gtk.Container):
             self._send_invites()
 
     def share(self, private=False):
-        """Request that the activity be shared on the network.
+        '''
+        Request that the activity be shared on the network.
 
-        private -- bool: True to share by invitation only,
+        Args:
+            private (bool): True to share by invitation only,
             False to advertise as shared to everyone.
 
         Once the activity is shared, its privacy can be changed by setting
         its 'private' property.
-        """
+        '''
         if self.shared_activity and self.shared_activity.props.joined:
             raise RuntimeError('Activity %s already shared.' %
                                self._activity_id)
@@ -990,8 +1054,10 @@ class Activity(Window, Gtk.Container):
             self._session.will_quit(self, False)
 
     def can_close(self):
-        """Activities should override this function if they want to perform
-        extra checks before actually closing."""
+        '''
+        Activities should override this function if they want to perform
+        extra checks before actually closing.
+        '''
 
         return True
 
@@ -1024,12 +1090,16 @@ class Activity(Window, Gtk.Container):
         power.get_power_manager().shutdown()
 
     def close(self, skip_save=False):
-        """Request that the activity be stopped and saved to the Journal
+        '''
+        Request that the activity be stopped and saved to the Journal
 
         Activities should not override this method, but should implement
         write_file() to do any state saving instead. If the application wants
         to control wether it can close, it should override can_close().
-        """
+
+        Args:
+            skip_save (bool)
+        '''
         if not self.can_close():
             return
 
@@ -1053,17 +1123,26 @@ class Activity(Window, Gtk.Container):
         return True
 
     def get_metadata(self):
-        """Returns the jobject metadata or None if there is no jobject.
+        '''
+        Returns:
+
+            dict: the jobject metadata or None if there is no jobject.
 
         Activities can set metadata in write_file() using:
+
+        .. code-block:: python
+
             self.metadata['MyKey'] = 'Something'
 
         and retrieve metadata in read_file() using:
+
+        .. code-block:: python
+
             self.metadata.get('MyKey', 'aDefaultValue')
 
         Note: Make sure your activity works properly if one or more of the
         metadata items is missing. Never assume they will all be present.
-        """
+        '''
         if self._jobject:
             return self._jobject.metadata
         else:
@@ -1072,6 +1151,11 @@ class Activity(Window, Gtk.Container):
     metadata = property(get_metadata, None)
 
     def handle_view_source(self):
+        '''
+        A developer can impleement this method to show aditional information
+        in the View Source window. Example implementations are available
+        on activities Browse or TurtleArt.
+        '''
         raise NotImplementedError
 
     def get_document_path(self, async_cb, async_err_cb):
@@ -1138,17 +1222,26 @@ def _get_session():
 
 
 def get_bundle_name():
-    """Return the bundle name for the current process' bundle"""
+    '''
+    Returns:
+        str: the bundle name for the current process' bundle
+    '''
     return os.environ['SUGAR_BUNDLE_NAME']
 
 
 def get_bundle_path():
-    """Return the bundle path for the current process' bundle"""
+    '''
+    Returns:
+        str: the bundle path for the current process' bundle
+    '''
     return os.environ['SUGAR_BUNDLE_PATH']
 
 
 def get_activity_root():
-    """Returns a path for saving Activity specific preferences, etc."""
+    '''
+    Returns:
+        str: a path for saving Activity specific preferences, etc.
+    '''
     if os.environ.get('SUGAR_ACTIVITY_ROOT'):
         return os.environ['SUGAR_ACTIVITY_ROOT']
     else:
