@@ -143,6 +143,8 @@ class ToolbarButton(ToolButton):
 
 class ToolbarBox(Gtk.VBox):
 
+    __gtype_name__ = 'SugarToolbarBox'
+
     def __init__(self, padding=style.TOOLBOX_HORIZONTAL_PADDING):
         GObject.GObject.__init__(self)
         self._expanded_button_index = -1
