@@ -60,7 +60,11 @@ License: BSD-3-clause~Django and BSD-3-clause~Patrick
 
 Files: */Makefile.in
 Copyright: 1994-2013, Free Software Foundation, Inc.
-License: GAP~Makefile.in
+License-Grant:
+ This Makefile.in is free software; the Free Software Foundation gives
+ unlimited permission to copy and/or distribute it, with or without
+ modifications, as long as this notice is preserved.
+License: GAP
 
 Files: ./src/sugar3/acme-*
 Copyright: 2002-2003, Bastien Nocera
@@ -69,7 +73,7 @@ License-Grant:
  modify it under the terms of the GNU Library General Public License as
  published by the Free Software Foundation; either version 2 of the
  License, or (at your option) any later version.
-License: LGPL-2+~Gnome
+License: LGPL-2+
 
 Files: aclocal.m4
  config.guess
@@ -98,7 +102,10 @@ License: GAP
 
 Files: configure
 Copyright: 1992-1996,1998-2012, Free Software Foundation, Inc.
-License: GAP~configure
+License-Grant:
+ This configure script is free software; the Free Software Foundation
+ gives unlimited permission to copy, distribute and modify it.
+License: GAP
 
 Files: ltmain.sh
  m4/libtool.m4
@@ -132,7 +139,12 @@ License: X11
 Files: po/Makefile.in.in
 Copyright: 1995-1997, Ulrich Drepper <drepper@gnu.ai.mit.edu>
   2004-2008, Rodney Dawes <dobey.pwns@gmail.com>
-License: GAP~gettext
+License-Grant:
+ This file may be copied and used freely without restrictions.  It may
+ be used in projects which are not available under a GNU Public License,
+ but which still want to provide support for the GNU gettext
+ functionality.
+License: GAP
 
 Files: debian/*
 Copyright: 2012,2015, Jonas Smedegaard <dr@jones.dk>
@@ -144,9 +156,6 @@ License-Grant:
 License: GPL-3+
 
 License: LGPL-2+
-License-Reference: /usr/share/common-licenses/LGPL-2
-
-License: LGPL-2+~Gnome
 License-Reference: /usr/share/common-licenses/LGPL-2
 
 License: LGPL-2.1+
@@ -162,21 +171,6 @@ License: GAP
  This file is free software; the Free Software Foundation gives
  unlimited permission to copy and/or distribute it, with or without
  modifications, as long as this notice is preserved.
-
-License: GAP~Makefile.in
- This Makefile.in is free software; the Free Software Foundation gives
- unlimited permission to copy and/or distribute it, with or without
- modifications, as long as this notice is preserved.
-
-License: GAP~configure
- This configure script is free software; the Free Software Foundation
- gives unlimited permission to copy, distribute and modify it.
-
-License: GAP~gettext
- This file may be copied and used freely without restrictions.  It may
- be used in projects which are not available under a GNU Public License,
- but which still want to provide support for the GNU gettext
- functionality.
 
 License: X11
  Permission is hereby granted, free of charge, to any person obtaining a
