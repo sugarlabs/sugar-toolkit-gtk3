@@ -1,3 +1,15 @@
+sugar-toolkit-gtk3 (0.106.1-1) unstable; urgency=medium
+
+  [ upstream ]
+  * New release.
+
+  [ Jonas Smedegaard ]
+  * Update licensing info:
+    + Merge pseudo-derived licenses (Use License-Grant to indicate
+      difference in verbatim text).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 14 Sep 2015 15:47:37 +0200
+
 sugar-toolkit-gtk3 (0.106.0-1) unstable; urgency=medium
 
   [ upstream ]
