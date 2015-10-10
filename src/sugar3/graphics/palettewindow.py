@@ -1008,13 +1008,32 @@ class Invoker(GObject.GObject):
     def notify_mouse_leave(self):
         self.emit('mouse-leave')
 
-    def notify_right_click(self):
+    def notify_right_click(self, x=None, y=None):
+        '''
+        Notify the palette invoker of a right click and expand the
+        palette as required.  The x and y args should be that of
+        where the event happened, relative to the root of the screen.
+
+        Args
+            x (float): the x coord of the event relative to the root
+                of the screen, eg. :class:`Gdk.EventTouch.x_root`
+            y (float): the y coord of the event relative to the root
+                of the screen, eg. :class:`Gdk.EventTouch.y_root`
+        '''
         self._ensure_palette_exists()
+        self._process_event(x, y)
         self.emit('right-click')
 
     def notify_toggle_state(self):
         self._ensure_palette_exists()
         self.emit('toggle-state')
+
+    def _process_event(self, x, y):
+        if x is None or y is None:
+            return
+
+        self._cursor_x = x
+        self._cursor_y = y
 
     def get_palette(self):
         return self._palette
@@ -1231,14 +1250,14 @@ class WidgetInvoker(Invoker):
             if self.props.toggle_palette:
                 self.notify_toggle_state()
         elif event.button == 3:
-            self.notify_right_click()
+            self.notify_right_click(event.x_root, event.y_root)
             return True
         else:
             return False
 
     def __long_pressed_event_cb(self, controller, x, y, widget):
         self._long_pressed_recognized = True
-        self.notify_right_click()
+        self.notify_right_click(x, y)
 
     def get_toplevel(self):
         return self._widget.get_toplevel()
@@ -1348,14 +1367,14 @@ class CursorInvoker(Invoker):
             if self.props.toggle_palette:
                 self.notify_toggle_state()
         if event.button == 3:
-            self.notify_right_click()
+            self.notify_right_click(event.x_root, event.y_root)
             return True
         else:
             return False
 
     def __long_pressed_event_cb(self, controller, x, y, widget):
         self._long_pressed_recognized = True
-        self.notify_right_click()
+        self.notify_right_click(x, y)
 
     def get_toplevel(self):
         return self._item.get_toplevel()
@@ -1497,7 +1516,7 @@ class TreeViewInvoker(Invoker):
             # right mouse button
             self._mouse_detector.stop()
             self._change_palette()
-            self.notify_right_click()
+            self.notify_right_click(event.x_root, event.y_root)
             return True
         else:
             return False
@@ -1507,7 +1526,7 @@ class TreeViewInvoker(Invoker):
         self._path = path
         self._column = column
         self._change_palette()
-        self.notify_right_click()
+        self.notify_right_click(x, y)
 
     def __mouse_slow_cb(self, widget):
         self._mouse_detector.stop()
