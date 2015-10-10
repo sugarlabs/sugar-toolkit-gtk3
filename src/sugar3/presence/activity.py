@@ -96,7 +96,6 @@ class Activity(GObject.GObject):
         self._account_path = account_path
         self.telepathy_conn = connection
         self.telepathy_text_chan = None
-        self.telepathy_tubes_chan = None
 
         self.room_handle = room_handle
         self._join_command = None
@@ -275,7 +274,6 @@ class Activity(GObject.GObject):
         if error is not None:
             self.emit('joined', error is None, str(error))
         self.telepathy_text_chan = join_command.text_channel
-        self.telepathy_tubes_chan = join_command.tubes_channel
         self._channel_self_handle = join_command.channel_self_handle
         self._text_channel_group_flags = join_command.text_channel_group_flags
         self._start_tracking_buddies()
@@ -407,7 +405,6 @@ class Activity(GObject.GObject):
             self._joined = True
             self.room_handle = share_command.room_handle
             self.telepathy_text_chan = share_command.text_channel
-            self.telepathy_tubes_chan = share_command.tubes_channel
             self._channel_self_handle = share_command.channel_self_handle
             self._text_channel_group_flags = \
                 share_command.text_channel_group_flags
@@ -456,8 +453,7 @@ class Activity(GObject.GObject):
         """
         bus_name = self.telepathy_conn.requested_bus_name
         connection_path = self.telepathy_conn.object_path
-        channels = [self.telepathy_text_chan.object_path,
-                    self.telepathy_tubes_chan.object_path]
+        channels = [self.telepathy_text_chan.object_path]
 
         _logger.debug('%r: bus name is %s, connection is %s, channels are %r' %
                       (self, bus_name, connection_path, channels))
@@ -565,6 +561,7 @@ class _JoinCommand(_BaseCommand):
                              dbus_interface=PROPERTIES_IFACE)
 
     def __get_self_handle_cb(self, handle):
+        logging.debug('__get_self_handle_cb')
         self._global_self_handle = handle
 
         self._connection.RequestChannel(
@@ -572,15 +569,6 @@ class _JoinCommand(_BaseCommand):
             HANDLE_TYPE_ROOM,
             self.room_handle, True,
             reply_handler=self.__create_text_channel_cb,
-            error_handler=self.__error_handler_cb,
-            dbus_interface=CONNECTION)
-
-        self._connection.RequestChannel(
-            CHANNEL_TYPE_TUBES,
-            HANDLE_TYPE_ROOM,
-            self.room_handle,
-            True,
-            reply_handler=self.__create_tubes_channel_cb,
             error_handler=self.__error_handler_cb,
             dbus_interface=CONNECTION)
 
@@ -607,10 +595,6 @@ class _JoinCommand(_BaseCommand):
         self._tubes_ready()
 
     def _tubes_ready(self):
-        if self.text_channel is None or \
-                self.tubes_channel is None:
-            return
-
         _logger.debug('%r: finished setting up tubes' % self)
 
         self._add_self_to_channel()
