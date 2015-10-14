@@ -145,7 +145,7 @@ class Alert(Gtk.EventBox):
 
     def do_get_property(self, pspec):
         """
-        Set alert property, GObject internal method.
+        Get alert property, GObject internal method.
         Use the `alert.props` object, eg::
 
             title = alert.props.title
@@ -385,7 +385,7 @@ class TimeoutAlert(Alert):
             elif response_id is Gtk.ResponseType.CANCEL:
                 print 'Cancel Button was clicked.'
             elif response_id == -1:
-                print 'Timout occurred'
+                print 'Timeout occurred'
     """
 
     def __init__(self, timeout=5, **kwargs):
@@ -417,7 +417,7 @@ class NotifyAlert(Alert):
     """
     Timeout alert with only an "OK" button.  This should be used just for
     notifications and not for user interaction.  The alert will timeout after
-    a given length, simmilar to a :class:`sugar3.graphics.alert.TimeoutAlert`.
+    a given length, similar to a :class:`sugar3.graphics.alert.TimeoutAlert`.
 
     Args:
         timeout (int, optional): the length in seconds for the timeout to
