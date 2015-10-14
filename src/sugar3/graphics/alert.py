@@ -421,7 +421,7 @@ class TimeoutAlert(Alert):
         Alert._response(self, *args)
 
 
-class NotifyAlert(Alert):
+class NotifyAlert(TimeoutAlert):
     """
     Timeout alert with only an "OK" button.  This should be used just for
     notifications and not for user interaction.  The alert will timeout after
@@ -463,10 +463,3 @@ class NotifyAlert(Alert):
 
         GLib.timeout_add(1000, self.__timeout)
 
-    def __timeout(self):
-        self._timeout -= 1
-        self._timeout_text.set_text(self._timeout)
-        if self._timeout == 0:
-            self._response(Gtk.ResponseType.OK)
-            return False
-        return True
