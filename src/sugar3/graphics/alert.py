@@ -145,7 +145,7 @@ class Alert(Gtk.EventBox):
 
     def do_get_property(self, pspec):
         """
-        Set alert property, GObject internal method.
+        Get alert property, GObject internal method.
         Use the `alert.props` object, eg::
 
             title = alert.props.title
@@ -385,11 +385,15 @@ class TimeoutAlert(Alert):
             elif response_id is Gtk.ResponseType.CANCEL:
                 print 'Cancel Button was clicked.'
             elif response_id == -1:
-                print 'Timout occurred'
+                print 'Timeout occurred'
     """
 
     def __init__(self, timeout=5, **kwargs):
         Alert.__init__(self, **kwargs)
+
+        if timeout < 1:
+            Alert._response(self, Gtk.ResponseType.OK)
+            return
 
         self._timeout = timeout
 
@@ -402,22 +406,26 @@ class TimeoutAlert(Alert):
         self.add_button(Gtk.ResponseType.OK, _('Continue'), self._timeout_text)
         self._timeout_text.show()
 
-        GLib.timeout_add_seconds(1, self.__timeout)
+        self._timeout_sid = GLib.timeout_add(1000, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1
         self._timeout_text.set_text(self._timeout)
-        if self._timeout == 0:
-            self._response(Gtk.ResponseType.OK)
+        if self._timeout < 1:
+            Alert._response(self, Gtk.ResponseType.OK)
             return False
         return True
 
+    def _response(self, *args):
+        GLib.source_remove(self._timeout_sid)
+        Alert._response(self, *args)
 
-class NotifyAlert(Alert):
+
+class NotifyAlert(TimeoutAlert):
     """
     Timeout alert with only an "OK" button.  This should be used just for
     notifications and not for user interaction.  The alert will timeout after
-    a given length, simmilar to a :class:`sugar3.graphics.alert.TimeoutAlert`.
+    a given length, similar to a :class:`sugar3.graphics.alert.TimeoutAlert`.
 
     Args:
         timeout (int, optional): the length in seconds for the timeout to
@@ -455,10 +463,3 @@ class NotifyAlert(Alert):
 
         GLib.timeout_add(1000, self.__timeout)
 
-    def __timeout(self):
-        self._timeout -= 1
-        self._timeout_text.set_text(self._timeout)
-        if self._timeout == 0:
-            self._response(Gtk.ResponseType.OK)
-            return False
-        return True
