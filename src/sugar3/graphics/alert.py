@@ -402,15 +402,19 @@ class TimeoutAlert(Alert):
         self.add_button(Gtk.ResponseType.OK, _('Continue'), self._timeout_text)
         self._timeout_text.show()
 
-        GLib.timeout_add_seconds(1, self.__timeout)
+        self._timeout_sid = GLib.timeout_add(1000, self.__timeout)
 
     def __timeout(self):
         self._timeout -= 1
         self._timeout_text.set_text(self._timeout)
         if self._timeout == 0:
-            self._response(Gtk.ResponseType.OK)
+            Alert._response(self, Gtk.ResponseType.OK)
             return False
         return True
+
+    def _response(self, *args):
+        GLib.source_remove(self._timeout_sid)
+        Alert._response(self, *args)
 
 
 class NotifyAlert(Alert):
