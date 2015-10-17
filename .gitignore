@@ -26,3 +26,7 @@ libtool
 ltmain.sh
 missing
 compile
+
+/doc/sugar3.rst
+/doc/sugar3.*.rst
+/doc/_build
