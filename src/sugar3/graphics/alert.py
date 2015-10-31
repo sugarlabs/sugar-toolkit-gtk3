@@ -346,9 +346,35 @@ class _TimeoutIcon(Gtk.Alignment):
         self._text.set_markup('<b>%s</b>' % GLib.markup_escape_text(str(text)))
 
 
-class TimeoutAlert(Alert):
+class _TimeoutAlert(Alert):
+    def __init__(self, timeout=5, label=_('Ok'), **kwargs):
+        Alert.__init__(self, **kwargs)
+
+        self._timeout = timeout
+
+        self._timeout_text = _TimeoutIcon()
+        self._timeout_text.set_text(self._timeout)
+        self.add_button(Gtk.ResponseType.OK, label, self._timeout_text)
+        self._timeout_text.show()
+
+        self._timeout_sid = GLib.timeout_add(1000, self.__timeout_cb)
+
+    def __timeout_cb(self):
+        self._timeout -= 1
+        self._timeout_text.set_text(self._timeout)
+        if self._timeout == 0:
+            Alert._response(self, Gtk.ResponseType.OK)
+            return False
+        return True
+
+    def _response(self, *args):
+        GLib.source_remove(self._timeout_sid)
+        Alert._response(self, *args)
+
+
+class TimeoutAlert(_TimeoutAlert):
     """
-    This is a ready-made two button (Cancel, Continue) alert.  The continue
+    This is a ready-made two button (Continue, Cancel) alert.  The continue
     button contains a visual countdown indicating the time remaining to the
     user.  If the user does not select a button before the timeout, the
     response callback is called and the alert is usually removed.
@@ -389,35 +415,14 @@ class TimeoutAlert(Alert):
     """
 
     def __init__(self, timeout=5, **kwargs):
-        Alert.__init__(self, **kwargs)
-
-        self._timeout = timeout
+        _TimeoutAlert.__init__(self, timeout, _('Continue'), **kwargs)
 
         icon = Icon(icon_name='dialog-cancel')
         self.add_button(Gtk.ResponseType.CANCEL, _('Cancel'), icon)
         icon.show()
 
-        self._timeout_text = _TimeoutIcon()
-        self._timeout_text.set_text(self._timeout)
-        self.add_button(Gtk.ResponseType.OK, _('Continue'), self._timeout_text)
-        self._timeout_text.show()
 
-        self._timeout_sid = GLib.timeout_add(1000, self.__timeout)
-
-    def __timeout(self):
-        self._timeout -= 1
-        self._timeout_text.set_text(self._timeout)
-        if self._timeout == 0:
-            Alert._response(self, Gtk.ResponseType.OK)
-            return False
-        return True
-
-    def _response(self, *args):
-        GLib.source_remove(self._timeout_sid)
-        Alert._response(self, *args)
-
-
-class NotifyAlert(Alert):
+class NotifyAlert(_TimeoutAlert):
     """
     Timeout alert with only an "OK" button.  This should be used just for
     notifications and not for user interaction.  The alert will timeout after
@@ -448,21 +453,4 @@ class NotifyAlert(Alert):
     """
 
     def __init__(self, timeout=5, **kwargs):
-        Alert.__init__(self, **kwargs)
-
-        self._timeout = timeout
-
-        self._timeout_text = _TimeoutIcon()
-        self._timeout_text.set_text(self._timeout)
-        self.add_button(Gtk.ResponseType.OK, _('Ok'), self._timeout_text)
-        self._timeout_text.show()
-
-        GLib.timeout_add(1000, self.__timeout)
-
-    def __timeout(self):
-        self._timeout -= 1
-        self._timeout_text.set_text(self._timeout)
-        if self._timeout == 0:
-            self._response(Gtk.ResponseType.OK)
-            return False
-        return True
+        _TimeoutAlert.__init__(self, timeout, _('Ok'), **kwargs)
