@@ -27,6 +27,8 @@ import logging
 import os
 from ConfigParser import ConfigParser
 
+import gi
+gi.require_version('Rsvg', '2.0')
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
