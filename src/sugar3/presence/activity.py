@@ -555,24 +555,19 @@ class _JoinCommand(_BaseCommand):
                              error_handler=self.__error_handler_cb,
                              dbus_interface=PROPERTIES_IFACE)
 
+    def __error_handler_cb(self, error):
+        logging.error('__error_handler_cb %r', error)
+
     def __get_self_handle_cb(self, handle):
         self._global_self_handle = handle
 
-        self._connection.RequestChannel(
-            CHANNEL_TYPE_TEXT,
-            HANDLE_TYPE_ROOM,
-            self.room_handle, True,
-            reply_handler=self.__create_text_channel_cb,
-            error_handler=self.__error_handler_cb,
-            dbus_interface=CONNECTION)
-
-    def __create_text_channel_cb(self, channel_path):
-        Channel(self._connection.requested_bus_name, channel_path,
+        ok, path, props = self._connection.EnsureChannel(dbus.Dictionary({
+            CHANNEL + '.ChannelType': CHANNEL_TYPE_TEXT,
+            CHANNEL + '.TargetHandleType': HANDLE_TYPE_ROOM,
+            CHANNEL + '.TargetHandle': self.room_handle
+        }, signature='sv'))
+        Channel(self._connection.requested_bus_name, path,
                 ready_handler=self.__text_channel_ready_cb)
-
-    def __error_handler_cb(self, error):
-        self._finished = True
-        self.emit('finished', error)
 
     def __text_channel_ready_cb(self, channel):
         _logger.debug('%r: Text channel %r is ready' % (self, channel))
