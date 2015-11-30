@@ -6,5 +6,6 @@ sugar_PYTHON =			\
 	connectionmanager.py	\
 	sugartubeconn.py	\
 	tubeconn.py		\
+	wrapper.py		\
 	presenceservice.py
 
