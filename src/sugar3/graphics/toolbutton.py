@@ -36,7 +36,7 @@ def _add_accelerator(tool_button):
 
     # TODO: should we remove the accelerator from the prev top level?
     if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
-        logging.warning('No Gtk.AccelGroup in the top level window.')
+        logging.debug('No Gtk.AccelGroup in the top level window.')
         return
 
     accel_group = tool_button.get_toplevel().sugar_accel_group

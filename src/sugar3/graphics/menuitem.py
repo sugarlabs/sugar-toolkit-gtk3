@@ -77,7 +77,7 @@ class MenuItem(Gtk.ImageMenuItem):
         # TODO: should we remove the accelerator from the prev top level?
 
         if not hasattr(self.get_toplevel(), 'sugar_accel_group'):
-            logging.warning('No Gtk.AccelGroup in the top level window.')
+            logging.debug('No Gtk.AccelGroup in the top level window.')
             return
 
         accel_group = self.get_toplevel().sugar_accel_group
