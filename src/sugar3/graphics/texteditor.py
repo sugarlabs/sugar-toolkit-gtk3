@@ -36,7 +36,8 @@ class CollabTextEditor(Gtk.Box):
         self.textview.set_cursor_visible(True)
         self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
         self.textbuffer = self.textview.get_buffer()
-        self.textbuffer.connect('changed', self.__text_buffer_edited_cb)
+	self.textbuffer.connect('insert-text', self.__text_buffer_inserted_cb)
+	self.textbuffer.connect('delete-range', self.__text_buffer_deleted_cb)
         self.textbuffer.set_text("")
         self.textview.show()
         self.pack_start(self.textview, expand=True, fill=True, padding=0)
@@ -53,19 +54,36 @@ class CollabTextEditor(Gtk.Box):
     '''
     def __message_cb(self, collab, buddy, message):
         action = message.get('action')
-	if action == 'entry_changed':
-	    self.textbuffer.set_text(message.get('new_text'))
+	if action == 'entry_inserted':
+	    self.textbuffer.insert(message.get('start_iter'),message.get('new_text'))
+	if action == 'entry_deleted':
+	    self.textbuffer.delete(message.get('start_iter'),message.get('end_iter'))
 
     '''
-    The text buffer edited callback is called whenever any changes
-    are made in the editor, so that other users get updated with 
+    The text buffer inserted callback is called whenever text is 
+    inserted in the editor, so that other users get updated with 
     these changes.
 
     Args:
         textbuffer (:class:`Gtk.TextBuffer`): text storage widget
+	start (:class:`Gtk.Iterator`): a pointer to the start position
     '''
-    def __text_buffer_edited_cb(self,textbuffer):
-	start_iter = textbuffer.get_start_iter()
-	end_iter = textbuffer.get_end_iter()
-	logging.debug('Text has been updated, %s' % (textbuffer.get_text(start_iter, end_iter, True)))
-	self._collab.post(dict(action='entry_changed',new_text=textbuffer.get_text(start_iter, end_iter, True)))
+    def __text_buffer_inserted_cb(self, textbuffer, start, text, length):
+	logging.debug('Text inserted is %s' % (text))
+	logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
+        self._collab.post(dict(action='entry_inserted', start_iter = start, new_text = text))
+
+    '''
+    The text buffer deleted callback is called whenever any text is 
+    removed in the editor, so that other users get updated with 
+    these changes.
+
+    Args:
+        textbuffer (:class:`Gtk.TextBuffer`): text storage widget
+	start (:class:`Gtk.Iterator`): a pointer to the start position
+	end (:class:`Gtk.Iterator`): a pointer to the end position
+    '''
+    def __text_buffer_deleted_cb(self,textbuffer,start,end):
+	logging.debug('Text deleted is %s' % (textbuffer.get_text(start, end, True)))
+	logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
+        self._collab.post(dict(action='entry_deleted',start_iter=start,end_iter=end))
