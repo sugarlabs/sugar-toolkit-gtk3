@@ -32,7 +32,7 @@ from sugar3.graphics import style
 from sugar3.graphics.palettemenu import PaletteMenuBox
 from sugar3 import profile
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit-Gtk3', msg)
+_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 def _create_activity_icon(metadata):
