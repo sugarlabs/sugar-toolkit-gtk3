@@ -59,7 +59,7 @@ class CollabTextEditor(Gtk.Box):
         self.textbuffer.set_text("")
         self.textview.show()
         self.pack_start(self.textview, expand=True, fill=True, padding=0)
-        self.initialize_status=0
+        self.has_initialized = False
         self.show()
 
     '''
@@ -74,9 +74,9 @@ class CollabTextEditor(Gtk.Box):
     '''
     def __message_cb(self, collab, buddy, message):
         action = message.get('action')
-        if action == 'init_response' and self.initialize_status == 0:
+        if action == 'init_response' and self.has_initialized == False:
             print 'response_for_init'
-            self.initialize_status=1
+            self.has_initialized=True
             self.textbuffer.set_text(message.get('current_content'))
         if action == 'entry_inserted':
             self.textbuffer.insert(message.get('start_iter'),message.get('new_text'))
@@ -96,8 +96,8 @@ class CollabTextEditor(Gtk.Box):
         start (:class:`Gtk.Iterator`): a pointer to the start position
     '''
     def __text_buffer_inserted_cb(self, textbuffer, start, text, length):
-        if self.initialize_status==0:
-            self.initialize_status=1
+        if self.has_initialized == False:
+            self.has_initialized = True
         logging.debug('Text inserted is %s' % (text))
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
         self._collab.post(dict(action='entry_inserted', start_iter = start, new_text = text))
@@ -113,8 +113,8 @@ class CollabTextEditor(Gtk.Box):
         end (:class:`Gtk.Iterator`): a pointer to the end position
     '''
     def __text_buffer_deleted_cb(self,textbuffer,start,end):
-        if self.initialize_status==0:
-            self.initialize_status=1
+        if self.has_initialized == False:
+            self.has_initialized = True
         logging.debug('Text deleted is %s' % (textbuffer.get_text(start, end, True)))
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
         self._collab.post(dict(action='entry_deleted',start_iter=start,end_iter=end))
