@@ -43,8 +43,9 @@ class CollabTextEditor(Gtk.Box):
         scrolled_window.show()
 
     '''
-    def __init__(self,activity):
+    def __init__(self,activity,editor_id):
         Gtk.Box.__init__(self)
+        self._id = editor_id
         self._collab = CollabWrapper(activity)
         self._collab.connect('message', self.__message_cb)
         self._collab.connect('buddy-joined', self.__buddy_joined_cb)
@@ -74,17 +75,25 @@ class CollabTextEditor(Gtk.Box):
     '''
     def __message_cb(self, collab, buddy, message):
         action = message.get('action')
-        if action == 'init_response' and self.has_initialized == False:
+        if action == 'init_response' and self.has_initialized == False and message.get('res_id') == self._id:
             print 'response_for_init'
-            self.has_initialized=True
+            self.has_initialized = True
             self.textbuffer.set_text(message.get('current_content'))
-        if action == 'entry_inserted':
+        if action == 'entry_inserted' and message.get('res_id') == self._id:
             self.textbuffer.insert(message.get('start_iter'),message.get('new_text'))
-        if action == 'entry_deleted':
+        if action == 'entry_deleted' and message.get('res_id') == self._id:
             self.textbuffer.delete(message.get('start_iter'),message.get('end_iter'))
-    
+   
+    '''
+    The buddy joined callback is called whenever another user joins
+    this activity. We then send them the contents of the text buffer
+    so that their text buffer is an identical copy.
+
+    Args:
+        buddy : another user who has joined the activity
+    '''
     def __buddy_joined_cb(self, buddy):
-        self._collab.post(dict(action='init_response',current_content=self.textbuffer.get_text(self.textbuffer.get_start_iter(),self.textbuffer.get_end_iter(),True)))
+        self._collab.post(dict(action='init_response', res_id = self._id, current_content=self.textbuffer.get_text(self.textbuffer.get_start_iter(),self.textbuffer.get_end_iter(),True)))
 
     '''
     The text buffer inserted callback is called whenever text is 
@@ -100,7 +109,7 @@ class CollabTextEditor(Gtk.Box):
             self.has_initialized = True
         logging.debug('Text inserted is %s' % (text))
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
-        self._collab.post(dict(action='entry_inserted', start_iter = start, new_text = text))
+        self._collab.post(dict(action='entry_inserted', res_id = self._id, start_iter = start, new_text = text))
 
     '''
     The text buffer deleted callback is called whenever any text is 
@@ -117,4 +126,5 @@ class CollabTextEditor(Gtk.Box):
             self.has_initialized = True
         logging.debug('Text deleted is %s' % (textbuffer.get_text(start, end, True)))
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
-        self._collab.post(dict(action='entry_deleted',start_iter=start,end_iter=end))
+        self._collab.post(dict(action='entry_deleted', res_id = self._id, start_iter=start, end_iter=end))
+        
