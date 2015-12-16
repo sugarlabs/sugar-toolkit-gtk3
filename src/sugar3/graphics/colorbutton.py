@@ -59,7 +59,7 @@ class _ColorButton(Gtk.Button):
         self._accept_drag = True
 
         self._preview = Icon(icon_name='color-preview',
-                             pixel_size=Gtk.IconSize.BUTTON)
+                             pixel_size=style.SMALL_ICON_SIZE)
 
         GObject.GObject.__init__(self, **kwargs)
 
