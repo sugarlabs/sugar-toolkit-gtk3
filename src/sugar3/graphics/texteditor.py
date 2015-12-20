@@ -25,16 +25,17 @@ which can be included in any activity and then multiple
 users can collaborate and edit together in the editor.
 '''
 
+
 class CollabTextEditor(Gtk.Box):
     '''
     A CollabTextEditor widget is a adjustable text editor which
     can be placed on an activity screen.
-   
+
     The `changed` signal is usually emitted when the text in the
     editor is changed by a user.
     The `message` signal is usually emitted when another user makes
     changes in the text editor, so they are reflected in your editor.
-    
+
     The widget can be embedded in a window which can be displayed.
     Example usage:
         editorinstance = CollabTextEditor(self)
@@ -42,7 +43,8 @@ class CollabTextEditor(Gtk.Box):
         scrolled_window.show()
 
     '''
-    def __init__(self,activity,editor_id):
+
+    def __init__(self, activity, editor_id):
         Gtk.Box.__init__(self)
         self._id = editor_id
         self._collab = CollabWrapper(activity)
@@ -72,6 +74,7 @@ class CollabTextEditor(Gtk.Box):
         buddy : another user who sent the message
         message : updates send over from other users
     '''
+
     def __message_cb(self, collab, buddy, message):
         action = message.get('action')
         if action == 'init_response' and self.has_initialized == False and message.get('res_id') == self._id:
@@ -79,10 +82,12 @@ class CollabTextEditor(Gtk.Box):
             self.has_initialized = True
             self.textbuffer.set_text(message.get('current_content'))
         if action == 'entry_inserted' and message.get('res_id') == self._id:
-            self.textbuffer.insert(message.get('start_iter'),message.get('new_text'))
+            self.textbuffer.insert(message.get(
+                'start_iter'), message.get('new_text'))
         if action == 'entry_deleted' and message.get('res_id') == self._id:
-            self.textbuffer.delete(message.get('start_iter'),message.get('end_iter'))
-   
+            self.textbuffer.delete(message.get(
+                'start_iter'), message.get('end_iter'))
+
     '''
     The buddy joined callback is called whenever another user joins
     this activity. We then send them the contents of the text buffer
@@ -91,8 +96,10 @@ class CollabTextEditor(Gtk.Box):
     Args:
         buddy : another user who has joined the activity
     '''
+
     def __buddy_joined_cb(self, buddy):
-        self._collab.post(dict(action='init_response', res_id = self._id, current_content=self.textbuffer.get_text(self.textbuffer.get_start_iter(),self.textbuffer.get_end_iter(),True)))
+        self._collab.post(dict(action='init_response', res_id=self._id, current_content=self.textbuffer.get_text(
+            self.textbuffer.get_start_iter(), self.textbuffer.get_end_iter(), True)))
 
     '''
     The text buffer inserted callback is called whenever text is 
@@ -103,12 +110,15 @@ class CollabTextEditor(Gtk.Box):
         textbuffer (:class:`Gtk.TextBuffer`): text storage widget
         start (:class:`Gtk.Iterator`): a pointer to the start position
     '''
+
     def __text_buffer_inserted_cb(self, textbuffer, start, text, length):
         if self.has_initialized == False:
             self.has_initialized = True
         logging.debug('Text inserted is %s' % (text))
-        logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
-        self._collab.post(dict(action='entry_inserted', res_id = self._id, start_iter = start, new_text = text))
+        logging.debug('Text has been updated, %s' % (textbuffer.get_text(
+            textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
+        self._collab.post(dict(action='entry_inserted',
+                               res_id=self._id, start_iter=start, new_text=text))
 
     '''
     The text buffer deleted callback is called whenever any text is 
@@ -120,10 +130,13 @@ class CollabTextEditor(Gtk.Box):
         start (:class:`Gtk.Iterator`): a pointer to the start position
         end (:class:`Gtk.Iterator`): a pointer to the end position
     '''
-    def __text_buffer_deleted_cb(self,textbuffer,start,end):
+
+    def __text_buffer_deleted_cb(self, textbuffer, start, end):
         if self.has_initialized == False:
             self.has_initialized = True
-        logging.debug('Text deleted is %s' % (textbuffer.get_text(start, end, True)))
-        logging.debug('Text has been updated, %s' % (textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
-        self._collab.post(dict(action='entry_deleted', res_id = self._id, start_iter=start, end_iter=end))
-        
+        logging.debug('Text deleted is %s' %
+                      (textbuffer.get_text(start, end, True)))
+        logging.debug('Text has been updated, %s' % (textbuffer.get_text(
+            textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
+        self._collab.post(dict(action='entry_deleted',
+                               res_id=self._id, start_iter=start, end_iter=end))
