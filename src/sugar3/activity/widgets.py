@@ -32,6 +32,7 @@ from sugar3.graphics import style
 from sugar3.graphics.palettemenu import PaletteMenuBox
 from sugar3 import profile
 
+
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
@@ -395,4 +396,3 @@ class EditToolbar(Gtk.Toolbar):
         self.paste = PasteButton()
         self.insert(self.paste, -1)
         self.paste.show()
-
