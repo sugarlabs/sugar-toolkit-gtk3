@@ -35,6 +35,12 @@ _UNFULLSCREEN_BUTTON_VISIBILITY_TIMEOUT = 2
 
 
 class UnfullscreenButton(Gtk.Window):
+    """
+    A ready-made "Unfullscreen" button.
+
+    The type of button used by :class:`sugar3.graphics.window.Window` to exit
+    fullscreen mode when in fullscreen mode.
+    """
 
     def __init__(self):
         Gtk.Window.__init__(self)
@@ -84,6 +90,15 @@ class UnfullscreenButton(Gtk.Window):
 
 
 class Window(Gtk.Window):
+    """
+    UI interface for activity Windows
+
+    Windows are used as a container to display things that happen in an
+    activity. They contain canvas content, alerts messages, a tray and a
+    toolbar. Windows can either be in fullscreen or non-fullscreen mode.
+    Note that the toolbar is hidden in fullscreen mode, while it is visible in
+    non-fullscreen mode.
+    """
 
     def __init__(self, **args):
         self._enable_fullscreen_mode = True
@@ -131,11 +146,12 @@ class Window(Gtk.Window):
         self._unfullscreen_button_timeout_id = None
 
     def reveal(self):
-        """ Make window active
+        """
+        Make window active.
 
-        In contrast with present(), brings window to the top
-        even after invoking on response on non-gtk events.
-        See #1423.
+        Brings the window to the top and makes it acive, even after invoking on
+        response to non-gtk events (in contrast to present()).
+        See bug #1423
         """
         window = self.get_window()
         if window is None:
@@ -147,9 +163,18 @@ class Window(Gtk.Window):
         window.focus(timestamp)
 
     def is_fullscreen(self):
+        """
+        Check whether the window is fullscreen or not.
+
+        Returns:
+            bool: true if window is fullscreen, false otherwise
+        """
         return self._is_fullscreen
 
     def fullscreen(self):
+        """
+        Make the window fullscreen and hide the toolbar.
+        """
         palettegroup.popdown_all()
         if self._toolbar_box is not None:
             self._toolbar_box.hide()
@@ -171,6 +196,9 @@ class Window(Gtk.Window):
                     self.__unfullscreen_button_timeout_cb)
 
     def unfullscreen(self):
+        """
+        Put the window in non-fullscreen mode and make the toolbar visible.
+        """
         if self._toolbar_box is not None:
             self._toolbar_box.show()
         if self.tray is not None:
@@ -186,6 +214,12 @@ class Window(Gtk.Window):
                 self._unfullscreen_button_timeout_id = None
 
     def set_canvas(self, canvas):
+        """
+        Set current canvas of the window.
+
+        Args:
+            canvas (:class:`Gtk.Widget`): the canvas to set as current
+        """
         if self._canvas:
             self.__hbox.remove(self._canvas)
 
@@ -196,14 +230,32 @@ class Window(Gtk.Window):
         self.__vbox.set_focus_child(self._canvas)
 
     def get_canvas(self):
+        """
+        Get current canvas content of the window.
+
+        Returns:
+            Gtk.Widget: the current canvas of the window
+        """
         return self._canvas
 
     canvas = property(get_canvas, set_canvas)
 
     def get_toolbar_box(self):
+        """
+        Return window's current toolbar.
+
+        Returns:
+            sugar3.graphics.toolbar_box.ToolbarBox: the current toolbar box of the window
+        """
         return self._toolbar_box
 
     def set_toolbar_box(self, toolbar_box):
+        """
+        Set window's current toolbar.
+
+        Args:
+            toolbar_box (:class:`sugar3.graphics.toolbarbox.ToolbarBox`): the toolbar box to set as current
+        """
         if self._toolbar_box:
             self.__vbox.remove(self._toolbar_box)
 
@@ -216,6 +268,13 @@ class Window(Gtk.Window):
     toolbar_box = property(get_toolbar_box, set_toolbar_box)
 
     def set_tray(self, tray, position):
+        """
+        Set the window's current tray.
+
+        Args:
+            tray (:class:`sugar3.graphics.tray.HTray` or :class:`sugar3.graphics.tray.VTray`): the tray to set
+            position (Gtk.PositionType constant): the edge to set the tray at
+        """
         if self.tray:
             box = self.tray.get_parent()
             box.remove(self.tray)
@@ -230,6 +289,14 @@ class Window(Gtk.Window):
         self.tray = tray
 
     def add_alert(self, alert):
+        """
+        Add an alert message to the window.
+        Add an alert to the window. Note that you do need to .show the alert
+        to make it visible.
+
+        Args:
+            alert (:class:`sugar3.graphics.alert.Alert`): the alert to add
+        """
         self._alerts.append(alert)
         if len(self._alerts) == 1:
             self.__vbox.pack_start(alert, False, False, 0)
@@ -239,6 +306,12 @@ class Window(Gtk.Window):
                 self.__vbox.reorder_child(alert, 0)
 
     def remove_alert(self, alert):
+        """
+        Remove an alert message from the window.
+
+        Args:
+            alert (:class:`sugar3.graphics.alert.Alert`): the alert to remove
+        """
         if alert in self._alerts:
             self._alerts.remove(alert)
             # if the alert is the visible one on top of the queue
@@ -320,9 +393,21 @@ class Window(Gtk.Window):
         self.__vbox.size_allocate(allocation)
 
     def set_enable_fullscreen_mode(self, enable_fullscreen_mode):
+        """
+        Set whether the window is allowed to enter fullscreen mode.
+
+        Args:
+            enable_fullscreen_mode (bool): the boolean to set `_enable_fullscreen_mode` to
+        """
         self._enable_fullscreen_mode = enable_fullscreen_mode
 
     def get_enable_fullscreen_mode(self):
+        """
+        Return whether the window is allowed to enter fullscreen mode.
+
+        Returns:
+            bool: true if window is allowed to be fullscreen, false otherwise
+        """
         return self._enable_fullscreen_mode
 
     enable_fullscreen_mode = GObject.property(
