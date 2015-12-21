@@ -1411,14 +1411,11 @@ class TreeViewInvoker(Invoker):
 
         self._tree_view = None
         self._motion_hid = None
-        self._leave_hid = None
         self._release_hid = None
         self._long_pressed_hid = None
         self._position_hint = self.AT_CURSOR
 
         self._long_pressed_controller = SugarGestures.LongPressController()
-
-        self._mouse_detector = MouseSpeedDetector(200, 5)
 
         self._tree_view = None
         self._path = None
@@ -1431,10 +1428,6 @@ class TreeViewInvoker(Invoker):
 
         self._motion_hid = tree_view.connect('motion-notify-event',
                                              self.__motion_notify_event_cb)
-        self._enter_hid = tree_view.connect('enter-notify-event',
-                                            self.__enter_notify_event_cb)
-        self._leave_hid = tree_view.connect('leave-notify-event',
-                                            self.__leave_notify_event_cb)
         self._release_hid = tree_view.connect('button-release-event',
                                               self.__button_release_event_cb)
         self._long_pressed_hid = self._long_pressed_controller.connect(
@@ -1443,19 +1436,14 @@ class TreeViewInvoker(Invoker):
             tree_view,
             SugarGestures.EventControllerFlags.NONE)
 
-        self._mouse_detector.connect('motion-slow', self.__mouse_slow_cb)
-        self._mouse_detector.parent = tree_view
         Invoker.attach(self, tree_view)
 
     def detach(self):
         Invoker.detach(self)
         self._tree_view.disconnect(self._motion_hid)
-        self._tree_view.disconnect(self._enter_hid)
-        self._tree_view.disconnect(self._leave_hid)
         self._tree_view.disconnect(self._release_hid)
         self._long_pressed_controller.detach(self._tree_view)
         self._long_pressed_controller.disconnect(self._long_pressed_hid)
-        self._mouse_detector.disconnect_by_func(self.__mouse_slow_cb)
 
     def get_rect(self):
         return self._tree_view.get_background_area(self._path, self._column)
@@ -1464,25 +1452,27 @@ class TreeViewInvoker(Invoker):
         return self._tree_view.get_toplevel()
 
     def __motion_notify_event_cb(self, widget, event):
-        try:
-            path, column, x_, y_ = self._tree_view.get_path_at_pos(
-                int(event.x), int(event.y))
-            if path != self._path or column != self._column:
-                self._redraw_cell(self._path, self._column)
-                self._redraw_cell(path, column)
+        here = self._tree_view.get_path_at_pos(int(event.x), int(event.y))
+        if here is None:
+            if self._path is not None:
+                self.notify_mouse_leave()
+            self._path = None
+            self._column = None
+            return
 
-                self._path = path
-                self._column = column
+        path, column, x_, y_ = here
+        if path != self._path or column != self._column:
+            self._redraw_cell(self._path, self._column)
+            self._redraw_cell(path, column)
 
-                if self.palette is not None:
-                    self.palette.popdown(immediate=True)
-                    self.palette = None
+            self._path = path
+            self._column = column
 
-                self._mouse_detector.start()
-        except TypeError:
-            # tree_view.get_path_at_pos() fail if x,y poition is over
-            # a empty area
-            pass
+            if self.palette is not None:
+                self.palette.popdown(immediate=True)
+                self.palette = None
+
+            self.notify_mouse_enter()
 
     def _redraw_cell(self, path, column):
         area = self._tree_view.get_background_area(path, column)
@@ -1490,15 +1480,12 @@ class TreeViewInvoker(Invoker):
             self._tree_view.convert_bin_window_to_widget_coords(area.x, area.y)
         self._tree_view.queue_draw_area(x, y, area.width, area.height)
 
-    def __enter_notify_event_cb(self, widget, event):
-        self._mouse_detector.start()
-
-    def __leave_notify_event_cb(self, widget, event):
-        self._mouse_detector.stop()
-
     def __button_release_event_cb(self, widget, event):
         x, y = int(event.x), int(event.y)
-        path, column, cell_x, cell_y = self._tree_view.get_path_at_pos(x, y)
+        here = self._tree_view.get_path_at_pos(x, y)
+        if here is None:
+            return False
+        path, column, cell_x, cell_y = here
         self._path = path
         self._column = column
         if event.button == 1:
@@ -1512,10 +1499,9 @@ class TreeViewInvoker(Invoker):
                 cellrenderer.emit('clicked', path)
             # So the treeview receives it and knows a drag isn't going on
             return False
-        if event.button == 3:
+        elif event.button == 3:
             # right mouse button
-            self._mouse_detector.stop()
-            self._change_palette()
+            self._ensure_palette_exists()
             self.notify_right_click(event.x_root, event.y_root)
             return True
         else:
@@ -1525,15 +1511,10 @@ class TreeViewInvoker(Invoker):
         path, column, x_, y_ = self._tree_view.get_path_at_pos(x, y)
         self._path = path
         self._column = column
-        self._change_palette()
+        self._ensure_palette_exists()
         self.notify_right_click(x, y)
 
-    def __mouse_slow_cb(self, widget):
-        self._mouse_detector.stop()
-        self._change_palette()
-        self.emit('mouse-enter')
-
-    def _change_palette(self):
+    def _ensure_palette_exists(self):
         if hasattr(self._tree_view, 'create_palette'):
             self.palette = self._tree_view.create_palette(
                 self._path, self._column)
