@@ -82,11 +82,15 @@ class CollabTextEditor(Gtk.Box):
             self.has_initialized = True
             self.textbuffer.set_text(message.get('current_content'))
         if action == 'entry_inserted' and message.get('res_id') == self._id:
-            self.textbuffer.insert(message.get(
-                'start_iter'), message.get('new_text'))
+            start_iter=self.textbuffer.get_iter_at_line_offset(message.get('start_iter_line'),
+                    message.get('start_iter_offset'))
+            self.textbuffer.insert(start_iter, message.get('new_text'))
         if action == 'entry_deleted' and message.get('res_id') == self._id:
-            self.textbuffer.delete(message.get(
-                'start_iter'), message.get('end_iter'))
+            start_iter=self.textbuffer.get_iter_at_line_offset(message.get('start_iter_line'),
+                    message.get('start_iter_offset'))
+            end_iter=self.textbuffer.get_iter_at_line_offset(message.get('end_iter_line'),
+                    message.get('end_iter_offset'))
+            self.textbuffer.delete(start_iter, end_iter)
 
     '''
     The buddy joined callback is called whenever another user joins
@@ -118,7 +122,8 @@ class CollabTextEditor(Gtk.Box):
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(
             textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
         self._collab.post(dict(action='entry_inserted',
-                               res_id=self._id, start_iter=start, new_text=text))
+                               res_id=self._id, start_iter_offset=start.get_offset(), 
+                               start_iter_line=start.get_line(), new_text=text))
 
     '''
     The text buffer deleted callback is called whenever any text is 
@@ -139,4 +144,6 @@ class CollabTextEditor(Gtk.Box):
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(
             textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
         self._collab.post(dict(action='entry_deleted',
-                               res_id=self._id, start_iter=start, end_iter=end))
+                               res_id=self._id, start_iter_offset=start.get_offset(), 
+                               start_iter_line=start.get_line(),end_iter_offset=end.get_offset(), 
+                               end_iter_line=end.get_line()))
