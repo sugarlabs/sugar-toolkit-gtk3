@@ -14,9 +14,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-"""Subclass of TubeConnection that converts handles to Sugar Buddies
+"""
+Deprecated - Telepathy Tubes have been removed upstream.  Consider using
+             Text channels or other channels:
 
-STABLE.
+    http://telepathy.freedesktop.org/doc/book/chapter.channel.html
 """
 
 from telepathy.constants import (

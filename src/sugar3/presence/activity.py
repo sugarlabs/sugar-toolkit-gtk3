@@ -96,7 +96,6 @@ class Activity(GObject.GObject):
         self._account_path = account_path
         self.telepathy_conn = connection
         self.telepathy_text_chan = None
-        self.telepathy_tubes_chan = None
 
         self.room_handle = room_handle
         self._join_command = None
@@ -267,15 +266,11 @@ class Activity(GObject.GObject):
     def __invite_cb(self, response_cb, error=None):
         response_cb(error)
 
-    def set_up_tubes(self, reply_handler, error_handler):
-        raise NotImplementedError()
-
     def __joined_cb(self, join_command, error):
         _logger.debug('%r: Join finished %r' % (self, error))
         if error is not None:
             self.emit('joined', error is None, str(error))
         self.telepathy_text_chan = join_command.text_channel
-        self.telepathy_tubes_chan = join_command.tubes_channel
         self._channel_self_handle = join_command.channel_self_handle
         self._text_channel_group_flags = join_command.text_channel_group_flags
         self._start_tracking_buddies()
@@ -407,7 +402,6 @@ class Activity(GObject.GObject):
             self._joined = True
             self.room_handle = share_command.room_handle
             self.telepathy_text_chan = share_command.text_channel
-            self.telepathy_tubes_chan = share_command.tubes_channel
             self._channel_self_handle = share_command.channel_self_handle
             self._text_channel_group_flags = \
                 share_command.text_channel_group_flags
@@ -456,8 +450,7 @@ class Activity(GObject.GObject):
         """
         bus_name = self.telepathy_conn.requested_bus_name
         connection_path = self.telepathy_conn.object_path
-        channels = [self.telepathy_text_chan.object_path,
-                    self.telepathy_tubes_chan.object_path]
+        channels = [self.telepathy_text_chan.object_path]
 
         _logger.debug('%r: bus name is %s, connection is %s, channels are %r' %
                       (self, bus_name, connection_path, channels))
@@ -485,7 +478,6 @@ class _BaseCommand(GObject.GObject):
 
         self.text_channel = None
         self.text_channel_group_flags = None
-        self.tubes_channel = None
         self.room_handle = None
         self.channel_self_handle = None
 
@@ -527,7 +519,6 @@ class _ShareCommand(_BaseCommand):
 
         self.text_channel = join_command.text_channel
         self.text_channel_group_flags = join_command.text_channel_group_flags
-        self.tubes_channel = join_command.tubes_channel
         self.channel_self_handle = join_command.channel_self_handle
 
         self._connection.AddActivity(
@@ -564,55 +555,23 @@ class _JoinCommand(_BaseCommand):
                              error_handler=self.__error_handler_cb,
                              dbus_interface=PROPERTIES_IFACE)
 
+    def __error_handler_cb(self, error):
+        logging.error('__error_handler_cb %r', error)
+
     def __get_self_handle_cb(self, handle):
         self._global_self_handle = handle
 
-        self._connection.RequestChannel(
-            CHANNEL_TYPE_TEXT,
-            HANDLE_TYPE_ROOM,
-            self.room_handle, True,
-            reply_handler=self.__create_text_channel_cb,
-            error_handler=self.__error_handler_cb,
-            dbus_interface=CONNECTION)
-
-        self._connection.RequestChannel(
-            CHANNEL_TYPE_TUBES,
-            HANDLE_TYPE_ROOM,
-            self.room_handle,
-            True,
-            reply_handler=self.__create_tubes_channel_cb,
-            error_handler=self.__error_handler_cb,
-            dbus_interface=CONNECTION)
-
-    def __create_text_channel_cb(self, channel_path):
-        Channel(self._connection.requested_bus_name, channel_path,
+        ok, path, props = self._connection.EnsureChannel(dbus.Dictionary({
+            CHANNEL + '.ChannelType': CHANNEL_TYPE_TEXT,
+            CHANNEL + '.TargetHandleType': HANDLE_TYPE_ROOM,
+            CHANNEL + '.TargetHandle': self.room_handle
+        }, signature='sv'))
+        Channel(self._connection.requested_bus_name, path,
                 ready_handler=self.__text_channel_ready_cb)
-
-    def __create_tubes_channel_cb(self, channel_path):
-        Channel(self._connection.requested_bus_name, channel_path,
-                ready_handler=self.__tubes_channel_ready_cb)
-
-    def __error_handler_cb(self, error):
-        self._finished = True
-        self.emit('finished', error)
-
-    def __tubes_channel_ready_cb(self, channel):
-        _logger.debug('%r: Tubes channel %r is ready' % (self, channel))
-        self.tubes_channel = channel
-        self._tubes_ready()
 
     def __text_channel_ready_cb(self, channel):
         _logger.debug('%r: Text channel %r is ready' % (self, channel))
         self.text_channel = channel
-        self._tubes_ready()
-
-    def _tubes_ready(self):
-        if self.text_channel is None or \
-                self.tubes_channel is None:
-            return
-
-        _logger.debug('%r: finished setting up tubes' % self)
-
         self._add_self_to_channel()
 
     def __text_channel_group_flags_changed_cb(self, added, removed):
