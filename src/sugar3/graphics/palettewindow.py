@@ -970,15 +970,19 @@ class Invoker(GObject.GObject):
             dright = screen_area.x + screen_area.width - rect.x - rect.width
 
             ih = 0
+            
+            if palette_dim.width == 0:
+                ph = 0
 
-            # Set palette_halign to align to screen on left
-            if dleft > dright:
-                ph = -float(dleft) / palette_dim.width
-
-            # Set palette_halign to align to screen on right
             else:
-                ph = -float(palette_dim.width - dright - rect.width) \
-                    / palette_dim.width
+                # Set palette_halign to align to screen on left
+                if dleft > dright:
+                    ph = -float(dleft) / palette_dim.width
+
+                # Set palette_halign to align to screen on right
+                else:
+                    ph = -float(palette_dim.width - dright - rect.width) \
+                        / palette_dim.width
 
         return (ph, pv, ih, iv)
 
