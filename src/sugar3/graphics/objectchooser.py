@@ -46,7 +46,9 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
     Retrive a pixbuf with the content of the preview field
 
     Args:
-        metadata (dictionary): the metadata dictionary. Can't be None, use metadata.get('preview', '')
+        metadata (dictionary): preview data from the metadata dictionary. Can't
+            be None. Returned from the
+            sugar3.datastore.datastore.DSObject.get_metadata() method.
 
     Keyword Args:
         width (int): the pixbuf width, if is not set, the default width will be used
@@ -55,6 +57,16 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
     Returns:
         Pixbuf, the generated Pixbuf
         None, if it could not be created
+
+    Example:
+        pixbuf = get_preview_pixbuf(metadata.get('preview', ''))                
+        has_preview = pixbuf is not None                                        
+                                                                               
+        if has_preview:                                                        
+            im = Gtk.Image()                                                    
+            im.set_from_pixbuf(pixbuf)                                          
+            box.add(im)                                                        
+            im.show()
     """
     if width == -1:
         width = PREVIEW_SIZE[0]
@@ -103,7 +115,7 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
 
 class ObjectChooser(object):
     """
-    UI interface for objec choosers.
+    UI interface for object choosers.
 
     Object choosers can be used by acivities to allow the user to select objects
     from the file system or from some other similar source.
@@ -112,7 +124,7 @@ class ObjectChooser(object):
         parent (:class:`Gtk.Widget`): the widget calling ObjectChooser
 
         what_filter (str): an activity bundle_id or a generic mime type as
-            defined in mime.py used to determine which objects
+            defined in :mod:`sugar3.mime` used to determine which objects
             will be presented in the object chooser
         
         filter_type (str): should be one of [None, FILTER_TYPE_GENERIC_MIME,
