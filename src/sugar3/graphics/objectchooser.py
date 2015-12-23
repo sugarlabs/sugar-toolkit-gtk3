@@ -152,6 +152,13 @@ class ObjectChooser(object):
         show_preview (bool): if True will show the preview image asociated with
             the object in the Journal. This option is only available if
             filter_type is selected.
+
+    Examples:
+        chooser = ObjectChooser(self._activity, what_filter='Image')
+        
+        chooser = ObjectChooser(parent=self,
+                                what_filter=self.get_bundle_id(),
+                                filter_type=FILTER_TYPE_ACTIVITY)
     """
 
     def __init__(self, parent=None, what_filter=None, filter_type=None,
