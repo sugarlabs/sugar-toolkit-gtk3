@@ -27,6 +27,7 @@ from functools import partial
 import dbus
 from dbus import PROPERTIES_IFACE
 from gi.repository import GObject
+from gi.repository import Gio
 from telepathy.client import Channel
 from telepathy.interfaces import CHANNEL, \
     CHANNEL_INTERFACE_GROUP, \
@@ -45,6 +46,9 @@ CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 CONN_INTERFACE_ROOM_CONFIG = \
     'org.freedesktop.Telepathy.Channel.Interface.RoomConfig1'
+
+settings = Gio.Settings('org.sugarlabs.collaboration')
+TUBES_SUPPORTED = settings.get_boolean('tubes-supported')
 
 _logger = logging.getLogger('sugar3.presence.activity')
 
@@ -575,14 +579,15 @@ class _JoinCommand(_BaseCommand):
             error_handler=self.__error_handler_cb,
             dbus_interface=CONNECTION)
 
-        self._connection.RequestChannel(
-            CHANNEL_TYPE_TUBES,
-            HANDLE_TYPE_ROOM,
-            self.room_handle,
-            True,
-            reply_handler=self.__create_tubes_channel_cb,
-            error_handler=self.__error_handler_cb,
-            dbus_interface=CONNECTION)
+        if TUBES_SUPPORTED:
+            self._connection.RequestChannel(
+                CHANNEL_TYPE_TUBES,
+                HANDLE_TYPE_ROOM,
+                self.room_handle,
+                True,
+                reply_handler=self.__create_tubes_channel_cb,
+                error_handler=self.__error_handler_cb,
+                dbus_interface=CONNECTION)
 
     def __create_text_channel_cb(self, channel_path):
         Channel(self._connection.requested_bus_name, channel_path,
@@ -608,7 +613,7 @@ class _JoinCommand(_BaseCommand):
 
     def _tubes_ready(self):
         if self.text_channel is None or \
-                self.tubes_channel is None:
+                (TUBES_SUPPORTED and self.tubes_channel is None):
             return
 
         _logger.debug('%r: finished setting up tubes' % self)
