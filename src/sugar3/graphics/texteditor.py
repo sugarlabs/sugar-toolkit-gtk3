@@ -137,8 +137,9 @@ class CollabTextEditor(Gtk.Box):
         logging.debug('Text inserted is %s' % (text))
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(
             textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
+        print start.get_offset(),start.get_line()
         self._collab.post(dict(action='entry_inserted',
-                               res_id=self._id, start_iter_offset=start.get_offset(), 
+                               res_id=self._id, start_iter_offset=start.get_line_offset(), 
                                start_iter_line=start.get_line(), new_text=text))
 
     '''
@@ -162,6 +163,6 @@ class CollabTextEditor(Gtk.Box):
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(
             textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
         self._collab.post(dict(action='entry_deleted',
-                               res_id=self._id, start_iter_offset=start.get_offset(), 
-                               start_iter_line=start.get_line(),end_iter_offset=end.get_offset(), 
+                               res_id=self._id, start_iter_offset=start.get_line_offset(), 
+                               start_iter_line=start.get_line(),end_iter_offset=end.get_line_offset(), 
                                end_iter_line=end.get_line()))
