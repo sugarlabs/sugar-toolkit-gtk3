@@ -127,6 +127,8 @@ class CollabTextEditor(Gtk.Box):
     '''
          
     def __buddy_joined_cb(self, sender, buddy):
+        if self.has_initialized == False:
+            self.has_initialized = True
         self._collab.post(dict(action='init_response', res_id=self._id, 
             current_content=self.textbuffer.get_text(
             self.textbuffer.get_start_iter(), self.textbuffer.get_end_iter(), True)))
