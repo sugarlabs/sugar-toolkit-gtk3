@@ -15,6 +15,7 @@
 # Boston, MA 02111-1307, USA.
 
 import logging
+import time
 
 from gi.repository import Gtk
 from sugar3.presence.wrapper import CollabWrapper
@@ -66,24 +67,6 @@ class CollabTextEditor(Gtk.Box):
         self.show()
 
     '''
-    The leader of the activity sends the latest content to another buddy who joins.
-    '''
-    def get_data(self):
-        # return plain python objects - things that can be encoded
-        # using the json module
-        current_content = self.textbuffer.get_text(self.textbuffer.get_start_iter(),
-                self.textbuffer.get_end_iter(),True)
-        return current_content
-
-    '''
-    The joined buddy then sets their text editor to be a copy of the leader's text editor.
-    '''
-    def set_data(self, data):
-        # data will be the same object returned by get_data
-        print data
-        self.textbuffer.set_text(data)
-
-    '''
     The message callback is called whenever another user edits
     something in the text editor and the changes are reflected
     in the editor or when a new buddy joins and we send them the
@@ -97,7 +80,6 @@ class CollabTextEditor(Gtk.Box):
     def __message_cb(self, collab, buddy, message):
         action = message.get('action')
         if action == 'init_response' and self.has_initialized == False and message.get('res_id') == self._id:
-            print 'response_for_init'
             self.has_initialized = True
             self._callbacks_status = False
             self.textbuffer.set_text(message.get('current_content'))
@@ -119,16 +101,20 @@ class CollabTextEditor(Gtk.Box):
     
     '''
     The buddy joined callback is called whenever another user joins
-    this activity. We then send them the contents of the text buffer
-    so that their text buffer is an identical copy.
+    this activity. The leader then send them the contents of the text 
+    buffer so that their text buffer is an identical copy.
      
     Args:
          buddy : another user who has joined the activity
     '''
          
     def __buddy_joined_cb(self, sender, buddy):
+        logging.debug("Buddy joined")
+        if self._collab._leader == False:
+            return
         if self.has_initialized == False:
             self.has_initialized = True
+        time.sleep(0.5)
         self._collab.post(dict(action='init_response', res_id=self._id, 
             current_content=self.textbuffer.get_text(
             self.textbuffer.get_start_iter(), self.textbuffer.get_end_iter(), True)))
