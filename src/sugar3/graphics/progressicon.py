@@ -16,7 +16,7 @@
 # Boston, MA 02111-1307, USA.
 '''
 The progressicon module provide a progress icon; a widget like progress
-bar which shows progress of a task
+bar which shows progress of a task 
 '''
 
 from gi.repository import Gtk
