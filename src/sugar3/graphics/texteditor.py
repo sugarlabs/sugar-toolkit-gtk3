@@ -50,14 +50,16 @@ class CollabTextEditor(Gtk.TextView):
 
     '''
 
-    def __init__(self, activity, editor_id):
+    def __init__(self, activity, editor_id, collab):
         Gtk.TextView.__init__(self)
         self._id = editor_id
         self._callbacks_status = True
-        self._collab = CollabWrapper(activity)
-        self._collab.message_handler = self._collab.connect('message', self.__message_cb)
-        self._collab.buddy_joined_handler = self._collab.connect('buddy-joined', self.__buddy_joined_cb)
-        self._collab.setup()
+        collab.connect('message', self.__message_cb)
+        collab.connect('buddy-joined', self.__buddy_joined_cb)
+        if not hasattr(collab, 'setup_done'):
+            collab.setup_done = True
+            collab.setup()
+        self._collab = collab
         self.set_editable(True)
         self.set_cursor_visible(True)
         self.set_wrap_mode(Gtk.WrapMode.WORD)
