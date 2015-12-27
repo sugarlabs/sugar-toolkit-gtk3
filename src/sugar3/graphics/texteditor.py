@@ -19,11 +19,7 @@ import time
 
 from gi.repository import Gtk
 
-try:
-    from sugar3.presence.wrapper import CollabWrapper
-    logging.error('USING SUGAR COLLAB WRAPPER!')
-except ImportError:
-    from collabwrapper import CollabWrapper
+from sugar3.presence.wrapper import CollabWrapper
 
 '''
 The collabtexteditor moudle provides a text editor widget 
