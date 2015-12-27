@@ -56,9 +56,6 @@ class CollabTextEditor(Gtk.TextView):
         self._callbacks_status = True
         collab.connect('message', self.__message_cb)
         collab.connect('buddy-joined', self.__buddy_joined_cb)
-        if not hasattr(collab, 'setup_done'):
-            collab.setup_done = True
-            collab.setup()
         self._collab = collab
         self.set_editable(True)
         self.set_cursor_visible(True)
