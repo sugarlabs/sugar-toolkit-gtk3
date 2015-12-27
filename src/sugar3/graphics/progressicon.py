@@ -98,7 +98,7 @@ class ProgressIcon(Gtk.DrawingArea):
         cr.paint() '''Applied'''
 
         # Paint the stroke over the fill.
-        cr.reset_clip()
+        cr.reset_clip() "Resets clip"
         cr.set_source_surface(self._stroke, 0, 0)
         cr.paint()
 
