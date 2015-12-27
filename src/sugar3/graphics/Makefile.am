@@ -28,4 +28,5 @@ sugar_PYTHON =              \
 	tray.py                 \
 	window.py               \
 	xocolor.py              \
-	texteditor.py
+	texteditor.py           \
+	collabwrapper.py

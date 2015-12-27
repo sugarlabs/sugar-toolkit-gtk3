@@ -18,7 +18,12 @@ import logging
 import time
 
 from gi.repository import Gtk
-from sugar3.presence.wrapper import CollabWrapper
+
+try:
+    from sugar3.presence.wrapper import CollabWrapper
+    logging.error('USING SUGAR COLLAB WRAPPER!')
+except ImportError:
+    from collabwrapper import CollabWrapper
 
 '''
 The collabtexteditor moudle provides a text editor widget 
@@ -27,7 +32,7 @@ users can collaborate and edit together in the editor.
 '''
 
 
-class CollabTextEditor(Gtk.Box):
+class CollabTextEditor(Gtk.TextView):
     '''
     A CollabTextEditor widget is a adjustable text editor which
     can be placed on an activity screen.
@@ -46,25 +51,22 @@ class CollabTextEditor(Gtk.Box):
     '''
 
     def __init__(self, activity, editor_id):
-        Gtk.Box.__init__(self)
+        Gtk.TextView.__init__(self)
         self._id = editor_id
         self._callbacks_status = True
         self._collab = CollabWrapper(activity)
-        self._collab.connect('message', self.__message_cb)
-        self._collab.connect('buddy-joined', self.__buddy_joined_cb)
+        self._collab.message_handler = self._collab.connect('message', self.__message_cb)
+        self._collab.buddy_joined_handler = self._collab.connect('buddy-joined', self.__buddy_joined_cb)
         self._collab.setup()
-        self.textview = Gtk.TextView()
-        self.textview.set_editable(True)
-        self.textview.set_cursor_visible(True)
-        self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
-        self.textbuffer = self.textview.get_buffer()
+        self.set_editable(True)
+        self.set_cursor_visible(True)
+        self.set_wrap_mode(Gtk.WrapMode.WORD)
+        self.textbuffer = self.get_buffer()
         self.textbuffer.connect('insert-text', self.__text_buffer_inserted_cb)
         self.textbuffer.connect('delete-range', self.__text_buffer_deleted_cb)
         self.textbuffer.set_text("")
-        self.textview.show()
-        self.pack_start(self.textview, expand=True, fill=True, padding=0)
-        self.has_initialized = False
         self.show()
+        self.has_initialized = False
 
     '''
     The message callback is called whenever another user edits
@@ -81,6 +83,12 @@ class CollabTextEditor(Gtk.Box):
         action = message.get('action')
         if action == 'init_response' and self.has_initialized == False and message.get('res_id') == self._id:
             self.has_initialized = True
+            self._callbacks_status = False
+            self.textbuffer.set_text(message.get('current_content'))
+            self._callbacks_status = True
+        if action == 'sync_editors' and message.get('res_id') == self._id:
+            if self.has_initialized == False:
+                self.has_initialized = True
             self._callbacks_status = False
             self.textbuffer.set_text(message.get('current_content'))
             self._callbacks_status = True
@@ -120,6 +128,24 @@ class CollabTextEditor(Gtk.Box):
             self.textbuffer.get_start_iter(), self.textbuffer.get_end_iter(), True)))
 
     '''
+    This will send a message to all your buddies to set their editors to 
+    sync with the text specified as an argument.
+
+    Args:
+        text : Text to be set in all the editors
+    '''
+    def __set_text_synced(self, text):
+        if self._callbacks_status == False:
+            return
+        if self.has_initialized == False:
+            self.has_initialized = True
+        self._callbacks_status = False
+        self.textbuffer.set_text(text)
+        self._callbacks_status = True
+        self._collab.post(dict(action='sync_editors', res_id=self._id,
+            current_content=text))
+
+    '''
     The text buffer inserted callback is called whenever text is 
     inserted in the editor, so that other users get updated with 
     these changes.
@@ -137,7 +163,6 @@ class CollabTextEditor(Gtk.Box):
         logging.debug('Text inserted is %s' % (text))
         logging.debug('Text has been updated, %s' % (textbuffer.get_text(
             textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)))
-        print start.get_offset(),start.get_line()
         self._collab.post(dict(action='entry_inserted',
                                res_id=self._id, start_iter_offset=start.get_line_offset(), 
                                start_iter_line=start.get_line(), new_text=text))
