@@ -19,21 +19,14 @@ The progressicon module provide a progress icon; a widget like progress
 bar which shows progress of a task
 '''
 
-'''
-The above three lines are for importing modules. The first one imports GTK form gi.repository, second one imports get_surface from 
-sugar3.graphics.icon and third one imports style namespace from sugar3.graphics.
-'''
-
-
 from gi.repository import Gtk
 from sugar3.graphics.icon import get_surface
 from sugar3.graphics import style
 
-
 '''
-Here is the class 'ProgressIcon'
+The above three lines are for importing modules. The first one imports GTK form gi.repository, second one imports get_surface from 
+sugar3.graphics.icon and third one imports style namespace from sugar3.graphics.
 '''
-
 
 class ProgressIcon(Gtk.DrawingArea):
     """Display the progress filling the icon.
@@ -48,11 +41,11 @@ class ProgressIcon(Gtk.DrawingArea):
 
     """
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
-                 direction='vertical'):
+                 direction='vertical'): '''Direction becomes vertical'''
         Gtk.DrawingArea.__init__(self)
 
-        self._icon_name = icon_name '''Icon Name '''
-        self._direction = direction ''' Direction'''
+        self._icon_name = icon_name 
+        self._direction = direction 
         self._progress = 0 '''Initial Value of progress is zero'''
 
         self._stroke = get_surface(
@@ -74,9 +67,9 @@ class ProgressIcon(Gtk.DrawingArea):
             similarly, height is also parsed from pixel_size of get_surface (like XXXpx). The stroke color changes the color of stroke
             to transparent(here).
          '''
-        self.connect("draw", self.__draw_cb)
+        self.connect("draw", self.__draw_cb) '''Connect ---> Draw to self.__draw_cb'''
 
-    def __draw_cb(self, widget, cr):
+    def __draw_cb(self, widget, cr): '''definition of __draw_cb '''
         allocation = widget.get_allocation()
 
         # Center the graphic in the allocated space.
