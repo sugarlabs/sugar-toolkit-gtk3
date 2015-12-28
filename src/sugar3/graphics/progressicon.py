@@ -23,8 +23,8 @@ from gi.repository import Gtk
 from sugar3.graphics.icon import get_surface
 from sugar3.graphics import style
  
-class ProgressIcon(Gtk.DrawingArea):
-    """Display the progress filling the icon.
+class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
+    '''Display the progress filling the icon.
 
     This class is compatible with the sugar3.graphics.icon.Icon class.
 
@@ -34,8 +34,8 @@ class ProgressIcon(Gtk.DrawingArea):
     it will be filled from right to left or from left to right,
     depending on the system's language RTL setting.
 
-    """
-    def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
+    '''
+    def __init__(self, icon_name, pixel_size, stroke_color, fill_color, '''initialize the progressicon '''
                  direction='vertical'): '''Direction becomes vertical'''
         Gtk.DrawingArea.__init__(self) '''here, init is instructor, self represents instance of __init__'''
 
@@ -66,16 +66,16 @@ class ProgressIcon(Gtk.DrawingArea):
         # Paint the fill, clipping it by the progress.
         x_, y_ = 0, 0 '''The value of margin x_ and y_ is 0,0 (0i,0j) '''
         width, height = self._stroke.get_width(), self._stroke.get_height() '''Width = self._stroke.get_width() & height = self._stroke.get_height()'''
-        if self._direction == 'vertical':  '''if _direction is vertical then''' #vertical direction, bottom to top 
+        if self._direction == 'vertical':  '''if direction is vertical then...''' #vertical direction, bottom to top 
             y_ = self._stroke.get_height()
-            height *= self._progress * -1 '''Vale of _progress (mentioned above) is multiplied with -1 ''' 
+            height *= self._progress * -1
         else: 
             rtl_direction = \
-                Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL '''default direction'''
+                Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL '''Sets text direction from right to left'''
             if rtl_direction: '''IF rtl_direction ----> right to left '''  # horizontal direction, right to left
                 x_ = self._stroke.get_width() '''value of x_ gets set as self._stroke.get_width() '''
                 width *= self._progress * -1
-            else: '''IF rtl_direction ----> left to right  '''  # horizontal direction, left to right
+            else: '''IF rtl_direction ----> left to right '''  # horizontal direction, left to right
                 width *= self._progress
 
         cr.rectangle(x_, y_, width, height) '''x_ = width and y_ = width '''
@@ -96,6 +96,6 @@ class ProgressIcon(Gtk.DrawingArea):
         height = self._stroke.get_height() '''height will be set as self._stroke.get_height()'''
         return (height, height) '''Returns tuple'''
 
-    def update(self, progress):
-        self._progress = progress '''_progress's value is equal to progress's value'''
+    def update(self, progress): '''updates progressicon with progress value '''
+        self._progress = progress '''Set progressbar value'''
         self.queue_draw() '''Draws'''
