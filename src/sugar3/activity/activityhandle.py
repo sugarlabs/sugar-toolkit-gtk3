@@ -15,49 +15,49 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""
-STABLE.
-"""
+'''
+Provides a class for storing activity metadata such as activity id's,
+journal object id's,
+'''
 
 
 class ActivityHandle(object):
-    """Data structure storing simple activity metadata"""
+    '''
+    Data structure storing simple activity metadata
+    
+    Args:
+        activity_id (string): unique id for the activity to be
+        created
+        
+        object_id (string): identity of the journal object
+        associated with the activity.
+        
+        When you resume an activity from the journal
+        the object_id will be passed in. It is optional
+        since new activities does not have an
+        associated object.
+        
+        uri (string): URI associated with the activity. Used when
+        opening an external file or resource in the
+        activity, rather than a journal object
+        (downloads stored on the file system for
+        example or web pages)
+        
+        invited (bool): True if the activity is being 
+        launched for handling an invite from the network
+    '''
 
     def __init__(self, activity_id=None, object_id=None, uri=None,
                  invited=False):
-        """Initialise the handle from activity_id
-
-        activity_id -- unique id for the activity to be
-            created
-        object_id -- identity of the journal object
-            associated with the activity. It was used by
-            the journal prototype implementation, might
-            change when we do the real one.
-
-            When you resume an activity from the journal
-            the object_id will be passed in. It's optional
-            since new activities does not have an
-            associated object (yet).
-
-            XXX Not clear how this relates to the activity
-            id yet, i.e. not sure we really need both. TBF
-        uri -- URI associated with the activity. Used when
-            opening an external file or resource in the
-            activity, rather than a journal object
-            (downloads stored on the file system for
-            example or web pages)
-        invited -- the activity is being launched for handling an invite
-                   from the network
-        """
         self.activity_id = activity_id
         self.object_id = object_id
         self.uri = uri
         self.invited = invited
 
     def get_dict(self):
-        """Retrieve our settings as a dictionary"""
-        result = {'activity_id': self.activity_id,
-                  'invited': self.invited}
+        '''Returns activity settings as a dictionary in format 
+            {activity_id:XXXX, object_id:XXXX, uri:XXXX, invited:BOOL}'''
+        result = {'activity_id': self.activity_id, 'invited': self.invited}
         if self.object_id:
             result['object_id'] = self.object_id
         if self.uri:
@@ -67,7 +67,7 @@ class ActivityHandle(object):
 
 
 def create_from_dict(handle_dict):
-    """Create a handle from a dictionary of parameters"""
+    '''Returns an activity handle from a dictionary of parameters'''
     result = ActivityHandle(handle_dict['activity_id'],
                             object_id=handle_dict.get('object_id'),
                             uri=handle_dict.get('uri'),
