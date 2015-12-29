@@ -24,7 +24,7 @@ from sugar3.graphics.icon import get_surface
 from sugar3.graphics import style
  
 class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
-    '''Display the progress filling the icon.
+ '''Display the progress filling the icon.
 
     This class is compatible with the sugar3.graphics.icon.Icon class.
 
@@ -34,9 +34,25 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
     it will be filled from right to left or from left to right,
     depending on the system's language RTL setting.
 
-    '''
-    def __init__(self, icon_name, pixel_size, stroke_color, fill_color, '''initialize the progressicon '''
-                 direction='vertical'): '''Direction becomes vertical'''
+ '''
+    def __init__(self, icon_name, pixel_size, stroke_color, fill_color, 
+                 direction='vertical'):
+        ''' 
+        Initializes the ProgressIcon class
+        
+        Example :
+           class A(object):
+           def __init__(self):
+           self.x = 'Hello'
+
+           def method_a(self, foo):
+           print self.x + ' ' + foo
+        
+           __init is constructor, like :
+           def __init__(self):
+           self.data = []
+        '''
+        
         Gtk.DrawingArea.__init__(self) '''here, init is instructor, self represents instance of __init__'''
 
         self._icon_name = icon_name 
@@ -55,9 +71,21 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         
         self.connect("draw", self.__draw_cb) '''Connect ---> Draw to self.__draw_cb'''
 
-    def __draw_cb(self, widget, cr): 
-        allocation = widget.get_allocation() '''The get_allocation() method returns a rectangle containing the bounds of the widget's allocation.'''
-
+    def __draw_cb(self, widget, cr):
+     '''
+     Example:
+         def _draw_cb(self, da, cr): 
+         cr.set_source_rgb(1, 1, 1)
+         cr.paint()
+     '''
+        allocation = widget.get_allocation() 
+        
+        '''
+        Retruns:
+           A gtk.gdk.Rectangle
+           The get_allocation() method returns a rectangle containing the bounds of the widget's allocation.
+        '''
+        
         # Center the graphic in the allocated space.
         margin_x = (allocation.width - self._stroke.get_width()) / 2 '''Margin x : It's value is width from allocation - stroke's width '''
         margin_y = (allocation.height - self._stroke.get_height()) / 2 '''Margin y : It's value is height from allocation - stroke's height '''
@@ -81,7 +109,7 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         cr.rectangle(x_, y_, width, height) '''x_ = width and y_ = width '''
         cr.clip() 
         cr.set_source_surface(self._fill, 0, 0)
-        cr.paint() '''Applied'''
+        cr.paint() 
 
         # Paint the stroke over the fill.
         cr.reset_clip() 
@@ -91,11 +119,53 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
     def do_get_preferred_width(self):
         width = self._stroke.get_width() '''width will be set as self._stroke.get_width()'''
         return (width, width) '''Returns tuple'''
+        '''
+        	This is called by containers to obtain the minimum and natural width of a widget. 
+        	A widget will never be allocated a width less than its minimum and will only ever
+        	be allocated a width greater than the natural width once all of the said widget's 
+        	siblings have received their natural widths. Furthermore, a widget will only ever
+        	be allocated a width greater than its natural width if it was configured to receive 
+        	extra expand space from its parent container.
+        
+        Example:
+            from gi.repository import Gtk
+            class Patch(Gtk.DrawingArea):
+            def __init__(self):
+            super(Patch,self).__init__()
+
+            def do_get_preferred_width(self):
+            print("example")
+            return 100, 100
+        '''
 
     def do_get_preferred_height(self):
         height = self._stroke.get_height() '''height will be set as self._stroke.get_height()'''
         return (height, height) '''Returns tuple'''
+        '''
+        This is called by containers to obtain the minimum and natural height of a widget.
+        A widget that does not actually trade any height for width or width for height only has to 
+        implement methods (GtkWidgetClass.get_preferred_width() and GtkWidgetClass.get_preferred_height()).
+        
+        Example:
+            from gi.repository import Gtk
+            class Patch(Gtk.DrawingArea):
+            def __init__(self):
+            super(Patch,self).__init__()
+
+            def do_get_preferred_height(self):
+            print("example")
+            return 100, 100
+        '''
 
     def update(self, progress): '''updates progressicon with progress value '''
         self._progress = progress '''Set progressbar value'''
-        self.queue_draw() '''Draws'''
+        self.queue_draw() 
+        '''
+        Example:
+            def update(self, iterable):
+            for item in iterable:
+            self.items_list.append(item)
+            
+        Returns:
+            Updates progressicon with progress value 
+         '''
