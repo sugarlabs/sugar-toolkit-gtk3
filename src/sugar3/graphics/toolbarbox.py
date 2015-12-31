@@ -202,6 +202,8 @@ class ToolbarBox(Gtk.VBox):
         if button == self.expanded_button:
             self.remove(button.page_widget)
             self._expanded_button_index = -1
+if hasattr(ToolbarBox, 'set_css_name'):
+    ToolbarBox.set_css_name('toolbarbox')
 
 
 class _ToolbarPalette(PaletteWindow):

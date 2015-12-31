@@ -831,6 +831,8 @@ class CanvasIcon(EventIcon):
 
     def __palette_popdown_cb(self, palette):
         self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
+if hasattr(CanvasIcon, 'set_css_name'):
+    CanvasIcon.set_css_name('canvasicon')
 
 
 class CellRendererIcon(Gtk.CellRenderer):

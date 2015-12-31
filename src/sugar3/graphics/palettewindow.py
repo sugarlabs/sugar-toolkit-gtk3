@@ -363,7 +363,7 @@ class _PaletteWindowWidget(Gtk.Window):
 
         allocation = self.get_allocation()
         context = self.get_style_context()
-        context.add_class('toolitem')
+        context.add_class('palette')
         if gap:
             cr.save()
             cr.set_source_rgb(0, 0, 0)
@@ -406,6 +406,8 @@ class _PaletteWindowWidget(Gtk.Window):
         self.disconnect_by_func(self.__enter_notify_event_cb)
         self.disconnect_by_func(self.__leave_notify_event_cb)
         self.hide()
+if hasattr(_PaletteWindowWidget, 'set_css_name'):
+    _PaletteWindowWidget.set_css_name('palette')
 
 
 class MouseSpeedDetector(GObject.GObject):
