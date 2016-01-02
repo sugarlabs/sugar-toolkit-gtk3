@@ -38,29 +38,14 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color, 
                  direction='vertical'):
         ''' 
+        
         Initializes the ProgressIcon class
         
         Parameters:
            icon_name - The name of icon progressicon uses.
            pixel_size - It explains basic geometry of an image. 
            stroke_color - Stroke color means border color. Here, it is for progressicon.
-           fill_color - The inside color of progressicon. 
-        
-        Example :
-          
-           class Box:
-           def area(self):
-           return self.width * self.height
-
-           def __init__(self, width, height):
-           self.width = width
-           self.height = height
-
-           # Create an instance of Box.
-           x = Box(10, 2)
-
-           # Print area.
-           print(x.area())
+           fill_color - The inside color of progressicon.
         
         '''
         
@@ -68,7 +53,7 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
 
         self._icon_name = icon_name 
         self._direction = direction 
-        self._progress = 0 '''Initial Value of progress is zero'''
+        self._progress = 0
 
         self._stroke = get_surface(
             icon_name=icon_name, width=pixel_size, height=pixel_size,
@@ -88,12 +73,7 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         self.connect("draw", self.__draw_cb) '''Connect ---> Draw to self.__draw_cb'''
 
     def __draw_cb(self, widget, cr):
-     '''
-     Example:
-         def __draw_cb(self, da, cr): 
-         cr.set_source_rgb(1, 1, 1)
-         cr.paint()
-     '''
+     
         allocation = widget.get_allocation() 
         
         '''
@@ -174,11 +154,10 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         self._progress = progress '''Set progressbar value'''
         self.queue_draw() 
         '''
-        Example:
-            def update(self, iterable):
-            for item in iterable:
-            self.items_list.append(item)
-            
         Returns:
             Updates progressicon with progress value 
+        
+        Example:
+            update(0.9)
+            
          '''
