@@ -15,16 +15,38 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
+'''
+ScrollingDetector emits signals when a ScrolledWindow starts and
+finish scrolling. Other widgets can use that information to
+avoid doing performance-expensive operations.
+
+Example:
+
+.. literalinclude:: ../examples/scrollingdetector.py
+'''
+
+
 from gi.repository import GObject
 from gi.repository import GLib
 
 
 class ScrollingDetector(GObject.GObject):
-    """
-    ScollingDetector emit signals when a ScrolledWindow starts and
-    finish scrolling. Other widets can use that information to
-    avoid do performance expensive operations.
-    """
+    '''
+    The scrolling detector sends signals when a scrolled window is scrolled and 
+    when a scrolled window stops scrolling. Only one `scroll-start` signal will be
+	emitted until scrolling stops.
+    
+    The `scroll-start` signal is emitted when scrolling begins and
+    The `scroll-end` signal is emitted when scrolling ends
+    Neither of these two signals have any arguments
+    
+    Args:
+        scrolled_window (Gtk.ScrolledWindow): A GTK scrolled window object for which
+            scrolling is to be detected
+        
+        timeout (int): time in milliseconds to establish the interval for which
+            scrolling is detected
+    '''
 
     scroll_start_signal = GObject.Signal('scroll-start')
     scroll_end_signal = GObject.Signal('scroll-end')
@@ -39,6 +61,14 @@ class ScrollingDetector(GObject.GObject):
         GObject.GObject.__init__(self)
 
     def connect_scrolled_window(self):
+        '''
+        Connects scrolling detector to a scrolled window.
+        Detects scrolling when the vertical scrollbar
+        adjustment value is changed
+        
+        Should be used to link an instance of a scrolling detector
+        to a Scrolled Window, after setting scrolled_window
+        '''
         adj = self._scrolled_window.get_vadjustment()
         adj.connect('value-changed', self._value_changed_cb)
 
