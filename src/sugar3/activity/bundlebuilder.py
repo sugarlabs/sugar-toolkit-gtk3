@@ -283,7 +283,15 @@ class Installer(Packager):
             if not os.path.exists(path):
                 os.makedirs(path)
 
-            shutil.copy(source, dest)
+            if os.path.isfile(source):
+                shutil.copy(source, dest)
+            else:
+                if os.path.isdir(dest):
+                    # shutil can't copytree is dest exists
+                    shutil.rmtree(dest)
+                # Git may give us directories to copy, namely with git
+                # submodules they are only included as their root path
+                shutil.copytree(source, dest)
 
         if install_mime:
             self.config.bundle.install_mime_type(self.config.source_dir)
