@@ -15,7 +15,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 '''
-The progressicon module provide a progress icon; a widget like progress
+The progressicon module provides a progress icon; a widget like progress
 bar which shows progress of a task 
 '''
 
@@ -24,16 +24,9 @@ from sugar3.graphics.icon import get_surface
 from sugar3.graphics import style
  
 class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
- '''Display the progress filling the icon.
-
-    This class is compatible with the sugar3.graphics.icon.Icon class.
-
-    Call update(progress) with the new progress to update the icon.
-    The direction defaults to 'vertical', in which case the icon is
-    filled from bottom to top.  If direction is set to 'horizontal',
-    it will be filled from right to left or from left to right,
-    depending on the system's language RTL setting.
-
+ '''This class is compatible with the sugar3.graphics.icon.Icon class.
+    Sets stroke color (border color of progressicon) to transparent.
+    Sets fill color to transparent. 
  '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color, 
                  direction='vertical'):
@@ -49,7 +42,7 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         
         '''
         
-        Gtk.DrawingArea.__init__(self) '''here, init is instructor, self represents instance of __init__'''
+        Gtk.DrawingArea.__init__(self) '''here, init stands for initializer, self represents instance of __init__'''
 
         self._icon_name = icon_name 
         self._direction = direction 
@@ -59,18 +52,13 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
             icon_name=icon_name, width=pixel_size, height=pixel_size,
             stroke_color=stroke_color,
             fill_color=style.COLOR_TRANSPARENT.get_svg())
-            '''
-            Sets stroke color (border color of progressicon) to transparent. 
-            '''
-       
+           
         self._fill = get_surface(
             icon_name=icon_name, width=pixel_size, height=pixel_size,
             stroke_color=style.COLOR_TRANSPARENT.get_svg(),
             fill_color=fill_color)
-            '''
-            Sets fill color to transparent. 
-            '''
-        self.connect("draw", self.__draw_cb) '''Connect ---> Draw to self.__draw_cb'''
+            
+        self.connect("draw", self.__draw_cb)
 
     def __draw_cb(self, widget, cr):
      
@@ -101,7 +89,12 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
                 width *= self._progress * -1
             else: # horizontal direction, left to right
                 width *= self._progress
-
+         '''
+          The direction defaults to 'vertical', in which case the icon is
+          filled from bottom to top.  If direction is set to 'horizontal',
+          it will be filled from right to left or from left to right,
+          depending on the system's language RTL setting.
+          '''
         cr.rectangle(x_, y_, width, height)
         cr.clip() 
         cr.set_source_surface(self._fill, 0, 0)
@@ -154,8 +147,8 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         self._progress = progress '''Set progressbar value'''
         self.queue_draw() 
         '''
-        Returns:
-            Updates progressicon with progress value 
+         Call update(progress) with the new progress to update the icon.
+         Updates progressicon with progress value 
         
         Example:
             update(0.9)
