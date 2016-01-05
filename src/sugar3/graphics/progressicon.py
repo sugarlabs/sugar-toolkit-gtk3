@@ -26,13 +26,32 @@ from sugar3.graphics import style
 class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
  
     '''
-    Display the progress filling the icon.
-    This class is compatible with the sugar3.graphics.icon.Icon class.
-    The direction defaults to 'vertical', in which case the icon is
-    filled from bottom to top.  If direction is set to 'horizontal',
-    it will be filled from right to left or from left to right,
-    depending on the system's language RTL setting.
-
+      Display the progress filling the icon.
+      This class is compatible with the sugar3.graphics.icon.Icon class.
+      The direction defaults to 'vertical', in which case the icon is
+      filled from bottom to top.  If direction is set to 'horizontal',
+      it will be filled from right to left or from left to right,
+      depending on the system's language RTL setting.
+      
+    Parameters:
+    
+      pixel_size - sets the icon size [e.g. pixel_size=style.LARGE_ICON_SIZE]
+      icon_name - Name of icon [e.g. icon_name='test_icon']
+      stroke color - Stroke color means border color. [e.g.stroke_color=style.COLOR_BUTTON_RED.get_svg()]
+      fill_color - The main (inside) color of progressicon [e.g. fill_color=style.COLOR_BLUE.get_svg()
+    
+    Example:
+     
+      test = common.Test()
+      icon = ProgressIcon(
+      pixel_size=style.LARGE_ICON_SIZE,
+      icon_name='computer-xo',
+      stroke_color=style.COLOR_BUTTON_GREY.get_svg(),
+      fill_color=style.COLOR_WHITE.get_svg())
+      test.pack_start(icon, True, True, 0)
+      icon.show()
+      ...
+   
     '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color, '''initialize the progressicon '''
                  direction='vertical'):
