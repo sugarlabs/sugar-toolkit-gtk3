@@ -46,9 +46,13 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         
         Example :
            
-           class A(object):
-           def __init__(self):
-           self.x = 'Hello'
+           def __init__(self, name):
+	         	self.name = name
+	          def sayHello(self):
+		         print 'Hello, my name is', self.name
+
+           per = Person('Swaroop')
+           per.sayHello()
         
         '''
         
