@@ -89,13 +89,13 @@ class ProgressIcon(Gtk.DrawingArea):
 
         self.connect("draw", self.__draw_cb)
 
-        def __draw_cb(self, widget, cr)
-        allocation = widget.get_allocation()
+        def __draw_cb(self, widget, cr):
+         allocation = widget.get_allocation()
 
         # Center the graphic in the allocated space.
-        margin_x = (allocation.width - self._stroke.get_width()) / 2
-        margin_y = (allocation.height - self._stroke.get_height()) / 2
-        cr.translate(margin_x, margin_y)
+         margin_x = (allocation.width - self._stroke.get_width()) / 2
+         margin_y = (allocation.height - self._stroke.get_height()) / 2
+         cr.translate(margin_x, margin_y)
 
         # Paint the fill, clipping it by the progress.
         x_, y_ = 0, 0
@@ -110,7 +110,7 @@ class ProgressIcon(Gtk.DrawingArea):
             if rtl_direction:  # horizontal direction, right to left
                 x_ = self._stroke.get_width()
                 width *= self._progress * -1
-        else:  # horizontal direction, left to right
+            else:  # horizontal direction, left to right
                 width *= self._progress
 
         cr.rectangle(x_, y_, width, height)
