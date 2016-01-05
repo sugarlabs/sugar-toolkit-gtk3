@@ -22,11 +22,11 @@ bar which shows progress of a task
 from gi.repository import Gtk
 from sugar3.graphics.icon import get_surface
 from sugar3.graphics import style
-
- 
-class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
+class ProgressIcon(Gtk.DrawingArea): '
  
     '''
+      UI interface for Progress Icon.
+    
       Display the progress filling the icon.
       This class is compatible with the sugar3.graphics.icon.Icon class.
       The direction defaults to 'vertical', in which case the icon is
@@ -54,15 +54,9 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
       ...
    
     '''
-    def __init__(self, icon_name, pixel_size, stroke_color, fill_color, '''initialize the progressicon '''
+    def __init__(self, icon_name, pixel_size, stroke_color, fill_color, 
                  direction='vertical'):
         ''' 
-        Parameters:
-           
-           icon_name - The name of icon progressicon uses.
-           pixel_size - It explains basic geometry of an image. 
-           stroke_color - Stroke color means border color. Here, it is for progressicon.
-           fill_color - The inside color of progressicon.
         
         Example :
            
@@ -70,13 +64,10 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
 	         	self.name = name
 	          def sayHello(self):
 		         print 'Hello, my name is', self.name
-
-           per = Person('Swaroop')
-           per.sayHello()
         
         '''
         
-        Gtk.DrawingArea.__init__(self) '''here, init means initialize, self represents instance of __init__'''
+        Gtk.DrawingArea.__init__(self) 
 
         self._icon_name = icon_name 
         self._direction = direction 
@@ -96,31 +87,28 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
 
     def __draw_cb(self, widget, cr): 
         allocation = widget.get_allocation() 
-        '''
-        The get_allocation() method returns a rectangle containing the bounds of the widget's allocation.
-        '''
         
         # Center the graphic in the allocated space.
-        margin_x = (allocation.width - self._stroke.get_width()) / 2 '''Margin x : It's value is width from allocation - stroke's width '''
-        margin_y = (allocation.height - self._stroke.get_height()) / 2 '''Margin y : It's value is height from allocation - stroke's height '''
+        margin_x = (allocation.width - self._stroke.get_width()) / 2 
+        margin_y = (allocation.height - self._stroke.get_height()) / 2 
         cr.translate(margin_x, margin_y)
 
         # Paint the fill, clipping it by the progress.
-        x_, y_ = 0, 0 '''The value of margin x_ and y_ is 0,0 (0i,0j) '''
-        width, height = self._stroke.get_width(), self._stroke.get_height() '''Width = self._stroke.get_width() & height = self._stroke.get_height()'''
-        if self._direction == 'vertical':  '''if direction is vertical then...''' #vertical direction, bottom to top 
+        x_, y_ = 0, 0 
+        width, height = self._stroke.get_width(), self._stroke.get_height() 
+        if self._direction == 'vertical':  #vertical direction, bottom to top 
             y_ = self._stroke.get_height()
             height *= self._progress * -1
         else: 
             rtl_direction = \
-                Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL '''Sets text direction from right to left'''
-            if rtl_direction: '''If rtl_direction ----> right to left '''  # horizontal direction, right to left
-                x_ = self._stroke.get_width() '''value of x_ gets set as self._stroke.get_width() '''
+                Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL 
+            if rtl_direction: # horizontal direction, right to left
+                x_ = self._stroke.get_width() 
                 width *= self._progress * -1
-            else: '''IF rtl_direction ----> left to right '''  # horizontal direction, left to right
+            else: # horizontal direction, left to right
                 width *= self._progress
 
-        cr.rectangle(x_, y_, width, height) '''x_ = width and y_ = width '''
+        cr.rectangle(x_, y_, width, height)
         cr.clip() 
         cr.set_source_surface(self._fill, 0, 0)
         cr.paint()
@@ -133,7 +121,7 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
     def do_get_preferred_width(self):
         width = self._stroke.get_width() 
         return (width, width) 
-        '''Returns tuple'''
+        
         '''
         Example:
 
@@ -144,8 +132,8 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         '''
 
     def do_get_preferred_height(self):
-        height = self._stroke.get_height() '''height will be set as self._stroke.get_height()'''
-        return (height, height) '''Returns tuple'''
+        height = self._stroke.get_height() 
+        return (height, height) 
         '''
         Example:
         
@@ -155,14 +143,13 @@ class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
         
         '''
 
-    def update(self, progress): '''updates progressicon with progress value '''
-        self._progress = progress '''Set progressbar value'''
-        self.queue_draw() '''Draws'''
-        '''
-       Call update(progress) with the new progress to update the icon.:
-       Updates progressicon with progress value 
+    def update(self, progress): 
+        self._progress = progress 
+        self.queue_draw()
+       '''
+       Call update(progress) with the new progress to update the icon.
+       Updates progressicon with progress's value.
        
-        Example:
-        update(0.9)
-      
+       Example:
+         update(0.9)
        '''
