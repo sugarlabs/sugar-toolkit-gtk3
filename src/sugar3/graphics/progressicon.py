@@ -28,7 +28,7 @@ class ProgressIcon(Gtk.DrawingArea):
 
     '''
       UI interface for Progress Icon.
-    
+
       Display the progress filling the icon.
       This class is compatible with the sugar3.graphics.icon.Icon class.
       The direction defaults to 'vertical', in which case the icon is
@@ -38,13 +38,20 @@ class ProgressIcon(Gtk.DrawingArea):
 
     Parameters:
 
-      pixel_size - sets the icon size [e.g. pixel_size=style.LARGE_ICON_SIZE]
-      icon_name - Name of icon [e.g. icon_name='test_icon']
-      stroke color - Stroke color means border color. [e.g.stroke_color=style.COLOR_BUTTON_RED.get_svg()]
-      fill_color - The main (inside) color of progressicon [e.g. fill_color=style.COLOR_BLUE.get_svg()
-    
+      pixel_size - sets the icon size
+         [e.g. pixel_size=style.LARGE_ICON_SIZE]
+
+      icon_name - Name of icon
+         [e.g. icon_name='test_icon']
+
+      stroke color - Stroke color means border color.
+         [e.g.stroke_color=style.COLOR_BUTTON_RED.get_svg()]
+
+      fill_color - The main (inside) color of progressicon
+         [e.g. fill_color=style.COLOR_BLUE.get_svg()
+
     Example:
-     
+
       test = common.Test()
       icon = ProgressIcon(
       pixel_size=style.LARGE_ICON_SIZE,
@@ -54,21 +61,16 @@ class ProgressIcon(Gtk.DrawingArea):
       test.pack_start(icon, True, True, 0)
       icon.show()
       ...
-   
     '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
-        ''' 
-        
-        Example :
-           
-           def __init__(self, name):
-	         	self.name = name
-	          def sayHello(self):
-		         print 'Hello, my name is', self.name
-        
         '''
-        
+        Example :
+        def __init__(self, name):
+        self.name = name
+        def sayHello(self):
+        print 'Hello, my name is', self.name
+        '''
         Gtk.DrawingArea.__init__(self)
 
         self._icon_name = icon_name
@@ -79,17 +81,17 @@ class ProgressIcon(Gtk.DrawingArea):
             icon_name=icon_name, width=pixel_size, height=pixel_size,
             stroke_color=stroke_color,
             fill_color=style.COLOR_TRANSPARENT.get_svg())
-       
+
         self._fill = get_surface(
             icon_name=icon_name, width=pixel_size, height=pixel_size,
             stroke_color=style.COLOR_TRANSPARENT.get_svg(),
             fill_color=fill_color)
-        
-        self.connect("draw", self.__draw_cb) '''Connect ---> Draw to self.__draw_cb'''
 
-    def __draw_cb(self, widget, cr)
+        self.connect("draw", self.__draw_cb)
+
+        def __draw_cb(self, widget, cr)
         allocation = widget.get_allocation()
-        
+
         # Center the graphic in the allocated space.
         margin_x = (allocation.width - self._stroke.get_width()) / 2
         margin_y = (allocation.height - self._stroke.get_height()) / 2
@@ -98,16 +100,17 @@ class ProgressIcon(Gtk.DrawingArea):
         # Paint the fill, clipping it by the progress.
         x_, y_ = 0, 0
         width, height = self._stroke.get_width(), self._stroke.get_height()
-        if self._direction == 'vertical': #vertical direction, bottom to top
+        if self._direction == 'vertical':
+            '''vertical direction, bottom to top'''
             y_ = self._stroke.get_height()
             height *= self._progress * -1
         else:
             rtl_direction = \
                 Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL
-            if rtl_direction: # horizontal direction, right to left
+            if rtl_direction:  # horizontal direction, right to left
                 x_ = self._stroke.get_width()
                 width *= self._progress * -1
-            else: # horizontal direction, left to right
+        else:  # horizontal direction, left to right
                 width *= self._progress
 
         cr.rectangle(x_, y_, width, height)
@@ -123,35 +126,30 @@ class ProgressIcon(Gtk.DrawingArea):
     def do_get_preferred_width(self):
         width = self._stroke.get_width()
         return (width, width)
-        
         '''
         Example:
-
         def do_get_preferred_width(self):
         print("example")
         return (100, 100)
-        
-        '''
+          '''
 
     def do_get_preferred_height(self):
         height = self._stroke.get_height()
         return (height, height)
         '''
         Example:
-        
+
         def do_get_preferred_height(self):
         print("example")
         return (100, 100)
-        
         '''
 
     def update(self, progress):
         self._progress = progress
         self.queue_draw()
-       '''
-       Call update(progress) with the new progress to update the icon.
-       Updates progressicon with progress's value.
-       
-       Example:
-         update(0.9)
-       '''
+        '''
+        Call update(progress) with the new progress to update the icon.
+        Updates progressicon with progress's value.
+
+        Example: update(0.9)
+        '''
