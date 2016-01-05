@@ -22,6 +22,7 @@ bar which shows progress of a task
 from gi.repository import Gtk
 from sugar3.graphics.icon import get_surface
 from sugar3.graphics import style
+
  
 class ProgressIcon(Gtk.DrawingArea): '''UI interface for Progress Icon.'''
  
