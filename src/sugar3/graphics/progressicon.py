@@ -28,30 +28,22 @@ class ProgressIcon(Gtk.DrawingArea):
 
     '''
       UI interface for Progress Icon.
-
       Display the progress filling the icon.
       This class is compatible with the sugar3.graphics.icon.Icon class.
       The direction defaults to 'vertical', in which case the icon is
       filled from bottom to top.  If direction is set to 'horizontal',
       it will be filled from right to left or from left to right,
       depending on the system's language RTL setting.
-
     Parameters:
-
       pixel_size - sets the icon size
          [e.g. pixel_size=style.LARGE_ICON_SIZE]
-
       icon_name - Name of icon
          [e.g. icon_name='test_icon']
-
       stroke color - Stroke color means border color.
          [e.g.stroke_color=style.COLOR_BUTTON_RED.get_svg()]
-
       fill_color - The main (inside) color of progressicon
          [e.g. fill_color=style.COLOR_BLUE.get_svg()
-
     Example:
-
       test = common.Test()
       icon = ProgressIcon(
       pixel_size=style.LARGE_ICON_SIZE,
@@ -89,13 +81,11 @@ class ProgressIcon(Gtk.DrawingArea):
 
         self.connect("draw", self.__draw_cb)
 
-        def __draw_cb(self, widget, cr):
-         allocation = widget.get_allocation()
-
-        # Center the graphic in the allocated space.
-         margin_x = (allocation.width - self._stroke.get_width()) / 2
-         margin_y = (allocation.height - self._stroke.get_height()) / 2
-         cr.translate(margin_x, margin_y)
+    def __draw_cb(self, widget, cr):
+        allocation = widget.get_allocation()
+        margin_x = (allocation.width - self._stroke.get_width()) / 2
+        margin_y = (allocation.height - self._stroke.get_height()) / 2
+        cr.translate(margin_x, margin_y)
 
         # Paint the fill, clipping it by the progress.
         x_, y_ = 0, 0
@@ -138,7 +128,6 @@ class ProgressIcon(Gtk.DrawingArea):
         return (height, height)
         '''
         Example:
-
         def do_get_preferred_height(self):
         print("example")
         return (100, 100)
@@ -150,6 +139,5 @@ class ProgressIcon(Gtk.DrawingArea):
         '''
         Call update(progress) with the new progress to update the icon.
         Updates progressicon with progress's value.
-
         Example: update(0.9)
         '''
