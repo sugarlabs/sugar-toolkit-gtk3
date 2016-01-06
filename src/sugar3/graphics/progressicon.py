@@ -78,6 +78,8 @@ class ProgressIcon(Gtk.DrawingArea):
 
     def __draw_cb(self, widget, cr):
         allocation = widget.get_allocation()
+
+        # Center the graphic in the allocated space.
         margin_x = (allocation.width - self._stroke.get_width()) / 2
         margin_y = (allocation.height - self._stroke.get_height()) / 2
         cr.translate(margin_x, margin_y)
