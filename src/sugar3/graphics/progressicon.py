@@ -30,6 +30,7 @@ class ProgressIcon(Gtk.DrawingArea):
       UI interface for Progress Icon.
       Display the progress filling the icon.
       This class is compatible with the sugar3.graphics.icon.Icon class.
+      Call update(progress) with the new progress to update the icon.
       The direction defaults to 'vertical', in which case the icon is
       filled from bottom to top.  If direction is set to 'horizontal',
       it will be filled from right to left or from left to right,
@@ -56,7 +57,7 @@ class ProgressIcon(Gtk.DrawingArea):
     '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
-       
+
         Gtk.DrawingArea.__init__(self)
 
         self._icon_name = icon_name
@@ -131,7 +132,6 @@ class ProgressIcon(Gtk.DrawingArea):
         self._progress = progress
         self.queue_draw()
         '''
-        Call update(progress) with the new progress to update the icon.
         Updates progressicon with progress's value.
         Example: update(0.9)
         '''
