@@ -111,22 +111,10 @@ class ProgressIcon(Gtk.DrawingArea):
     def do_get_preferred_width(self):
         width = self._stroke.get_width()
         return (width, width)
-        '''
-        Example:
-        def do_get_preferred_width(self):
-        print("example")
-        return (100, 100)
-          '''
 
     def do_get_preferred_height(self):
         height = self._stroke.get_height()
         return (height, height)
-        '''
-        Example:
-        def do_get_preferred_height(self):
-        print("example")
-        return (100, 100)
-        '''
 
     def update(self, progress):
         self._progress = progress
