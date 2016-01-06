@@ -117,9 +117,9 @@ class ProgressIcon(Gtk.DrawingArea):
         return (height, height)
 
     def update(self, progress):
-        self._progress = progress
-        self.queue_draw()
         '''
         Updates progressicon with progress's value.
         Example: update(0.9)
         '''
+        self._progress = progress
+        self.queue_draw()
