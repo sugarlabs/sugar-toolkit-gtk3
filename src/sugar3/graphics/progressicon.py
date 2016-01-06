@@ -57,7 +57,6 @@ class ProgressIcon(Gtk.DrawingArea):
     '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
-
         Gtk.DrawingArea.__init__(self)
 
         self._icon_name = icon_name
@@ -87,8 +86,7 @@ class ProgressIcon(Gtk.DrawingArea):
         # Paint the fill, clipping it by the progress.
         x_, y_ = 0, 0
         width, height = self._stroke.get_width(), self._stroke.get_height()
-        if self._direction == 'vertical':
-            '''vertical direction, bottom to top'''
+        if self._direction == 'vertical':  # vertical direction, bottom to top
             y_ = self._stroke.get_height()
             height *= self._progress * -1
         else:
@@ -119,9 +117,9 @@ class ProgressIcon(Gtk.DrawingArea):
         return (height, height)
 
     def update(self, progress):
-        self._progress = progress
-        self.queue_draw()
         '''
         Updates progressicon with progress's value.
         Example: update(0.9)
         '''
+        self._progress = progress
+        self.queue_draw()
