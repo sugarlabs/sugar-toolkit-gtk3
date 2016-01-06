@@ -56,13 +56,7 @@ class ProgressIcon(Gtk.DrawingArea):
     '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
-        '''
-        Example :
-        def __init__(self, name):
-        self.name = name
-        def sayHello(self):
-        print 'Hello, my name is', self.name
-        '''
+       
         Gtk.DrawingArea.__init__(self)
 
         self._icon_name = icon_name
