@@ -19,7 +19,6 @@
 """
 STABLE.
 """
-
 import logging
 
 from gi.repository import GObject
@@ -28,24 +27,51 @@ from gi.repository import Gtk
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
 
+'''
+Toogle tool button switches you between two tasks.
+For example, a button can contains two functions like
+On or Off.
+'''
+
 
 def _add_accelerator(tool_button):
     if not tool_button.props.accelerator or not tool_button.get_toplevel() or \
             not tool_button.get_child():
         return
+'''
 
-    # TODO: should we remove the accelerator from the prev top level?
-    if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
+The add_accelerator() method installs an accelerator for the
+widget in accel_group that causes accel_signal to be emitted
+if the accelerator is activated. The accelerator key and modifiers
+are specified by accel_key and accel_mods respectively.
+Parameters:
+accel_signal : the widget signal to emit on accelerator activation
+accel_group: the accel group for this widget, added to its toplevel
+accel_key : the keyval of the accelerator e.g. ord('q')
+accel_mods : the modifier key combination of the accelerator
+accel_flags : the flag accelerators, e.g. gtk.ACCEL_VISIBLE
+'''
+
+if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
         logging.debug('No Gtk.AccelGroup in the top level window.')
         return
+'''
+ -> hassatr(object, name)
+    The arguments are an object and a string.
+    The result is True if the string is the name of one of the object’s
+    attributes, False if not. (This is implemented by calling
+    getattr(object, name) and seeing whether it raises an exception or not.)
+    Example:
+    hassatr(abc,'abc')
+    '''
 
-    accel_group = tool_button.get_toplevel().sugar_accel_group
-    keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
-    # the accelerator needs to be set at the child, so the Gtk.AccelLabel
-    # in the palette can pick it up.
-    accel_flags = Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE
-    tool_button.get_child().add_accelerator('clicked', accel_group,
-                                            keyval, mask, accel_flags)
+accel_group = tool_button.get_toplevel().sugar_accel_group
+keyval, mask = Gtk.accelerator_parse(tool_button.props.accelerator)
+# the accelerator needs to be set at the child, so the Gtk.AccelLabel
+# in the palette can pick it up.
+accel_flags = Gtk.AccelFlags.LOCKED | Gtk.AccelFlags.VISIBLE
+tool_button.get_child().add_accelerator('clicked', accel_group,
+                                        keyval, mask, accel_flags)
 
 
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
@@ -58,6 +84,16 @@ def setup_accelerator(tool_button):
 
 
 class ToggleToolButton(Gtk.ToggleToolButton):
+    '''
+    UI for toggletoolbutton
+    Args:
+        icon_name(string): name of themed icon which is to be used.
+    Keyword Args:
+        accelerator (string): keyboard shortcut to be used to
+        activate this button
+        tooltip (string): tooltip to be displayed when user
+        hovers over toggle button.
+    '''
 
     __gtype_name__ = 'SugarToggleToolButton'
 
@@ -74,17 +110,38 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     def __destroy_cb(self, icon):
         if self._palette_invoker is not None:
             self._palette_invoker.detach()
+    '''
+    Returns:
+    If palette_invoker is not equal to none then it is detached.
+    '''
 
     def set_icon_name(self, icon_name):
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
+    '''
+    Shows icon for toggle tool button
+    The set_icon_name() method sets the "icon-name" property to
+    the value of icon_name. The name of themed icon specified by
+    icon_name is used to determine the icon for the toolbutton if
+    not overridden by the "label", "stock-id" and "icon-widget"
+    properties.
+    Args:
+      icon_name(string): The name for a themed icon. It can be 'None' too.
+    Example:
+    def set_icon_name('xyz')
+    '''
 
     def get_icon_name(self):
+        '''Return above icon name (icon_name)'''
         if self.props.icon_widget is not None:
             return self.props.icon_widget.props.icon_name
         else:
             return None
+    '''
+    The get_icon_name() method returns the value of the icon_name
+    property that contains the name of a themed icon or None.
+    '''
 
     icon_name = GObject.property(type=str, setter=set_icon_name,
                                  getter=get_icon_name)
@@ -113,18 +170,35 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
     def set_tooltip(self, text):
         self.set_palette(Palette(text))
+        '''
+        Sets the tooltip of the toogle tool button. Displays when
+        user hovers over the button with cursor.
+        Args:
+            tooltip (string): tooltip to be added to the button
+        '''
 
     def set_accelerator(self, accelerator):
         self._accelerator = accelerator
         setup_accelerator(self)
+    '''
+    Sets keyboard shortcut that activates this button
+        Args:
+            accelerator(string): accelerator to be set. Should be in
+            form <modifier>Letter
+    '''
 
     def get_accelerator(self):
         return self._accelerator
-
+    '''
+    Return above accelerator string
+    '''
     accelerator = GObject.property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
     def do_draw(self, cr):
+        '''
+        Implementation method for drawing the toogle tool button
+        '''
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before
@@ -143,5 +217,9 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     def do_clicked(self):
         if self.palette:
             self.palette.popdown(True)
+        '''
+        Implementation method for hiding the tooltip when the
+        toggle button is clicked
+        '''
 
     palette = property(get_palette, set_palette)
