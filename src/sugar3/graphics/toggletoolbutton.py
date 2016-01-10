@@ -66,13 +66,18 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     UI for toggletoolbutton.
     Toogle tool button carries multiple activites for example
     like you want to make an ON/OFF task.
+
     Args:
+
         icon_name(string): name of themed icon which is to be used.
+
     Keyword Args:
+
         accelerator (string): keyboard shortcut to be used to
         activate this button
         tooltip (string): tooltip to be displayed when user
         hovers over toggle button.
+
     '''
 
     __gtype_name__ = 'SugarToggleToolButton'
