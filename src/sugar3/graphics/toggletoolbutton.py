@@ -51,6 +51,7 @@ def _add_accelerator(tool_button):
     tool_button.get_child().add_accelerator('clicked', accel_group,
                                             keyval, mask, accel_flags)
 
+
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
     _add_accelerator(tool_button)
 
@@ -62,17 +63,22 @@ def setup_accelerator(tool_button):
 
 class ToggleToolButton(Gtk.ToggleToolButton):
     '''
-    
-    UI for toggletoolbutton
-    
+
+    UI for toggletoolbutton.
+    Toogle tool button carries multiple activites for example
+    like you want to make an ON/OFF task.
+
     Args:
+
         icon_name(string): name of themed icon which is to be used.
+
     Keyword Args:
+
         accelerator (string): keyboard shortcut to be used to
         activate this button
         tooltip (string): tooltip to be displayed when user
         hovers over toggle button.
-    
+
     '''
 
     __gtype_name__ = 'SugarToggleToolButton'
@@ -92,22 +98,20 @@ class ToggleToolButton(Gtk.ToggleToolButton):
             self._palette_invoker.detach()
 
     def set_icon_name(self, icon_name):
-    '''
-    
+        '''
     Shows icon for toggle tool button
     The set_icon_name() method sets the "icon-name" property to
     the value of icon_name. If it is none than no icon will be shown on the
     toogle tool button.
-    
+
     Args:
-      
+
       icon_name(string): The name for a themed icon. It can be 'None' too.
-    
+
     Example:
-    
+
       def set_icon_name(self, icon_name)
-    
-    '''
+        '''
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
@@ -121,10 +125,6 @@ class ToggleToolButton(Gtk.ToggleToolButton):
             return self.props.icon_widget.props.icon_name
         else:
             return None
-    '''
-    The get_icon_name() method returns the value of the icon_name
-    property that contains the name of a themed icon or None.
-    '''
 
     icon_name = GObject.property(type=str, setter=set_icon_name,
                                  getter=get_icon_name)
@@ -152,39 +152,37 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
-    '''
+        '''
         Sets the tooltip of the toogle tool button. Displays when
         user hovers over the button with cursor.
         Args:
             tooltip (string): tooltip to be added to the button
-    '''    
+        '''
         self.set_palette(Palette(text))
-        
 
     def set_accelerator(self, accelerator):
-    '''
-    Sets keyboard shortcut that activates this button
-        
+        '''
+        Sets keyboard shortcut that activates this button
+
         Args:
-           
+
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
-   
+
         Example:
-        
+
         def set_accelerator(self, 'accel')
-   
-    '''    
+
+        '''
         self._accelerator = accelerator
         setup_accelerator(self)
-    
 
     def get_accelerator(self):
-    '''
-    Returns above accelerator string.
-    '''
-        return self._accelerator
-    
+        '''
+        Returns above accelerator string.
+        '''
+    return self._accelerator
+
     accelerator = GObject.property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
@@ -208,12 +206,10 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         return False
 
     def do_clicked(self):
+        if self.palette:
+            self.palette.popdown(True)
     '''
         Implementation method for hiding the tooltip when the
         toggle button is clicked
-    '''    
-        if self.palette:
-            self.palette.popdown(True)
-        
-
+    '''
     palette = property(get_palette, set_palette)
