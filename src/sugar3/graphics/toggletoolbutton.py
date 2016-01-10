@@ -63,22 +63,16 @@ def setup_accelerator(tool_button):
 
 class ToggleToolButton(Gtk.ToggleToolButton):
     '''
-
     UI for toggletoolbutton.
     Toogle tool button carries multiple activites for example
     like you want to make an ON/OFF task.
-
     Args:
-
         icon_name(string): name of themed icon which is to be used.
-
     Keyword Args:
-
         accelerator (string): keyboard shortcut to be used to
         activate this button
         tooltip (string): tooltip to be displayed when user
         hovers over toggle button.
-
     '''
 
     __gtype_name__ = 'SugarToggleToolButton'
@@ -103,13 +97,9 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     The set_icon_name() method sets the "icon-name" property to
     the value of icon_name. If it is none then no icon will be shown on the
     toogle tool button.
-
     Args:
-
       icon_name(string): The name for a themed icon. It can be 'None' too.
-
     Example:
-
       def set_icon_name(self, icon_name)
         '''
         icon = Icon(icon_name=icon_name)
@@ -163,16 +153,11 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     def set_accelerator(self, accelerator):
         '''
         Sets keyboard shortcut that activates this button
-
         Args:
-
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
-
         Example:
-
         def set_accelerator(self, 'accel')
-
         '''
         self._accelerator = accelerator
         setup_accelerator(self)
