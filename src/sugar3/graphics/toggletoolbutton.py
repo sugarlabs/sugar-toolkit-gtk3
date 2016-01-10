@@ -29,7 +29,7 @@ from sugar3.graphics.palette import Palette, ToolInvoker
 
 '''
 Toogle tool button switches you between two tasks.
-For example, a button can contains two functions like
+For example, a button can contain two functions like
 On or Off.
 '''
 
@@ -101,7 +101,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         '''
     Shows icon for toggle tool button
     The set_icon_name() method sets the "icon-name" property to
-    the value of icon_name. If it is none than no icon will be shown on the
+    the value of icon_name. If it is none then no icon will be shown on the
     toogle tool button.
 
     Args:
