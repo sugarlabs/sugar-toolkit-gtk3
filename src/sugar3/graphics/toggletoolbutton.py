@@ -102,10 +102,15 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     The set_icon_name() method sets the "icon-name" property to
     the value of icon_name. If it is none then no icon will be shown on the
     toogle tool button.
+
     Args:
+
       icon_name(string): The name for a themed icon. It can be 'None' too.
+
     Example:
-      def set_icon_name(self, icon_name)
+
+      set_icon_name('abcxyz')
+
         '''
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
@@ -150,19 +155,27 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         '''
         Sets the tooltip of the toogle tool button. Displays when
         user hovers over the button with cursor.
+
         Args:
+
             tooltip (string): tooltip to be added to the button
+
         '''
         self.set_palette(Palette(text))
 
     def set_accelerator(self, accelerator):
         '''
         Sets keyboard shortcut that activates this button
+
         Args:
+
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
+
         Example:
-        def set_accelerator(self, 'accel')
+
+        set_accelerator(self, 'accel')
+
         '''
         self._accelerator = accelerator
         setup_accelerator(self)
@@ -196,10 +209,11 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         return False
 
     def do_clicked(self):
-        if self.palette:
-            self.palette.popdown(True)
-    '''
+        '''
         Implementation method for hiding the tooltip when the
         toggle button is clicked
-    '''
+        '''
+        if self.palette:
+            self.palette.popdown(True)
+
     palette = property(get_palette, set_palette)
