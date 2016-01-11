@@ -165,7 +165,9 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
     def set_accelerator(self, accelerator):
         '''
-        Sets keyboard shortcut that activates this button
+        Sets keyboard shortcut that activates this button.
+        When the keybord shorcut is executed, the process of
+        the task which is to be done starts.
 
         Args:
 
