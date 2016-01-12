@@ -63,9 +63,17 @@ def setup_accelerator(tool_button):
 
 class ToggleToolButton(Gtk.ToggleToolButton):
     '''
+
     UI for toggletoolbutton.
-    Toogle tool button carries multiple activites for example
+    Toogle tool button carries multiple tasks for example
     like you want to make an ON/OFF task.
+
+    Contructor:
+
+         gtk.ToggleToolButton(stock_id=None)
+
+            stock_id: The name of stock item.
+            Returns a new gtk.toggletoolbutton.
 
     Args:
 
@@ -98,18 +106,21 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
     def set_icon_name(self, icon_name):
         '''
-    Shows icon for toggle tool button
-    The set_icon_name() method sets the "icon-name" property to
-    the value of icon_name. If it is none then no icon will be shown on the
-    toogle tool button.
+        Shows icon for toggle tool button
+        The set_icon_name() method sets the "icon-name" property to
+        the value of icon_name. If it is none then no icon will be shown on the
+        toogle tool button.The themed icon name specified by icon_name is used
+        to determine the icon for the toolbutton if not overridden by the
+        "stock-id" property.
 
-    Args:
+        Args:
 
-      icon_name(string): The name for a themed icon. It can be 'None' too.
+            icon_name(string): The name for a themed icon.
+            It can be set as 'None' too.
 
-    Example:
+        Example:
 
-      set_icon_name('abcxyz')
+            set_icon_name('abcxyz')
 
         '''
         icon = Icon(icon_name=icon_name)
@@ -168,6 +179,11 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         Sets keyboard shortcut that activates this button.
         When the keybord shorcut is executed, the process of
         the task which is to be done starts.
+        For example, you've set the keyboard shorcut for a
+        toogle tool button which carries two tasks, one for
+        ON and another for off, if you execute that keyboard
+        shortcut, the task (On or Off) will be switched to other
+        like (On --> Off) or (Off --> On).
 
         Args:
 
