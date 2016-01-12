@@ -67,13 +67,14 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     UI for toggletoolbutton.
     Toogle tool button carries multiple tasks for example
     like you want to make an ON/OFF task.
+    A Gtk.ToggleToolButton is a Gtk.ToolItem that contains a toggle button.
+    Use Gtk.ToggleToolButton.new () to create a new Gtk.ToggleToolButton.
 
-    Contructor:
+    Fuctions:
 
-         gtk.ToggleToolButton(stock_id=None)
+        gtk_toggle_tool_button_new()
 
-            stock_id: The name of stock item.
-            Returns a new gtk.toggletoolbutton.
+            Returns: a new GTK.toggletoolbutton
 
     Args:
 
@@ -83,6 +84,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
         accelerator (string): keyboard shortcut to be used to
         activate this button
+
         tooltip (string): tooltip to be displayed when user
         hovers over toggle button.
 
@@ -111,7 +113,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         the value of icon_name. If it is none then no icon will be shown on the
         toogle tool button.The themed icon name specified by icon_name is used
         to determine the icon for the toolbutton if not overridden by the
-        "stock-id" property.
+        "stock-id" (icon_name) property.
 
         Args:
 
