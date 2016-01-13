@@ -29,7 +29,7 @@ from sugar3.graphics.palette import Palette, ToolInvoker
 
 '''
 Toogle tool button switches you between two tasks.
-For example, Journals favorites button. You can 
+For example, Journals favorites button. You can
 add or remove favorite by one button.
 '''
 
