@@ -29,8 +29,8 @@ from sugar3.graphics.palette import Palette, ToolInvoker
 
 '''
 Toogle tool button switches you between two tasks.
-For example, a button can contain two functions like
-On or Off.
+For example, Journals favorites button. You can 
+add or remove favorite by one button.
 '''
 
 
@@ -65,12 +65,12 @@ def setup_accelerator(tool_button):
 class ToggleToolButton(Gtk.ToggleToolButton):
     '''
     UI for toggletoolbutton.
-    A Gtk.ToggleToolButton is a Gtk.ToolItem that contains a toggle button,
+    A ToggleToolButton is a ToolItem that contains a toggle button,
     having an icon, a tooltip palette, and an accelerator.
-    Use Gtk.ToggleToolButton.new() to create a new Gtk.ToggleToolButton.
+    Use ToggleToolButton.new() to create a new ToggleToolButton.
     Fuctions:
-        Gtk.ToggleToolButton.new ()
-            Returns: a new GTK.toggletoolbutton
+        ToggleToolButton.new ()
+            Returns: a new toggletoolbutton
     Args:
 
         accelerator (string): keyboard shortcut to be used to
@@ -107,7 +107,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         and other.
         Args:
             icon_name(string): The name for a themed icon.
-            It can be set as 'None' too (No icon will be displayed).
+            It can be set as 'None' too.
         Example:
             set_icon_name('abcxyz')
         '''
