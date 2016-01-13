@@ -39,6 +39,7 @@ def _add_accelerator(tool_button):
             not tool_button.get_child():
         return
 
+    # TODO: should we remove the accelerator from the prev top level?
     if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
         logging.debug('No Gtk.AccelGroup in the top level window.')
         return
@@ -64,20 +65,22 @@ def setup_accelerator(tool_button):
 class ToggleToolButton(Gtk.ToggleToolButton):
     '''
     UI for toggletoolbutton.
-    Toogle tool button carries multiple tasks for example
-    like you want to make an ON/OFF task.
-    A Gtk.ToggleToolButton is a Gtk.ToolItem that contains a toggle button.
-    Use Gtk.ToggleToolButton.new () to create a new Gtk.ToggleToolButton.
+    A Gtk.ToggleToolButton is a Gtk.ToolItem that contains a toggle button,
+    having an icon, a tooltip palette, and an accelerator.
+    Use Gtk.ToggleToolButton.new() to create a new Gtk.ToggleToolButton.
     Fuctions:
-        gtk_toggle_tool_button_new()
+        Gtk.ToggleToolButton.new ()
             Returns: a new GTK.toggletoolbutton
     Args:
-        icon_name(string): name of themed icon which is to be used.
-    Keyword Args:
+
         accelerator (string): keyboard shortcut to be used to
-        activate this button
+        activate this button.
         tooltip (string): tooltip to be displayed when user
         hovers over toggle button.
+
+    Keyword Args:
+        icon_name(string): name of themed icon which is to be used.
+
     '''
 
     __gtype_name__ = 'SugarToggleToolButton'
@@ -98,15 +101,13 @@ class ToggleToolButton(Gtk.ToggleToolButton):
 
     def set_icon_name(self, icon_name):
         '''
-        Shows icon for toggle tool button
-        The set_icon_name() method sets the "icon-name" property to
-        the value of icon_name. If it is none then no icon will be shown on the
-        toogle tool button.The themed icon name specified by icon_name is used
-        to determine the icon for the toolbutton if not overridden by the
-        "stock-id" (icon_name) property.
+        Sets the icon for the tool button from a named themed icon.
+        If it is none then no icon will be shown. The icon-name
+        property will only effect if not overriden by stock-id
+        and other.
         Args:
             icon_name(string): The name for a themed icon.
-            It can be set as 'None' too.
+            It can be set as 'None' too (No icon will be displayed).
         Example:
             set_icon_name('abcxyz')
         '''
@@ -161,13 +162,6 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     def set_accelerator(self, accelerator):
         '''
         Sets keyboard shortcut that activates this button.
-        When the keybord shorcut is executed, the process of
-        the task which is to be done starts.
-        For example, you've set the keyboard shorcut for a
-        toogle tool button which carries two tasks, one for
-        ON and another for off, if you execute that keyboard
-        shortcut, the task (On or Off) will be switched to other
-        like (On --> Off) or (Off --> On).
         Args:
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
@@ -181,7 +175,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         '''
         Returns above accelerator string.
         '''
-    return self._accelerator
+        return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
