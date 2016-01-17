@@ -29,8 +29,7 @@ from sugar3.graphics.palette import Palette, ToolInvoker
 
 '''
 Toolbutton is a simple button which can contain only
-one event, for example, the clear search button
-in journal.
+one event, for example, buttons in toolbars.
 '''
 
 
@@ -67,9 +66,9 @@ class ToolButton(Gtk.ToolButton):
     UI for toolbutton.
     A ToolButton is a ToolItem having an icon, a tooltip palette,
     and an accelerator.
-    Use ToolButton.new() to create a new ToolButton.
+    Use ToolButton() to create a new ToolButton.
     Fuctions:
-        ToolButton.new ()
+        ToolButton()
             Returns: a new toolbutton
     Args:
         accelerator (string): keyboard shortcut to be used to
@@ -109,8 +108,6 @@ class ToolButton(Gtk.ToolButton):
         return True
 
     def set_tooltip(self, tooltip):
-        """ Set a simple palette with just a single label.
-        """
         '''
         Sets the tooltip of the tool button. Displays when
         user hovers over the button with cursor.
@@ -138,6 +135,9 @@ class ToolButton(Gtk.ToolButton):
 
     def get_hide_tooltip_on_click(self):
         return self._hide_tooltip_on_click
+        '''
+        Hides tooltip when clicked
+        '''
 
     def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
         if self._hide_tooltip_on_click != hide_tooltip_on_click:
@@ -153,8 +153,6 @@ class ToolButton(Gtk.ToolButton):
         Args:
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
-        Example:
-        set_accelerator(self, 'accel')
         '''
         self._accelerator = accelerator
         setup_accelerator(self)
@@ -169,11 +167,22 @@ class ToolButton(Gtk.ToolButton):
                                    getter=get_accelerator)
 
     def set_icon_name(self, icon_name):
+        '''
+        Returns:
+            Sets the icon for the tool button from a named themed icon.
+        Args:
+            icon_name: Name of themed icon.
+        '''
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
 
     def get_icon_name(self):
+        '''
+        Returns:
+            Returns the name of the themed icon for the tool button,
+            Returns none if tool button has no icon.
+        '''
         if self.props.icon_widget is not None:
             return self.props.icon_widget.props.icon_name
         else:
