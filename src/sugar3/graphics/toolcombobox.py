@@ -18,15 +18,32 @@
 """
 STABLE.
 """
-
 from gi.repository import Gtk
 from gi.repository import GObject
 
 from sugar3.graphics.combobox import ComboBox
 from sugar3.graphics import style
+'''
+A ToolComboBox is a widget that allows the user to
+choose from a list of valid choices.
+'''
 
 
 class ToolComboBox(Gtk.ToolItem):
+    '''
+    UI for ToolComboBox
+    A ToolComboBox is a widget that allows the user to choose
+    from a list of valid choices. The ToolComboBox displays
+    the selected choice. When activated, it displays a popup
+    which allows the user to make a new choice.
+    Functions:
+        ToolComboBox.new()
+            Returns a new tool combobox.
+    Keyword Args:
+        combo:
+            Combo for ToolComboBox.
+            It can be also set to none.
+    '''
 
     __gproperties__ = {
         'label-text': (str, None, None, None, GObject.PARAM_WRITABLE),
