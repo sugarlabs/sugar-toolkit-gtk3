@@ -41,7 +41,7 @@ class ToolComboBox(Gtk.ToolItem):
             Returns a new tool combobox.
     Keyword Args:
         combo:
-            Combo for ToolComboBox.
+        List of items in ToolComboBox
             It can be also set to none.
     '''
 
