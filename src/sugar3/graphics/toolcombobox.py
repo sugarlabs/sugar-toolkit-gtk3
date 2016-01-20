@@ -41,6 +41,9 @@ class ToolComboBox(Gtk.ToolItem):
             Returns a new tool combobox.
     Keyword Args:
         combo:
+            The combo attribute is like a Gtk.ComboBox.
+            There are two types: Either user passed or
+            automatic.
         List of items in ToolComboBox
             It can be also set to none.
     '''
@@ -48,6 +51,10 @@ class ToolComboBox(Gtk.ToolItem):
     __gproperties__ = {
         'label-text': (str, None, None, None, GObject.PARAM_WRITABLE),
     }
+    '''
+        label-text
+        The text displayed on the label for ToolComboBox.
+    '''
 
     def __init__(self, combo=None, **kwargs):
         self.label = None
