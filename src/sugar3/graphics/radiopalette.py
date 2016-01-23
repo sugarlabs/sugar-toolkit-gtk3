@@ -22,6 +22,10 @@ from sugar3.graphics.palette import Palette
 
 
 class RadioMenuButton(ToolButton):
+    '''
+    This is a button used to open a group of widgets in a RadioPalette(menu)
+    It is not clickable
+    '''
 
     def __init__(self, **kwargs):
         ToolButton.__init__(self, **kwargs)
@@ -36,24 +40,38 @@ class RadioMenuButton(ToolButton):
         self.connect('notify::palette', self.__palette_cb)
 
     def __palette_cb(self, widget, pspec):
+        '''
+        A callback function
+        '''
         if not isinstance(self.props.palette, RadioPalette):
             return
         self.props.palette.update_button()
 
 
 class RadioToolsButton(RadioMenuButton):
+    '''
+    This is a button used to open a group of widgets in a RadioPalette(menu)
+    It is clickable
+    '''
 
     def __init__(self, **kwargs):
         RadioMenuButton.__init__(self, **kwargs)
 
     def do_clicked(self):
+        '''
+        This function is called when RadioToolsButton is clicked
+        '''
         if not self.selected_button:
             return
         self.selected_button.emit('clicked')
 
 
 class RadioPalette(Palette):
-
+    '''
+    This contains the widgets to be displayed in the RadioMenuButton
+    and RadioToolsButton. This is the Palette (menu) that shows up when
+    those buttons are clicked. It is used to display the widgets.
+    '''
     def __init__(self, **kwargs):
         Palette.__init__(self, **kwargs)
 
@@ -62,6 +80,9 @@ class RadioPalette(Palette):
         self.set_content(self.button_box)
 
     def append(self, button, label):
+        '''
+        Adds a widget to the RadioPalette
+        '''
         children = self.button_box.get_children()
 
         if button.palette is not None:
@@ -76,10 +97,17 @@ class RadioPalette(Palette):
             self.__clicked_cb(button)
 
     def update_button(self):
+        '''
+        Updates the button
+        '''
         for i in self.button_box.get_children():
             self.__clicked_cb(i)
 
     def __clicked_cb(self, button):
+        '''
+        Called when an element in RadioPalette is clicked 
+        Changes the label text to reflect the change in the selection
+        '''
         if not button.get_active():
             return
 
