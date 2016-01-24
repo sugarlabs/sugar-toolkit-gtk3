@@ -25,6 +25,17 @@ This file is used to open a palette with a bunch
 of widgets, some of whom are clickable while the others
 are not. Also, the buttons can have sub-palettes or menus.
 
+RadioPalette is different from a normal palette, as: in a 
+normal palette you can add only one widget but in this you 
+can add multiple of them (because internally they are HBox'es)
+
+This class dynamically switches between the window widget and the 
+menu widget.
+The window widget, created by default, acts as the container for any
+type of widget the user may wish to add. It is made to display 
+an icon at the top of the palette, but it can be used to display 
+anything with the "clicked" event
+
 Example: radiopalette.py
 
     from gi.repository import Gtk
@@ -140,6 +151,7 @@ class RadioToolsButton(RadioMenuButton):
     do_clicked(self), which performs the given lines of code.    
     Example Usage: button = RadioToolButton(icon_name='document-save',
                                             group=group)
+    where icon_name and group are Kwargs parameters
     '''
 
     def __init__(self, **kwargs):
