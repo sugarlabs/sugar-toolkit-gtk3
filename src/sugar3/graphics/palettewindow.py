@@ -1198,6 +1198,7 @@ class WidgetInvoker(Invoker):
 
         context = self.parent.get_style_context()
         context.add_class('toolitem')
+        context.add_class('palette-down')
 
         gap = _calculate_gap(self.get_rect(), palette.get_rect())
         if gap:
