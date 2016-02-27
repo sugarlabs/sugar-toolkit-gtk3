@@ -98,10 +98,12 @@ class Alert(Gtk.EventBox):
         self._msg_box = Gtk.VBox()
         self._title_label = Gtk.Label()
         self._title_label.set_alignment(0, 0.5)
+        self._title_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
         self._msg_box.pack_start(self._title_label, False, False, 0)
 
         self._msg_label = Gtk.Label()
         self._msg_label.set_alignment(0, 0.5)
+        self._msg_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
         self._msg_box.pack_start(self._msg_label, False, False, 0)
         self._hbox.pack_start(self._msg_box, False, False, 0)
 
