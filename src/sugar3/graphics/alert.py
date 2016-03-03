@@ -209,6 +209,8 @@ class Alert(Gtk.EventBox):
 
     def __button_clicked_cb(self, button, response_id):
         self._response(response_id)
+if hasattr(Alert, 'set_css_name'):
+    Alert.set_css_name('alert')
 
 
 class ConfirmationAlert(Alert):
@@ -344,6 +346,8 @@ class _TimeoutIcon(Gtk.Alignment):
 
     def set_text(self, text):
         self._text.set_markup('<b>%s</b>' % GLib.markup_escape_text(str(text)))
+if hasattr(_TimeoutIcon, 'set_css_name'):
+    _TimeoutIcon.set_css_name('timeouticon')
 
 
 class _TimeoutAlert(Alert):
