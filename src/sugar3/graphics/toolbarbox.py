@@ -130,6 +130,7 @@ class ToolbarButton(ToolButton):
         alloc = self.get_allocation()
         context = self.get_style_context()
         context.add_class('toolitem')
+        context.add_class('toolbar-down')
         if not self.is_expanded() or self.props.palette is not None and \
                 self.props.palette.is_up():
             ToolButton.do_draw(self, cr)
@@ -202,6 +203,8 @@ class ToolbarBox(Gtk.VBox):
         if button == self.expanded_button:
             self.remove(button.page_widget)
             self._expanded_button_index = -1
+if hasattr(ToolbarBox, 'set_css_name'):
+    ToolbarBox.set_css_name('toolbarbox')
 
 
 class _ToolbarPalette(PaletteWindow):

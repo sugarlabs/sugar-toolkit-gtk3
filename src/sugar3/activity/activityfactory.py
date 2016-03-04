@@ -38,6 +38,7 @@ import os
 import tempfile
 import subprocess
 import pwd
+import shutil
 
 _SHELL_SERVICE = 'org.laptop.Shell'
 _SHELL_PATH = '/org/laptop/Shell'
@@ -67,26 +68,30 @@ def create_activity_id():
     return util.unique_id()
 
 
+def _mkdir(path):
+    try:
+        os.mkdir(path)
+    except OSError, e:
+        if e.errno != EEXIST:
+            raise e
+
+
 def get_environment(activity):
     environ = os.environ.copy()
 
     bin_path = os.path.join(activity.get_path(), 'bin')
 
     activity_root = env.get_profile_path(activity.get_bundle_id())
-    if not os.path.exists(activity_root):
-        os.mkdir(activity_root)
+    _mkdir(activity_root)
 
-    data_dir = os.path.join(activity_root, 'instance')
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
+    instance_dir = os.path.join(activity_root, 'instance')
+    _mkdir(instance_dir)
 
     data_dir = os.path.join(activity_root, 'data')
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
+    _mkdir(data_dir)
 
     tmp_dir = os.path.join(activity_root, 'tmp')
-    if not os.path.exists(tmp_dir):
-        os.mkdir(tmp_dir)
+    _mkdir(tmp_dir)
 
     environ['SUGAR_BUNDLE_PATH'] = activity.get_path()
     environ['SUGAR_BUNDLE_ID'] = activity.get_bundle_id()
@@ -222,30 +227,6 @@ class ActivityCreationHandler(GObject.GObject):
                               self._handle.object_id, self._handle.uri,
                               self._handle.invited)
 
-        environment_dir = None
-        if os.path.exists('/etc/olpc-security') \
-                and os.access('/usr/bin/rainbow-run', os.X_OK):
-            environment_dir = tempfile.mkdtemp()
-            command = ['sudo', '-E', '--',
-                       'rainbow-run',
-                       '-v', '-v',
-                       '-a', 'rainbow-sugarize',
-                       '-s', '/var/spool/rainbow/2',
-                       '-f', '1',
-                       '-f', '2',
-                       '-c', self._bundle.get_path(),
-                       '-u', pwd.getpwuid(os.getuid()).pw_name,
-                       '-i', environ['SUGAR_BUNDLE_ID'],
-                       '-e', environment_dir,
-                       '--',
-                       ] + command
-
-            for key, value in environ.items():
-                file_path = os.path.join(environment_dir, str(key))
-                open(file_path, 'w').write(str(value))
-
-            log_file.write(' '.join(command) + '\n\n')
-
         dev_null = file('/dev/null', 'r')
         child = subprocess.Popen([str(s) for s in command],
                                  env=environ,
@@ -257,8 +238,8 @@ class ActivityCreationHandler(GObject.GObject):
 
         GObject.child_watch_add(child.pid,
                                 _child_watch_cb,
-                                (environment_dir, log_file,
-                                    self._handle.activity_id))
+                                (log_file,
+                                 self._handle.activity_id))
 
     def _no_reply_handler(self, *args):
         pass
@@ -319,11 +300,7 @@ def create_with_object_id(bundle, object_id):
 
 
 def _child_watch_cb(pid, condition, user_data):
-    # FIXME we use standalone method here instead of ActivityCreationHandler's
-    # member to have workaround code, see #1123
-    environment_dir, log_file, activity_id = user_data
-    if environment_dir is not None:
-        subprocess.call(['/bin/rm', '-rf', environment_dir])
+    log_file, activity_id = user_data
 
     if os.WIFEXITED(condition):
         status = os.WEXITSTATUS(condition)
