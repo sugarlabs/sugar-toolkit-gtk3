@@ -175,6 +175,35 @@ class _TrayViewport(Gtk.Viewport):
             self.notify('can-scroll-next')
 
 
+class _TrayToolButton(ToolButton):
+
+    __gtype_name__ = 'SugarTrayToolButton'
+
+    __gsignals__ = {
+        'add-link': (GObject.SignalFlags.RUN_FIRST, None, ([]))
+    }
+
+    def __init__(self, icon_name):
+        ToolButton.__init__(self)
+        self._viewport = None
+
+        self.set_size_request(style.SMALL_ICON_SIZE, style.SMALL_ICON_SIZE)
+
+        self.icon = Icon(icon_name=icon_name,
+                         pixel_size=style.SMALL_ICON_SIZE)
+        # The alignment is a hack to work around Gtk.ToolButton code
+        # that sets the icon_size when the icon_widget is a Gtk.Image
+        alignment = Gtk.Alignment(xalign=0.5, yalign=0.5)
+        alignment.add(self.icon)
+        self.set_icon_widget(alignment)
+        alignment.show_all()
+
+        self.connect('clicked', self._clicked_cb)
+
+    def _clicked_cb(self, button):
+        self.emit('add-link')
+
+
 class _TrayScrollButton(ToolButton):
 
     __gtype_name__ = 'SugarTrayScrollButton'
@@ -185,7 +214,7 @@ class _TrayScrollButton(ToolButton):
 
         self._scroll_direction = scroll_direction
 
-        self.set_size_request(style.GRID_CELL_SIZE, style.GRID_CELL_SIZE)
+        self.set_size_request(style.SMALL_ICON_SIZE, style.SMALL_ICON_SIZE)
 
         self.icon = Icon(icon_name=icon_name,
                          pixel_size=style.SMALL_ICON_SIZE)
@@ -260,6 +289,10 @@ class HTray(Gtk.EventBox):
         self._viewport = _TrayViewport(Gtk.Orientation.HORIZONTAL)
         self._box.pack_start(self._viewport, True, True, 0)
         self._viewport.show()
+
+        self._add_bookmark = _TrayToolButton('list-add')
+        self._box.pack_start(self._add_bookmark, False, False, 0)
+        self._add_bookmark.show()
 
         scroll_right = _TrayScrollButton('go-right', _NEXT_PAGE)
         self._box.pack_start(scroll_right, False, False, 0)
