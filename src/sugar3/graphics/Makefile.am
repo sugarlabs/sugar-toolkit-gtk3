@@ -16,6 +16,7 @@ sugar_PYTHON =              \
 	palettemenu.py          \
 	palettewindow.py        \
 	panel.py                \
+	progresstoolbutton.py   \
 	radiopalette.py         \
 	radiotoolbutton.py      \
 	scrollingdetector.py    \
