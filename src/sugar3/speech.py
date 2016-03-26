@@ -47,73 +47,136 @@ _SAVE_TIMEOUT = 500
 # If espeak add new voices, we need update this list.
 
 translated_espeak_voices = {
+    # Translators:  http://en.wikipedia.org/wiki/Afrikaans_language
     'af': _('Afrikaans'),
+    # Translators:  http://en.wikipedia.org/wiki/Aragonese_language
     'an': _('Aragonese'),
+    # Translators:  http://en.wikipedia.org/wiki/Bulgarian_language
     'bg': _('Bulgarian'),
+    # Translators:  http://en.wikipedia.org/wiki/Bosnian_language
     'bs': _('Bosnian'),
+    # Translators:  http://en.wikipedia.org/wiki/Catalan_language
     'ca': _('Catalan'),
+    # Translators:  http://en.wikipedia.org/wiki/Czech_language
     'cs': _('Czech'),
+    # Translators:  http://en.wikipedia.org/wiki/Welsh_language
     'cy': _('Welsh'),
+    # Translators:  http://en.wikipedia.org/wiki/Danish_language
     'da': _('Danish'),
+    # Translators:  http://en.wikipedia.org/wiki/German_language
     'de': _('German'),
+    # Translators:  http://en.wikipedia.org/wiki/Modern_Greek
     'el': _('Greek'),
     'en': _('Default'),
+    # Translators:  http://en.wikipedia.org/wiki/British_English
     'en_gb': _('English Britain'),
+    # Translators:  http://en.wikipedia.org/wiki/Scottish_English
     'en_sc': _('English scottish'),
     'en_uk-north': _('English-north'),
+    # Translators:  http://en.wikipedia.org/wiki/Received_Pronunciation
     'en_uk-rp': _('English_rp'),
+    # Translators:  http://en.wikipedia.org/wiki/West_Midlands_English
     'en_uk-wmids': _('English_wmids'),
+    # Translators:  http://en.wikipedia.org/wiki/American_English
     'en_us': _('English USA'),
-    'en_wi': _('English west indies'),
+    # Translators:  http://en.wikipedia.org/wiki/Caribbean_English
+    'en_wi': _('English West Indies'),
+    # Translators:  http://en.wikipedia.org/wiki/Esperanto
     'eo': _('Esperanto'),
+    # Translators:  http://en.wikipedia.org/wiki/Spanish_language
     'es': _('Spanish'),
     'es_la': _('Spanish latin american'),
+    # Translators:  http://en.wikipedia.org/wiki/Estonian_language
     'et': _('Estonian'),
+    # Translators:  http://en.wikipedia.org/wiki/Persian_language
     'fa': _('Farsi'),
+    # Translators:  http://en.wikipedia.org/wiki/Fingilish
     'fa_pin': _('Farsi-pinglish'),
+    # Translators:  http://en.wikipedia.org/wiki/Finnish_language
     'fi': _('Finnish'),
+    # Translators:  http://en.wikipedia.org/wiki/Belgian_French
     'fr_be': _('French belgium'),
+    # Translators:  http://en.wikipedia.org/wiki/French_language
     'fr_fr': _('French'),
+    # Translators:  http://en.wikipedia.org/wiki/Irish_language
     'ga': _('Irish-gaeilge'),
+    # Translators:  http://en.wikipedia.org/wiki/Ancient_Greek
     'grc': _('Greek-ancient'),
+    # Translators:  http://en.wikipedia.org/wiki/Hindi
     'hi': _('Hindi'),
+    # Translators:  http://en.wikipedia.org/wiki/Croatian_language
     'hr': _('Croatian'),
+    # Translators:  http://en.wikipedia.org/wiki/Hungarian_language
     'hu': _('Hungarian'),
+    # Translators:  http://en.wikipedia.org/wiki/Armenian_language
     'hy': _('Armenian'),
+    # Translators:  http://en.wikipedia.org/wiki/Western_Armenian
     'hy_west': _('Armenian (west)'),
+    # Translators:  http://en.wikipedia.org/wiki/Indonesian_language
     'id': _('Indonesian'),
+    # Translators:  http://en.wikipedia.org/wiki/Icelandic_language
     'is': _('Icelandic'),
+    # Translators:  http://en.wikipedia.org/wiki/Italian_language
     'it': _('Italian'),
+    # Translators:  http://en.wikipedia.org/wiki/Lojban
     'jbo': _('Lojban'),
+    # Translators:  http://en.wikipedia.org/wiki/Georgian_language
     'ka': _('Georgian'),
+    # Translators:  http://en.wikipedia.org/wiki/Kannada_language
     'kn': _('Kannada'),
+    # Translators:  http://en.wikipedia.org/wiki/Kurdish_language
     'ku': _('Kurdish'),
+    # Translators:  http://en.wikipedia.org/wiki/Latin
     'la': _('Latin'),
+    # Translators:  http://en.wikipedia.org/wiki/Lithuanian_language
     'lt': _('Lithuanian'),
+    # Translators:  http://en.wikipedia.org/wiki/Latvian_language
     'lv': _('Latvian'),
+    # Translators:  http://en.wikipedia.org/wiki/Macedonian_language
     'mk': _('Macedonian'),
+    # Translators:  http://en.wikipedia.org/wiki/Malayalam
     'ml': _('Malayalam'),
+    # Translators:  http://en.wikipedia.org/wiki/Malay_language
     'ms': _('Malay'),
+    # Translators:  http://en.wikipedia.org/wiki/Nepali_language
     'ne': _('Nepali'),
+    # Translators:  http://en.wikipedia.org/wiki/Dutch_language
     'nl': _('Dutch'),
+    # Translators:  http://en.wikipedia.org/wiki/Norwegian_language
     'no': _('Norwegian'),
+    # Translators:  http://en.wikipedia.org/wiki/Punjabi_language
     'pa': _('Punjabi'),
+    # Translators:  http://en.wikipedia.org/wiki/Polish_language
     'pl': _('Polish'),
+    # Translators:  http://en.wikipedia.org/wiki/Brazilian_Portuguese
     'pt_br': _('Portuguese (Brazil)'),
+    # Translators:  http://en.wikipedia.org/wiki/Portuguese_language
     'pt_pt': _('Portuguese (Portugal)'),
+    # Translators:  http://en.wikipedia.org/wiki/Romanian_language
     'ro': _('Romanian'),
+    # Translators:  http://en.wikipedia.org/wiki/Russian_language
     'ru': _('Russian'),
+    # Translators:  http://en.wikipedia.org/wiki/Slovak_language
     'sk': _('Slovak'),
+    # Translators:  http://en.wikipedia.org/wiki/Albanian_language
     'sq': _('Albanian'),
+    # Translators:  http://en.wikipedia.org/wiki/Serbian_language
     'sr': _('Serbian'),
+    # Translators:  http://en.wikipedia.org/wiki/Swedish_language
     'sv': _('Swedish'),
-    'sw': _('Swahili-test'),
+    # Translators:  http://en.wikipedia.org/wiki/Swahili_language
+    'sw': _('Swahili'),
+    # Translators:  http://en.wikipedia.org/wiki/Tamil_language
     'ta': _('Tamil'),
+    # Translators:  http://en.wikipedia.org/wiki/Turkish_language
     'tr': _('Turkish'),
+    # Translators:  http://en.wikipedia.org/wiki/Vietnamese_language
     'vi': _('Vietnam'),
     'vi_hue': _('Vietnam_hue'),
     'vi_sgn': _('Vietnam_sgn'),
+    # Translators:  http://en.wikipedia.org/wiki/Mandarin_Chinese
     'zh': _('Mandarin'),
+    # Translators:  http://en.wikipedia.org/wiki/Cantonese
     'zh_yue': _('Cantonese')
 }
 
