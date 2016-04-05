@@ -385,6 +385,9 @@ class Activity(Window, Gtk.Container):
         self._bus = ActivityService(self)
         self._owns_file = False
 
+        sugar_cursor = Gdk.Cursor(Gdk.CursorType.LEFT_PTR)
+        self.get_window().set_cursor(sugar_cursor)
+
         share_scope = SCOPE_PRIVATE
 
         if handle.object_id:
