@@ -67,7 +67,6 @@ import json
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
-from gi.repository import Gio
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
@@ -81,6 +80,7 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
 from sugar3 import power
+from sugar3.profile import get_nick_name, get_color
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
@@ -90,6 +90,9 @@ from sugar3.graphics.icon import Icon
 from sugar3.datastore import datastore
 from sugar3.bundle.activitybundle import get_bundle_instance
 from sugar3.bundle.helpers import bundle_from_dir
+from sugar3 import env
+from errno import EEXIST
+
 from gi.repository import SugarExt
 
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
@@ -436,13 +439,18 @@ class Activity(Window, Gtk.Container):
                                            self.__jobject_updated_cb)
         self.set_title(self._jobject.metadata['title'])
 
+        if 'SUGAR_VERSION' not in os.environ:
+            bundle = get_bundle_instance(get_bundle_path())
+            self.set_icon_from_file(bundle.get_icon())
+
+
     def run_main_loop(self):
         Gtk.main()
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
-        settings = Gio.Settings('org.sugarlabs.user')
-        icon_color = settings.get_string('color')
+       
+        icon_color = get_color().to_string()
 
         jobject = datastore.create()
         jobject.metadata['title'] = title
@@ -613,11 +621,12 @@ class Activity(Window, Gtk.Container):
 
     def _adapt_window_to_screen(self):
         screen = Gdk.Screen.get_default()
+        workarea = screen.get_monitor_workarea(screen.get_number())
         geometry = Gdk.Geometry()
         geometry.max_width = geometry.base_width = geometry.min_width = \
-            screen.get_width()
+            workarea.width
         geometry.max_height = geometry.base_height = geometry.min_height = \
-            screen.get_height()
+            workarea.height
         geometry.width_inc = geometry.height_inc = geometry.min_aspect = \
             geometry.max_aspect = 1
         hints = Gdk.WindowHints(Gdk.WindowHints.ASPECT |
@@ -671,7 +680,7 @@ class Activity(Window, Gtk.Container):
         if os.environ.get('SUGAR_ACTIVITY_ROOT'):
             return os.environ['SUGAR_ACTIVITY_ROOT']
         else:
-            return '/'
+            return get_activity_root()
 
     def read_file(self, file_path):
         '''
@@ -876,7 +885,7 @@ class Activity(Window, Gtk.Container):
         if not self.metadata.get('activity_id', ''):
             self.metadata['activity_id'] = self.get_id()
 
-        file_path = os.path.join(self.get_activity_root(), 'instance',
+        file_path = os.path.join(get_activity_root(), 'instance',
                                  '%i' % time.time())
         try:
             self.write_file(file_path)
@@ -1251,7 +1260,13 @@ def get_activity_root():
     if os.environ.get('SUGAR_ACTIVITY_ROOT'):
         return os.environ['SUGAR_ACTIVITY_ROOT']
     else:
-        raise RuntimeError('No SUGAR_ACTIVITY_ROOT set.')
+        activity_root = env.get_profile_path(os.environ['SUGAR_BUNDLE_ID'])
+        try:
+            os.mkdir(activity_root)
+        except OSError, e:
+            if e.errno != EEXIST:
+                raise e
+        return activity_root
 
 
 def show_object_in_journal(object_id):

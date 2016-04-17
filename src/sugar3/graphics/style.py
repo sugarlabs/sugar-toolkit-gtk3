@@ -116,9 +116,13 @@ MEDIUM_ICON_SIZE = zoom(55 * 1.5)
 LARGE_ICON_SIZE = zoom(55 * 2.0)
 XLARGE_ICON_SIZE = zoom(55 * 2.75)
 
-settings = Gio.Settings('org.sugarlabs.font')
-FONT_SIZE = settings.get_double('default-size')
-FONT_FACE = settings.get_string('default-face')
+if 'org.sugarlabs.font' in Gio.Settings.list_schemas():
+    settings = Gio.Settings('org.sugarlabs.font')
+    FONT_SIZE = settings.get_double('default-size')
+    FONT_FACE = settings.get_string('default-face')
+else:
+    FONT_SIZE = 10
+    FONT_FACE = 'Sans Serif' 
 
 FONT_NORMAL = Font('%s %f' % (FONT_FACE, FONT_SIZE))
 FONT_BOLD = Font('%s bold %f' % (FONT_FACE, FONT_SIZE))

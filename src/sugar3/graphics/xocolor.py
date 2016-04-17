@@ -244,8 +244,9 @@ class XoColor:
         parsed_color = None
 
         if color_string is None:
-            settings = Gio.Settings('org.sugarlabs.user')
-            color_string = settings.get_string('color')
+            if 'org.sugarlabs.user' in Gio.Settings.list_schemas():
+                settings = Gio.Settings('org.sugarlabs.user')
+                color_string = settings.get_string('color')
 
         if color_string is not None:
             parsed_color = _parse_string(color_string)
