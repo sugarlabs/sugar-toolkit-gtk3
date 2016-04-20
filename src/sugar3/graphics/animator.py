@@ -24,15 +24,15 @@ Example:
         from gi.repository import Gtk
         from sugar3.graphics.animator import Animator, Animation
 
-        # Construct a 5 second animator
-        animator = Animator(5)
-
         # Construct a window to animate
         w = Gtk.Window()
         w.connect('destroy', Gtk.main_quit)
         # Start the animation when the window is shown
         w.connect('realize', lambda self: animator.start())
         w.show()
+
+        # Construct a 5 second animator
+        animator = Animator(5, widget=w)
 
         # Create an animation subclass to animate the widget
         class SizeAnimation(Animation):
@@ -80,6 +80,11 @@ class Animator(GObject.GObject):
             per second (frames per second)
         easing (int): the desired easing mode, either `EASE_OUT_EXPO`
             or `EASE_IN_EXPO`
+        widget (:class:`Gtk.Widget`): one of the widgets that the animation
+            is acting on.  If supplied and if the user's Gtk+ version
+            supports it, the animation will run on the frame clock of the
+            widget, resulting in a smoother animation and the fps value
+            will be disregarded.
 
     .. note::
 
@@ -92,12 +97,13 @@ class Animator(GObject.GObject):
         'completed': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
-    def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO):
+    def __init__(self, duration, fps=20, easing=EASE_OUT_EXPO, widget=None):
         GObject.GObject.__init__(self)
         self._animations = []
         self._duration = duration
         self._interval = 1.0 / fps
         self._easing = easing
+        self._widget = widget
         self._timeout_sid = 0
         self._start_time = None
 
@@ -127,19 +133,30 @@ class Animator(GObject.GObject):
             self.stop()
 
         self._start_time = time.time()
-        self._timeout_sid = GLib.timeout_add(
-            int(self._interval * 1000), self._next_frame_cb)
+        if hasattr(self._widget, 'add_tick_callback'):
+            self._timeout_sid = self._widget.add_tick_callback(
+                self._next_frame_cb, None)
+            # Make sure the 1st frame is animated so we get ticks
+            self._next_frame_cb()
+        else:
+            self._timeout_sid = GLib.timeout_add(
+                int(self._interval * 1000), self._next_frame_cb)
 
     def stop(self):
         '''
         Stop the animation and emit the `completed` signal
         '''
-        if self._timeout_sid:
+        if self._timeout_sid and \
+           not hasattr(self._widget, 'add_tick_callback'):
             GObject.source_remove(self._timeout_sid)
             self._timeout_sid = 0
             self.emit('completed')
+        if self._timeout_sid and hasattr(self._widget, 'add_tick_callback'):
+            self._widget.remove_tick_callback(self._timeout_sid)
+            self._timeout_sid = 0
+            self.emit('completed')
 
-    def _next_frame_cb(self):
+    def _next_frame_cb(self, *args):
         current_time = min(self._duration, time.time() - self._start_time)
         current_time = max(current_time, 0.0)
 
