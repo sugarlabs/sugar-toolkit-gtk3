@@ -15,12 +15,14 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""
+'''
+The style module defines constants for spacing and sizing, as well as classes for 
+Colors and Fonts. Text rendering is handled by Pango and colors are inputted by their
+HTML code (e.g. #FFFFFFFF)
+
 All the constants are expressed in pixels. They are defined for the XO screen
 and are usually adapted to different resolution by applying a zoom factor.
-
-STABLE.
-"""
+'''
 
 import os
 import logging
@@ -36,6 +38,10 @@ ELLIPSIZE_MODE_DEFAULT = Pango.EllipsizeMode.END
 
 
 def _compute_zoom_factor():
+    '''
+    Calculates zoom factor based on size of screen. 
+    Returns double representing fraction of maximum possible screen size
+    '''
     try:
         scaling = int(os.environ.get('SUGAR_SCALING', '100'))
         return scaling / 100.0
@@ -46,39 +52,75 @@ def _compute_zoom_factor():
 
 
 class Font(object):
-
+    '''
+    A font defines the style of how the text should be rendered. 
+    
+    Args:
+        desc (str): a description of the Font object
+    '''
     def __init__(self, desc):
         self._desc = desc
 
     def __str__(self):
+        '''
+        Returns description of font
+        '''
         return self._desc
 
     def get_pango_desc(self):
+        '''
+        Returns Pango description of font
+        '''
         return Pango.FontDescription(self._desc)
 
 
 class Color(object):
+    '''
+    A Color object defines a specific color. 
 
+    Args:
+        color (str): String in the form #FFFFFF representing the color
+        
+        alpha (double):  transparency of color
+    '''
     def __init__(self, color, alpha=1.0):
         self._r, self._g, self._b = self._html_to_rgb(color)
         self._a = alpha
 
     def get_rgba(self):
+        '''
+        Returns 4-tuple of red, green, blue, and alpha levels in range 0-1
+        '''
         return (self._r, self._g, self._b, self._a)
 
     def get_int(self):
+        '''
+        Returns color encoded as an int, in the form rgba
+        '''
         return int(self._a * 255) + (int(self._b * 255) << 8) + \
             (int(self._g * 255) << 16) + (int(self._r * 255) << 24)
 
     def get_gdk_color(self):
+        '''
+        Returns GDK standard color
+        '''
         return Gdk.Color(int(self._r * 65535), int(self._g * 65535),
                          int(self._b * 65535))
 
     def get_html(self):
+        '''
+        Returns string in the standard html Color format (#FFFFFF)
+        '''
         return '#%02x%02x%02x' % (self._r * 255, self._g * 255, self._b * 255)
 
     def _html_to_rgb(self, html_color):
-        """ #RRGGBB -> (r, g, b) tuple (in float format) """
+        '''
+        Converts and returns (r, g, b) tuple in float format from standard HTML format (#FFFFFF).
+        Colors will be in range 0-1
+        
+        Args:
+            html_color (string): html string in the format #FFFFFF
+        '''
 
         html_color = html_color.strip()
         if html_color[0] == '#':
@@ -93,6 +135,11 @@ class Color(object):
         return (r, g, b)
 
     def get_svg(self):
+        '''
+        Returns HTML formatted color, unless the color is completely transparent, in
+        which case returns "none"
+        '''
+        
         if self._a == 0.0:
             return 'none'
         else:
@@ -100,6 +147,12 @@ class Color(object):
 
 
 def zoom(units):
+    '''
+    Returns size of units pixels at current zoom level
+    
+    Args:
+        units (int): size of item at full size
+    '''
     return int(ZOOM_FACTOR * units)
 
 
