@@ -144,6 +144,8 @@ class Builder(object):
             cat = gettext.GNUTranslations(open(mo_file, 'r'))
             translated_name = cat.gettext(self.config.activity_name)
             translated_summary = cat.gettext(self.config.summary)
+            if translated_summary is None:
+                translated_summary = ''
             if translated_summary.find('\n') > -1:
                 translated_summary = translated_summary.replace('\n', '')
                 logging.warn(
