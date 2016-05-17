@@ -40,6 +40,9 @@ from sugar3 import logger
 from sugar3.bundle.bundle import MalformedBundleException
 
 from distutils.dir_util import mkpath
+import time
+import hashlib
+import random
 
 def create_activity_instance(constructor, handle):
     activity = constructor(handle)
@@ -165,7 +168,10 @@ def main():
     activity_constructor = getattr(module, class_name)
 
     if not options.activity_id:
-        options.activity_id = bundle.get_name()
+        # Generate random hash
+        data = '%s%s' % (time.time(), random.randint(10000, 100000))
+        random_hash = hashlib.sha1(data).hexdigest()
+        options.activity_id = random_hash
         options.bundle_id = bundle.get_bundle_id()
 
     activity_handle = activityhandle.ActivityHandle(
