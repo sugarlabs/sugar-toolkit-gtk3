@@ -143,7 +143,7 @@ class ActivityBundle(Bundle):
             else:
                 raise MalformedBundleException(
                     'Activity bundle %s does not specify a bundle id' %
-                    self._path)
+                    self.get_path())
 
         if ' ' in self._bundle_id:
             raise MalformedBundleException('Space in bundle_id')
@@ -152,7 +152,7 @@ class ActivityBundle(Bundle):
             self._name = cp.get(section, 'name')
         else:
             raise MalformedBundleException(
-                'Activity bundle %s does not specify a name' % self._path)
+                'Activity bundle %s does not specify a name' % self.get_path())
 
         if cp.has_option(section, 'exec'):
             self.bundle_exec = cp.get(section, 'exec')
@@ -165,7 +165,7 @@ class ActivityBundle(Bundle):
                               'changed to exec')
             else:
                 raise MalformedBundleException(
-                    'Activity bundle %s must specify exec' % self._path)
+                    'Activity bundle %s must specify exec' % self.get_path())
 
         if cp.has_option(section, 'mime_types'):
             mime_list = cp.get(section, 'mime_types').strip(';')
@@ -189,7 +189,7 @@ class ActivityBundle(Bundle):
             except InvalidVersionError:
                 raise MalformedBundleException(
                     'Activity bundle %s has invalid version number %s' %
-                    (self._path, version))
+                    (self.get_path(), version))
             self._activity_version = version
 
         if cp.has_option(section, 'summary'):
@@ -206,7 +206,7 @@ class ActivityBundle(Bundle):
             except ValueError:
                 raise MalformedBundleException(
                     'Activity bundle %s has invalid max_participants %s' %
-                    (self._path, max_participants))
+                    (self.get_path(), max_participants))
 
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
@@ -255,13 +255,13 @@ class ActivityBundle(Bundle):
         """Get the locale path inside the (installed) activity bundle."""
         if self._zip_file is not None:
             raise NotInstalledException
-        return os.path.join(self._path, 'locale')
+        return os.path.join(self.get_path(), 'locale')
 
     def get_icons_path(self):
         """Get the icons path inside the (installed) activity bundle."""
         if self._zip_file is not None:
             raise NotInstalledException
-        return os.path.join(self._path, 'icons')
+        return os.path.join(self.get_path(), 'icons')
 
     def get_name(self):
         """Get the activity user-visible name."""
@@ -277,7 +277,7 @@ class ActivityBundle(Bundle):
         # we don't need to create a temp file in the zip case
         icon_path = os.path.join('activity', self._icon + '.svg')
         if self._zip_file is None:
-            return os.path.join(self._path, icon_path)
+            return os.path.join(self.get_path(), icon_path)
         else:
             icon_data = self.get_file(icon_path).read()
             temp_file, temp_file_path = tempfile.mkstemp(prefix=self._icon,
