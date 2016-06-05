@@ -31,7 +31,9 @@ import subprocess
 import re
 import gettext
 import logging
+from glob import glob
 from fnmatch import fnmatch
+from ConfigParser import ConfigParser
 
 from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
@@ -255,7 +257,7 @@ class Installer(Packager):
         Packager.__init__(self, builder.config)
         self.builder = builder
 
-    def install(self, prefix, install_mime=True):
+    def install(self, prefix, install_mime=True, install_desktop_file=True):
         self.builder.build()
 
         activity_path = os.path.join(prefix, 'share', 'sugar', 'activities',
@@ -289,6 +291,48 @@ class Installer(Packager):
 
         if install_mime:
             self.config.bundle.install_mime_type(self.config.source_dir)
+
+        if install_desktop_file:
+            self._install_desktop_file(prefix, activity_path)
+
+    def _install_desktop_file(self, prefix, activity_path):
+        cp = ConfigParser()
+        section = 'Desktop Entry'
+        cp.add_section(section)
+        cp.optionxform = str  # Allow CamelCase entries
+
+        # Get it from the activity.info for the non-translated version
+        info = ConfigParser()
+        info.read(os.path.join(activity_path, 'activity', 'activity.info'))
+        cp.set(section, 'Name', info.get('Activity', 'name'))
+        if info.has_option('Activity', 'summary'):
+            cp.set(section, 'Comment', info.get('Activity', 'summary'))
+
+        for path in glob(os.path.join(activity_path, 'locale',
+                                      '*', 'activity.linfo')):
+            locale = path.split(os.path.sep)[-2]
+            info = ConfigParser()
+            info.read(path)
+            if info.has_option('Activity', 'name'):
+                cp.set(section, 'Name[{}]'.format(locale),
+                       info.get('Activity', 'name'))
+            if info.has_option('Activity', 'summary'):
+                cp.set(section, 'Comment[{}]'.format(locale),
+                       info.get('Activity', 'summary'))
+
+        cp.set(section, 'Terminal', 'false')
+        cp.set(section, 'Type', 'Application')
+        cp.set(section, 'Categories', 'Education;')
+        cp.set(section, 'Icon', self.config.bundle.get_icon())
+        cp.set(section, 'Exec', self.config.bundle.get_command())
+        cp.set(section, 'Path', activity_path)  # Path == CWD for running
+
+        name = '{}.activity.desktop'.format(self.config.bundle_id)
+        path = os.path.join(prefix, 'share', 'applications', name)
+        if not os.path.isdir(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+        with open(path, 'w') as f:
+            cp.write(f)
 
 
 def cmd_check(config, options):
