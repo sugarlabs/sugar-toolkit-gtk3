@@ -1129,9 +1129,16 @@ class Activity(Window, Gtk.Container):
             self._complete_close()
 
     def __realize_cb(self, window):
-        xid = window.get_window().get_xid()
-        SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
-        SugarExt.wm_set_activity_id(xid, str(self._activity_id))
+        display_name = Gdk.Display.get_default().get_name()
+        if ':' in display_name: 
+            # X11 for sure; this only works in X11
+            xid = window.get_window().get_xid()
+            SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
+            SugarExt.wm_set_activity_id(xid, str(self._activity_id))
+        elif display_name is 'Broadway': 
+            # GTK3's HTML5 backend
+            # This is needed so that the window takes the whole browser window
+            self.maximize()
 
     def __delete_event_cb(self, widget, event):
         self.close()
