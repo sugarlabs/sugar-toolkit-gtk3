@@ -576,6 +576,10 @@ class EventIcon(Gtk.EventBox):
                         Gdk.EventMask.TOUCH_MASK |
                         Gdk.EventMask.BUTTON_RELEASE_MASK)
         self.connect('button-release-event', self.__button_release_event_cb)
+        # Connect after the default so that the palette can silence events
+        # for example, after a touch palette invocation
+        self.connect_after('button-release-event',
+                           self.__button_release_event_cb)
         for key, value in kwargs.iteritems():
             self.set_property(key, value)
 
