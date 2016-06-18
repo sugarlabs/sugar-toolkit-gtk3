@@ -15,11 +15,77 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""
-A small fixed size picture, typically used to decorate components.
+'''
+Icons are small pictures that are used to decorate components.  In Sugar, icons
+are SVG files that are re-coloured with a fill and a stroke colour.  Typically,
+icons representing the system use a greyscale color palette, whereas icons
+representing people take on their selected XoColors.
 
-STABLE.
-"""
+Designing a Sugar Icon
+======================
+
+If you want to make an icon to use in Sugar, start by designing something in
+a vector program, like Inkscape.  When you are designing the icon, use a canvas
+that is 55x55px.
+
+When designing your icon, use 2 colors.  For example, use a black stroke and a
+white fill color.  You need to keep this consistent and remember those colors.
+
+You should also keep the subcell grid in mind when designing the icon.  A grid
+cell (which the size of an icon) is made up of 5 by 5 subcells.  To use this in
+Inkscape, enable the page grid (View -> Page Grid), the go to grid properties
+(File -> Document Properties -> Grids).  In grid properties, set the "Spacing
+X" option to 11, "Spacing Y" to 11 and "Major grid line every" to 1.
+
+Before your icon is ready to be used in Sugar, it needs to be Sugarized.  This
+converts the colors to SVG entities, which allows Sugar to change the colors
+of the icon.  To do that, just run the `sugar-iconfiy`__ script.  Usually, it
+"just works" like::
+
+    python path/to/sugar-iconify.py -o icon.svg
+
+__ https://github.com/GhostAlgorithm/sugariconify/blob/master/sugariconify.py
+
+Code Example
+============
+
+Example of using icons with badges:
+
+.. literalinclude:: ../examples/iconbadges.py
+
+Badge Icons
+===========
+Badge icons are small icons that are attached to the normal icon.
+For example, a WiFi network icon might have a star badge attached to
+the bottom left corner (the "attach point") that indicates that the
+network is connected to.
+
+Badge icons are displayed at _BADGE_SIZE percent (45% currently),
+of their main icon.
+
+Badge icons are specified by the icon name, in the same sense that
+normal icons have a :any:`Icon.set_icon_name` function.
+
+Attach Points
+-------------
+
+Where the badge icon is placed is defined by the main icon.  By
+default, it is centered on 0, 0.  That means that the 3 quarters of
+the icon will be cut off!  Therefore, it is helpful to define the
+attach points.
+
+When Sugar loads the main icon, it looks for a `.icon` file.  For
+example, if the icon path is resolved to `/theme/computer-xo.svg`,
+the `/theme/computer-xo.icon` will be tried to find the attach points.
+
+The `.icon` files are to be formatted as follows::
+
+    [Icon Data]
+    AttachPoints=970,850
+
+In this example, the badge will be centered at 97.0% on the X axis,
+and 85.0% on the Y axis.
+'''
 
 import re
 import math
@@ -363,6 +429,40 @@ class _IconBuffer(object):
 
 
 class Icon(Gtk.Image):
+    '''
+    The most basic Sugar icon class.  Displays the icon given.
+
+    You must set either the `file_name`, `file` or `icon_name` properties,
+    otherwise, no icon will be visible.
+
+    You should set the `pixel_size`, using constants the `*_ICON_SIZE`
+    constants from :any:`sugar3.graphics.style`.
+
+    You should set the color (either via `xo_color` or `fill_color` and
+    `stroke_color`), otherwise the default black and white fill and stroke
+    will be used.
+
+    Keyword Args:
+        file_name (str): a path to the SVG icon file
+        file (object): same behaviour as file_name, but for
+            :class:`sugar3.util.TempFilePath` type objects
+        icon_name (str): a name of an icon in the theme to display.  The
+            icons in the theme include those in the sugar-artwork project
+            and icons in the activity's '/icons' directory
+        pixel_size (int): size of the icon, in pixels.  Best to use the
+            constants from :class:`sugar3.graphics.style`, as those constants
+            are scaled based on the user's preferences
+        xo_color (sugar3.graphics.xocolor.XoColor): color to display icon,
+            a shortcut that just sets the fill_color and stroke_color
+        fill_color (str): a string, like '#FFFFFF', that will serve as the
+            fill color for the icon
+        stroke_color (str): a string, like '#282828', that will serve as the
+            stroke color for the icon
+        icon_size: deprecated since 0.102.0, use pixel_size instead
+        badge_name (str): the icon_name for a badge icon,
+            see :any:`set_badge_name`
+        alpha (float): transparency of the icon, defaults to 1.0
+    '''
 
     __gtype_name__ = 'SugarIcon'
 
@@ -395,13 +495,31 @@ class Icon(Gtk.Image):
     file = GObject.property(type=object, setter=set_file, getter=get_file)
 
     def get_pixbuf(self):
+        '''
+        Returns the :class:`GdkPixbuf.Pixbuf` for the icon, if one has been
+        loaded yet.  If the icon has been drawn (:any:`do_draw`), the icon
+        will be loaded.
+
+        The pixbuf only contains the SVG icon that has been loaded and
+        recoloured.  It does not contain the badge.
+        '''
         return self._buffer.pixbuf
 
     def set_pixbuf(self, pixbuf):
+        '''
+        Set the pixbuf.  This will force the icon to be rendered with the
+        given pixbuf.  The icon will still be centered, badge added, etc.
+
+        Args:
+            pixbuf (GdkPixbuf.Pixbuf): pixbuf to set
+        '''
         self._buffer.pixbuf = pixbuf
 
     pixbuf = GObject.property(type=object, setter=set_pixbuf,
                               getter=get_pixbuf)
+    '''
+    icon.props.pixbuf -> see :any:`get_pixbuf` and :any:`set_pixbuf`
+    '''
 
     def _sync_image_properties(self):
         if self._buffer.icon_name != self.props.icon_name:
@@ -436,6 +554,7 @@ class Icon(Gtk.Image):
         self._buffer.file_name = self.props.file
 
     def do_get_preferred_height(self):
+        '''Gtk widget implementation method'''
         self._sync_image_properties()
         surface = self._buffer.get_surface()
         if surface:
@@ -447,6 +566,7 @@ class Icon(Gtk.Image):
         return (height, height)
 
     def do_get_preferred_width(self):
+        '''Gtk widget implementation method'''
         self._sync_image_properties()
         surface = self._buffer.get_surface()
         if surface:
@@ -458,6 +578,7 @@ class Icon(Gtk.Image):
         return (width, width)
 
     def do_draw(self, cr):
+        '''Gtk widget implementation method'''
         self._sync_image_properties()
         sensitive = (self.is_sensitive())
         surface = self._buffer.get_surface(sensitive, self)
@@ -493,71 +614,172 @@ class Icon(Gtk.Image):
             cr.paint_with_alpha(self._alpha)
 
     def set_xo_color(self, value):
+        '''
+        Set the colors used to display the icon
+
+        Args:
+            value (sugar3.graphics.xocolor.XoColor): new XoColor to use
+        '''
         if self._buffer.xo_color != value:
             self._buffer.xo_color = value
             self.queue_draw()
 
     xo_color = GObject.property(
         type=object, getter=None, setter=set_xo_color)
+    '''
+    icon.props.xo_color -> see :any:`set_xo_color`, note there is no getter
+    '''
 
     def set_fill_color(self, value):
+        '''
+        Set the color used to fill the icon
+
+        Args:
+            value (str): SVG color string, like '#FFFFFF'
+        '''
         if self._buffer.fill_color != value:
             self._buffer.fill_color = value
             self.queue_draw()
 
     def get_fill_color(self):
+        '''
+        Get the color used to fill the icon
+
+        Returns:
+            str, SVG color string, like '#FFFFFF'
+        '''
         return self._buffer.fill_color
 
     fill_color = GObject.property(
         type=object, getter=get_fill_color, setter=set_fill_color)
+    '''
+    icon.props.fill_color -> see :any:`get_fill_color`
+        and :any:`set_fill_color`
+    '''
 
     def set_stroke_color(self, value):
+        '''
+        Set the color used to paint the icon stroke
+
+        Args:
+            value (str): SVG color string, like '#282828'
+        '''
         if self._buffer.stroke_color != value:
             self._buffer.stroke_color = value
             self.queue_draw()
 
     def get_stroke_color(self):
+        '''
+        Get the color used to paint the icon stroke
+
+        Returns:
+            str, SVG color string, like '#282828'
+        '''
         return self._buffer.stroke_color
 
     stroke_color = GObject.property(
         type=object, getter=get_stroke_color, setter=set_stroke_color)
+    '''
+    icon.props.stroke_color -> see :any:`get_stroke_color`
+        and :any:`set_stroke_color`
+    '''
 
     def set_badge_name(self, value):
+        '''
+        See the Badge Icons section at the top of the file.
+
+        Args:
+            value (str): the icon name for the badge
+        '''
         if self._buffer.badge_name != value:
             self._buffer.badge_name = value
             self.queue_resize()
 
     def get_badge_name(self):
+        '''
+        Get the badge name, as set by :any:`set_badge_name`
+
+        Returns:
+            str, badge icon name
+        '''
         return self._buffer.badge_name
 
     badge_name = GObject.property(
         type=str, getter=get_badge_name, setter=set_badge_name)
+    '''
+    icon.props.badge_name -> see :any:`get_badge_name`
+        and :any:`set_badge_name`
+    '''
 
     def get_badge_size(self):
+        '''
+        Returns:
+            int, size of badge icon, in pixels
+        '''
         return int(_BADGE_SIZE * self.props.pixel_size)
 
     def set_alpha(self, value):
+        '''
+        Set the transparency for the icon.  Defaults to 1.0, which is
+        fully visible icon.
+
+        Args:
+            value (float): alpha value from 0.0 to 1.0
+        '''
         if self._alpha != value:
             self._alpha = value
             self.queue_draw()
 
     alpha = GObject.property(
         type=float, setter=set_alpha)
+    '''
+    icon.props.alpha -> see :any:`set_alpha`, note no getter
+    '''
 
     def set_scale(self, value):
+        '''
+        Scales the icon, with the transformation origin at the top left
+        corner.  Note that this only scales the resulting drawing, so
+        at large scales the icon will appear pixilated.
+
+        Args:
+            value (float): new scaling factor
+        '''
         if self._scale != value:
             self._scale = value
             self.queue_draw()
 
     scale = GObject.property(
         type=float, setter=set_scale)
+    '''
+    icon.props.scale -> see :any:`set_scale`, note no getter
+    '''
 
 
 class EventIcon(Gtk.EventBox):
-    """
+    '''
     An Icon class that provides access to mouse events and that can act as a
     cursor-positioned palette invoker.
-    """
+
+    The palette invoker can be used in 3 ways:
+
+    1.  Set the palette during your constructor, see :any:`set_palette`
+    2.  Override the create_palette method, see :any:`create_palette`
+    3.  Set the tooltip, see :any:`create_tooltip`
+
+    Otherwise, the icon setup api is the same as the basic :class:`Icon`.
+    This EventIcon class supports the icon_name, stroke_color, fill_color,
+    file_name, xo_color, pixel_size, scale and alpha keyword arguments as
+    the :class:`Icon`.  The added arguments are as follows:
+
+    Keyword Args:
+        background_color (Gdk.Color): the color to draw the icon on top of.
+            It defaults to None, which means no background is drawn
+            (transparent).  The alpha channel of the Gdk.Color is disregarded.
+        cache (bool): if True, the icon file contents will be cached to
+            reduce disk usage
+        palette (sugar3.graphics.palette.Palette): a palette to connect
+    '''
 
     __gsignals__ = {
         'activate': (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -589,6 +811,7 @@ class EventIcon(Gtk.EventBox):
         self.connect('destroy', self.__destroy_cb)
 
     def do_draw(self, cr):
+        '''Gtk widget implementation method'''
         surface = self._buffer.get_surface()
         if surface:
             allocation = self.get_allocation()
@@ -603,6 +826,7 @@ class EventIcon(Gtk.EventBox):
                 cr.paint_with_alpha(self._alpha)
 
     def do_get_preferred_height(self):
+        '''Gtk widget implementation method'''
         surface = self._buffer.get_surface()
         if surface:
             height = surface.get_height()
@@ -613,6 +837,7 @@ class EventIcon(Gtk.EventBox):
         return (height, height)
 
     def do_get_preferred_width(self):
+        '''Gtk widget implementation method'''
         surface = self._buffer.get_surface()
         if surface:
             width = surface.get_width()
@@ -679,15 +904,28 @@ class EventIcon(Gtk.EventBox):
         type=object, getter=get_stroke_color, setter=set_stroke_color)
 
     def set_background_color(self, value):
+        '''
+        Args:
+            value (Gdk.Color): color use as background (alpha is ignored),
+                or None meaning no background is drawn (transparent)
+        '''
         if self._buffer.background_color != value:
             self._buffer.background_color = value
             self.queue_draw()
 
     def get_background_color(self):
+        '''
+        Returns:
+            Gdk.Color, current background color, may be None
+        '''
         return self._buffer.background_color
 
     background_color = GObject.property(
         type=object, getter=get_background_color, setter=set_background_color)
+    '''
+    event_icon.props.get_background_color -> see :any:`set_background_color`
+        and :any:`get_background_color`
+    '''
 
     def set_size(self, value):
         if self._buffer.width != value:
@@ -721,13 +959,27 @@ class EventIcon(Gtk.EventBox):
         type=float, setter=set_alpha)
 
     def set_cache(self, value):
+        '''
+        Sugar caches icon file contents in a smart cache.  Currently, we use
+        a LRU (Least Recently Used) algorithm to manage the cache.
+
+        Args:
+            value (bool): if True, the icon file will be cached in the LRU
+        '''
         self._buffer.cache = value
 
     def get_cache(self):
+        '''
+        Returns:
+            bool, if the icon file will be saved in the LRU
+        '''
         return self._buffer.cache
 
     cache = GObject.property(
         type=bool, default=False, getter=get_cache, setter=set_cache)
+    '''
+    event_icon.props.cache -> see :any:`set_cache` and :any:`get_cache`
+    '''
 
     def set_badge_name(self, value):
         if self._buffer.badge_name != value:
@@ -741,16 +993,51 @@ class EventIcon(Gtk.EventBox):
         type=object, getter=get_badge_name, setter=set_badge_name)
 
     def create_palette(self):
+        '''
+        The create_palette function is called when the palette needs to be
+        invoked.  For example, when the user has right clicked the icon or
+        the user has hovered over the icon for a long time.
+
+        The create_palette will only be called once or zero times.  The palette
+        returned will be stored and re-used if the user invokes the palette
+        multiple times.
+
+        Your create_palette implementation does not need to
+        :any:`Gtk.Widget.show` the palette, as this will be done by the
+        invoker.  However, you still need to show
+        the menu items, etc that you place in the palette.
+
+        Returns:
+            sugar3.graphics.palette.Palette, or None to indicate that you
+            do not want a palette shown
+
+        The default implementation returns None, to indicate no palette should
+        be shown.
+        '''
         return None
 
     def get_palette(self):
+        '''
+        Gets the current palette, either set by :any:`set_palette` or cached
+        after a call to :any:`create_palette`
+        '''
         return self._palette_invoker.palette
 
     def set_palette(self, palette):
+        '''
+        Sets the palette to show.  If the palette is not None, this will
+        override the palette set by create_palette.
+
+        Args:
+            palette (sugar3.graphics.palette.Palette): palette or None
+        '''
         self._palette_invoker.palette = palette
 
     palette = GObject.property(
         type=object, setter=set_palette, getter=get_palette)
+    '''
+    event_icon.props.palette -> see :any:`get_palette` and :any:`set_palette`
+    '''
 
     def get_palette_invoker(self):
         return self._palette_invoker
@@ -763,6 +1050,14 @@ class EventIcon(Gtk.EventBox):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
+        '''
+        Creates a palette with the tooltip text.  This will override any
+        current palette set through :any:`set_palette` or that will ever be
+        returned by :any:`create_palette`.
+
+        Args:
+            text (str): tooltip text
+        '''
         from sugar3.graphics.palette import Palette
 
         self.set_palette(Palette(text))
@@ -775,14 +1070,16 @@ class EventIcon(Gtk.EventBox):
 
 
 class CanvasIcon(EventIcon):
-    """
+    '''
     An EventIcon with active and prelight states, and a styleable
-    background.
+    background.  If the icon pops up a palette, the prelight state is
+    set until the palette pops down.  This is used to render a light
+    grey highlight, however can be configured by Gtk+ CSS with the
+    `:prelight` selector.
 
-    If the icon pops up a palette, the prelight state is set until the
-    palette pops down.
-
-    """
+    Care should to use :any:`connect_to_palette_pop_events` for all palettes
+    created and shown around this icon.
+    '''
 
     __gtype_name__ = 'SugarCanvasIcon'
 
@@ -796,11 +1093,26 @@ class CanvasIcon(EventIcon):
         self.connect('button-release-event', self.__button_release_event_cb)
 
     def connect_to_palette_pop_events(self, palette):
+        '''
+        Connect to the palette's popup and popdown events, so that the prelight
+        state is set at the right times.  You should run this call
+        before you :any:`EventIcon.set_palette` or before you return from
+        your :any:`EventIcon.create_palette` function, eg:
+
+            def create_palette(self):
+                palette = ...
+
+                self.connect_to_palette_pop_events(palette)
+                return palette
+
+        Args:
+            palette (sugar3.graphics.palette.Palette): palette to connect
+        '''
         palette.connect('popup', self.__palette_popup_cb)
         palette.connect('popdown', self.__palette_popdown_cb)
 
     def do_draw(self, cr):
-        """Render a background that fits the allocated space."""
+        '''Gtk widget implementation method'''
         allocation = self.get_allocation()
         context = self.get_style_context()
         Gtk.render_background(context, cr, 0, 0,
@@ -1060,6 +1372,40 @@ class CellRendererIcon(Gtk.CellRenderer):
 
 
 def get_icon_state(base_name, perc, step=5):
+    '''
+    Get the closest icon name for a given state in percent.
+
+    First, you need a set of icons.  They must be prefixed with `base_name`, for
+    example "network-wireless".  They must be suffixed with 3 digit percentage
+    numbers, for example "-000", "-200", etc.  Eventually, you get a collection
+    of icon names like:
+
+    * network-wireless-000
+    * network-wireless-020
+    * network-wireless-040
+    * network-wireless-060
+    * network-wireless-080
+    * network-wireless-100
+
+    All of these icons must be placed in the icon theme, such that they are
+    addressable by their `icon_name`.
+
+    Args:
+        base_name (str): base icon name, eg `network-wireless`
+        perc (float): desired percentage between 0 and 100, eg. 67.8
+
+    Keyword Arguments:
+        step (int): step to increment to find all possible icons
+
+            From the example above, we could step 5, because 0, 5, 10, 15, etc,
+            includes all number suffixes in our set of icons (0, 20, 40, etc).
+
+            If we had the number suffixes 0, 33, 66, 99, we could not use 5,
+            as none of the numbers are divisible by 5.
+
+    Returns:
+        str, icon name that represent given state, or None if not found
+    '''
     strength = round(perc / step) * step
     icon_theme = Gtk.IconTheme.get_default()
 
@@ -1072,6 +1418,14 @@ def get_icon_state(base_name, perc, step=5):
 
 
 def get_icon_file_name(icon_name):
+    '''
+    Resolves a given icon name into a file path.  Looks for any icon in them
+    theme, including those in sugar-artwork and those in the activities
+    '/icons/' directory.
+
+    Returns:
+        str, path to icon, or None is the icon is not found in the theme
+    '''
     icon_theme = Gtk.IconTheme.get_default()
     info = icon_theme.lookup_icon(icon_name, Gtk.IconSize.LARGE_TOOLBAR, 0)
     if not info:
@@ -1082,27 +1436,13 @@ def get_icon_file_name(icon_name):
 
 
 def get_surface(**kwargs):
-    """Get cached cairo surface.
+    '''
+    Get cairo surface of the icon.  Supports the same arguments as
+    :any:`Icon`, in exactly the same way.
 
-        Keyword arguments:
-        icon_name        -- name of icon to load, default None
-        file_name        -- path to image file, default None
-        fill_color       -- for svg images, change default fill color
-                            default None
-        stroke_color     -- for svg images, change default stroke color
-                            default None
-        background_color -- draw background or surface will be transparent
-                            default None
-        badge_name       -- name of icon which will be drawn on top of
-                            original image, default None
-        width            -- change image width, default None
-        height           -- change image height, default None
-        cache            -- if image is svg, keep svg file content for later
-        scale            -- scale image, default 1.0
-
-        Return: cairo surface or None if image was not found
-
-        """
+    Returns:
+        cairo surface or None if image was not found
+    '''
     icon = _IconBuffer()
     for key, value in kwargs.items():
         icon.__setattr__(key, value)
