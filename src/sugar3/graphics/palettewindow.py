@@ -1388,14 +1388,36 @@ class CursorInvoker(Invoker):
 
 
 class ToolInvoker(WidgetInvoker):
+    '''
+    A palette invoker for toolbar buttons and other items.  This invoker
+    will properly align the palette so that is perpendicular to the toolbar
+    (a horizontal toolbar will spawn a palette going downwards).  It also
+    draws the highlights specific to a toolitem.
+
+    For :class:`sugar3.graphics.toolbutton.ToolButton` and subclasses, you
+    should not use the toolinvoker directly.  Instead, just subclass the
+    tool button and override the `create_palette` function.
+
+    Args:
+        parent (Gtk.Widget):  toolitem to connect invoker to
+    '''
 
     def __init__(self, parent=None):
         WidgetInvoker.__init__(self)
+        self._tool = None
 
         if parent:
             self.attach_tool(parent)
 
     def attach_tool(self, widget):
+        '''
+        Attach a toolitem to the invoker.  Same behaviour as passing the
+        `parent` argument to the constructor.
+
+        Args:
+            widget (Gtk.Widget):  toolitem to connect invoker to
+        '''
+        self._tool = widget
         self.attach_widget(widget, widget.get_child())
 
     def _get_alignments(self):
@@ -1410,6 +1432,14 @@ class ToolInvoker(WidgetInvoker):
 
     def primary_text_clicked(self):
         self._widget.emit('clicked')
+
+    def notify_popup(self):
+        WidgetInvoker.notify_popup(self)
+        self._tool.queue_draw()
+
+    def notify_popdown(self):
+        WidgetInvoker.notify_popdown(self)
+        self._tool.queue_draw()
 
 
 class TreeViewInvoker(Invoker):
