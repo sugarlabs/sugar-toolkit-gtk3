@@ -172,12 +172,15 @@ class Packager(object):
         if not os.path.exists(self.config.dist_dir):
             os.mkdir(self.config.dist_dir)
 
-    def get_files_in_git(self):
+    def get_files_in_git(self, root=None):
+        if root is None:
+            root = self.config.source_dir
+
         git_ls = None
         try:
             git_ls = subprocess.Popen(['git', 'ls-files'],
                                       stdout=subprocess.PIPE,
-                                      cwd=self.config.source_dir)
+                                      cwd=root)
         except OSError:
             logging.warn('Packager: git is not installed, '
                          'fall back to filtered list')
@@ -200,7 +203,14 @@ class Packager(object):
                             ignore = True
                             break
                     if not ignore:
-                        files.append(line)
+                        sub_path = os.path.join(root, line)
+                        if os.path.isdir(sub_path) \
+                           and os.path.isdir(os.path.join(sub_path, '.git')):
+                            sub_list = self.get_files_in_git(sub_path)
+                            for f in sub_list:
+                                files.append(os.path.join(line, f))
+                        else:
+                            files.append(line)
 
                 for pattern in IGNORE_FILES:
                     files = [f for f in files if not fnmatch(f, pattern)]
