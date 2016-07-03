@@ -486,9 +486,6 @@ class PaletteWindow(GObject.GObject):
     Provides basic management of child widget, invoker, and animation.
     """
 
-    PRIMARY = 0
-    SECONDARY = 1
-
     __gsignals__ = {
         'popup': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'popdown': (GObject.SignalFlags.RUN_FIRST, None, ([])),
@@ -502,7 +499,6 @@ class PaletteWindow(GObject.GObject):
         self._cursor_y = 0
         self._alignment = None
         self._up = False
-        self._palette_state = None
         self._widget = None
 
         self._popup_anim = animator.Animator(.5, 10)
@@ -756,17 +752,6 @@ class PaletteWindow(GObject.GObject):
         rect.height = minimum.height
 
         return rect
-
-    def get_palette_state(self):
-        return self._palette_state
-
-    def _set_palette_state(self, state):
-        self._palette_state = state
-
-    def set_palette_state(self, state):
-        self._set_palette_state(state)
-
-    palette_state = property(get_palette_state)
 
 
 class _PopupAnimation(animator.Animation):
