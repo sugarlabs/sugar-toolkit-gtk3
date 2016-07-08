@@ -394,7 +394,6 @@ class _PaletteWindowWidget(Gtk.Window):
 
     def popup(self, invoker):
         if self.get_visible():
-            logging.error('PaletteWindowWidget popup get_visible True')
             return
         self.connect('enter-notify-event', self.__enter_notify_event_cb)
         self.connect('leave-notify-event', self.__leave_notify_event_cb)
