@@ -1111,6 +1111,7 @@ class WidgetInvoker(Invoker):
 
         self._widget = None
         self._expanded = False
+        self._pointer_position = (-1, -1)
         self._enter_hid = None
         self._leave_hid = None
         self._release_hid = None
@@ -1129,6 +1130,8 @@ class WidgetInvoker(Invoker):
             self._widget = widget
         else:
             self._widget = parent
+
+        self._pointer_position = _get_pointer_position(self._widget)
 
         self.notify('widget')
 
@@ -1206,6 +1209,9 @@ class WidgetInvoker(Invoker):
                                  gap[0], gap[1], gap[1] + gap[2])
 
     def __enter_notify_event_cb(self, widget, event):
+        if (event.x_root, event.y_root) == self._pointer_position:
+            self._pointer_position = (-1, -1)
+            return False
         if event.mode == Gdk.CrossingMode.NORMAL:
             self.notify_mouse_enter()
 
@@ -1297,6 +1303,7 @@ class CursorInvoker(Invoker):
         Invoker.__init__(self)
 
         self._position_hint = self.AT_CURSOR
+        self._pointer_position = (-1, -1)
         self._enter_hid = None
         self._leave_hid = None
         self._release_hid = None
@@ -1312,6 +1319,9 @@ class CursorInvoker(Invoker):
         Invoker.attach(self, parent)
 
         self._item = parent
+
+        self._pointer_position = _get_pointer_position(self.parent)
+
         self._enter_hid = self._item.connect('enter-notify-event',
                                              self.__enter_notify_event_cb)
         self._leave_hid = self._item.connect('leave-notify-event',
@@ -1346,6 +1356,9 @@ class CursorInvoker(Invoker):
         return rect
 
     def __enter_notify_event_cb(self, button, event):
+        if (event.x_root, event.y_root) == self._pointer_position:
+            self._pointer_position = (-1, -1)
+            return False
         if event.mode == Gdk.CrossingMode.NORMAL:
             self.notify_mouse_enter()
         return False
