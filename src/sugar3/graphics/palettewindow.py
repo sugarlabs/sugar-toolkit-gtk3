@@ -1381,6 +1381,7 @@ class CursorInvoker(Invoker):
 
     def __long_pressed_event_cb(self, controller, x, y, widget):
         self._long_pressed_recognized = True
+        x, y = widget.get_window().get_root_coords(x, y)
         self.notify_right_click(x, y)
 
     def get_toplevel(self):
