@@ -38,6 +38,18 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import CellRendererIcon
 
 
+_pointer = None
+
+def _get_pointer_position(widget):
+    global _pointer
+
+    if _pointer is None:
+        display = widget.get_display()
+        manager = display.get_device_manager()
+        _pointer = manager.get_client_pointer()
+    screen, x, y = _pointer.get_position()
+    return (x, y)
+
 def _calculate_gap(a, b):
     """Helper function to find the gap position and size of widget a"""
     # Test for each side if the palette and invoker are
@@ -436,7 +448,7 @@ class MouseSpeedDetector(GObject.GObject):
     def start(self):
         self.stop()
 
-        self._mouse_pos = self._get_mouse_position()
+        self._mouse_pos = _get_pointer_position(self.parent)
         self._timeout_hid = GLib.timeout_add(self._delay, self._timer_cb)
 
     def stop(self):
@@ -445,19 +457,9 @@ class MouseSpeedDetector(GObject.GObject):
             self._timeout_hid = None
         self._state = None
 
-    def _get_mouse_position(self):
-        if hasattr(self.parent, 'get_display'):
-            display = self.parent.get_display()
-        else:
-            display = Gdk.Display.get_default()
-        manager = display.get_device_manager()
-        pointer_device = manager.get_client_pointer()
-        screen, x, y = pointer_device.get_position()
-        return (x, y)
-
     def _detect_motion(self):
         oldx, oldy = self._mouse_pos
-        (x, y) = self._get_mouse_position()
+        (x, y) = _get_pointer_position(self.parent)
         self._mouse_pos = (x, y)
 
         dist2 = (oldx - x) ** 2 + (oldy - y) ** 2
@@ -844,15 +846,8 @@ class Invoker(GObject.GObject):
         invoker_valign = alignment[3]
 
         if self._cursor_x == -1 or self._cursor_y == -1:
-            if hasattr(self.parent, 'get_display'):
-                display = self.parent.get_display()
-            else:
-                display = Gdk.Display.get_default()
-            manager = display.get_device_manager()
-            pointer_device = manager.get_client_pointer()
-            screen, x, y = pointer_device.get_position()
-            self._cursor_x = x
-            self._cursor_y = y
+            position = _get_pointer_position(self.parent)
+            (self._cursor_x, self._cursor_y) = position
 
         if self._position_hint is self.ANCHORED:
             rect = self.get_rect()
