@@ -39,6 +39,7 @@ src/sugar3/Makefile
 src/sugar3/activity/Makefile
 src/sugar3/bundle/Makefile
 src/sugar3/graphics/Makefile
+src/sugar3/graphics/webkit/Makefile
 src/sugar3/event-controller/Makefile
 src/sugar3/presence/Makefile
 src/sugar3/datastore/Makefile
