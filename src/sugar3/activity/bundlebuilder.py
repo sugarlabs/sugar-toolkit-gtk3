@@ -333,7 +333,8 @@ class Installer(Packager):
         cp.set(section, 'Terminal', 'false')
         cp.set(section, 'Type', 'Application')
         cp.set(section, 'Categories', 'Education;')
-        cp.set(section, 'Icon', self.config.bundle.get_icon())
+        cp.set(section, 'Icon', os.path.join(
+            activity_path, 'activity', self.config.bundle.get_icon_filename()))
         cp.set(section, 'Exec', self.config.bundle.get_command())
         cp.set(section, 'Path', activity_path)  # Path == CWD for running
 

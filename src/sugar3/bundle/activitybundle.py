@@ -286,6 +286,10 @@ class ActivityBundle(Bundle):
             os.close(temp_file)
             return temp_file_path
 
+    def get_icon_filename(self):
+        '''Get the icon file name'''
+        return self._icon + '.svg'
+
     def get_activity_version(self):
         """Get the activity version"""
         return self._activity_version
