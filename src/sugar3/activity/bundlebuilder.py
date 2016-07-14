@@ -1,4 +1,5 @@
 # Copyright (C) 2008 Red Hat, Inc.
+# Copyright (C) 2016 Sam Parkinson <sam@sam.today>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,9 +16,72 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""
-STABLE.
-"""
+'''
+The bundle builder provides a build system for Sugar activities.  Usually, it
+is setup by creating a `setup.py` file in the project with the following::
+
+    # setup.py
+    #!/usr/bin/env python
+
+    from sugar3.activity import bundlebuilder
+    bundlebuilder.start()
+
+AppStream Metadata
+==================
+
+AppStream is the standard, distro-agnostic way of providing package metadata.
+For Sugar activities, the AppStream metadata is automatically exported from
+the activity.info file by the bundlebuilder.
+
+Activities must have the following metadata fields under the [Activity] header
+(of the `activity.info` file):
+
+* `metadata_license` - license for screenshots and description.  AppStream
+  requests only using one of the following: `CC0-1.0`, `CC-BY-3.0`,
+  `CC-BY-SA-3.0` or `GFDL-1.3`
+* `license` - a `SPDX License Code`__, eg. `GPL-3.0+`
+* `name`, `icon`, `bundle_id`, `summary` - same usage as in Sugar
+* `description` - a long (multi paragraph) description of your application.
+  This must be written in a subset of HTML.  Only the p, ol, ul and li tags
+  are supported.
+
+Other good metadata items to have are:
+
+* `url` - link to the home page for the activity on the internet
+* `repository_url` - link to repository for activity code
+* `screenshots` - a space separated list of screenshot URLs.  PNG or JPEG files
+  are supported.
+
+__ http://spdx.org/licenses/
+
+Example `activity.info`
+-----------------------
+
+.. code-block:: ini
+    :emphasize-lines: 10-12,20-21
+
+    [Activity]
+    name = Browse
+    bundle_id = org.laptop.WebActivity
+    exec = sugar-activity webactivity.WebActivity
+    activity_version = 200
+    icon = activity-web
+    max_participants = 100
+    summary = Surf the world!
+
+    license = GPL-2.0+
+    metadata_license = CC0-1.0
+    description:
+        <p>Surf the world! Here you can do research, watch educational videos, take online courses, find books, connect with friends and more.  Browse is powered by the WebKit2 rendering engine with the Faster Than Light javascript interpreter - allowing you to view the full beauty of the web.</p>
+        <p>To help in researching, Browse offers many features:</p>
+        <ul>
+            <li>Bookmark (save) good pages you find - never loose good resources or forget to add them to your bibliography</li>
+            <li>Bookmark pages with collaborators in real time - great for researching as a group or teachers showing pages to their class</li>
+            <li>Comment on your bookmarked pages - a great tool for making curated collections</li>
+        </ul>
+    url = https://github.com/sugarlabs/browse-activity
+    screenshots = https://people.sugarlabs.org/sam/activity-ss/browse-1-1.png https://people.sugarlabs.org/sam/activity-ss/browse-1-2.png
+'''
 
 import argparse
 import operator
@@ -34,6 +98,7 @@ import logging
 from glob import glob
 from fnmatch import fnmatch
 from ConfigParser import ConfigParser
+import xml.etree.cElementTree as ET
 
 from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
@@ -304,6 +369,7 @@ class Installer(Packager):
 
         if install_desktop_file:
             self._install_desktop_file(prefix, activity_path)
+            self._generate_appdata(prefix, activity_path)
 
     def _install_desktop_file(self, prefix, activity_path):
         cp = ConfigParser()
@@ -344,6 +410,61 @@ class Installer(Packager):
             os.makedirs(os.path.dirname(path))
         with open(path, 'w') as f:
             cp.write(f)
+
+    def _generate_appdata(self, prefix, activity_path):
+        info = ConfigParser()
+        info.read(os.path.join(activity_path, 'activity', 'activity.info'))
+
+        required_fields = ['metadata_license', 'license', 'name', 'icon',
+                           'description']
+        for name in required_fields:
+            if not info.has_option('Activity', name):
+                print('[WARNING] Activity needs more metadata for AppStream '
+                      'file')
+                print('  Without an AppStream file, the activity will NOT '
+                      'show in software stores!')
+                print('  Please `pydoc sugar3.activity.bundlebuilder` for'
+                      'more info')
+                return
+
+        # See https://www.freedesktop.org/software/appstream/docs/
+        root = ET.Element('component', type='desktop')
+        ET.SubElement(root, 'project_group').text = 'Sugar'
+        ET.SubElement(root, 'id').text = \
+            self.config.bundle_id + '.activity.desktop'
+        desc = ET.fromstring('<description>{}</description>'.format(
+            info.get('Activity', 'description')))
+        root.append(desc)
+
+        copy_pairs = [('metadata_license', 'metadata_license'),
+                      ('license', 'project_license'),
+                      ('summary', 'summary'),
+                      ('name', 'name')]
+        for key, ename in copy_pairs:
+            ET.SubElement(root, ename).text = info.get('Activity', key)
+
+        if info.has_option('Activity', 'screenshots'):
+            screenshots = info.get('Activity', 'screenshots').split()
+            ss_root = ET.SubElement(root, 'screenshots')
+            for i, screenshot in enumerate(screenshots):
+                e = ET.SubElement(ss_root, 'screenshot')
+                if i == 0:
+                    e.set('type', 'default')
+                ET.SubElement(e, 'image').text = screenshot
+
+        if info.has_option('Activity', 'url'):
+            ET.SubElement(root, 'url', type='homepage').text = \
+                info.get('Activity', 'url')
+        if info.has_option('Activity', 'repository_url'):
+            ET.SubElement(root, 'url', type='repository').text = \
+                info.get('Activity', 'repository_url')
+
+        path = os.path.join(prefix, 'share', 'metainfo',
+                            self.config.bundle_id + '.appdata.xml')
+        if not os.path.isdir(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+        tree = ET.ElementTree(root)
+        tree.write(path, encoding='UTF-8')
 
 
 def cmd_check(config, options):
