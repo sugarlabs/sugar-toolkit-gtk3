@@ -205,7 +205,7 @@ class Packager(object):
                     if not ignore:
                         sub_path = os.path.join(root, line)
                         if os.path.isdir(sub_path) \
-                           and os.path.isdir(os.path.join(sub_path, '.git')):
+                           and os.path.exists(os.path.join(sub_path, '.git')):
                             sub_list = self.get_files_in_git(sub_path)
                             for f in sub_list:
                                 files.append(os.path.join(line, f))
