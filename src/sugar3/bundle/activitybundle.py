@@ -111,6 +111,7 @@ class ActivityBundle(Bundle):
         self._tags = None
         self._activity_version = '0'
         self._summary = None
+        self._description = None
         self._single_instance = False
         self._max_participants = 0
 
@@ -194,6 +195,8 @@ class ActivityBundle(Bundle):
 
         if cp.has_option(section, 'summary'):
             self._summary = cp.get(section, 'summary')
+        if cp.has_option(section, 'description'):
+            self._description = cp.get(section, 'description')
 
         if cp.has_option(section, 'single_instance'):
             if cp.get(section, 'single_instance') == 'yes':
@@ -309,6 +312,14 @@ class ActivityBundle(Bundle):
     def get_summary(self):
         """Get the summary that describe the activity"""
         return self._summary
+
+    def get_description(self):
+        """
+        Get the description for the activity.  The description is a
+        pace of multi paragraph text about the activity.  It is written
+        in a HTML subset using only the p, ul, li and ol tags.
+        """
+        return self._description
 
     def get_single_instance(self):
         """Get whether there should be a single instance for the activity"""

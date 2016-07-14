@@ -99,6 +99,7 @@ from glob import glob
 from fnmatch import fnmatch
 from ConfigParser import ConfigParser
 import xml.etree.cElementTree as ET
+from HTMLParser import HTMLParser
 
 from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
@@ -147,6 +148,7 @@ class Config(object):
         self.xo_name = None
         self.tar_name = None
         self.summary = None
+        self.description = None
 
         self.update()
 
@@ -157,6 +159,7 @@ class Config(object):
         self.activity_name = bundle.get_name()
         self.bundle_id = bundle.get_bundle_id()
         self.summary = bundle.get_summary()
+        self.description = bundle.get_description()
         self.bundle_name = reduce(operator.add, self.activity_name.split())
         self.bundle_root_dir = self.bundle_name + '.activity'
         self.tar_root_dir = '%s-%s' % (self.bundle_name, self.version)
@@ -430,6 +433,8 @@ class Installer(Packager):
         # See https://www.freedesktop.org/software/appstream/docs/
         root = ET.Element('component', type='desktop')
         ET.SubElement(root, 'project_group').text = 'Sugar'
+        ET.SubElement(root, 'translation', type='gettext').text = \
+            self.config.bundle_id
         ET.SubElement(root, 'id').text = \
             self.config.bundle_id + '.activity.desktop'
         desc = ET.fromstring('<description>{}</description>'.format(
@@ -558,6 +563,10 @@ def cmd_install(config, options):
     installer.install(options.prefix, options.install_mime)
 
 
+def _po_escape(string):
+    return re.sub('([\\\\"])', '\\\\\\1', string)
+
+
 def cmd_genpot(config, options):
     """Generate the gettext pot file"""
 
@@ -581,16 +590,29 @@ def cmd_genpot(config, options):
     # to the end of the .pot file afterwards, because that might
     # create a duplicate msgid.)
     pot_file = os.path.join('po', '%s.pot' % config.bundle_name)
-    escaped_name = re.sub('([\\\\"])', '\\\\\\1', config.activity_name)
+    escaped_name = _po_escape(config.activity_name)
     f = open(pot_file, 'w')
     f.write('#: activity/activity.info:2\n')
     f.write('msgid "%s"\n' % escaped_name)
     f.write('msgstr ""\n')
     if config.summary is not None:
-        escaped_summary = re.sub('([\\\\"])', '\\\\\\1', config.summary)
+        escaped_summary = _po_escape(config.summary)
         f.write('#: activity/activity.info:3\n')
         f.write('msgid "%s"\n' % escaped_summary)
         f.write('msgstr ""\n')
+
+    if config.description is not None:
+        parser = HTMLParser()
+        strings = []
+        parser.handle_data = strings.append
+        parser.feed(config.description)
+
+        for s in strings:
+            s = s.strip()
+            if s:
+                f.write('#: activity/activity.info:4\n')
+                f.write('msgid "%s"\n' % _po_escape(s))
+                f.write('msgstr ""\n')
     f.close()
 
     args = ['xgettext', '--join-existing', '--language=Python',
