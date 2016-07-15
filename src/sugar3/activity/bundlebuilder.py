@@ -461,7 +461,7 @@ class Installer(Packager):
             ET.SubElement(root, 'url', type='homepage').text = \
                 info.get('Activity', 'url')
         if info.has_option('Activity', 'repository_url'):
-            ET.SubElement(root, 'url', type='repository').text = \
+            ET.SubElement(root, 'url', type='bugtracker').text = \
                 info.get('Activity', 'repository_url')
 
         path = os.path.join(prefix, 'share', 'metainfo',
