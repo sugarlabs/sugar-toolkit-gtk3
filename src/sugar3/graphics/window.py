@@ -20,6 +20,9 @@
 STABLE.
 """
 
+import gi
+gi.require_version('GdkX11', '3.0')
+
 from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gdk
