@@ -16,7 +16,7 @@
 # Boston, MA 02111-1307, USA.
 
 """
-The animator module provides a simple framwork to create animations.
+The animator module provides a simple framework to create animations.
 
 Example:
     Animate the size of a window::
@@ -65,7 +65,7 @@ EASE_IN_EXPO = 1
 
 class Animator(GObject.GObject):
     '''
-    The animator class manages the the timing for calling the
+    The animator class manages the timing for calling the
     animations.  The animations can be added using the `add` function
     and then started with the `start` function.  If multiple animations
     are added, then they will be played back at the same time and rate
@@ -90,7 +90,7 @@ class Animator(GObject.GObject):
 
         When creating an animation, take into account the limited cpu power
         on some devices, such as the XO.  Setting the fps too high on can
-        use signifigant cpu usage on the XO.
+        use significant cpu usage on the XO.
     '''
 
     __gsignals__ = {
@@ -206,7 +206,7 @@ class Animation(object):
 
     def do_frame(self, t, duration, easing):
         '''
-        This method is called by the animtor class every frame.  This
+        This method is called by the animator class every frame.  This
         method calculated the `frame` value to then call `next_frame`.
 
         Args:
@@ -230,7 +230,7 @@ class Animation(object):
 
     def next_frame(self, frame):
         '''
-        This method is called every frame and should be overriden by
+        This method is called every frame and should be overridden by
         subclasses.
 
         Args:
