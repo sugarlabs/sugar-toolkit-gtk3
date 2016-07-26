@@ -146,6 +146,9 @@ class Animator(GObject.GObject):
         '''
         Stop the animation and emit the `completed` signal
         '''
+        for animation in self._animations:
+            animation.do_stop()
+
         if self._timeout_sid and \
            not hasattr(self._widget, 'add_tick_callback'):
             GObject.source_remove(self._timeout_sid)
@@ -233,5 +236,45 @@ class Animation(object):
         Args:
             frame (float): a value between `start` and `end` representing
                 the current progress in the animation
+        '''
+        pass
+
+    def do_stop(self):
+        '''
+        This method is called whenever the animation is stopped, either
+        due to the animation ending or being stopped by the animation.
+        `next_frame` will not be called after do_stop, unless the animation
+        is restarted.
+
+        .. versionadded:: 0.109.0.3
+
+        This should be used in subclasses if they bind any signals.  Eg.
+        if they bind the draw signal for a widget:
+
+        .. code-block:: python
+
+            class SignalAnimation(Animation):
+
+                def __init__(self, widget):
+                    Animation.__init__(self, 0, 1)
+                    self._draw_hid = None
+                    self._widget = widget
+
+                def next_frame(self, frame):
+                    self._frame = frame
+                    if self._draw_hid is None:
+                        self._draw_hid = self._widget.connect_after(
+                            'draw', self.__draw_cb)
+                    self._widget.queue_draw()
+
+                def __draw_cb(self, widget, cr):
+                    cr.save()
+                    # Do the draw
+                    cr.restore()
+
+                def do_stop(self):
+                    self._widget.disconnect(self._draw_hid)
+                    self._widget.queue_draw()
+
         '''
         pass
