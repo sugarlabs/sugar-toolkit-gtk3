@@ -440,9 +440,8 @@ class Activity(Window, Gtk.Container):
                                            self.__jobject_updated_cb)
         self.set_title(self._jobject.metadata['title'])
 
-        if 'SUGAR_VERSION' not in os.environ:
-            bundle = get_bundle_instance(get_bundle_path())
-            self.set_icon_from_file(bundle.get_icon())
+        bundle = get_bundle_instance(get_bundle_path())
+        self.set_icon_from_file(bundle.get_icon())
 
 
     def run_main_loop(self):
