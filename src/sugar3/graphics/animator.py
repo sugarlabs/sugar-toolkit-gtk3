@@ -16,7 +16,7 @@
 # Boston, MA 02111-1307, USA.
 
 """
-The animator module provides a simple framwork to create animations.
+The animator module provides a simple framework to create animations.
 
 Example:
     Animate the size of a window::
@@ -65,7 +65,7 @@ EASE_IN_EXPO = 1
 
 class Animator(GObject.GObject):
     '''
-    The animator class manages the the timing for calling the
+    The animator class manages the timing for calling the
     animations.  The animations can be added using the `add` function
     and then started with the `start` function.  If multiple animations
     are added, then they will be played back at the same time and rate
@@ -90,7 +90,7 @@ class Animator(GObject.GObject):
 
         When creating an animation, take into account the limited cpu power
         on some devices, such as the XO.  Setting the fps too high on can
-        use signifigant cpu usage on the XO.
+        use significant cpu usage on the XO.
     '''
 
     __gsignals__ = {
@@ -146,6 +146,9 @@ class Animator(GObject.GObject):
         '''
         Stop the animation and emit the `completed` signal
         '''
+        for animation in self._animations:
+            animation.do_stop()
+
         if self._timeout_sid and \
            not hasattr(self._widget, 'add_tick_callback'):
             GObject.source_remove(self._timeout_sid)
@@ -203,7 +206,7 @@ class Animation(object):
 
     def do_frame(self, t, duration, easing):
         '''
-        This method is called by the animtor class every frame.  This
+        This method is called by the animator class every frame.  This
         method calculated the `frame` value to then call `next_frame`.
 
         Args:
@@ -227,11 +230,51 @@ class Animation(object):
 
     def next_frame(self, frame):
         '''
-        This method is called every frame and should be overriden by
+        This method is called every frame and should be overridden by
         subclasses.
 
         Args:
             frame (float): a value between `start` and `end` representing
                 the current progress in the animation
+        '''
+        pass
+
+    def do_stop(self):
+        '''
+        This method is called whenever the animation is stopped, either
+        due to the animation ending or being stopped by the animation.
+        `next_frame` will not be called after do_stop, unless the animation
+        is restarted.
+
+        .. versionadded:: 0.109.0.3
+
+        This should be used in subclasses if they bind any signals.  Eg.
+        if they bind the draw signal for a widget:
+
+        .. code-block:: python
+
+            class SignalAnimation(Animation):
+
+                def __init__(self, widget):
+                    Animation.__init__(self, 0, 1)
+                    self._draw_hid = None
+                    self._widget = widget
+
+                def next_frame(self, frame):
+                    self._frame = frame
+                    if self._draw_hid is None:
+                        self._draw_hid = self._widget.connect_after(
+                            'draw', self.__draw_cb)
+                    self._widget.queue_draw()
+
+                def __draw_cb(self, widget, cr):
+                    cr.save()
+                    # Do the draw
+                    cr.restore()
+
+                def do_stop(self):
+                    self._widget.disconnect(self._draw_hid)
+                    self._widget.queue_draw()
+
         '''
         pass
