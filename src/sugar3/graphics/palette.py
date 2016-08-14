@@ -223,7 +223,19 @@ class Palette(PaletteWindow):
 
         PaletteWindow.popup(self, immediate)
 
-    def popdown(self, immediate=False):
+    def popdown(self, immediate=False, state=None):
+        '''
+        Popdown (or show the full contents of) the palette.
+
+        Keyword Args:
+            immediate (bool): if True, the palette will be shown instantly (as
+                if the user right clicked the item).  If False, the palette
+                will be shown after the usual activation wait time.
+
+        .. deprecated:: 0.109
+            The state keyword argument is deprecated.  The old
+            secondary state has become the only state.
+        '''
         if immediate:
             if self._widget:
                 self._widget.size_request()
