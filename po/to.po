@@ -6,34 +6,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-02 00:32-0400\n"
-"PO-Revision-Date: 2012-06-18 06:38+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2014-10-08 09:45-0400\n"
+"PO-Revision-Date: 2016-09-25 05:26+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: to\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 2.0.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1474781195.000000\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:416
 #, python-format
 msgid "%s Activity"
 msgstr "%s 'Ekitiviti"
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:967
 msgid "Keep error"
 msgstr "Tauhi pe ngaahi fehalaaki"
 
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:968
 msgid "Keep error: all changes will be lost"
 msgstr "Tauhi pe ngaahi fehalaaki: 'e mole kotoa e ngaahi me'a ne liliu"
 
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:971
 msgid "Don't stop"
 msgstr "'Oua e ta'ofi"
 
-#: ../src/sugar3/activity/activity.py:881
+#: ../src/sugar3/activity/activity.py:975
 msgid "Stop anyway"
 msgstr "Ta'ofi pe ia"
 
@@ -65,7 +67,7 @@ msgstr "Palaiveiti"
 msgid "My Neighborhood"
 msgstr "Hoku ngaahi kaunga 'api"
 
-#: ../src/sugar3/activity/widgets.py:226
+#: ../src/sugar3/activity/widgets.py:233
 msgid "Description"
 msgstr "Fakamatala"
 
@@ -86,15 +88,15 @@ msgstr "Hokoatu"
 msgid "Choose a color"
 msgstr "Fili ha lanu"
 
-#: ../src/sugar3/graphics/colorbutton.py:274
+#: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
 msgstr "Kulokula"
 
-#: ../src/sugar3/graphics/colorbutton.py:276
+#: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
 msgstr "Lanumata"
 
-#: ../src/sugar3/graphics/colorbutton.py:278
+#: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
 msgstr "Pulû"
 
@@ -124,42 +126,36 @@ msgstr "%s 'osi pe hili"
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
@@ -185,22 +181,305 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:43
+#: ../src/sugar3/mime.py:56
 msgid "Text"
 msgstr ""
 
-#: ../src/sugar3/mime.py:52
+#: ../src/sugar3/mime.py:63
 msgid "Image"
 msgstr "'Imisi"
 
-#: ../src/sugar3/mime.py:58
+#: ../src/sugar3/mime.py:68
 msgid "Audio"
 msgstr "'Otio"
 
-#: ../src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:75
 msgid "Video"
 msgstr "Vitio"
 
-#: ../src/sugar3/mime.py:72
+#: ../src/sugar3/mime.py:86
 msgid "Link"
 msgstr ""
+
+#: ../src/sugar3/mime.py:91
+msgid "Bundle"
+msgstr ""
+
+#: ../src/sugar3/speech.py:48
+msgid "Afrikaans"
+msgstr "lea fakaʻafilikana"
+
+#: ../src/sugar3/speech.py:49
+msgid "Aragonese"
+msgstr ""
+
+#: ../src/sugar3/speech.py:50
+msgid "Bulgarian"
+msgstr "lea fakapulukalia"
+
+#: ../src/sugar3/speech.py:51
+msgid "Bosnian"
+msgstr "lea fakaposinia"
+
+#: ../src/sugar3/speech.py:52
+msgid "Catalan"
+msgstr "lea fakakatalani"
+
+#: ../src/sugar3/speech.py:53
+msgid "Czech"
+msgstr "lea fakaseki"
+
+#: ../src/sugar3/speech.py:54
+msgid "Welsh"
+msgstr "lea fakauēlesi"
+
+#: ../src/sugar3/speech.py:55
+msgid "Danish"
+msgstr "lea fakatenimaʻake"
+
+#: ../src/sugar3/speech.py:56
+msgid "German"
+msgstr "lea fakasiamane"
+
+#: ../src/sugar3/speech.py:57
+msgid "Greek"
+msgstr "lea fakakalisi"
+
+#: ../src/sugar3/speech.py:58
+msgid "Default"
+msgstr ""
+
+#: ../src/sugar3/speech.py:59
+msgid "English Britain"
+msgstr "lea fakapilitānia"
+
+#: ../src/sugar3/speech.py:60
+msgid "English scottish"
+msgstr ""
+
+#: ../src/sugar3/speech.py:61
+msgid "English-north"
+msgstr ""
+
+#: ../src/sugar3/speech.py:62
+msgid "English_rp"
+msgstr ""
+
+#: ../src/sugar3/speech.py:63
+msgid "English_wmids"
+msgstr ""
+
+#: ../src/sugar3/speech.py:64
+msgid "English USA"
+msgstr "lea fakapālangi-ʻamelika"
+
+#: ../src/sugar3/speech.py:65
+msgid "English west indies"
+msgstr ""
+
+#: ../src/sugar3/speech.py:66
+msgid "Esperanto"
+msgstr ""
+
+#: ../src/sugar3/speech.py:67
+msgid "Spanish"
+msgstr "lea fakasipēnisi"
+
+#: ../src/sugar3/speech.py:68
+#, fuzzy
+msgid "Spanish latin american"
+msgstr "lea fakasipēnisi"
+
+#: ../src/sugar3/speech.py:69
+msgid "Estonian"
+msgstr "lea fakaʻesitōnia"
+
+#: ../src/sugar3/speech.py:70
+msgid "Farsi"
+msgstr "lea fakapēsia"
+
+#: ../src/sugar3/speech.py:71
+#, fuzzy
+msgid "Farsi-pinglish"
+msgstr "lea fakapēsia"
+
+#: ../src/sugar3/speech.py:72
+msgid "Finnish"
+msgstr "lea fakafinilani"
+
+#: ../src/sugar3/speech.py:73
+#, fuzzy
+msgid "French belgium"
+msgstr "lea fakafalanisē"
+
+#: ../src/sugar3/speech.py:74
+msgid "French"
+msgstr "lea fakafalanisē"
+
+#: ../src/sugar3/speech.py:75
+msgid "Irish-gaeilge"
+msgstr "lea fakaʻaelani"
+
+#: ../src/sugar3/speech.py:76
+#, fuzzy
+msgid "Greek-ancient"
+msgstr "lea fakakalisi"
+
+#: ../src/sugar3/speech.py:77
+msgid "Hindi"
+msgstr "lea fakahinitī"
+
+#: ../src/sugar3/speech.py:78
+msgid "Croatian"
+msgstr "lea fakakuloisia"
+
+#: ../src/sugar3/speech.py:79
+msgid "Hungarian"
+msgstr "lea fakahungakalia"
+
+#: ../src/sugar3/speech.py:80
+msgid "Armenian"
+msgstr "lea fakaʻāmenia"
+
+#: ../src/sugar3/speech.py:81
+#, fuzzy
+msgid "Armenian (west)"
+msgstr "lea fakaʻāmenia"
+
+#: ../src/sugar3/speech.py:82
+msgid "Indonesian"
+msgstr ""
+
+#: ../src/sugar3/speech.py:83
+msgid "Icelandic"
+msgstr "lea fakaʻaisilani"
+
+#: ../src/sugar3/speech.py:84
+msgid "Italian"
+msgstr "lea fakaʻītali"
+
+#: ../src/sugar3/speech.py:85
+msgid "Lojban"
+msgstr "lea fakalosipani"
+
+#: ../src/sugar3/speech.py:86
+msgid "Georgian"
+msgstr "lea fakaseōsia"
+
+#: ../src/sugar3/speech.py:87
+msgid "Kannada"
+msgstr "lea fakakanata"
+
+#: ../src/sugar3/speech.py:88
+msgid "Kurdish"
+msgstr "lea fakakulitī"
+
+#: ../src/sugar3/speech.py:89
+msgid "Latin"
+msgstr "lea fakalatina"
+
+#: ../src/sugar3/speech.py:90
+msgid "Lithuanian"
+msgstr "lea fakalituania"
+
+#: ../src/sugar3/speech.py:91
+msgid "Latvian"
+msgstr "lea fakalativia"
+
+#: ../src/sugar3/speech.py:92
+msgid "Macedonian"
+msgstr "lea fakamasitōnia"
+
+#: ../src/sugar3/speech.py:93
+msgid "Malayalam"
+msgstr ""
+
+#: ../src/sugar3/speech.py:94
+msgid "Malay"
+msgstr "lea fakamalei"
+
+#: ../src/sugar3/speech.py:95
+msgid "Nepali"
+msgstr "lea fakanepali"
+
+#: ../src/sugar3/speech.py:96
+msgid "Dutch"
+msgstr "lea fakahōlani"
+
+#: ../src/sugar3/speech.py:97
+msgid "Norwegian"
+msgstr "lea fakanouaē"
+
+#: ../src/sugar3/speech.py:98
+msgid "Punjabi"
+msgstr "lea fakapūnusapi"
+
+#: ../src/sugar3/speech.py:99
+msgid "Polish"
+msgstr "lea fakapolani"
+
+#: ../src/sugar3/speech.py:100
+msgid "Portuguese (Brazil)"
+msgstr "lea fakapotukali-palāsili"
+
+#: ../src/sugar3/speech.py:101
+msgid "Portuguese (Portugal)"
+msgstr "lea fakapotukali-ʻiulope"
+
+#: ../src/sugar3/speech.py:102
+msgid "Romanian"
+msgstr "lea fakalōmenia"
+
+#: ../src/sugar3/speech.py:103
+msgid "Russian"
+msgstr "lea fakalūsia"
+
+#: ../src/sugar3/speech.py:104
+msgid "Slovak"
+msgstr "lea fakasolāvaki"
+
+#: ../src/sugar3/speech.py:105
+msgid "Albanian"
+msgstr "lea fakaʻalapēnia"
+
+#: ../src/sugar3/speech.py:106
+msgid "Serbian"
+msgstr "lea fakasēpia"
+
+#: ../src/sugar3/speech.py:107
+msgid "Swedish"
+msgstr "lea fakasuēteni"
+
+#: ../src/sugar3/speech.py:108
+msgid "Swahili-test"
+msgstr "lea fakasuahili"
+
+#: ../src/sugar3/speech.py:109
+msgid "Tamil"
+msgstr "lea fakatamili"
+
+#: ../src/sugar3/speech.py:110
+msgid "Turkish"
+msgstr "lea fakatoake"
+
+#: ../src/sugar3/speech.py:111
+msgid "Vietnam"
+msgstr "lea fakavietinami"
+
+#: ../src/sugar3/speech.py:112
+msgid "Vietnam_hue"
+msgstr "lea fakavietinami_hue"
+
+#: ../src/sugar3/speech.py:113
+msgid "Vietnam_sgn"
+msgstr "lea fakavietinami_sgn"
+
+#: ../src/sugar3/speech.py:114
+#, fuzzy
+msgid "Mandarin"
+msgstr "lea fakasiaina"
+
+#: ../src/sugar3/speech.py:115
+#, fuzzy
+msgid "Cantonese"
+msgstr "lea fakasiaina"
