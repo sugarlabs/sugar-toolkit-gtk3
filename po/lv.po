@@ -8,14 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-22 12:40+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2016-10-02 04:47+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.11.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"
+"\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1475383679.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416
 #, python-format
@@ -52,7 +55,7 @@ msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
-msgstr ""
+msgstr "Kopēt"
 
 #: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
@@ -68,7 +71,7 @@ msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:233
 msgid "Description"
-msgstr ""
+msgstr "Apraksts"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
@@ -81,7 +84,7 @@ msgstr ""
 
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
-msgstr ""
+msgstr "Turpināt"
 
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
@@ -89,15 +92,15 @@ msgstr ""
 
 #: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
-msgstr ""
+msgstr "Sarkans"
 
 #: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
-msgstr ""
+msgstr "Zaļš"
 
 #: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
-msgstr ""
+msgstr "Zils"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
@@ -126,6 +129,7 @@ msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:241
 #, python-format
@@ -133,6 +137,7 @@ msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:242
 #, python-format
@@ -140,6 +145,7 @@ msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:243
 #, python-format
@@ -147,6 +153,7 @@ msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:244
 #, python-format
@@ -154,6 +161,7 @@ msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:245
 #, python-format
@@ -161,6 +169,7 @@ msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
@@ -212,43 +221,43 @@ msgstr ""
 
 #: ../src/sugar3/speech.py:48
 msgid "Afrikaans"
-msgstr ""
+msgstr "afrikandu"
 
 #: ../src/sugar3/speech.py:49
 msgid "Aragonese"
-msgstr ""
+msgstr "aragoniešu"
 
 #: ../src/sugar3/speech.py:50
 msgid "Bulgarian"
-msgstr ""
+msgstr "bulgāru"
 
 #: ../src/sugar3/speech.py:51
 msgid "Bosnian"
-msgstr ""
+msgstr "bosniešu"
 
 #: ../src/sugar3/speech.py:52
 msgid "Catalan"
-msgstr ""
+msgstr "katalāņu"
 
 #: ../src/sugar3/speech.py:53
 msgid "Czech"
-msgstr ""
+msgstr "čehu"
 
 #: ../src/sugar3/speech.py:54
 msgid "Welsh"
-msgstr ""
+msgstr "velsiešu"
 
 #: ../src/sugar3/speech.py:55
 msgid "Danish"
-msgstr ""
+msgstr "dāņu"
 
 #: ../src/sugar3/speech.py:56
 msgid "German"
-msgstr ""
+msgstr "vācu"
 
 #: ../src/sugar3/speech.py:57
 msgid "Greek"
-msgstr ""
+msgstr "grieķu"
 
 #: ../src/sugar3/speech.py:58
 msgid "Default"
@@ -256,228 +265,232 @@ msgstr ""
 
 #: ../src/sugar3/speech.py:59
 msgid "English Britain"
-msgstr ""
+msgstr "Lielbritānijas angļu"
 
 #: ../src/sugar3/speech.py:60
+#, fuzzy
 msgid "English scottish"
-msgstr ""
+msgstr "angļu"
 
 #: ../src/sugar3/speech.py:61
+#, fuzzy
 msgid "English-north"
-msgstr ""
+msgstr "angļu"
 
 #: ../src/sugar3/speech.py:62
 msgid "English_rp"
-msgstr ""
+msgstr "angļu"
 
 #: ../src/sugar3/speech.py:63
 msgid "English_wmids"
-msgstr ""
+msgstr "angļu_wmids"
 
 #: ../src/sugar3/speech.py:64
 msgid "English USA"
-msgstr ""
+msgstr "Angļu (ASV)"
 
 #: ../src/sugar3/speech.py:65
 msgid "English west indies"
-msgstr ""
+msgstr "angļu"
 
 #: ../src/sugar3/speech.py:66
 msgid "Esperanto"
-msgstr ""
+msgstr "esperanto"
 
 #: ../src/sugar3/speech.py:67
 msgid "Spanish"
-msgstr ""
+msgstr "spāņu"
 
 #: ../src/sugar3/speech.py:68
+#, fuzzy
 msgid "Spanish latin american"
-msgstr ""
+msgstr "spāņu"
 
 #: ../src/sugar3/speech.py:69
 msgid "Estonian"
-msgstr ""
+msgstr "igauņu"
 
 #: ../src/sugar3/speech.py:70
 msgid "Farsi"
-msgstr ""
+msgstr "persiešu"
 
 #: ../src/sugar3/speech.py:71
 msgid "Farsi-pinglish"
-msgstr ""
+msgstr "persiešu-angļu"
 
 #: ../src/sugar3/speech.py:72
 msgid "Finnish"
-msgstr ""
+msgstr "somu"
 
 #: ../src/sugar3/speech.py:73
 msgid "French belgium"
-msgstr ""
+msgstr "Franču (Beļģija)"
 
 #: ../src/sugar3/speech.py:74
 msgid "French"
-msgstr ""
+msgstr "franču"
 
 #: ../src/sugar3/speech.py:75
 msgid "Irish-gaeilge"
-msgstr ""
+msgstr "īru"
 
 #: ../src/sugar3/speech.py:76
 msgid "Greek-ancient"
-msgstr ""
+msgstr "Sengrieķu"
 
 #: ../src/sugar3/speech.py:77
 msgid "Hindi"
-msgstr ""
+msgstr "hindi"
 
 #: ../src/sugar3/speech.py:78
 msgid "Croatian"
-msgstr ""
+msgstr "horvātu"
 
 #: ../src/sugar3/speech.py:79
 msgid "Hungarian"
-msgstr ""
+msgstr "ungāru"
 
 #: ../src/sugar3/speech.py:80
 msgid "Armenian"
-msgstr ""
+msgstr "armēņu"
 
 #: ../src/sugar3/speech.py:81
+#, fuzzy
 msgid "Armenian (west)"
-msgstr ""
+msgstr "armēņu"
 
 #: ../src/sugar3/speech.py:82
 msgid "Indonesian"
-msgstr ""
+msgstr "indonēziešu"
 
 #: ../src/sugar3/speech.py:83
 msgid "Icelandic"
-msgstr ""
+msgstr "īslandiešu"
 
 #: ../src/sugar3/speech.py:84
 msgid "Italian"
-msgstr ""
+msgstr "itāļu"
 
 #: ../src/sugar3/speech.py:85
 msgid "Lojban"
-msgstr ""
+msgstr "Ložbans"
 
 #: ../src/sugar3/speech.py:86
 msgid "Georgian"
-msgstr ""
+msgstr "gruzīnu"
 
 #: ../src/sugar3/speech.py:87
 msgid "Kannada"
-msgstr ""
+msgstr "kannadu"
 
 #: ../src/sugar3/speech.py:88
 msgid "Kurdish"
-msgstr ""
+msgstr "kurdu"
 
 #: ../src/sugar3/speech.py:89
 msgid "Latin"
-msgstr ""
+msgstr "latīņu"
 
 #: ../src/sugar3/speech.py:90
 msgid "Lithuanian"
-msgstr ""
+msgstr "lietuviešu"
 
 #: ../src/sugar3/speech.py:91
 msgid "Latvian"
-msgstr ""
+msgstr "latviešu"
 
 #: ../src/sugar3/speech.py:92
 msgid "Macedonian"
-msgstr ""
+msgstr "maķedoniešu"
 
 #: ../src/sugar3/speech.py:93
 msgid "Malayalam"
-msgstr ""
+msgstr "malajalu"
 
 #: ../src/sugar3/speech.py:94
 msgid "Malay"
-msgstr ""
+msgstr "malajiešu"
 
 #: ../src/sugar3/speech.py:95
 msgid "Nepali"
-msgstr ""
+msgstr "nepāliešu"
 
 #: ../src/sugar3/speech.py:96
 msgid "Dutch"
-msgstr ""
+msgstr "holandiešu"
 
 #: ../src/sugar3/speech.py:97
 msgid "Norwegian"
-msgstr ""
+msgstr "norvēģu"
 
 #: ../src/sugar3/speech.py:98
 msgid "Punjabi"
-msgstr ""
+msgstr "pandžabu"
 
 #: ../src/sugar3/speech.py:99
 msgid "Polish"
-msgstr ""
+msgstr "poļu"
 
 #: ../src/sugar3/speech.py:100
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugāļu (Brazīlija)"
 
 #: ../src/sugar3/speech.py:101
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portugāļu (Portugāle)"
 
 #: ../src/sugar3/speech.py:102
 msgid "Romanian"
-msgstr ""
+msgstr "rumāņu"
 
 #: ../src/sugar3/speech.py:103
 msgid "Russian"
-msgstr ""
+msgstr "krievu"
 
 #: ../src/sugar3/speech.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "slovāku"
 
 #: ../src/sugar3/speech.py:105
 msgid "Albanian"
-msgstr ""
+msgstr "albāņu"
 
 #: ../src/sugar3/speech.py:106
 msgid "Serbian"
-msgstr ""
+msgstr "serbu"
 
 #: ../src/sugar3/speech.py:107
 msgid "Swedish"
-msgstr ""
+msgstr "zviedru"
 
 #: ../src/sugar3/speech.py:108
 msgid "Swahili-test"
-msgstr ""
+msgstr "svahili"
 
 #: ../src/sugar3/speech.py:109
 msgid "Tamil"
-msgstr ""
+msgstr "tamilu"
 
 #: ../src/sugar3/speech.py:110
 msgid "Turkish"
-msgstr ""
+msgstr "turku"
 
 #: ../src/sugar3/speech.py:111
 msgid "Vietnam"
-msgstr ""
+msgstr "vjetnamiešu"
 
 #: ../src/sugar3/speech.py:112
 msgid "Vietnam_hue"
-msgstr ""
+msgstr "vjetnamiešu_hue"
 
 #: ../src/sugar3/speech.py:113
 msgid "Vietnam_sgn"
-msgstr ""
+msgstr "vjetnamiešu_sgn"
 
 #: ../src/sugar3/speech.py:114
 msgid "Mandarin"
-msgstr ""
+msgstr "Mandarīnu"
 
 #: ../src/sugar3/speech.py:115
 msgid "Cantonese"
-msgstr ""
+msgstr "Kantonēzas"

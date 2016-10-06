@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-22 12:40+0000\n"
-"PO-Revision-Date: 2015-02-26 09:00+0000\n"
-"Last-Translator: Samson <samsongoddy@sugarlabs.org>\n"
+"PO-Revision-Date: 2016-03-03 04:40+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ibo\n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1424941203.000000\n"
+"X-POOTLE-MTIME: 1456980030.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416
 #, python-format
 msgid "%s Activity"
-msgstr "% s Arụ Ọrụ"
+msgstr "%s Arụ Ọrụ"
 
 #: ../src/sugar3/activity/activity.py:967
 msgid "Keep error"
@@ -102,11 +102,11 @@ msgstr "Blue"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
-msgstr "na"
+msgstr " na "
 
 #: ../src/sugar3/util.py:218
 msgid ", "
-msgstr ","
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
@@ -118,50 +118,50 @@ msgstr "sekọnd gara aga"
 #: ../src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
-msgstr "% s gara aga"
+msgstr "%s gara aga"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "% d afọ"
-msgstr[1] "% d afọ"
+msgstr[0] "%d afọ"
+msgstr[1] "%d afọ"
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "% d ọnwa"
-msgstr[1] "% d ọnwa"
+msgstr[0] "%d ọnwa"
+msgstr[1] "%d ọnwa"
 
 #: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "% d izu"
-msgstr[1] "% d izu"
+msgstr[0] "%d izu"
+msgstr[1] "%d izu"
 
 #: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "% d ụbọchị"
-msgstr[1] "% d ụbọchị"
+msgstr[0] "%d ụbọchị"
+msgstr[1] "%d ụbọchị"
 
 #: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] "% d hour"
-msgstr[1] "% d awa"
+msgstr[0] "%d hour"
+msgstr[1] "%d awa"
 
 #: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "% d nkeji"
-msgstr[1] "% d nkeji"
+msgstr[0] "%d nkeji"
+msgstr[1] "%d nkeji"
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
@@ -170,7 +170,7 @@ msgstr "efu"
 #: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr "% d B"
+msgstr "%d B"
 
 #: ../src/sugar3/util.py:350
 #, python-format
@@ -365,7 +365,7 @@ msgstr "Lojban"
 
 #: ../src/sugar3/speech.py:86
 msgid "Georgian"
-msgstr "Kannada "
+msgstr "Georgian"
 
 #: ../src/sugar3/speech.py:87
 msgid "Kannada"

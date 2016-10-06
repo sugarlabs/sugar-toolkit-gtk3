@@ -2,14 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-22 12:40+0000\n"
-"PO-Revision-Date: 2015-09-20 18:11+0000\n"
-"Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
+"PO-Revision-Date: 2016-09-25 04:50+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1442772696.000000\n"
+"X-POOTLE-MTIME: 1474779027.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416
 #, python-format
@@ -267,24 +266,26 @@ msgid "English scottish"
 msgstr "Anglès (Escòcia)"
 
 #: ../src/sugar3/speech.py:61
+#, fuzzy
 msgid "English-north"
-msgstr ""
+msgstr "Anglès"
 
 #: ../src/sugar3/speech.py:62
 msgid "English_rp"
-msgstr "Anglès"
+msgstr "Anglès_rp"
 
 #: ../src/sugar3/speech.py:63
 msgid "English_wmids"
-msgstr ""
+msgstr "Anglès_wmids"
 
 #: ../src/sugar3/speech.py:64
 msgid "English USA"
 msgstr "Anglès (EUA)"
 
 #: ../src/sugar3/speech.py:65
+#, fuzzy
 msgid "English west indies"
-msgstr ""
+msgstr "Anglès"
 
 #: ../src/sugar3/speech.py:66
 msgid "Esperanto"
@@ -308,7 +309,7 @@ msgstr "Persa"
 
 #: ../src/sugar3/speech.py:71
 msgid "Farsi-pinglish"
-msgstr ""
+msgstr "Persa-Anglès"
 
 #: ../src/sugar3/speech.py:72
 msgid "Finnish"
@@ -324,11 +325,11 @@ msgstr "Francès"
 
 #: ../src/sugar3/speech.py:75
 msgid "Irish-gaeilge"
-msgstr ""
+msgstr "Irlandès"
 
 #: ../src/sugar3/speech.py:76
 msgid "Greek-ancient"
-msgstr ""
+msgstr "Grec antic"
 
 #: ../src/sugar3/speech.py:77
 msgid "Hindi"
@@ -456,7 +457,7 @@ msgstr "Suec"
 
 #: ../src/sugar3/speech.py:108
 msgid "Swahili-test"
-msgstr ""
+msgstr "Suahili"
 
 #: ../src/sugar3/speech.py:109
 msgid "Tamil"
@@ -472,11 +473,11 @@ msgstr "Vietnam"
 
 #: ../src/sugar3/speech.py:112
 msgid "Vietnam_hue"
-msgstr ""
+msgstr "Vietnamita_hue"
 
 #: ../src/sugar3/speech.py:113
 msgid "Vietnam_sgn"
-msgstr ""
+msgstr "Vietnamita_sgn"
 
 #: ../src/sugar3/speech.py:114
 msgid "Mandarin"
