@@ -6,67 +6,68 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2012-06-20 17:18+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2014-10-08 09:45-0400\n"
+"PO-Revision-Date: 2016-09-26 03:32+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: Sugar Labs\n"
 "Language: rw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1) ;\n"
-"X-Generator: Pootle 2.0.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1474860770.000000\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:416
 #, python-format
 msgid "%s Activity"
 msgstr "%s Igikorwa"
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:967
 msgid "Keep error"
 msgstr "Gumana ikosa"
 
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:968
 msgid "Keep error: all changes will be lost"
 msgstr "Gumana ikosa:impinduka zose zirabura"
 
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:971
 msgid "Don't stop"
 msgstr "Ntuhagarare"
 
-#: ../src/sugar3/activity/activity.py:882
+#: ../src/sugar3/activity/activity.py:975
 msgid "Stop anyway"
 msgstr "Hagarara muburyo bwose"
 
-#: ../src/sugar3/activity/widgets.py:87
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "Hagarika"
 
-#: ../src/sugar3/activity/widgets.py:99
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "Subiramo"
 
-#: ../src/sugar3/activity/widgets.py:107
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "Gukuraho icyariho"
 
-#: ../src/sugar3/activity/widgets.py:114
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "Gukoporora"
 
-#: ../src/sugar3/activity/widgets.py:122
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "Omeka"
 
-#: ../src/sugar3/activity/widgets.py:133
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "Byihariye"
 
-#: ../src/sugar3/activity/widgets.py:140
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "Guturana kwanjye"
 
-#: ../src/sugar3/activity/widgets.py:234
+#: ../src/sugar3/activity/widgets.py:233
 msgid "Description"
 msgstr "Igisobanuro"
 
@@ -186,22 +187,306 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:55
+#: ../src/sugar3/mime.py:56
 msgid "Text"
 msgstr "Unyandiko"
 
-#: ../src/sugar3/mime.py:64
+#: ../src/sugar3/mime.py:63
 msgid "Image"
 msgstr "Ishusho"
 
-#: ../src/sugar3/mime.py:70
+#: ../src/sugar3/mime.py:68
 msgid "Audio"
 msgstr "Isohoramajwi"
 
-#: ../src/sugar3/mime.py:78
+#: ../src/sugar3/mime.py:75
 msgid "Video"
 msgstr "Isohoramashusho"
 
-#: ../src/sugar3/mime.py:90
+#: ../src/sugar3/mime.py:86
 msgid "Link"
 msgstr "Huza"
+
+#: ../src/sugar3/mime.py:91
+msgid "Bundle"
+msgstr ""
+
+#: ../src/sugar3/speech.py:48
+msgid "Afrikaans"
+msgstr "Ikinyafurikaneri"
+
+#: ../src/sugar3/speech.py:49
+msgid "Aragonese"
+msgstr "Icyaragoneze"
+
+#: ../src/sugar3/speech.py:50
+msgid "Bulgarian"
+msgstr "Urunyabuligariya"
+
+#: ../src/sugar3/speech.py:51
+msgid "Bosnian"
+msgstr "Inyebosiniya"
+
+#: ../src/sugar3/speech.py:52
+msgid "Catalan"
+msgstr "Igikatalani"
+
+#: ../src/sugar3/speech.py:53
+msgid "Czech"
+msgstr "Igiceke"
+
+#: ../src/sugar3/speech.py:54
+msgid "Welsh"
+msgstr "Ikigaluwa"
+
+#: ../src/sugar3/speech.py:55
+msgid "Danish"
+msgstr "Ikidaninwa"
+
+#: ../src/sugar3/speech.py:56
+msgid "German"
+msgstr "Ikidage"
+
+#: ../src/sugar3/speech.py:57
+msgid "Greek"
+msgstr "Ikigereki"
+
+#: ../src/sugar3/speech.py:58
+msgid "Default"
+msgstr ""
+
+#: ../src/sugar3/speech.py:59
+#, fuzzy
+msgid "English Britain"
+msgstr "Icyongereza"
+
+#: ../src/sugar3/speech.py:60
+#, fuzzy
+msgid "English scottish"
+msgstr "Icyongereza"
+
+#: ../src/sugar3/speech.py:61
+#, fuzzy
+msgid "English-north"
+msgstr "Icyongereza"
+
+#: ../src/sugar3/speech.py:62
+msgid "English_rp"
+msgstr "Icyongereza"
+
+#: ../src/sugar3/speech.py:63
+#, fuzzy
+msgid "English_wmids"
+msgstr "Icyongereza"
+
+#: ../src/sugar3/speech.py:64
+msgid "English USA"
+msgstr "Icyongereza (Leta Zunze Ubumwe z'Amerika)"
+
+#: ../src/sugar3/speech.py:65
+#, fuzzy
+msgid "English west indies"
+msgstr "Icyongereza"
+
+#: ../src/sugar3/speech.py:66
+msgid "Esperanto"
+msgstr "Icyesiperanto"
+
+#: ../src/sugar3/speech.py:67
+msgid "Spanish"
+msgstr "Icyesipanyolo"
+
+#: ../src/sugar3/speech.py:68
+#, fuzzy
+msgid "Spanish latin american"
+msgstr "Icyesipanyolo"
+
+#: ../src/sugar3/speech.py:69
+msgid "Estonian"
+msgstr "Icyesitoniya"
+
+#: ../src/sugar3/speech.py:70
+msgid "Farsi"
+msgstr "Inyeperisi"
+
+#: ../src/sugar3/speech.py:71
+msgid "Farsi-pinglish"
+msgstr "Inyeperisi-Icyongereza"
+
+#: ../src/sugar3/speech.py:72
+msgid "Finnish"
+msgstr "Igifinilande"
+
+#: ../src/sugar3/speech.py:73
+msgid "French belgium"
+msgstr "Igifaransa (Ububirigi)"
+
+#: ../src/sugar3/speech.py:74
+msgid "French"
+msgstr "Igifaransa"
+
+#: ../src/sugar3/speech.py:75
+msgid "Irish-gaeilge"
+msgstr "Ikirilandi"
+
+#: ../src/sugar3/speech.py:76
+#, fuzzy
+msgid "Greek-ancient"
+msgstr "Ikigereki"
+
+#: ../src/sugar3/speech.py:77
+msgid "Hindi"
+msgstr "Igihindi"
+
+#: ../src/sugar3/speech.py:78
+msgid "Croatian"
+msgstr "Igikorowasiya"
+
+#: ../src/sugar3/speech.py:79
+msgid "Hungarian"
+msgstr "Igihongiriya"
+
+#: ../src/sugar3/speech.py:80
+msgid "Armenian"
+msgstr "Ikinyarumeniya"
+
+#: ../src/sugar3/speech.py:81
+#, fuzzy
+msgid "Armenian (west)"
+msgstr "Ikinyarumeniya"
+
+#: ../src/sugar3/speech.py:82
+msgid "Indonesian"
+msgstr "Ikinyendoziya"
+
+#: ../src/sugar3/speech.py:83
+msgid "Icelandic"
+msgstr "Igisilande"
+
+#: ../src/sugar3/speech.py:84
+msgid "Italian"
+msgstr "Igitaliyani"
+
+#: ../src/sugar3/speech.py:85
+msgid "Lojban"
+msgstr "Ikilojibani"
+
+#: ../src/sugar3/speech.py:86
+msgid "Georgian"
+msgstr "Inyejeworujiya"
+
+#: ../src/sugar3/speech.py:87
+msgid "Kannada"
+msgstr "Igikanada"
+
+#: ../src/sugar3/speech.py:88
+msgid "Kurdish"
+msgstr "Inyekuridishi"
+
+#: ../src/sugar3/speech.py:89
+msgid "Latin"
+msgstr "Ikilatini"
+
+#: ../src/sugar3/speech.py:90
+msgid "Lithuanian"
+msgstr "Ikilituwaniya"
+
+#: ../src/sugar3/speech.py:91
+msgid "Latvian"
+msgstr "Ikinyaletoviyani"
+
+#: ../src/sugar3/speech.py:92
+msgid "Macedonian"
+msgstr "Ikimasedoniyani"
+
+#: ../src/sugar3/speech.py:93
+msgid "Malayalam"
+msgstr "Ikimalayalami"
+
+#: ../src/sugar3/speech.py:94
+msgid "Malay"
+msgstr "Ikimalayi"
+
+#: ../src/sugar3/speech.py:95
+msgid "Nepali"
+msgstr "Ikinepali"
+
+#: ../src/sugar3/speech.py:96
+msgid "Dutch"
+msgstr "Ikinerilande"
+
+#: ../src/sugar3/speech.py:97
+msgid "Norwegian"
+msgstr "Ikinoruveji"
+
+#: ../src/sugar3/speech.py:98
+msgid "Punjabi"
+msgstr "Igipunjabi"
+
+#: ../src/sugar3/speech.py:99
+msgid "Polish"
+msgstr "Igipolone"
+
+#: ../src/sugar3/speech.py:100
+msgid "Portuguese (Brazil)"
+msgstr "Inyeporutigali (Brezili)"
+
+#: ../src/sugar3/speech.py:101
+msgid "Portuguese (Portugal)"
+msgstr "Inyeporutigali (Brezili)"
+
+#: ../src/sugar3/speech.py:102
+msgid "Romanian"
+msgstr "Ikinyarumaniya"
+
+#: ../src/sugar3/speech.py:103
+msgid "Russian"
+msgstr "Ikirusiya"
+
+#: ../src/sugar3/speech.py:104
+msgid "Slovak"
+msgstr "Igisilovaki"
+
+#: ../src/sugar3/speech.py:105
+msgid "Albanian"
+msgstr "Icyalubaniya"
+
+#: ../src/sugar3/speech.py:106
+msgid "Serbian"
+msgstr "Igiseribe"
+
+#: ../src/sugar3/speech.py:107
+msgid "Swedish"
+msgstr "Igisuweduwa"
+
+#: ../src/sugar3/speech.py:108
+msgid "Swahili-test"
+msgstr "Igiswahili"
+
+#: ../src/sugar3/speech.py:109
+msgid "Tamil"
+msgstr "Igitamili"
+
+#: ../src/sugar3/speech.py:110
+msgid "Turkish"
+msgstr "Igiturukiya"
+
+#: ../src/sugar3/speech.py:111
+msgid "Vietnam"
+msgstr "Ikinyaviyetinamu"
+
+#: ../src/sugar3/speech.py:112
+msgid "Vietnam_hue"
+msgstr "Ikinyaviyetinamu_hue"
+
+#: ../src/sugar3/speech.py:113
+msgid "Vietnam_sgn"
+msgstr "Ikinyaviyetinamu_sgn"
+
+#: ../src/sugar3/speech.py:114
+msgid "Mandarin"
+msgstr ""
+
+#: ../src/sugar3/speech.py:115
+msgid "Cantonese"
+msgstr ""

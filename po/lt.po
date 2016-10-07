@@ -6,74 +6,75 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2012-02-11 06:45+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2015-01-22 12:40+0000\n"
+"PO-Revision-Date: 2016-09-25 04:58+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
-"100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.0.5\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1474779539.000000\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:416
 #, python-format
 msgid "%s Activity"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:967
 msgid "Keep error"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:968
 msgid "Keep error: all changes will be lost"
 msgstr ""
 
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:971
 msgid "Don't stop"
-msgstr ""
+msgstr "Nestabdyti"
 
-#: ../src/sugar3/activity/activity.py:882
+#: ../src/sugar3/activity/activity.py:975
 msgid "Stop anyway"
-msgstr ""
+msgstr "Vis tiek stabdyti"
 
-#: ../src/sugar3/activity/widgets.py:87
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
-msgstr ""
+msgstr "Stabdyti"
 
-#: ../src/sugar3/activity/widgets.py:99
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
-msgstr ""
+msgstr "Atšaukti"
 
-#: ../src/sugar3/activity/widgets.py:107
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
-msgstr ""
+msgstr "Grąžinti"
 
-#: ../src/sugar3/activity/widgets.py:114
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
-msgstr ""
+msgstr "Kopijuoti"
 
-#: ../src/sugar3/activity/widgets.py:122
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
-msgstr ""
+msgstr "Įdėti"
 
-#: ../src/sugar3/activity/widgets.py:133
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:140
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr ""
 
-#: ../src/sugar3/activity/widgets.py:234
+#: ../src/sugar3/activity/widgets.py:233
 msgid "Description"
 msgstr "Aprašas"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 msgid "Cancel"
-msgstr ""
+msgstr "Atšaukti"
 
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479
@@ -82,7 +83,7 @@ msgstr "Gerai"
 
 #: ../src/sugar3/graphics/alert.py:434
 msgid "Continue"
-msgstr ""
+msgstr "Tęsti"
 
 #: ../src/sugar3/graphics/colorbutton.py:54
 msgid "Choose a color"
@@ -90,23 +91,23 @@ msgstr ""
 
 #: ../src/sugar3/graphics/colorbutton.py:279
 msgid "Red"
-msgstr ""
+msgstr "Raudona"
 
 #: ../src/sugar3/graphics/colorbutton.py:281
 msgid "Green"
-msgstr ""
+msgstr "Žalia"
 
 #: ../src/sugar3/graphics/colorbutton.py:283
 msgid "Blue"
-msgstr ""
+msgstr "Mėlyna"
 
 #: ../src/sugar3/util.py:217
 msgid " and "
-msgstr ""
+msgstr " ir "
 
 #: ../src/sugar3/util.py:218
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221
@@ -118,56 +119,56 @@ msgstr ""
 #: ../src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "Prieš %s"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d metai"
+msgstr[1] "%d metai"
+msgstr[2] "%d metų"
 
 #: ../src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d mėnuo"
+msgstr[1] "%d mėnesiai"
+msgstr[2] "%d mėnesių"
 
 #: ../src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d savaitė"
+msgstr[1] "%d savaitės"
+msgstr[2] "%d savaičių"
 
 #: ../src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d diena"
+msgstr[1] "%d dienos"
+msgstr[2] "%d dienų"
 
 #: ../src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d valanda"
+msgstr[1] "%d valandos"
+msgstr[2] "%d valandų"
 
 #: ../src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d minutė"
+msgstr[1] "%d minutės"
+msgstr[2] "%d minučių"
 
 #: ../src/sugar3/util.py:346
 msgid "Empty"
@@ -176,39 +177,319 @@ msgstr ""
 #: ../src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d B"
 
 #: ../src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d KB"
 
 #: ../src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: ../src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:55
+#: ../src/sugar3/mime.py:56
 msgid "Text"
-msgstr ""
+msgstr "Tekstas"
 
-#: ../src/sugar3/mime.py:64
+#: ../src/sugar3/mime.py:63
 msgid "Image"
-msgstr ""
+msgstr "Paveikslėlis"
 
-#: ../src/sugar3/mime.py:70
+#: ../src/sugar3/mime.py:68
 msgid "Audio"
-msgstr ""
+msgstr "Garso įrašas"
 
-#: ../src/sugar3/mime.py:78
+#: ../src/sugar3/mime.py:75
 msgid "Video"
+msgstr "Vaizdo įrašas"
+
+#: ../src/sugar3/mime.py:86
+msgid "Link"
+msgstr "Nuoroda"
+
+#: ../src/sugar3/mime.py:91
+msgid "Bundle"
 msgstr ""
 
-#: ../src/sugar3/mime.py:90
-msgid "Link"
+#: ../src/sugar3/speech.py:48
+msgid "Afrikaans"
+msgstr "Afrikanų"
+
+#: ../src/sugar3/speech.py:49
+msgid "Aragonese"
 msgstr ""
+
+#: ../src/sugar3/speech.py:50
+msgid "Bulgarian"
+msgstr "Bulgarų"
+
+#: ../src/sugar3/speech.py:51
+msgid "Bosnian"
+msgstr "Bosnių"
+
+#: ../src/sugar3/speech.py:52
+msgid "Catalan"
+msgstr "Katalonų"
+
+#: ../src/sugar3/speech.py:53
+msgid "Czech"
+msgstr "Čekų"
+
+#: ../src/sugar3/speech.py:54
+msgid "Welsh"
+msgstr "Velsų"
+
+#: ../src/sugar3/speech.py:55
+msgid "Danish"
+msgstr "Danų"
+
+#: ../src/sugar3/speech.py:56
+msgid "German"
+msgstr "Vokiečių"
+
+#: ../src/sugar3/speech.py:57
+msgid "Greek"
+msgstr "Graikų"
+
+#: ../src/sugar3/speech.py:58
+msgid "Default"
+msgstr ""
+
+#: ../src/sugar3/speech.py:59
+msgid "English Britain"
+msgstr "Anglų britų"
+
+#: ../src/sugar3/speech.py:60
+msgid "English scottish"
+msgstr "Anglų škotų"
+
+#: ../src/sugar3/speech.py:61
+msgid "English-north"
+msgstr "Anglų šiaurės"
+
+#: ../src/sugar3/speech.py:62
+msgid "English_rp"
+msgstr "Anglų_rp"
+
+#: ../src/sugar3/speech.py:63
+msgid "English_wmids"
+msgstr "Anglų_wmids"
+
+#: ../src/sugar3/speech.py:64
+msgid "English USA"
+msgstr "Anglų JAV"
+
+#: ../src/sugar3/speech.py:65
+#, fuzzy
+msgid "English west indies"
+msgstr "Anglų"
+
+#: ../src/sugar3/speech.py:66
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: ../src/sugar3/speech.py:67
+msgid "Spanish"
+msgstr "Ispanų"
+
+#: ../src/sugar3/speech.py:68
+msgid "Spanish latin american"
+msgstr "Ispanų (Lotynų Amerika)"
+
+#: ../src/sugar3/speech.py:69
+msgid "Estonian"
+msgstr "Estų"
+
+#: ../src/sugar3/speech.py:70
+msgid "Farsi"
+msgstr "Persų"
+
+#: ../src/sugar3/speech.py:71
+msgid "Farsi-pinglish"
+msgstr "Persų-Anglų"
+
+#: ../src/sugar3/speech.py:72
+msgid "Finnish"
+msgstr "Suomių"
+
+#: ../src/sugar3/speech.py:73
+msgid "French belgium"
+msgstr "Prancūzų (Belgija)"
+
+#: ../src/sugar3/speech.py:74
+msgid "French"
+msgstr "Prancūzų"
+
+#: ../src/sugar3/speech.py:75
+msgid "Irish-gaeilge"
+msgstr "Airių"
+
+#: ../src/sugar3/speech.py:76
+msgid "Greek-ancient"
+msgstr "Senovės graikų"
+
+#: ../src/sugar3/speech.py:77
+msgid "Hindi"
+msgstr "Indų"
+
+#: ../src/sugar3/speech.py:78
+msgid "Croatian"
+msgstr "Kroatų"
+
+#: ../src/sugar3/speech.py:79
+msgid "Hungarian"
+msgstr "Vengrų"
+
+#: ../src/sugar3/speech.py:80
+msgid "Armenian"
+msgstr "Armėnų"
+
+#: ../src/sugar3/speech.py:81
+msgid "Armenian (west)"
+msgstr "Armėnų (Vakarų)"
+
+#: ../src/sugar3/speech.py:82
+msgid "Indonesian"
+msgstr "Indoneziečių"
+
+#: ../src/sugar3/speech.py:83
+msgid "Icelandic"
+msgstr "Islandų"
+
+#: ../src/sugar3/speech.py:84
+msgid "Italian"
+msgstr "Italų"
+
+#: ../src/sugar3/speech.py:85
+#, fuzzy
+msgid "Lojban"
+msgstr "Loiban"
+
+#: ../src/sugar3/speech.py:86
+msgid "Georgian"
+msgstr "Gruzinų"
+
+#: ../src/sugar3/speech.py:87
+msgid "Kannada"
+msgstr "Kanadų"
+
+#: ../src/sugar3/speech.py:88
+msgid "Kurdish"
+msgstr "Kurdų"
+
+#: ../src/sugar3/speech.py:89
+msgid "Latin"
+msgstr "Lotynų"
+
+#: ../src/sugar3/speech.py:90
+msgid "Lithuanian"
+msgstr "Lietuvių"
+
+#: ../src/sugar3/speech.py:91
+msgid "Latvian"
+msgstr "Latvių"
+
+#: ../src/sugar3/speech.py:92
+msgid "Macedonian"
+msgstr "Makedonų"
+
+#: ../src/sugar3/speech.py:93
+msgid "Malayalam"
+msgstr "Malajalių"
+
+#: ../src/sugar3/speech.py:94
+msgid "Malay"
+msgstr "Malajiečių"
+
+#: ../src/sugar3/speech.py:95
+msgid "Nepali"
+msgstr "Nepaliečių"
+
+#: ../src/sugar3/speech.py:96
+msgid "Dutch"
+msgstr "Olandų"
+
+#: ../src/sugar3/speech.py:97
+msgid "Norwegian"
+msgstr "Norvegų"
+
+#: ../src/sugar3/speech.py:98
+msgid "Punjabi"
+msgstr "Pandžabų"
+
+#: ../src/sugar3/speech.py:99
+msgid "Polish"
+msgstr "Lenkų"
+
+#: ../src/sugar3/speech.py:100
+msgid "Portuguese (Brazil)"
+msgstr "Portugalų (Brazilija)"
+
+#: ../src/sugar3/speech.py:101
+msgid "Portuguese (Portugal)"
+msgstr "Portugalų (Portugalija)"
+
+#: ../src/sugar3/speech.py:102
+msgid "Romanian"
+msgstr "Rumunų"
+
+#: ../src/sugar3/speech.py:103
+msgid "Russian"
+msgstr "Rusų"
+
+#: ../src/sugar3/speech.py:104
+msgid "Slovak"
+msgstr "Slovakų"
+
+#: ../src/sugar3/speech.py:105
+msgid "Albanian"
+msgstr "Albanų"
+
+#: ../src/sugar3/speech.py:106
+msgid "Serbian"
+msgstr "Serbų"
+
+#: ../src/sugar3/speech.py:107
+msgid "Swedish"
+msgstr "Švedų"
+
+#: ../src/sugar3/speech.py:108
+msgid "Swahili-test"
+msgstr "Suahilių"
+
+#: ../src/sugar3/speech.py:109
+msgid "Tamil"
+msgstr "Tamilų"
+
+#: ../src/sugar3/speech.py:110
+msgid "Turkish"
+msgstr "Turkų"
+
+#: ../src/sugar3/speech.py:111
+msgid "Vietnam"
+msgstr "Vietnamiečių"
+
+#: ../src/sugar3/speech.py:112
+#, fuzzy
+msgid "Vietnam_hue"
+msgstr "Vietnamiečių_hue"
+
+#: ../src/sugar3/speech.py:113
+#, fuzzy
+msgid "Vietnam_sgn"
+msgstr "Vietnamiečių_sgn"
+
+#: ../src/sugar3/speech.py:114
+msgid "Mandarin"
+msgstr "Mandarinų"
+
+#: ../src/sugar3/speech.py:115
+msgid "Cantonese"
+msgstr "Kantoniečių"

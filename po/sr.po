@@ -6,68 +6,69 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2012-06-20 00:10+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2015-01-22 12:40+0000\n"
+"PO-Revision-Date: 2016-09-26 01:11+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.0.5\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1474852294.000000\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:416
 #, python-format
 msgid "%s Activity"
 msgstr "%s активност"
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:967
 msgid "Keep error"
 msgstr "Задржи грешку"
 
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:968
 msgid "Keep error: all changes will be lost"
 msgstr "Задржи грешку: све измене ће бити изгубљене"
 
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:971
 msgid "Don't stop"
 msgstr "Не заустављај"
 
-#: ../src/sugar3/activity/activity.py:882
+#: ../src/sugar3/activity/activity.py:975
 msgid "Stop anyway"
 msgstr "Ипак заустави"
 
-#: ../src/sugar3/activity/widgets.py:87
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "Заустави"
 
-#: ../src/sugar3/activity/widgets.py:99
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "Поништи"
 
-#: ../src/sugar3/activity/widgets.py:107
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "Поврати"
 
-#: ../src/sugar3/activity/widgets.py:114
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "Умножи"
 
-#: ../src/sugar3/activity/widgets.py:122
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "Убаци"
 
-#: ../src/sugar3/activity/widgets.py:133
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "Приватно"
 
-#: ../src/sugar3/activity/widgets.py:140
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "Мој комшилук"
 
-#: ../src/sugar3/activity/widgets.py:234
+#: ../src/sugar3/activity/widgets.py:233
 msgid "Description"
 msgstr "Опис"
 
@@ -193,22 +194,307 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:55
+#: ../src/sugar3/mime.py:56
 msgid "Text"
 msgstr "Текст"
 
-#: ../src/sugar3/mime.py:64
+#: ../src/sugar3/mime.py:63
 msgid "Image"
 msgstr "Слика"
 
-#: ../src/sugar3/mime.py:70
+#: ../src/sugar3/mime.py:68
 msgid "Audio"
 msgstr "Аудио"
 
-#: ../src/sugar3/mime.py:78
+#: ../src/sugar3/mime.py:75
 msgid "Video"
 msgstr "Видео"
 
-#: ../src/sugar3/mime.py:90
+#: ../src/sugar3/mime.py:86
 msgid "Link"
 msgstr "Веза"
+
+#: ../src/sugar3/mime.py:91
+msgid "Bundle"
+msgstr ""
+
+#: ../src/sugar3/speech.py:48
+msgid "Afrikaans"
+msgstr "африканс"
+
+#: ../src/sugar3/speech.py:49
+msgid "Aragonese"
+msgstr "Арагонежански"
+
+#: ../src/sugar3/speech.py:50
+msgid "Bulgarian"
+msgstr "бугарски"
+
+#: ../src/sugar3/speech.py:51
+msgid "Bosnian"
+msgstr "Босански"
+
+#: ../src/sugar3/speech.py:52
+msgid "Catalan"
+msgstr "каталонски"
+
+#: ../src/sugar3/speech.py:53
+msgid "Czech"
+msgstr "чешки"
+
+#: ../src/sugar3/speech.py:54
+msgid "Welsh"
+msgstr "велшки"
+
+#: ../src/sugar3/speech.py:55
+msgid "Danish"
+msgstr "дански"
+
+#: ../src/sugar3/speech.py:56
+msgid "German"
+msgstr "немачки"
+
+#: ../src/sugar3/speech.py:57
+msgid "Greek"
+msgstr "грчки"
+
+#: ../src/sugar3/speech.py:58
+msgid "Default"
+msgstr ""
+
+#: ../src/sugar3/speech.py:59
+msgid "English Britain"
+msgstr "енглески (УК)"
+
+#: ../src/sugar3/speech.py:60
+#, fuzzy
+msgid "English scottish"
+msgstr "енглески"
+
+#: ../src/sugar3/speech.py:61
+#, fuzzy
+msgid "English-north"
+msgstr "енглески"
+
+#: ../src/sugar3/speech.py:62
+msgid "English_rp"
+msgstr "енглески"
+
+#: ../src/sugar3/speech.py:63
+#, fuzzy
+msgid "English_wmids"
+msgstr "енглески"
+
+#: ../src/sugar3/speech.py:64
+msgid "English USA"
+msgstr "енглески (САД)"
+
+#: ../src/sugar3/speech.py:65
+#, fuzzy
+msgid "English west indies"
+msgstr "енглески"
+
+#: ../src/sugar3/speech.py:66
+msgid "Esperanto"
+msgstr "есперанто"
+
+#: ../src/sugar3/speech.py:67
+msgid "Spanish"
+msgstr "шпански"
+
+#: ../src/sugar3/speech.py:68
+#, fuzzy
+msgid "Spanish latin american"
+msgstr "шпански"
+
+#: ../src/sugar3/speech.py:69
+msgid "Estonian"
+msgstr "естонски"
+
+#: ../src/sugar3/speech.py:70
+msgid "Farsi"
+msgstr "персијски"
+
+#: ../src/sugar3/speech.py:71
+msgid "Farsi-pinglish"
+msgstr "персијски-енглески"
+
+#: ../src/sugar3/speech.py:72
+msgid "Finnish"
+msgstr "фински"
+
+#: ../src/sugar3/speech.py:73
+msgid "French belgium"
+msgstr "француски (Белгија)"
+
+#: ../src/sugar3/speech.py:74
+msgid "French"
+msgstr "француски"
+
+#: ../src/sugar3/speech.py:75
+msgid "Irish-gaeilge"
+msgstr "ирски"
+
+#: ../src/sugar3/speech.py:76
+#, fuzzy
+msgid "Greek-ancient"
+msgstr "старогрчки"
+
+#: ../src/sugar3/speech.py:77
+msgid "Hindi"
+msgstr "хинди"
+
+#: ../src/sugar3/speech.py:78
+msgid "Croatian"
+msgstr "хрватски"
+
+#: ../src/sugar3/speech.py:79
+msgid "Hungarian"
+msgstr "мађарски"
+
+#: ../src/sugar3/speech.py:80
+msgid "Armenian"
+msgstr "јерменски"
+
+#: ../src/sugar3/speech.py:81
+#, fuzzy
+msgid "Armenian (west)"
+msgstr "јерменски"
+
+#: ../src/sugar3/speech.py:82
+msgid "Indonesian"
+msgstr "индонежански"
+
+#: ../src/sugar3/speech.py:83
+msgid "Icelandic"
+msgstr "исландски"
+
+#: ../src/sugar3/speech.py:84
+msgid "Italian"
+msgstr "италијански"
+
+#: ../src/sugar3/speech.py:85
+msgid "Lojban"
+msgstr "лојбан"
+
+#: ../src/sugar3/speech.py:86
+msgid "Georgian"
+msgstr "грузијски"
+
+#: ../src/sugar3/speech.py:87
+msgid "Kannada"
+msgstr "канада"
+
+#: ../src/sugar3/speech.py:88
+msgid "Kurdish"
+msgstr "курдски"
+
+#: ../src/sugar3/speech.py:89
+msgid "Latin"
+msgstr "латински"
+
+#: ../src/sugar3/speech.py:90
+msgid "Lithuanian"
+msgstr "литвански"
+
+#: ../src/sugar3/speech.py:91
+msgid "Latvian"
+msgstr "летонски"
+
+#: ../src/sugar3/speech.py:92
+msgid "Macedonian"
+msgstr "македонски"
+
+#: ../src/sugar3/speech.py:93
+msgid "Malayalam"
+msgstr "малајалам"
+
+#: ../src/sugar3/speech.py:94
+msgid "Malay"
+msgstr "малајски"
+
+#: ../src/sugar3/speech.py:95
+msgid "Nepali"
+msgstr "непалски"
+
+#: ../src/sugar3/speech.py:96
+msgid "Dutch"
+msgstr "холандски"
+
+#: ../src/sugar3/speech.py:97
+msgid "Norwegian"
+msgstr "Норвешки"
+
+#: ../src/sugar3/speech.py:98
+msgid "Punjabi"
+msgstr "панџаби"
+
+#: ../src/sugar3/speech.py:99
+msgid "Polish"
+msgstr "пољски"
+
+#: ../src/sugar3/speech.py:100
+msgid "Portuguese (Brazil)"
+msgstr "Португалски (Бразил)"
+
+#: ../src/sugar3/speech.py:101
+msgid "Portuguese (Portugal)"
+msgstr "португалски (Португал)"
+
+#: ../src/sugar3/speech.py:102
+msgid "Romanian"
+msgstr "румунски"
+
+#: ../src/sugar3/speech.py:103
+msgid "Russian"
+msgstr "руски"
+
+#: ../src/sugar3/speech.py:104
+msgid "Slovak"
+msgstr "словачки"
+
+#: ../src/sugar3/speech.py:105
+msgid "Albanian"
+msgstr "албански"
+
+#: ../src/sugar3/speech.py:106
+msgid "Serbian"
+msgstr "српски"
+
+#: ../src/sugar3/speech.py:107
+msgid "Swedish"
+msgstr "шведски"
+
+#: ../src/sugar3/speech.py:108
+msgid "Swahili-test"
+msgstr "свахили"
+
+#: ../src/sugar3/speech.py:109
+msgid "Tamil"
+msgstr "тамилски"
+
+#: ../src/sugar3/speech.py:110
+msgid "Turkish"
+msgstr "турски"
+
+#: ../src/sugar3/speech.py:111
+msgid "Vietnam"
+msgstr "вијетнамски"
+
+#: ../src/sugar3/speech.py:112
+#, fuzzy
+msgid "Vietnam_hue"
+msgstr "вијетнамски"
+
+#: ../src/sugar3/speech.py:113
+#, fuzzy
+msgid "Vietnam_sgn"
+msgstr "вијетнамски"
+
+#: ../src/sugar3/speech.py:114
+msgid "Mandarin"
+msgstr "Мандарински"
+
+#: ../src/sugar3/speech.py:115
+msgid "Cantonese"
+msgstr "Кантонски"
