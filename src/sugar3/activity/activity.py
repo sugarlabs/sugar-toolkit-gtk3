@@ -626,12 +626,12 @@ class Activity(Window, Gtk.Container):
 
     def _adapt_window_to_screen(self):
         screen = Gdk.Screen.get_default()
-        workarea = screen.get_monitor_workarea(screen.get_number())
+        rect = screen.get_monitor_geometry(screen.get_number())
         geometry = Gdk.Geometry()
         geometry.max_width = geometry.base_width = geometry.min_width = \
-            workarea.width
+            rect.width
         geometry.max_height = geometry.base_height = geometry.min_height = \
-            workarea.height
+            rect.height
         geometry.width_inc = geometry.height_inc = geometry.min_aspect = \
             geometry.max_aspect = 1
         hints = Gdk.WindowHints(Gdk.WindowHints.ASPECT |
