@@ -147,7 +147,7 @@ License-Grant:
 License: GAP
 
 Files: debian/*
-Copyright: 2012,2015, Jonas Smedegaard <dr@jones.dk>
+Copyright: 2012,2015-2016, Jonas Smedegaard <dr@jones.dk>
 License-Grant:
  This program is free software; you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the
