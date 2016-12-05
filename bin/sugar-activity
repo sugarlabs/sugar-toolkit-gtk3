@@ -37,6 +37,12 @@ from sugar3 import config
 from sugar3.bundle.activitybundle import ActivityBundle
 from sugar3 import logger
 
+from sugar3.bundle.bundle import MalformedBundleException
+
+from distutils.dir_util import mkpath
+import time
+import hashlib
+import random
 
 def create_activity_instance(constructor, handle):
     activity = constructor(handle)
@@ -69,7 +75,13 @@ class SingleProcess(dbus.service.Object):
 
 
 def main():
-    parser = OptionParser()
+    usage = 'usage: %prog [options] [activity dir] [python class]'
+    epilog = 'If you are running from a directory containing an Activity, ' \
+             'the argument may be ommitted. Otherwise please provide either '\
+             'a directory containing a Sugar Activity [activity dir], a '\
+             '[python_class], or both.'
+
+    parser = OptionParser(usage=usage, epilog=epilog)
     parser.add_option('-b', '--bundle-id', dest='bundle_id',
                       help='identifier of the activity bundle')
     parser.add_option('-a', '--activity-id', dest='activity_id',
@@ -89,18 +101,49 @@ def main():
 
     logger.start()
 
-    if 'SUGAR_BUNDLE_PATH' not in os.environ:
-        print 'SUGAR_BUNDLE_PATH is not defined in the environment.'
-        sys.exit(1)
+    activity_class = None
+    if len(args) == 2:
+        activity_class = args[1]
+        os.chdir(args[0])
+    elif len(args) == 1:
+        if os.path.isdir(args[0]):
+            os.chdir(args[0])
+        else:
+            activity_class = args[0]
 
-    if len(args) == 0:
-        print 'A python class must be specified as first argument.'
-        sys.exit(1)
+    os.environ['SUGAR_BUNDLE_PATH'] = os.path.abspath(os.curdir)
 
     bundle_path = os.environ['SUGAR_BUNDLE_PATH']
     sys.path.append(bundle_path)
 
-    bundle = ActivityBundle(bundle_path)
+    try:
+        bundle = ActivityBundle(bundle_path)
+    except MalformedBundleException:
+        parser.print_help()
+        exit(0)
+
+    if not activity_class:
+        if bundle.get_command().startswith('sugar-activity'):
+            print 'Guessing python class from activity.info!'
+            activity_class = bundle.get_command().split(" ")[1]
+
+    if 'SUGAR_VERSION' not in os.environ:
+        profile_id = os.environ.get('SUGAR_PROFILE', 'default')
+        home_dir = os.environ.get('SUGAR_HOME', os.path.expanduser('~/.sugar'))
+        base = os.path.join(home_dir, profile_id)
+        activity_root = os.path.join(base, bundle.get_bundle_id())
+
+        instance_dir = os.path.join(activity_root, 'instance')
+        mkpath(instance_dir)
+
+        data_dir = os.path.join(activity_root, 'data')
+        mkpath(data_dir)
+
+        tmp_dir = os.path.join(activity_root, 'tmp')
+        mkpath(tmp_dir)
+
+        os.environ['SUGAR_ACTIVITY_ROOT'] = activity_root
+        os.environ['SUGAR_BUNDLE_PATH'] = bundle.get_path()
 
     os.environ['SUGAR_BUNDLE_ID'] = bundle.get_bundle_id()
     os.environ['SUGAR_BUNDLE_NAME'] = bundle.get_name()
@@ -114,7 +157,7 @@ def main():
     gettext.bindtextdomain('sugar-toolkit-gtk3', config.locale_path)
     gettext.textdomain(bundle.get_bundle_id())
 
-    splitted_module = args[0].rsplit('.', 1)
+    splitted_module = activity_class.rsplit('.', 1)
     module_name = splitted_module[0]
     class_name = splitted_module[1]
 
@@ -123,6 +166,14 @@ def main():
         module = getattr(module, comp)
 
     activity_constructor = getattr(module, class_name)
+
+    if not options.activity_id:
+        # Generate random hash
+        data = '%s%s' % (time.time(), random.randint(10000, 100000))
+        random_hash = hashlib.sha1(data).hexdigest()
+        options.activity_id = random_hash
+        options.bundle_id = bundle.get_bundle_id()
+
     activity_handle = activityhandle.ActivityHandle(
         activity_id=options.activity_id,
         object_id=options.object_id, uri=options.uri,

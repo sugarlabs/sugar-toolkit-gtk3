@@ -123,7 +123,6 @@ class Palette(PaletteWindow):
         self._secondary_text = None
         self._icon = None
         self._icon_visible = True
-        self._palette_state = self.PRIMARY
 
         self._primary_event_box = Gtk.EventBox()
         self._primary_event_box.show()
@@ -165,9 +164,7 @@ class Palette(PaletteWindow):
 
         self._separator = Gtk.HSeparator()
         self._secondary_box.pack_start(self._separator, True, True, 0)
-
-        self._secondary_anim = animator.Animator(2.0, 10)
-        self._secondary_anim.add(_SecondaryAnimation(self))
+        self._secondary_box.show()
 
         # we init after initializing all of our containers
         PaletteWindow.__init__(self, **kwargs)
@@ -186,7 +183,6 @@ class Palette(PaletteWindow):
         self.action_bar.show()
 
         self.connect('notify::invoker', self.__notify_invoker_cb)
-        self.connect('popdown', self.__popdown_cb)
 
         # Default to a normal window palette
         self._content_widget = None
@@ -203,14 +199,10 @@ class Palette(PaletteWindow):
             self._widget.present()
 
     def __destroy_cb(self, palette):
-        self._secondary_anim.stop()
         self.popdown(immediate=True)
         # Break the reference cycle. It looks like the gc is not able to free
         # it, possibly because Gtk.Menu memory handling is very special.
         self._widget = None
-
-    def __popdown_cb(self, widget):
-        self._secondary_anim.stop()
 
     def __notify_invoker_cb(self, palette, pspec):
         invoker = self.props.invoker
@@ -225,33 +217,32 @@ class Palette(PaletteWindow):
     def get_full_size_request(self):
         return self._full_request
 
-    def popup(self, immediate=False, state=None):
+    def popup(self, immediate=False):
         if self._invoker is not None:
             self._update_full_request()
 
-        if state is None:
-            state = self.PRIMARY
-        self.set_palette_state(state)
-
-        if state == self.PRIMARY:
-            self._secondary_anim.start()
-        else:
-            self._secondary_anim.stop()
-
         PaletteWindow.popup(self, immediate)
 
-    def popdown(self, immediate=False):
+    def popdown(self, immediate=False, state=None):
+        '''
+        Popdown (or show the full contents of) the palette.
+
+        Keyword Args:
+            immediate (bool): if True, the palette will be shown instantly (as
+                if the user right clicked the item).  If False, the palette
+                will be shown after the usual activation wait time.
+
+        .. deprecated:: 0.109
+            The state keyword argument is deprecated.  The old
+            secondary state has become the only state.
+        '''
         if immediate:
-            self._secondary_anim.stop()
-            # to suppress glitches while later re-opening
-            self.set_palette_state(self.PRIMARY)
             if self._widget:
                 self._widget.size_request()
         PaletteWindow.popdown(self, immediate)
 
     def on_enter(self):
         PaletteWindow.on_enter(self)
-        self._secondary_anim.start()
 
     def _add_content(self):
         # The content is not shown until a widget is added
@@ -430,26 +421,8 @@ class Palette(PaletteWindow):
         self._widget.set_accept_focus(accept_focus)
 
     def _update_full_request(self):
-        if self._palette_state == self.PRIMARY:
-            self._secondary_box.show()
-
         if self._widget is not None:
             self._full_request = self._widget.size_request()
-
-        if self._palette_state == self.PRIMARY:
-            self._secondary_box.hide()
-
-    def _set_palette_state(self, state):
-        if self._palette_state == state:
-            return
-
-        if state == self.PRIMARY:
-            self._secondary_box.hide()
-        elif state == self.SECONDARY:
-            self._secondary_box.show()
-            self.update_position()
-
-        self._palette_state = state
 
     def get_menu(self):
         assert self._content_widget is None
@@ -475,13 +448,7 @@ class Palette(PaletteWindow):
     menu = GObject.property(type=object, getter=get_menu)
 
     def _invoker_right_click_cb(self, invoker):
-        self.popup(immediate=True, state=self.SECONDARY)
-
-    def _invoker_toggle_state_cb(self, invoker):
-        if self.is_up() and self._palette_state == self.SECONDARY:
-            self.popdown(immediate=True)
-        else:
-            self.popup(immediate=True, state=self.SECONDARY)
+        self.popup(immediate=True)
 
 
 class PaletteActionBar(Gtk.HButtonBox):
@@ -496,14 +463,3 @@ class PaletteActionBar(Gtk.HButtonBox):
 
         self.pack_start(button, True, True, 0)
         button.show()
-
-
-class _SecondaryAnimation(animator.Animation):
-
-    def __init__(self, palette):
-        animator.Animation.__init__(self, 0.0, 1.0)
-        self._palette = palette
-
-    def next_frame(self, current):
-        if current == 1.0:
-            self._palette.set_palette_state(Palette.SECONDARY)

@@ -15,9 +15,11 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""
-STABLE.
-"""
+'''
+A toolbox holds a group of toolbars in a list. One toolbar is displayed
+at a time. Toolbars are assigned an index and can be accessed using this index.
+Indices are generated in the order the toolbars are added.
+'''
 
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -26,6 +28,15 @@ from sugar3.graphics import style
 
 
 class Toolbox(Gtk.VBox):
+    '''
+    Class to represent the toolbox of an activity. Groups a
+    number of toolbars vertically, which can be accessed using their
+    indices. The current toolbar is the only one displayed.
+    
+    Emits `current-toolbar-changed` signal when the
+    current toolbar is changed. This signal takes the current page index
+    as an argument.
+    '''
 
     __gtype_name__ = 'SugarToolbox'
 
@@ -58,6 +69,17 @@ class Toolbox(Gtk.VBox):
         self.emit('current-toolbar-changed', notebook.props.page)
 
     def add_toolbar(self, name, toolbar):
+        '''
+        Adds a toolbar to this toolbox. Toolbar will be added
+        to the end of this toolbox, and it's index will be 
+        1 greater than the previously added index (index will be
+        0 if it is the first toolbar added).
+        
+        Args:
+            name (string): name of toolbar to be added
+            
+            toolbar (.. :class:`Gtk.Toolbar`): Gtk.Toolbar to be appended to this toolbox
+        '''
         label = Gtk.Label(label=name)
         req = label.size_request()
         label.set_size_request(max(req.width, style.TOOLBOX_TAB_LABEL_WIDTH),
@@ -82,6 +104,12 @@ class Toolbox(Gtk.VBox):
             self._separator.show()
 
     def remove_toolbar(self, index):
+        '''
+        Removes toolbar at the index specified.
+        
+        Args:
+            index (int): index of the toolbar to be removed
+        '''
         self._notebook.remove_page(index)
 
         if self._notebook.get_n_pages() < 2:
@@ -89,9 +117,19 @@ class Toolbox(Gtk.VBox):
             self._separator.hide()
 
     def set_current_toolbar(self, index):
+        '''
+        Sets the current toolbar to that of the index specified and 
+        displays it.
+        
+        Args:
+            index (int): index of toolbar to be set as current toolbar
+        '''
         self._notebook.set_current_page(index)
 
     def get_current_toolbar(self):
+        '''
+        Returns current toolbar.
+        '''
         return self._notebook.get_current_page()
 
     current_toolbar = property(get_current_toolbar, set_current_toolbar)

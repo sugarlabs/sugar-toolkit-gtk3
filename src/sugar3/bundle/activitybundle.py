@@ -111,6 +111,7 @@ class ActivityBundle(Bundle):
         self._tags = None
         self._activity_version = '0'
         self._summary = None
+        self._description = None
         self._single_instance = False
         self._max_participants = 0
 
@@ -143,7 +144,7 @@ class ActivityBundle(Bundle):
             else:
                 raise MalformedBundleException(
                     'Activity bundle %s does not specify a bundle id' %
-                    self._path)
+                    self.get_path())
 
         if ' ' in self._bundle_id:
             raise MalformedBundleException('Space in bundle_id')
@@ -152,7 +153,7 @@ class ActivityBundle(Bundle):
             self._name = cp.get(section, 'name')
         else:
             raise MalformedBundleException(
-                'Activity bundle %s does not specify a name' % self._path)
+                'Activity bundle %s does not specify a name' % self.get_path())
 
         if cp.has_option(section, 'exec'):
             self.bundle_exec = cp.get(section, 'exec')
@@ -165,7 +166,7 @@ class ActivityBundle(Bundle):
                               'changed to exec')
             else:
                 raise MalformedBundleException(
-                    'Activity bundle %s must specify exec' % self._path)
+                    'Activity bundle %s must specify exec' % self.get_path())
 
         if cp.has_option(section, 'mime_types'):
             mime_list = cp.get(section, 'mime_types').strip(';')
@@ -189,11 +190,13 @@ class ActivityBundle(Bundle):
             except InvalidVersionError:
                 raise MalformedBundleException(
                     'Activity bundle %s has invalid version number %s' %
-                    (self._path, version))
+                    (self.get_path(), version))
             self._activity_version = version
 
         if cp.has_option(section, 'summary'):
             self._summary = cp.get(section, 'summary')
+        if cp.has_option(section, 'description'):
+            self._description = cp.get(section, 'description')
 
         if cp.has_option(section, 'single_instance'):
             if cp.get(section, 'single_instance') == 'yes':
@@ -206,7 +209,7 @@ class ActivityBundle(Bundle):
             except ValueError:
                 raise MalformedBundleException(
                     'Activity bundle %s has invalid max_participants %s' %
-                    (self._path, max_participants))
+                    (self.get_path(), max_participants))
 
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
@@ -255,13 +258,13 @@ class ActivityBundle(Bundle):
         """Get the locale path inside the (installed) activity bundle."""
         if self._zip_file is not None:
             raise NotInstalledException
-        return os.path.join(self._path, 'locale')
+        return os.path.join(self.get_path(), 'locale')
 
     def get_icons_path(self):
         """Get the icons path inside the (installed) activity bundle."""
         if self._zip_file is not None:
             raise NotInstalledException
-        return os.path.join(self._path, 'icons')
+        return os.path.join(self.get_path(), 'icons')
 
     def get_name(self):
         """Get the activity user-visible name."""
@@ -277,7 +280,7 @@ class ActivityBundle(Bundle):
         # we don't need to create a temp file in the zip case
         icon_path = os.path.join('activity', self._icon + '.svg')
         if self._zip_file is None:
-            return os.path.join(self._path, icon_path)
+            return os.path.join(self.get_path(), icon_path)
         else:
             icon_data = self.get_file(icon_path).read()
             temp_file, temp_file_path = tempfile.mkstemp(prefix=self._icon,
@@ -285,6 +288,10 @@ class ActivityBundle(Bundle):
             os.write(temp_file, icon_data)
             os.close(temp_file)
             return temp_file_path
+
+    def get_icon_filename(self):
+        '''Get the icon file name'''
+        return self._icon + '.svg'
 
     def get_activity_version(self):
         """Get the activity version"""
@@ -305,6 +312,14 @@ class ActivityBundle(Bundle):
     def get_summary(self):
         """Get the summary that describe the activity"""
         return self._summary
+
+    def get_description(self):
+        """
+        Get the description for the activity.  The description is a
+        pace of multi paragraph text about the activity.  It is written
+        in a HTML subset using only the p, ul, li and ol tags.
+        """
+        return self._description
 
     def get_single_instance(self):
         """Get whether there should be a single instance for the activity"""
