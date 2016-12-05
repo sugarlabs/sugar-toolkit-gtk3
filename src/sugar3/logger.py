@@ -105,16 +105,21 @@ def cleanup():
                 os.remove(os.path.join(root, f))
             os.rmdir(root)
         except OSError, e:
-            print "Could not remove old logs filesi %s" % e
+            print "Could not remove old logs files %s" % e
 
     if len(backup_logs) > 0:
         name = str(int(time.time()))
         backup_dir = os.path.join(logs_dir, name)
-        os.mkdir(backup_dir)
-        for log in backup_logs:
-            source_path = os.path.join(logs_dir, log)
-            dest_path = os.path.join(backup_dir, log)
-            os.rename(source_path, dest_path)
+        try:
+            os.mkdir(backup_dir)
+            for log in backup_logs:
+                source_path = os.path.join(logs_dir, log)
+                dest_path = os.path.join(backup_dir, log)
+                os.rename(source_path, dest_path)
+        except OSError, e:
+            # gracefully deal w/ disk full
+            if e.errno != errno.ENOSPC:
+                raise e
 
 
 def start(log_filename=None):

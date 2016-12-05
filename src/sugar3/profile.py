@@ -27,6 +27,7 @@ from sugar3 import env
 from sugar3 import util
 from sugar3.graphics.xocolor import XoColor
 
+import getpass
 
 _profile = None
 
@@ -62,9 +63,8 @@ class Profile(object):
     privkey_hash = property(fget=_get_privkey_hash)
 
     def is_valid(self):
-        settings = Gio.Settings('org.sugarlabs.user')
-        nick = settings.get_string('nick')
-        color = settings.get_string('color')
+        nick = get_nick_name()
+        color = get_color()
 
         return nick is not '' and \
             color is not '' and \
@@ -204,14 +204,20 @@ def get_profile():
 
 
 def get_nick_name():
-    settings = Gio.Settings('org.sugarlabs.user')
-    return settings.get_string('nick')
+    if 'org.sugarlabs.user' in Gio.Settings.list_schemas():
+        settings = Gio.Settings('org.sugarlabs.user')
+        return settings.get_string('nick')
+    else:
+        return getpass.getuser()
 
 
 def get_color():
-    settings = Gio.Settings('org.sugarlabs.user')
-    color = settings.get_string('color')
-    return XoColor(color)
+    if 'org.sugarlabs.user' in Gio.Settings.list_schemas():
+        settings = Gio.Settings('org.sugarlabs.user')
+        color = settings.get_string('color')
+        return XoColor(color)
+    else:
+        return XoColor()
 
 
 def get_pubkey():

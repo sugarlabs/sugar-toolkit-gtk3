@@ -32,6 +32,7 @@ import dbus
 from sugar3 import env
 from sugar3 import mime
 from sugar3 import dispatch
+from sugar3.profile import get_color
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
@@ -71,8 +72,6 @@ def __datastore_deleted_cb(object_id):
 created = dispatch.Signal()
 deleted = dispatch.Signal()
 updated = dispatch.Signal()
-
-_get_data_store()
 
 
 class DSMetadata(GObject.GObject):
@@ -224,7 +223,6 @@ class RawObject(object):
 
     def __init__(self, file_path):
         stat = os.stat(file_path)
-        settings = Gio.Settings('org.sugarlabs.user')
         metadata = {
             'uid': file_path,
             'title': os.path.basename(file_path),
@@ -232,7 +230,7 @@ class RawObject(object):
             'mime_type': Gio.content_type_guess(file_path, None)[0],
             'activity': '',
             'activity_id': '',
-            'icon-color': settings.get_string('color'),
+            'icon-color': get_color().to_string(),
             'description': file_path,
         }
 

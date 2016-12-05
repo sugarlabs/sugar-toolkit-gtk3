@@ -554,6 +554,7 @@ class _JoinCommand(_BaseCommand):
         self._finished = False
         self.room_handle = room_handle
         self._global_self_handle = None
+        self._tubes_supported = True
 
     def run(self):
         if self._finished:
@@ -581,7 +582,7 @@ class _JoinCommand(_BaseCommand):
             self.room_handle,
             True,
             reply_handler=self.__create_tubes_channel_cb,
-            error_handler=self.__error_handler_cb,
+            error_handler=self.__tubes_error_handler_cb,
             dbus_interface=CONNECTION)
 
     def __create_text_channel_cb(self, channel_path):
@@ -591,6 +592,15 @@ class _JoinCommand(_BaseCommand):
     def __create_tubes_channel_cb(self, channel_path):
         Channel(self._connection.requested_bus_name, channel_path,
                 ready_handler=self.__tubes_channel_ready_cb)
+
+    def __tubes_error_handler_cb(self, error):
+        if (error.get_dbus_name() ==
+                'org.freedesktop.Telepathy.Error.NotImplemented'):
+            self._tubes_supported = False
+            self._tubes_ready()
+        else:
+            self._finished = True
+            self.emit('finished', error)
 
     def __error_handler_cb(self, error):
         self._finished = True
@@ -608,7 +618,7 @@ class _JoinCommand(_BaseCommand):
 
     def _tubes_ready(self):
         if self.text_channel is None or \
-                self.tubes_channel is None:
+                (self._tubes_supported and self.tubes_channel is None):
             return
 
         _logger.debug('%r: finished setting up tubes' % self)

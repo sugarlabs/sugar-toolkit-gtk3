@@ -59,7 +59,7 @@ class _ColorButton(Gtk.Button):
         self._accept_drag = True
 
         self._preview = Icon(icon_name='color-preview',
-                             icon_size=Gtk.IconSize.BUTTON)
+                             pixel_size=style.SMALL_ICON_SIZE)
 
         GObject.GObject.__init__(self, **kwargs)
 
@@ -402,7 +402,7 @@ def _add_accelerator(tool_button):
     # TODO: should we remove the accelerator from the prev top level?
 
     if not hasattr(tool_button.get_toplevel(), 'sugar_accel_group'):
-        logging.warning('No Gtk.AccelGroup in the top level window.')
+        logging.debug('No Gtk.AccelGroup in the top level window.')
         return
 
     accel_group = tool_button.get_toplevel().sugar_accel_group

@@ -73,9 +73,9 @@ sugar_marshal_BOOLEAN__UINT_UINT_UINT (GClosure     *closure,
                                                             guint        arg_2,
                                                             guint        arg_3,
                                                             gpointer     data2);
-  register GMarshalFunc_BOOLEAN__UINT_UINT_UINT callback;
-  register GCClosure *cc = (GCClosure*) closure;
-  register gpointer data1, data2;
+  GMarshalFunc_BOOLEAN__UINT_UINT_UINT callback;
+  GCClosure *cc = (GCClosure*) closure;
+  gpointer data1, data2;
   gboolean v_return;
 
   g_return_if_fail (return_value != NULL);

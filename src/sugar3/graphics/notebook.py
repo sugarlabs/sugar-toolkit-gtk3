@@ -15,21 +15,25 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-"""Notebook class
+'''
+Notebook class
 
-This class create a Gtk.Notebook() widget supporting
-a close button in every tab when the 'can-close-tabs' gproperty
-is enabled (True)
+This class creates a :class:`Gtk.Notebook` widget supporting
+a close button in every tab when the `can-close-tabs` gproperty
+is enabled (True).
 
-STABLE.
-"""
+.. literalinclude:: ../examples/notebook.py
+'''
 
 from gi.repository import Gtk
 from gi.repository import GObject
 
 
 class Notebook(Gtk.Notebook):
-
+    '''
+    Notebook class that creates a :class:`Gtk.Notebook`. It is possible to set
+    the `can-close-tabs` property from the constructor through Notebook(can_close_tabs=True)
+    '''
     __gtype_name__ = 'SugarNotebook'
 
     __gproperties__ = {
@@ -52,23 +56,9 @@ class Notebook(Gtk.Notebook):
         self.show()
 
     def do_set_property(self, pspec, value):
-        """
-        Set notebook property
-
-        Parameters
-        ----------
-        pspec :
-            property for which the value will be set
-
-        Returns
-        -------
-        None
-
-        Raises
-        ------
-        AssertionError
-
-        """
+        '''
+        Implementation method. Use notebook.props to set properties.
+        '''
         if pspec.name == 'can-close-tabs':
             self._can_close_tabs = value
         else:
@@ -114,21 +104,16 @@ class Notebook(Gtk.Notebook):
         return event_box
 
     def add_page(self, text_label, widget):
-        """
-        Adds a page to the notebook.
+        '''
+        Adds a page to the notebook and sets the newly added page as current.
+        Returns True if the page is successfully added to the notebook.
+        If `can-close-tabs` is true, then a GtkEventBox is also created to close the tab.
 
-        Parameters
-        ----------
-        text_label :
+        Args:
+            text_label (string): label of page to be added
 
-        widget :
-
-        Returns
-        -------
-        Boolean
-          Returns TRUE if the page is successfully added to the notebook.
-
-        """
+            widget (Gtk.Widget): widget to be used as contents of current page
+        '''
         # Add a new page to the notebook
         if self._can_close_tabs:
             eventbox = self._create_custom_tab(text_label, widget)

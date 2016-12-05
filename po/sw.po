@@ -6,67 +6,68 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-26 00:33-0400\n"
-"PO-Revision-Date: 2012-06-19 23:24+0200\n"
-"Last-Translator: Chris <cjl@laptop.org>\n"
+"POT-Creation-Date: 2015-01-22 12:40+0000\n"
+"PO-Revision-Date: 2016-10-05 20:33+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.5\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1475699624.000000\n"
 
-#: ../src/sugar3/activity/activity.py:378
+#: ../src/sugar3/activity/activity.py:416
 #, python-format
 msgid "%s Activity"
 msgstr "%s Kazi"
 
-#: ../src/sugar3/activity/activity.py:874
+#: ../src/sugar3/activity/activity.py:967
 msgid "Keep error"
 msgstr "hifadhi kosa"
 
-#: ../src/sugar3/activity/activity.py:875
+#: ../src/sugar3/activity/activity.py:968
 msgid "Keep error: all changes will be lost"
 msgstr "hifadhi kosa: mabadiliko yote yatapotea"
 
-#: ../src/sugar3/activity/activity.py:878
+#: ../src/sugar3/activity/activity.py:971
 msgid "Don't stop"
 msgstr "Usisimame"
 
-#: ../src/sugar3/activity/activity.py:882
+#: ../src/sugar3/activity/activity.py:975
 msgid "Stop anyway"
 msgstr "Simama hata hiyo"
 
-#: ../src/sugar3/activity/widgets.py:87
+#: ../src/sugar3/activity/widgets.py:86
 msgid "Stop"
 msgstr "Simama"
 
-#: ../src/sugar3/activity/widgets.py:99
+#: ../src/sugar3/activity/widgets.py:98
 msgid "Undo"
 msgstr "rudi kabla"
 
-#: ../src/sugar3/activity/widgets.py:107
+#: ../src/sugar3/activity/widgets.py:106
 msgid "Redo"
 msgstr "Rudia kufanya"
 
-#: ../src/sugar3/activity/widgets.py:114
+#: ../src/sugar3/activity/widgets.py:113
 msgid "Copy"
 msgstr "nakili"
 
-#: ../src/sugar3/activity/widgets.py:122
+#: ../src/sugar3/activity/widgets.py:121
 msgid "Paste"
 msgstr "bandika"
 
-#: ../src/sugar3/activity/widgets.py:133
+#: ../src/sugar3/activity/widgets.py:132
 msgid "Private"
 msgstr "Binafsi"
 
-#: ../src/sugar3/activity/widgets.py:140
+#: ../src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
 msgstr "Jirani yangu"
 
-#: ../src/sugar3/activity/widgets.py:234
+#: ../src/sugar3/activity/widgets.py:233
 msgid "Description"
 msgstr "Maelezo"
 
@@ -186,22 +187,304 @@ msgstr "%d MB"
 msgid "%d GB"
 msgstr "%d GB"
 
-#: ../src/sugar3/mime.py:55
+#: ../src/sugar3/mime.py:56
 msgid "Text"
 msgstr "Maandishi"
 
-#: ../src/sugar3/mime.py:64
+#: ../src/sugar3/mime.py:63
 msgid "Image"
 msgstr "Tawsira"
 
-#: ../src/sugar3/mime.py:70
+#: ../src/sugar3/mime.py:68
 msgid "Audio"
 msgstr "Sauti"
 
-#: ../src/sugar3/mime.py:78
+#: ../src/sugar3/mime.py:75
 msgid "Video"
 msgstr "Video"
 
-#: ../src/sugar3/mime.py:90
+#: ../src/sugar3/mime.py:86
 msgid "Link"
 msgstr "Kiunganishi"
+
+#: ../src/sugar3/mime.py:91
+msgid "Bundle"
+msgstr ""
+
+#: ../src/sugar3/speech.py:48
+msgid "Afrikaans"
+msgstr "Kiafrikana"
+
+#: ../src/sugar3/speech.py:49
+msgid "Aragonese"
+msgstr "Kiaragoni"
+
+#: ../src/sugar3/speech.py:50
+msgid "Bulgarian"
+msgstr "Kibulgaria"
+
+#: ../src/sugar3/speech.py:51
+msgid "Bosnian"
+msgstr "Kibosnia"
+
+#: ../src/sugar3/speech.py:52
+msgid "Catalan"
+msgstr "Kikatalani"
+
+#: ../src/sugar3/speech.py:53
+msgid "Czech"
+msgstr "Kicheki"
+
+#: ../src/sugar3/speech.py:54
+msgid "Welsh"
+msgstr "Kiwelisi"
+
+#: ../src/sugar3/speech.py:55
+msgid "Danish"
+msgstr "Kidenmaki"
+
+#: ../src/sugar3/speech.py:56
+msgid "German"
+msgstr "Kijerumani"
+
+#: ../src/sugar3/speech.py:57
+msgid "Greek"
+msgstr "Kigiriki"
+
+#: ../src/sugar3/speech.py:58
+msgid "Default"
+msgstr ""
+
+#: ../src/sugar3/speech.py:59
+msgid "English Britain"
+msgstr "Kiingereza (UK)"
+
+#: ../src/sugar3/speech.py:60
+#, fuzzy
+msgid "English scottish"
+msgstr "Kiingereza"
+
+#: ../src/sugar3/speech.py:61
+#, fuzzy
+msgid "English-north"
+msgstr "Kiingereza"
+
+#: ../src/sugar3/speech.py:62
+msgid "English_rp"
+msgstr "Kiingereza"
+
+#: ../src/sugar3/speech.py:63
+msgid "English_wmids"
+msgstr "Kiingereza_wmids"
+
+#: ../src/sugar3/speech.py:64
+msgid "English USA"
+msgstr "Kiingereza (US)"
+
+#: ../src/sugar3/speech.py:65
+#, fuzzy
+msgid "English west indies"
+msgstr "Kiingereza"
+
+#: ../src/sugar3/speech.py:66
+msgid "Esperanto"
+msgstr "Kiesperanto"
+
+#: ../src/sugar3/speech.py:67
+msgid "Spanish"
+msgstr "Kihispania"
+
+#: ../src/sugar3/speech.py:68
+#, fuzzy
+msgid "Spanish latin american"
+msgstr "Kihispania"
+
+#: ../src/sugar3/speech.py:69
+msgid "Estonian"
+msgstr "Kiestonia"
+
+#: ../src/sugar3/speech.py:70
+msgid "Farsi"
+msgstr ""
+
+#: ../src/sugar3/speech.py:71
+msgid "Farsi-pinglish"
+msgstr ""
+
+#: ../src/sugar3/speech.py:72
+msgid "Finnish"
+msgstr "Kifini"
+
+#: ../src/sugar3/speech.py:73
+msgid "French belgium"
+msgstr "Kifaransa (Ubeligiji)"
+
+#: ../src/sugar3/speech.py:74
+msgid "French"
+msgstr "Kifaransa"
+
+#: ../src/sugar3/speech.py:75
+msgid "Irish-gaeilge"
+msgstr "Kiayalandi"
+
+#: ../src/sugar3/speech.py:76
+#, fuzzy
+msgid "Greek-ancient"
+msgstr "Kigiriki"
+
+#: ../src/sugar3/speech.py:77
+msgid "Hindi"
+msgstr "Kihindi"
+
+#: ../src/sugar3/speech.py:78
+msgid "Croatian"
+msgstr "Kikroeshia"
+
+#: ../src/sugar3/speech.py:79
+msgid "Hungarian"
+msgstr "Kihangari"
+
+#: ../src/sugar3/speech.py:80
+msgid "Armenian"
+msgstr "Kiarmenia"
+
+#: ../src/sugar3/speech.py:81
+#, fuzzy
+msgid "Armenian (west)"
+msgstr "Kiarmenia"
+
+#: ../src/sugar3/speech.py:82
+msgid "Indonesian"
+msgstr "Kiindonesia"
+
+#: ../src/sugar3/speech.py:83
+msgid "Icelandic"
+msgstr "Kiaisilandi"
+
+#: ../src/sugar3/speech.py:84
+msgid "Italian"
+msgstr "Kiitaliano"
+
+#: ../src/sugar3/speech.py:85
+msgid "Lojban"
+msgstr ""
+
+#: ../src/sugar3/speech.py:86
+msgid "Georgian"
+msgstr "Kijojia"
+
+#: ../src/sugar3/speech.py:87
+msgid "Kannada"
+msgstr ""
+
+#: ../src/sugar3/speech.py:88
+msgid "Kurdish"
+msgstr "Kikurdi"
+
+#: ../src/sugar3/speech.py:89
+msgid "Latin"
+msgstr "Kilatini"
+
+#: ../src/sugar3/speech.py:90
+msgid "Lithuanian"
+msgstr "Kilithuania"
+
+#: ../src/sugar3/speech.py:91
+msgid "Latvian"
+msgstr "Kilatvia"
+
+#: ../src/sugar3/speech.py:92
+msgid "Macedonian"
+msgstr "Kimasedonia"
+
+#: ../src/sugar3/speech.py:93
+msgid "Malayalam"
+msgstr "Kimalayalamu"
+
+#: ../src/sugar3/speech.py:94
+msgid "Malay"
+msgstr "Kimalesia"
+
+#: ../src/sugar3/speech.py:95
+msgid "Nepali"
+msgstr "Kinepali"
+
+#: ../src/sugar3/speech.py:96
+msgid "Dutch"
+msgstr "Kiholanzi"
+
+#: ../src/sugar3/speech.py:97
+msgid "Norwegian"
+msgstr "Kinoweji"
+
+#: ../src/sugar3/speech.py:98
+msgid "Punjabi"
+msgstr "Kipunjabi"
+
+#: ../src/sugar3/speech.py:99
+msgid "Polish"
+msgstr "Kipolandi"
+
+#: ../src/sugar3/speech.py:100
+msgid "Portuguese (Brazil)"
+msgstr "Kireno (Brazili)"
+
+#: ../src/sugar3/speech.py:101
+msgid "Portuguese (Portugal)"
+msgstr "Kireno (Ureno)"
+
+#: ../src/sugar3/speech.py:102
+msgid "Romanian"
+msgstr "Kiromania"
+
+#: ../src/sugar3/speech.py:103
+msgid "Russian"
+msgstr "Kirusi"
+
+#: ../src/sugar3/speech.py:104
+msgid "Slovak"
+msgstr "Kislovakia"
+
+#: ../src/sugar3/speech.py:105
+msgid "Albanian"
+msgstr "Kialbania"
+
+#: ../src/sugar3/speech.py:106
+msgid "Serbian"
+msgstr "Kiserbia"
+
+#: ../src/sugar3/speech.py:107
+msgid "Swedish"
+msgstr "Kiswidi"
+
+#: ../src/sugar3/speech.py:108
+msgid "Swahili-test"
+msgstr "Kiswahili"
+
+#: ../src/sugar3/speech.py:109
+msgid "Tamil"
+msgstr "Kitamil"
+
+#: ../src/sugar3/speech.py:110
+msgid "Turkish"
+msgstr "Kituruki"
+
+#: ../src/sugar3/speech.py:111
+msgid "Vietnam"
+msgstr "Kivietinamu"
+
+#: ../src/sugar3/speech.py:112
+msgid "Vietnam_hue"
+msgstr "Kivietinamu_hue"
+
+#: ../src/sugar3/speech.py:113
+msgid "Vietnam_sgn"
+msgstr "Kivietinamu_sgn"
+
+#: ../src/sugar3/speech.py:114
+msgid "Mandarin"
+msgstr "Kichina (Mandarin)"
+
+#: ../src/sugar3/speech.py:115
+msgid "Cantonese"
+msgstr "Kichina (Cantonese)"
