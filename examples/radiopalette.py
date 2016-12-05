@@ -10,7 +10,7 @@ box = Gtk.VBox()
 window.add(box)
 
 toolbar = Gtk.Toolbar()
-box.pack_start(toolbar, False)
+box.pack_start(toolbar, False, True, 0)
 
 text_view = Gtk.TextView()
 box.pack_start(text_view, True, True, 0)
