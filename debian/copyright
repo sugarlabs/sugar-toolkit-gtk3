@@ -82,7 +82,7 @@ Files: aclocal.m4
  m4/intltool.m4
  missing
  py-compile
-Copyright: 1992-2013, Free Software Foundation, Inc.
+Copyright: 1992-2015, Free Software Foundation, Inc.
   2001, Eazel, Inc.
   2001-2004, Red Hat, Inc.
 License-Grant:
@@ -97,11 +97,11 @@ License: GPL-2+ with Autoconf exception
  the same distribution terms that you use for the rest of that program.
 
 Files: m4/lt*
-Copyright: 2004-2005,2007-2009, Free Software Foundation, Inc.
+Copyright: 2004-2005,2007-2009,2011-2015, Free Software Foundation, Inc.
 License: GAP
 
 Files: configure
-Copyright: 1992-1996,1998-2012, Free Software Foundation, Inc.
+Copyright: 1992-1996,1998-2012,2014, Free Software Foundation, Inc.
 License-Grant:
  This configure script is free software; the Free Software Foundation
  gives unlimited permission to copy, distribute and modify it.
@@ -109,7 +109,7 @@ License: GAP
 
 Files: ltmain.sh
  m4/libtool.m4
-Copyright: 1996-2001,2003-2011, Free Software Foundation, Inc.
+Copyright: 1996-2015, Free Software Foundation, Inc.
 License-Grant:
  GNU Libtool is free software; you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the
