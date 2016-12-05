@@ -19,7 +19,6 @@
 """
 STABLE.
 """
-
 import logging
 
 from gi.repository import Gtk
@@ -27,6 +26,11 @@ from gi.repository import GObject
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
+
+'''
+Toolbutton is a simple button which can contain only
+one event, for example, buttons in toolbars.
+'''
 
 
 def _add_accelerator(tool_button):
@@ -58,6 +62,22 @@ def setup_accelerator(tool_button):
 
 
 class ToolButton(Gtk.ToolButton):
+    '''
+    UI for toolbutton.
+    A ToolButton is a ToolItem having an icon, a tooltip palette,
+    and an accelerator.
+    Use ToolButton() to create a new ToolButton.
+    Fuctions:
+        ToolButton()
+            Returns: a new toolbutton
+    Args:
+        accelerator (string): keyboard shortcut to be used to
+        activate this button.
+        tooltip (string): tooltip to be displayed when user
+        hovers over the tool button.
+    Keyword Args:
+        icon_name(string): name of themed icon which is to be used.
+    '''
 
     __gtype_name__ = 'SugarToolButton'
 
@@ -88,8 +108,12 @@ class ToolButton(Gtk.ToolButton):
         return True
 
     def set_tooltip(self, tooltip):
-        """ Set a simple palette with just a single label.
-        """
+        '''
+        Sets the tooltip of the tool button. Displays when
+        user hovers over the button with cursor.
+        Args:
+            tooltip (string): tooltip to be added to the button
+        '''
         if self.palette is None or self._tooltip is None:
             self.palette = Palette(tooltip)
         elif self.palette is not None:
@@ -101,6 +125,9 @@ class ToolButton(Gtk.ToolButton):
         Gtk.ToolButton.set_label(self, tooltip)
 
     def get_tooltip(self):
+        '''
+        Returns the above tooltip string.
+        '''
         return self._tooltip
 
     tooltip = GObject.property(type=str, setter=set_tooltip,
@@ -108,6 +135,9 @@ class ToolButton(Gtk.ToolButton):
 
     def get_hide_tooltip_on_click(self):
         return self._hide_tooltip_on_click
+        '''
+        Hides tooltip when clicked
+        '''
 
     def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
         if self._hide_tooltip_on_click != hide_tooltip_on_click:
@@ -118,21 +148,41 @@ class ToolButton(Gtk.ToolButton):
         setter=set_hide_tooltip_on_click)
 
     def set_accelerator(self, accelerator):
+        '''
+        Sets keyboard shortcut that activates this button.
+        Args:
+            accelerator(string): accelerator to be set. Should be in
+            form <modifier>Letter
+        '''
         self._accelerator = accelerator
         setup_accelerator(self)
 
     def get_accelerator(self):
+        '''
+        Returns the above accelerator string.
+        '''
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
     def set_icon_name(self, icon_name):
+        '''
+        Returns:
+            Sets the icon for the tool button from a named themed icon.
+        Args:
+            icon_name: Name of themed icon.
+        '''
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
 
     def get_icon_name(self):
+        '''
+        Returns:
+            Returns the name of the themed icon for the tool button,
+            Returns none if tool button has no icon.
+        '''
         if self.props.icon_widget is not None:
             return self.props.icon_widget.props.icon_name
         else:
@@ -164,6 +214,9 @@ class ToolButton(Gtk.ToolButton):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_draw(self, cr):
+        '''
+        Implementation method for drawing the tool button
+        '''
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before
@@ -180,5 +233,9 @@ class ToolButton(Gtk.ToolButton):
         return False
 
     def do_clicked(self):
+        '''
+        Implementation method for hiding the tooltip when the
+        tool button is clicked
+        '''
         if self._hide_tooltip_on_click and self.palette:
             self.palette.popdown(True)
