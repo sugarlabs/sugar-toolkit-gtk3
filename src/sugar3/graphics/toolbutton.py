@@ -28,8 +28,8 @@ from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker
 
 '''
-Toolbutton is a simple button which can contain only
-one event, for example, buttons in toolbars.
+Toolbutton is a simple button which can trigger only one
+task, for example, buttons in toolbars.
 '''
 
 
@@ -67,14 +67,13 @@ class ToolButton(Gtk.ToolButton):
     A ToolButton is a ToolItem having an icon, a tooltip palette,
     and an accelerator.
     Use ToolButton() to create a new ToolButton.
-    Fuctions:
-        ToolButton()
-            Returns: a new toolbutton
+
     Args:
         accelerator (string): keyboard shortcut to be used to
         activate this button.
         tooltip (string): tooltip to be displayed when user
         hovers over the tool button.
+
     Keyword Args:
         icon_name(string): name of themed icon which is to be used.
     '''
@@ -111,6 +110,7 @@ class ToolButton(Gtk.ToolButton):
         '''
         Sets the tooltip of the tool button. Displays when
         user hovers over the button with cursor.
+
         Args:
             tooltip (string): tooltip to be added to the button
         '''
@@ -135,11 +135,20 @@ class ToolButton(Gtk.ToolButton):
 
     def get_hide_tooltip_on_click(self):
         '''
-        Hides tooltip when clicked.
+        Returns True if the tooltip is hidden when a user
+        clicks on the button, otherwise returns false
         '''
         return self._hide_tooltip_on_click
 
     def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
+        '''
+        Sets whether or not the tooltip is hidden when a user
+        clicks on the radiotoolbutton.
+
+        Args:
+            hide_tooltip_on_click (bool): True if the tooltip is
+            hidden on click, and False otherwise
+        '''
         if self._hide_tooltip_on_click != hide_tooltip_on_click:
             self._hide_tooltip_on_click = hide_tooltip_on_click
 
@@ -150,6 +159,7 @@ class ToolButton(Gtk.ToolButton):
     def set_accelerator(self, accelerator):
         '''
         Sets keyboard shortcut that activates this button.
+
         Args:
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter.
@@ -170,6 +180,7 @@ class ToolButton(Gtk.ToolButton):
         '''
         Returns:
             Sets the icon for the tool button from a named themed icon.
+
         Args:
             icon_name: Name of themed icon.
         '''
