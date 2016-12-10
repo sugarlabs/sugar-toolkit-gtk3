@@ -12,7 +12,7 @@ test.show()
 tb1 = ToolButton()
 tb1.show()
 
-tb2 = ToolButton('activity-start')
+tb2 = ToolButton(icon_name='document-send', tooltip='document-send')
 tb2.show()
 
 Gtk.main()
