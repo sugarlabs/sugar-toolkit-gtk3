@@ -245,8 +245,8 @@ class ToolButton(Gtk.ToolButton):
 
     def do_clicked(self):
         '''
-        Implementation method for hiding the tooltip when the
-        tool button is clicked.
+        Implementation method for hiding the tooltip when
+        the tool button is clicked.
         '''
         if self._hide_tooltip_on_click and self.palette:
             self.palette.popdown(True)
