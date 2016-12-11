@@ -3,7 +3,7 @@ Author: Jonas Smedegaard <dr@jones.dk>
 Last-Update: 2010-02-08
 --- a/src/sugar3/activity/bundlebuilder.py
 +++ b/src/sugar3/activity/bundlebuilder.py
-@@ -37,7 +37,7 @@
+@@ -105,7 +105,7 @@
  from sugar3.bundle.activitybundle import ActivityBundle
  
  
