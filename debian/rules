@@ -68,6 +68,8 @@ bdeps +=, libasound2-dev | libasound-dev, libgirepository1.0-dev
 bdeps +=, linux-libc-dev [linux-any], hurd-dev [hurd-any]
 
 # Needed (always/often/seldom) at runtime
+#  * Carquinol used in sugar3.datastore.*
+#  * Jarabe used in sugar3.graphics.popwindow
 #  * alsa-utils (mayby still) needed to unmute devices at boot (bug#581504)
 #  * shared-mime-info (update-mime-database) used in sugar.bundle.bundlebuilder
 #  * unzip used in sugar3.bundle.bundle
@@ -87,6 +89,7 @@ depends-gir = $(pkg-lib) (= $(DEB_VERSION))
 recommends = unzip, telepathy-mission-control-5, alsa-utils
 recommends +=, telepathy-salut, shared-mime-info
 suggests = git, ipython
+suggests +=, python-jarabe, python-carquinyol
 
 CDBS_BUILD_DEPENDS +=, $(bdeps)
 CDBS_DEPENDS_$(pkg-python) +=, $(depends)
