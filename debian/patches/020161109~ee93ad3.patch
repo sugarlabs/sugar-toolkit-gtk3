@@ -1,0 +1,38 @@
+Description: Further gi.require_version calls
+ Activity logs have continued to report GObject Introspection version
+ warnings.
+Author: James Cameron <quozl@laptop.org>
+Origin: Upstream, https://github.com/sugarlabs/sugar-toolkit-gtk3/commit/ee93ad3
+Last-Update: 2016-12-11
+
+--- a/src/sugar3/activity/activity.py
++++ b/src/sugar3/activity/activity.py
+@@ -64,9 +64,14 @@
+ import cairo
+ import json
+ 
+-from gi.repository import Gtk
+-from gi.repository import Gdk
++import gi
++gi.require_version('Gtk', '3.0')
++gi.require_version('Gdk', '3.0')
++gi.require_version('SugarExt', '1.0')
++
+ from gi.repository import GObject
++from gi.repository import Gdk
++from gi.repository import Gtk
+ import dbus
+ import dbus.service
+ from dbus import PROPERTIES_IFACE
+--- a/src/sugar3/graphics/palettewindow.py
++++ b/src/sugar3/graphics/palettewindow.py
+@@ -26,6 +26,9 @@
+ import logging
+ import math
+ 
++import gi
++gi.require_version('SugarGestures', '1.0')
++
+ from gi.repository import Gdk
+ from gi.repository import Gtk
+ from gi.repository import GObject
