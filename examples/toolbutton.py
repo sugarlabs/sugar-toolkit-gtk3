@@ -21,7 +21,7 @@ separator = Gtk.SeparatorToolItem()
 toolbar_box.toolbar.insert(separator, -1)
 separator.show()
 
-tool_button = ToolButton(icon_name='view-radial')
+tool_button = ToolButton(icon_name='view-radial', tooltip='A toolbutton')
 toolbar_box.toolbar.insert(tool_button, -1)
 tool_button.show()
 
