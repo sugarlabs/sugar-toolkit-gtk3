@@ -1,3 +1,15 @@
+sugar-toolkit-gtk3 (0.110.0-2) unstable; urgency=medium
+
+  * Modernize CDBS use:
+    + Let CDBS resolve if build is targeted experimental.
+  * Update package relations:
+    + Relax to recommend (not depend on) webkit/webkit2.
+    + Favor webkit2 over webkit.
+    + Recommend webkit2 (without webkit fallback) strengthen favoring.
+    + Drop obsolete transitional conflicts/replaces/breaks.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Dec 2016 19:00:52 +0100
+
 sugar-toolkit-gtk3 (0.110.0-1) unstable; urgency=medium
 
   [ upstream ]
