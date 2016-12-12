@@ -1,3 +1,34 @@
+sugar-toolkit-gtk3 (0.110.0-1) unstable; urgency=medium
+
+  [ upstream ]
+  * New release(s).
+    Highlights:
+    + Collaboration: Handle tubes channel failure gracefully.
+    + Remove support for Rainbow.
+    + Allow one to run activities without Sugar shell.
+
+  [ Jonas Smedegaard ]
+  * Update licensing info:
+    + Fix add disclaimer to GAP License (arguably needs to be preserved
+      as part of "this notice").
+    + Extend coverage of autotools files.
+    + Extend coverage of Debian packaging.
+  * Declare compliance with Debian Policy 3.9.8.
+  * Track only stable 0.110 branch in watch file.
+  * Have git-buildpackage use versioned upstream branch.
+  * Have python-sugar3 suggest python-jarabe and python-carquinyol.
+  * Stop recommend older telepathy-gabble: No longer needed for
+    collaboration.
+  * Modernize CDBS use: Build-depend on licensecheck (not devscripts).
+  * Unfuzz patch 2002.
+  * Add patch cherry-picked upstream to fix avoid more introspection
+    versioning warnings.
+  * Use dh-autoreconf.
+    + Build-depend on dh-autoreconf and autoconf-archive.
+    Closes: Bug#744666. Thanks to Matthias Klose.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Dec 2016 03:41:58 +0100
+
 sugar-toolkit-gtk3 (0.106.1-1) unstable; urgency=medium
 
   [ upstream ]

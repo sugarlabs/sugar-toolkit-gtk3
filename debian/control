@@ -6,11 +6,13 @@ Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Santiago Ruano Rincón <santiago@debian.org>
 Build-Depends: cdbs (>= 0.4.90~),
  autotools-dev,
- devscripts,
+ licensecheck,
  python,
  python-dev (>= 2.3.5-7),
  debhelper,
  dh-buildinfo,
+ autoconf-archive,
+ dh-autoreconf,
  libgtk-3-dev,
  libgdk-pixbuf2.0-dev,
  libsm-dev,
@@ -28,7 +30,7 @@ Build-Depends: cdbs (>= 0.4.90~),
  linux-libc-dev [linux-any],
  hurd-dev [hurd-any],
  d-shlibs (>= 0.59~)
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Vcs-Git: git://anonscm.debian.org/pkg-sugar/sugar-toolkit-gtk3
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-sugar/sugar-toolkit-gtk3.git
 Homepage: http://wiki.sugarlabs.org/go/Sugar
