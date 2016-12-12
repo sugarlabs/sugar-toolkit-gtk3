@@ -40,22 +40,24 @@ from sugar3.graphics import toolbutton
 
 class RadioToolButton(Gtk.RadioToolButton):
     '''
-    An implementation of a "push" button.
+    The RadioToolButton class manages a Gtk.RadioToolButton styled for
+    Sugar.
 
     Args:
-        icon_name (string): name of icon to be used
+        icon_name (string): name of icon to be used.
 
     Keyword Args:
 
         accelerator (string): keyboard shortcut to be used to
-        activate this button
+            activate this button.
 
-        tooltip (string): tooltip to be displayed when user hovers over button
+        tooltip (string): tooltip to be displayed when user hovers
+            over button.
 
-        xo_color (sugar3.graphics.xocolor.XoColor): XoColor of button
+        xo_color (sugar3.graphics.xocolor.XoColor): XoColor of button.
 
         hide_tooltip_on_click (bool): Whether or not the tooltip
-            is hidden when user clicks on button
+            is hidden when user clicks on button.
     '''
 
     __gtype_name__ = 'SugarRadioToolButton'
@@ -88,11 +90,10 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def set_tooltip(self, tooltip):
         '''
-        Sets the tooltip of the radiotoolbutton. Displays when
-        user hovers over the button with cursor.
+        Set the tooltip.
 
         Args:
-            tooltip (string): tooltip to be added to the button
+            tooltip (string): tooltip to be set.
         '''
         if self.palette is None or self._tooltip is None:
             self.palette = Palette(tooltip)
@@ -106,7 +107,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def get_tooltip(self):
         '''
-        Returns the tooltip
+        Return the tooltip.
         '''
         return self._tooltip
 
@@ -115,18 +116,18 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def set_accelerator(self, accelerator):
         '''
-        Sets keyboard shortcut that activates this button
+        Set keyboard shortcut that activates this button.
 
         Args:
             accelerator (string): accelerator to be set. Should be in
-            form <modifier>Letter
+            form <modifier>Letter.
         '''
         self._accelerator = accelerator
         toolbutton.setup_accelerator(self)
 
     def get_accelerator(self):
         '''
-        Returns accelerator string
+        Return accelerator string.
         '''
         return self._accelerator
 
@@ -135,7 +136,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def set_icon_name(self, icon_name):
         '''
-        Sets name of icon
+        Set name of icon.
 
         Args:
             icon_name (string): name of icon
@@ -147,7 +148,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def get_icon_name(self):
         '''
-        Returns icon name
+        Return icon name, or None if there is no icon name.
         '''
         if self.props.icon_widget is not None:
             return self.props.icon_widget.props.icon_name
@@ -159,10 +160,10 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def set_xo_color(self, xo_color):
         '''
-        Sets XoColor of button icon
+        Set XoColor of button icon.
 
         Args:
-            xo_color (sugar3.graphics.xocolor.XoColor): xocolor to be set
+            xo_color (sugar3.graphics.xocolor.XoColor): xocolor to be set.
         '''
         if self._xo_color != xo_color:
             self._xo_color = xo_color
@@ -171,7 +172,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def get_xo_color(self):
         '''
-        Returns xocolor
+        Return xocolor.
         '''
         return self._xo_color
 
@@ -202,7 +203,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def do_draw(self, cr):
         '''
-        Implementation method for drawing the button
+        Implementation method for drawing the button.
         '''
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
@@ -221,19 +222,19 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def get_hide_tooltip_on_click(self):
         '''
-        Returns True if the tooltip is hidden when a user
-        clicks on the button, otherwise returns false
+        Return True if the tooltip is hidden when a user
+        clicks on the button, otherwise return False.
         '''
         return self._hide_tooltip_on_click
 
     def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
         '''
-        Sets whether or not the tooltip is hidden when a user
-        clicks on the radiotoolbutton.
+        Set whether or not the tooltip is hidden when a user
+        clicks on the button.
 
         Args:
             hide_tooltip_on_click (bool): True if the tooltip is
-            hidden on click, and False otherwise
+            hidden on click, and False otherwise.
         '''
         if self._hide_tooltip_on_click != hide_tooltip_on_click:
             self._hide_tooltip_on_click = hide_tooltip_on_click
@@ -244,7 +245,8 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     def do_clicked(self):
         '''
-        Implementation method for hiding the tooltip when the button is clicked
+        Implementation method for hiding the tooltip when
+        the button is clicked.
         '''
         if self._hide_tooltip_on_click and self.palette:
             self.palette.popdown(True)
