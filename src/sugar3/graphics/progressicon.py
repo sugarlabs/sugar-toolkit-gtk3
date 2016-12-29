@@ -14,6 +14,10 @@
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+'''
+The progressicon module provides a progress icon; a widget like progress
+bar which shows progress of a task
+'''
 
 from gi.repository import Gtk
 from sugar3.graphics.icon import get_surface
@@ -21,18 +25,36 @@ from sugar3.graphics import style
 
 
 class ProgressIcon(Gtk.DrawingArea):
-    """Display the progress filling the icon.
 
-    This class is compatible with the sugar3.graphics.icon.Icon class.
-
-    Call update(progress) with the new progress to update the icon.
-
-    The direction defaults to 'vertical', in which case the icon is
-    filled from bottom to top.  If direction is set to 'horizontal',
-    it will be filled from right to left or from left to right,
-    depending on the system's language RTL setting.
-
-    """
+    '''
+      UI interface for Progress Icon.
+      Display the progress filling the icon.
+      This class is compatible with the sugar3.graphics.icon.Icon class.
+      Call update(progress) with the new progress to update the icon.
+      The direction defaults to 'vertical', in which case the icon is
+      filled from bottom to top.  If direction is set to 'horizontal',
+      it will be filled from right to left or from left to right,
+      depending on the system's language RTL setting.
+    Parameters:
+      pixel_size - sets the icon size
+         [e.g. pixel_size=style.LARGE_ICON_SIZE]
+      icon_name - Name of icon
+         [e.g. icon_name='test_icon']
+      stroke color - Stroke color means border color.
+         [e.g.stroke_color=style.COLOR_BUTTON_RED.get_svg()]
+      fill_color - The main (inside) color of progressicon
+         [e.g. fill_color=style.COLOR_BLUE.get_svg()
+    Example:
+      test = common.Test()
+      icon = ProgressIcon(
+      pixel_size=style.LARGE_ICON_SIZE,
+      icon_name='computer-xo',
+      stroke_color=style.COLOR_BUTTON_GREY.get_svg(),
+      fill_color=style.COLOR_WHITE.get_svg())
+      test.pack_start(icon, True, True, 0)
+      icon.show()
+      ...
+    '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
         Gtk.DrawingArea.__init__(self)
@@ -95,5 +117,9 @@ class ProgressIcon(Gtk.DrawingArea):
         return (height, height)
 
     def update(self, progress):
+        '''
+        Updates progressicon with progress's value.
+        Example: update(0.9)
+        '''
         self._progress = progress
         self.queue_draw()
