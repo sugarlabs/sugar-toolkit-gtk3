@@ -17,10 +17,6 @@ toolbar_box = ToolbarBox()
 vbox.pack_start(toolbar_box, False, False, 0)
 toolbar_box.show()
 
-separator = Gtk.SeparatorToolItem()
-toolbar_box.toolbar.insert(separator, -1)
-separator.show()
-
 favorite_button = ToggleToolButton('emblem-favorite')
 favorite_button.set_tooltip('Favorite')
 toolbar_box.toolbar.insert(favorite_button, -1)
