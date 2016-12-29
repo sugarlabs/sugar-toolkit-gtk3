@@ -64,13 +64,11 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     having an icon, a tooltip palette, and an accelerator.
     Use ToggleToolButton.new() to create a new ToggleToolButton.
 
-    Fuctions:
-        ToggleToolButton()
-            Returns: a new toggletoolbutton
-
     Args:
         accelerator (string): keyboard shortcut to be used to
         activate this button.
+        Find about format here : goo.gl/JrEMWP
+
         tooltip (string): tooltip to be displayed when user
         hovers over toggle button.
 
@@ -162,6 +160,8 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         Args:
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
+            Find about format here : goo.gl/JrEMWP
+
 
         Example:
             set_accelerator(self, 'accel')
