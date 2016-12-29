@@ -67,7 +67,9 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     Args:
         accelerator (string): keyboard shortcut to be used to
         activate this button.
-        Find about format here : goo.gl/JrEMWP
+        Find about format here :
+        https://developer.gnome.org/gtk3/stable/gtk3-Keyboard-Accelerators.html#gtk-accelerator-parse
+
 
         tooltip (string): tooltip to be displayed when user
         hovers over toggle button.
@@ -160,8 +162,8 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         Args:
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
-            Find about format here : goo.gl/JrEMWP
-
+            Find about format here :
+            https://developer.gnome.org/gtk3/stable/gtk3-Keyboard-Accelerators.html#gtk-accelerator-parse
 
         Example:
             set_accelerator(self, 'accel')
