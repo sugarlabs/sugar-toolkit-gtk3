@@ -17,6 +17,27 @@
 # Boston, MA 02111-1307, USA.
 
 """
+The toolbutton module provides the ToolButton class, which is a
+Gtk.ToolButton with icon and tooltip styled for Sugar.
+
+Example:
+    Add a tool button to a window
+
+        from gi.repository import Gtk
+        from sugar3.graphics.toolbutton import ToolButton
+
+        def __clicked_cb(button):
+            print "tool button was clicked"
+
+        w = Gtk.Window()
+        w.connect('destroy', Gtk.main_quit)
+        b = ToolButton(icon_name='dialog-ok', tooltip='a tooltip')
+        b.connect('clicked', __clicked_cb)
+        w.add(b)
+        w.show_all()
+
+        Gtk.main()
+
 STABLE.
 """
 
@@ -58,6 +79,22 @@ def setup_accelerator(tool_button):
 
 
 class ToolButton(Gtk.ToolButton):
+    '''
+    The ToolButton class manages a Gtk.ToolButton styled for Sugar.
+
+    Keyword Args:
+        icon_name(string): name of themed icon.
+
+        accelerator (string): keyboard shortcut to be used to
+            activate this button.
+
+        tooltip (string): tooltip to be displayed when user hovers
+            over button.
+
+        hide_tooltip_on_click (bool): Whether or not the tooltip
+            is hidden when user clicks on button.
+
+    '''
 
     __gtype_name__ = 'SugarToolButton'
 
@@ -88,8 +125,12 @@ class ToolButton(Gtk.ToolButton):
         return True
 
     def set_tooltip(self, tooltip):
-        """ Set a simple palette with just a single label.
-        """
+        '''
+        Set the tooltip.
+
+        Args:
+            tooltip (string): tooltip to be set.
+        '''
         if self.palette is None or self._tooltip is None:
             self.palette = Palette(tooltip)
         elif self.palette is not None:
@@ -101,15 +142,30 @@ class ToolButton(Gtk.ToolButton):
         Gtk.ToolButton.set_label(self, tooltip)
 
     def get_tooltip(self):
+        '''
+        Return the tooltip.
+        '''
         return self._tooltip
 
     tooltip = GObject.property(type=str, setter=set_tooltip,
                                getter=get_tooltip)
 
     def get_hide_tooltip_on_click(self):
+        '''
+        Return True if the tooltip is hidden when a user
+        clicks on the button, otherwise return False.
+        '''
         return self._hide_tooltip_on_click
 
     def set_hide_tooltip_on_click(self, hide_tooltip_on_click):
+        '''
+        Set whether or not the tooltip is hidden when a user
+        clicks on the button.
+
+        Args:
+            hide_tooltip_on_click (bool): True if the tooltip is
+            hidden on click, and False otherwise.
+        '''
         if self._hide_tooltip_on_click != hide_tooltip_on_click:
             self._hide_tooltip_on_click = hide_tooltip_on_click
 
@@ -118,21 +174,39 @@ class ToolButton(Gtk.ToolButton):
         setter=set_hide_tooltip_on_click)
 
     def set_accelerator(self, accelerator):
+        '''
+        Set accelerator that activates the button.
+
+        Args:
+            accelerator(string): accelerator to be set.
+        '''
         self._accelerator = accelerator
         setup_accelerator(self)
 
     def get_accelerator(self):
+        '''
+        Return accelerator that activates the button.
+        '''
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
     def set_icon_name(self, icon_name):
+        '''
+        Set name of icon.
+
+        Args:
+            icon_name (string): name of icon
+        '''
         icon = Icon(icon_name=icon_name)
         self.set_icon_widget(icon)
         icon.show()
 
     def get_icon_name(self):
+        '''
+        Return icon name, or None if there is no icon name.
+        '''
         if self.props.icon_widget is not None:
             return self.props.icon_widget.props.icon_name
         else:
@@ -164,6 +238,9 @@ class ToolButton(Gtk.ToolButton):
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_draw(self, cr):
+        '''
+        Implementation method for drawing the button.
+        '''
         if self.palette and self.palette.is_up():
             allocation = self.get_allocation()
             # draw a black background, has been done by the engine before
@@ -180,5 +257,9 @@ class ToolButton(Gtk.ToolButton):
         return False
 
     def do_clicked(self):
+        '''
+        Implementation method for hiding the tooltip when
+        the button is clicked.
+        '''
         if self._hide_tooltip_on_click and self.palette:
             self.palette.popdown(True)
