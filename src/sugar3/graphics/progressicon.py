@@ -15,8 +15,8 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 '''
-The progressicon module provides a progress icon; a widget like progress
-bar which shows progress of a task
+The progressicon module provides a progress icon.
+A progress icon is a progress indicator in the form of an icon.
 '''
 
 from gi.repository import Gtk
