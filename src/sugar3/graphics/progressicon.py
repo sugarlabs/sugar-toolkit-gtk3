@@ -15,7 +15,6 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 '''
-The progressicon module provides a progress icon.
 A progress icon is a progress indicator in the form of an icon.
 '''
 
@@ -37,18 +36,18 @@ class ProgressIcon(Gtk.DrawingArea):
     it will be filled from right to left or from left to right,
     depending on the system's language RTL setting.
 
-    Parameters:
+    Args:
 
-      pixel_size - sets the icon size
+      pixel_size(string): sets the icon size
          [e.g. pixel_size=style.LARGE_ICON_SIZE]
 
-      icon_name - Name of icon
+      icon_name(string): Name of icon
          [e.g. icon_name='test_icon']
 
-      stroke color - Stroke color means border color.
+      stroke_color(string): Stroke color means border color.
          [e.g.stroke_color=style.COLOR_BUTTON_RED.get_svg()]
 
-      fill_color - The main (inside) color of progressicon
+      fill_color(string): The main (inside) color of progressicon
          [e.g. fill_color=style.COLOR_BLUE.get_svg()
     """
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
@@ -105,10 +104,16 @@ class ProgressIcon(Gtk.DrawingArea):
         cr.paint()
 
     def do_get_preferred_width(self):
+        '''
+        Calculate the minimum and natural width of the progressicon.
+        '''
         width = self._stroke.get_width()
         return (width, width)
 
     def do_get_preferred_height(self):
+        '''
+        Calculate the minimum and natural height of the progressicon.
+        '''
         height = self._stroke.get_height()
         return (height, height)
 
