@@ -387,8 +387,8 @@ class Installer(Packager):
         if info.has_option('Activity', 'summary'):
             cp.set(section, 'Comment', info.get('Activity', 'summary'))
 
-        for path in glob(os.path.join(activity_path, 'locale',
-                                      '*', 'activity.linfo')):
+        for path in sorted(glob(os.path.join(activity_path, 'locale',
+                                             '*', 'activity.linfo'))):
             locale = path.split(os.path.sep)[-2]
             info = ConfigParser()
             info.read(path)
