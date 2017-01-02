@@ -24,7 +24,7 @@ from sugar3.graphics import style
 
 
 class ProgressIcon(Gtk.DrawingArea):
-    """
+    '''
     Display the progress filling the icon.
 
     This class is compatible with the sugar3.graphics.icon.Icon class.
@@ -38,7 +38,7 @@ class ProgressIcon(Gtk.DrawingArea):
 
     Args:
 
-      pixel_size(string): sets the icon size
+      pixel_size(integer): sets the icon size
          [e.g. pixel_size=style.LARGE_ICON_SIZE]
 
       icon_name(string): Name of icon
@@ -49,7 +49,7 @@ class ProgressIcon(Gtk.DrawingArea):
 
       fill_color(string): The main (inside) color of progressicon
          [e.g. fill_color=style.COLOR_BLUE.get_svg()
-    """
+    '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
         Gtk.DrawingArea.__init__(self)
