@@ -117,9 +117,9 @@ class PaletteMenuBox(Gtk.VBox):
             item_or_widget (:class:`Gtk.Widget` or menu item or seperator):
                 item or widget to add the the palette
             horizontal_padding (int):  by default,
-                :class:`sugar3.graphics.style.DEFAULT_SPCAING` is applied
+                :class:`sugar3.graphics.style.DEFAULT_SPACING` is applied
             vertical_padding (int):  by default,
-                :class:`sugar3.graphics.style.DEFAULT_SPCAING` is applied
+                :class:`sugar3.graphics.style.DEFAULT_SPACING` is applied
 
         Returns:
             None
