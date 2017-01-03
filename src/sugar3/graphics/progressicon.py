@@ -14,6 +14,9 @@
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+'''
+A progress icon is a progress indicator in the form of an icon.
+'''
 
 from gi.repository import Gtk
 from sugar3.graphics.icon import get_surface
@@ -21,18 +24,23 @@ from sugar3.graphics import style
 
 
 class ProgressIcon(Gtk.DrawingArea):
-    """Display the progress filling the icon.
-
+    '''
+    Display the progress filling the icon.
     This class is compatible with the sugar3.graphics.icon.Icon class.
-
     Call update(progress) with the new progress to update the icon.
-
     The direction defaults to 'vertical', in which case the icon is
     filled from bottom to top.  If direction is set to 'horizontal',
     it will be filled from right to left or from left to right,
     depending on the system's language RTL setting.
-
-    """
+    Args:
+      pixel_size (integer): sets the icon size
+         [e.g. pixel_size=style.LARGE_ICON_SIZE]
+      icon_name (string): Name of icon
+         [e.g. icon_name='test_icon']
+      stroke_color (string): Stroke color means border color.
+      fill_color (string): The main (inside) color of progressicon
+         [e.g. fill_color=style.COLOR_BLUE.get_svg()
+    '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
         Gtk.DrawingArea.__init__(self)
@@ -87,13 +95,23 @@ class ProgressIcon(Gtk.DrawingArea):
         cr.paint()
 
     def do_get_preferred_width(self):
+        '''
+        Calculate the minimum and natural width of the progressicon.
+        '''
         width = self._stroke.get_width()
         return (width, width)
 
     def do_get_preferred_height(self):
+        '''
+        Calculate the minimum and natural height of the progressicon.
+        '''
         height = self._stroke.get_height()
         return (height, height)
 
     def update(self, progress):
+        '''
+        Updates progressicon with progress's value.
+        Example: update(0.9)
+        '''
         self._progress = progress
         self.queue_draw()
