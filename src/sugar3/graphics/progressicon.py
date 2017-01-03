@@ -38,16 +38,15 @@ class ProgressIcon(Gtk.DrawingArea):
 
     Args:
 
-      pixel_size(integer): sets the icon size
+      pixel_size (integer): sets the icon size
          [e.g. pixel_size=style.LARGE_ICON_SIZE]
 
-      icon_name(string): Name of icon
+      icon_name (string): Name of icon
          [e.g. icon_name='test_icon']
 
-      stroke_color(string): Stroke color means border color.
-         [e.g.stroke_color=style.COLOR_BUTTON_RED.get_svg()]
+      stroke_color (string): Stroke color means border color.
 
-      fill_color(string): The main (inside) color of progressicon
+      fill_color (string): The main (inside) color of progressicon
          [e.g. fill_color=style.COLOR_BLUE.get_svg()
     '''
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
