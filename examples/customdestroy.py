@@ -22,6 +22,7 @@ def window_destroy_cb(*kwargs):
     print "window destroy"
     Gtk.main_quit()
 
+
 window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
 window.connect("destroy", window_destroy_cb)
 window.show()
@@ -29,6 +30,7 @@ window.show()
 
 def treeview_destroy_cb(*kwargs):
     print "treeview destroy"
+
 
 treeview = Gtk.TreeView()
 treeview.connect("destroy", treeview_destroy_cb)

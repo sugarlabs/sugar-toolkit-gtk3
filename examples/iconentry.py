@@ -14,6 +14,7 @@ def __go_next_cb(entry, icon_pos, data=None):
 def __entry_activate_cb(widget, data=None):
     print 'Entry activate'
 
+
 w = Gtk.Window()
 w.connect("destroy", _destroy_cb)
 

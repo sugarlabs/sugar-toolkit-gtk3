@@ -31,6 +31,8 @@ def set_theme():
             sugar_theme = 'sugar-100'
     settings.set_property('gtk-theme-name', sugar_theme)
     settings.set_property('gtk-icon-theme-name', 'sugar')
+
+
 set_theme()
 
 

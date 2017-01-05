@@ -25,6 +25,7 @@ def __animation_completed_cb(anim):
 def _destroy_cb(widget, data=None):
     Gtk.main_quit()
 
+
 w = Gtk.Window()
 w.connect("destroy", _destroy_cb)
 

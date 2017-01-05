@@ -23,6 +23,7 @@ def __clicked_cb(button):
     button.set_tooltip(str(n+1))
     print "tool button click count %d" % n
 
+
 tool_button = ToolButton(icon_name='view-radial', tooltip='0')
 tool_button.connect('clicked', __clicked_cb)
 tool_button.set_hide_tooltip_on_click(False)

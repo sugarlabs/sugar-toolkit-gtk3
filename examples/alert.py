@@ -10,6 +10,7 @@ def _destroy_cb(widget, data=None):
 def __start_response_cb(widget, data=None):
     print 'Response: start download'
 
+
 w = Gtk.Window()
 w.connect("destroy", _destroy_cb)
 

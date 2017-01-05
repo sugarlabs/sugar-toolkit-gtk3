@@ -40,6 +40,7 @@ class MyBox(Gtk.VBox):
 
         self.show_all()
 
+
 vbox = MyBox()
 test.pack_start(vbox, True, True, 0)
 vbox.show()
