@@ -6,6 +6,7 @@ from sugar3.graphics.combobox import ComboBox
 def __combo_changed_cb(combo):
     print 'Combo changed to %r' % combo.get_value()
 
+
 w = Gtk.Window()
 w.connect("destroy", Gtk.main_quit)
 

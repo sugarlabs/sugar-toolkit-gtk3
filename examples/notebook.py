@@ -6,6 +6,7 @@ from sugar3.graphics.notebook import Notebook
 def _destroy_cb(widget, data=None):
     Gtk.main_quit()
 
+
 w = Gtk.Window()
 w.connect("destroy", _destroy_cb)
 

@@ -52,6 +52,7 @@ def _button_activated_cb(button):
         test.get_children()[i].props.icon_name = data[i][0]
         test.get_children()[i].props.xo_color = XoColor(data[i][1])
 
+
 for d in data:
     icon = Icon(icon_name=d[0],
                 icon_size=Gtk.IconSize.LARGE_TOOLBAR,

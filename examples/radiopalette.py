@@ -21,6 +21,7 @@ def echo(button, label):
         return
     text_view.props.buffer.props.text += '\n' + label
 
+
 # RadioMenuButton
 
 palette = RadioPalette()

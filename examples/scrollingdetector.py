@@ -15,9 +15,11 @@ def _scroll_start_cb(event, treeview, invoker):
     print "Scroll starts"
     invoker.detach()
 
+
 def _scroll_end_cb(event, treeview, invoker):
     print "Scroll ends"
     invoker.attach_treeview(treeview)
+
 
 test = common.Test()
 test.show()
