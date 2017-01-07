@@ -38,7 +38,8 @@ def get_svg_color_string(color):
 
 
 class _ColorButton(Gtk.Button):
-    """This is a ColorButton for Sugar. It is similar to the Gtk.ColorButton,
+    """
+    This is a ColorButton for Sugar. It is similar to the Gtk.ColorButton,
     but does not have any alpha support.
     Instead of a color selector dialog it will pop up a Sugar palette.
 
@@ -90,6 +91,11 @@ class _ColorButton(Gtk.Button):
             self._invoker.palette = self._palette
 
     def create_palette(self):
+        '''
+        Create a new palette with selected color and title.
+        (Here the title is 'Choose a color' and the bgcolor
+        is black.)
+        '''
         if self._has_palette:
             self._palette = _ColorPalette(color=self._color,
                                           primary_text=self._title)
@@ -135,9 +141,24 @@ class _ColorButton(Gtk.Button):
     color = GObject.property(type=object, getter=get_color, setter=set_color)
 
     def set_icon_name(self, icon_name):
+        '''
+        Sets the icon for the tool button from a named themed icon.
+        If it is none then no icon will be shown.
+        
+        Args:
+            icon_name(string): The name for a themed icon.
+            It can be set as 'None' too.
+        
+        Example:
+            set_icon_name('view-radial')
+        '''
         self._preview.props.icon_name = icon_name
 
     def get_icon_name(self):
+        '''
+        The get_icon_name() method returns the value of the icon_name
+        property that contains the name of a themed icon or None.
+        '''
         return self._preview.props.icon_name
 
     icon_name = GObject.property(type=str,
@@ -468,16 +489,53 @@ class ColorToolButton(Gtk.ToolItem):
         return True
 
     def set_accelerator(self, accelerator):
+        '''
+        Sets keyboard shortcut that activates this button.
+        
+        Args:
+            accelerator(string): accelerator to be set. Should be in
+            form <modifier>Letter
+            Find about format here :
+            https://developer.gnome.org/gtk3/stable/gtk3-Keyboard-Accelerators.html#gtk-accelerator-parse
+        
+        Example:
+            set_accelerator(self, 'accel')
+        '''
         self._accelerator = accelerator
         setup_accelerator(self)
 
     def get_accelerator(self):
+        '''
+        Returns the above accelerator string.
+        '''
         return self._accelerator
 
     accelerator = GObject.property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
     def create_palette(self):
+        '''
+        The create_palette function is called when the palette needs to be
+        invoked.  For example, when the user has right clicked the icon or
+        the user has hovered over the icon for a long time.
+        
+        The create_palette will only be called once or zero times.  The palette
+        returned will be stored and re-used if the user invokes the palette
+        multiple times.
+        
+        Your create_palette implementation does not need to
+        :any:`Gtk.Widget.show` the palette, as this will be done by the
+        invoker.  However, you still need to show
+        the menu items, etc that you place in the palette.
+        
+        Returns:
+            
+            sugar3.graphics.palette.Palette, or None to indicate that you
+            do not want a palette shown
+        
+        The default implementation returns None, to indicate no palette should
+        be shown.
+        '''
         self._palette = self.get_child().create_palette()
         return self._palette
 
@@ -515,35 +573,70 @@ class ColorToolButton(Gtk.ToolItem):
     toolbar_box = property(get_toolbar_box)
 
     def set_color(self, color):
+        '''
+        Sets the color of the colorbutton
+        '''
         self.get_child().props.color = color
 
     def get_color(self):
+        '''
+        Gets the above set color string.
+        '''
         return self.get_child().props.color
 
     color = GObject.property(type=object, getter=get_color, setter=set_color)
 
     def set_icon_name(self, icon_name):
+        '''
+        Sets the icon for the tool button from a named themed icon.
+        If it is none then no icon will be shown.
+        
+        Args:
+            icon_name(string): The name for a themed icon.
+            It can be set as 'None' too.
+        
+        Example:
+            set_icon_name('view-radial')
+        '''
         self.get_child().props.icon_name = icon_name
 
     def get_icon_name(self):
+        '''
+        The get_icon_name() method returns the value of the icon_name
+        property that contains the name of a themed icon or None.
+        '''
         return self.get_child().props.icon_name
 
     icon_name = GObject.property(type=str,
                                  getter=get_icon_name, setter=set_icon_name)
 
     def set_icon_size(self, icon_size):
+        '''
+        Sets the size of icons in the colorbutton.
+        '''
         self.get_child().props.icon_size = icon_size
 
     def get_icon_size(self):
+        '''
+        Gets the size of icons in the colorbutton.
+        '''
         return self.get_child().props.icon_size
 
     icon_size = GObject.property(type=int,
                                  getter=get_icon_size, setter=set_icon_size)
 
     def set_title(self, title):
+        '''
+        The set_title() method sets the "title" property to the value of 
+        title. The "title" property contains the string that is used to 
+        set the colorbutton title.
+        '''
         self.get_child().props.title = title
 
     def get_title(self):
+        '''
+        Return the above title string.
+        '''
         return self.get_child().props.title
 
     title = GObject.property(type=str, getter=get_title, setter=set_title)
