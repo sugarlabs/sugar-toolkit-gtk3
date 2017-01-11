@@ -25,6 +25,7 @@ from gi.repository import Gtk
 
 from sugar3.graphics.palette import Palette
 from sugar3.graphics.icon import Icon
+from sugar3.graphics import style
 
 import common
 
@@ -33,23 +34,23 @@ test = common.TestPalette()
 palette = Palette('Test radio and toggle')
 test.set_palette(palette)
 
-box = Gtk.HBox()
+box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
 toggle = Gtk.ToggleButton()
 
-icon = Icon(icon_name='go-previous', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+icon = Icon(icon_name='go-previous', pixel_size=style.STANDARD_ICON_SIZE)
 toggle.set_image(icon)
 
-box.pack_start(toggle, False)
+box.pack_start(toggle, False, False, 0)
 toggle.show()
 
 radio = Gtk.RadioButton()
 
-icon = Icon(icon_name='go-next', icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+icon = Icon(icon_name='go-next', pixel_size=style.STANDARD_ICON_SIZE)
 radio.set_image(icon)
 
 radio.set_mode(False)
-box.pack_start(radio, False)
+box.pack_start(radio, False, False, 0)
 radio.show()
 
 palette.set_content(box)

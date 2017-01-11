@@ -1,6 +1,8 @@
 from gi.repository import Gtk
 
 from sugar3.graphics.combobox import ComboBox
+from common import set_theme
+set_theme()
 
 
 def __combo_changed_cb(combo):
@@ -8,7 +10,7 @@ def __combo_changed_cb(combo):
 
 
 w = Gtk.Window()
-w.connect("destroy", Gtk.main_quit)
+w.connect("delete-event", Gtk.main_quit)
 
 combo = ComboBox()
 combo.append_item(True, 'one')

@@ -33,15 +33,16 @@ def set_theme():
     settings.set_property('gtk-icon-theme-name', 'sugar')
 
 
-set_theme()
+class Test(Gtk.Box):
 
-
-class Test(Gtk.VBox):
     def __init__(self):
-        GObject.GObject.__init__(self)
+        GObject.GObject.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+
+        set_theme()
 
 
 class TestPalette(Test):
+
     def __init__(self):
         Test.__init__(self)
 
@@ -51,7 +52,7 @@ class TestPalette(Test):
         toolbar.insert(self._invoker, -1)
         self._invoker.show()
 
-        self.pack_start(toolbar, False)
+        self.pack_start(toolbar, False, False, 0)
         toolbar.show()
 
     def set_palette(self, palette):
@@ -59,9 +60,10 @@ class TestPalette(Test):
 
 
 class TestRunner(object):
+
     def run(self, test):
         window = Gtk.Window()
-        window.connect('destroy', lambda w: Gtk.main_quit())
+        window.connect('delete-event', Gtk.main_quit)
         window.add(test)
         test.show()
 

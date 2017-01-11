@@ -1,15 +1,17 @@
 from gi.repository import Gtk
-
 from sugar3.graphics.radiotoolbutton import RadioToolButton
 from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton
 from sugar3.graphics.xocolor import XoColor
 
 
+from common import set_theme
+set_theme()
+
 window = Gtk.Window()
 window.show()
-window.connect("destroy", Gtk.main_quit)
+window.connect("delete-event", Gtk.main_quit)
 
-box = Gtk.HBox()
+box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 window.add(box)
 box.show()
 

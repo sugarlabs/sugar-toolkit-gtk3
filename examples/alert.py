@@ -1,10 +1,7 @@
 from gi.repository import Gtk
-
 from sugar3.graphics.alert import TimeoutAlert
-
-
-def _destroy_cb(widget, data=None):
-    Gtk.main_quit()
+from common import set_theme
+set_theme()
 
 
 def __start_response_cb(widget, data=None):
@@ -12,9 +9,9 @@ def __start_response_cb(widget, data=None):
 
 
 w = Gtk.Window()
-w.connect("destroy", _destroy_cb)
+w.connect("delete-event", Gtk.main_quit)
 
-box = Gtk.VBox()
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 w.add(box)
 
 alert = TimeoutAlert(9)

@@ -7,7 +7,7 @@ import common
 test = common.Test()
 test.show()
 
-box = Gtk.HBox()
+box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 test.pack_start(box, True, True, 0)
 box.show()
 
@@ -18,7 +18,7 @@ box.pack_start(notebook, True, True, 0)
 notebook.show()
 
 for i in range(3):
-    hbox = Gtk.HBox()
+    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
     notebook.append_page(hbox, Gtk.Label('Page %d' % (i + 1)))
     hbox.show()
 
@@ -38,7 +38,7 @@ notebook.set_action_widget(button, Gtk.PackType.END)
 button.show()
 
 for i in range(3):
-    hbox = Gtk.HBox()
+    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
     notebook.append_page(hbox, Gtk.Label('Page %d' % (i + 1)))
     hbox.show()
 

@@ -1,26 +1,25 @@
 #!/usr/bin/python
 from gi.repository import Gtk
 
-
 import common
 test = common.Test()
 test.show()
 
 
-class MyBox(Gtk.VBox):
+class MyBox(Gtk.Box):
 
     def __init__(self):
-        Gtk.VBox.__init__(self)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
 
-        self.scrolled = Gtk.ScrolledWindow()
-        self.scrolled.set_policy(Gtk.PolicyType.AUTOMATIC,
-                                 Gtk.PolicyType.AUTOMATIC)
+        scrolled = Gtk.ScrolledWindow()
+        scrolled.set_policy(Gtk.PolicyType.AUTOMATIC,
+                            Gtk.PolicyType.AUTOMATIC)
 
-        self.store = Gtk.ListStore(str, str)
+        store = Gtk.ListStore(str, str)
         for i in range(5):
-            self.store.append([str(i), 'Item %s' % i])
+            store.append([str(i), 'Item %s' % i])
 
-        self.treeview = Gtk.TreeView(self.store)
+        treeview = Gtk.TreeView(store)
         renderer_no_sens = Gtk.CellRendererText()
         # set 'sensitive' property
         renderer_no_sens.set_property('sensitive', False)
@@ -29,21 +28,21 @@ class MyBox(Gtk.VBox):
 
         column = Gtk.TreeViewColumn('\'sensitive\' False',
                                     renderer_no_sens, text=0)
-        self.treeview.append_column(column)
+        treeview.append_column(column)
 
         column = Gtk.TreeViewColumn('\'sensitive\' True',
                                     renderer, text=1)
-        self.treeview.append_column(column)
+        treeview.append_column(column)
 
-        self.scrolled.add(self.treeview)
-        self.add(self.scrolled)
+        scrolled.add(treeview)
+        self.pack_start(scrolled, True, True, 0)
 
         self.show_all()
 
 
-vbox = MyBox()
-test.pack_start(vbox, True, True, 0)
-vbox.show()
+box = MyBox()
+test.pack_start(box, True, True, 0)
+box.show()
 
 if __name__ == '__main__':
     common.main(test)

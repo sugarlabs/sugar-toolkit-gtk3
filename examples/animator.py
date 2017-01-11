@@ -4,8 +4,12 @@ from sugar3.graphics import animator
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import style
 
+from common import set_theme
+set_theme()
+
 
 class _Animation(animator.Animation):
+
     def __init__(self, icon, start_size, end_size):
         animator.Animation.__init__(self, 0.0, 1.0)
 
@@ -22,14 +26,10 @@ def __animation_completed_cb(anim):
     print 'Animation completed'
 
 
-def _destroy_cb(widget, data=None):
-    Gtk.main_quit()
-
-
 w = Gtk.Window()
-w.connect("destroy", _destroy_cb)
+w.connect('delete-event', Gtk.main_quit)
 
-box = Gtk.VBox()
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 w.add(box)
 
 anim = animator.Animator(5)
