@@ -2,14 +2,17 @@ from gi.repository import Gtk
 
 from sugar3.graphics.toolbutton import ToolButton
 from sugar3.graphics.toolbarbox import ToolbarBox, ToolbarButton
+from common import set_theme
+set_theme()
+
 
 window = Gtk.Window()
 
-box = Gtk.VBox()
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 window.add(box)
 
 toolbar = ToolbarBox()
-box.pack_start(toolbar, False)
+box.pack_start(toolbar, False, False, 0)
 
 tollbarbutton_1 = ToolbarButton(
     page=Gtk.Button('sub-widget #1'),
@@ -48,5 +51,6 @@ tollbarbutton_4 = ToolbarButton(
     icon_name='document-save')
 toolbar.toolbar.insert(tollbarbutton_4, -1)
 
+window.connect('delete-event', Gtk.main_quit)
 window.show_all()
 Gtk.main()

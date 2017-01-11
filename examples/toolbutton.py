@@ -8,11 +8,11 @@ import common
 
 test = common.Test()
 
-vbox = Gtk.VBox()
-test.pack_start(vbox, True, True, 0)
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+test.pack_start(box, True, True, 0)
 
 toolbar_box = ToolbarBox()
-vbox.pack_start(toolbar_box, False, False, 0)
+box.pack_start(toolbar_box, False, False, 0)
 
 separator = Gtk.SeparatorToolItem()
 toolbar_box.toolbar.insert(separator, -1)
@@ -20,7 +20,7 @@ toolbar_box.toolbar.insert(separator, -1)
 
 def __clicked_cb(button):
     n = int(button.get_tooltip())
-    button.set_tooltip(str(n+1))
+    button.set_tooltip(str(n + 1))
     print "tool button click count %d" % n
 
 

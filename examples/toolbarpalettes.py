@@ -28,12 +28,12 @@ import common
 
 test = common.Test()
 
-vbox = Gtk.VBox()
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
 theme_icons = Gtk.IconTheme.get_default().list_icons()
 
 toolbar = Gtk.Toolbar()
-vbox.pack_start(toolbar, False)
+box.pack_start(toolbar, False, False, 0)
 toolbar.show()
 
 for i in range(0, 5):
@@ -43,11 +43,11 @@ for i in range(0, 5):
     button.show()
 
 content = Gtk.Label()
-vbox.pack_start(content, True, True, 0)
+box.pack_start(content, True, True, 0)
 content.show()
 
 tray = HTray()
-vbox.pack_start(tray, False)
+box.pack_start(tray, False, False, 0)
 tray.show()
 
 for i in range(0, 30):
@@ -56,8 +56,8 @@ for i in range(0, 30):
     tray.add_item(button)
     button.show()
 
-test.pack_start(vbox, True, True, 0)
-vbox.show()
+test.pack_start(box, True, True, 0)
+box.show()
 
 test.show()
 

@@ -10,20 +10,20 @@ import common
 
 test = common.Test()
 
-vbox = Gtk.VBox()
-test.pack_start(vbox, True, True, 0)
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+test.pack_start(box, True, True, 0)
 
 toolbar_box = ToolbarBox()
-vbox.pack_start(toolbar_box, False, False, 0)
+box.pack_start(toolbar_box, False, False, 0)
 
 separator = Gtk.SeparatorToolItem()
 toolbar_box.toolbar.insert(separator, -1)
 
 icon = ProgressIcon(
-      pixel_size=style.LARGE_ICON_SIZE,
-      icon_name='computer-xo',
-      stroke_color=style.COLOR_BUTTON_GREY.get_svg(),
-      fill_color=style.COLOR_WHITE.get_svg())
+    pixel_size=style.LARGE_ICON_SIZE,
+    icon_name='computer-xo',
+    stroke_color=style.COLOR_BUTTON_GREY.get_svg(),
+    fill_color=style.COLOR_WHITE.get_svg())
 test.pack_start(icon, True, True, 0)
 icon.show()
 

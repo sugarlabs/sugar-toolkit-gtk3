@@ -8,6 +8,7 @@ We can do the cleanup in the python destructor method instead.
 
 
 class MyCellRenderer(Gtk.CellRenderer):
+
     def __init__(self):
         Gtk.CellRenderer.__init__(self)
 

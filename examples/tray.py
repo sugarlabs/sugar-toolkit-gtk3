@@ -28,7 +28,7 @@ import common
 
 test = common.Test()
 
-vbox = Gtk.VBox()
+vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
 tray = HTray()
 vbox.pack_start(tray, False, False, 0)
@@ -50,7 +50,7 @@ for i in range(0, 10):
     tray.add_item(icon)
     icon.show()
 
-hbox = Gtk.HBox()
+hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
 tray = VTray()
 hbox.pack_start(tray, False, False, 0)

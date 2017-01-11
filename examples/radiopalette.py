@@ -3,14 +3,17 @@ from gi.repository import Gtk
 from sugar3.graphics.radiopalette import RadioPalette, RadioMenuButton, \
     RadioToolsButton
 from sugar3.graphics.radiotoolbutton import RadioToolButton
+from common import set_theme
+set_theme()
+
 
 window = Gtk.Window()
 
-box = Gtk.VBox()
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 window.add(box)
 
 toolbar = Gtk.Toolbar()
-box.pack_start(toolbar, False)
+box.pack_start(toolbar, False, False, 0)
 
 text_view = Gtk.TextView()
 box.pack_start(text_view, True, True, 0)
@@ -70,5 +73,6 @@ palette.append(button, 'menu.document-send')
 button = RadioToolsButton(palette=palette)
 toolbar.insert(button, -1)
 
+window.connect('delete-event', Gtk.main_quit)
 window.show_all()
 Gtk.main()

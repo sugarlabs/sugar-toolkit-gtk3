@@ -1,10 +1,8 @@
 from gi.repository import Gtk
 
 from sugar3.graphics import iconentry
-
-
-def _destroy_cb(widget, data=None):
-    Gtk.main_quit()
+from common import set_theme
+set_theme()
 
 
 def __go_next_cb(entry, icon_pos, data=None):
@@ -16,9 +14,9 @@ def __entry_activate_cb(widget, data=None):
 
 
 w = Gtk.Window()
-w.connect("destroy", _destroy_cb)
+w.connect("delete-event", Gtk.main_quit)
 
-box = Gtk.VBox()
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 w.add(box)
 
 entry = iconentry.IconEntry()

@@ -6,7 +6,7 @@ import common
 test = common.Test()
 test.show()
 
-box = Gtk.HBox()
+box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 test.pack_start(box, True, False, 10)
 box.show()
 

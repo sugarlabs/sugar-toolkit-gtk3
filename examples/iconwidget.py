@@ -23,44 +23,45 @@ from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.xocolor import XoColor
+from sugar3.graphics import style
 
 import common
 
 test = common.Test()
 
-hbox = Gtk.HBox()
-test.pack_start(hbox, True, True, 0)
-sensitive_box = Gtk.VBox()
-insensitive_box = Gtk.VBox()
+box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+test.pack_start(box, True, True, 0)
+sensitive_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+insensitive_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-hbox.pack_start(sensitive_box, True, True, 0)
-hbox.pack_start(insensitive_box, True, True, 0)
-hbox.show_all()
+box.pack_start(sensitive_box, True, True, 0)
+box.pack_start(insensitive_box, True, True, 0)
+box.show_all()
 
 
 def create_icon_widgets(box, sensitive=True):
     icon = Icon(icon_name='go-previous')
-    icon.props.icon_size = Gtk.IconSize.LARGE_TOOLBAR
+    icon.props.pixel_size = style.STANDARD_ICON_SIZE
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='computer-xo',
-                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
+                pixel_size=style.STANDARD_ICON_SIZE,
                 xo_color=XoColor())
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='battery-000',
-                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
+                pixel_size=style.STANDARD_ICON_SIZE,
                 badge_name='emblem-busy')
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)
     icon.show()
 
     icon = Icon(icon_name='gtk-new',
-                icon_size=Gtk.IconSize.LARGE_TOOLBAR,
+                pixel_size=style.STANDARD_ICON_SIZE,
                 badge_name='gtk-cancel')
     box.pack_start(icon, True, True, 0)
     icon.set_sensitive(sensitive)

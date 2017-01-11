@@ -29,7 +29,7 @@ model = Gtk.ListStore(str)
 data_dir = os.getenv('GTK_DATA_PREFIX', '/usr/')
 
 iconlist = os.listdir(os.path.join(data_dir,
-                      'share/icons/sugar/scalable/actions/'))
+                                   'share/icons/sugar/scalable/actions/'))
 print "Displaying %s icons" % len(iconlist)
 for icon in iconlist:
     icon = os.path.basename(icon)

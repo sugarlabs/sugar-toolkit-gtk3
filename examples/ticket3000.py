@@ -28,7 +28,7 @@ import common
 test = common.Test()
 
 toolbar = Gtk.Toolbar()
-test.pack_start(toolbar, False)
+test.pack_start(toolbar, False, False, 0)
 toolbar.show()
 
 button = ToolButton('go-previous')

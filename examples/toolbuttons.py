@@ -11,12 +11,12 @@ import common
 test = common.Test()
 test.show()
 
-vbox = Gtk.VBox()
-test.pack_start(vbox, True, True, 0)
-vbox.show()
+box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+test.pack_start(box, True, True, 0)
+box.show()
 
 toolbar_box = ToolbarBox()
-vbox.pack_start(toolbar_box, False, False, 0)
+box.pack_start(toolbar_box, False, False, 0)
 toolbar_box.show()
 
 radial_button = RadioToolButton(icon_name='view-radial')
