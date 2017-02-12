@@ -560,7 +560,7 @@ def cmd_install(config, options):
     """Install the activity in the system"""
 
     installer = Installer(Builder(config))
-    installer.install(options.prefix, options.install_mime)
+    installer.install(options.prefix, options.install_mime, options.install_desktop_file)
 
 
 def _po_escape(string):
@@ -645,6 +645,10 @@ def start():
         "--skip-install-mime", dest="install_mime",
         action="store_false", default=True,
         help="Skip the installation of custom mime types in the system")
+    install_parser.add_argument(
+        "--skip-install-desktop-file", dest="install_desktop_file",
+        action="store_false", default=True,
+        help="Skip the installation of desktop file in the system")
 
     check_parser = subparsers.add_parser(
         "check", help="Run tests for the activity")
