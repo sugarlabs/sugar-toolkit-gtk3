@@ -141,6 +141,9 @@ class Window(Gtk.Window):
         self.add(self.__vbox)
         self.__vbox.show()
 
+        sugar_cursor = Gdk.Cursor(Gdk.CursorType.LEFT_PTR)
+        self.get_root_window().set_cursor(sugar_cursor)
+
         self._is_fullscreen = False
         self._unfullscreen_button = UnfullscreenButton()
         self._unfullscreen_button.set_transient_for(self)
