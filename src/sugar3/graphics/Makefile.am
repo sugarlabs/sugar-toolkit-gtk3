@@ -1,3 +1,5 @@
+SUBDIRS = webkit
+
 sugardir = $(pythondir)/sugar3/graphics
 sugar_PYTHON =              \
 	alert.py                \
