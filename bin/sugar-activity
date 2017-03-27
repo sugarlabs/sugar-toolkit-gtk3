@@ -114,7 +114,7 @@ def main():
     os.environ['SUGAR_BUNDLE_PATH'] = os.path.abspath(os.curdir)
 
     bundle_path = os.environ['SUGAR_BUNDLE_PATH']
-    sys.path.append(bundle_path)
+    sys.path.insert(0, bundle_path)
 
     try:
         bundle = ActivityBundle(bundle_path)
