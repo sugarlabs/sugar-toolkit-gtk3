@@ -365,7 +365,10 @@ class Installer(Packager):
             if not os.path.exists(path):
                 os.makedirs(path)
 
-            shutil.copy(source, dest)
+            if os.path.isdir(source):
+                shutil.copytree(source, dest)
+            else:
+                shutil.copy(source, dest)
 
         if install_mime:
             self.config.bundle.install_mime_type(self.config.source_dir)
