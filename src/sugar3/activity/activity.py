@@ -72,6 +72,7 @@ gi.require_version('SugarExt', '1.0')
 from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
+from gi.repository import Gio
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
@@ -88,6 +89,7 @@ from sugar3 import power
 from sugar3.profile import get_nick_name, get_color
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
+from sugar3.activity.alerts import SaveAlert
 from sugar3.graphics import style
 from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
@@ -379,6 +381,10 @@ class Activity(Window, Gtk.Container):
         self._max_participants = None
         self._invites_queue = []
         self._jobject = None
+        self._jobject_clone = None
+        self._pre_naming = False
+        self._is_resumed = False
+        self._save_alert = None
         self._read_file_called = False
 
         self._session = _get_session()
@@ -417,9 +423,24 @@ class Activity(Window, Gtk.Container):
         self.shared_activity = None
         self._join_id = None
 
+        # This part is responsible for cloning the _jobject
         if handle.object_id is None:
             logging.debug('Creating a jobject.')
             self._jobject = self._initialize_journal_object()
+            self._is_resumed = False
+            self.set_title(self._jobject.metadata['title'])
+
+        elif Gio.Settings(
+            'org.sugarlabs.journal').get_boolean('save-as'):
+            self._is_resumed = True
+            logging.debug('Creating a jobject clone')
+            self._file_path = self._jobject.file_path
+            self._jobject_clone = self._jobject
+            self._jobject = self._initialize_journal_object()
+            self._jobject.file_path = self._file_path
+            self.set_title(self._jobject_clone.metadata['title'])
+
+        self._jobject_clone_title = self._jobject.metadata['title']
 
         if handle.invited:
             wait_loop = GObject.MainLoop()
@@ -445,9 +466,18 @@ class Activity(Window, Gtk.Container):
                                            self.__jobject_updated_cb)
         self.set_title(self._jobject.metadata['title'])
 
+        self.connect('key-press-event', self.__keypress_event_cb)
+
         bundle = get_bundle_instance(get_bundle_path())
         self.set_icon_from_file(bundle.get_icon())
 
+    def __keypress_event_cb(self, widget, event):
+        keyname = Gdk.keyval_name(event.keyval)
+
+        if keyname == 'Escape':
+            if not self._save_alert is None:
+                self._save_alert.disconnect(self._save_as_hid)
+                self.remove_alert(self._save_alert)
 
     def run_main_loop(self):
         Gtk.main()
@@ -1081,6 +1111,45 @@ class Activity(Window, Gtk.Container):
 
         return True
 
+    def _show_saveas_alert(self):
+        self._save_alert = SaveAlert()
+        self._save_alert.props.title = _('Save As')
+        self._save_alert.props.msg = _('Provide the name for the project')
+        if self._is_resumed:
+            self._save_alert._name_entry.set_text(self._jobject_clone.metadata['title'])
+        else:
+            self._save_alert._name_entry.set_text(self._jobject.metadata['title'])
+        ok_icon = Icon(icon_name='dialog-ok')
+        self._save_alert.add_button(Gtk.ResponseType.OK,
+                                    _('Save'), ok_icon)
+        cancel_icon = Icon(icon_name='dialog-cancel')
+        can = self._save_alert.add_button(Gtk.ResponseType.CANCEL,
+                                          _('Quit'), cancel_icon)
+        self._save_as_hid = self._save_alert.connect('response',
+                                                     self.__save_response_cb)
+        self.add_alert(self._save_alert)
+        self._save_alert.show()
+
+    def __save_response_cb(self, alert, response_id):
+        self.remove_alert(alert)
+        if self._save_alert._name_entry.get_text() is '':
+            self._show_saveas_alert()
+            return
+
+        if response_id == Gtk.ResponseType.OK:
+            self._skip_save_datafiles = False
+            self._jobject.metadata[
+                'title'] = self._save_alert._name_entry.get_text()
+            self._post_alert_close()
+            return
+
+        if response_id == Gtk.ResponseType.CANCEL:
+            self._skip_save_datafiles = True
+            if self._is_resumed is True:
+                datastore.delete(self._jobject.get_object_id())
+            self._post_alert_close()
+            return
+
     def _prepare_close(self, skip_save=False):
         if not skip_save:
             try:
@@ -1123,8 +1192,37 @@ class Activity(Window, Gtk.Container):
         if not self.can_close():
             return
 
+        _save_as_enabled = Gio.Settings(
+            'org.sugarlabs.journal').get_boolean('save-as')
+
+        if (_save_as_enabled):
+            self._alert_confirmation()
+
         self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
         self.emit('_closing')
+
+        if (self._pre_naming is True or not _save_as_enabled):
+            self._post_alert_close()
+
+    def _alert_confirmation(self):
+        '''
+        Displays the alert for user to provide the save name on close.
+        '''
+        if (self._jobject.metadata['title'] != self._jobject_clone_title):
+            self._skip_save_datafiles = False
+            self._pre_naming = True
+            return
+
+        else:
+            self._show_saveas_alert()
+            return False
+
+    def _post_alert_close(self):
+        if (Gio.Settings(
+            'org.sugarlabs.journal').get_boolean('save-as')):
+            skip_save = self._skip_save_datafiles
+        else:
+            skip_save = False
 
         if not self._closing:
             if not self._prepare_close(skip_save):
