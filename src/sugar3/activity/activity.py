@@ -1114,7 +1114,7 @@ class Activity(Window, Gtk.Container):
     def _show_saveas_alert(self):
         self._save_alert = SaveAlert()
         self._save_alert.props.title = _('Save As')
-        self._save_alert.props.msg = _('Provide the name for the project')
+        self._save_alert.props.msg = _('Provide the name for this journal entry  (Press \'Esc\' to Cancel)')
         if self._is_resumed:
             self._save_alert._name_entry.set_text(self._jobject_clone.metadata['title'])
         else:
@@ -1124,7 +1124,7 @@ class Activity(Window, Gtk.Container):
                                     _('Save'), ok_icon)
         cancel_icon = Icon(icon_name='dialog-cancel')
         can = self._save_alert.add_button(Gtk.ResponseType.CANCEL,
-                                          _('Quit'), cancel_icon)
+                                          _('Don\'t Save'), cancel_icon)
         self._save_as_hid = self._save_alert.connect('response',
                                                      self.__save_response_cb)
         self.add_alert(self._save_alert)
