@@ -1132,10 +1132,6 @@ class Activity(Window, Gtk.Container):
 
     def __save_response_cb(self, alert, response_id):
         self.remove_alert(alert)
-        if self._save_alert._name_entry.get_text() is '':
-            self._show_saveas_alert()
-            return
-
         if response_id == Gtk.ResponseType.OK:
             self._skip_save_datafiles = False
             self._jobject.metadata[
