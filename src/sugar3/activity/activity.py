@@ -384,6 +384,7 @@ class Activity(Window, Gtk.Container):
         self._jobject_clone = None
         self._pre_naming = False
         self._is_resumed = False
+        self._skip_save_datafiles = False
         self._save_alert = None
         self._read_file_called = False
 
@@ -673,7 +674,7 @@ class Activity(Window, Gtk.Container):
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
 
-        if self._prepare_close() and not self._updating_jobject:
+        if self._prepare_close(False) and not self._updating_jobject:
             session.will_quit(self, True)
 
     def __session_quit_cb(self, client):
@@ -1133,9 +1134,11 @@ class Activity(Window, Gtk.Container):
     def __save_response_cb(self, alert, response_id):
         self.remove_alert(alert)
         if response_id == Gtk.ResponseType.OK:
+            if (self._is_resumed and \
+                self._save_alert._name_entry.get_text() == self._jobject_clone.metadata['title']):
+                    datastore.delete(self._jobject_clone.get_object_id())
             self._skip_save_datafiles = False
-            self._jobject.metadata[
-                'title'] = self._save_alert._name_entry.get_text()
+            self._jobject.metadata['title'] = self._save_alert._name_entry.get_text()
             self._post_alert_close()
             return
 
@@ -1146,7 +1149,7 @@ class Activity(Window, Gtk.Container):
             self._post_alert_close()
             return
 
-    def _prepare_close(self, skip_save=False):
+    def _prepare_close(self, skip_save):
         if not skip_save:
             try:
                 self.save()
@@ -1202,7 +1205,8 @@ class Activity(Window, Gtk.Container):
 
     def _alert_confirmation(self):
         '''
-        Displays the alert for user to provide the save name on close.
+        Displays the alert for user to provide the save name on close
+        if the instance is already named.
         '''
         if (self._jobject.metadata['title'] != self._jobject_clone_title):
             self._skip_save_datafiles = False
@@ -1214,12 +1218,7 @@ class Activity(Window, Gtk.Container):
             return False
 
     def _post_alert_close(self):
-        if (Gio.Settings(
-            'org.sugarlabs.journal').get_boolean('save-as')):
-            skip_save = self._skip_save_datafiles
-        else:
-            skip_save = False
-
+        skip_save = self._skip_save_datafiles
         if not self._closing:
             if not self._prepare_close(skip_save):
                 return
