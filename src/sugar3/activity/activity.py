@@ -440,6 +440,7 @@ class Activity(Window, Gtk.Container):
             self._jobject = self._initialize_journal_object()
             self._jobject.file_path = self._file_path
             self.set_title(self._jobject_clone.metadata['title'])
+            self.metadata['title'] = self._jobject_clone.metadata['title']
 
         self._jobject_clone_title = self._jobject.metadata['title']
 
@@ -479,6 +480,9 @@ class Activity(Window, Gtk.Container):
             if not self._save_alert is None:
                 self._save_alert.disconnect(self._save_as_hid)
                 self.remove_alert(self._save_alert)
+
+        if keyname == 'Return':
+            self.__save_response_cb(self._save_alert, Gtk.ResponseType.OK)
 
     def run_main_loop(self):
         Gtk.main()
