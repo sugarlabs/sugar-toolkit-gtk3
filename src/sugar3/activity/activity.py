@@ -386,6 +386,7 @@ class Activity(Window, Gtk.Container):
         self._is_resumed = False
         self._skip_save_datafiles = False
         self._save_alert = None
+        self._save_alert_active = False
         self._read_file_called = False
 
         self._session = _get_session()
@@ -475,14 +476,14 @@ class Activity(Window, Gtk.Container):
 
     def __keypress_event_cb(self, widget, event):
         keyname = Gdk.keyval_name(event.keyval)
+        if self._save_alert_active:
+            if keyname == 'Escape':
+                if not self._save_alert is None:
+                    self._save_alert.disconnect(self._save_as_hid)
+                    self.remove_alert(self._save_alert)
 
-        if keyname == 'Escape':
-            if not self._save_alert is None:
-                self._save_alert.disconnect(self._save_as_hid)
-                self.remove_alert(self._save_alert)
-
-        if keyname == 'Return':
-            self.__save_response_cb(self._save_alert, Gtk.ResponseType.OK)
+            if keyname == 'Return':
+                self.__save_response_cb(self._save_alert, Gtk.ResponseType.OK)
 
     def run_main_loop(self):
         Gtk.main()
@@ -1119,7 +1120,7 @@ class Activity(Window, Gtk.Container):
     def _show_saveas_alert(self):
         self._save_alert = SaveAlert()
         self._save_alert.props.title = _('Save As')
-        self._save_alert.props.msg = _('Provide the name for this journal entry  (Press \'Esc\' to Cancel)')
+        self._save_alert.props.msg = _('Provide the name for this journal entry')
         if self._is_resumed:
             self._save_alert._name_entry.set_text(self._jobject_clone.metadata['title'])
         else:
@@ -1134,8 +1135,10 @@ class Activity(Window, Gtk.Container):
                                                      self.__save_response_cb)
         self.add_alert(self._save_alert)
         self._save_alert.show()
+        self._save_alert_active = True
 
     def __save_response_cb(self, alert, response_id):
+        self._save_alert_active = False
         self.remove_alert(alert)
         if response_id == Gtk.ResponseType.OK:
             if (self._is_resumed and \
@@ -1200,8 +1203,8 @@ class Activity(Window, Gtk.Container):
 
         if (_save_as_enabled):
             self._alert_confirmation()
-
-        self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+        else:
+            self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
         self.emit('_closing')
 
         if (self._pre_naming is True or not _save_as_enabled):
