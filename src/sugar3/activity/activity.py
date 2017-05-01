@@ -1136,6 +1136,7 @@ class Activity(Window, Gtk.Container):
         self.add_alert(self._save_alert)
         self._save_alert.show()
         self._save_alert_active = True
+        GObject.idle_add(lambda: self._save_alert._name_entry.grab_focus())
 
     def __save_response_cb(self, alert, response_id):
         self._save_alert_active = False
