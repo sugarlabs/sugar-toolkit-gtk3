@@ -1133,10 +1133,13 @@ class Activity(Window, Gtk.Container):
                                           _('Don\'t Save'), cancel_icon)
         self._save_as_hid = self._save_alert.connect('response',
                                                      self.__save_response_cb)
+        self._save_alert.connect('realize', self.__grab_focus)
         self.add_alert(self._save_alert)
         self._save_alert.show()
         self._save_alert_active = True
-        GObject.idle_add(lambda: self._save_alert._name_entry.grab_focus())
+
+    def __grab_focus(self, alert):
+        self._save_alert._name_entry.grab_focus()
 
     def __save_response_cb(self, alert, response_id):
         self._save_alert_active = False
@@ -1148,6 +1151,7 @@ class Activity(Window, Gtk.Container):
             self._skip_save_datafiles = False
             self._jobject.metadata['title'] = self._save_alert._name_entry.get_text()
             self._post_alert_close()
+            self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
             return
 
         if response_id == Gtk.ResponseType.CANCEL:
@@ -1203,30 +1207,20 @@ class Activity(Window, Gtk.Container):
             'org.sugarlabs.journal').get_boolean('save-as')
 
         if (_save_as_enabled):
-            self._alert_confirmation()
+            if (self._jobject.metadata['title'] != self._jobject_clone_title):
+                self._skip_save_datafiles = False
+                self._pre_naming = True
+            else:
+                self._show_saveas_alert()
         else:
             self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        self.emit('_closing')
 
         if (self._pre_naming is True or not _save_as_enabled):
             self._post_alert_close()
 
-    def _alert_confirmation(self):
-        '''
-        Displays the alert for user to provide the save name on close
-        if the instance is already named.
-        '''
-        if (self._jobject.metadata['title'] != self._jobject_clone_title):
-            self._skip_save_datafiles = False
-            self._pre_naming = True
-            return
-
-        else:
-            self._show_saveas_alert()
-            return False
-
     def _post_alert_close(self):
         skip_save = self._skip_save_datafiles
+        self.emit('_closing')
         if not self._closing:
             if not self._prepare_close(skip_save):
                 return
