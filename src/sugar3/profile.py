@@ -30,6 +30,7 @@ from sugar3.graphics.xocolor import XoColor
 import getpass
 
 _profile = None
+_journal_settings = None
 
 
 class Profile(object):
@@ -222,3 +223,22 @@ def get_color():
 
 def get_pubkey():
     return get_profile().pubkey
+
+
+def _get_journal_settings_boolean(name, default):
+    global _journal_settings
+
+    if not _journal_settings:
+        if 'org.sugarlabs.journal' not in Gio.Settings.list_schemas():
+            return default
+
+        _journal_settings = Gio.Settings('org.sugarlabs.journal')
+
+    if name not in _journal_settings.list_keys():
+        return default
+
+    return _journal_settings.get_boolean(name)
+
+
+def get_save_as():
+    return _get_journal_settings_boolean('save-as', True)
