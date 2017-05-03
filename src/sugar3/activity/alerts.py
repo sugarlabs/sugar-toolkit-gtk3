@@ -6,32 +6,25 @@ from sugar3.graphics import style
 
 class SaveAlert(Alert):
     """
-    Creates a alert popup to prompt the user to specify
-    a name for the project to be saved.
+    An alert popup to prompt the user to give a name to the journal
+    entry.
     """
     __gtype_name__ = 'SaveAsAlert'
 
     def __init__(self, **kwargs):
         Alert.__init__(self, **kwargs)
-        # Name entry box
-        self._name_view = Gtk.EventBox()
-        self._name_view.show()
 
-        # Entry box
-        self._name_entry = Gtk.Entry()
+        self.entry = Gtk.Entry()
         halign = Gtk.Alignment.new(0, 0, 1, 0)
+        # FIXME: access to private member
         self._hbox.pack_start(halign, True, True, 0)
-        halign.add(self._name_view)
-        halign.show()
-
-        self._name_view.add(self._name_entry)
-        self._name_entry.show()
+        halign.add(self.entry)
 
         halign = Gtk.Alignment.new(0, 0, 0, 0)
+        # FIXME: access to private member
         self._buttons_box = Gtk.HButtonBox()
         self._buttons_box.set_layout(Gtk.ButtonBoxStyle.END)
         self._buttons_box.set_spacing(style.DEFAULT_SPACING)
         halign.add(self._buttons_box)
         self._hbox.pack_start(halign, False, False, 0)
-        halign.show()
         self.show_all()
