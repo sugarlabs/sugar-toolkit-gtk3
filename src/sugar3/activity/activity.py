@@ -1084,6 +1084,11 @@ class Activity(Window, Gtk.Container):
         pservice.share_activity(self, private=private)
 
     def _show_keep_failed_dialog(self):
+        '''
+        A keep error means the activity write_file method raised an
+        exception before writing the file, or the datastore cannot be
+        written to.
+        '''
         alert = Alert()
         alert.props.title = _('Keep error')
         alert.props.msg = _('Keep error: all changes will be lost')
@@ -1096,11 +1101,11 @@ class Activity(Window, Gtk.Container):
         alert.add_button(Gtk.ResponseType.OK, _('Stop anyway'), stop_icon)
 
         self.add_alert(alert)
-        alert.connect('response', self._keep_failed_dialog_response_cb)
+        alert.connect('response', self.__keep_failed_dialog_response_cb)
 
         self.reveal()
 
-    def _keep_failed_dialog_response_cb(self, alert, response_id):
+    def __keep_failed_dialog_response_cb(self, alert, response_id):
         self.remove_alert(alert)
         if response_id == Gtk.ResponseType.OK:
             self.close(skip_save=True)
