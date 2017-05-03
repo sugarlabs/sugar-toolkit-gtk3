@@ -72,7 +72,6 @@ gi.require_version('SugarExt', '1.0')
 from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
-from gi.repository import Gio
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
@@ -86,7 +85,7 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
 from sugar3 import power
-from sugar3.profile import get_nick_name, get_color
+from sugar3.profile import get_nick_name, get_color, get_save_as
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.activity.alerts import SaveAlert
@@ -382,11 +381,7 @@ class Activity(Window, Gtk.Container):
         self._invites_queue = []
         self._jobject = None
         self._jobject_clone = None
-        self._pre_naming = False
         self._is_resumed = False
-        self._skip_save_datafiles = False
-        self._save_alert = None
-        self._save_alert_active = False
         self._read_file_called = False
 
         self._session = _get_session()
@@ -425,15 +420,13 @@ class Activity(Window, Gtk.Container):
         self.shared_activity = None
         self._join_id = None
 
-        # This part is responsible for cloning the _jobject
         if handle.object_id is None:
             logging.debug('Creating a jobject.')
             self._jobject = self._initialize_journal_object()
             self._is_resumed = False
             self.set_title(self._jobject.metadata['title'])
 
-        elif Gio.Settings(
-            'org.sugarlabs.journal').get_boolean('save-as'):
+        elif get_save_as():
             self._is_resumed = True
             logging.debug('Creating a jobject clone')
             self._file_path = self._jobject.file_path
@@ -469,28 +462,21 @@ class Activity(Window, Gtk.Container):
                                            self.__jobject_updated_cb)
         self.set_title(self._jobject.metadata['title'])
 
-        self.connect('key-press-event', self.__keypress_event_cb)
-
         bundle = get_bundle_instance(get_bundle_path())
         self.set_icon_from_file(bundle.get_icon())
 
-    def __keypress_event_cb(self, widget, event):
-        keyname = Gdk.keyval_name(event.keyval)
-        if self._save_alert_active:
-            if keyname == 'Escape':
-                if not self._save_alert is None:
-                    self._save_alert.disconnect(self._save_as_hid)
-                    self.remove_alert(self._save_alert)
+        self._busy_count = 0
+        self._stop_buttons = []
 
-            if keyname == 'Return':
-                self.__save_response_cb(self._save_alert, Gtk.ResponseType.OK)
+    def add_stop_button(self, button):
+        self._stop_buttons.append(button)
 
     def run_main_loop(self):
         Gtk.main()
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
-       
+
         icon_color = get_color().to_string()
 
         jobject = datastore.create()
@@ -679,7 +665,7 @@ class Activity(Window, Gtk.Container):
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
 
-        if self._prepare_close(False) and not self._updating_jobject:
+        if self._prepare_close() and not self._updating_jobject:
             session.will_quit(self, True)
 
     def __session_quit_cb(self, client):
@@ -1122,51 +1108,59 @@ class Activity(Window, Gtk.Container):
 
         return True
 
-    def _show_saveas_alert(self):
-        self._save_alert = SaveAlert()
-        self._save_alert.props.title = _('Save As')
-        self._save_alert.props.msg = _('Provide the name for this journal entry')
+    def _show_stop_dialog(self):
+        for button in self._stop_buttons:
+            button.set_sensitive(False)
+        alert = SaveAlert()
+        alert.props.title = _('Stop')
+        alert.props.msg = _('Stop: name your journal entry')
         if self._is_resumed:
-            self._save_alert._name_entry.set_text(self._jobject_clone.metadata['title'])
+            alert.entry.set_text(self._jobject_clone.metadata['title'])
         else:
-            self._save_alert._name_entry.set_text(self._jobject.metadata['title'])
-        ok_icon = Icon(icon_name='dialog-ok')
-        self._save_alert.add_button(Gtk.ResponseType.OK,
-                                    _('Save'), ok_icon)
-        cancel_icon = Icon(icon_name='dialog-cancel')
-        can = self._save_alert.add_button(Gtk.ResponseType.CANCEL,
-                                          _('Don\'t Save'), cancel_icon)
-        self._save_as_hid = self._save_alert.connect('response',
-                                                     self.__save_response_cb)
-        self._save_alert.connect('realize', self.__grab_focus)
-        self.add_alert(self._save_alert)
-        self._save_alert.show()
-        self._save_alert_active = True
+            alert.entry.set_text(self._jobject.metadata['title'])
 
-    def __grab_focus(self, alert):
-        self._save_alert._name_entry.grab_focus()
+        button = alert.add_button(Gtk.ResponseType.OK, _('Save'),
+                                  Icon(icon_name='dialog-ok'))
+        button.add_accelerator('clicked', self.sugar_accel_group,
+                               Gdk.KEY_Return, 0, 0)
 
-    def __save_response_cb(self, alert, response_id):
-        self._save_alert_active = False
-        self.remove_alert(alert)
+        button = alert.add_button(Gtk.ResponseType.ACCEPT, _('Erase'),
+                                  Icon(icon_name='list-remove'))
+
+        button = alert.add_button(Gtk.ResponseType.CANCEL, _('Cancel'),
+                                  Icon(icon_name='dialog-cancel'))
+        button.add_accelerator('clicked', self.sugar_accel_group,
+                               Gdk.KEY_Escape, 0, 0)
+
+        alert.connect('realize', self.__stop_dialog_realize_cb)
+        alert.connect('response', self.__stop_dialog_response_cb)
+        self.add_alert(alert)
+        alert.show()
+
+    def __stop_dialog_realize_cb(self, alert):
+        # FIXME: does not work with Write activity
+        alert.entry.grab_focus()
+
+    def __stop_dialog_response_cb(self, alert, response_id):
         if response_id == Gtk.ResponseType.OK:
-            if (self._is_resumed and \
-                self._save_alert._name_entry.get_text() == self._jobject_clone.metadata['title']):
+            title = alert.entry.get_text()
+            if self._is_resumed and \
+                title == self._jobject_clone.metadata['title']:
                     datastore.delete(self._jobject_clone.get_object_id())
-            self._skip_save_datafiles = False
-            self._jobject.metadata['title'] = self._save_alert._name_entry.get_text()
-            self._post_alert_close()
-            self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-            return
+            self._jobject.metadata['title'] = title
+            self._do_close(False)
+
+        if response_id == Gtk.ResponseType.ACCEPT:
+            datastore.delete(self._jobject.get_object_id())
+            self._do_close(True)
 
         if response_id == Gtk.ResponseType.CANCEL:
-            self._skip_save_datafiles = True
-            if self._is_resumed is True:
-                datastore.delete(self._jobject.get_object_id())
-            self._post_alert_close()
-            return
+            for button in self._stop_buttons:
+                button.set_sensitive(True)
 
-    def _prepare_close(self, skip_save):
+        self.remove_alert(alert)
+
+    def _prepare_close(self, skip_save=False):
         if not skip_save:
             try:
                 self.save()
@@ -1194,6 +1188,16 @@ class Activity(Window, Gtk.Container):
         self._session.unregister(self)
         power.get_power_manager().shutdown()
 
+    def _do_close(self, skip_save):
+        self.busy()
+        self.emit('_closing')
+        if not self._closing:
+            if not self._prepare_close(skip_save):
+                return
+
+        if not self._updating_jobject:
+            self._complete_close()
+
     def close(self, skip_save=False):
         '''
         Request that the activity be stopped and saved to the Journal
@@ -1208,30 +1212,13 @@ class Activity(Window, Gtk.Container):
         if not self.can_close():
             return
 
-        _save_as_enabled = Gio.Settings(
-            'org.sugarlabs.journal').get_boolean('save-as')
-
-        if (_save_as_enabled):
-            if (self._jobject.metadata['title'] != self._jobject_clone_title):
-                self._skip_save_datafiles = False
-                self._pre_naming = True
+        if get_save_as():
+            if self._jobject.metadata['title'] != self._jobject_clone_title:
+                self._do_close(skip_save)
             else:
-                self._show_saveas_alert()
+                self._show_stop_dialog()
         else:
-            self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-
-        if (self._pre_naming is True or not _save_as_enabled):
-            self._post_alert_close()
-
-    def _post_alert_close(self):
-        skip_save = self._skip_save_datafiles
-        self.emit('_closing')
-        if not self._closing:
-            if not self._prepare_close(skip_save):
-                return
-
-        if not self._updating_jobject:
-            self._complete_close()
+            self._do_close(skip_save)
 
     def __realize_cb(self, window):
         display_name = Gdk.Display.get_default().get_name()
@@ -1287,6 +1274,42 @@ class Activity(Window, Gtk.Container):
 
     def get_document_path(self, async_cb, async_err_cb):
         async_err_cb(NotImplementedError())
+
+    def busy(self):
+        '''
+        Show that the activity is busy.  If used, must be called once
+        before a lengthy operation, and unbusy must be called after
+        the operation completes.
+
+        .. code-block:: python
+
+            self.busy()
+            self.long_operation()
+            self.unbusy()
+
+        '''
+        if self._busy_count == 0:
+            self._old_cursor = self.get_window().get_cursor()
+            self._set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self._busy_count += 1
+
+    def unbusy(self):
+        '''
+        Returns:
+
+            int: a count of further calls to unbusy expected
+
+        Show that the activity is not busy.  An equal number of calls
+        to unbusy are required to balance the calls to busy.
+        '''
+        self._busy_count -= 1
+        if self._busy_count == 0:
+            self._set_cursor(self._old_cursor)
+        return self._busy_count
+
+    def _set_cursor(self, cursor):
+        self.get_window().set_cursor(cursor)
+        Gdk.flush()
 
 
 class _ClientHandler(dbus.service.Object, DBusProperties):
