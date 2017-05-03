@@ -1115,25 +1115,33 @@ class Activity(Window, Gtk.Container):
         alert.props.title = _('Stop')
         alert.props.msg = _('Stop: name your journal entry')
         if self._is_resumed:
-            alert.entry.set_text(self._jobject_clone.metadata['title'])
+            title = self._jobject_clone.metadata['title']
         else:
-            alert.entry.set_text(self._jobject.metadata['title'])
+            title = self._jobject.metadata['title']
 
-        button = alert.add_button(Gtk.ResponseType.OK, _('Save'),
+        alert.entry.set_text(title)
+        label, tip = self._get_save_label_tip(title)
+        button = alert.add_button(Gtk.ResponseType.OK, label,
                                   Icon(icon_name='dialog-ok'))
         button.add_accelerator('clicked', self.sugar_accel_group,
                                Gdk.KEY_Return, 0, 0)
+        button.set_tooltip_text(tip)
+        alert.ok = button
 
-        button = alert.add_button(Gtk.ResponseType.ACCEPT, _('Erase'),
+        label, tip = self._get_erase_label_tip()
+        button = alert.add_button(Gtk.ResponseType.ACCEPT, label,
                                   Icon(icon_name='list-remove'))
+        button.set_tooltip_text(tip)
 
         button = alert.add_button(Gtk.ResponseType.CANCEL, _('Cancel'),
                                   Icon(icon_name='dialog-cancel'))
         button.add_accelerator('clicked', self.sugar_accel_group,
                                Gdk.KEY_Escape, 0, 0)
+        button.set_tooltip_text(_('Cancel stop and continue the activity'))
 
         alert.connect('realize', self.__stop_dialog_realize_cb)
         alert.connect('response', self.__stop_dialog_response_cb)
+        alert.entry.connect('changed', self.__stop_dialog_changed_cb, alert)
         self.add_alert(alert)
         alert.show()
 
@@ -1159,6 +1167,34 @@ class Activity(Window, Gtk.Container):
                 button.set_sensitive(True)
 
         self.remove_alert(alert)
+
+    def __stop_dialog_changed_cb(self, entry, alert):
+        label, tip = self._get_save_label_tip(entry.get_text())
+
+        alert.ok.set_label(label)
+        alert.ok.set_tooltip_text(tip)
+
+    def _get_save_label_tip(self, title):
+        label = _('Save new')
+        tip = _('Save a new journal entry')
+        if self._is_resumed and \
+            title == self._jobject_clone.metadata['title']:
+            label = _('Save')
+            tip = _('Save into the old journal entry')
+
+        return label, tip
+
+    def _get_erase_label_tip(self):
+        if self._is_resumed:
+            label = _('Erase changes')
+            tip = _('Erase what you have done, '
+                    'and leave your old journal entry unchanged')
+        else:
+            label = _('Erase')
+            tip = _('Erase what you have done, '
+                    'and avoid making a journal entry')
+
+        return label, tip
 
     def _prepare_close(self, skip_save=False):
         if not skip_save:
