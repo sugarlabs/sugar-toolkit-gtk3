@@ -872,7 +872,7 @@ class Activity(Window, Gtk.Container):
 
         This method is called by the close() method below. In general,
         activities should not override this method. This method is part of the
-        public API of an Acivity, and should behave in standard ways. Use your
+        public API of an Activity, and should behave in standard ways. Use your
         own implementation of write_file() to save your Activity specific data.
         '''
 
