@@ -1113,13 +1113,11 @@ class Activity(Window, Gtk.Container):
         alert = Alert()
         alert.props.title = _('Stop')
         alert.props.msg = _('Stop: name your journal entry')
-        if self._is_resumed:
-            title = self._jobject_clone.metadata['title']
-        else:
-            title = self._jobject.metadata['title']
 
+        title = self._jobject.metadata['title']
         alert.entry = alert.add_entry()
         alert.entry.set_text(title)
+
         label, tip = self._get_save_label_tip(title)
         button = alert.add_button(Gtk.ResponseType.OK, label,
                                   Icon(icon_name='dialog-ok'))
