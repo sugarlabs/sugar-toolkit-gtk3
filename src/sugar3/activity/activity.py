@@ -88,7 +88,6 @@ from sugar3 import power
 from sugar3.profile import get_nick_name, get_color, get_save_as
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
-from sugar3.activity.alerts import SaveAlert
 from sugar3.graphics import style
 from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
@@ -1111,7 +1110,7 @@ class Activity(Window, Gtk.Container):
     def _show_stop_dialog(self):
         for button in self._stop_buttons:
             button.set_sensitive(False)
-        alert = SaveAlert()
+        alert = Alert()
         alert.props.title = _('Stop')
         alert.props.msg = _('Stop: name your journal entry')
         if self._is_resumed:
@@ -1119,6 +1118,7 @@ class Activity(Window, Gtk.Container):
         else:
             title = self._jobject.metadata['title']
 
+        alert.entry = alert.add_entry()
         alert.entry.set_text(title)
         label, tip = self._get_save_label_tip(title)
         button = alert.add_button(Gtk.ResponseType.OK, label,
