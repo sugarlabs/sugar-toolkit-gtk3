@@ -379,7 +379,7 @@ class Activity(Window, Gtk.Container):
         self._max_participants = None
         self._invites_queue = []
         self._jobject = None
-        self._jobject_clone = None
+        self._jobject_old = None
         self._is_resumed = False
         self._read_file_called = False
 
@@ -416,15 +416,6 @@ class Activity(Window, Gtk.Container):
                 self._jobject.metadata['spent-times'] += ', 0'
             else:
                 self._jobject.metadata['spent-times'] = '0'
-
-            if get_save_as():
-                title = self._jobject.metadata['title']
-                file_path = self._jobject.file_path
-                self._jobject_clone = self._jobject
-                self._jobject = self._initialize_journal_object()
-                self._jobject.metadata['title'] = title
-                self._jobject.file_path = file_path
-                self.set_title(title)
         else:
             self._is_resumed = False
             self._jobject = self._initialize_journal_object()
@@ -464,6 +455,11 @@ class Activity(Window, Gtk.Container):
 
         self._busy_count = 0
         self._stop_buttons = []
+
+        if self._is_resumed and get_save_as():
+            # preserve original and use a copy for editing
+            self._jobject_old = self._jobject
+            self._jobject = datastore.copy(self._jobject, '/')
 
         self._original_title = self._jobject.metadata['title']
 
@@ -1152,7 +1148,7 @@ class Activity(Window, Gtk.Container):
             title = alert.entry.get_text()
             if self._is_resumed and \
                 title == self._original_title:
-                    datastore.delete(self._jobject_clone.get_object_id())
+                    datastore.delete(self._jobject_old.get_object_id())
             self._jobject.metadata['title'] = title
             self._do_close(False)
 
