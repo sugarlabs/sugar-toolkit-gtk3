@@ -1153,7 +1153,7 @@ class Activity(Window, Gtk.Container):
         if response_id == Gtk.ResponseType.OK:
             title = alert.entry.get_text()
             if self._is_resumed and \
-                title == self._jobject_clone.metadata['title']:
+                title == self._original_title:
                     datastore.delete(self._jobject_clone.get_object_id())
             self._jobject.metadata['title'] = title
             self._do_close(False)
@@ -1178,7 +1178,7 @@ class Activity(Window, Gtk.Container):
         label = _('Save new')
         tip = _('Save a new journal entry')
         if self._is_resumed and \
-            title == self._jobject_clone.metadata['title']:
+            title == self._original_title:
             label = _('Save')
             tip = _('Save into the old journal entry')
 
