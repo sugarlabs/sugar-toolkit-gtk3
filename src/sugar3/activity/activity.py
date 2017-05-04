@@ -434,7 +434,7 @@ class Activity(Window, Gtk.Container):
         self.shared_activity = None
         self._join_id = None
 
-        self._jobject_clone_title = self._jobject.metadata['title']
+        self._original_title = self._jobject.metadata['title']
 
         if handle.invited:
             wait_loop = GObject.MainLoop()
@@ -1247,7 +1247,7 @@ class Activity(Window, Gtk.Container):
             return
 
         if get_save_as():
-            if self._jobject.metadata['title'] != self._jobject_clone_title:
+            if self._jobject.metadata['title'] != self._original_title:
                 self._do_close(skip_save)
             else:
                 self._show_stop_dialog()
