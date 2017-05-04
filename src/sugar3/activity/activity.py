@@ -466,6 +466,8 @@ class Activity(Window, Gtk.Container):
         self._busy_count = 0
         self._stop_buttons = []
 
+        self._original_title = self._jobject.metadata['title']
+
     def add_stop_button(self, button):
         self._stop_buttons.append(button)
 
