@@ -400,6 +400,7 @@ class Activity(Window, Gtk.Container):
         share_scope = SCOPE_PRIVATE
 
         if handle.object_id:
+            self._is_resumed = True
             self._jobject = datastore.get(handle.object_id)
 
             if 'share-scope' in self._jobject.metadata:
@@ -417,24 +418,21 @@ class Activity(Window, Gtk.Container):
             else:
                 self._jobject.metadata['spent-times'] = '0'
 
-        self.shared_activity = None
-        self._join_id = None
-
-        if handle.object_id is None:
-            logging.debug('Creating a jobject.')
-            self._jobject = self._initialize_journal_object()
+            if get_save_as():
+                title = self._jobject.metadata['title']
+                file_path = self._jobject.file_path
+                self._jobject_clone = self._jobject
+                self._jobject = self._initialize_journal_object()
+                self._jobject.metadata['title'] = title
+                self._jobject.file_path = file_path
+                self.set_title(title)
+        else:
             self._is_resumed = False
+            self._jobject = self._initialize_journal_object()
             self.set_title(self._jobject.metadata['title'])
 
-        elif get_save_as():
-            self._is_resumed = True
-            logging.debug('Creating a jobject clone')
-            self._file_path = self._jobject.file_path
-            self._jobject_clone = self._jobject
-            self._jobject = self._initialize_journal_object()
-            self._jobject.file_path = self._file_path
-            self.set_title(self._jobject_clone.metadata['title'])
-            self.metadata['title'] = self._jobject_clone.metadata['title']
+        self.shared_activity = None
+        self._join_id = None
 
         self._jobject_clone_title = self._jobject.metadata['title']
 
