@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2017-04-01 06:50+0000\n"
-"Last-Translator: Chris <cjl@sugarlabs.org>\n"
+"PO-Revision-Date: 2017-04-23 18:12+0000\n"
+"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1491029439.000000\n"
+"X-POOTLE-MTIME: 1492971128.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
-msgstr ""
+msgstr "מחרוזת טקסט"
 
 #: src/sugar3/mime.py:56
 msgid "Text"
@@ -69,54 +69,42 @@ msgstr "לפני %s"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: src/sugar3/util.py:240
-#, python-format
-#, python-format
-#, fuzzy, python-format
+#, python-format, python-format, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "שנה אחת"
 msgstr[1] "%d שנים"
 
 #: src/sugar3/util.py:241
-#, python-format
-#, python-format
-#, fuzzy, python-format
+#, python-format, python-format, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "חודש אחד"
 msgstr[1] "%d חודשים"
 
 #: src/sugar3/util.py:242
-#, python-format
-#, python-format
-#, fuzzy, python-format
+#, python-format, python-format, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "שבוע אחד"
 msgstr[1] "%d שבועות"
 
 #: src/sugar3/util.py:243
-#, python-format
-#, python-format
-#, fuzzy, python-format
+#, python-format, python-format, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "יום אחד"
 msgstr[1] "%d ימים"
 
 #: src/sugar3/util.py:244
-#, python-format
-#, python-format
-#, fuzzy, python-format
+#, python-format, python-format, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "שעה אחת"
 msgstr[1] "%d שעות"
 
 #: src/sugar3/util.py:245
-#, python-format
-#, python-format
-#, fuzzy, python-format
+#, python-format, python-format, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "דקה אחת"
@@ -168,7 +156,7 @@ msgstr "כחול"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
-msgstr ""
+msgstr "סגירה"
 
 #: src/sugar3/graphics/alert.py:261 src/sugar3/graphics/alert.py:427
 msgid "Cancel"
@@ -307,7 +295,7 @@ msgstr "אנגלית אמריקאית"
 
 #: src/sugar3/speech.py:83
 msgid "English West Indies"
-msgstr ""
+msgstr "איי הודו המערבית הבריטיים"
 
 #: src/sugar3/speech.py:85
 msgid "Esperanto"
@@ -479,7 +467,7 @@ msgstr "שוודית"
 
 #: src/sugar3/speech.py:168
 msgid "Swahili"
-msgstr ""
+msgstr "סווהילי"
 
 #: src/sugar3/speech.py:170
 msgid "Tamil"
