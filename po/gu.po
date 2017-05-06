@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2017-03-25 05:53+0000\n"
+"PO-Revision-Date: 2017-05-06 16:29+0000\n"
 "Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: gu\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1490421198.000000\n"
+"X-POOTLE-MTIME: 1494088151.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
-msgstr ""
+msgstr "ટેક્સ્ટ સ્ટ્રિંગ"
 
 #: src/sugar3/mime.py:56
 msgid "Text"
@@ -32,7 +32,7 @@ msgstr "ઇમેજ"
 
 #: src/sugar3/mime.py:68
 msgid "Audio"
-msgstr ""
+msgstr "ઓડિયો"
 
 #: src/sugar3/mime.py:75
 msgid "Video"
@@ -78,7 +78,7 @@ msgstr "%s પહેલાં"
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d વર્ષ"
-msgstr[1] ""
+msgstr[1] "%d વર્ષો"
 
 #: src/sugar3/util.py:241
 #, python-format
@@ -87,7 +87,7 @@ msgstr[1] ""
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d મહિનો"
-msgstr[1] ""
+msgstr[1] "%d મહિનાઓ"
 
 #: src/sugar3/util.py:242
 #, python-format
@@ -310,8 +310,9 @@ msgid "English USA"
 msgstr "અંગ્રેજી (યુએસએ)"
 
 #: src/sugar3/speech.py:83
+#, fuzzy
 msgid "English West Indies"
-msgstr ""
+msgstr "અંગ્રેજી જમૈકા"
 
 #: src/sugar3/speech.py:85
 msgid "Esperanto"
