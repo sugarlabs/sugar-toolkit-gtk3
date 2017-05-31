@@ -583,6 +583,7 @@ def cmd_genpot(config, options):
                 file_path = os.path.relpath(os.path.join(root, file_name),
                                             config.source_dir)
                 python_files.append(file_path)
+    python_files.sort()
 
     # First write out a stub .pot file containing just the translated
     # activity name, then have xgettext merge the rest of the
