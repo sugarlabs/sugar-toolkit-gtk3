@@ -110,7 +110,7 @@ class Alert(Gtk.EventBox):
         self._buttons_box = Gtk.HButtonBox()
         self._buttons_box.set_layout(Gtk.ButtonBoxStyle.END)
         self._buttons_box.set_spacing(style.DEFAULT_SPACING)
-        self._hbox.pack_start(self._buttons_box, True, True, 0)
+        self._hbox.pack_end(self._buttons_box, True, True, 0)
 
         GObject.GObject.__init__(self, **kwargs)
 
@@ -156,6 +156,22 @@ class Alert(Gtk.EventBox):
             return self._title
         elif pspec.name == 'msg':
             return self._msg
+
+    def add_entry(self):
+        """
+        Add an entry, after the title and before the buttons.
+
+        Returns:
+            Gtk.Entry: the entry added to the alert
+        """
+        entry = Gtk.Entry()
+        self._hbox.pack_start(entry, True, True, 0)
+        entry.show()
+
+        self._hbox.set_child_packing(self._buttons_box, False, False, 0,
+                                     Gtk.PackType.END)
+
+        return entry
 
     def add_button(self, response_id, label, icon=None, position=-1):
         """
