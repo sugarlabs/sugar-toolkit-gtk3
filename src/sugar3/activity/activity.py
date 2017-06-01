@@ -448,6 +448,7 @@ class Activity(Window, Gtk.Container):
         bundle = get_bundle_instance(get_bundle_path())
         self.set_icon_from_file(bundle.get_icon())
 
+        self._busy_count = 0
         self._stop_buttons = []
 
     def add_stop_button(self, button):
@@ -1196,6 +1197,42 @@ class Activity(Window, Gtk.Container):
 
     def get_document_path(self, async_cb, async_err_cb):
         async_err_cb(NotImplementedError())
+
+    def busy(self):
+        '''
+        Show that the activity is busy.  If used, must be called once
+        before a lengthy operation, and unbusy must be called after
+        the operation completes.
+
+        .. code-block:: python
+
+            self.busy()
+            self.long_operation()
+            self.unbusy()
+
+        '''
+        if self._busy_count == 0:
+            self._old_cursor = self.get_window().get_cursor()
+            self._set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self._busy_count += 1
+
+    def unbusy(self):
+        '''
+        Returns:
+
+            int: a count of further calls to unbusy expected
+
+        Show that the activity is not busy.  An equal number of calls
+        to unbusy are required to balance the calls to busy.
+        '''
+        self._busy_count -= 1
+        if self._busy_count == 0:
+            self._set_cursor(self._old_cursor)
+        return self._busy_count
+
+    def _set_cursor(self, cursor):
+        self.get_window().set_cursor(cursor)
+        Gdk.flush()
 
 
 class _ClientHandler(dbus.service.Object, DBusProperties):
