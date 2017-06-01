@@ -448,6 +448,10 @@ class Activity(Window, Gtk.Container):
         bundle = get_bundle_instance(get_bundle_path())
         self.set_icon_from_file(bundle.get_icon())
 
+        self._stop_buttons = []
+
+    def add_stop_button(self, button):
+        self._stop_buttons.append(button)
 
     def run_main_loop(self):
         Gtk.main()
