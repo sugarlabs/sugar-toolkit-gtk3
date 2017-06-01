@@ -85,7 +85,7 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
 from sugar3 import power
-from sugar3.profile import get_nick_name, get_color
+from sugar3.profile import get_nick_name, get_color, get_save_as
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
@@ -379,6 +379,8 @@ class Activity(Window, Gtk.Container):
         self._max_participants = None
         self._invites_queue = []
         self._jobject = None
+        self._jobject_old = None
+        self._is_resumed = False
         self._read_file_called = False
 
         self._session = _get_session()
@@ -397,6 +399,7 @@ class Activity(Window, Gtk.Container):
         share_scope = SCOPE_PRIVATE
 
         if handle.object_id:
+            self._is_resumed = True
             self._jobject = datastore.get(handle.object_id)
 
             if 'share-scope' in self._jobject.metadata:
@@ -413,13 +416,15 @@ class Activity(Window, Gtk.Container):
                 self._jobject.metadata['spent-times'] += ', 0'
             else:
                 self._jobject.metadata['spent-times'] = '0'
+        else:
+            self._is_resumed = False
+            self._jobject = self._initialize_journal_object()
+            self.set_title(self._jobject.metadata['title'])
 
         self.shared_activity = None
         self._join_id = None
 
-        if handle.object_id is None:
-            logging.debug('Creating a jobject.')
-            self._jobject = self._initialize_journal_object()
+        self._original_title = self._jobject.metadata['title']
 
         if handle.invited:
             wait_loop = GObject.MainLoop()
@@ -450,6 +455,13 @@ class Activity(Window, Gtk.Container):
 
         self._busy_count = 0
         self._stop_buttons = []
+
+        if self._is_resumed and get_save_as():
+            # preserve original and use a copy for editing
+            self._jobject_old = self._jobject
+            self._jobject = datastore.copy(self._jobject, '/')
+
+        self._original_title = self._jobject.metadata['title']
 
     def add_stop_button(self, button):
         self._stop_buttons.append(button)
@@ -1091,6 +1103,92 @@ class Activity(Window, Gtk.Container):
 
         return True
 
+    def _show_stop_dialog(self):
+        for button in self._stop_buttons:
+            button.set_sensitive(False)
+        alert = Alert()
+        alert.props.title = _('Stop')
+        alert.props.msg = _('Stop: name your journal entry')
+
+        title = self._jobject.metadata['title']
+        alert.entry = alert.add_entry()
+        alert.entry.set_text(title)
+
+        label, tip = self._get_save_label_tip(title)
+        button = alert.add_button(Gtk.ResponseType.OK, label,
+                                  Icon(icon_name='dialog-ok'))
+        button.add_accelerator('clicked', self.sugar_accel_group,
+                               Gdk.KEY_Return, 0, 0)
+        button.set_tooltip_text(tip)
+        alert.ok = button
+
+        label, tip = self._get_erase_label_tip()
+        button = alert.add_button(Gtk.ResponseType.ACCEPT, label,
+                                  Icon(icon_name='list-remove'))
+        button.set_tooltip_text(tip)
+
+        button = alert.add_button(Gtk.ResponseType.CANCEL, _('Cancel'),
+                                  Icon(icon_name='dialog-cancel'))
+        button.add_accelerator('clicked', self.sugar_accel_group,
+                               Gdk.KEY_Escape, 0, 0)
+        button.set_tooltip_text(_('Cancel stop and continue the activity'))
+
+        alert.connect('realize', self.__stop_dialog_realize_cb)
+        alert.connect('response', self.__stop_dialog_response_cb)
+        alert.entry.connect('changed', self.__stop_dialog_changed_cb, alert)
+        self.add_alert(alert)
+        alert.show()
+
+    def __stop_dialog_realize_cb(self, alert):
+        alert.entry.grab_focus()
+
+    def __stop_dialog_response_cb(self, alert, response_id):
+        if response_id == Gtk.ResponseType.OK:
+            title = alert.entry.get_text()
+            if self._is_resumed and \
+                title == self._original_title:
+                    datastore.delete(self._jobject_old.get_object_id())
+            self._jobject.metadata['title'] = title
+            self._do_close(False)
+
+        if response_id == Gtk.ResponseType.ACCEPT:
+            datastore.delete(self._jobject.get_object_id())
+            self._do_close(True)
+
+        if response_id == Gtk.ResponseType.CANCEL:
+            for button in self._stop_buttons:
+                button.set_sensitive(True)
+
+        self.remove_alert(alert)
+
+    def __stop_dialog_changed_cb(self, entry, alert):
+        label, tip = self._get_save_label_tip(entry.get_text())
+
+        alert.ok.set_label(label)
+        alert.ok.set_tooltip_text(tip)
+
+    def _get_save_label_tip(self, title):
+        label = _('Save new')
+        tip = _('Save a new journal entry')
+        if self._is_resumed and \
+            title == self._original_title:
+            label = _('Save')
+            tip = _('Save into the old journal entry')
+
+        return label, tip
+
+    def _get_erase_label_tip(self):
+        if self._is_resumed:
+            label = _('Erase changes')
+            tip = _('Erase what you have done, '
+                    'and leave your old journal entry unchanged')
+        else:
+            label = _('Erase')
+            tip = _('Erase what you have done, '
+                    'and avoid making a journal entry')
+
+        return label, tip
+
     def _prepare_close(self, skip_save=False):
         if not skip_save:
             try:
@@ -1119,6 +1217,16 @@ class Activity(Window, Gtk.Container):
         self._session.unregister(self)
         power.get_power_manager().shutdown()
 
+    def _do_close(self, skip_save):
+        self.busy()
+        self.emit('_closing')
+        if not self._closing:
+            if not self._prepare_close(skip_save):
+                return
+
+        if not self._updating_jobject:
+            self._complete_close()
+
     def close(self, skip_save=False):
         '''
         Request that the activity be stopped and saved to the Journal
@@ -1133,15 +1241,13 @@ class Activity(Window, Gtk.Container):
         if not self.can_close():
             return
 
-        self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        self.emit('_closing')
-
-        if not self._closing:
-            if not self._prepare_close(skip_save):
-                return
-
-        if not self._updating_jobject:
-            self._complete_close()
+        if get_save_as():
+            if self._jobject.metadata['title'] != self._original_title:
+                self._do_close(skip_save)
+            else:
+                self._show_stop_dialog()
+        else:
+            self._do_close(skip_save)
 
     def __realize_cb(self, window):
         display_name = Gdk.Display.get_default().get_name()
