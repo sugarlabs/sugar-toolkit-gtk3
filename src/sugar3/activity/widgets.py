@@ -86,6 +86,7 @@ class StopButton(ToolButton):
         self.props.tooltip = _('Stop')
         self.props.accelerator = '<Ctrl>Q'
         self.connect('clicked', self.__stop_button_clicked_cb, activity)
+        activity.add_stop_button(self)
 
     def __stop_button_clicked_cb(self, button, activity):
         activity.close()
