@@ -55,7 +55,7 @@ class PopWindow(Gtk.Window):
     FULLSCREEN = (Gdk.Screen.width() - style.GRID_CELL_SIZE * 3,
                   Gdk.Screen.height() - style.GRID_CELL_SIZE * 2)
 
-    HALF_WIDTH = ((Gdk.Screen.height() - style.GRID_CELL_SIZE * 3)/2,
+    HALF_WIDTH = ((Gdk.Screen.height() - style.GRID_CELL_SIZE * 3) / 2,
                   (Gdk.Screen.height() - style.GRID_CELL_SIZE * 2))
 
     def __init__(self, window_xid=None, **kwargs):
@@ -90,8 +90,8 @@ class PopWindow(Gtk.Window):
         # the child class to display the window after modifications
         # like chaninging window size, decorating, changing position.
 
-    def set_size(self, size):
-        width, height = size
+    def set_size(self, size_x, size_y):
+        width, height = size_x, size_y
         self.set_size_request(width, height)
 
     size = GObject.Property(type=None, setter=set_size)
