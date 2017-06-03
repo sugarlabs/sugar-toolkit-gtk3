@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2016-10-13 08:30+0000\n"
+"PO-Revision-Date: 2017-05-28 19:30+0000\n"
 "Last-Translator: dark159123 <r.j.hansen@protonmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: da\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1476347438.000000\n"
+"X-POOTLE-MTIME: 1495999837.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
-msgstr ""
+msgstr "Tekst streng"
 
 #: src/sugar3/mime.py:56
 msgid "Text"
@@ -162,7 +162,7 @@ msgstr "Blå"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
-msgstr ""
+msgstr "Luk"
 
 #: src/sugar3/graphics/alert.py:261 src/sugar3/graphics/alert.py:427
 msgid "Cancel"
@@ -203,7 +203,7 @@ msgstr "Privat"
 
 #: src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
-msgstr "Mit nabolag"
+msgstr "Mit Nabolag"
 
 #: src/sugar3/activity/widgets.py:233
 msgid "Description"
@@ -301,7 +301,7 @@ msgstr "Engelsk (USA)"
 
 #: src/sugar3/speech.py:83
 msgid "English West Indies"
-msgstr ""
+msgstr "Engelsk vestindien"
 
 #: src/sugar3/speech.py:85
 msgid "Esperanto"
@@ -473,7 +473,7 @@ msgstr "Svensk"
 
 #: src/sugar3/speech.py:168
 msgid "Swahili"
-msgstr ""
+msgstr "Swahili"
 
 #: src/sugar3/speech.py:170
 msgid "Tamil"
