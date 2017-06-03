@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2017-04-09 16:50+0000\n"
-"Last-Translator: chanchumgpa <chanchumgpa@gmail.com>\n"
+"PO-Revision-Date: 2017-05-07 10:18+0000\n"
+"Last-Translator: Olot <agwanta2004@yahoo.co.uk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ach\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1491756636.000000\n"
+"X-POOTLE-MTIME: 1494152306.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
@@ -260,9 +260,8 @@ msgid "Welsh"
 msgstr "Jo Wel"
 
 #: src/sugar3/speech.py:65
-#, fuzzy
 msgid "Danish"
-msgstr "Dano me Denmark"
+msgstr "Danic"
 
 #: src/sugar3/speech.py:67
 msgid "German"

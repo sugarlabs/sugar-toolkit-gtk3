@@ -1,23 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the sugar-toolkit-gtk3 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: sugar-toolkit-gtk3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2017-04-09 21:34+0000\n"
-"Last-Translator: boput <bozidarp@yahoo.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2017-05-16 15:30-0700\n"
+"Last-Translator: Božidar Putanec <bozidarp@yahoo.com>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.5.1.1\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-POOTLE-MTIME: 1491773687.000000\n"
+"Language-Team: \n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
@@ -64,13 +64,11 @@ msgstr "Malo prije"
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: src/sugar3/util.py:225
 #, python-format
-#, python-format
 msgid "%s ago"
 msgstr "prije %s"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: src/sugar3/util.py:240
-#, python-format
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
@@ -80,7 +78,6 @@ msgstr[2] "%d godina"
 
 #: src/sugar3/util.py:241
 #, python-format
-#, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d mjesec"
@@ -88,7 +85,6 @@ msgstr[1] "%d mjeseca"
 msgstr[2] "%d mjeseci"
 
 #: src/sugar3/util.py:242
-#, python-format
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -98,7 +94,6 @@ msgstr[2] "%d tjedana"
 
 #: src/sugar3/util.py:243
 #, python-format
-#, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dan"
@@ -106,7 +101,6 @@ msgstr[1] "%d dana"
 msgstr[2] "%d dana"
 
 #: src/sugar3/util.py:244
-#, python-format
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -116,8 +110,6 @@ msgstr[2] "%d sati"
 
 #: src/sugar3/util.py:245
 #, python-format
-#, python-format
-#, python-format, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minuta"
@@ -130,24 +122,20 @@ msgstr "Prazno"
 
 #: src/sugar3/util.py:348
 #, python-format
-#, python-format
 msgid "%d B"
 msgstr "%d B"
 
 #: src/sugar3/util.py:350
-#, python-format
 #, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
 #: src/sugar3/util.py:352
 #, python-format
-#, python-format
 msgid "%d MB"
 msgstr "%d MB"
 
 #: src/sugar3/util.py:354
-#, python-format
 #, python-format
 msgid "%d GB"
 msgstr "%d GB"
@@ -218,7 +206,6 @@ msgid "Description"
 msgstr "Opis"
 
 #: src/sugar3/activity/activity.py:456
-#, python-format
 #, python-format
 msgid "%s Activity"
 msgstr "Aktivnost %s"
