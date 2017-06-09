@@ -124,7 +124,6 @@ def main():
 
     if not activity_class:
         if bundle.get_command().startswith('sugar-activity'):
-            print 'Guessing python class from activity.info!'
             activity_class = bundle.get_command().split(" ")[1]
 
     if 'SUGAR_VERSION' not in os.environ:
