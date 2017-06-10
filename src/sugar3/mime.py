@@ -25,6 +25,9 @@ import os
 import logging
 import gettext
 
+import gi
+gi.require_version('GdkPixbuf', '2.0')
+
 from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
