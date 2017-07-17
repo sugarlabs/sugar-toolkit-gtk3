@@ -2,490 +2,492 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2017-06-10 10:29+0000\n"
+"Last-Translator: belkacem77 <belkacem77@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: pms\n"
+"Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Translate Toolkit 1.11.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1497090572.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
-msgstr ""
+msgstr "Azrir n isekkilen"
 
 #: src/sugar3/mime.py:56
 msgid "Text"
-msgstr ""
+msgstr "Aḍris"
 
 #: src/sugar3/mime.py:63
 msgid "Image"
-msgstr ""
+msgstr "Tugna"
 
 #: src/sugar3/mime.py:68
 msgid "Audio"
-msgstr ""
+msgstr "Ameslaw"
 
 #: src/sugar3/mime.py:75
 msgid "Video"
-msgstr ""
+msgstr "Tavidyut"
 
 #: src/sugar3/mime.py:86
 msgid "Link"
-msgstr ""
+msgstr "Aseɣwen"
 
 #: src/sugar3/mime.py:91
 msgid "Bundle"
-msgstr ""
+msgstr "Tagrumma"
 
 #: src/sugar3/util.py:217
 msgid " and "
-msgstr ""
+msgstr " akked "
 
 #: src/sugar3/util.py:218
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: src/sugar3/util.py:221
 msgid "Seconds ago"
-msgstr ""
+msgstr "n tasinin aya"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s aya"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: src/sugar3/util.py:240
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d n useggas"
+msgstr[1] "%d n iseggasen"
 
 #: src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d n wayyur"
+msgstr[1] "%d n wayyuren"
 
 #: src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d n umalas"
+msgstr[1] "%d n imalasen"
 
 #: src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d n wass"
+msgstr[1] "%d n wussan"
 
 #: src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d n usrag"
+msgstr[1] "%d n isragen"
 
 #: src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d n tesdat"
+msgstr[1] "%d n tesdatin"
 
 #: src/sugar3/util.py:346
 msgid "Empty"
-msgstr ""
+msgstr "Ilem"
 
 #: src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d AṬ"
 
 #: src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d KAṬ"
 
 #: src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d MAṬ"
 
 #: src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d GAṬ"
 
 #: src/sugar3/graphics/colorbutton.py:55
 msgid "Choose a color"
-msgstr ""
+msgstr "Fren ini"
 
 #: src/sugar3/graphics/colorbutton.py:300
 msgid "Red"
-msgstr ""
+msgstr "Azeggaɣ"
 
 #: src/sugar3/graphics/colorbutton.py:302
 msgid "Green"
-msgstr ""
+msgstr "Azegzaw"
 
 #: src/sugar3/graphics/colorbutton.py:304
 msgid "Blue"
-msgstr ""
+msgstr "Amidadi"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
-msgstr ""
+msgstr "Mdel"
 
 #: src/sugar3/graphics/alert.py:261 src/sugar3/graphics/alert.py:427
 msgid "Cancel"
-msgstr ""
+msgstr "Sefsex"
 
 #: src/sugar3/graphics/alert.py:265 src/sugar3/graphics/alert.py:309
 #: src/sugar3/graphics/alert.py:356 src/sugar3/graphics/alert.py:462
 msgid "Ok"
-msgstr ""
+msgstr "Ih"
 
 #: src/sugar3/graphics/alert.py:424
 msgid "Continue"
-msgstr ""
+msgstr "Kemmel"
 
 #: src/sugar3/activity/widgets.py:86
 msgid "Stop"
-msgstr ""
+msgstr "Seḥbes"
 
 #: src/sugar3/activity/widgets.py:98
 msgid "Undo"
-msgstr ""
+msgstr "Sefsex"
 
 #: src/sugar3/activity/widgets.py:106
 msgid "Redo"
-msgstr ""
+msgstr "Err-d"
 
 #: src/sugar3/activity/widgets.py:113
 msgid "Copy"
-msgstr ""
+msgstr "Nɣel"
 
 #: src/sugar3/activity/widgets.py:121
 msgid "Paste"
-msgstr ""
+msgstr "Senteḍ"
 
 #: src/sugar3/activity/widgets.py:132
 msgid "Private"
-msgstr ""
+msgstr "Uslig"
 
 #: src/sugar3/activity/widgets.py:139
 msgid "My Neighborhood"
-msgstr ""
+msgstr "Anarag-iw"
 
 #: src/sugar3/activity/widgets.py:233
 msgid "Description"
-msgstr ""
+msgstr "Aglam"
 
 #: src/sugar3/activity/activity.py:456
 #, python-format
 msgid "%s Activity"
-msgstr ""
+msgstr "Armud %s"
 
 #: src/sugar3/activity/activity.py:1052
 msgid "Keep error"
-msgstr ""
+msgstr "Tuccḍa n usekles"
 
 #: src/sugar3/activity/activity.py:1053
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "Tuccḍa n usekles: akk asnifel ad iruḥ"
 
 #: src/sugar3/activity/activity.py:1056
 msgid "Don't stop"
-msgstr ""
+msgstr "Ur seḥbas ara"
 
 #: src/sugar3/activity/activity.py:1060
 msgid "Stop anyway"
-msgstr ""
+msgstr "Seḥbes ɣas akka"
 
 #: src/sugar3/speech.py:51
 msgid "Afrikaans"
-msgstr ""
+msgstr "Tafrikanst"
 
 #: src/sugar3/speech.py:53
 msgid "Aragonese"
-msgstr ""
+msgstr "Taṛagunit"
 
 #: src/sugar3/speech.py:55
 msgid "Bulgarian"
-msgstr ""
+msgstr "Tabulgarit"
 
 #: src/sugar3/speech.py:57
 msgid "Bosnian"
-msgstr ""
+msgstr "Aglam"
 
 #: src/sugar3/speech.py:59
 msgid "Catalan"
-msgstr ""
+msgstr "Takaṭalant"
 
 #: src/sugar3/speech.py:61
 msgid "Czech"
-msgstr ""
+msgstr "Tačikit"
 
 #: src/sugar3/speech.py:63
 msgid "Welsh"
-msgstr ""
+msgstr "Takusit"
 
 #: src/sugar3/speech.py:65
 msgid "Danish"
-msgstr ""
+msgstr "Tadanit"
 
 #: src/sugar3/speech.py:67
 msgid "German"
-msgstr ""
+msgstr "Talmanit"
 
 #: src/sugar3/speech.py:69
 msgid "Greek"
-msgstr ""
+msgstr "Tagrikit"
 
 #: src/sugar3/speech.py:70
 msgid "Default"
-msgstr ""
+msgstr "Amezwer"
 
 #: src/sugar3/speech.py:72
 msgid "English Britain"
-msgstr ""
+msgstr "Taglizit n Britanya"
 
 #: src/sugar3/speech.py:74
 msgid "English scottish"
-msgstr ""
+msgstr "Taglizit n Skutland"
 
 #: src/sugar3/speech.py:75
 msgid "English-north"
-msgstr ""
+msgstr "Taglizit-agafa"
 
 #: src/sugar3/speech.py:77
 msgid "English_rp"
-msgstr ""
+msgstr "Taglizit-rp"
 
 #: src/sugar3/speech.py:79
 msgid "English_wmids"
-msgstr ""
+msgstr "Taglizit_wmids"
 
 #: src/sugar3/speech.py:81
 msgid "English USA"
-msgstr ""
+msgstr "English Marikan"
 
 #: src/sugar3/speech.py:83
 msgid "English West Indies"
-msgstr ""
+msgstr "Hend n umalu taglizit"
 
 #: src/sugar3/speech.py:85
 msgid "Esperanto"
-msgstr ""
+msgstr "Taspirantit"
 
 #: src/sugar3/speech.py:87
 msgid "Spanish"
-msgstr ""
+msgstr "Taspanit"
 
 #: src/sugar3/speech.py:88
 msgid "Spanish latin american"
-msgstr ""
+msgstr "Taspanit n temrikt talatinit"
 
 #: src/sugar3/speech.py:90
 msgid "Estonian"
-msgstr ""
+msgstr "Tastunit"
 
 #: src/sugar3/speech.py:92
 msgid "Farsi"
-msgstr ""
+msgstr "Tafarsit"
 
 #: src/sugar3/speech.py:94
 msgid "Farsi-pinglish"
-msgstr ""
+msgstr "Tafarsit-Taglizit"
 
 #: src/sugar3/speech.py:96
 msgid "Finnish"
-msgstr ""
+msgstr "Tafinit"
 
 #: src/sugar3/speech.py:98
 msgid "French belgium"
-msgstr ""
+msgstr "Tafṛansist (Biljik)"
 
 #: src/sugar3/speech.py:100
 msgid "French"
-msgstr ""
+msgstr "Tafṛansist"
 
 #: src/sugar3/speech.py:102
 msgid "Irish-gaeilge"
-msgstr ""
+msgstr "Tirlandit - Tagalisyant"
 
 #: src/sugar3/speech.py:104
 msgid "Greek-ancient"
-msgstr ""
+msgstr "Tagrikit taqburt"
 
 #: src/sugar3/speech.py:106
 msgid "Hindi"
-msgstr ""
+msgstr "Tahendit"
 
 #: src/sugar3/speech.py:108
 msgid "Croatian"
-msgstr ""
+msgstr "Takarwasit"
 
 #: src/sugar3/speech.py:110
 msgid "Hungarian"
-msgstr ""
+msgstr "Tahungarit"
 
 #: src/sugar3/speech.py:112
 msgid "Armenian"
-msgstr ""
+msgstr "Taṛminit"
 
 #: src/sugar3/speech.py:114
 msgid "Armenian (west)"
-msgstr ""
+msgstr "Taṛminit (amalu)"
 
 #: src/sugar3/speech.py:116
 msgid "Indonesian"
-msgstr ""
+msgstr "Tandunizit"
 
 #: src/sugar3/speech.py:118
 msgid "Icelandic"
-msgstr ""
+msgstr "Taslandit"
 
 #: src/sugar3/speech.py:120
 msgid "Italian"
-msgstr ""
+msgstr "Taṭelyanit"
 
 #: src/sugar3/speech.py:122
 msgid "Lojban"
-msgstr ""
+msgstr "Talujbant"
 
 #: src/sugar3/speech.py:124
 msgid "Georgian"
-msgstr ""
+msgstr "Tajyuṛjit"
 
 #: src/sugar3/speech.py:126
 msgid "Kannada"
-msgstr ""
+msgstr "Takannadat"
 
 #: src/sugar3/speech.py:128
 msgid "Kurdish"
-msgstr ""
+msgstr "Takurdit"
 
 #: src/sugar3/speech.py:130
 msgid "Latin"
-msgstr ""
+msgstr "Talatinit"
 
 #: src/sugar3/speech.py:132
 msgid "Lithuanian"
-msgstr ""
+msgstr "Talitwanit"
 
 #: src/sugar3/speech.py:134
 msgid "Latvian"
-msgstr ""
+msgstr "Talitunit"
 
 #: src/sugar3/speech.py:136
 msgid "Macedonian"
-msgstr ""
+msgstr "Tamasidunit"
 
 #: src/sugar3/speech.py:138
 msgid "Malayalam"
-msgstr ""
+msgstr "Tamayalamt"
 
 #: src/sugar3/speech.py:140
 msgid "Malay"
-msgstr ""
+msgstr "Tamalizit"
 
 #: src/sugar3/speech.py:142
 msgid "Nepali"
-msgstr ""
+msgstr "Tanipalit"
 
 #: src/sugar3/speech.py:144
 msgid "Dutch"
-msgstr ""
+msgstr "Tahulandit"
 
 #: src/sugar3/speech.py:146
 msgid "Norwegian"
-msgstr ""
+msgstr "Tanurvijit"
 
 #: src/sugar3/speech.py:148
 msgid "Punjabi"
-msgstr ""
+msgstr "Tabenjabit"
 
 #: src/sugar3/speech.py:150
 msgid "Polish"
-msgstr ""
+msgstr "Tapulandit"
 
 #: src/sugar3/speech.py:152
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Tapurtugit (Birizil)"
 
 #: src/sugar3/speech.py:154
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Tapurtugut (Purtugal)"
 
 #: src/sugar3/speech.py:156
 msgid "Romanian"
-msgstr ""
+msgstr "Tarumanit"
 
 #: src/sugar3/speech.py:158
 msgid "Russian"
-msgstr ""
+msgstr "Tarusit"
 
 #: src/sugar3/speech.py:160
 msgid "Slovak"
-msgstr ""
+msgstr "Tasluvakt"
 
 #: src/sugar3/speech.py:162
 msgid "Albanian"
-msgstr ""
+msgstr "Talbanit"
 
 #: src/sugar3/speech.py:164
 msgid "Serbian"
-msgstr ""
+msgstr "Tasiṛbit"
 
 #: src/sugar3/speech.py:166
 msgid "Swedish"
-msgstr ""
+msgstr "Taswidit"
 
 #: src/sugar3/speech.py:168
 msgid "Swahili"
-msgstr ""
+msgstr "Taswahilit"
 
 #: src/sugar3/speech.py:170
 msgid "Tamil"
-msgstr ""
+msgstr "Taṭamult"
 
 #: src/sugar3/speech.py:172
 msgid "Turkish"
-msgstr ""
+msgstr "Taṭurkit"
 
 #: src/sugar3/speech.py:174
 msgid "Vietnam"
-msgstr ""
+msgstr "Tavyiṭnamit"
 
 #: src/sugar3/speech.py:175
 msgid "Vietnam_hue"
-msgstr ""
+msgstr "Tavyiṭnamit"
 
 #: src/sugar3/speech.py:176
 msgid "Vietnam_sgn"
-msgstr ""
+msgstr "Tavyiṭnamit_sgn"
 
 #: src/sugar3/speech.py:178
 msgid "Mandarin"
-msgstr ""
+msgstr "Tamandart"
 
 #: src/sugar3/speech.py:180
 msgid "Cantonese"
-msgstr ""
+msgstr "Takuntunit"

@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2017-06-03 20:56+0000\n"
-"Last-Translator: Chris <cjl@sugarlabs.org>\n"
+"PO-Revision-Date: 2017-06-04 07:55+0000\n"
+"Last-Translator: Mariana <dias.inkscape@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1496523407.000000\n"
+"X-POOTLE-MTIME: 1496562911.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 #, fuzzy
@@ -290,7 +290,7 @@ msgstr "Inglês Escocês"
 
 #: src/sugar3/speech.py:75
 msgid "English-north"
-msgstr "Inglês-Norte"
+msgstr "Inglês-norte"
 
 #: src/sugar3/speech.py:77
 msgid "English_rp"
