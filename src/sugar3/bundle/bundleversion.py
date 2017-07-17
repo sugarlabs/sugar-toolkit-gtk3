@@ -32,7 +32,7 @@ VERSION_RE = re.compile(r'''
     (?P<version>\d+)               # minimum 'N'
     (?P<extraversion>(?:\.\d+)*)   # any number of extra '.N' segments
     (?:
-    (?P<local>\-[a-zA-Z]*)         # ignore any string in the comparison
+    (?P<local>[\-\~].[a-zA-Z]*)    # ignore any string in the comparison
     )?
     $''', re.VERBOSE)
 
@@ -45,6 +45,7 @@ class NormalizedVersion(object):
         1.2
         1.2.3
         1.2.3-peru
+        1.2.3~dfsg
 
     Bad:
         1.2peru        # must be separated with -
