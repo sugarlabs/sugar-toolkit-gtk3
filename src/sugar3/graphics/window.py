@@ -41,8 +41,8 @@ class UnfullscreenButton(Gtk.Window):
     """
     A ready-made "Unfullscreen" button.
 
-    The type of button used by :class:`sugar3.graphics.window.Window` to exit
-    fullscreen mode when in fullscreen mode.
+    Used by :class:`~sugar3.graphics.window.Window` to exit fullscreen
+    mode.
     """
 
     def __init__(self):
@@ -94,13 +94,28 @@ class UnfullscreenButton(Gtk.Window):
 
 class Window(Gtk.Window):
     """
-    UI interface for activity Windows
+    An activity window.
 
-    Windows are used as a container to display things that happen in an
-    activity. They contain canvas content, alerts messages, a tray and a
-    toolbar. Windows can either be in fullscreen or non-fullscreen mode.
-    Note that the toolbar is hidden in fullscreen mode, while it is visible in
-    non-fullscreen mode.
+    Used as a container to display things that happen in an activity.
+    A window must contain a canvas widget, and a toolbar box widget.
+    A window may also contain alert message widgets and a tray widget.
+
+    Widgets are kept in a vertical box in this order;
+        * toolbar box,
+        * alerts,
+        * canvas,
+        * tray.
+
+    A window may be in fullscreen or non-fullscreen mode.  In fullscreen
+    mode, the toolbar and tray are hidden.
+
+    Motion events are tracked, and an unfullscreen button is shown when
+    the mouse is moved into the top right corner of the canvas.
+
+    Key press events are tracked;
+        * :kbd:`escape` will cancel fullscreen mode,
+        * :kbd:`Alt+space` will toggle tray visibility.
+
     """
 
     def __init__(self, **args):
@@ -152,9 +167,9 @@ class Window(Gtk.Window):
         """
         Make window active.
 
-        Brings the window to the top and makes it acive, even after invoking on
-        response to non-gtk events (in contrast to present()).
-        See bug #1423
+        Brings the window to the top and makes it active, even after
+        invoking on response to non-GTK events (in contrast to
+        present()).  See bug #1423
         """
         window = self.get_window()
         if window is None:
@@ -167,16 +182,18 @@ class Window(Gtk.Window):
 
     def is_fullscreen(self):
         """
-        Check whether the window is fullscreen or not.
+        Check if the window is fullscreen.
 
         Returns:
-            bool: true if window is fullscreen, false otherwise
+            bool: window is fullscreen
         """
         return self._is_fullscreen
 
     def fullscreen(self):
         """
-        Make the window fullscreen and hide the toolbar.
+        Make the window fullscreen.  The toolbar and tray will be
+        hidden, and the :class:`UnfullscreenButton` will be shown for
+        a short time.
         """
         palettegroup.popdown_all()
         if self._toolbar_box is not None:
@@ -200,7 +217,9 @@ class Window(Gtk.Window):
 
     def unfullscreen(self):
         """
-        Put the window in non-fullscreen mode and make the toolbar visible.
+        Restore the window to non-fullscreen mode.  The
+        :class:`UnfullscreenButton` will be hidden, and the toolbar
+        and tray will be shown.
         """
         if self._toolbar_box is not None:
             self._toolbar_box.show()
@@ -218,10 +237,10 @@ class Window(Gtk.Window):
 
     def set_canvas(self, canvas):
         """
-        Set current canvas of the window.
+        Set canvas widget.
 
         Args:
-            canvas (:class:`Gtk.Widget`): the canvas to set as current
+            canvas (:class:`Gtk.Widget`): the canvas to set
         """
         if self._canvas:
             self.__hbox.remove(self._canvas)
@@ -234,30 +253,36 @@ class Window(Gtk.Window):
 
     def get_canvas(self):
         """
-        Get current canvas content of the window.
+        Get canvas widget.
 
         Returns:
-            Gtk.Widget: the current canvas of the window
+            :class:`Gtk.Widget`: the canvas
         """
         return self._canvas
 
     canvas = property(get_canvas, set_canvas)
+    """
+    Property: the :class:`Gtk.Widget` to be shown as the canvas, below
+    the toolbar and alerts, and above the tray.
+    """
 
     def get_toolbar_box(self):
         """
-        Return window's current toolbar.
+        Get :class:`~sugar3.graphics.toolbarbox.ToolbarBox` widget.
 
         Returns:
-            sugar3.graphics.toolbar_box.ToolbarBox: the current toolbar box of the window
+            :class:`~sugar3.graphics.toolbarbox.ToolbarBox`: the
+                current toolbar box of the window
         """
         return self._toolbar_box
 
     def set_toolbar_box(self, toolbar_box):
         """
-        Set window's current toolbar.
+        Set :class:`~sugar3.graphics.toolbarbox.ToolbarBox` widget.
 
         Args:
-            toolbar_box (:class:`sugar3.graphics.toolbarbox.ToolbarBox`): the toolbar box to set as current
+            toolbar_box (:class:`~sugar3.graphics.toolbarbox.ToolbarBox`):
+                the toolbar box to set as current
         """
         if self._toolbar_box:
             self.__vbox.remove(self._toolbar_box)
@@ -269,14 +294,19 @@ class Window(Gtk.Window):
         self._toolbar_box = toolbar_box
 
     toolbar_box = property(get_toolbar_box, set_toolbar_box)
+    """
+    Property: the :class:`~sugar3.graphics.toolbarbox.ToolbarBox` to
+    be shown above the alerts and canvas.
+    """
 
     def set_tray(self, tray, position):
         """
-        Set the window's current tray.
+        Set the tray.
 
         Args:
-            tray (:class:`sugar3.graphics.tray.HTray` or :class:`sugar3.graphics.tray.VTray`): the tray to set
-            position (Gtk.PositionType constant): the edge to set the tray at
+            tray (:class:`~sugar3.graphics.tray.HTray` \
+                or :class:`~sugar3.graphics.tray.VTray`): the tray to set
+            position (:class:`Gtk.PositionType`): the edge to set the tray at
         """
         if self.tray:
             box = self.tray.get_parent()
@@ -293,12 +323,14 @@ class Window(Gtk.Window):
 
     def add_alert(self, alert):
         """
-        Add an alert message to the window.
-        Add an alert to the window. Note that you do need to .show the alert
+        Add an alert to the window.
+
+        You must call :class:`Gtk.Widget`. :func:`show` on the alert
         to make it visible.
 
         Args:
-            alert (:class:`sugar3.graphics.alert.Alert`): the alert to add
+            alert (:class:`~sugar3.graphics.alert.Alert`): the alert
+                to add
         """
         self._alerts.append(alert)
         if len(self._alerts) == 1:
@@ -313,7 +345,8 @@ class Window(Gtk.Window):
         Remove an alert message from the window.
 
         Args:
-            alert (:class:`sugar3.graphics.alert.Alert`): the alert to remove
+            alert (:class:`~sugar3.graphics.alert.Alert`): the alert
+                to remove
         """
         if alert in self._alerts:
             self._alerts.remove(alert)
@@ -397,19 +430,19 @@ class Window(Gtk.Window):
 
     def set_enable_fullscreen_mode(self, enable_fullscreen_mode):
         """
-        Set whether the window is allowed to enter fullscreen mode.
+        Set enable fullscreen mode.
 
         Args:
-            enable_fullscreen_mode (bool): the boolean to set `_enable_fullscreen_mode` to
+            enable_fullscreen_mode (bool): enable fullscreen mode
         """
         self._enable_fullscreen_mode = enable_fullscreen_mode
 
     def get_enable_fullscreen_mode(self):
         """
-        Return whether the window is allowed to enter fullscreen mode.
+        Get enable fullscreen mode.
 
         Returns:
-            bool: true if window is allowed to be fullscreen, false otherwise
+            bool: enable fullscreen mode
         """
         return self._enable_fullscreen_mode
 
@@ -417,3 +450,7 @@ class Window(Gtk.Window):
         type=object,
         setter=set_enable_fullscreen_mode,
         getter=get_enable_fullscreen_mode)
+    """
+    Property: (bool) whether the window is allowed to enter fullscreen
+    mode, default True.
+    """

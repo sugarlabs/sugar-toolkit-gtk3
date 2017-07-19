@@ -1,40 +1,3 @@
-'''
-Base class for activities written in Python
-===========================================
-
-This is currently the only definitive reference for what an
-activity must do to participate in the Sugar desktop.
-
-A Basic Activity
-----------------
-
-All activities must implement a class derived from 'Activity' in this class.
-The convention is to call it ActivitynameActivity, but this is not required as
-the activity.info file associated with your activity will tell the sugar-shell
-which class to start.
-
-For example the most minimal Activity:
-
-.. code-block:: python
-
-   from sugar3.activity import activity
-
-   class ReadActivity(activity.Activity):
-        pass
-
-To get a real, working activity, you will at least have to implement:
-
-__init__(), :func:`sugar3.activity.activity.Activity.read_file()` and
-:func:`sugar3.activity.activity.Activity.write_file()`
-
-Aditionally, you will probably need a at least a Toolbar so you can have some
-interesting buttons for the user, like for example 'exit activity'
-
-See the methods of the Activity class below for more information on what you
-will need for a real activity.
-
-.. note:: This API is STABLE.
-'''
 # Copyright (C) 2006-2007 Red Hat, Inc.
 # Copyright (C) 2007-2009 One Laptop Per Child
 # Copyright (C) 2010 Collabora Ltd. <http://www.collabora.co.uk/>
@@ -53,6 +16,147 @@ will need for a real activity.
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+
+'''
+Activity
+========
+
+A definitive reference for what a Sugar Python activity must do to
+participate in the Sugar desktop.
+
+.. note:: This API is STABLE.
+
+The :class:`Activity` class is used to derive all Sugar Python
+activities.  This is where your activity starts.
+
+**Derive from the class**
+
+    .. code-block:: python
+
+        from sugar3.activity.activity import Activity
+
+        class MyActivity(Activity):
+            def __init__(self, handle):
+                Activity.__init__(self, handle)
+
+    An activity must implement a new class derived from
+    :class:`Activity`.
+
+    Name the new class `MyActivity`, where `My` is the name of your
+    activity.  Use bundle metadata to tell Sugar to instantiate this
+    class.  See :class:`~sugar3.bundle` for bundle metadata.
+
+**Create a ToolbarBox**
+
+    In your :func:`__init__` method create a
+    :class:`~sugar3.graphics.toolbarbox.ToolbarBox`, with an
+    :class:`~sugar3.activity.widgets.ActivityToolbarButton`, a
+    :class:`~sugar3.activity.widgets.StopButton`, and then call
+    :func:`~sugar3.graphics.window.Window.set_toolbar_box`.
+
+    .. code-block:: python
+        :emphasize-lines: 2-4,10-
+
+        from sugar3.activity.activity import Activity
+        from sugar3.graphics.toolbarbox import ToolbarBox
+        from sugar3.activity.widgets import ActivityToolbarButton
+        from sugar3.activity.widgets import StopButton
+
+        class MyActivity(Activity):
+            def __init__(self, handle):
+                Activity.__init__(self, handle)
+
+                toolbar_box = ToolbarBox()
+                activity_button = ActivityToolbarButton(self)
+                toolbar_box.toolbar.insert(activity_button, 0)
+                activity_button.show()
+
+                separator = Gtk.SeparatorToolItem(draw=False)
+                separator.set_expand(True)
+                toolbar_box.toolbar.insert(separator, -1)
+                separator.show()
+
+                stop_button = StopButton(self)
+                toolbar_box.toolbar.insert(stop_button, -1)
+                stop_button.show()
+
+                self.set_toolbar_box(toolbar_box)
+                toolbar_box.show()
+
+**Journal methods**
+
+    In your activity class, code
+    :func:`~sugar3.activity.activity.Activity.read_file()` and
+    :func:`~sugar3.activity.activity.Activity.write_file()` methods.
+
+    Most activities create and resume journal objects.  For example,
+    the Write activity saves the document as a journal object, and
+    reads it from the journal object when resumed.
+
+    :func:`~sugar3.activity.activity.Activity.read_file()` and
+    :func:`~sugar3.activity.activity.Activity.write_file()` will be
+    called by the toolkit to tell your activity that it must load or
+    save the data the user is working on.
+
+**Activity toolbars**
+
+    Add any activity toolbars before the last separator in the
+    :class:`~sugar3.graphics.toolbarbox.ToolbarBox`, so that the
+    :class:`~sugar3.activity.widgets.StopButton` is aligned to the
+    right.
+
+    There are a number of standard Toolbars.
+
+    You may need the :class:`~sugar3.activity.widgets.EditToolbar`.
+    This has copy and paste buttons.  You may derive your own
+    class from
+    :class:`~sugar3.activity.widgets.EditToolbar`:
+
+    .. code-block:: python
+
+        from sugar3.activity.widgets import EditToolbar
+
+        class MyEditToolbar(EditToolbar):
+            ...
+
+    See :class:`~sugar3.activity.widgets.EditToolbar` for the
+    methods you should implement in your class.
+
+    You may need some activity specific buttons and options which
+    you can create as toolbars by deriving a class from
+    :class:`Gtk.Toolbar`:
+
+    .. code-block:: python
+
+        class MySpecialToolbar(Gtk.Toolbar):
+            ...
+
+**Sharing**
+
+    An activity can be shared across the network with other users.  Near
+    the end of your :func:`__init__`, test if the activity is shared,
+    and connect to signals to detect sharing.
+
+    .. code-block:: python
+
+        if self.shared_activity:
+            # we are joining the activity
+            self.connect('joined', self._joined_cb)
+            if self.get_shared():
+                # we have already joined
+                self._joined_cb()
+        else:
+            # we are creating the activity
+            self.connect('shared', self._shared_cb)
+
+    Add methods to handle the signals.
+
+Read through the methods of the :class:`Activity` class below, to learn
+more about how to make an activity work.
+
+Hint: A good and simple activity to learn from is the Read activity.
+You may copy it and use it as a template.
+'''
 
 import gettext
 import logging
@@ -117,6 +221,9 @@ N_IFACE_NAME = 'org.freedesktop.Notifications'
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
 PREVIEW_SIZE = style.zoom(300), style.zoom(225)
+"""
+Size of a preview image for journal object metadata.
+"""
 
 
 class _ActivitySession(GObject.GObject):
@@ -170,118 +277,31 @@ class _ActivitySession(GObject.GObject):
 
 
 class Activity(Window, Gtk.Container):
-    '''
-    This is the base Activity class that all other Activities derive from.
-    This is where your activity starts.
+    """
+    Initialise an Activity.
 
-    To get a working Activity:
-        0. Derive your Activity from this class:
+    Args:
+        handle (:class:`~sugar3.activity.activityhandle.ActivityHandle`): instance providing the activity id and access to the presence service which *may* provide sharing for this application
+        create_jobject (boolean): DEPRECATED: define if it should create a journal object if we are not resuming. The parameter is ignored, and always will be created a object in the Journal.
 
-        .. code-block:: python
+    **Signals:**
+        * **shared** - the activity has been shared on a network in order that other users may join,
+        * **joined** - the activity has joined with other instances of the activity to create a shared network activity.
 
-            class MyActivity(activity.Activity):
-                ...
+    Side effects:
 
-        1. implement an __init__() method for your Activity class.
+        * sets the gdk screen DPI setting (resolution) to the Sugar screen resolution.
 
-        Use your init method to create your own ToolbarBox.
-        This is the code to make a basic toolbar with the activity
-        toolbar and a stop button.
+        * connects our "destroy" message to our _destroy_cb method.
 
-        .. code-block:: python
+        * creates a base Gtk.Window within this window.
 
-            from sugar3.graphics.toolbarbox import ToolbarBox
-            from sugar3.activity.widgets import ActivityToolbarButton
-            from sugar3.activity.widgets import StopButton
+        * creates an ActivityService (self._bus) servicing this application.
 
-            def __init__(self, handle):
-                activity.Activity.__init__(self, handle)
-
-                toolbar_box = ToolbarBox()
-                activity_button = ActivityToolbarButton(self)
-                toolbar_box.toolbar.insert(activity_button, 0)
-                activity_button.show()
-
-                ... Your toolbars ...
-
-                separator = Gtk.SeparatorToolItem(draw=False)
-                separator.set_expand(True)
-                toolbar_box.toolbar.insert(separator, -1)
-                separator.show()
-
-                stop_button = StopButton(self)
-                toolbar_box.toolbar.insert(stop_button, -1)
-                stop_button.show()
-
-                self.set_toolbar_box(toolbar_box)
-                toolbar_box.show()
-
-        Add extra Toolbars to your toolbox.
-
-        You should setup Activity sharing here too.
-
-        Finaly, your Activity may need some resources which you can claim
-        here too.
-
-        The __init__() method is also used to make the distinction between
-        being resumed from the Journal, or starting with a blank document.
-
-        2. Implement :func:`sugar3.activity.activity.Activity.read_file()` and
-        :func:`sugar3.activity.activity.Activity.write_file()`
-        Most activities revolve around creating and storing Journal entries.
-        For example, Write: You create a document, it is saved to the
-        Journal and then later you resume working on the document.
-
-        :func:`sugar3.activity.activity.Activity.read_file()` and
-        :func:`sugar3.activity.activity.Activity.write_file()`
-        will be called by sugar to tell your
-        Activity that it should load or save the document the user is
-        working on.
-
-        3. Implement our Activity Toolbars.
-
-        The Toolbars are added to your Activity in step 1 (the toolbox), but
-        you need to implement them somewhere. Now is a good time.
-
-        There are a number of standard Toolbars. The most basic one, the one
-        your almost absolutely MUST have is the ActivityToolbar. Without
-        this, you're not really making a proper Sugar Activity (which may be
-        okay, but you should really stop and think about why not!) You do
-        this with the ActivityToolbox(self) call in step 1.
-
-        Usually, you will also need the standard EditToolbar. This is the
-        one which has the standard copy and paste buttons. You need to
-        derive your own EditToolbar class from
-        :class:`sugar3.activity.widgets.EditToolbar`:
-
-        .. code-block:: python
-
-            from sugar3.activity.widgets import EditToolbar
-
-            class MyEditToolbar(EditToolbar):
-                ...
-
-        See EditToolbar for the methods you should implement in your class.
-
-        Finaly, your Activity will very likely need some activity specific
-        buttons and options you can create your own toolbars by deriving a
-        class from :class:`Gtk.Toolbar`:
-
-        .. code-block:: python
-
-            class MySpecialToolbar(Gtk.Toolbar):
-            ...
-
-        4. Use your creativity. Make your Activity something special and share
-           it with your friends!
-
-        Read through the methods of the Activity class below, to learn more
-        about how to make an Activity work.
-
-        Hint: A good and simple Activity to learn from is the Read activity.
-        To create your own activity, you may want to copy it and use it as a
-        template.
-    '''
+    When your activity implements :func:`__init__`, it must call the
+    :class:`Activity` class :func:`__init__` before any
+    :class:`Activity` specific code.
+    """
 
     __gtype_name__ = 'SugarActivity'
 
@@ -294,39 +314,6 @@ class Activity(Window, Gtk.Container):
     }
 
     def __init__(self, handle, create_jobject=True):
-        '''
-        Initialise the Activity
-
-        Args:
-
-        handle (sugar3.activity.activityhandle.ActivityHandle)
-            instance providing the activity id and access to the
-            presence service which *may* provide sharing for this
-            application
-        create_jobject (boolean)
-            DEPRECATED: define if it should create a journal object if we are
-            not resuming. The parameter is ignored, and always  will
-            be created a object in the Journal.
-
-        Side effects:
-
-            Sets the gdk screen DPI setting (resolution) to the
-            Sugar screen resolution.
-
-            Connects our "destroy" message to our _destroy_cb
-            method.
-
-            Creates a base Gtk.Window within this window.
-
-            Creates an ActivityService (self._bus) servicing
-            this application.
-
-        Usage:
-            If your Activity implements __init__(), it should call
-            the base class __init()__ before doing Activity specific things.
-
-        '''
-
         # Stuff that needs to be done early
         icons_path = os.path.join(get_bundle_path(), 'icons')
         Gtk.IconTheme.get_default().append_search_path(icons_path)
@@ -464,6 +451,13 @@ class Activity(Window, Gtk.Container):
         self._original_title = self._jobject.metadata['title']
 
     def add_stop_button(self, button):
+        """
+        Register an extra stop button.  Normally not required.  Use only
+        when an activity has more than the default stop button.
+
+        Args:
+            button (:class:`Gtk.Button`): a stop button
+        """
         self._stop_buttons.append(button)
 
     def run_main_loop(self):
@@ -548,6 +542,14 @@ class Activity(Window, Gtk.Container):
         wait_loop.quit()
 
     def get_active(self):
+        '''
+        Get whether the activity is active.  An activity may be made
+        inactive by the shell as a result of another activity being
+        active.  An active activity accumulates usage metrics.
+
+        Returns:
+            boolean: if the activity is active.
+        '''
         return self._active
 
     def _update_spent_time(self):
@@ -562,6 +564,14 @@ class Activity(Window, Gtk.Container):
             self._active_time = current
 
     def set_active(self, active):
+        '''
+        Set whether the activity is active.  An activity may declare
+        itself active or inactive, as can the shell.  An active activity
+        accumulates usage metrics.
+
+        Args:
+            active (boolean): if the activity is active.
+        '''
         if self._active != active:
             self._active = active
             self._update_spent_time()
@@ -570,12 +580,22 @@ class Activity(Window, Gtk.Container):
 
     active = GObject.property(
         type=bool, default=False, getter=get_active, setter=set_active)
+    '''
+        Whether an activity is active.
+    '''
 
     def get_max_participants(self):
         '''
+        Get the maximum number of users that can share a instance
+        of this activity.  Should be configured in the activity.info
+        file.  When not configured, it will be zero.
+
         Returns:
-            int: the max number of users than can share a instance of the
-            activity. Should be configured in the activity.info file.
+            int: the maximum number of participants
+
+        See also
+        :func:`~sugar3.bundle.activitybundle.ActivityBundle.get_max_participants`
+        in :class:`~sugar3.bundle.activitybundle.ActivityBundle`.
         '''
         # If max_participants has not been set in the activity, get it
         # from the bundle.
@@ -585,6 +605,16 @@ class Activity(Window, Gtk.Container):
         return self._max_participants
 
     def set_max_participants(self, participants):
+        '''
+        Set the maximum number of users that can share a instance of
+        this activity.  An activity may use this method instead of or
+        as well as configuring the activity.info file.  When both are
+        used, this method takes precedence over the activity.info
+        file.
+
+        Args:
+            participants (int): the maximum number of participants
+        '''
         self._max_participants = participants
 
     max_participants = GObject.property(
@@ -593,15 +623,18 @@ class Activity(Window, Gtk.Container):
 
     def get_id(self):
         '''
+        Get the activity id, a likely-unique identifier for the
+        instance of an activity, randomly assigned when a new instance
+        is started, or read from the journal object metadata when a
+        saved instance is resumed.
+
         Returns:
 
-            int: the activity id of the current instance of your activity.
+            str: the activity id
 
-            The activity id is sort-of-like the unix process id (PID). However,
-            unlike PIDs it is only different for each new instance
-            and stays the same everytime a user
-            resumes an activity. This is also the identity of your Activity to
-            other XOs for use when sharing.
+        See also
+        :meth:`~sugar3.activity.activityfactory.create_activity_id`
+        and :meth:`~sugar3.util.unique_id`.
         '''
         return self._activity_id
 
@@ -614,6 +647,8 @@ class Activity(Window, Gtk.Container):
 
     def get_canvas(self):
         '''
+        Get the :attr:`canvas`.
+
         Returns:
             :class:`Gtk.Widget`: the widget used as canvas
         '''
@@ -621,9 +656,7 @@ class Activity(Window, Gtk.Container):
 
     def set_canvas(self, canvas):
         '''
-        Sets the 'work area' of your activity with the canvas of your choice.
-
-        One commonly used canvas is Gtk.ScrolledWindow
+        Set the :attr:`canvas`.
 
         Args:
             canvas (:class:`Gtk.Widget`): the widget used as canvas
@@ -634,6 +667,10 @@ class Activity(Window, Gtk.Container):
             canvas.connect('map', self.__canvas_map_cb)
 
     canvas = property(get_canvas, set_canvas)
+    '''
+    The :class:`Gtk.Widget` used as canvas, or work area of your
+    activity.  A common canvas is :class:`Gtk.ScrolledWindow`.
+    '''
 
     def __screen_size_changed_cb(self, screen):
         self._adapt_window_to_screen()
@@ -709,8 +746,10 @@ class Activity(Window, Gtk.Container):
         Subclasses implement this method if they support resuming objects from
         the journal. 'file_path' is the file to read from.
 
-        You should immediately open the file from the file_path, because the
-        file_name will be deleted immediately after returning from read_file().
+        You should immediately open the file from the file_path,
+        because the file_name will be deleted immediately after
+        returning from :meth:`read_file`.
+
         Once the file has been opened, you do not have to read it immediately:
         After you have opened it, the file will only be really gone when you
         close it.
@@ -722,7 +761,7 @@ class Activity(Window, Gtk.Container):
         originals.
 
         Args:
-            str: the file path to read
+            file_path (str): the file path to read
         '''
         raise NotImplementedError
 
@@ -738,10 +777,10 @@ class Activity(Window, Gtk.Container):
         activity. For example, the Read activity saves the current page and
         zoom level, so it can display the page.
 
-        Note: Currently, the file_path *WILL* be different from the one you
-        received in file_read(). Even if you kept the file_path from
-        file_read() open until now, you must still write the entire file to
-        this file_path.
+        Note: Currently, the file_path *WILL* be different from the
+        one you received in :meth:`read_file`. Even if you kept the
+        file_path from :meth:`read_file` open until now, you must
+        still write the entire file to this file_path.
 
         Args:
             file_path (str): complete path of the file to write
@@ -794,17 +833,20 @@ class Activity(Window, Gtk.Container):
 
     def get_preview(self):
         '''
+        Get a preview image from the :attr:`canvas`, for use as
+        metadata for the journal object.  This should be what the user
+        is seeing at the time.
+
         Returns:
-            str: with data ready to save with an image representing the state
-            of the activity. Generally this is what the user is seeing in
-            this moment.
+            str: image data in PNG format
 
-        Activities can override this method, which should return a str with the
-        binary content of a png image with a width of PREVIEW_SIZE pixels.
+        Activities may override this method, and return a string with
+        image data in PNG format with a width and height of
+        :attr:`~sugar3.activity.activity.PREVIEW_SIZE` pixels.
 
-        The method does create a cairo surface similar to that of the canvas'
-        window and draws on that. Then we create a cairo image surface with
-        the desired preview size and scale the canvas surface on that.
+        The method creates a Cairo surface similar to that of the
+        :ref:`Gdk.Window` of the :meth:`canvas` widget, draws on it,
+        then resizes to a surface with the preview size.
         '''
         if self.canvas is None or not hasattr(self.canvas, 'get_window'):
             return None
@@ -864,12 +906,13 @@ class Activity(Window, Gtk.Container):
 
     def save(self):
         '''
-        Request that the activity is saved to the Journal.
+        Save to the journal.
 
-        This method is called by the close() method below. In general,
-        activities should not override this method. This method is part of the
-        public API of an Activity, and should behave in standard ways. Use your
-        own implementation of write_file() to save your Activity specific data.
+        This may be called by the :meth:`close` method.
+
+        Activities should not override this method. This method is part of the
+        public API of an activity, and should behave in standard ways. Use your
+        own implementation of write_file() to save your activity specific data.
         '''
 
         if self._jobject is None:
@@ -931,11 +974,15 @@ class Activity(Window, Gtk.Container):
 
     def copy(self):
         '''
-        Request that the activity 'Keep in Journal' the current state
-        of the activity.
+        Make a copy of the journal object.
 
-        Activities should not override this method. Instead, like save() do any
-        copy work that needs to be done in write_file()
+        Activities may use this to 'Keep in Journal' the current state
+        of the activity.  A new journal object will be created for the
+        running activity.
+
+        Activities should not override this method. Instead, like
+        :meth:`save` do any copy work that needs to be done in
+        :meth:`write_file`.
         '''
         logging.debug('Activity.copy: %r' % self._jobject.object_id)
         self.save()
@@ -968,17 +1015,22 @@ class Activity(Window, Gtk.Container):
 
     def get_shared_activity(self):
         '''
-        Returns:
-            an instance of the shared Activity or None
+        Get the shared activity of type
+        :class:`sugar3.presence.activity.Activity`, or None if the
+        activity is not shared, or is shared and not yet joined.
 
-        The shared activity is of type sugar3.presence.activity.Activity
+        Returns:
+            :class:`sugar3.presence.activity.Activity`: instance of
+                the shared activity or None
         '''
         return self.shared_activity
 
     def get_shared(self):
         '''
+        Get whether the activity is shared.
+
         Returns:
-             bool: True if the activity is shared on the mesh.
+            bool: the activity is shared.
         '''
         if not self.shared_activity:
             return False
@@ -1025,14 +1077,14 @@ class Activity(Window, Gtk.Container):
 
     def invite(self, account_path, contact_id):
         '''
-        Invite a buddy to join this Activity.
+        Invite a buddy to join this activity.
 
         Args:
             account_path
             contact_id
 
-        Side Effects:
-            Calls self.share(True) to privately share the activity if it wasn't
+        **Side Effects:**
+            Calls :meth:`share` to privately share the activity if it wasn't
             shared before.
         '''
         self._invites_queue.append((account_path, contact_id))
@@ -1049,10 +1101,11 @@ class Activity(Window, Gtk.Container):
 
         Args:
             private (bool): True to share by invitation only,
-            False to advertise as shared to everyone.
+                False to advertise as shared to everyone.
 
-        Once the activity is shared, its privacy can be changed by setting
-        its 'private' property.
+        Once the activity is shared, its privacy can be changed by
+        setting the :attr:`private` property of the
+        :attr:`sugar3.presence.activity.Activity` class.
         '''
         if self.shared_activity and self.shared_activity.props.joined:
             raise RuntimeError('Activity %s already shared.' %
@@ -1097,8 +1150,14 @@ class Activity(Window, Gtk.Container):
 
     def can_close(self):
         '''
-        Activities should override this function if they want to perform
-        extra checks before actually closing.
+        Return whether :func:`close` is permitted.
+
+        An activity may override this function to code extra checks
+        before closing.
+
+        Returns:
+            bool: whether :func:`close` is permitted by activity,
+            default True.
         '''
 
         return True
@@ -1229,14 +1288,18 @@ class Activity(Window, Gtk.Container):
 
     def close(self, skip_save=False):
         '''
-        Request that the activity be stopped and saved to the Journal
+        Save to the journal and stop the activity.
 
-        Activities should not override this method, but should implement
-        write_file() to do any state saving instead. If the application wants
-        to control wether it can close, it should override can_close().
+        Activities should not override this method, but should
+        implement :meth:`write_file` to do any state saving
+        instead. If the activity wants to control wether it can close,
+        it should override :meth:`can_close`.
 
         Args:
-            skip_save (bool)
+            skip_save (bool): avoid last-chance save; but does not prevent
+                a journal object, as an object is created when the activity
+                starts.  Use this when an activity calls :meth:`save` just
+                prior to :meth:`close`.
         '''
         if not self.can_close():
             return
@@ -1267,9 +1330,11 @@ class Activity(Window, Gtk.Container):
 
     def get_metadata(self):
         '''
+        Get the journal object metadata.
+
         Returns:
 
-            dict: the jobject metadata or None if there is no jobject.
+            dict: the journal object metadata, or None if there is no object.
 
         Activities can set metadata in write_file() using:
 
@@ -1283,8 +1348,9 @@ class Activity(Window, Gtk.Container):
 
             self.metadata.get('MyKey', 'aDefaultValue')
 
-        Note: Make sure your activity works properly if one or more of the
-        metadata items is missing. Never assume they will all be present.
+        Make sure your activity works properly if one or more of the
+        metadata items is missing. Never assume they will all be
+        present.
         '''
         if self._jobject:
             return self._jobject.metadata
@@ -1295,27 +1361,32 @@ class Activity(Window, Gtk.Container):
 
     def handle_view_source(self):
         '''
-        A developer can impleement this method to show aditional information
-        in the View Source window. Example implementations are available
-        on activities Browse or TurtleArt.
+        An activity may override this method to show aditional
+        information in the View Source window. Examples can be seen in
+        Browse and TurtleArt.
+
+        Raises:
+            :exc:`NotImplementedError`
         '''
         raise NotImplementedError
 
     def get_document_path(self, async_cb, async_err_cb):
+        '''
+        Not implemented.
+        '''
         async_err_cb(NotImplementedError())
 
     def busy(self):
         '''
         Show that the activity is busy.  If used, must be called once
-        before a lengthy operation, and unbusy must be called after
-        the operation completes.
+        before a lengthy operation, and :meth:`unbusy` must be called
+        after the operation completes.
 
         .. code-block:: python
 
             self.busy()
             self.long_operation()
             self.unbusy()
-
         '''
         if self._busy_count == 0:
             self._old_cursor = self.get_window().get_cursor()
@@ -1324,12 +1395,12 @@ class Activity(Window, Gtk.Container):
 
     def unbusy(self):
         '''
-        Returns:
-
-            int: a count of further calls to unbusy expected
-
         Show that the activity is not busy.  An equal number of calls
-        to unbusy are required to balance the calls to busy.
+        to :meth:`unbusy` are required to balance the calls to
+        :meth:`busy`.
+
+        Returns:
+            int: a count of further calls to :meth:`unbusy` expected
         '''
         self._busy_count -= 1
         if self._busy_count == 0:
@@ -1434,6 +1505,12 @@ def get_activity_root():
 
 
 def show_object_in_journal(object_id):
+    '''
+    Raise the journal activity and show a journal object.
+
+    Args:
+        object_id (object): journal object
+    '''
     bus = dbus.SessionBus()
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
@@ -1441,6 +1518,13 @@ def show_object_in_journal(object_id):
 
 
 def launch_bundle(bundle_id='', object_id=''):
+    '''
+    Launch an activity for a journal object, or an activity.
+
+    Args:
+        bundle_id (str): activity bundle id, optional
+        object_id (object): journal object
+    '''
     bus = dbus.SessionBus()
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     bundle_launcher = dbus.Interface(obj, J_DBUS_INTERFACE)
@@ -1448,6 +1532,13 @@ def launch_bundle(bundle_id='', object_id=''):
 
 
 def get_bundle(bundle_id='', object_id=''):
+    '''
+    Get the bundle id of an activity that can open a journal object.
+
+    Args:
+        bundle_id (str): activity bundle id, optional
+        object_id (object): journal object
+    '''
     bus = dbus.SessionBus()
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)

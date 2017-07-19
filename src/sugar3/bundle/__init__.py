@@ -14,3 +14,100 @@
 # License along with this library; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
+
+'''
+
+Activity Metadata
+=================
+
+Your `activity/activity.info` file must have these metadata keys after
+an `[Activity]` header:
+
+* `name` - the name of the activity, shown by Sugar in the list of
+  installed activities, e.g. Browse,
+
+* `activity_version` - the version of the activity, e.g. 1, 1.2,
+  1.2.3, 1.2.3-country, or 1.2.3~developer,
+
+* `bundle_id` - the activity bundle identifier, using Java package
+  naming conventions, usually an organisation or individual domain
+  name in reverse order, e.g. `org.sugarlabs.Name`,
+
+* `license` - an identifier for the software license of the bundle,
+  either a `Fedora License Short Name`_, (e.g. GPLv3+) or an `SPDX
+  License Identifier`_, with an optional `or later version` suffix,
+  e.g. `GPL-3.0+`,
+
+* `icon` - the icon file for the activity, shown by Sugar in the list
+  of installed activities,
+
+* `exec` - how to execute the activity, e.g. `sugar-activity module.Class`,
+
+Optional metadata keys are;
+
+* `mime_types` - list of MIME types supported by the activity,
+  separated by semicolons.  Your `read_file` method must be able to read
+  files of these MIME types.  Used to offer your activity when opening a
+  downloaded file or a journal object.
+
+* `url` - link to the home page for the activity,
+
+* `repository` - link to repository for activity code,
+
+.. _SPDX License Identifier: http://spdx.org/licenses/
+.. _Fedora License Short Name: https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Good_Licenses
+
+AppStream Metadata
+==================
+
+AppStream is a standard, distribution independent package metadata.
+For Sugar activities, the AppStream metadata is automatically exported
+from the activity.info file by the bundlebuilder during the install
+step.
+
+In order to be compliant with AppStream, activities must have the
+following metadata fields under the [Activity] header (of the
+`activity.info` file):
+
+* `metadata_license` - license for screenshots and description.  AppStream
+  requests only using one of the following: `CC0-1.0`, `CC-BY-3.0`,
+  `CC-BY-SA-3.0` or `GFDL-1.3`
+
+* `description` - a long (multi paragraph) description of your application.
+  This must be written in a subset of HTML.  Only the p, ol, ul and li tags
+  are supported.
+
+Optional metadata key:
+
+* `screenshots` - a space separated list of screenshot URLs.  PNG or JPEG files
+  are supported.
+
+Example `activity.info`
+-----------------------
+
+.. code-block:: ini
+    :emphasize-lines: 10-12,20-21
+
+    [Activity]
+    name = Browse
+    bundle_id = org.laptop.WebActivity
+    exec = sugar-activity webactivity.WebActivity
+    activity_version = 200
+    icon = activity-web
+    max_participants = 100
+    summary = Surf the world!
+
+    license = GPL-3.0+
+    metadata_license = CC0-1.0
+    description:
+        <p>Surf the world! Here you can do research, watch educational videos, take online courses, find books, connect with friends and more.  Browse is powered by the WebKit2 rendering engine with the Faster Than Light javascript interpreter - allowing you to view the full beauty of the web.</p>
+        <p>To help in researching, Browse offers many features:</p>
+        <ul>
+            <li>Bookmark (save) good pages you find - never loose good resources or forget to add them to your bibliography</li>
+            <li>Bookmark pages with collaborators in real time - great for researching as a group or teachers showing pages to their class</li>
+            <li>Comment on your bookmarked pages - a great tool for making curated collections</li>
+        </ul>
+    url = https://github.com/sugarlabs/browse-activity
+    screenshots = https://people.sugarlabs.org/sam/activity-ss/browse-1-1.png https://people.sugarlabs.org/sam/activity-ss/browse-1-2.png
+
+'''

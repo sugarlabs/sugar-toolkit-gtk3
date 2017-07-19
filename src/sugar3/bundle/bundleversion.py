@@ -15,17 +15,39 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-#
-# Based on the implementation of PEP 386, but adapted to our
-# numeration schema.
-#
+
+"""
+Validation and normalization of bundle versions.
+
+Instances of :class:`NormalizedVersion` can be directly compared;
+
+    >>> from sugar3.bundle.bundleversion import NormalizedVersion
+    >>> a = NormalizedVersion('157.3')
+    >>> b = NormalizedVersion('201.2')
+    >>> a > b
+    False
+    >>> b > a
+    True
+
+Invalid versions will raise :exc:`InvalidVersionError`.
+
+Valid versions are `1`, `1.2`, `1.2.3`, `1.2.3-peru`, and
+`1.2.3~dfsg`.
+
+Invalid versions are:
+    * `1.2peru` (because the suffix must be preceded with a dash or tilde),
+    * `1.2.` (because a version can't end with a period), or
+    * `1.02.5` (because a version can't have a leading zero).
+
+Based on the implementation of :pep:`386`, but adapted to our
+numeration schema.
+
+Attributes:
+    VERSION_RE (RegexObject): regular expression for versions, deprecated, as it is insufficient by itself.
+"""
 
 import re
 
-
-class InvalidVersionError(Exception):
-    """The passed activity version can not be normalized."""
-    pass
 
 VERSION_RE = re.compile(r'''
     ^
@@ -37,30 +59,30 @@ VERSION_RE = re.compile(r'''
     $''', re.VERBOSE)
 
 
-class NormalizedVersion(object):
-    """A normalized version.
-
-    Good:
-        1
-        1.2
-        1.2.3
-        1.2.3-peru
-        1.2.3~dfsg
-
-    Bad:
-        1.2peru        # must be separated with -
-        1.2.           # can't end with '.'
-        1.02.5         # can't have a leading zero
-
+class InvalidVersionError(Exception):
     """
+    A version cannot be normalized, because:
+        * the object is not a string,
+        * the string does not match the regular expression, or
+        * the string has a leading zero in a version part.
+    """
+    pass
 
+
+class NormalizedVersion(object):
+    """
+    Normalize a version string.
+
+    Args:
+        activity_version (str): the version string
+
+    Raises:
+        :exc:`InvalidVersionError`
+
+    Attributes:
+        parts (list): the numeric parts of the version after normalization.
+    """
     def __init__(self, activity_version):
-        """Create a NormalizedVersion instance from a version string.
-
-        Keyword arguments:
-        activity_version -- The version string
-
-        """
         self._activity_version = activity_version
         self.parts = []
         self._local = None
