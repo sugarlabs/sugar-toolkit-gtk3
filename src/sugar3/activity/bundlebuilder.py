@@ -463,6 +463,9 @@ class Installer(Packager):
         if info.has_option('Activity', 'repository_url'):
             ET.SubElement(root, 'url', type='bugtracker').text = \
                 info.get('Activity', 'repository_url')
+        elif info.has_option('Activity', 'repository'):
+            ET.SubElement(root, 'url', type='bugtracker').text = \
+                info.get('Activity', 'repository')
 
         path = os.path.join(prefix, 'share', 'metainfo',
                             self.config.bundle_id + '.appdata.xml')
