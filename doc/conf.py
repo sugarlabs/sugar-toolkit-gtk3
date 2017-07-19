@@ -67,7 +67,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Sugar Toolkit GTK3'
-copyright = u'2016, Sugar Labs'
+copyright = u'2017, Sugar Labs'
 author = u'Sugar Labs'
 
 # The version info for the project you're documenting, acts as replacement for
