@@ -1,3 +1,0 @@
-Sugar is the core of the OLPC Human Interface. The toolkit provides
-a set of widgets to build HIG compliant applications and interfaces
-to interact with system services like presence and the datastore.
