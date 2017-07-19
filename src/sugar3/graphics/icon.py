@@ -39,7 +39,7 @@ X" option to 11, "Spacing Y" to 11 and "Major grid line every" to 1.
 
 Before your icon is ready to be used in Sugar, it needs to be Sugarized.  This
 converts the colors to SVG entities, which allows Sugar to change the colors
-of the icon.  To do that, just run the `sugar-iconfiy`__ script.  Usually, it
+of the icon.  To do that, just run the `sugar-iconify`__ script.  Usually, it
 "just works" like::
 
     python path/to/sugar-iconify.py -o icon.svg

@@ -17,7 +17,7 @@
 
 """Activity implementation code for Sugar-based activities
 
-Each activity within the OLPC environment must provide two
+Each activity within the Sugar environment must provide two
 dbus services.  The first, patterned after the
 
     sugar3.activity.activityfactory.ActivityFactory
