@@ -17,70 +17,13 @@
 # Boston, MA 02111-1307, USA.
 
 '''
-The bundle builder provides a build system for Sugar activities.  Usually, it
+The bundle builder is a build system for Sugar activities.  Usually, it
 is setup by creating a `setup.py` file in the project with the following::
 
-    # setup.py
     #!/usr/bin/env python
 
     from sugar3.activity import bundlebuilder
     bundlebuilder.start()
-
-AppStream Metadata
-==================
-
-AppStream is the standard, distro-agnostic way of providing package metadata.
-For Sugar activities, the AppStream metadata is automatically exported from
-the activity.info file by the bundlebuilder.
-
-Activities must have the following metadata fields under the [Activity] header
-(of the `activity.info` file):
-
-* `metadata_license` - license for screenshots and description.  AppStream
-  requests only using one of the following: `CC0-1.0`, `CC-BY-3.0`,
-  `CC-BY-SA-3.0` or `GFDL-1.3`
-* `license` - a `SPDX License Code`__, eg. `GPL-3.0+`
-* `name`, `icon`, `bundle_id`, `summary` - same usage as in Sugar
-* `description` - a long (multi paragraph) description of your application.
-  This must be written in a subset of HTML.  Only the p, ol, ul and li tags
-  are supported.
-
-Other good metadata items to have are:
-
-* `url` - link to the home page for the activity on the internet
-* `repository_url` - link to repository for activity code
-* `screenshots` - a space separated list of screenshot URLs.  PNG or JPEG files
-  are supported.
-
-__ http://spdx.org/licenses/
-
-Example `activity.info`
------------------------
-
-.. code-block:: ini
-    :emphasize-lines: 10-12,20-21
-
-    [Activity]
-    name = Browse
-    bundle_id = org.laptop.WebActivity
-    exec = sugar-activity webactivity.WebActivity
-    activity_version = 200
-    icon = activity-web
-    max_participants = 100
-    summary = Surf the world!
-
-    license = GPL-2.0+
-    metadata_license = CC0-1.0
-    description:
-        <p>Surf the world! Here you can do research, watch educational videos, take online courses, find books, connect with friends and more.  Browse is powered by the WebKit2 rendering engine with the Faster Than Light javascript interpreter - allowing you to view the full beauty of the web.</p>
-        <p>To help in researching, Browse offers many features:</p>
-        <ul>
-            <li>Bookmark (save) good pages you find - never loose good resources or forget to add them to your bibliography</li>
-            <li>Bookmark pages with collaborators in real time - great for researching as a group or teachers showing pages to their class</li>
-            <li>Comment on your bookmarked pages - a great tool for making curated collections</li>
-        </ul>
-    url = https://github.com/sugarlabs/browse-activity
-    screenshots = https://people.sugarlabs.org/sam/activity-ss/browse-1-1.png https://people.sugarlabs.org/sam/activity-ss/browse-1-2.png
 '''
 
 import argparse
