@@ -246,7 +246,7 @@ class Alert(Gtk.EventBox):
         Emitting response when we have a result
 
         A result can be that a user has clicked a button or
-        a timeout has occured, the id identifies the button
+        a timeout has occurred, the id identifies the button
         that has been clicked and -1 for a timeout
         """
         self.emit('response', response_id)

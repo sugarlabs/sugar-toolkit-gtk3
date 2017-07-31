@@ -240,7 +240,7 @@ def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
         try:
             res = f(*args, **kwargs)
         except:
-            trace_logger.exception("Exception occured in %s" % f.__name__)
+            trace_logger.exception("Exception occurred in %s" % f.__name__)
             raise
 
         trace_logger.log(TRACE, "%s(%s) returned %s", f.__name__,
