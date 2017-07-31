@@ -436,6 +436,4 @@ class _GstSpeechPlayer(GObject.GObject):
 
         best = voices.get(language_location) or voices.get(language) \
             or 'default'
-        logging.debug('Best voice for LANG %s seems to be %s',
-                      locale, best)
         return best
