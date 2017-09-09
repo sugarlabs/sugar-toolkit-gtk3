@@ -134,7 +134,7 @@ class Builder(object):
         if os.path.exists(self.locale_dir):
             shutil.rmtree(self.locale_dir)
 
-        for f in os.listdir(po_dir):
+        for f in sorted(os.listdir(po_dir)):
             if not f.endswith('.po') or f == 'pseudo.po':
                 continue
 
