@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2016-03-04 23:02+0000\n"
+"PO-Revision-Date: 2017-08-03 04:18+0000\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_CN\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1457132541.000000\n"
+"X-POOTLE-MTIME: 1501733925.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
-msgstr ""
+msgstr "文本字符串"
 
 #: src/sugar3/mime.py:56
 msgid "Text"
@@ -160,7 +160,7 @@ msgstr "蓝"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
-msgstr ""
+msgstr "关闭"
 
 #: src/sugar3/graphics/alert.py:261 src/sugar3/graphics/alert.py:427
 msgid "Cancel"
@@ -231,27 +231,27 @@ msgstr "无论如何停止"
 
 #: src/sugar3/speech.py:51
 msgid "Afrikaans"
-msgstr ""
+msgstr "南非荷兰语"
 
 #: src/sugar3/speech.py:53
 msgid "Aragonese"
-msgstr ""
+msgstr "阿拉贡语"
 
 #: src/sugar3/speech.py:55
 msgid "Bulgarian"
-msgstr ""
+msgstr "保加利亚语"
 
 #: src/sugar3/speech.py:57
 msgid "Bosnian"
-msgstr ""
+msgstr "波斯尼亚语"
 
 #: src/sugar3/speech.py:59
 msgid "Catalan"
-msgstr ""
+msgstr "加泰罗尼亚语"
 
 #: src/sugar3/speech.py:61
 msgid "Czech"
-msgstr ""
+msgstr "捷克语"
 
 #: src/sugar3/speech.py:63
 msgid "Welsh"
@@ -259,32 +259,31 @@ msgstr "威尔士语"
 
 #: src/sugar3/speech.py:65
 msgid "Danish"
-msgstr ""
+msgstr "丹麦语"
 
 #: src/sugar3/speech.py:67
 msgid "German"
-msgstr ""
+msgstr "德语"
 
 #: src/sugar3/speech.py:69
-#, fuzzy
 msgid "Greek"
-msgstr "绿"
+msgstr "希腊语"
 
 #: src/sugar3/speech.py:70
 msgid "Default"
-msgstr ""
+msgstr "默认的"
 
 #: src/sugar3/speech.py:72
 msgid "English Britain"
-msgstr ""
+msgstr "英语（英国）"
 
 #: src/sugar3/speech.py:74
 msgid "English scottish"
-msgstr ""
+msgstr "英语（苏格兰）"
 
 #: src/sugar3/speech.py:75
 msgid "English-north"
-msgstr ""
+msgstr "英语（北欧）"
 
 #: src/sugar3/speech.py:77
 msgid "English_rp"
@@ -296,19 +295,19 @@ msgstr ""
 
 #: src/sugar3/speech.py:81
 msgid "English USA"
-msgstr ""
+msgstr "英语（美国）"
 
 #: src/sugar3/speech.py:83
 msgid "English West Indies"
-msgstr ""
+msgstr "英语（西印度群岛）"
 
 #: src/sugar3/speech.py:85
 msgid "Esperanto"
-msgstr ""
+msgstr "世界语"
 
 #: src/sugar3/speech.py:87
 msgid "Spanish"
-msgstr "西班牙"
+msgstr "西班牙语"
 
 #: src/sugar3/speech.py:88
 msgid "Spanish latin american"
@@ -316,11 +315,11 @@ msgstr ""
 
 #: src/sugar3/speech.py:90
 msgid "Estonian"
-msgstr ""
+msgstr "爱沙尼亚语"
 
 #: src/sugar3/speech.py:92
 msgid "Farsi"
-msgstr ""
+msgstr "波斯语"
 
 #: src/sugar3/speech.py:94
 msgid "Farsi-pinglish"
@@ -332,11 +331,11 @@ msgstr "芬兰语"
 
 #: src/sugar3/speech.py:98
 msgid "French belgium"
-msgstr ""
+msgstr "法语（比利时）"
 
 #: src/sugar3/speech.py:100
 msgid "French"
-msgstr ""
+msgstr "法语"
 
 #: src/sugar3/speech.py:102
 msgid "Irish-gaeilge"
@@ -344,7 +343,7 @@ msgstr ""
 
 #: src/sugar3/speech.py:104
 msgid "Greek-ancient"
-msgstr ""
+msgstr "古希腊语"
 
 #: src/sugar3/speech.py:106
 msgid "Hindi"
@@ -376,7 +375,7 @@ msgstr "冰岛语"
 
 #: src/sugar3/speech.py:120
 msgid "Italian"
-msgstr ""
+msgstr "意大利语"
 
 #: src/sugar3/speech.py:122
 msgid "Lojban"
