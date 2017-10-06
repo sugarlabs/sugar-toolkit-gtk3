@@ -314,8 +314,14 @@ class SpeechManager(GObject.GObject):
         return None
 
     def get_all_traslated_voices(self):
+        """ deprecated after 0.112, due to method name spelling error """
         if self._player:
-            return self._player.get_all_voices()
+            return self._player.get_all_translated_voices()
+        return None
+
+    def get_all_translated_voices(self):
+        if self._player:
+            return self._player.get_all_translated_voices()
         return None
 
 
