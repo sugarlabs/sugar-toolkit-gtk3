@@ -71,7 +71,7 @@ translated_espeak_voices = {
     'de': _('German'),
     # Translators:  http://en.wikipedia.org/wiki/Modern_Greek
     'el': _('Greek'),
-    'en': _('Default'),
+    'en': _('English'),
     # Translators:  http://en.wikipedia.org/wiki/British_English
     'en_gb': _('English Britain'),
     # Translators:  http://en.wikipedia.org/wiki/Scottish_English
@@ -267,7 +267,7 @@ class SpeechManager(GObject.GObject):
         else:
             voice_name = self._player.get_all_voices()[lang_code]
         if text:
-            logging.debug('PLAYING "%s" lang %s', text, voice_name)
+            logging.error('PLAYING %r lang %r pitch %r rate %r', text, voice_name, pitch, rate)
             self._player.speak(pitch, rate, voice_name, text)
 
     def say_selected_text(self):
@@ -441,5 +441,5 @@ class _GstSpeechPlayer(GObject.GObject):
             language_location = 'es_la'
 
         best = voices.get(language_location) or voices.get(language) \
-            or 'default'
+            or 'english'
         return best
