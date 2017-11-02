@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2016-03-16 15:18+0000\n"
-"Last-Translator: Carlo <cfalciola@yahoo.it>\n"
+"PO-Revision-Date: 2017-10-31 14:23+0000\n"
+"Last-Translator: Sebastiano <SebastianoPistore.info@protonmail.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1458141481.000000\n"
+"X-POOTLE-MTIME: 1509459813.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
-msgstr ""
+msgstr "Stringa di testo"
 
 #: src/sugar3/mime.py:56
 msgid "Text"
@@ -171,7 +171,7 @@ msgstr "Blu"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
-msgstr ""
+msgstr "Chiudi"
 
 #: src/sugar3/graphics/alert.py:261 src/sugar3/graphics/alert.py:427
 msgid "Cancel"
@@ -230,11 +230,11 @@ msgstr "Errore di memorizzazione"
 
 #: src/sugar3/activity/activity.py:1053
 msgid "Keep error: all changes will be lost"
-msgstr "Errore di memorizzazione: tutte le modifiche saranno perse"
+msgstr "Errore di memorizzazione: tutte le modifiche andranno perse"
 
 #: src/sugar3/activity/activity.py:1056
 msgid "Don't stop"
-msgstr "Non Fermare"
+msgstr "Non fermare"
 
 #: src/sugar3/activity/activity.py:1060
 msgid "Stop anyway"
@@ -310,7 +310,7 @@ msgstr "Inglese (USA)"
 
 #: src/sugar3/speech.py:83
 msgid "English West Indies"
-msgstr ""
+msgstr "Inglese (Caraibi)"
 
 #: src/sugar3/speech.py:85
 msgid "Esperanto"
@@ -330,7 +330,7 @@ msgstr "Estone"
 
 #: src/sugar3/speech.py:92
 msgid "Farsi"
-msgstr "Farsi"
+msgstr "Persiano"
 
 #: src/sugar3/speech.py:94
 msgid "Farsi-pinglish"
@@ -482,7 +482,7 @@ msgstr "Svedese"
 
 #: src/sugar3/speech.py:168
 msgid "Swahili"
-msgstr ""
+msgstr "Swahili"
 
 #: src/sugar3/speech.py:170
 msgid "Tamil"
@@ -506,7 +506,7 @@ msgstr "Vietnam_sgn"
 
 #: src/sugar3/speech.py:178
 msgid "Mandarin"
-msgstr "Mandarino standard"
+msgstr "Cinese mandarino"
 
 #: src/sugar3/speech.py:180
 msgid "Cantonese"
