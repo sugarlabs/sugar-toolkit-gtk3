@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2017-04-13 11:05+0000\n"
+"PO-Revision-Date: 2017-11-05 19:14+0000\n"
 "Last-Translator: Moo <hazap@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: lt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1492081502.000000\n"
+"X-POOTLE-MTIME: 1509909243.000000\n"
 
 #: tests/data/sample.activity/activity.py:9
 msgid "Text string"
@@ -29,7 +29,7 @@ msgstr "Tekstas"
 
 #: src/sugar3/mime.py:63
 msgid "Image"
-msgstr "Paveikslėlis"
+msgstr "Paveikslas"
 
 #: src/sugar3/mime.py:68
 msgid "Audio"
@@ -45,7 +45,7 @@ msgstr "Nuoroda"
 
 #: src/sugar3/mime.py:91
 msgid "Bundle"
-msgstr "Ryšulys"
+msgstr "Rinkinys"
 
 #: src/sugar3/util.py:217
 msgid " and "
@@ -173,7 +173,7 @@ msgstr "Užverti"
 
 #: src/sugar3/graphics/alert.py:261 src/sugar3/graphics/alert.py:427
 msgid "Cancel"
-msgstr "Atšaukti"
+msgstr "Atsisakyti"
 
 #: src/sugar3/graphics/alert.py:265 src/sugar3/graphics/alert.py:309
 #: src/sugar3/graphics/alert.py:356 src/sugar3/graphics/alert.py:462
@@ -223,11 +223,11 @@ msgstr "Veikla %s"
 
 #: src/sugar3/activity/activity.py:1052
 msgid "Keep error"
-msgstr "Išlaikymo klaida"
+msgstr "Išsaugojimo klaida"
 
 #: src/sugar3/activity/activity.py:1053
 msgid "Keep error: all changes will be lost"
-msgstr "Išlaikymo klaida: visi pakeitimai bus prarasti"
+msgstr "Išsaugojimo klaida: visi pakeitimai bus prarasti"
 
 #: src/sugar3/activity/activity.py:1056
 msgid "Don't stop"
@@ -395,7 +395,7 @@ msgstr "Gruzinų"
 
 #: src/sugar3/speech.py:126
 msgid "Kannada"
-msgstr "Kanadų"
+msgstr "Kanadiečių"
 
 #: src/sugar3/speech.py:128
 msgid "Kurdish"
