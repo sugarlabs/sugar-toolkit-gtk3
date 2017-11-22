@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-03 10:01+1000\n"
-"PO-Revision-Date: 2017-04-10 16:22+0000\n"
+"POT-Creation-Date: 2017-10-16 18:58+1100\n"
+"PO-Revision-Date: 2017-11-07 15:20+0000\n"
 "Last-Translator: dbekele <almazsolutions@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: am\n"
@@ -16,490 +16,543 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1491841354.000000\n"
+"X-POOTLE-MTIME: 1510068004.000000\n"
 
-#: tests/data/sample.activity/activity.py:9
-msgid "Text string"
-msgstr "የተቀጣጠሉ ፊደሎች"
+#: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
+#, python-format
+msgid "%s Activity"
+msgstr "%s እንቅስቃሴ"
 
-#: src/sugar3/mime.py:56
-msgid "Text"
-msgstr "ጽሑፍ"
+#: ../src/sugar3/activity/activity.py:967 src/sugar3/activity/activity.py:1127
+msgid "Keep error"
+msgstr "የጥበቃ መልክት/ስህተት"
 
-#: src/sugar3/mime.py:63
-msgid "Image"
-msgstr "ምስል"
+#: ../src/sugar3/activity/activity.py:968 src/sugar3/activity/activity.py:1128
+msgid "Keep error: all changes will be lost"
+msgstr "የጥበቃ መልክት: የተደረጉት ለውጦች በሙሉ ይጠፋሉ"
 
-#: src/sugar3/mime.py:68
-msgid "Audio"
-msgstr "ድምፅ"
+#: ../src/sugar3/activity/activity.py:971 src/sugar3/activity/activity.py:1131
+msgid "Don't stop"
+msgstr "አታቁም/ሚ"
 
-#: src/sugar3/mime.py:75
-msgid "Video"
-msgstr "ፈልግ"
+#: ../src/sugar3/activity/activity.py:975 src/sugar3/activity/activity.py:1135
+msgid "Stop anyway"
+msgstr "የሆነ ሆኖ አቁም/ሚ"
 
-#: src/sugar3/mime.py:86
-msgid "Link"
-msgstr "አያያዝ"
+#: ../src/sugar3/activity/widgets.py:86 src/sugar3/activity/activity.py:1169
+#: src/sugar3/activity/widgets.py:86
+msgid "Stop"
+msgstr "አቁም/ሚ"
 
-#: src/sugar3/mime.py:91
-msgid "Bundle"
-msgstr "ጥቅል"
+#: ../src/sugar3/activity/widgets.py:98 src/sugar3/activity/widgets.py:99
+msgid "Undo"
+msgstr "ወደ ነበረበት መልስ/ሺ"
 
-#: src/sugar3/util.py:217
+#: ../src/sugar3/activity/widgets.py:106 src/sugar3/activity/widgets.py:107
+msgid "Redo"
+msgstr "እንደገና አድርግ/ጊ"
+
+#: ../src/sugar3/activity/widgets.py:113 src/sugar3/activity/widgets.py:114
+msgid "Copy"
+msgstr "ቅጂ/ዳ"
+
+#: ../src/sugar3/activity/widgets.py:121 src/sugar3/activity/widgets.py:122
+msgid "Paste"
+msgstr "ለጥፍ/ፊ"
+
+#: ../src/sugar3/activity/widgets.py:132 src/sugar3/activity/widgets.py:133
+msgid "Private"
+msgstr "የግል"
+
+#: ../src/sugar3/activity/widgets.py:139 src/sugar3/activity/widgets.py:140
+msgid "My Neighborhood"
+msgstr "ሰፈሬ"
+
+#: ../src/sugar3/activity/widgets.py:233 src/sugar3/activity/widgets.py:234
+msgid "Description"
+msgstr "መግለጫ"
+
+#: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
+#: src/sugar3/activity/activity.py:1189 src/sugar3/graphics/alert.py:301
+#: src/sugar3/graphics/alert.py:467
+msgid "Cancel"
+msgstr "ሻሪ/ር"
+
+#: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
+#: ../src/sugar3/graphics/alert.py:479 src/sugar3/graphics/alert.py:305
+#: src/sugar3/graphics/alert.py:346 src/sugar3/graphics/alert.py:393
+#: src/sugar3/graphics/alert.py:512
+msgid "Ok"
+msgstr "ይስማማል"
+
+#: ../src/sugar3/graphics/alert.py:434 src/sugar3/graphics/alert.py:464
+msgid "Continue"
+msgstr "ቀጥል/ዪ"
+
+#: ../src/sugar3/graphics/colorbutton.py:54
+#: src/sugar3/graphics/colorbutton.py:55
+msgid "Choose a color"
+msgstr "ቀለም ምረጪ/ጥ"
+
+#: ../src/sugar3/graphics/colorbutton.py:279
+#: src/sugar3/graphics/colorbutton.py:300
+msgid "Red"
+msgstr "ቀይ"
+
+#: ../src/sugar3/graphics/colorbutton.py:281
+#: src/sugar3/graphics/colorbutton.py:302
+msgid "Green"
+msgstr "አረንጓዴ"
+
+#: ../src/sugar3/graphics/colorbutton.py:283
+#: src/sugar3/graphics/colorbutton.py:304
+msgid "Blue"
+msgstr "ሰማያዊ"
+
+#: ../src/sugar3/util.py:217 src/sugar3/util.py:217
 msgid " and "
-msgstr "እና"
+msgstr " እና "
 
-#: src/sugar3/util.py:218
+#: ../src/sugar3/util.py:218 src/sugar3/util.py:218
 msgid ", "
-msgstr ","
+msgstr "፣ "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: src/sugar3/util.py:221
+#: ../src/sugar3/util.py:221 src/sugar3/util.py:221
 msgid "Seconds ago"
 msgstr "ከሰከንዶች በፊት"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: src/sugar3/util.py:225
-#, python-format
+#: ../src/sugar3/util.py:225 src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
 msgstr "%s በፊት"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: src/sugar3/util.py:240
+#: ../src/sugar3/util.py:240 src/sugar3/util.py:240
+#, python-format
 #, python-format, python-format, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d ዓመት"
 msgstr[1] "%d ዓመታት"
 
-#: src/sugar3/util.py:241
+#: ../src/sugar3/util.py:241 src/sugar3/util.py:241
+#, python-format
 #, python-format, python-format, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d ወር"
 msgstr[1] "%d ወራት"
 
-#: src/sugar3/util.py:242
+#: ../src/sugar3/util.py:242 src/sugar3/util.py:242
+#, python-format
 #, python-format, python-format, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d ሳምንት"
 msgstr[1] "%d ሳምንታት"
 
-#: src/sugar3/util.py:243
+#: ../src/sugar3/util.py:243 src/sugar3/util.py:243
+#, python-format
 #, python-format, python-format, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d ቀን"
 msgstr[1] "%d ቀናት"
 
-#: src/sugar3/util.py:244
+#: ../src/sugar3/util.py:244 src/sugar3/util.py:244
+#, python-format
 #, python-format, python-format, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d ሰኣት"
 msgstr[1] "%d ሰኣታት"
 
-#: src/sugar3/util.py:245
+#: ../src/sugar3/util.py:245 src/sugar3/util.py:245
+#, python-format
 #, python-format, python-format, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d ደቂቃ"
 msgstr[1] "%d ደቂቃዎች"
 
-#: src/sugar3/util.py:346
+#: ../src/sugar3/util.py:346 src/sugar3/util.py:346
 msgid "Empty"
 msgstr "ባዶ"
 
-#: src/sugar3/util.py:348
-#, python-format
+#: ../src/sugar3/util.py:348 src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
 msgstr "%d ባይት"
 
-#: src/sugar3/util.py:350
-#, python-format
+#: ../src/sugar3/util.py:350 src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr "%d ኬባይት"
+msgstr "%d ኬ ባይት"
 
-#: src/sugar3/util.py:352
-#, python-format
+#: ../src/sugar3/util.py:352 src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr "%d ሜጋባይት"
+msgstr "%d ሜጋ ባይት"
 
-#: src/sugar3/util.py:354
-#, python-format
+#: ../src/sugar3/util.py:354 src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr "%d አንድሺ ሜጋባይት"
+msgstr "%d ጊጋ ባይት"
 
-#: src/sugar3/graphics/colorbutton.py:55
-msgid "Choose a color"
-msgstr "ቀለም ምረጪ/ጥ"
+#: ../src/sugar3/mime.py:56 src/sugar3/mime.py:59
+msgid "Text"
+msgstr "ጽሑፍ"
 
-#: src/sugar3/graphics/colorbutton.py:300
-msgid "Red"
-msgstr "ቀይ"
+#: ../src/sugar3/mime.py:63 src/sugar3/mime.py:66
+msgid "Image"
+msgstr "ምስል"
 
-#: src/sugar3/graphics/colorbutton.py:302
-msgid "Green"
-msgstr "አረንጓዴ"
+#: ../src/sugar3/mime.py:68 src/sugar3/mime.py:71
+msgid "Audio"
+msgstr "ድምፅ"
 
-#: src/sugar3/graphics/colorbutton.py:304
-msgid "Blue"
-msgstr "ሰማያዊ"
+#: ../src/sugar3/mime.py:75 src/sugar3/mime.py:78
+msgid "Video"
+msgstr "ቪዲዮ"
 
-#: src/sugar3/graphics/popwindow.py:179
-msgid "Close"
-msgstr "ዝጊ/ጋ"
+#: ../src/sugar3/mime.py:86 src/sugar3/mime.py:89
+msgid "Link"
+msgstr "ማያያዣ"
 
-#: src/sugar3/graphics/alert.py:261 src/sugar3/graphics/alert.py:427
-msgid "Cancel"
-msgstr "ሻሪ/ር"
+#: ../src/sugar3/mime.py:91 src/sugar3/mime.py:94
+msgid "Bundle"
+msgstr "ጥቅል"
 
-#: src/sugar3/graphics/alert.py:265 src/sugar3/graphics/alert.py:309
-#: src/sugar3/graphics/alert.py:356 src/sugar3/graphics/alert.py:462
-msgid "Ok"
-msgstr "ይስማማል"
-
-#: src/sugar3/graphics/alert.py:424
-msgid "Continue"
-msgstr "ቀጥል/ዪ"
-
-#: src/sugar3/activity/widgets.py:86
-msgid "Stop"
-msgstr "አቁም/ሚ"
-
-#: src/sugar3/activity/widgets.py:98
-msgid "Undo"
-msgstr "ወደ ነበረበት መልስ/ሺ"
-
-#: src/sugar3/activity/widgets.py:106
-msgid "Redo"
-msgstr "እንደገና አድርግ/ጊ"
-
-#: src/sugar3/activity/widgets.py:113
-msgid "Copy"
-msgstr "ቅጂ/ዳ"
-
-#: src/sugar3/activity/widgets.py:121
-msgid "Paste"
-msgstr "ለጥፍ/ፊ"
-
-#: src/sugar3/activity/widgets.py:132
-msgid "Private"
-msgstr "የግል"
-
-#: src/sugar3/activity/widgets.py:139
-msgid "My Neighborhood"
-msgstr "ሰፈሬ"
-
-#: src/sugar3/activity/widgets.py:233
-msgid "Description"
-msgstr "መግለጫ"
-
-#: src/sugar3/activity/activity.py:456
-#, python-format
-#, python-format
-msgid "%s Activity"
-msgstr "%s እንቅስቃሴ"
-
-#: src/sugar3/activity/activity.py:1052
-msgid "Keep error"
-msgstr "የማስቀመጥ መልክት/ስህተት"
-
-#: src/sugar3/activity/activity.py:1053
-msgid "Keep error: all changes will be lost"
-msgstr "የማስቀመጥ መልክት: የተደረጉት ለውጦች በሙሉ ይጠፋሉ"
-
-#: src/sugar3/activity/activity.py:1056
-msgid "Don't stop"
-msgstr "አታቁም/ሚ"
-
-#: src/sugar3/activity/activity.py:1060
-msgid "Stop anyway"
-msgstr "ለማንኛውም አቁም/ሚ"
-
-#: src/sugar3/speech.py:51
+#: ../src/sugar3/speech.py:48 src/sugar3/speech.py:56
 msgid "Afrikaans"
 msgstr "አፍሪካንኛ"
 
-#: src/sugar3/speech.py:53
+#: ../src/sugar3/speech.py:49 src/sugar3/speech.py:58
 msgid "Aragonese"
-msgstr "አራጎንስ"
+msgstr "አራጎኒስኛ"
 
-#: src/sugar3/speech.py:55
+#: ../src/sugar3/speech.py:50 src/sugar3/speech.py:60
 msgid "Bulgarian"
 msgstr "ቡልጋሪኛ"
 
-#: src/sugar3/speech.py:57
+#: ../src/sugar3/speech.py:51 src/sugar3/speech.py:62
 msgid "Bosnian"
 msgstr "ቦስኒያንኛ"
 
-#: src/sugar3/speech.py:59
+#: ../src/sugar3/speech.py:52 src/sugar3/speech.py:64
 msgid "Catalan"
 msgstr "ካታላንኛ"
 
-#: src/sugar3/speech.py:61
+#: ../src/sugar3/speech.py:53 src/sugar3/speech.py:66
 msgid "Czech"
 msgstr "ቼክኛ"
 
-#: src/sugar3/speech.py:63
+#: ../src/sugar3/speech.py:54 src/sugar3/speech.py:68
 msgid "Welsh"
-msgstr "ወልሽ"
+msgstr "ዌልሽ"
 
-#: src/sugar3/speech.py:65
+#: ../src/sugar3/speech.py:55 src/sugar3/speech.py:70
 msgid "Danish"
 msgstr "ዴኒሽ"
 
-#: src/sugar3/speech.py:67
+#: ../src/sugar3/speech.py:56 src/sugar3/speech.py:72
 msgid "German"
 msgstr "ጀርመን"
 
-#: src/sugar3/speech.py:69
+#: ../src/sugar3/speech.py:57 src/sugar3/speech.py:74
 msgid "Greek"
 msgstr "ግሪክኛ"
 
-#: src/sugar3/speech.py:70
+#: ../src/sugar3/speech.py:58
 msgid "Default"
 msgstr "ነባር"
 
-#: src/sugar3/speech.py:72
+#: ../src/sugar3/speech.py:59 src/sugar3/speech.py:77
 msgid "English Britain"
 msgstr "እንግሊዝኛ (ብሪታንያ)"
 
-#: src/sugar3/speech.py:74
+#: ../src/sugar3/speech.py:60 src/sugar3/speech.py:79
 msgid "English scottish"
 msgstr "እንግሊዝኛ (ስኮት)"
 
-#: src/sugar3/speech.py:75
+#: ../src/sugar3/speech.py:61 src/sugar3/speech.py:80
 msgid "English-north"
 msgstr "እንግሊዝኛ-ሰሜን"
 
-#: src/sugar3/speech.py:77
+#: ../src/sugar3/speech.py:62 src/sugar3/speech.py:82
 msgid "English_rp"
 msgstr "እንግሊዝኛ_ብሪታንያ"
 
-#: src/sugar3/speech.py:79
+#: ../src/sugar3/speech.py:63 src/sugar3/speech.py:84
 msgid "English_wmids"
 msgstr "እንግሊዝኛ"
 
-#: src/sugar3/speech.py:81
+#: ../src/sugar3/speech.py:64 src/sugar3/speech.py:86
 msgid "English USA"
-msgstr "እንግሊዘኛ (ዩኤስኤ)"
+msgstr "እንግሊዘኛ ዩኤስኤ"
 
-#: src/sugar3/speech.py:83
-msgid "English West Indies"
-msgstr "እንግሊዝኛ (ዌስት ኢንዲስ)"
+#: ../src/sugar3/speech.py:65
+msgid "English west indies"
+msgstr "እንግሊዝኛ ዌስት ኢንዲስ"
 
-#: src/sugar3/speech.py:85
+#: ../src/sugar3/speech.py:66 src/sugar3/speech.py:90
 msgid "Esperanto"
 msgstr "ኤስፐራንቶ"
 
-#: src/sugar3/speech.py:87
+#: ../src/sugar3/speech.py:67 src/sugar3/speech.py:92
 msgid "Spanish"
 msgstr "ስፓንሽኛ"
 
-#: src/sugar3/speech.py:88
+#: ../src/sugar3/speech.py:68 src/sugar3/speech.py:93
 msgid "Spanish latin american"
-msgstr "ስፓንሽኛ (ላትን አሜሪካ)"
+msgstr "ስፓንሽኛ ላትን አሜሪካ"
 
-#: src/sugar3/speech.py:90
+#: ../src/sugar3/speech.py:69 src/sugar3/speech.py:95
 msgid "Estonian"
 msgstr "ኢስቶኒያንኛ"
 
-#: src/sugar3/speech.py:92
+#: ../src/sugar3/speech.py:70 src/sugar3/speech.py:97
 msgid "Farsi"
 msgstr "ፋርሲ"
 
-#: src/sugar3/speech.py:94
+#: ../src/sugar3/speech.py:71 src/sugar3/speech.py:99
 msgid "Farsi-pinglish"
 msgstr "ከእንግሊዝኛ ጋር የተቀላቀለ ፐርሺያኛ"
 
-#: src/sugar3/speech.py:96
+#: ../src/sugar3/speech.py:72 src/sugar3/speech.py:101
 msgid "Finnish"
 msgstr "ፊኒሽ"
 
-#: src/sugar3/speech.py:98
+#: ../src/sugar3/speech.py:73 src/sugar3/speech.py:103
 msgid "French belgium"
-msgstr "ፈረንሳይኛ (ቤልጄም)"
+msgstr "ፈረንሳይኛ ቤልጄም"
 
-#: src/sugar3/speech.py:100
+#: ../src/sugar3/speech.py:74 src/sugar3/speech.py:105
 msgid "French"
 msgstr "ፈረንሳይኛ"
 
-#: src/sugar3/speech.py:102
+#: ../src/sugar3/speech.py:75 src/sugar3/speech.py:107
 msgid "Irish-gaeilge"
 msgstr "አይሪሽ-ጌይሊግ"
 
-#: src/sugar3/speech.py:104
+#: ../src/sugar3/speech.py:76 src/sugar3/speech.py:109
 msgid "Greek-ancient"
 msgstr "የጥንት የግሪክ ቋንቋ"
 
-#: src/sugar3/speech.py:106
+#: ../src/sugar3/speech.py:77 src/sugar3/speech.py:111
 msgid "Hindi"
 msgstr "ሒንዱ"
 
-#: src/sugar3/speech.py:108
+#: ../src/sugar3/speech.py:78 src/sugar3/speech.py:113
 msgid "Croatian"
 msgstr "ክሮኤሽያንኛ"
 
-#: src/sugar3/speech.py:110
+#: ../src/sugar3/speech.py:79 src/sugar3/speech.py:115
 msgid "Hungarian"
 msgstr "ሀንጋሪኛ"
 
-#: src/sugar3/speech.py:112
+#: ../src/sugar3/speech.py:80 src/sugar3/speech.py:117
 msgid "Armenian"
-msgstr "አርመን"
+msgstr "አርመንኛ"
 
-#: src/sugar3/speech.py:114
+#: ../src/sugar3/speech.py:81 src/sugar3/speech.py:119
 msgid "Armenian (west)"
 msgstr "አርመናዊ (ምእራብ)"
 
-#: src/sugar3/speech.py:116
+#: ../src/sugar3/speech.py:82 src/sugar3/speech.py:121
 msgid "Indonesian"
 msgstr "ኢንዶኔዥኛ"
 
-#: src/sugar3/speech.py:118
+#: ../src/sugar3/speech.py:83 src/sugar3/speech.py:123
 msgid "Icelandic"
 msgstr "አይስላንድኛ"
 
-#: src/sugar3/speech.py:120
+#: ../src/sugar3/speech.py:84 src/sugar3/speech.py:125
 msgid "Italian"
 msgstr "ጣሊያንኛ"
 
-#: src/sugar3/speech.py:122
+#: ../src/sugar3/speech.py:85 src/sugar3/speech.py:127
 msgid "Lojban"
 msgstr "ሎጅባን"
 
-#: src/sugar3/speech.py:124
+#: ../src/sugar3/speech.py:86 src/sugar3/speech.py:129
 msgid "Georgian"
-msgstr "ጆርጂያን"
+msgstr "ጆርጂያንኛ"
 
-#: src/sugar3/speech.py:126
+#: ../src/sugar3/speech.py:87 src/sugar3/speech.py:131
 msgid "Kannada"
 msgstr "ካናዳኛ"
 
-#: src/sugar3/speech.py:128
+#: ../src/sugar3/speech.py:88 src/sugar3/speech.py:133
 msgid "Kurdish"
 msgstr "ኩርድሽኛ"
 
-#: src/sugar3/speech.py:130
+#: ../src/sugar3/speech.py:89 src/sugar3/speech.py:135
 msgid "Latin"
 msgstr "ላቲን"
 
-#: src/sugar3/speech.py:132
+#: ../src/sugar3/speech.py:90 src/sugar3/speech.py:137
 msgid "Lithuanian"
-msgstr "ሉቴንያንኛ"
+msgstr "ሉቱዌንያን"
 
-#: src/sugar3/speech.py:134
+#: ../src/sugar3/speech.py:91 src/sugar3/speech.py:139
 msgid "Latvian"
 msgstr "ላትቪያን"
 
-#: src/sugar3/speech.py:136
+#: ../src/sugar3/speech.py:92 src/sugar3/speech.py:141
 msgid "Macedonian"
-msgstr "ማሴዶንኛ"
+msgstr "ማሴዶንያን"
 
-#: src/sugar3/speech.py:138
+#: ../src/sugar3/speech.py:93 src/sugar3/speech.py:143
 msgid "Malayalam"
-msgstr "ማላያላምኛ"
+msgstr "ማላያላም"
 
-#: src/sugar3/speech.py:140
+#: ../src/sugar3/speech.py:94 src/sugar3/speech.py:145
 msgid "Malay"
-msgstr "ማላይኛ"
+msgstr "ማሌይኛ"
 
-#: src/sugar3/speech.py:142
+#: ../src/sugar3/speech.py:95 src/sugar3/speech.py:147
 msgid "Nepali"
 msgstr "ኔፓሊኛ"
 
-#: src/sugar3/speech.py:144
+#: ../src/sugar3/speech.py:96 src/sugar3/speech.py:149
 msgid "Dutch"
 msgstr "ደች"
 
-#: src/sugar3/speech.py:146
+#: ../src/sugar3/speech.py:97 src/sugar3/speech.py:151
 msgid "Norwegian"
 msgstr "ኖርዌጂያን"
 
-#: src/sugar3/speech.py:148
+#: ../src/sugar3/speech.py:98 src/sugar3/speech.py:153
 msgid "Punjabi"
 msgstr "ፑንጃብኛ"
 
-#: src/sugar3/speech.py:150
+#: ../src/sugar3/speech.py:99 src/sugar3/speech.py:155
 msgid "Polish"
 msgstr "ፖሊሽኛ"
 
-#: src/sugar3/speech.py:152
+#: ../src/sugar3/speech.py:100 src/sugar3/speech.py:157
 msgid "Portuguese (Brazil)"
-msgstr "ፖርቹጋልኛ (ብራዚል)"
+msgstr "ፖርቹጊስ (ብራዚል)"
 
-#: src/sugar3/speech.py:154
+#: ../src/sugar3/speech.py:101 src/sugar3/speech.py:159
 msgid "Portuguese (Portugal)"
-msgstr "ፖርቹጋልኛ (ፖርቹጋል)"
+msgstr "ፖርቹጊስ (ፖርቹጋል)"
 
-#: src/sugar3/speech.py:156
+#: ../src/sugar3/speech.py:102 src/sugar3/speech.py:161
 msgid "Romanian"
 msgstr "ሮማኒያን"
 
-#: src/sugar3/speech.py:158
+#: ../src/sugar3/speech.py:103 src/sugar3/speech.py:163
 msgid "Russian"
 msgstr "ራሽያኛ"
 
-#: src/sugar3/speech.py:160
+#: ../src/sugar3/speech.py:104 src/sugar3/speech.py:165
 msgid "Slovak"
 msgstr "ስሎቫክኛ"
 
-#: src/sugar3/speech.py:162
+#: ../src/sugar3/speech.py:105 src/sugar3/speech.py:167
 msgid "Albanian"
-msgstr "አልቤኒኛ"
+msgstr "አልቤኒያን"
 
-#: src/sugar3/speech.py:164
+#: ../src/sugar3/speech.py:106 src/sugar3/speech.py:169
 msgid "Serbian"
-msgstr "ሰርቢኛ"
+msgstr "ሰርቢያን"
 
-#: src/sugar3/speech.py:166
+#: ../src/sugar3/speech.py:107 src/sugar3/speech.py:171
 msgid "Swedish"
-msgstr "ስዊድንኛ"
+msgstr "ስዊድሽ"
 
-#: src/sugar3/speech.py:168
-msgid "Swahili"
-msgstr "ስዋሂሊ"
+#: ../src/sugar3/speech.py:108
+msgid "Swahili-test"
+msgstr "ስዋሂሊ-ሙከራ"
 
-#: src/sugar3/speech.py:170
+#: ../src/sugar3/speech.py:109 src/sugar3/speech.py:175
 msgid "Tamil"
 msgstr "ታሚልኛ"
 
-#: src/sugar3/speech.py:172
+#: ../src/sugar3/speech.py:110 src/sugar3/speech.py:177
 msgid "Turkish"
-msgstr "ቱርክኛ"
+msgstr "ቱርኪሽ"
 
-#: src/sugar3/speech.py:174
+#: ../src/sugar3/speech.py:111 src/sugar3/speech.py:179
 msgid "Vietnam"
 msgstr "ቪትናምኛ"
 
-#: src/sugar3/speech.py:175
+#: ../src/sugar3/speech.py:112 src/sugar3/speech.py:180
 msgid "Vietnam_hue"
 msgstr "ቪትናምኛ"
 
-#: src/sugar3/speech.py:176
+#: ../src/sugar3/speech.py:113 src/sugar3/speech.py:181
 msgid "Vietnam_sgn"
 msgstr "ቪትናምኛ"
 
-#: src/sugar3/speech.py:178
+#: ../src/sugar3/speech.py:114 src/sugar3/speech.py:183
 msgid "Mandarin"
 msgstr "ማንደሪን/ቻይንኛ"
 
-#: src/sugar3/speech.py:180
+#: ../src/sugar3/speech.py:115 src/sugar3/speech.py:185
 msgid "Cantonese"
 msgstr "ካንቶኒዝ/ቻይንኛ"
 
-#, fuzzy
-#~ msgid "English west indies"
-#~ msgstr "እንግሊዝኛ ዌስት ኢንዲስ"
+#: src/sugar3/activity/activity.py:1170
+msgid "Stop: name your journal entry"
+msgstr "አቁም/አቁሚ፡ ለማስታወሻው ገጽ ስም ስጥ/ስጪ"
 
-#~ msgid "Swahili-test"
-#~ msgstr "ስዋሂሊ-ሙከራ"
+#: src/sugar3/activity/activity.py:1193
+msgid "Cancel stop and continue the activity"
+msgstr "መሰረዙን ይተውና የጀመሩትን ይቀጥሉ"
+
+#: src/sugar3/activity/activity.py:1230
+msgid "Save new"
+msgstr "እንደአዲስ ይቀመጥ"
+
+#: src/sugar3/activity/activity.py:1231
+msgid "Save a new journal entry"
+msgstr "አዲስ የማስታወሻ ገጽ ይቀመጥ"
+
+#: src/sugar3/activity/activity.py:1234
+msgid "Save"
+msgstr "ይቀመጥ"
+
+#: src/sugar3/activity/activity.py:1235
+msgid "Save into the old journal entry"
+msgstr "የበፊቱ ማስታወሻ ገጽ ውስጥ ይቀመጥ"
+
+#: src/sugar3/activity/activity.py:1241
+msgid "Erase changes"
+msgstr "ለውጡ ይፋቅ"
+
+#: src/sugar3/activity/activity.py:1242
+msgid "Erase what you have done, and leave your old journal entry unchanged"
+msgstr "በቅርብ የተደረገው ይፋቅና የበፊቱ የማስታወሻ ገጽ ሳይለወጥ ይቆይ"
+
+#: src/sugar3/activity/activity.py:1245
+msgid "Erase"
+msgstr "ይፋቅ"
+
+#: src/sugar3/activity/activity.py:1246
+msgid "Erase what you have done, and avoid making a journal entry"
+msgstr "በቅርብ የተደረገው ይፋቅና ጭማሪ ማስታወሻ ከማድረግ ይገደቡ"
+
+#: src/sugar3/graphics/popwindow.py:179
+msgid "Close"
+msgstr "ይዝጉ"
+
+#: src/sugar3/speech.py:75
+msgid "English"
+msgstr "እንግሊዝኛ"
+
+#: src/sugar3/speech.py:88
+msgid "English West Indies"
+msgstr "እንግሊዝኛ ዌስት ኢንዲስ"
+
+#: src/sugar3/speech.py:173
+msgid "Swahili"
+msgstr "ስዋሂሊ"
+
+#~ msgid "Text string"
+#~ msgstr "የተቀጣጠሉ ፊደሎች"
