@@ -140,7 +140,7 @@ class ActivityBundle(Bundle):
                 self._bundle_id = cp.get(section, 'service_name')
                 logging.error('ATTENTION: service_name property in the '
                               'activity.info file is deprecated, should be '
-                              ' changed to bundle_id')
+                              'changed to bundle_id')
             else:
                 raise MalformedBundleException(
                     'Activity bundle %s does not specify a bundle id' %
