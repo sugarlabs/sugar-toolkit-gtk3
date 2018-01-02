@@ -852,6 +852,9 @@ class Activity(Window, Gtk.Container):
             return None
 
         window = self.canvas.get_window()
+        if window is None:
+            return None
+
         alloc = self.canvas.get_allocation()
 
         dummy_cr = Gdk.cairo_create(window)
