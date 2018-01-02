@@ -228,7 +228,7 @@ class TestGit(unittest.TestCase):
 
     def test_dev_in_source(self):
         repo_path = self._create_repo()
-        self._test_genpot(repo_path, repo_path)
+        self._test_dev(repo_path, repo_path)
 
     def test_dev_out_of_source(self):
         repo_path = self._create_repo()
