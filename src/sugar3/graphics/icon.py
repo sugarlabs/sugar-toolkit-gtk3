@@ -113,7 +113,7 @@ _BADGE_SIZE = 0.45
 class _SVGLoader(object):
 
     def __init__(self):
-        self._cache = LRU(50)
+        self._cache = LRU(100)
 
     def load(self, file_name, entities, cache):
         if file_name in self._cache:
@@ -156,7 +156,7 @@ class _BadgeInfo(object):
 
 class _IconBuffer(object):
 
-    _surface_cache = LRU(50)
+    _surface_cache = LRU(100)
     _loader = _SVGLoader()
 
     def __init__(self):
