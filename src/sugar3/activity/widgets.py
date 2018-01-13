@@ -177,12 +177,19 @@ class TitleEntry(Gtk.ToolItem):
         self.entry.set_text(activity.metadata['title'])
         self.entry.connect(
             'focus-out-event', self.__title_changed_cb, activity)
+        self.entry.connect('activate', self.__on_activate, activity)
         self.entry.connect('button-press-event', self.__button_press_event_cb)
         self.entry.show()
         self.add(self.entry)
 
         activity.metadata.connect('updated', self.__jobject_updated_cb)
         activity.connect('_closing', self.__closing_cb)
+
+    def __on_activate(self, widget, activity):
+        self.save_title(activity)
+        self.entry.hide()
+        self.entry.show()
+        return False
 
     def modify_bg(self, state, color):
         Gtk.ToolItem.modify_bg(self, state, color)
