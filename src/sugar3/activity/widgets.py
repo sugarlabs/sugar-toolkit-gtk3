@@ -187,6 +187,7 @@ class TitleEntry(Gtk.ToolItem):
 
     def __activate_cb(self, entry, activity):
         self.save_title(activity)
+        entry.select_region(0, 0)
         entry.hide()
         entry.show()
         return False
@@ -207,6 +208,7 @@ class TitleEntry(Gtk.ToolItem):
         return False
 
     def __focus_out_event_cb(self, widget, event, activity):
+        widget.select_region(0, 0)
         self.save_title(activity)
         return False
 
