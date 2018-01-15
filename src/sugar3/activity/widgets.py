@@ -176,8 +176,8 @@ class TitleEntry(Gtk.ToolItem):
         self.entry.set_size_request(int(Gdk.Screen.width() / 3), -1)
         self.entry.set_text(activity.metadata['title'])
         self.entry.connect(
-            'focus-out-event', self.__title_changed_cb, activity)
-        self.entry.connect('activate', self.__on_activate, activity)
+            'focus-out-event', self.__focus_out_event_cb, activity)
+        self.entry.connect('activate', self.__activate_cb, activity)
         self.entry.connect('button-press-event', self.__button_press_event_cb)
         self.entry.show()
         self.add(self.entry)
@@ -185,10 +185,10 @@ class TitleEntry(Gtk.ToolItem):
         activity.metadata.connect('updated', self.__jobject_updated_cb)
         activity.connect('_closing', self.__closing_cb)
 
-    def __on_activate(self, widget, activity):
+    def __activate_cb(self, entry, activity):
         self.save_title(activity)
-        self.entry.hide()
-        self.entry.show()
+        entry.hide()
+        entry.show()
         return False
 
     def modify_bg(self, state, color):
@@ -206,7 +206,7 @@ class TitleEntry(Gtk.ToolItem):
         self.save_title(activity)
         return False
 
-    def __title_changed_cb(self, editable, event, activity):
+    def __focus_out_event_cb(self, widget, event, activity):
         self.save_title(activity)
         return False
 
