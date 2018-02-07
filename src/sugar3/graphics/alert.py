@@ -406,7 +406,7 @@ class _TimeoutAlert(Alert):
         self._timeout -= 1
         self._timeout_text.set_text(self._timeout)
         if self._timeout == 0:
-            Alert._response(self, Gtk.ResponseType.OK)
+            Alert._response(self, -1)
             return False
         return True
 
