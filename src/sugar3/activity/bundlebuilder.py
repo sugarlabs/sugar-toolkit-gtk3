@@ -237,6 +237,7 @@ class XOPackager(Packager):
     def __init__(self, builder):
         Packager.__init__(self, builder.config)
 
+        self.metadata_keys = ['activity_version', 'license']
         self.builder = builder
         self.builder.build_locale()
         self.package_path = os.path.join(self.config.dist_dir,
@@ -245,7 +246,7 @@ class XOPackager(Packager):
     def package(self):
         bundle_zip = zipfile.ZipFile(self.package_path, 'w',
                                      zipfile.ZIP_DEFLATED)
-
+        self.metadata_warn()
         for f in self.get_files_in_git():
             bundle_zip.write(os.path.join(self.config.source_dir, f),
                              os.path.join(self.config.bundle_root_dir, f))
@@ -256,6 +257,16 @@ class XOPackager(Packager):
                                           'locale', f))
 
         bundle_zip.close()
+
+    def metadata_warn(self):
+        with open(os.path.join(self.config.source_dir, 'activity','activity.info')) as f:
+            activity_metadata = f.readlines()
+        for key in self.metadata_keys:
+            for metadata in activity_metadata:
+                if metadata.startswith(key):
+                    break
+            else:
+                logging.warning('"' + key + '"' + ' key is missing in activity.info')
 
 
 class SourcePackager(Packager):
