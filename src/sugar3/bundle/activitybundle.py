@@ -222,7 +222,8 @@ class ActivityBundle(Bundle):
         for types, tags in keys.items():
             for tag in tags:
                 if not options.has_option(section, tag):
-                    logging.warning('activity.info doesn\'t have the tag "' + tag + '", necessary for ' + types)
+                    logging.warning('activity.info doesn\'t have the tag "' +
+                                    tag + '", necessary for ' + types)
 
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
