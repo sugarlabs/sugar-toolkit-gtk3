@@ -36,7 +36,8 @@ an `[Activity]` header:
 * `license` - an identifier for the software license of the bundle,
   either a `Fedora License Short Name`_, (e.g. GPLv3+) or an `SPDX
   License Identifier`_, with an optional `or later version` suffix,
-  e.g. `GPL-3.0+`,
+  e.g. `GPL-3.0+`, and multiple licenses are to be separated with
+  semicolons,
 
 * `icon` - the icon file for the activity, shown by Sugar in the list
   of installed activities,
@@ -45,6 +46,8 @@ an `[Activity]` header:
 
 Optional metadata keys are;
 
+* `summary` - a short summary of the activity that may be displayed in the List or Home Views,
+
 * `mime_types` - list of MIME types supported by the activity,
   separated by semicolons.  Your `read_file` method must be able to read
   files of these MIME types.  Used to offer your activity when opening a
@@ -52,7 +55,21 @@ Optional metadata keys are;
 
 * `url` - link to the home page for the activity,
 
-* `repository` - link to repository for activity code,
+* `repository` - link to repository for activity code, for use by git clone,
+
+* `single_instance` - if yes, only a single instance of an activity
+  should be started, and if another instance is requested the existing
+  instance shown,
+
+* `max_participants` - maximum number of participants for sharing an activity,
+
+* `tags` - more context into which to place an activity,
+
+* `show_launcher` - if set to "no", the activity is not shown in list view,
+
+Deprecated metadata keys are;
+
+* `update_url` - the updater no longer uses this.
 
 .. _SPDX License Identifier: http://spdx.org/licenses/
 .. _Fedora License Short Name: https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Good_Licenses
