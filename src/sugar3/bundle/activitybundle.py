@@ -133,7 +133,10 @@ class ActivityBundle(Bundle):
 
         section = 'Activity'
 
-        self.metadata_warn(cp, section)
+        for tag in ['activity_version', 'license', 'icon']:
+            if not cp.has_option(section, tag):
+                logging.warning('activity.info does not have the tag "' + tag + '"')
+
         if cp.has_option(section, 'bundle_id'):
             self._bundle_id = cp.get(section, 'bundle_id')
         else:
@@ -211,19 +214,6 @@ class ActivityBundle(Bundle):
                 raise MalformedBundleException(
                     'Activity bundle %s has invalid max_participants %s' %
                     (self.get_path(), max_participants))
-
-    def metadata_warn(self, options, section):
-        keys = {
-            'Activity': ['name', 'activity_version',
-                         'bundle_id', 'license', 'icon'
-                         'exec'],
-            'Appstream': ['metadata_license', 'description']
-        }
-        for types, tags in keys.items():
-            for tag in tags:
-                if not options.has_option(section, tag):
-                    logging.warning('activity.info doesn\'t have the tag "' +
-                                    tag + '", necessary for ' + types)
 
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
