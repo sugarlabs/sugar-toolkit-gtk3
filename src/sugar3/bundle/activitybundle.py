@@ -135,7 +135,7 @@ class ActivityBundle(Bundle):
 
         for tag in ['activity_version', 'license', 'icon']:
             if not cp.has_option(section, tag):
-                logging.warning('activity.info does not have the tag "' + tag + '"')
+                logging.warning('Activity bundle does not specify a %s' % tag)
 
         if cp.has_option(section, 'bundle_id'):
             self._bundle_id = cp.get(section, 'bundle_id')
