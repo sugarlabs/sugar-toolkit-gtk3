@@ -143,7 +143,7 @@ class ActivityBundle(Bundle):
                               'changed to bundle_id')
             else:
                 raise MalformedBundleException(
-                    'Activity bundle %s does not specify a bundle id' %
+                    'Activity bundle %s does not specify a bundle_id' %
                     self.get_path())
 
         if ' ' in self._bundle_id:
@@ -182,6 +182,10 @@ class ActivityBundle(Bundle):
 
         if cp.has_option(section, 'icon'):
             self._icon = cp.get(section, 'icon')
+        else:
+            logging.warning(
+                'Activity bundle %s does not specify an icon' %
+                self.get_path())
 
         if cp.has_option(section, 'activity_version'):
             version = cp.get(section, 'activity_version')
@@ -192,6 +196,10 @@ class ActivityBundle(Bundle):
                     'Activity bundle %s has invalid version number %s' %
                     (self.get_path(), version))
             self._activity_version = version
+        else:
+            logging.warning(
+                'Activity bundle %s does not specify an activity_version, '
+                'assuming %s' % (self.get_path(), self._activity_version))
 
         if cp.has_option(section, 'summary'):
             self._summary = cp.get(section, 'summary')
@@ -210,6 +218,11 @@ class ActivityBundle(Bundle):
                 raise MalformedBundleException(
                     'Activity bundle %s has invalid max_participants %s' %
                     (self.get_path(), max_participants))
+
+        if not cp.has_option(section, 'license'):
+            logging.warning(
+                'Activity bundle %s does not specify a license' %
+                self.get_path())
 
     def _get_linfo_file(self):
         # Using method from gettext.py, first find languages from environ
