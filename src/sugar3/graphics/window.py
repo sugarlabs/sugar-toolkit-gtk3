@@ -98,7 +98,8 @@ class Window(Gtk.Window):
 
     Used as a container to display things that happen in an activity.
     A window must contain a canvas widget, and a toolbar box widget.
-    A window may also contain alert message widgets and a tray widget.
+    A window may also contain alert message widgets, tray widget and
+    notebook widget.
 
     Widgets are kept in a vertical box in this order;
         * toolbar box,
@@ -140,6 +141,7 @@ class Window(Gtk.Window):
         self._alerts = []
         self._canvas = None
         self.tray = None
+        self._notebook = None
 
         self.__vbox = Gtk.VBox()
         self.__hbox = Gtk.HBox()
@@ -191,11 +193,13 @@ class Window(Gtk.Window):
 
     def fullscreen(self):
         """
-        Make the window fullscreen.  The toolbar and tray will be
-        hidden, and the :class:`UnfullscreenButton` will be shown for
-        a short time.
+        Make the window fullscreen.  The toolbar, tray and notebook
+        will be hidden, and the :class:`UnfullscreenButton` will be
+        shown for a short time.
         """
         palettegroup.popdown_all()
+        if self._notebook is not None:
+            self._notebook.set_show_tabs(False)
         if self._toolbar_box is not None:
             self._toolbar_box.hide()
         if self.tray is not None:
@@ -218,9 +222,11 @@ class Window(Gtk.Window):
     def unfullscreen(self):
         """
         Restore the window to non-fullscreen mode.  The
-        :class:`UnfullscreenButton` will be hidden, and the toolbar
-        and tray will be shown.
+        :class:`UnfullscreenButton` will be hidden, and the toolbar,
+        tray and notebook will be shown.
         """
+        if self._notebook is not None:
+            self._notebook.set_show_tabs(True)
         if self._toolbar_box is not None:
             self._toolbar_box.show()
         if self.tray is not None:
