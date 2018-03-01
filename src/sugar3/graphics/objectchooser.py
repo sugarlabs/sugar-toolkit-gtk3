@@ -19,8 +19,8 @@
 STABLE.
 """
 
+import six
 import logging
-import StringIO
 import cairo
 
 from gi.repository import GObject
@@ -59,13 +59,13 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
         None, if it could not be created
 
     Example:
-        pixbuf = get_preview_pixbuf(metadata.get('preview', ''))                
-        has_preview = pixbuf is not None                                        
-                                                                               
-        if has_preview:                                                        
-            im = Gtk.Image()                                                    
-            im.set_from_pixbuf(pixbuf)                                          
-            box.add(im)                                                        
+        pixbuf = get_preview_pixbuf(metadata.get('preview', ''))
+        has_preview = pixbuf is not None
+
+        if has_preview:
+            im = Gtk.Image()
+            im.set_from_pixbuf(pixbuf)
+            box.add(im)
             im.show()
     """
     if width == -1:
@@ -82,7 +82,7 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
             import base64
             preview_data = base64.b64decode(preview_data)
 
-        png_file = StringIO.StringIO(preview_data)
+        png_file = six.StringIO(preview_data)
         try:
             # Load image and scale to dimensions
             surface = cairo.ImageSurface.create_from_png(png_file)
@@ -126,7 +126,7 @@ class ObjectChooser(object):
         what_filter (str): an activity bundle_id or a generic mime type as
             defined in :mod:`sugar3.mime` used to determine which objects
             will be presented in the object chooser
-        
+
         filter_type (str): should be one of [None, FILTER_TYPE_GENERIC_MIME,
             FILTER_TYPE_ACTIVITY, FILTER_TYPE_MIME_BY_ACTIVITY]
 
@@ -155,7 +155,7 @@ class ObjectChooser(object):
 
     Examples:
         chooser = ObjectChooser(self._activity, what_filter='Image')
-        
+
         chooser = ObjectChooser(parent=self,
                                 what_filter=self.get_bundle_id(),
                                 filter_type=FILTER_TYPE_ACTIVITY)
@@ -192,7 +192,7 @@ class ObjectChooser(object):
     def run(self):
         """
         Runs the object chooser and displays it.
-        
+
         Returns:
             Gtk.ResponseType constant, the response received from displaying the
                 object chooser.

@@ -29,7 +29,7 @@ from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 if not hasattr(GObject.ParamFlags, 'READWRITE'):
@@ -38,8 +38,8 @@ if not hasattr(GObject.ParamFlags, 'READWRITE'):
 
 
 def get_svg_color_string(color):
-    return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257,
-                              color.blue / 257)
+    return '#%.2X%.2X%.2X' % (color.red // 257, color.green // 257,
+                              color.blue // 257)
 
 
 class _ColorButton(Gtk.Button):
@@ -123,8 +123,8 @@ class _ColorButton(Gtk.Button):
         context = self.get_style_context()
         fg_color = context.get_color(Gtk.StateType.NORMAL)
         # the color components are stored as float values between 0.0 and 1.0
-        return '#%.2X%.2X%.2X' % (fg_color.red * 255, fg_color.green * 255,
-                                  fg_color.blue * 255)
+        return '#%.2X%.2X%.2X' % (int(fg_color.red * 255), int(fg_color.green * 255),
+                                  int(fg_color.blue * 255))
 
     def set_color(self, color):
         assert isinstance(color, Gdk.Color)
@@ -149,11 +149,11 @@ class _ColorButton(Gtk.Button):
         '''
         Sets the icon for the tool button from a named themed icon.
         If it is none then no icon will be shown.
-        
+
         Args:
             icon_name(string): The name for a themed icon.
             It can be set as 'None' too.
-        
+
         Example:
             set_icon_name('view-radial')
         '''
@@ -169,11 +169,11 @@ class _ColorButton(Gtk.Button):
     icon_name = GObject.Property(type=str,
                                  getter=get_icon_name, setter=set_icon_name)
 
-    def set_icon_size(self, icon_size):
-        self._preview.props.icon_size = icon_size
+    def set_icon_size(self, pixel_size):
+        self._preview.props.pixel_size = pixel_size
 
     def get_icon_size(self):
-        return self._preview.props.icon_size
+        return self._preview.props.pixel_size
 
     icon_size = GObject.Property(type=int,
                                  getter=get_icon_size, setter=set_icon_size)
@@ -496,13 +496,13 @@ class ColorToolButton(Gtk.ToolItem):
     def set_accelerator(self, accelerator):
         '''
         Sets keyboard shortcut that activates this button.
-        
+
         Args:
             accelerator(string): accelerator to be set. Should be in
             form <modifier>Letter
             Find about format here :
             https://developer.gnome.org/gtk3/stable/gtk3-Keyboard-Accelerators.html#gtk-accelerator-parse
-        
+
         Example:
             set_accelerator(self, 'accel')
         '''
@@ -523,21 +523,21 @@ class ColorToolButton(Gtk.ToolItem):
         The create_palette function is called when the palette needs to be
         invoked.  For example, when the user has right clicked the icon or
         the user has hovered over the icon for a long time.
-        
+
         The create_palette will only be called once or zero times.  The palette
         returned will be stored and re-used if the user invokes the palette
         multiple times.
-        
+
         Your create_palette implementation does not need to
         :any:`Gtk.Widget.show` the palette, as this will be done by the
         invoker.  However, you still need to show
         the menu items, etc that you place in the palette.
-        
+
         Returns:
-            
+
             sugar3.graphics.palette.Palette, or None to indicate that you
             do not want a palette shown
-        
+
         The default implementation returns None, to indicate no palette should
         be shown.
         '''
@@ -595,11 +595,11 @@ class ColorToolButton(Gtk.ToolItem):
         '''
         Sets the icon for the tool button from a named themed icon.
         If it is none then no icon will be shown.
-        
+
         Args:
             icon_name(string): The name for a themed icon.
             It can be set as 'None' too.
-        
+
         Example:
             set_icon_name('view-radial')
         '''
@@ -632,8 +632,8 @@ class ColorToolButton(Gtk.ToolItem):
 
     def set_title(self, title):
         '''
-        The set_title() method sets the "title" property to the value of 
-        title. The "title" property contains the string that is used to 
+        The set_title() method sets the "title" property to the value of
+        title. The "title" property contains the string that is used to
         set the colorbutton title.
         '''
         self.get_child().props.title = title

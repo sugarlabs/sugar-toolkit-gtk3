@@ -330,6 +330,8 @@ class HTray(Gtk.EventBox):
 
     def scroll_to_item(self, item):
         self._viewport.scroll_to_item(item)
+
+
 if hasattr(HTray, 'set_css_name'):
     HTray.set_css_name('htray')
 
@@ -424,6 +426,8 @@ class VTray(Gtk.EventBox):
 
     def scroll_to_item(self, item):
         self._viewport.scroll_to_item(item)
+
+
 if hasattr(VTray, 'set_css_name'):
     VTray.set_css_name('VTray')
 

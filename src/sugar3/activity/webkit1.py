@@ -28,8 +28,8 @@ GObject.threads_init()
 from gi.repository import WebKit
 import socket
 from threading import Thread
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-import SocketServer
+from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from six.moves import socketserver
 import select
 import errno
 import mimetypes
@@ -80,7 +80,7 @@ class LocalHTTPServer(HTTPServer):
             # shutdown request and wastes cpu at all other times.
             try:
                 r, w, e = select.select([self], [], [], poll_interval)
-            except select.error, e:
+            except select.error as e:
                 if e[0] == errno.EINTR:
                     logging.debug("got eintr")
                     continue
@@ -92,7 +92,7 @@ class LocalHTTPServer(HTTPServer):
     def server_bind(self):
         """Override server_bind in HTTPServer to not use
         getfqdn to get the server name because is very slow."""
-        SocketServer.TCPServer.server_bind(self)
+        socketserver.TCPServer.server_bind(self)
         _host, port = self.socket.getsockname()[:2]
         self.server_name = 'localhost'
         self.server_port = port

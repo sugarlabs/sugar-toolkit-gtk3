@@ -27,7 +27,7 @@ Example:
         from sugar3.graphics.toolbutton import ToolButton
 
         def __clicked_cb(button):
-            print "tool button was clicked"
+            print("tool button was clicked")
 
         w = Gtk.Window()
         w.connect('destroy', Gtk.main_quit)

@@ -5,6 +5,7 @@ Provides a way to safely weakref any function, including bound methods (which
 aren't handled by the core weakref module).
 """
 
+import six
 import weakref
 import traceback
 
@@ -21,7 +22,7 @@ def safeRef(target, onDelete=None):
         weakref or a BoundMethodWeakref) as argument.
     """
     if hasattr(target, 'im_self'):
-        if target.im_self is not None:
+        if im_self(target) is not None:
             # Turn a bound method into a BoundMethodWeakref instance.
             # Keep track of these instances for lookup by disconnect().
             assert hasattr(target, 'im_func'), \
@@ -123,18 +124,18 @@ class BoundMethodWeakref(object):
                 try:
                     if callable(function):
                         function(self)
-                except Exception, e:
+                except Exception as e:
                     try:
                         traceback.print_exc()
                     except AttributeError:
-                        print "Exception during saferef %s cleanup "
-                        "function %s: %s" % (self, function, e)
+                        print("Exception during saferef %s cleanup "
+                              "function %s: %s" % (self, function, e))
         self.deletionMethods = [onDelete]
         self.key = self.calculateKey(target)
-        self.weakSelf = weakref.ref(target.im_self, remove)
-        self.weakFunc = weakref.ref(target.im_func, remove)
-        self.selfName = str(target.im_self)
-        self.funcName = str(target.im_func.__name__)
+        self.weakSelf = weakref.ref(im_self(target), remove)
+        self.weakFunc = weakref.ref(im_func(target), remove)
+        self.selfName = str(im_self(target))
+        self.funcName = str(im_func(target).__name__)
 
     def calculateKey(cls, target):
         """Calculate the reference key for this reference
@@ -142,7 +143,7 @@ class BoundMethodWeakref(object):
         Currently this is a two-tuple of the id()'s of the
         target object and the target function respectively.
         """
-        return (id(target.im_self), id(target.im_func))
+        return (id(im_self(target)), id(im_func(target)))
     calculateKey = classmethod(calculateKey)
 
     def __str__(self):
@@ -155,15 +156,19 @@ class BoundMethodWeakref(object):
 
     __repr__ = __str__
 
-    def __nonzero__(self):
+    def __bool__(self):
         """Whether we are still a valid reference"""
+        return self() is not None
+
+    def __nonzero__(self):
+        """Python2 alternative for __bool__"""
         return self() is not None
 
     def __cmp__(self, other):
         """Compare with another reference"""
         if not isinstance(other, self.__class__):
-            return cmp(self.__class__, type(other))
-        return cmp(self.key, other.key)
+            return ((self.__class__ > type(other)) - (self.__class__ < type(other)))
+        return ((self.key > other.key) - (self.key < other.key))
 
     def __call__(self):
         """Return a strong reference to the bound method
@@ -201,6 +206,7 @@ class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
     aren't descriptors (such as Jython) this implementation has the advantage
     of working in the most cases.
     """
+
     def __init__(self, target, onDelete=None):
         """Return a weak-reference-like instance for a bound method
 
@@ -215,9 +221,9 @@ class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
             collected).  Should take a single argument,
             which will be passed a pointer to this object.
         """
-        assert getattr(target.im_self, target.__name__) == target, \
+        assert getattr(im_self(target), target.__name__) == target, \
             ("method %s isn't available as the attribute %s of %s" %
-                (target, target.__name__, target.im_self))
+                (target, target.__name__, im_self(target)))
         super(BoundNonDescriptorMethodWeakref, self).__init__(target, onDelete)
 
     def __call__(self):
@@ -255,3 +261,17 @@ def get_bound_method_weakref(target, onDelete):
         # no luck, use the alternative implementation:
         return BoundNonDescriptorMethodWeakref(target=target,
                                                onDelete=onDelete)
+
+
+def im_self(func):
+    if six.PY2:
+        return func.im_self
+    elif six.PY3:
+        return func.__self__
+
+
+def im_func(func):
+    if six.PY2:
+        return func.im_func
+    elif six.PY3:
+        return func.__func__

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from gi.repository import Gtk
 
 from sugar3.graphics.icon import Icon

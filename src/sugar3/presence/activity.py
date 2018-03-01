@@ -21,6 +21,7 @@
 STABLE.
 """
 
+import six
 import logging
 from functools import partial
 
@@ -124,6 +125,11 @@ class Activity(GObject.GObject):
 
     def _start_tracking_properties(self):
         bus = dbus.SessionBus()
+        arg_dict = dict(reply_handler=self.__got_properties_cb,
+                        error_handler=self.__error_handler_cb)
+        if six.PY2:
+            arg_dict = arg_dict.update(utf8_strings=True)
+
         self._get_properties_call = bus.call_async(
             self.telepathy_conn.requested_bus_name,
             self.telepathy_conn.object_path,
@@ -131,9 +137,7 @@ class Activity(GObject.GObject):
             'GetProperties',
             'u',
             (self.room_handle,),
-            reply_handler=self.__got_properties_cb,
-            error_handler=self.__error_handler_cb,
-            utf8_strings=True)
+            arg_dict)
 
         # As only one Activity instance is needed per activity process,
         # we can afford listening to ActivityPropertiesChanged like this.
@@ -144,7 +148,7 @@ class Activity(GObject.GObject):
 
     def __activity_properties_changed_cb(self, room_handle, properties):
         _logger.debug('%r: Activity properties changed to %r' % (self,
-                      properties))
+                                                                 properties))
         self._update_properties(properties)
 
     def __got_properties_cb(self, properties):
@@ -239,7 +243,7 @@ class Activity(GObject.GObject):
         returns list of presence Buddy objects that we can successfully
         create from the buddy object paths that PS has for this activity.
         """
-        return self._joined_buddies.values()
+        return list(self._joined_buddies.values())
 
     def get_buddy_by_handle(self, handle):
         """Retrieve the Buddy object given a telepathy handle.
@@ -300,8 +304,9 @@ class Activity(GObject.GObject):
         channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
     def __get_all_members_cb(self, members, local_pending, remote_pending):
-        _logger.debug('__get_all_members_cb %r %r' % (members,
-                      self._text_channel_group_flags))
+        _logger.debug(
+            '__get_all_members_cb %r %r' %
+            (members, self._text_channel_group_flags))
         if self._channel_self_handle in members:
             members.remove(self._channel_self_handle)
 
@@ -631,8 +636,9 @@ class _JoinCommand(_BaseCommand):
         self._add_self_to_channel()
 
     def __text_channel_group_flags_changed_cb(self, added, removed):
-        _logger.debug('__text_channel_group_flags_changed_cb %r %r' % (added,
-                      removed))
+        _logger.debug(
+            '__text_channel_group_flags_changed_cb %r %r' %
+            (added, removed))
         self.text_channel_group_flags |= added
         self.text_channel_group_flags &= ~removed
 

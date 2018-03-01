@@ -40,12 +40,13 @@ import gettext
 import logging
 from glob import glob
 from fnmatch import fnmatch
-from ConfigParser import ConfigParser
+from six.moves.configparser import ConfigParser
 import xml.etree.cElementTree as ET
-from HTMLParser import HTMLParser
+from six.moves.html_parser import HTMLParser
 
 from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
+from six.moves import reduce
 
 
 IGNORE_DIRS = ['dist', '.git', 'screenshots']
@@ -150,7 +151,7 @@ class Builder(object):
             args = ['msgfmt', '--output-file=%s' % mo_file, file_name]
             retcode = subprocess.call(args)
             if retcode:
-                print 'ERROR - msgfmt failed with return code %i.' % retcode
+                print('ERROR - msgfmt failed with return code %i.' % retcode)
                 if self._no_fail:
                     continue
 
@@ -301,8 +302,8 @@ class Installer(Packager):
 
             source_to_dest[source_path] = dest_path
 
-        for source, dest in source_to_dest.items():
-            print 'Install %s to %s.' % (source, dest)
+        for source, dest in list(source_to_dest.items()):
+            print('Install %s to %s.' % (source, dest))
 
             path = os.path.dirname(dest)
             if not os.path.exists(path):
@@ -429,7 +430,7 @@ def cmd_check(config, options):
     if options.choice == 'integration':
         run_unit_test = False
 
-    print "Running Tests"
+    print("Running Tests")
 
     test_path = os.path.join(config.source_dir, "tests")
 
@@ -443,22 +444,22 @@ def cmd_check(config, options):
             all_tests = unittest.defaultTestLoader.discover(unit_test_path)
             unittest.TextTestRunner(verbosity=options.verbose).run(all_tests)
         elif not run_unit_test:
-            print "Not running unit tests"
+            print("Not running unit tests")
         else:
-            print 'No "unit" directory found.'
+            print('No "unit" directory found.')
 
         if os.path.isdir(integration_test_path) and run_integration_test:
             all_tests = unittest.defaultTestLoader.discover(
                 integration_test_path)
             unittest.TextTestRunner(verbosity=options.verbose).run(all_tests)
         elif not run_integration_test:
-            print "Not running integration tests"
+            print("Not running integration tests")
         else:
-            print 'No "integration" directory found.'
+            print('No "integration" directory found.')
 
-        print "Finished testing"
+        print("Finished testing")
     else:
-        print "Error: No tests/ directory"
+        print("Error: No tests/ directory")
 
 
 def cmd_dev(config, options):
@@ -472,9 +473,9 @@ def cmd_dev(config, options):
         os.symlink(config.source_dir, bundle_path)
     except OSError:
         if os.path.islink(bundle_path):
-            print 'ERROR - The bundle has been already setup for development.'
+            print('ERROR - The bundle has been already setup for development.')
         else:
-            print 'ERROR - A bundle with the same name is already installed.'
+            print('ERROR - A bundle with the same name is already installed.')
 
 
 def cmd_dist_xo(config, options):
@@ -490,9 +491,9 @@ def cmd_dist_xo(config, options):
 def cmd_fix_manifest(config, options):
     '''Add missing files to the manifest (OBSOLETE)'''
 
-    print 'WARNING: The fix_manifest command is obsolete.'
-    print '         The MANIFEST file is no longer used in bundles,'
-    print '         please remove it.'
+    print('WARNING: The fix_manifest command is obsolete.')
+    print('         The MANIFEST file is no longer used in bundles,')
+    print('         please remove it.')
 
 
 def cmd_dist_source(config, options):
@@ -506,7 +507,10 @@ def cmd_install(config, options):
     """Install the activity in the system"""
 
     installer = Installer(Builder(config))
-    installer.install(options.prefix, options.install_mime, options.install_desktop_file)
+    installer.install(
+        options.prefix,
+        options.install_mime,
+        options.install_desktop_file)
 
 
 def _po_escape(string):
@@ -568,7 +572,7 @@ def cmd_genpot(config, options):
     args += python_files
     retcode = subprocess.call(args)
     if retcode:
-        print 'ERROR - xgettext failed with return code %i.' % retcode
+        print('ERROR - xgettext failed with return code %i.' % retcode)
 
 
 def cmd_build(config, options):
@@ -603,7 +607,7 @@ def start():
                               choices=['unit', 'integration'],
                               help="run unit/integration test")
     check_parser.add_argument("--verbosity", "-v", dest="verbose",
-                              type=int, choices=range(0, 3),
+                              type=int, choices=list(range(0, 3)),
                               default=1, nargs='?',
                               help="verbosity for the unit tests")
 

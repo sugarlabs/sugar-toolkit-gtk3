@@ -20,16 +20,17 @@
 STABLE.
 """
 
+import six
 import array
 import collections
 import errno
 import logging
 import sys
 import os
-import repr as repr_
 import decorator
 import time
 
+from six.moves import reprlib as repr_
 from sugar3 import env
 
 # Let's keep this module self contained so that it can be easily
@@ -104,8 +105,8 @@ def cleanup():
             for f in os.listdir(root):
                 os.remove(os.path.join(root, f))
             os.rmdir(root)
-        except OSError, e:
-            print "Could not remove old logs files %s" % e
+        except OSError as e:
+            print("Could not remove old logs files %s" % e)
 
     if len(backup_logs) > 0:
         name = str(int(time.time()))
@@ -116,7 +117,7 @@ def cleanup():
                 source_path = os.path.join(logs_dir, log)
                 dest_path = os.path.join(backup_dir, log)
                 os.rename(source_path, dest_path)
-        except OSError, e:
+        except OSError as e:
             # gracefully deal w/ disk full
             if e.errno != errno.ENOSPC:
                 raise e
@@ -145,7 +146,7 @@ def start(log_filename=None):
         def write(self, s):
             try:
                 self._stream.write(s)
-            except IOError, e:
+            except IOError as e:
                 # gracefully deal w/ disk full
                 if e.errno != errno.ENOSPC:
                     raise e
@@ -153,7 +154,7 @@ def start(log_filename=None):
         def flush(self):
             try:
                 self._stream.flush()
-            except IOError, e:
+            except IOError as e:
                 # gracefully deal w/ disk full
                 if e.errno != errno.ENOSPC:
                     raise e
@@ -177,7 +178,7 @@ def start(log_filename=None):
 
             sys.stdout = SafeLogWrapper(sys.stdout)
             sys.stderr = SafeLogWrapper(sys.stderr)
-        except OSError, e:
+        except OSError as e:
             # if we're out of space, just continue
             if e.errno != errno.ENOSPC:
                 raise e
@@ -188,13 +189,15 @@ def start(log_filename=None):
 class TraceRepr(repr_.Repr):
 
     # better handling of subclasses of basic types, e.g. for DBus
-    _TYPES = [int, long, bool, tuple, list, array.array, set, frozenset,
+    _TYPES = [int, bool, tuple, list, array.array, set, frozenset,
               collections.deque, dict, str]
+    if six.PY2:
+        _TYPES.append(long)
 
     def repr1(self, x, level):
         for t in self._TYPES:
             if isinstance(x, t):
-                return getattr(self, 'repr_'+t.__name__)(x, level)
+                return getattr(self, 'repr_' + t.__name__)(x, level)
 
         return repr_.Repr.repr1(self, x, level)
 
@@ -232,14 +235,14 @@ def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
             [trace_repr.repr(a)
                 for (idx, a) in enumerate(args) if idx not in skip_args] +
             ['%s=%s' % (k, trace_repr.repr(v))
-                for (k, v) in kwargs.items() if k not in skip_kwargs])
+                for (k, v) in list(kwargs.items()) if k not in skip_kwargs])
 
         trace_logger.log(TRACE, "%s(%s) invoked", f.__name__,
                          params_formatted)
 
         try:
             res = f(*args, **kwargs)
-        except:
+        except BaseException:
             trace_logger.exception("Exception occurred in %s" % f.__name__)
             raise
 

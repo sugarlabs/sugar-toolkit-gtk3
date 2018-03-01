@@ -79,5 +79,5 @@ class ActivityService(dbus.service.Object):
     def GetDocumentPath(self, async_cb, async_err_cb):
         try:
             self._activity.get_document_path(async_cb, async_err_cb)
-        except Exception, e:
+        except Exception as e:
             async_err_cb(e)

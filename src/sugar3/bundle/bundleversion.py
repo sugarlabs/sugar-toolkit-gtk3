@@ -82,6 +82,7 @@ class NormalizedVersion(object):
     Attributes:
         parts (list): the numeric parts of the version after normalization.
     """
+
     def __init__(self, activity_version):
         self._activity_version = activity_version
         self.parts = []

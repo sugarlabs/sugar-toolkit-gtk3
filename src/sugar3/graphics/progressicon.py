@@ -41,6 +41,7 @@ class ProgressIcon(Gtk.DrawingArea):
       fill_color (string): The main (inside) color of progressicon
          [e.g. fill_color=style.COLOR_BLUE.get_svg()
     '''
+
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
                  direction='vertical'):
         Gtk.DrawingArea.__init__(self)

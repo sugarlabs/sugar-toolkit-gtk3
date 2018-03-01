@@ -20,6 +20,7 @@ This class represents all of the colors that the XO can take on.
 Each pair of colors represents the fill color and the stroke color
 '''
 
+import six
 import random
 import logging
 
@@ -210,11 +211,11 @@ colors = [['#B20008', '#FF2B34'],
 def _parse_string(color_string):
     '''
     Returns array of length 2 of two colors in standard html form of [stroke color, fill color]
-    
+
     Args:
         color_string (string): two html format strings separated by a comma
     '''
-    if not isinstance(color_string, (str, unicode)):
+    if not isinstance(color_string, (six.text_type, six.binary_type)):
         logging.error('Invalid color string: %r', color_string)
         return None
 
@@ -233,13 +234,14 @@ def _parse_string(color_string):
 class XoColor:
     '''
     Defines color for XO
-    
+
     Args:
-        color_string (string): two html format strings separated 
-		    by a comma, "white", or "insensitive". If color_string 
-		    is None, the user's color will be created. If parsed_color 
-		    cannot be created, a random color will be used
+        color_string (string): two html format strings separated
+                    by a comma, "white", or "insensitive". If color_string
+                    is None, the user's color will be created. If parsed_color
+                    cannot be created, a random color will be used
     '''
+
     def __init__(self, color_string=None):
         parsed_color = None
 
@@ -261,7 +263,7 @@ class XoColor:
         '''
         Compares two XO colors by their stroke and fill color
         Returns 0 if they are equal and -1 if they are unequal
-        
+
         Args:
             other (object): other XO color to compare
         '''
@@ -295,12 +297,12 @@ if __name__ == '__main__':
 
     f = open(sys.argv[1], 'r')
 
-    print 'colors = ['
+    print('colors = [')
 
     for line in f.readlines():
         match = re.match(r'fill: ([A-Z0-9]*) stroke: ([A-Z0-9]*)', line)
-        print "['#%s', '#%s'], \\" % (match.group(2), match.group(1))
+        print("['#%s', '#%s'], \\" % (match.group(2), match.group(1)))
 
-    print ']'
+    print(']')
 
     f.close()

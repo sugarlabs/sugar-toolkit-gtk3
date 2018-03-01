@@ -43,6 +43,7 @@ from sugar3.graphics.icon import CellRendererIcon
 
 _pointer = None
 
+
 def _get_pointer_position(widget):
     global _pointer
 
@@ -52,6 +53,7 @@ def _get_pointer_position(widget):
         _pointer = manager.get_client_pointer()
     screen, x, y = _pointer.get_position()
     return (x, y)
+
 
 def _calculate_gap(a, b):
     """Helper function to find the gap position and size of widget a"""
@@ -420,6 +422,8 @@ class _PaletteWindowWidget(Gtk.Window):
         self.disconnect_by_func(self.__enter_notify_event_cb)
         self.disconnect_by_func(self.__leave_notify_event_cb)
         self.hide()
+
+
 if hasattr(_PaletteWindowWidget, 'set_css_name'):
     _PaletteWindowWidget.set_css_name('palette')
 
@@ -954,7 +958,7 @@ class Invoker(GObject.GObject):
             dright = screen_area.x + screen_area.width - rect.x - rect.width
 
             ih = 0
-            
+
             if palette_dim.width == 0:
                 ph = 0
 
@@ -1315,7 +1319,7 @@ class CursorInvoker(Invoker):
         self._leave_hid = self._item.connect('leave-notify-event',
                                              self.__leave_notify_event_cb)
         self._release_hid = self._item.connect('button-release-event',
-                                               self.__button_release_event_cb)
+                                             self.__button_release_event_cb)
         self._long_pressed_hid = self._long_pressed_controller.connect(
             'pressed',
             self.__long_pressed_event_cb, self._item)
@@ -1325,9 +1329,9 @@ class CursorInvoker(Invoker):
 
     def detach(self):
         Invoker.detach(self)
-        self._item.disconnect(self._enter_hid)
-        self._item.disconnect(self._leave_hid)
-        self._item.disconnect(self._release_hid)
+        self._item.disconnect_by_func(self.__enter_notify_event_cb)
+        self._item.disconnect_by_func(self.__leave_notify_event_cb)
+        self._item.disconnect_by_func(self.__button_release_event_cb)
         self._long_pressed_controller.detach(self._item)
         self._long_pressed_controller.disconnect(self._long_pressed_hid)
 

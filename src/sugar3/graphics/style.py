@@ -59,6 +59,7 @@ class Font(object):
     Args:
         desc (str): a description of the Font object
     '''
+
     def __init__(self, desc):
         self._desc = desc
 
@@ -84,6 +85,7 @@ class Color(object):
 
         alpha (double):  transparency of color
     '''
+
     def __init__(self, color, alpha=1.0):
         self._r, self._g, self._b = self._html_to_rgb(color)
         self._a = alpha
@@ -112,7 +114,8 @@ class Color(object):
         '''
         Returns string in the standard html Color format (#FFFFFF)
         '''
-        return '#%02x%02x%02x' % (self._r * 255, self._g * 255, self._b * 255)
+        return '#%02x%02x%02x' % (
+            int(self._r * 255), int(self._g * 255), int(self._b * 255))
 
     def _html_to_rgb(self, html_color):
         '''

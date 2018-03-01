@@ -24,26 +24,26 @@ journal object id's,
 class ActivityHandle(object):
     '''
     Data structure storing simple activity metadata
-    
+
     Args:
         activity_id (string): unique id for the activity to be
         created
-        
+
         object_id (string): identity of the journal object
         associated with the activity.
-        
+
         When you resume an activity from the journal
         the object_id will be passed in. It is optional
         since new activities does not have an
         associated object.
-        
+
         uri (string): URI associated with the activity. Used when
         opening an external file or resource in the
         activity, rather than a journal object
         (downloads stored on the file system for
         example or web pages)
-        
-        invited (bool): True if the activity is being 
+
+        invited (bool): True if the activity is being
         launched for handling an invite from the network
     '''
 
@@ -55,7 +55,7 @@ class ActivityHandle(object):
         self.invited = invited
 
     def get_dict(self):
-        '''Returns activity settings as a dictionary in format 
+        '''Returns activity settings as a dictionary in format
             {activity_id:XXXX, object_id:XXXX, uri:XXXX, invited:BOOL}'''
         result = {'activity_id': self.activity_id, 'invited': self.invited}
         if self.object_id:

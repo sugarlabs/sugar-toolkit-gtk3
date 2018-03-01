@@ -32,7 +32,9 @@ from gi.repository import GLib
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
+
+def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+
 
 GENERIC_TYPE_TEXT = 'Text'
 GENERIC_TYPE_IMAGE = 'Image'
@@ -185,14 +187,14 @@ def get_mime_parents(mime_type):
             with open(subclasses_path) as parents_file:
                 for line in parents_file:
                     subclass, parent = line.split()
-                    if subclass not in _subclasses.keys():
+                    if subclass not in list(_subclasses.keys()):
                         _subclasses[subclass] = [parent]
                     else:
                         _subclasses[subclass].append(parent)
 
         _subclasses_timestamps = timestamps
 
-    if mime_type in _subclasses.keys():
+    if mime_type in list(_subclasses.keys()):
         return _subclasses[mime_type]
     else:
         return []

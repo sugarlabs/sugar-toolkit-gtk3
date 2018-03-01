@@ -36,7 +36,7 @@ def get_group(group_id):
 
 
 def popdown_all():
-    for group in _groups.values():
+    for group in list(_groups.values()):
         group.popdown()
 
 

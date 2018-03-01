@@ -61,7 +61,7 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 if not hasattr(GObject.ParamFlags, 'READWRITE'):
@@ -258,6 +258,8 @@ class Alert(Gtk.EventBox):
 
     def __button_clicked_cb(self, button, response_id):
         self._response(response_id)
+
+
 if hasattr(Alert, 'set_css_name'):
     Alert.set_css_name('alert')
 
@@ -294,9 +296,9 @@ class ConfirmationAlert(Alert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Ok Button was clicked.'
+                print('Ok Button was clicked.')
             elif response_id is Gtk.ResponseType.CANCEL:
-                print 'Cancel Button was clicked.'
+                print('Cancel Button was clicked.')
     """
 
     def __init__(self, **kwargs):
@@ -341,7 +343,7 @@ class ErrorAlert(Alert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Ok Button was clicked.'
+                print('Ok Button was clicked.')
     """
 
     def __init__(self, **kwargs):
@@ -390,6 +392,8 @@ class _TimeoutIcon(Gtk.Alignment):
 
     def set_text(self, text):
         self._text.set_markup('<b>%s</b>' % GLib.markup_escape_text(str(text)))
+
+
 if hasattr(_TimeoutIcon, 'set_css_name'):
     _TimeoutIcon.set_css_name('timeouticon')
 
@@ -458,11 +462,11 @@ class TimeoutAlert(_TimeoutAlert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Continue Button was clicked.'
+                print('Continue Button was clicked.')
             elif response_id is Gtk.ResponseType.CANCEL:
-                print 'Cancel Button was clicked.'
+                print('Cancel Button was clicked.')
             elif response_id == -1:
-                print 'Timeout occurred'
+                print('Timeout occurred')
     """
 
     def __init__(self, timeout=5, **kwargs):
@@ -508,9 +512,9 @@ class NotifyAlert(_TimeoutAlert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Ok Button was clicked.'
+                print('Ok Button was clicked.')
             elif response_id == -1:
-                print 'Timeout occurred'
+                print('Timeout occurred')
     """
 
     def __init__(self, timeout=5, **kwargs):

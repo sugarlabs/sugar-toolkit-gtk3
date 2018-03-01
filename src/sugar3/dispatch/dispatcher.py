@@ -1,4 +1,6 @@
 import weakref
+import six
+
 try:
     set
 except NameError:
@@ -11,7 +13,7 @@ WEAKREF_TYPES = (weakref.ReferenceType, saferef.BoundMethodWeakref)
 
 def _make_id(target):
     if hasattr(target, 'im_func'):
-        return (id(target.im_self), id(target.im_func))
+        return (id(im_self(target)), id(im_func(target)))
     return id(target)
 
 
@@ -159,7 +161,7 @@ class Signal(object):
         for receiver in self._live_receivers(_make_id(sender)):
             try:
                 response = receiver(signal=self, sender=sender, **named)
-            except Exception, err:
+            except Exception as err:
                 responses.append((receiver, err))
             else:
                 responses.append((receiver, response))
@@ -195,3 +197,17 @@ class Signal(object):
             for idx, (r_key, _) in enumerate(self.receivers):
                 if r_key == key:
                     del self.receivers[idx]
+
+
+def im_self(func):
+    if six.PY2:
+        return func.im_self
+    elif six.PY3:
+        return func.__self__
+
+
+def im_func(func):
+    if six.PY2:
+        return func.im_func
+    elif six.PY3:
+        return func.__func__

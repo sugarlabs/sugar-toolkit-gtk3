@@ -21,7 +21,8 @@
 from gi.repository import Gio
 import os
 import logging
-from ConfigParser import ConfigParser
+
+from six.moves.configparser import ConfigParser
 
 from sugar3 import env
 from sugar3 import util

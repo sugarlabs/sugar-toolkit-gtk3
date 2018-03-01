@@ -87,11 +87,13 @@ In this example, the badge will be centered at 97.0% on the X axis,
 and 85.0% on the Y axis.
 '''
 
+import six
 import re
 import math
 import logging
 import os
-from ConfigParser import ConfigParser
+
+from six.moves.configparser import ConfigParser
 
 import gi
 gi.require_version('Rsvg', '2.0')
@@ -127,8 +129,8 @@ class _SVGLoader(object):
             if cache:
                 self._cache[file_name] = icon
 
-        for entity, value in entities.items():
-            if isinstance(value, basestring):
+        for entity, value in list(entities.items()):
+            if isinstance(value, six.string_types):
                 xml = '<!ENTITY %s "%s">' % (entity, value)
                 icon = re.sub('<!ENTITY %s .*>' % entity, xml, icon)
             else:
@@ -207,7 +209,7 @@ class _IconBuffer(object):
             # try read from the .icon file
             icon_filename = info.get_filename().replace('.svg', '.icon')
             if icon_filename != info.get_filename() and \
-                os.path.exists(icon_filename):
+                            os.path.exists(icon_filename):
 
                 try:
                     with open(icon_filename) as config_file:
@@ -470,7 +472,6 @@ class Icon(Gtk.Image):
 
     __gtype_name__ = 'SugarIcon'
 
-    # FIXME: deprecate icon_size
     _MENU_SIZES = (Gtk.IconSize.MENU, Gtk.IconSize.DND,
                    Gtk.IconSize.SMALL_TOOLBAR, Gtk.IconSize.BUTTON)
 
@@ -483,7 +484,6 @@ class Icon(Gtk.Image):
         self._alpha = 1.0
         self._scale = 1.0
 
-        # FIXME: deprecate icon_size
         if 'icon_size' in kwargs:
             logging.warning("icon_size is deprecated. Use pixel_size instead.")
 
@@ -532,7 +532,6 @@ class Icon(Gtk.Image):
         if self._buffer.file_name != self.props.file:
             self._buffer.file_name = self.props.file
 
-        # FIXME: deprecate icon_size
         pixel_size = None
         if self.props.pixel_size == -1:
             if self.props.icon_size in self._MENU_SIZES:
@@ -549,7 +548,7 @@ class Icon(Gtk.Image):
             self._buffer.height = height
 
     def _icon_size_changed_cb(self, image, pspec):
-        self._buffer.icon_size = self.props.icon_size
+        self._buffer.icon_size = self.props.pixel_size
 
     def _icon_name_changed_cb(self, image, pspec):
         self._buffer.icon_name = self.props.icon_name
@@ -805,7 +804,7 @@ class EventIcon(Gtk.EventBox):
         # for example, after a touch palette invocation
         self.connect_after('button-release-event',
                            self.__button_release_event_cb)
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
             self.set_property(key, value)
 
         from sugar3.graphics.palette import CursorInvoker
@@ -1152,6 +1151,8 @@ class CanvasIcon(EventIcon):
 
     def __palette_popdown_cb(self, palette):
         self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
+
+
 if hasattr(CanvasIcon, 'set_css_name'):
     CanvasIcon.set_css_name('canvasicon')
 
@@ -1447,6 +1448,6 @@ def get_surface(**kwargs):
         cairo surface or None if image was not found
     '''
     icon = _IconBuffer()
-    for key, value in kwargs.items():
+    for key, value in list(kwargs.items()):
         icon.__setattr__(key, value)
     return icon.get_surface()

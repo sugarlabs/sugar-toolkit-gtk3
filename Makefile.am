@@ -26,4 +26,4 @@ check-po:
 test: check-po
 	pyflakes $(top_srcdir)
 	pep8 $(top_srcdir)
-	python -m sugar3.test.discover $(top_srcdir)/tests
+	python3 -m sugar3.test.discover $(top_srcdir)/tests

@@ -23,7 +23,7 @@ from sugar3.test import uitree
 
 class TestUITree(unittest.TestCase):
     def test_tree(self):
-        process = subprocess.Popen(["python", __file__, "show_window1"])
+        process = subprocess.Popen(["python3", __file__, "show_window1"])
 
         try:
             root = uitree.get_root()
@@ -48,6 +48,7 @@ def show_window1():
     window.show()
 
     Gtk.main()
+
 
 if __name__ == '__main__':
     globals()[sys.argv[1]]()
