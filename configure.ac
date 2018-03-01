@@ -15,7 +15,7 @@ GNOME_COMPILE_WARNINGS(maximum)
 
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 
-PYTHON=python2
+PYTHON=python3
 AM_PATH_PYTHON
 
 PKG_CHECK_MODULES(EXT, gtk+-3.0 gdk-3.0 gdk-pixbuf-2.0 sm ice alsa

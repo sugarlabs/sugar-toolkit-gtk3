@@ -1315,7 +1315,7 @@ class CursorInvoker(Invoker):
         self._leave_hid = self._item.connect('leave-notify-event',
                                              self.__leave_notify_event_cb)
         self._release_hid = self._item.connect('button-release-event',
-                                               self.__button_release_event_cb)
+                                             self.__button_release_event_cb)
         self._long_pressed_hid = self._long_pressed_controller.connect(
             'pressed',
             self.__long_pressed_event_cb, self._item)
@@ -1325,9 +1325,9 @@ class CursorInvoker(Invoker):
 
     def detach(self):
         Invoker.detach(self)
-        self._item.disconnect(self._enter_hid)
-        self._item.disconnect(self._leave_hid)
-        self._item.disconnect(self._release_hid)
+        self._item.disconnect_by_func(self.__enter_notify_event_cb)
+        self._item.disconnect_by_func(self.__leave_notify_event_cb)
+        self._item.disconnect_by_func(self.__button_release_event_cb)
         self._long_pressed_controller.detach(self._item)
         self._long_pressed_controller.disconnect(self._long_pressed_hid)
 

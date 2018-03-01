@@ -38,8 +38,8 @@ if not hasattr(GObject.ParamFlags, 'READWRITE'):
 
 
 def get_svg_color_string(color):
-    return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257,
-                              color.blue / 257)
+    return '#%.2X%.2X%.2X' % (color.red // 257, color.green // 257,
+                              color.blue // 257)
 
 
 class _ColorButton(Gtk.Button):
@@ -123,8 +123,8 @@ class _ColorButton(Gtk.Button):
         context = self.get_style_context()
         fg_color = context.get_color(Gtk.StateType.NORMAL)
         # the color components are stored as float values between 0.0 and 1.0
-        return '#%.2X%.2X%.2X' % (fg_color.red * 255, fg_color.green * 255,
-                                  fg_color.blue * 255)
+        return '#%.2X%.2X%.2X' % (int(fg_color.red * 255), int(fg_color.green * 255),
+                                  int(fg_color.blue * 255))
 
     def set_color(self, color):
         assert isinstance(color, Gdk.Color)

@@ -44,7 +44,9 @@ an `[Activity]` header on the first line:
 * `icon` - the icon file for the activity, shown by Sugar in the list
   of installed activities,
 
-* `exec` - how to execute the activity, e.g. `sugar-activity module.Class`,
+* `exec` - how to execute the activity, e.g.
+  `sugar-activity3 module.Class` (For activities written for Python 3),
+  `sugar-activity module.Class` (For activities written for Python 2)
 
 Optional metadata keys are;
 
@@ -117,7 +119,7 @@ Example `activity.info`
     [Activity]
     name = Browse
     bundle_id = org.laptop.WebActivity
-    exec = sugar-activity webactivity.WebActivity -s
+    exec = sugar-activity3 webactivity.WebActivity -s
     activity_version = 200
     icon = activity-web
     max_participants = 100

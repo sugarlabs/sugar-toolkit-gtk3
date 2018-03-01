@@ -112,7 +112,7 @@ class Color(object):
         '''
         Returns string in the standard html Color format (#FFFFFF)
         '''
-        return '#%02x%02x%02x' % (self._r * 255, self._g * 255, self._b * 255)
+        return '#%02x%02x%02x' % (int(self._r * 255), int(self._g * 255), int(self._b * 255))
 
     def _html_to_rgb(self, html_color):
         '''

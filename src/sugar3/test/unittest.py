@@ -18,7 +18,10 @@
 UNSTABLE.
 """
 
-from __future__ import absolute_import
+import six
+
+if six.PY2:
+    from __future__ import absolute_import
 
 import logging
 import os
@@ -52,7 +55,7 @@ class UITestCase(unittest.TestCase):
     @contextmanager
     def run_view(self, name):
         view_path = os.path.join("views", "%s.py" % name)
-        process = subprocess.Popen(["python", view_path])
+        process = subprocess.Popen(["python3", view_path])
 
         try:
             yield
@@ -77,7 +80,7 @@ class UITestCase(unittest.TestCase):
                 cmd += options
             process = subprocess.Popen(cmd)
         else:
-            print "No bundle_id specified."
+            print("No bundle_id specified.")
             return
 
         try:

@@ -22,7 +22,7 @@ STABLE.
 """
 
 import logging
-
+import six
 from gi.repository import GObject
 import dbus
 from telepathy.interfaces import CONNECTION, \
@@ -103,7 +103,7 @@ class BaseBuddy(GObject.GObject):
     def get_current_activity(self):
         if self._current_activity is None:
             return None
-        for activity in self._activities.values():
+        for activity in list(self._activities.values()):
             if activity.props.id == self._current_activity:
                 return activity
         return None
@@ -164,6 +164,12 @@ class Buddy(BaseBuddy):
                                      dbus_interface=CONNECTION)
         self.contact_handle = handles[0]
 
+        arg_dict = dict(reply_handler=self.__got_properties_cb,
+                        error_handler=self.__error_handler_cb,
+                        byte_arrays = True)
+        if six.PY2:
+            arg_dict = arg_dict.update(utf8_strings=True)
+
         self._get_properties_call = bus.call_async(
             connection_name,
             connection.object_path,
@@ -171,10 +177,7 @@ class Buddy(BaseBuddy):
             'GetProperties',
             'u',
             (self.contact_handle,),
-            reply_handler=self.__got_properties_cb,
-            error_handler=self.__error_handler_cb,
-            utf8_strings=True,
-            byte_arrays=True)
+            arg_dict)
 
         self._get_attributes_call = bus.call_async(
             connection_name,

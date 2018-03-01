@@ -56,7 +56,7 @@ Example:
                 menu_item.show()
 
             def __edit_cb(self, menu_item):
-                print 'Edit...'
+                print('Edit...')
 
         # Usually the Palette instance is returned in a create_palette function
         p = ItemPalette()

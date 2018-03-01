@@ -78,7 +78,7 @@ class PresenceService(GObject.GObject):
             connection_manager = get_connection_manager()
             connections_per_account = \
                 connection_manager.get_connections_per_account()
-            for account_path, connection in connections_per_account.items():
+            for account_path, connection in list(connections_per_account.items()):
                 if not connection.connected:
                     continue
                 logging.debug('Calling GetActivity on %s' % account_path)
@@ -86,7 +86,7 @@ class PresenceService(GObject.GObject):
                     room_handle = connection.connection.GetActivity(
                         activity_id,
                         dbus_interface=CONN_INTERFACE_ACTIVITY_PROPERTIES)
-                except dbus.exceptions.DBusException, e:
+                except dbus.exceptions.DBusException as e:
                     name = 'org.freedesktop.Telepathy.Error.NotAvailable'
                     if e.get_dbus_name() == name:
                         logging.debug("There's no shared activity with the id "

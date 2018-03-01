@@ -23,7 +23,6 @@ the moment there is no reason to stabilize this API.
 """
 
 import logging
-
 import dbus
 from gi.repository import GObject
 from gi.repository import GLib
@@ -53,7 +52,7 @@ except ValueError:
 
 
 def _close_fds():
-    for i in xrange(3, MAXFD):
+    for i in range(3, MAXFD):
         try:
             os.close(i)
         # pylint: disable=W0704
@@ -69,7 +68,7 @@ def create_activity_id():
 def _mkdir(path):
     try:
         os.mkdir(path)
-    except OSError, e:
+    except OSError as e:
         if e.errno != EEXIST:
             raise e
 
@@ -137,10 +136,10 @@ def open_log_file(activity):
     while True:
         path = env.get_logs_path('%s-%s.log' % (activity.get_bundle_id(), i))
         try:
-            fd = os.open(path, os.O_EXCL | os.O_CREAT | os.O_WRONLY, 0644)
-            f = os.fdopen(fd, 'w', 0)
+            fd = os.open(path, os.O_EXCL | os.O_CREAT | os.O_WRONLY, 0o644)
+            f = open(fd, 'w')
             return (path, f)
-        except OSError, e:
+        except OSError as e:
             if e.errno == EEXIST:
                 i += 1
             elif e.errno == ENOSPC:
@@ -225,7 +224,7 @@ class ActivityCreationHandler(GObject.GObject):
                               self._handle.object_id, self._handle.uri,
                               self._handle.invited)
 
-        dev_null = file('/dev/null', 'r')
+        dev_null = open('/dev/null', 'r')
         child = subprocess.Popen([str(s) for s in command],
                                  env=environ,
                                  cwd=str(self._bundle.get_path()),

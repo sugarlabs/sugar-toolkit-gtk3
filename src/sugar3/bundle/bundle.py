@@ -20,10 +20,10 @@
 UNSTABLE.
 """
 
+import six
 import os
 import logging
 import shutil
-import StringIO
 import zipfile
 
 
@@ -74,7 +74,7 @@ class Bundle(object):
         if not os.path.isdir(self._path):
             try:
                 self._zip_file = zipfile.ZipFile(self._path)
-            except zipfile.error, exception:
+            except zipfile.error as exception:
                 raise MalformedBundleException('Error accessing zip file %r: '
                                                '%s' % (self._path, exception))
             self._check_zip_bundle()
@@ -115,7 +115,7 @@ class Bundle(object):
         if self._zip_file is None:
             path = os.path.join(self._path, filename)
             try:
-                f = open(path, 'rb')
+                f = open(path, 'r')
             except IOError:
                 logging.debug("cannot open path %s" % path)
                 return None
@@ -123,7 +123,7 @@ class Bundle(object):
             path = os.path.join(self._zip_root_dir, filename)
             try:
                 data = self._zip_file.read(path)
-                f = StringIO.StringIO(data)
+                f = six.StringIO(data)
             except KeyError:
                 logging.debug('%s not found in zip %s.' % (filename, path))
                 return None
@@ -171,7 +171,7 @@ class Bundle(object):
             raise AlreadyInstalledException
 
         if not os.path.isdir(install_dir):
-            os.mkdir(install_dir, 0775)
+            os.mkdir(install_dir, 0o775)
 
         # zipfile provides API that in theory would let us do this
         # correctly by hand, but handling all the oddities of

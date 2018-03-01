@@ -20,6 +20,7 @@
 UNSTABLE. We have been adding helpers randomly to this module.
 """
 
+import six
 import os
 import time
 import hashlib
@@ -38,13 +39,19 @@ def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
     printable = ""
     for char in in_hash:
-        printable = printable + binascii.b2a_hex(char)
+        if six.PY3:
+            char = bytes([char])
+            printable = printable + binascii.b2a_hex(char).decode()
+        else:
+            printable = printable + binascii.b2a_hex(char)
     return printable
 
 
 def sha_data(data):
     """sha1 hash some bytes."""
     sha_hash = hashlib.sha1()
+    if six.PY3:
+        data = data.encode('utf-8')
     sha_hash.update(data)
     return sha_hash.digest()
 
@@ -81,7 +88,7 @@ def is_hex(s):
 
 def validate_activity_id(actid):
     """Validate an activity ID."""
-    if not isinstance(actid, (str, unicode)):
+    if not isinstance(actid, (six.binary_type, six.text_type)):
         return False
     if len(actid) != ACTIVITY_ID_LEN:
         return False
@@ -204,7 +211,7 @@ class LRU:
             yield j
 
     def keys(self):
-        return self.d.keys()
+        return list(self.d.keys())
 
 
 units = [['%d year', '%d years', 356 * 24 * 60 * 60],
@@ -331,7 +338,7 @@ class TempFilePath(str):
 
 def _cleanup_temp_files():
     logging.debug('_cleanup_temp_files')
-    for path in _tracked_paths.keys():
+    for path in list(_tracked_paths.keys()):
         try:
             os.unlink(path)
         except:

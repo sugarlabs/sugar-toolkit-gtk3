@@ -92,7 +92,7 @@ class ConnectionManager(object):
 
     def get_preferred_connection(self):
         best_connection = None, None
-        for account_path, connection in self._connections_per_account.items():
+        for account_path, connection in list(self._connections_per_account.items()):
             if 'salut' in account_path and connection.connected:
                 best_connection = account_path, connection.connection
             elif 'gabble' in account_path and connection.connected:
@@ -107,7 +107,7 @@ class ConnectionManager(object):
         return self._connections_per_account
 
     def get_account_for_connection(self, connection_path):
-        for account_path, connection in self._connections_per_account.items():
+        for account_path, connection in list(self._connections_per_account.items()):
             if connection.connection.object_path == connection_path:
                 return account_path
         return None

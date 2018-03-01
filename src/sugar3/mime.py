@@ -185,14 +185,14 @@ def get_mime_parents(mime_type):
             with open(subclasses_path) as parents_file:
                 for line in parents_file:
                     subclass, parent = line.split()
-                    if subclass not in _subclasses.keys():
+                    if subclass not in list(_subclasses.keys()):
                         _subclasses[subclass] = [parent]
                     else:
                         _subclasses[subclass].append(parent)
 
         _subclasses_timestamps = timestamps
 
-    if mime_type in _subclasses.keys():
+    if mime_type in list(_subclasses.keys()):
         return _subclasses[mime_type]
     else:
         return []

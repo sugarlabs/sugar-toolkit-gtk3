@@ -294,9 +294,9 @@ class ConfirmationAlert(Alert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Ok Button was clicked.'
+                print('Ok Button was clicked.')
             elif response_id is Gtk.ResponseType.CANCEL:
-                print 'Cancel Button was clicked.'
+                print('Cancel Button was clicked.')
     """
 
     def __init__(self, **kwargs):
@@ -341,7 +341,7 @@ class ErrorAlert(Alert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Ok Button was clicked.'
+                print('Ok Button was clicked.')
     """
 
     def __init__(self, **kwargs):
@@ -458,11 +458,11 @@ class TimeoutAlert(_TimeoutAlert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Continue Button was clicked.'
+                print('Continue Button was clicked.')
             elif response_id is Gtk.ResponseType.CANCEL:
-                print 'Cancel Button was clicked.'
+                print('Cancel Button was clicked.')
             elif response_id == -1:
-                print 'Timeout occurred'
+                print('Timeout occurred')
     """
 
     def __init__(self, timeout=5, **kwargs):
@@ -508,9 +508,9 @@ class NotifyAlert(_TimeoutAlert):
 
             # Check the response identifier.
             if response_id is Gtk.ResponseType.OK:
-                print 'Ok Button was clicked.'
+                print('Ok Button was clicked.')
             elif response_id == -1:
-                print 'Timeout occurred'
+                print('Timeout occurred')
     """
 
     def __init__(self, timeout=5, **kwargs):

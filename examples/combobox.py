@@ -6,7 +6,7 @@ set_theme()
 
 
 def __combo_changed_cb(combo):
-    print 'Combo changed to %r' % combo.get_value()
+    print('Combo changed to %r' % combo.get_value())
 
 
 w = Gtk.Window()

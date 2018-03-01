@@ -21,7 +21,7 @@ toolbar_box.toolbar.insert(separator, -1)
 def __clicked_cb(button):
     n = int(button.get_tooltip())
     button.set_tooltip(str(n + 1))
-    print "tool button click count %d" % n
+    print("tool button click count %d" % n)
 
 
 tool_button = ToolButton(icon_name='view-radial', tooltip='0')

@@ -158,6 +158,7 @@ Hint: A good and simple activity to learn from is the Read activity.
 You may copy it and use it as a template.
 '''
 
+import six
 import gettext
 import logging
 import os
@@ -165,7 +166,6 @@ import signal
 import time
 from hashlib import sha1
 from functools import partial
-import StringIO
 import cairo
 import json
 
@@ -881,7 +881,7 @@ class Activity(Window, Gtk.Container):
         cr.set_source_surface(screenshot_surface)
         cr.paint()
 
-        preview_str = StringIO.StringIO()
+        preview_str = six.BytesIO()
         preview_surface.write_to_png(preview_str)
         return preview_str.getvalue()
 
@@ -919,7 +919,7 @@ class Activity(Window, Gtk.Container):
 
         buddies_dict = self._get_buddies()
         if buddies_dict:
-            self.metadata['buddies_id'] = json.dumps(buddies_dict.keys())
+            self.metadata['buddies_id'] = json.dumps(list(buddies_dict.keys()))
             self.metadata['buddies'] = json.dumps(self._get_buddies())
 
         # update spent time before saving
@@ -1448,7 +1448,7 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
                 handle_type = properties[CHANNEL + '.TargetHandleType']
                 if channel_type == CHANNEL_TYPE_TEXT:
                     self._got_channel_cb(connection, object_path, handle_type)
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
 
 _session = None
@@ -1503,7 +1503,7 @@ def get_activity_root():
         activity_root = env.get_profile_path(os.environ['SUGAR_BUNDLE_ID'])
         try:
             os.mkdir(activity_root)
-        except OSError, e:
+        except OSError as e:
             if e.errno != EEXIST:
                 raise e
         return activity_root
