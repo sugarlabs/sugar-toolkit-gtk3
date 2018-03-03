@@ -72,7 +72,7 @@ class ActivityToolbarButton(ToolbarButton):
 
     def __init__(self, activity, **kwargs):
         toolbar = ActivityToolbar(activity, orientation_left=True)
-        toolbar.connect('entered', lambda widget: self.emit('clicked'))
+        toolbar.connect('enter-key-press', lambda widget: self.emit('clicked'))
 
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
 
@@ -170,7 +170,7 @@ class ShareButton(RadioMenuButton):
 
 class TitleEntry(Gtk.ToolItem):
     __gsignals__ = {
-        'entered': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'enter-key-press': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, activity, **kwargs):
@@ -195,7 +195,7 @@ class TitleEntry(Gtk.ToolItem):
         entry.select_region(0, 0)
         entry.hide()
         entry.show()
-        self.emit('entered')
+        self.emit('enter-key-press')
         return False
 
     def modify_bg(self, state, color):
@@ -327,7 +327,7 @@ class DescriptionItem(ToolButton):
 class ActivityToolbar(Gtk.Toolbar):
     """The Activity toolbar with the Journal entry title and sharing button"""
     __gsignals__ = {
-        'entered': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'enter-key-press': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, activity, orientation_left=False):
@@ -337,7 +337,7 @@ class ActivityToolbar(Gtk.Toolbar):
 
         if activity.metadata:
             title_button = TitleEntry(activity)
-            title_button.connect('entered', lambda widget: self.emit('entered'))
+            title_button.connect('enter-key-press', lambda widget: self.emit('enter-key-press'))
             title_button.show()
             self.insert(title_button, -1)
             self.title = title_button.entry
