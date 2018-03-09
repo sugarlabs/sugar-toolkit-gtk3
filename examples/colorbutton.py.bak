@@ -24,7 +24,7 @@ separator.show()
 
 
 def color_changed_cb(button, pspec):
-    print(button.get_color())
+    print button.get_color()
 
 
 color_button = ColorToolButton()

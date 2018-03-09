@@ -21,11 +21,11 @@ box.pack_start(alert, False, False, 0)
 # Called when an alert object throws a response event.
 def __alert_response_cb(alert, response_id):
     if response_id is Gtk.ResponseType.OK:
-        print('Continue Button was clicked.')
+        print 'Continue Button was clicked.'
     elif response_id is Gtk.ResponseType.CANCEL:
-        print('Cancel Button was clicked.')
+        print 'Cancel Button was clicked.'
     elif response_id == -1:
-        print('Timeout occurred')
+        print 'Timeout occurred'
 
 
 alert.connect('response', __alert_response_cb)

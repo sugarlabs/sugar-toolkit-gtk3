@@ -12,12 +12,12 @@ import common
 
 
 def _scroll_start_cb(event, treeview, invoker):
-    print("Scroll starts")
+    print "Scroll starts"
     invoker.detach()
 
 
 def _scroll_end_cb(event, treeview, invoker):
-    print("Scroll ends")
+    print "Scroll ends"
     invoker.attach_treeview(treeview)
 
 
@@ -30,7 +30,7 @@ data_dir = os.getenv('GTK_DATA_PREFIX', '/usr/')
 
 iconlist = os.listdir(os.path.join(data_dir,
                                    'share/icons/sugar/scalable/actions/'))
-print("Displaying %s icons" % len(iconlist))
+print "Displaying %s icons" % len(iconlist)
 for icon in iconlist:
     icon = os.path.basename(icon)
     icon = icon[:icon.find('.')]
