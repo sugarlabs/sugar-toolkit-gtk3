@@ -19,7 +19,7 @@ box.show()
 def echo(button, label):
     if not button.props.active:
         return
-    print label
+    print(label)
 
 
 palette = RadioPalette()
