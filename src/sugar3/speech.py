@@ -288,11 +288,6 @@ class SpeechManager(GObject.GObject):
 
     def save(self):
         self._save_timeout_id = -1
-        # DEPRECATED
-        from gi.repository import GConf
-        client = GConf.Client.get_default()
-        client.set_int('/desktop/sugar/speech/pitch', self._pitch)
-        client.set_int('/desktop/sugar/speech/rate', self._rate)
 
         settings = Gio.Settings('org.sugarlabs.speech')
         settings.set_int('pitch', self._pitch)
