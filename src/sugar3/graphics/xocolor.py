@@ -211,7 +211,7 @@ colors = [['#B20008', '#FF2B34'],
 def _parse_string(color_string):
     '''
     Returns array of length 2 of two colors in standard html form of [stroke color, fill color]
-    
+
     Args:
         color_string (string): two html format strings separated by a comma
     '''
@@ -234,13 +234,14 @@ def _parse_string(color_string):
 class XoColor:
     '''
     Defines color for XO
-    
+
     Args:
-        color_string (string): two html format strings separated 
-		    by a comma, "white", or "insensitive". If color_string 
-		    is None, the user's color will be created. If parsed_color 
-		    cannot be created, a random color will be used
+        color_string (string): two html format strings separated
+                    by a comma, "white", or "insensitive". If color_string
+                    is None, the user's color will be created. If parsed_color
+                    cannot be created, a random color will be used
     '''
+
     def __init__(self, color_string=None):
         parsed_color = None
 
@@ -262,7 +263,7 @@ class XoColor:
         '''
         Compares two XO colors by their stroke and fill color
         Returns 0 if they are equal and -1 if they are unequal
-        
+
         Args:
             other (object): other XO color to compare
         '''

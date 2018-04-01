@@ -206,7 +206,9 @@ from errno import EEXIST
 
 from gi.repository import SugarExt
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
+
+def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+
 
 SCOPE_PRIVATE = 'private'
 SCOPE_INVITE_ONLY = 'invite'  # shouldn't be shown in UI, it's implicit
@@ -1103,8 +1105,9 @@ class Activity(Window, Gtk.Container):
             raise RuntimeError('Activity %s already shared.' %
                                self._activity_id)
         verb = private and 'private' or 'public'
-        logging.debug('Requesting %s share of activity %s.' % (verb,
-                      self._activity_id))
+        logging.debug(
+            'Requesting %s share of activity %s.' %
+            (verb, self._activity_id))
         pservice = presenceservice.get_instance()
         pservice.connect('activity-shared', self.__share_cb)
         pservice.share_activity(self, private=private)
@@ -1197,8 +1200,8 @@ class Activity(Window, Gtk.Container):
         if response_id == Gtk.ResponseType.OK:
             title = alert.entry.get_text()
             if self._is_resumed and \
-                title == self._original_title:
-                    datastore.delete(self._jobject_old.get_object_id())
+                    title == self._original_title:
+                datastore.delete(self._jobject_old.get_object_id())
             self._jobject.metadata['title'] = title
             self._do_close(False)
 
@@ -1222,7 +1225,7 @@ class Activity(Window, Gtk.Container):
         label = _('Save new')
         tip = _('Save a new journal entry')
         if self._is_resumed and \
-            title == self._original_title:
+                title == self._original_title:
             label = _('Save')
             tip = _('Save into the old journal entry')
 
@@ -1244,7 +1247,7 @@ class Activity(Window, Gtk.Container):
         if not skip_save:
             try:
                 self.save()
-            except:
+            except BaseException:
                 # pylint: disable=W0702
                 logging.exception('Error saving activity object to datastore')
                 self._show_keep_failed_dialog()
@@ -1306,12 +1309,12 @@ class Activity(Window, Gtk.Container):
 
     def __realize_cb(self, window):
         display_name = Gdk.Display.get_default().get_name()
-        if ':' in display_name: 
+        if ':' in display_name:
             # X11 for sure; this only works in X11
             xid = window.get_window().get_xid()
             SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
             SugarExt.wm_set_activity_id(xid, str(self._activity_id))
-        elif display_name is 'Broadway': 
+        elif display_name is 'Broadway':
             # GTK3's HTML5 backend
             # This is needed so that the window takes the whole browser window
             self.maximize()
@@ -1432,7 +1435,7 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
         }
         filter_dict = dbus.Dictionary(filters, signature='sv')
         logging.debug('__get_filters_cb %r' % dbus.Array([filter_dict],
-                      signature='a{sv}'))
+                                                         signature='a{sv}'))
         return dbus.Array([filter_dict], signature='a{sv}')
 
     @dbus.service.method(dbus_interface=CLIENT_HANDLER,
@@ -1450,6 +1453,7 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
                     self._got_channel_cb(connection, object_path, handle_type)
         except Exception as e:
             logging.exception(e)
+
 
 _session = None
 

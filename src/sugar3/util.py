@@ -32,7 +32,7 @@ import logging
 import atexit
 
 
-_ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 def printable_hash(in_hash):
@@ -341,9 +341,10 @@ def _cleanup_temp_files():
     for path in list(_tracked_paths.keys()):
         try:
             os.unlink(path)
-        except:
+        except BaseException:
             # pylint: disable=W0702
             logging.exception('Exception occurred in _cleanup_temp_files')
+
 
 atexit.register(_cleanup_temp_files)
 

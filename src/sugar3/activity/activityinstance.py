@@ -44,6 +44,7 @@ import time
 import hashlib
 import random
 
+
 def create_activity_instance(constructor, handle):
     activity = constructor(handle)
     activity.show()
@@ -205,8 +206,8 @@ def main():
                 print('Created %s in a single process.' % service_name)
                 sys.exit(0)
             except (TypeError, dbus.DBusException):
-                print('Could not communicate with the instance process,' \
-                    'launching a new process')
+                print('Could not communicate with the instance process,'
+                      'launching a new process')
 
     if hasattr(module, 'start'):
         module.start()
@@ -215,5 +216,3 @@ def main():
 
     if hasattr(instance, 'run_main_loop'):
         instance.run_main_loop()
-
-

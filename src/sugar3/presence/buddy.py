@@ -248,4 +248,3 @@ class Owner(BaseBuddy):
 
         self.props.nick = get_nick_name()
         self.props.color = get_color().to_string()
-

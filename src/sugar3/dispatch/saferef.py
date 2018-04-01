@@ -129,7 +129,7 @@ class BoundMethodWeakref(object):
                         traceback.print_exc()
                     except AttributeError:
                         print("Exception during saferef %s cleanup "
-                        "function %s: %s" % (self, function, e))
+                              "function %s: %s" % (self, function, e))
         self.deletionMethods = [onDelete]
         self.key = self.calculateKey(target)
         self.weakSelf = weakref.ref(im_self(target), remove)
@@ -206,6 +206,7 @@ class BoundNonDescriptorMethodWeakref(BoundMethodWeakref):
     aren't descriptors (such as Jython) this implementation has the advantage
     of working in the most cases.
     """
+
     def __init__(self, target, onDelete=None):
         """Return a weak-reference-like instance for a bound method
 
@@ -261,11 +262,13 @@ def get_bound_method_weakref(target, onDelete):
         return BoundNonDescriptorMethodWeakref(target=target,
                                                onDelete=onDelete)
 
+
 def im_self(func):
     if six.PY2:
         return func.im_self
     elif six.PY3:
         return func.__self__
+
 
 def im_func(func):
     if six.PY2:

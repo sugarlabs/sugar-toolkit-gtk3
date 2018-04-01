@@ -55,7 +55,7 @@ class PopWindow(Gtk.Window):
     FULLSCREEN = (Gdk.Screen.width() - style.GRID_CELL_SIZE * 3,
                   Gdk.Screen.height() - style.GRID_CELL_SIZE * 2)
 
-    HALF_WIDTH = ((Gdk.Screen.height() - style.GRID_CELL_SIZE * 3)/2,
+    HALF_WIDTH = ((Gdk.Screen.height() - style.GRID_CELL_SIZE * 3) / 2,
                   (Gdk.Screen.height() - style.GRID_CELL_SIZE * 2))
 
     def __init__(self, window_xid=None, **kwargs):

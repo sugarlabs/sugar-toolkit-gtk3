@@ -205,6 +205,7 @@ def im_self(func):
     elif six.PY3:
         return func.__self__
 
+
 def im_func(func):
     if six.PY2:
         return func.im_func

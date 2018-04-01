@@ -49,5 +49,6 @@ def show_window1():
 
     Gtk.main()
 
+
 if __name__ == '__main__':
     globals()[sys.argv[1]]()

@@ -32,7 +32,7 @@ class Toolbox(Gtk.VBox):
     Class to represent the toolbox of an activity. Groups a
     number of toolbars vertically, which can be accessed using their
     indices. The current toolbar is the only one displayed.
-    
+
     Emits `current-toolbar-changed` signal when the
     current toolbar is changed. This signal takes the current page index
     as an argument.
@@ -71,13 +71,13 @@ class Toolbox(Gtk.VBox):
     def add_toolbar(self, name, toolbar):
         '''
         Adds a toolbar to this toolbox. Toolbar will be added
-        to the end of this toolbox, and it's index will be 
+        to the end of this toolbox, and it's index will be
         1 greater than the previously added index (index will be
         0 if it is the first toolbar added).
-        
+
         Args:
             name (string): name of toolbar to be added
-            
+
             toolbar (.. :class:`Gtk.Toolbar`): Gtk.Toolbar to be appended to this toolbox
         '''
         label = Gtk.Label(label=name)
@@ -106,7 +106,7 @@ class Toolbox(Gtk.VBox):
     def remove_toolbar(self, index):
         '''
         Removes toolbar at the index specified.
-        
+
         Args:
             index (int): index of the toolbar to be removed
         '''
@@ -118,9 +118,9 @@ class Toolbox(Gtk.VBox):
 
     def set_current_toolbar(self, index):
         '''
-        Sets the current toolbar to that of the index specified and 
+        Sets the current toolbar to that of the index specified and
         displays it.
-        
+
         Args:
             index (int): index of toolbar to be set as current toolbar
         '''

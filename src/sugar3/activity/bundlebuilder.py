@@ -507,7 +507,10 @@ def cmd_install(config, options):
     """Install the activity in the system"""
 
     installer = Installer(Builder(config))
-    installer.install(options.prefix, options.install_mime, options.install_desktop_file)
+    installer.install(
+        options.prefix,
+        options.install_mime,
+        options.install_desktop_file)
 
 
 def _po_escape(string):

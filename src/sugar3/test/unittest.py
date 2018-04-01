@@ -59,7 +59,7 @@ class UITestCase(unittest.TestCase):
 
         try:
             yield
-        except:
+        except BaseException:
             logging.debug(uitree.get_root().dump())
             raise
         finally:
@@ -85,7 +85,7 @@ class UITestCase(unittest.TestCase):
 
         try:
             yield
-        except:
+        except BaseException:
             logging.debug(uitree.get_root().dump())
             raise
         finally:

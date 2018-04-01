@@ -33,7 +33,7 @@ try:
     from gi.repository import Gst
     Gst.init(None)
     Gst.parse_launch('espeak')
-except:
+except BaseException:
     logging.error('Gst or the espeak plugin is not installed in the system.')
     _HAS_GST = False
 
@@ -268,7 +268,12 @@ class SpeechManager(GObject.GObject):
         else:
             voice_name = self._player.get_all_voices()[lang_code]
         if text:
-            logging.error('PLAYING %r lang %r pitch %r rate %r', text, voice_name, pitch, rate)
+            logging.error(
+                'PLAYING %r lang %r pitch %r rate %r',
+                text,
+                voice_name,
+                pitch,
+                rate)
             self._player.speak(pitch, rate, voice_name, text)
 
     def say_selected_text(self):

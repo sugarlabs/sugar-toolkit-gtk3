@@ -32,18 +32,18 @@ from gi.repository import GLib
 
 class ScrollingDetector(GObject.GObject):
     '''
-    The scrolling detector sends signals when a scrolled window is scrolled and 
+    The scrolling detector sends signals when a scrolled window is scrolled and
     when a scrolled window stops scrolling. Only one `scroll-start` signal will be
-	emitted until scrolling stops.
-    
+        emitted until scrolling stops.
+
     The `scroll-start` signal is emitted when scrolling begins and
     The `scroll-end` signal is emitted when scrolling ends
     Neither of these two signals have any arguments
-    
+
     Args:
         scrolled_window (Gtk.ScrolledWindow): A GTK scrolled window object for which
             scrolling is to be detected
-        
+
         timeout (int): time in milliseconds to establish the interval for which
             scrolling is detected
     '''
@@ -65,7 +65,7 @@ class ScrollingDetector(GObject.GObject):
         Connects scrolling detector to a scrolled window.
         Detects scrolling when the vertical scrollbar
         adjustment value is changed
-        
+
         Should be used to link an instance of a scrolling detector
         to a Scrolled Window, after setting scrolled_window
         '''

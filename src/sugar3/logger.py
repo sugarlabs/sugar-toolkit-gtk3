@@ -197,7 +197,7 @@ class TraceRepr(repr_.Repr):
     def repr1(self, x, level):
         for t in self._TYPES:
             if isinstance(x, t):
-                return getattr(self, 'repr_'+t.__name__)(x, level)
+                return getattr(self, 'repr_' + t.__name__)(x, level)
 
         return repr_.Repr.repr1(self, x, level)
 
@@ -242,7 +242,7 @@ def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
 
         try:
             res = f(*args, **kwargs)
-        except:
+        except BaseException:
             trace_logger.exception("Exception occurred in %s" % f.__name__)
             raise
 

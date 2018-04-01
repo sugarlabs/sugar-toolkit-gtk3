@@ -70,6 +70,7 @@ def __datastore_updated_cb(object_id):
 def __datastore_deleted_cb(object_id):
     deleted.send(None, object_id=object_id)
 
+
 created = dispatch.Signal()
 deleted = dispatch.Signal()
 updated = dispatch.Signal()
@@ -87,10 +88,10 @@ class DSMetadata(GObject.GObject):
             self._properties = {}
         else:
             if six.PY3:
-                for x,y in properties.items():
+                for x, y in properties.items():
                     try:
                         properties[x] = y.decode()
-                    except:
+                    except BaseException:
                         pass
             self._properties = properties
 
@@ -106,8 +107,8 @@ class DSMetadata(GObject.GObject):
     def __setitem__(self, key, value):
         if six.PY3:
             try:
-                value=value.decode()
-            except:
+                value = value.decode()
+            except BaseException:
                 pass
         if key not in self._properties or self._properties[key] != value:
             self._properties[key] = value
