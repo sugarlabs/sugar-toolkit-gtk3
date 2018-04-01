@@ -736,10 +736,7 @@ class Activity(Window, Gtk.Container):
         which isn't specific to a journal item here. If (meta-)data is in
         anyway specific to a journal entry, it MUST be stored in the DataStore.
         '''
-        if os.environ.get('SUGAR_ACTIVITY_ROOT'):
-            return os.environ['SUGAR_ACTIVITY_ROOT']
-        else:
-            return get_activity_root()
+        return get_activity_root()
 
     def read_file(self, file_path):
         '''
