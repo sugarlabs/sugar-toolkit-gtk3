@@ -23,17 +23,13 @@ STABLE.
 
 import logging
 
+from gi.repository import TelepathyGLib
 from gi.repository import GObject
 import dbus
-from telepathy.interfaces import CONNECTION, \
-    CONNECTION_INTERFACE_ALIASING, \
-    CONNECTION_INTERFACE_CONTACTS
-from telepathy.constants import HANDLE_TYPE_CONTACT
 
 from sugar3.presence.connectionmanager import get_connection_manager
 from sugar3.profile import get_color, get_nick_name
 
-ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 
 _logger = logging.getLogger('sugar3.presence.buddy')
@@ -160,8 +156,8 @@ class Buddy(BaseBuddy):
 
         bus = dbus.SessionBus()
         obj = bus.get_object(connection_name, connection.object_path)
-        handles = obj.RequestHandles(HANDLE_TYPE_CONTACT, [self.contact_id],
-                                     dbus_interface=CONNECTION)
+        handles = obj.RequestHandles(TelepathyGLib.HandleType.CONTACT, [self.contact_id],
+                                     dbus_interface=TelepathyGLib.IFACE_CONNECTION)
         self.contact_handle = handles[0]
 
         self._get_properties_call = bus.call_async(
@@ -179,10 +175,10 @@ class Buddy(BaseBuddy):
         self._get_attributes_call = bus.call_async(
             connection_name,
             connection.object_path,
-            CONNECTION_INTERFACE_CONTACTS,
+            TelepathyGLib.IFACE_CONNECTION_INTERFACE_CONTACTS,
             'GetContactAttributes',
             'auasb',
-            ([self.contact_handle], [CONNECTION_INTERFACE_ALIASING],
+            ([self.contact_handle], [TelepathyGLib.IFACE_CONNECTION_INTERFACE_ALIASING],
              False),
             reply_handler=self.__got_attributes_cb,
             error_handler=self.__error_handler_cb)
@@ -219,7 +215,7 @@ class Buddy(BaseBuddy):
             self.props.tags = properties['tags']
 
     def _update_attributes(self, attributes):
-        nick_key = CONNECTION_INTERFACE_ALIASING + '/alias'
+        nick_key = TelepathyGLib.IFACE_CONNECTION_INTERFACE_ALIASING + '/alias'
         if nick_key in attributes:
             self.props.nick = attributes[nick_key]
 
