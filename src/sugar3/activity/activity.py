@@ -189,7 +189,7 @@ from telepathy.constants import CONNECTION_HANDLE_TYPE_ROOM
 
 from sugar3 import util
 from sugar3 import power
-from sugar3.profile import get_nick_name, get_color, get_save_as
+from sugar3.profile import get_color, get_save_as
 from sugar3.presence import presenceservice
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
