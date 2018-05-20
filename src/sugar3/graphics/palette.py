@@ -30,7 +30,6 @@ from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
 
-from sugar3.graphics import animator
 from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 from sugar3.graphics.palettewindow import PaletteWindow, \

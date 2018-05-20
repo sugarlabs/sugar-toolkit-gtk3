@@ -14,7 +14,6 @@
 
 import sys
 import os
-import shlex
 from sphinx import version_info
 
 major, minor, patch, label, label_number = version_info

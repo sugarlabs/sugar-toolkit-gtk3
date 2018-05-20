@@ -35,10 +35,7 @@ from sugar3.datastore import datastore
 from errno import EEXIST, ENOSPC
 
 import os
-import tempfile
 import subprocess
-import pwd
-import shutil
 
 _SHELL_SERVICE = 'org.laptop.Shell'
 _SHELL_PATH = '/org/laptop/Shell'
