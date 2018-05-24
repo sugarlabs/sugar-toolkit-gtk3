@@ -205,7 +205,9 @@ class _IconBuffer(object):
         elif info.get_filename():
             # try read from the .icon file
             icon_filename = info.get_filename().replace('.svg', '.icon')
-            if os.path.exists(icon_filename):
+            if icon_filename != info.get_filename() and \
+                os.path.exists(icon_filename):
+
                 try:
                     with open(icon_filename) as config_file:
                         cp = ConfigParser()
