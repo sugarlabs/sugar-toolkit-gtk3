@@ -58,7 +58,7 @@ def _get_data_store():
 
 def __datastore_created_cb(object_id):
     metadata = _get_data_store().get_properties(object_id, byte_arrays=True)
-    updated.send(None, object_id=object_id, metadata=metadata)
+    created.send(None, object_id=object_id, metadata=metadata)
 
 
 def __datastore_updated_cb(object_id):
