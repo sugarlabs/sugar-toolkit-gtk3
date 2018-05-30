@@ -21,7 +21,7 @@ Activity Metadata
 =================
 
 Your `activity/activity.info` file must have these metadata keys after
-an `[Activity]` header:
+an `[Activity]` header on the first line:
 
 * `name` - the name of the activity, shown by Sugar in the list of
   installed activities, e.g. Browse,
@@ -46,28 +46,37 @@ an `[Activity]` header:
 
 Optional metadata keys are;
 
-* `summary` - a short summary of the activity that may be displayed in the List or Home Views,
+* `summary` - a short summary of the activity that may be displayed in
+  the List or Home Views,
 
 * `mime_types` - list of MIME types supported by the activity,
   separated by semicolons.  Your `read_file` method must be able to read
   files of these MIME types.  Used to offer your activity when opening a
   downloaded file or a journal object.
 
-* `url` - link to the home page for the activity,
+* `url` - link to a home page or user documentation on
+  https://help.sugarlabs.org/,
 
 * `repository` - link to repository for activity code, for use by git clone,
 
 * `single_instance` - if yes, only a single instance of an activity
-  should be started, and if another instance is requested the existing
-  instance shown,
+  should be started at any one time, and if another instance is requested
+  the existing instance shown,
 
-* `max_participants` - maximum number of participants for sharing an activity,
+* `max_participants` - maximum participants for sharing an activity,
 
-* `tags` - more context into which to place an activity,
+* `tags` - a semicolon or whitespace delimited list of keywords that
+   describe the activity.  Suggested keywords are Programming,
+   Robotics, Internet, Science, Maths, Language, Geography, Documents,
+   Music, Media, Art, Teacher, or System,
 
 * `show_launcher` - if set to "no", the activity is not shown in list view,
 
 Deprecated metadata keys are;
+
+* `category` or `categories` - aliases for `tags`,
+
+* `website` - alias for `url`,
 
 * `update_url` - the updater no longer uses this.
 
@@ -103,7 +112,6 @@ Example `activity.info`
 -----------------------
 
 .. code-block:: ini
-    :emphasize-lines: 10-12,20-21
 
     [Activity]
     name = Browse
@@ -115,6 +123,10 @@ Example `activity.info`
     summary = Surf the world!
 
     license = GPL-3.0+
+    repository = https://github.com/sugarlabs/browse-activity.git
+    url = https://help.sugarlabs.org/en/browse.html
+    tags = Utilities;Web
+
     metadata_license = CC0-1.0
     description:
         <p>Surf the world! Here you can do research, watch educational videos, take online courses, find books, connect with friends and more.  Browse is powered by the WebKit2 rendering engine with the Faster Than Light javascript interpreter - allowing you to view the full beauty of the web.</p>
@@ -124,7 +136,5 @@ Example `activity.info`
             <li>Bookmark pages with collaborators in real time - great for researching as a group or teachers showing pages to their class</li>
             <li>Comment on your bookmarked pages - a great tool for making curated collections</li>
         </ul>
-    url = https://github.com/sugarlabs/browse-activity
     screenshots = https://people.sugarlabs.org/sam/activity-ss/browse-1-1.png https://people.sugarlabs.org/sam/activity-ss/browse-1-2.png
-
 '''
