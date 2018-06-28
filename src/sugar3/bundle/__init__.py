@@ -29,9 +29,13 @@ an `[Activity]` header on the first line:
 * `activity_version` - the version of the activity, e.g. 1, 1.2,
   1.2.3, 1.2.3-country, or 1.2.3~developer,
 
-* `bundle_id` - the activity bundle identifier, using Java package
-  naming conventions, usually an organisation or individual domain
-  name in reverse order, e.g. `org.sugarlabs.Name`,
+* `bundle_id` - the activity bundle identifier, using [Java package
+  naming
+  conventions](http://en.wikipedia.org/wiki/Java_package#Package_naming_conventions),
+  should conform to the [D-Bus specification for message protocol
+  names](http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names)(hyphens
+  are not allowed), usually an organisation or individual domain name
+  in reverse order, e.g. `org.sugarlabs.Name`,
 
 * `license` - an identifier for the software license of the bundle,
   either a `Fedora License Short Name`_, (e.g. GPLv3+) or an `SPDX
