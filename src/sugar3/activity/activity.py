@@ -161,6 +161,7 @@ You may copy it and use it as a template.
 import gettext
 import logging
 import os
+import signal
 import time
 from hashlib import sha1
 from functools import partial
@@ -173,6 +174,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 gi.require_version('SugarExt', '1.0')
 
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -314,6 +316,8 @@ class Activity(Window, Gtk.Container):
     }
 
     def __init__(self, handle, create_jobject=True):
+        GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT, self.close)
+
         # Stuff that needs to be done early
         icons_path = os.path.join(get_bundle_path(), 'icons')
         Gtk.IconTheme.get_default().append_search_path(icons_path)
