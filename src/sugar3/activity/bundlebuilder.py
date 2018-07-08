@@ -622,7 +622,7 @@ def start():
 
     options = parser.parse_args()
 
-    source_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    source_dir = os.path.abspath(os.path.dirname(os.curdir))
     config = Config(source_dir)
 
     try:
