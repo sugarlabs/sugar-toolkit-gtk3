@@ -124,8 +124,11 @@ def main():
         exit(0)
 
     if not activity_class:
-        if bundle.get_command().startswith('sugar-activity'):
-            activity_class = bundle.get_command().split(" ")[1]
+        command = bundle.get_command()
+        if command.startswith('sugar-activity'):
+            if not command.startswith('sugar-activity3'):
+                logging.warning("Activity written for Python 2, consider porting to Python 3.")
+            activity_class = command.split(" ")[1]
 
     if 'SUGAR_VERSION' not in os.environ:
         profile_id = os.environ.get('SUGAR_PROFILE', 'default')
