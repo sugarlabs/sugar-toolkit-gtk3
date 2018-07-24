@@ -36,9 +36,9 @@ _NEXT_PAGE = 1
 class _TrayViewport(Gtk.Viewport):
 
     __gproperties__ = {
-        'scrollable': (bool, None, None, False, GObject.PARAM_READABLE),
-        'can-scroll-prev': (bool, None, None, False, GObject.PARAM_READABLE),
-        'can-scroll-next': (bool, None, None, False, GObject.PARAM_READABLE),
+        'scrollable': (bool, None, None, False, GObject.ParamFlags.READABLE),
+        'can-scroll-prev': (bool, None, None, False, GObject.ParamFlags.READABLE),
+        'can-scroll-next': (bool, None, None, False, GObject.ParamFlags.READABLE),
     }
 
     def __init__(self, orientation):
@@ -239,9 +239,9 @@ class HTray(Gtk.EventBox):
 
     __gproperties__ = {
         'align': (int, None, None, 0, 1, ALIGN_TO_START,
-                  GObject.PARAM_READWRITE |
-                  GObject.PARAM_CONSTRUCT_ONLY),
-        'drag-active': (bool, None, None, False, GObject.PARAM_READWRITE),
+                  GObject.ParamFlags.READWRITE |
+                  GObject.ParamFlags.CONSTRUCT_ONLY),
+        'drag-active': (bool, None, None, False, GObject.ParamFlags.READWRITE),
     }
 
     def __init__(self, **kwargs):
@@ -333,8 +333,8 @@ class VTray(Gtk.EventBox):
 
     __gproperties__ = {
         'align': (int, None, None, 0, 1, ALIGN_TO_START,
-                  GObject.PARAM_READWRITE | GObject.PARAM_CONSTRUCT_ONLY),
-        'drag-active': (bool, None, None, False, GObject.PARAM_READWRITE),
+                  GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT_ONLY),
+        'drag-active': (bool, None, None, False, GObject.ParamFlags.READWRITE),
     }
 
     def __init__(self, **kwargs):
@@ -495,7 +495,7 @@ class TrayIcon(Gtk.ToolItem):
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
 
-    palette = GObject.property(
+    palette = GObject.Property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_palette_invoker(self):
@@ -505,7 +505,7 @@ class TrayIcon(Gtk.ToolItem):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = GObject.property(
+    palette_invoker = GObject.Property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def get_icon(self):

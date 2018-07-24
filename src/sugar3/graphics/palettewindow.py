@@ -456,7 +456,7 @@ class MouseSpeedDetector(GObject.GObject):
 
     def stop(self):
         if self._timeout_hid is not None:
-            GObject.source_remove(self._timeout_hid)
+            GLib.source_remove(self._timeout_hid)
             self._timeout_hid = None
         self._state = None
 
@@ -568,7 +568,7 @@ class PaletteWindow(GObject.GObject):
     def get_invoker(self):
         return self._invoker
 
-    invoker = GObject.property(type=object,
+    invoker = GObject.Property(type=object,
                                getter=get_invoker,
                                setter=set_invoker)
 
@@ -609,7 +609,7 @@ class PaletteWindow(GObject.GObject):
     def get_group_id(self):
         return self._group_id
 
-    group_id = GObject.property(type=str,
+    group_id = GObject.Property(type=str,
                                 getter=get_group_id,
                                 setter=set_group_id)
 
@@ -1036,7 +1036,7 @@ class Invoker(GObject.GObject):
             # palette owner.
             GLib.idle_add(lambda old_palette=self._palette:
                           old_palette.destroy(),
-                          priority=GObject.PRIORITY_LOW)
+                          priority=GLib.PRIORITY_LOW)
 
         self._palette = palette
 
@@ -1044,7 +1044,7 @@ class Invoker(GObject.GObject):
             self._palette.props.invoker = self
             self._palette.connect('popdown', self.__palette_popdown_cb)
 
-    palette = GObject.property(
+    palette = GObject.Property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_cache_palette(self):
@@ -1053,7 +1053,7 @@ class Invoker(GObject.GObject):
     def set_cache_palette(self, cache_palette):
         self._cache_palette = cache_palette
 
-    cache_palette = GObject.property(type=object, setter=set_cache_palette,
+    cache_palette = GObject.Property(type=object, setter=set_cache_palette,
                                      getter=get_cache_palette)
     """Whether the invoker will cache the palette after its creation. Defaults
     to True.
@@ -1065,7 +1065,7 @@ class Invoker(GObject.GObject):
     def set_toggle_palette(self, toggle_palette):
         self._toggle_palette = toggle_palette
 
-    toggle_palette = GObject.property(type=object, setter=set_toggle_palette,
+    toggle_palette = GObject.Property(type=object, setter=set_toggle_palette,
                                       getter=get_toggle_palette)
     """Whether the invoker will popup/popdown the Palette on
     button left click/touch tap. Defaults to False.
@@ -1077,7 +1077,7 @@ class Invoker(GObject.GObject):
     def set_lock_palette(self, lock_palette):
         self._lock_palette = lock_palette
 
-    lock_palette = GObject.property(type=object, setter=set_lock_palette,
+    lock_palette = GObject.Property(type=object, setter=set_lock_palette,
                                     getter=get_lock_palette)
     """Whether the invoker will lock the Palette and
     ignore mouse events. Defaults to False.
@@ -1268,7 +1268,7 @@ class WidgetInvoker(Invoker):
 
     def _get_widget(self):
         return self._widget
-    widget = GObject.property(type=object, getter=_get_widget, setter=None)
+    widget = GObject.Property(type=object, getter=_get_widget, setter=None)
 
     def __drawing_cb(self, widget, cr):
         if not self.props.lock_palette:

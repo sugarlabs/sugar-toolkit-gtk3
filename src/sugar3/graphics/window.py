@@ -207,7 +207,7 @@ class Window(Gtk.Window):
             self._unfullscreen_button.show()
 
             if self._unfullscreen_button_timeout_id is not None:
-                GObject.source_remove(self._unfullscreen_button_timeout_id)
+                GLib.source_remove(self._unfullscreen_button_timeout_id)
                 self._unfullscreen_button_timeout_id = None
 
             self._unfullscreen_button_timeout_id = \
@@ -232,7 +232,7 @@ class Window(Gtk.Window):
             self._unfullscreen_button.hide()
 
             if self._unfullscreen_button_timeout_id:
-                GObject.source_remove(self._unfullscreen_button_timeout_id)
+                GLib.source_remove(self._unfullscreen_button_timeout_id)
                 self._unfullscreen_button_timeout_id = None
 
     def set_canvas(self, canvas):
@@ -395,7 +395,7 @@ class Window(Gtk.Window):
 
             # Reset the timer
             if self._unfullscreen_button_timeout_id is not None:
-                GObject.source_remove(self._unfullscreen_button_timeout_id)
+                GLib.source_remove(self._unfullscreen_button_timeout_id)
                 self._unfullscreen_button_timeout_id = None
 
             self._unfullscreen_button_timeout_id = \
@@ -446,7 +446,7 @@ class Window(Gtk.Window):
         """
         return self._enable_fullscreen_mode
 
-    enable_fullscreen_mode = GObject.property(
+    enable_fullscreen_mode = GObject.Property(
         type=object,
         setter=set_enable_fullscreen_mode,
         getter=get_enable_fullscreen_mode)

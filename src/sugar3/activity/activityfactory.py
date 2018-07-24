@@ -26,6 +26,7 @@ import logging
 
 import dbus
 from gi.repository import GObject
+from gi.repository import GLib
 
 from sugar3.activity.activityhandle import ActivityHandle
 from sugar3 import util
@@ -233,10 +234,10 @@ class ActivityCreationHandler(GObject.GObject):
                                  stdout=log_file.fileno(),
                                  stderr=log_file.fileno())
 
-        GObject.child_watch_add(child.pid,
-                                _child_watch_cb,
-                                (log_file,
-                                 self._handle.activity_id))
+        GLib.child_watch_add(child.pid,
+                             _child_watch_cb,
+                             (log_file,
+                             self._handle.activity_id))
 
     def _no_reply_handler(self, *args):
         pass

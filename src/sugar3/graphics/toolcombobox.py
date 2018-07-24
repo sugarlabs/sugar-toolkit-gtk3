@@ -29,7 +29,7 @@ from sugar3.graphics import style
 class ToolComboBox(Gtk.ToolItem):
 
     __gproperties__ = {
-        'label-text': (str, None, None, None, GObject.PARAM_WRITABLE),
+        'label-text': (str, None, None, None, GObject.ParamFlags.WRITABLE),
     }
 
     def __init__(self, combo=None, **kwargs):

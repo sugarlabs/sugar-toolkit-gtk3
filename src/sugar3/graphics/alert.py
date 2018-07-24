@@ -90,9 +90,9 @@ class Alert(Gtk.EventBox):
     }
 
     __gproperties__ = {
-        'title': (str, None, None, None, GObject.PARAM_READWRITE),
-        'msg': (str, None, None, None, GObject.PARAM_READWRITE),
-        'icon': (object, None, None, GObject.PARAM_WRITABLE),
+        'title': (str, None, None, None, GObject.ParamFlags.READWRITE),
+        'msg': (str, None, None, None, GObject.ParamFlags.READWRITE),
+        'icon': (object, None, None, GObject.ParamFlags.WRITABLE),
     }
 
     def __init__(self, **kwargs):

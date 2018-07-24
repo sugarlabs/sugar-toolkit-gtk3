@@ -138,7 +138,7 @@ class _ColorButton(Gtk.Button):
     def get_color(self):
         return self._color
 
-    color = GObject.property(type=object, getter=get_color, setter=set_color)
+    color = GObject.Property(type=object, getter=get_color, setter=set_color)
 
     def set_icon_name(self, icon_name):
         '''
@@ -161,7 +161,7 @@ class _ColorButton(Gtk.Button):
         '''
         return self._preview.props.icon_name
 
-    icon_name = GObject.property(type=str,
+    icon_name = GObject.Property(type=str,
                                  getter=get_icon_name, setter=set_icon_name)
 
     def set_icon_size(self, icon_size):
@@ -170,7 +170,7 @@ class _ColorButton(Gtk.Button):
     def get_icon_size(self):
         return self._preview.props.icon_size
 
-    icon_size = GObject.property(type=int,
+    icon_size = GObject.Property(type=int,
                                  getter=get_icon_size, setter=set_icon_size)
 
     def set_title(self, title):
@@ -181,7 +181,7 @@ class _ColorButton(Gtk.Button):
     def get_title(self):
         return self._title
 
-    title = GObject.property(type=str, getter=get_title, setter=set_title)
+    title = GObject.Property(type=str, getter=get_title, setter=set_title)
 
     def _set_has_invoker(self, has_invoker):
         self._has_invoker = has_invoker
@@ -189,9 +189,9 @@ class _ColorButton(Gtk.Button):
     def _get_has_invoker(self):
         return self._has_invoker
 
-    has_invoker = GObject.property(type=bool, default=True,
-                                   flags=GObject.PARAM_READWRITE |
-                                   GObject.PARAM_CONSTRUCT_ONLY,
+    has_invoker = GObject.Property(type=bool, default=True,
+                                   flags=GObject.ParamFlags.READWRITE |
+                                   GObject.ParamFlags.CONSTRUCT_ONLY,
                                    getter=_get_has_invoker,
                                    setter=_set_has_invoker)
 
@@ -201,9 +201,9 @@ class _ColorButton(Gtk.Button):
     def _get_has_palette(self):
         return self._has_palette
 
-    has_palette = GObject.property(type=bool, default=True,
-                                   flags=GObject.PARAM_READWRITE |
-                                   GObject.PARAM_CONSTRUCT_ONLY,
+    has_palette = GObject.Property(type=bool, default=True,
+                                   flags=GObject.ParamFlags.READWRITE |
+                                   GObject.ParamFlags.CONSTRUCT_ONLY,
                                    getter=_get_has_palette,
                                    setter=_set_has_palette)
 
@@ -213,9 +213,9 @@ class _ColorButton(Gtk.Button):
     def _get_accept_drag(self):
         return self._accept_drag
 
-    accept_drag = GObject.property(type=bool, default=True,
-                                   flags=GObject.PARAM_READWRITE |
-                                   GObject.PARAM_CONSTRUCT_ONLY,
+    accept_drag = GObject.Property(type=bool, default=True,
+                                   flags=GObject.ParamFlags.READWRITE |
+                                   GObject.ParamFlags.CONSTRUCT_ONLY,
                                    getter=_get_accept_drag,
                                    setter=_set_accept_drag)
 
@@ -412,7 +412,7 @@ class _ColorPalette(Palette):
     def get_color(self):
         return self._color
 
-    color = GObject.property(type=object, getter=get_color, setter=set_color)
+    color = GObject.Property(type=object, getter=get_color, setter=set_color)
 
 
 def _add_accelerator(tool_button):
@@ -510,7 +510,7 @@ class ColorToolButton(Gtk.ToolItem):
         '''
         return self._accelerator
 
-    accelerator = GObject.property(type=str, setter=set_accelerator,
+    accelerator = GObject.Property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
     def create_palette(self):
@@ -546,7 +546,7 @@ class ColorToolButton(Gtk.ToolItem):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = GObject.property(
+    palette_invoker = GObject.Property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_expanded(self, expanded):
@@ -584,7 +584,7 @@ class ColorToolButton(Gtk.ToolItem):
         '''
         return self.get_child().props.color
 
-    color = GObject.property(type=object, getter=get_color, setter=set_color)
+    color = GObject.Property(type=object, getter=get_color, setter=set_color)
 
     def set_icon_name(self, icon_name):
         '''
@@ -607,7 +607,7 @@ class ColorToolButton(Gtk.ToolItem):
         '''
         return self.get_child().props.icon_name
 
-    icon_name = GObject.property(type=str,
+    icon_name = GObject.Property(type=str,
                                  getter=get_icon_name, setter=set_icon_name)
 
     def set_icon_size(self, icon_size):
@@ -622,7 +622,7 @@ class ColorToolButton(Gtk.ToolItem):
         '''
         return self.get_child().props.icon_size
 
-    icon_size = GObject.property(type=int,
+    icon_size = GObject.Property(type=int,
                                  getter=get_icon_size, setter=set_icon_size)
 
     def set_title(self, title):
@@ -639,7 +639,7 @@ class ColorToolButton(Gtk.ToolItem):
         '''
         return self.get_child().props.title
 
-    title = GObject.property(type=str, getter=get_title, setter=set_title)
+    title = GObject.Property(type=str, getter=get_title, setter=set_title)
 
     def do_draw(self, cr):
         if self._palette and self._palette.is_up():

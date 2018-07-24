@@ -263,7 +263,7 @@ class Palette(PaletteWindow):
     def get_primary_text(self):
         return self._primary_text
 
-    primary_text = GObject.property(type=str,
+    primary_text = GObject.Property(type=str,
                                     getter=get_primary_text,
                                     setter=set_primary_text)
 
@@ -306,7 +306,7 @@ class Palette(PaletteWindow):
     def get_secondary_text(self):
         return self._secondary_text
 
-    secondary_text = GObject.property(type=str, getter=get_secondary_text,
+    secondary_text = GObject.Property(type=str, getter=get_secondary_text,
                                       setter=set_secondary_text)
 
     def _show_icon(self):
@@ -344,7 +344,7 @@ class Palette(PaletteWindow):
     def get_icon(self):
         return self._icon
 
-    icon = GObject.property(type=object, getter=get_icon, setter=set_icon)
+    icon = GObject.Property(type=object, getter=get_icon, setter=set_icon)
 
     def __icon_button_release_event_cb(self, icon, event):
         self.emit('activate')
@@ -360,7 +360,7 @@ class Palette(PaletteWindow):
     def get_icon_visible(self):
         return self._icon_visilbe
 
-    icon_visible = GObject.property(type=bool,
+    icon_visible = GObject.Property(type=bool,
                                     default=True,
                                     getter=get_icon_visible,
                                     setter=set_icon_visible)
@@ -444,7 +444,7 @@ class Palette(PaletteWindow):
 
         return self._widget
 
-    menu = GObject.property(type=object, getter=get_menu)
+    menu = GObject.Property(type=object, getter=get_menu)
 
     def _invoker_right_click_cb(self, invoker):
         self.popup(immediate=True)

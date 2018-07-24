@@ -151,7 +151,7 @@ class Animator(GObject.GObject):
 
         if self._timeout_sid and \
            not hasattr(self._widget, 'add_tick_callback'):
-            GObject.source_remove(self._timeout_sid)
+            GLib.source_remove(self._timeout_sid)
             self._timeout_sid = 0
             self.emit('completed')
         if self._timeout_sid and hasattr(self._widget, 'add_tick_callback'):

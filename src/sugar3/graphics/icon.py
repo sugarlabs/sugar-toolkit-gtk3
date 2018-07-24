@@ -96,6 +96,7 @@ from ConfigParser import ConfigParser
 import gi
 gi.require_version('Rsvg', '2.0')
 gi.require_version('Gtk', '3.0')
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -377,7 +378,7 @@ class _IconBuffer(object):
                         icon_width = pixbuf.get_width()
                         icon_height = pixbuf.get_height()
                         break
-                    except GObject.GError:
+                    except GLib.GError:
                         pass
 
         if icon_width is None:
@@ -495,7 +496,7 @@ class Icon(Gtk.Image):
         self._file = file_name
         self._buffer.file_name = file_name
 
-    file = GObject.property(type=object, setter=set_file, getter=get_file)
+    file = GObject.Property(type=object, setter=set_file, getter=get_file)
 
     def get_pixbuf(self):
         '''
@@ -518,7 +519,7 @@ class Icon(Gtk.Image):
         '''
         self._buffer.pixbuf = pixbuf
 
-    pixbuf = GObject.property(type=object, setter=set_pixbuf,
+    pixbuf = GObject.Property(type=object, setter=set_pixbuf,
                               getter=get_pixbuf)
     '''
     icon.props.pixbuf -> see :any:`get_pixbuf` and :any:`set_pixbuf`
@@ -627,7 +628,7 @@ class Icon(Gtk.Image):
             self._buffer.xo_color = value
             self.queue_draw()
 
-    xo_color = GObject.property(
+    xo_color = GObject.Property(
         type=object, getter=None, setter=set_xo_color)
     '''
     icon.props.xo_color -> see :any:`set_xo_color`, note there is no getter
@@ -653,7 +654,7 @@ class Icon(Gtk.Image):
         '''
         return self._buffer.fill_color
 
-    fill_color = GObject.property(
+    fill_color = GObject.Property(
         type=object, getter=get_fill_color, setter=set_fill_color)
     '''
     icon.props.fill_color -> see :any:`get_fill_color`
@@ -680,7 +681,7 @@ class Icon(Gtk.Image):
         '''
         return self._buffer.stroke_color
 
-    stroke_color = GObject.property(
+    stroke_color = GObject.Property(
         type=object, getter=get_stroke_color, setter=set_stroke_color)
     '''
     icon.props.stroke_color -> see :any:`get_stroke_color`
@@ -707,7 +708,7 @@ class Icon(Gtk.Image):
         '''
         return self._buffer.badge_name
 
-    badge_name = GObject.property(
+    badge_name = GObject.Property(
         type=str, getter=get_badge_name, setter=set_badge_name)
     '''
     icon.props.badge_name -> see :any:`get_badge_name`
@@ -733,7 +734,7 @@ class Icon(Gtk.Image):
             self._alpha = value
             self.queue_draw()
 
-    alpha = GObject.property(
+    alpha = GObject.Property(
         type=float, setter=set_alpha)
     '''
     icon.props.alpha -> see :any:`set_alpha`, note no getter
@@ -752,7 +753,7 @@ class Icon(Gtk.Image):
             self._scale = value
             self.queue_draw()
 
-    scale = GObject.property(
+    scale = GObject.Property(
         type=float, setter=set_scale)
     '''
     icon.props.scale -> see :any:`set_scale`, note no getter
@@ -861,7 +862,7 @@ class EventIcon(Gtk.EventBox):
     def get_file_name(self):
         return self._buffer.file_name
 
-    file_name = GObject.property(
+    file_name = GObject.Property(
         type=object, getter=get_file_name, setter=set_file_name)
 
     def set_icon_name(self, value):
@@ -872,7 +873,7 @@ class EventIcon(Gtk.EventBox):
     def get_icon_name(self):
         return self._buffer.icon_name
 
-    icon_name = GObject.property(
+    icon_name = GObject.Property(
         type=object, getter=get_icon_name, setter=set_icon_name)
 
     def set_xo_color(self, value):
@@ -880,7 +881,7 @@ class EventIcon(Gtk.EventBox):
             self._buffer.xo_color = value
             self.queue_draw()
 
-    xo_color = GObject.property(
+    xo_color = GObject.Property(
         type=object, getter=None, setter=set_xo_color)
 
     def set_fill_color(self, value):
@@ -891,7 +892,7 @@ class EventIcon(Gtk.EventBox):
     def get_fill_color(self):
         return self._buffer.fill_color
 
-    fill_color = GObject.property(
+    fill_color = GObject.Property(
         type=object, getter=get_fill_color, setter=set_fill_color)
 
     def set_stroke_color(self, value):
@@ -902,7 +903,7 @@ class EventIcon(Gtk.EventBox):
     def get_stroke_color(self):
         return self._buffer.stroke_color
 
-    stroke_color = GObject.property(
+    stroke_color = GObject.Property(
         type=object, getter=get_stroke_color, setter=set_stroke_color)
 
     def set_background_color(self, value):
@@ -922,7 +923,7 @@ class EventIcon(Gtk.EventBox):
         '''
         return self._buffer.background_color
 
-    background_color = GObject.property(
+    background_color = GObject.Property(
         type=object, getter=get_background_color, setter=set_background_color)
     '''
     event_icon.props.get_background_color -> see :any:`set_background_color`
@@ -938,7 +939,7 @@ class EventIcon(Gtk.EventBox):
     def get_size(self):
         return self._buffer.width
 
-    pixel_size = GObject.property(
+    pixel_size = GObject.Property(
         type=object, getter=get_size, setter=set_size)
 
     def set_scale(self, value):
@@ -949,7 +950,7 @@ class EventIcon(Gtk.EventBox):
     def get_scale(self):
         return self._buffer.scale
 
-    scale = GObject.property(
+    scale = GObject.Property(
         type=float, getter=get_scale, setter=set_scale)
 
     def set_alpha(self, alpha):
@@ -957,7 +958,7 @@ class EventIcon(Gtk.EventBox):
             self._alpha = alpha
             self.queue_draw()
 
-    alpha = GObject.property(
+    alpha = GObject.Property(
         type=float, setter=set_alpha)
 
     def set_cache(self, value):
@@ -977,7 +978,7 @@ class EventIcon(Gtk.EventBox):
         '''
         return self._buffer.cache
 
-    cache = GObject.property(
+    cache = GObject.Property(
         type=bool, default=False, getter=get_cache, setter=set_cache)
     '''
     event_icon.props.cache -> see :any:`set_cache` and :any:`get_cache`
@@ -991,7 +992,7 @@ class EventIcon(Gtk.EventBox):
     def get_badge_name(self):
         return self._buffer.badge_name
 
-    badge_name = GObject.property(
+    badge_name = GObject.Property(
         type=object, getter=get_badge_name, setter=set_badge_name)
 
     def create_palette(self):
@@ -1035,7 +1036,7 @@ class EventIcon(Gtk.EventBox):
         '''
         self._palette_invoker.palette = palette
 
-    palette = GObject.property(
+    palette = GObject.Property(
         type=object, setter=set_palette, getter=get_palette)
     '''
     event_icon.props.palette -> see :any:`get_palette` and :any:`set_palette`
@@ -1048,7 +1049,7 @@ class EventIcon(Gtk.EventBox):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = GObject.property(
+    palette_invoker = GObject.Property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
@@ -1202,13 +1203,13 @@ class CellRendererIcon(Gtk.CellRenderer):
         if self._buffer.file_name != value:
             self._buffer.file_name = value
 
-    file_name = GObject.property(type=str, setter=set_file_name)
+    file_name = GObject.Property(type=str, setter=set_file_name)
 
     def set_icon_name(self, value):
         if self._buffer.icon_name != value:
             self._buffer.icon_name = value
 
-    icon_name = GObject.property(type=str, setter=set_icon_name)
+    icon_name = GObject.Property(type=str, setter=set_icon_name)
 
     def get_xo_color(self):
         return self._xo_color
@@ -1216,40 +1217,40 @@ class CellRendererIcon(Gtk.CellRenderer):
     def set_xo_color(self, value):
         self._xo_color = value
 
-    xo_color = GObject.property(type=object,
+    xo_color = GObject.Property(type=object,
                                 getter=get_xo_color, setter=set_xo_color)
 
     def set_fill_color(self, value):
         if self._fill_color != value:
             self._fill_color = value
 
-    fill_color = GObject.property(type=object, setter=set_fill_color)
+    fill_color = GObject.Property(type=object, setter=set_fill_color)
 
     def set_stroke_color(self, value):
         if self._stroke_color != value:
             self._stroke_color = value
 
-    stroke_color = GObject.property(type=object, setter=set_stroke_color)
+    stroke_color = GObject.Property(type=object, setter=set_stroke_color)
 
     def set_prelit_fill_color(self, value):
         if self._prelit_fill_color != value:
             self._prelit_fill_color = value
 
-    prelit_fill_color = GObject.property(type=object,
+    prelit_fill_color = GObject.Property(type=object,
                                          setter=set_prelit_fill_color)
 
     def set_prelit_stroke_color(self, value):
         if self._prelit_stroke_color != value:
             self._prelit_stroke_color = value
 
-    prelit_stroke_color = GObject.property(type=object,
+    prelit_stroke_color = GObject.Property(type=object,
                                            setter=set_prelit_stroke_color)
 
     def set_background_color(self, value):
         if self._buffer.background_color != value:
             self._buffer.background_color = value
 
-    background_color = GObject.property(type=object,
+    background_color = GObject.Property(type=object,
                                         setter=set_background_color)
 
     def set_size(self, value):
@@ -1259,7 +1260,7 @@ class CellRendererIcon(Gtk.CellRenderer):
 
             self._cached_offsets = None
 
-    size = GObject.property(type=object, setter=set_size)
+    size = GObject.Property(type=object, setter=set_size)
 
     def do_get_size(self, widget, cell_area, x_offset=None, y_offset=None,
                     width=None, height=None):

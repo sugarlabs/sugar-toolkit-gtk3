@@ -582,7 +582,7 @@ class Activity(Window, Gtk.Container):
             if not self._active and self._jobject:
                 self.save()
 
-    active = GObject.property(
+    active = GObject.Property(
         type=bool, default=False, getter=get_active, setter=set_active)
     '''
         Whether an activity is active.
@@ -621,7 +621,7 @@ class Activity(Window, Gtk.Container):
         '''
         self._max_participants = participants
 
-    max_participants = GObject.property(
+    max_participants = GObject.Property(
         type=int, default=0, getter=get_max_participants,
         setter=set_max_participants)
 

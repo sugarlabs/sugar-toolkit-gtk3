@@ -65,7 +65,7 @@ class ComboBox(Gtk.ComboBox):
             return None
         return row[0]
 
-    value = GObject.property(
+    value = GObject.Property(
         type=object, getter=get_value, setter=None)
 
     def _get_real_name_from_theme(self, name, size):

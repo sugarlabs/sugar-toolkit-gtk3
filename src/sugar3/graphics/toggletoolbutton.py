@@ -119,7 +119,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         else:
             return None
 
-    icon_name = GObject.property(type=str, setter=set_icon_name,
+    icon_name = GObject.Property(type=str, setter=set_icon_name,
                                  getter=get_icon_name)
 
     def create_palette(self):
@@ -131,7 +131,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
 
-    palette = GObject.property(
+    palette = GObject.Property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_palette_invoker(self):
@@ -141,7 +141,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = GObject.property(
+    palette_invoker = GObject.Property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def set_tooltip(self, text):
@@ -176,7 +176,7 @@ class ToggleToolButton(Gtk.ToggleToolButton):
         '''
         return self._accelerator
 
-    accelerator = GObject.property(type=str, setter=set_accelerator,
+    accelerator = GObject.Property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
     def do_draw(self, cr):

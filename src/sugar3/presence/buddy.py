@@ -82,7 +82,7 @@ class BaseBuddy(GObject.GObject):
     def set_key(self, key):
         self._key = key
 
-    key = GObject.property(type=str, getter=get_key, setter=set_key)
+    key = GObject.Property(type=str, getter=get_key, setter=set_key)
 
     def get_nick(self):
         return self._nick
@@ -90,7 +90,7 @@ class BaseBuddy(GObject.GObject):
     def set_nick(self, nick):
         self._nick = nick
 
-    nick = GObject.property(type=str, getter=get_nick, setter=set_nick)
+    nick = GObject.Property(type=str, getter=get_nick, setter=set_nick)
 
     def get_color(self):
         return self._color
@@ -98,7 +98,7 @@ class BaseBuddy(GObject.GObject):
     def set_color(self, color):
         self._color = color
 
-    color = GObject.property(type=str, getter=get_color, setter=set_color)
+    color = GObject.Property(type=str, getter=get_color, setter=set_color)
 
     def get_current_activity(self):
         if self._current_activity is None:
@@ -108,7 +108,7 @@ class BaseBuddy(GObject.GObject):
                 return activity
         return None
 
-    current_activity = GObject.property(type=object,
+    current_activity = GObject.Property(type=object,
                                         getter=get_current_activity)
 
     def get_owner(self):
@@ -117,7 +117,7 @@ class BaseBuddy(GObject.GObject):
     def set_owner(self, owner):
         self._owner = owner
 
-    owner = GObject.property(type=bool, getter=get_owner, setter=set_owner,
+    owner = GObject.Property(type=bool, getter=get_owner, setter=set_owner,
                              default=False)
 
     def get_ip4_address(self):
@@ -126,7 +126,7 @@ class BaseBuddy(GObject.GObject):
     def set_ip4_address(self, ip4_address):
         self._ip4_address = ip4_address
 
-    ip4_address = GObject.property(type=str, getter=get_ip4_address,
+    ip4_address = GObject.Property(type=str, getter=get_ip4_address,
                                    setter=set_ip4_address)
 
     def get_tags(self):
@@ -135,7 +135,7 @@ class BaseBuddy(GObject.GObject):
     def set_tags(self, tags):
         self._tags = tags
 
-    tags = GObject.property(type=str, getter=get_tags, setter=set_tags)
+    tags = GObject.Property(type=str, getter=get_tags, setter=set_tags)
 
     def object_path(self):
         """Retrieve our dbus object path"""

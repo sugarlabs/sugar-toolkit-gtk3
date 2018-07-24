@@ -92,5 +92,5 @@ class MenuItem(Gtk.ImageMenuItem):
     def get_accelerator(self):
         return self._accelerator
 
-    accelerator = GObject.property(type=str, setter=set_accelerator,
+    accelerator = GObject.Property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
