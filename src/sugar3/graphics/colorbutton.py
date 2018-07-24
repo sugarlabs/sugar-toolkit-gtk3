@@ -169,11 +169,11 @@ class _ColorButton(Gtk.Button):
     icon_name = GObject.Property(type=str,
                                  getter=get_icon_name, setter=set_icon_name)
 
-    def set_icon_size(self, icon_size):
-        self._preview.props.icon_size = icon_size
+    def set_icon_size(self, pixel_size):
+        self._preview.props.pixel_size = pixel_size
 
     def get_icon_size(self):
-        return self._preview.props.icon_size
+        return self._preview.props.pixel_size
 
     icon_size = GObject.Property(type=int,
                                  getter=get_icon_size, setter=set_icon_size)

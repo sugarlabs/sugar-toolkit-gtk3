@@ -472,7 +472,6 @@ class Icon(Gtk.Image):
 
     __gtype_name__ = 'SugarIcon'
 
-    # FIXME: deprecate icon_size
     _MENU_SIZES = (Gtk.IconSize.MENU, Gtk.IconSize.DND,
                    Gtk.IconSize.SMALL_TOOLBAR, Gtk.IconSize.BUTTON)
 
@@ -485,7 +484,6 @@ class Icon(Gtk.Image):
         self._alpha = 1.0
         self._scale = 1.0
 
-        # FIXME: deprecate icon_size
         if 'icon_size' in kwargs:
             logging.warning("icon_size is deprecated. Use pixel_size instead.")
 
@@ -534,7 +532,6 @@ class Icon(Gtk.Image):
         if self._buffer.file_name != self.props.file:
             self._buffer.file_name = self.props.file
 
-        # FIXME: deprecate icon_size
         pixel_size = None
         if self.props.pixel_size == -1:
             if self.props.icon_size in self._MENU_SIZES:
@@ -551,7 +548,7 @@ class Icon(Gtk.Image):
             self._buffer.height = height
 
     def _icon_size_changed_cb(self, image, pspec):
-        self._buffer.icon_size = self.props.icon_size
+        self._buffer.icon_size = self.props.pixel_size
 
     def _icon_name_changed_cb(self, image, pspec):
         self._buffer.icon_name = self.props.icon_name
