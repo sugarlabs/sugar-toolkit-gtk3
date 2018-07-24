@@ -111,7 +111,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         '''
         return self._tooltip
 
-    tooltip = GObject.property(type=str, setter=set_tooltip,
+    tooltip = GObject.Property(type=str, setter=set_tooltip,
                                getter=get_tooltip)
 
     def set_accelerator(self, accelerator):
@@ -131,7 +131,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         '''
         return self._accelerator
 
-    accelerator = GObject.property(type=str, setter=set_accelerator,
+    accelerator = GObject.Property(type=str, setter=set_accelerator,
                                    getter=get_accelerator)
 
     def set_icon_name(self, icon_name):
@@ -155,7 +155,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         else:
             return None
 
-    icon_name = GObject.property(type=str, setter=set_icon_name,
+    icon_name = GObject.Property(type=str, setter=set_icon_name,
                                  getter=get_icon_name)
 
     def set_xo_color(self, xo_color):
@@ -176,7 +176,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         '''
         return self._xo_color
 
-    xo_color = GObject.property(type=object, setter=set_xo_color,
+    xo_color = GObject.Property(type=object, setter=set_xo_color,
                                 getter=get_xo_color)
 
     def create_palette(self):
@@ -188,7 +188,7 @@ class RadioToolButton(Gtk.RadioToolButton):
     def set_palette(self, palette):
         self._palette_invoker.palette = palette
 
-    palette = GObject.property(
+    palette = GObject.Property(
         type=object, setter=set_palette, getter=get_palette)
 
     def get_palette_invoker(self):
@@ -198,7 +198,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         self._palette_invoker.detach()
         self._palette_invoker = palette_invoker
 
-    palette_invoker = GObject.property(
+    palette_invoker = GObject.Property(
         type=object, setter=set_palette_invoker, getter=get_palette_invoker)
 
     def do_draw(self, cr):
@@ -239,7 +239,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         if self._hide_tooltip_on_click != hide_tooltip_on_click:
             self._hide_tooltip_on_click = hide_tooltip_on_click
 
-    hide_tooltip_on_click = GObject.property(
+    hide_tooltip_on_click = GObject.Property(
         type=bool, default=True, getter=get_hide_tooltip_on_click,
         setter=set_hide_tooltip_on_click)
 

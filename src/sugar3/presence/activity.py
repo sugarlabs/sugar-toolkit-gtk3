@@ -74,13 +74,13 @@ class Activity(GObject.GObject):
     }
 
     __gproperties__ = {
-        'id': (str, None, None, None, GObject.PARAM_READABLE),
-        'name': (str, None, None, None, GObject.PARAM_READWRITE),
-        'tags': (str, None, None, None, GObject.PARAM_READWRITE),
-        'color': (str, None, None, None, GObject.PARAM_READWRITE),
-        'type': (str, None, None, None, GObject.PARAM_READABLE),
-        'private': (bool, None, None, True, GObject.PARAM_READWRITE),
-        'joined': (bool, None, None, False, GObject.PARAM_READABLE),
+        'id': (str, None, None, None, GObject.ParamFlags.READABLE),
+        'name': (str, None, None, None, GObject.ParamFlags.READWRITE),
+        'tags': (str, None, None, None, GObject.ParamFlags.READWRITE),
+        'color': (str, None, None, None, GObject.ParamFlags.READWRITE),
+        'type': (str, None, None, None, GObject.ParamFlags.READABLE),
+        'private': (bool, None, None, True, GObject.ParamFlags.READWRITE),
+        'joined': (bool, None, None, False, GObject.ParamFlags.READABLE),
     }
 
     def __init__(self, account_path, connection, room_handle=None,

@@ -24,6 +24,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import GObject
 
 _HAS_GST = True
@@ -230,13 +231,13 @@ class SpeechManager(GObject.GObject):
     def get_is_playing(self):
         return self._is_playing
 
-    is_playing = GObject.property(type=bool, getter=get_is_playing,
+    is_playing = GObject.Property(type=bool, getter=get_is_playing,
                                   setter=None, default=False)
 
     def get_is_paused(self):
         return self._is_paused
 
-    is_paused = GObject.property(type=bool, getter=get_is_paused,
+    is_paused = GObject.Property(type=bool, getter=get_is_paused,
                                  setter=None, default=False)
 
     def get_pitch(self):
@@ -248,14 +249,14 @@ class SpeechManager(GObject.GObject):
     def set_pitch(self, pitch):
         self._pitch = pitch
         if self._save_timeout_id != -1:
-            GObject.source_remove(self._save_timeout_id)
-        self._save_timeout_id = GObject.timeout_add(_SAVE_TIMEOUT, self.save)
+            GLib.source_remove(self._save_timeout_id)
+        self._save_timeout_id = GLib.timeout_add(_SAVE_TIMEOUT, self.save)
 
     def set_rate(self, rate):
         self._rate = rate
         if self._save_timeout_id != -1:
-            GObject.source_remove(self._save_timeout_id)
-        self._save_timeout_id = GObject.timeout_add(_SAVE_TIMEOUT, self.save)
+            GLib.source_remove(self._save_timeout_id)
+        self._save_timeout_id = GLib.timeout_add(_SAVE_TIMEOUT, self.save)
 
     def say_text(self, text, pitch=None, rate=None, lang_code=None):
         if pitch is None:

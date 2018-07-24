@@ -1,5 +1,5 @@
 from gi.repository import Gtk
-from gi.repository import GObject
+from gi.repository import GLib
 
 from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.graphics.progressicon import ProgressIcon
@@ -51,7 +51,7 @@ def timeout_cb():
     return True
 
 
-GObject.timeout_add(50, timeout_cb)
+GLib.timeout_add(50, timeout_cb)
 
 
 if __name__ == '__main__':

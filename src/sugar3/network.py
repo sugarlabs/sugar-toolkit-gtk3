@@ -26,6 +26,7 @@ import fcntl
 import tempfile
 
 from gi.repository import GObject
+from.gi.repository import GLib
 import SimpleHTTPServer
 import SocketServer
 
@@ -60,12 +61,12 @@ class GlibTCPServer(SocketServer.TCPServer):
         self.socket.setblocking(0)  # Set nonblocking
 
         # Watch the listener socket for data
-        GObject.io_add_watch(self.socket, GObject.IO_IN, self._handle_accept)
+        GLib.io_add_watch(self.socket, GLib.IO_IN, self._handle_accept)
 
     def _handle_accept(self, source, condition):
         """Process incoming data on the server's socket by doing an accept()
         via handle_request()."""
-        if not (condition & GObject.IO_IN):
+        if not (condition & GLib.IO_IN):
             return True
         self.handle_request()
         return True
@@ -103,17 +104,17 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         """Serve a GET request."""
         self._file = self.send_head()
         if self._file:
-            self._srcid = GObject.io_add_watch(self.wfile, GObject.IO_OUT |
-                                               GObject.IO_ERR,
-                                               self._send_next_chunk)
+            self._srcid = GLib.io_add_watch(self.wfile, GLib.IO_OUT |
+                                            GLib.IO_ERR,
+                                            self._send_next_chunk)
         else:
             self._cleanup()
 
     def _send_next_chunk(self, source, condition):
-        if condition & GObject.IO_ERR:
+        if condition & GLib.IO_ERR:
             self._cleanup()
             return False
-        if not (condition & GObject.IO_OUT):
+        if not (condition & GLib.IO_OUT):
             self._cleanup()
             return False
         data = self._file.read(self.CHUNK_SIZE)
@@ -128,7 +129,7 @@ class ChunkedGlibHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self._file.close()
             self._file = None
         if self._srcid > 0:
-            GObject.source_remove(self._srcid)
+            GLib.source_remove(self._srcid)
             self._srcid = 0
         if not self.wfile.closed:
             self.wfile.flush()
@@ -238,9 +239,9 @@ class GlibURLDownloader(GObject.GObject):
                                                          dir=self._destdir)
 
         fcntl.fcntl(self._info.fp.fileno(), fcntl.F_SETFD, os.O_NDELAY)
-        self._srcid = GObject.io_add_watch(self._info.fp.fileno(),
-                                           GObject.IO_IN | GObject.IO_ERR,
-                                           self._read_next_chunk)
+        self._srcid = GLib.io_add_watch(self._info.fp.fileno(),
+                                        GLib.IO_IN | GLib.IO_ERR,
+                                        self._read_next_chunk)
 
     def cancel(self):
         if self._srcid == 0:
@@ -264,11 +265,11 @@ class GlibURLDownloader(GObject.GObject):
         return fname
 
     def _read_next_chunk(self, source, condition):
-        if condition & GObject.IO_ERR:
+        if condition & GLib.IO_ERR:
             self.cleanup(remove=True)
             self.emit('error', 'Error downloading file.')
             return False
-        elif not (condition & GObject.IO_IN):
+        elif not (condition & GLib.IO_IN):
             # shouldn't get here, but...
             return True
 
@@ -298,7 +299,7 @@ class GlibURLDownloader(GObject.GObject):
 
     def cleanup(self, remove=False):
         if self._srcid > 0:
-            GObject.source_remove(self._srcid)
+            GLib.source_remove(self._srcid)
             self._srcid = 0
         del self._info
         self._info = None

@@ -73,7 +73,7 @@ class ToolbarButton(ToolButton):
             self.props.palette = _ToolbarPalette(invoker=ToolInvoker(self))
         self._move_page_to_palette()
 
-    page = GObject.property(type=object, getter=get_page, setter=set_page)
+    page = GObject.Property(type=object, getter=get_page, setter=set_page)
 
     def is_in_palette(self):
         return self.page is not None and \
@@ -187,7 +187,7 @@ class ToolbarBox(Gtk.VBox):
     def set_padding(self, pad):
         self._toolbar_alignment.set_padding(0, 0, pad, pad)
 
-    padding = GObject.property(type=object,
+    padding = GObject.Property(type=object,
                                getter=get_padding, setter=set_padding)
 
     def modify_bg(self, state, color):
