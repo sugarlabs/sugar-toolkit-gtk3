@@ -236,8 +236,7 @@ class ActivityCreationHandler(GObject.GObject):
 
         GLib.child_watch_add(child.pid,
                              _child_watch_cb,
-                             (log_file,
-                             self._handle.activity_id))
+                             (log_file, self._handle.activity_id))
 
     def _no_reply_handler(self, *args):
         pass

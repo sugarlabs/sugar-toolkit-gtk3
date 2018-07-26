@@ -37,8 +37,10 @@ class _TrayViewport(Gtk.Viewport):
 
     __gproperties__ = {
         'scrollable': (bool, None, None, False, GObject.ParamFlags.READABLE),
-        'can-scroll-prev': (bool, None, None, False, GObject.ParamFlags.READABLE),
-        'can-scroll-next': (bool, None, None, False, GObject.ParamFlags.READABLE),
+        'can-scroll-prev': (bool, None, None, False,
+                            GObject.ParamFlags.READABLE),
+        'can-scroll-next': (bool, None, None, False,
+                            GObject.ParamFlags.READABLE),
     }
 
     def __init__(self, orientation):
@@ -333,7 +335,8 @@ class VTray(Gtk.EventBox):
 
     __gproperties__ = {
         'align': (int, None, None, 0, 1, ALIGN_TO_START,
-                  GObject.ParamFlags.READWRITE | GObject.ParamFlags.CONSTRUCT_ONLY),
+                  GObject.ParamFlags.READWRITE |
+                  GObject.ParamFlags.CONSTRUCT_ONLY),
         'drag-active': (bool, None, None, False, GObject.ParamFlags.READWRITE),
     }
 
