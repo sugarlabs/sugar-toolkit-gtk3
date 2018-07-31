@@ -26,7 +26,7 @@ import fcntl
 import tempfile
 
 from gi.repository import GObject
-from.gi.repository import GLib
+from gi.repository import GLib
 import SimpleHTTPServer
 import SocketServer
 
