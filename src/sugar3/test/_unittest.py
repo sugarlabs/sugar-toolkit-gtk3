@@ -18,11 +18,6 @@
 UNSTABLE.
 """
 
-import six
-
-if six.PY2:
-    from __future__ import absolute_import
-
 import logging
 import os
 import unittest

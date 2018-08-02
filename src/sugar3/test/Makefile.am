@@ -3,4 +3,4 @@ sugar_PYTHON = \
 	__init__.py \
     discover.py \
 	uitree.py \
-	unittest.py
+	_unittest.py
