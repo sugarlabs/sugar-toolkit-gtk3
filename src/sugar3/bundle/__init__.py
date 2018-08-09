@@ -12,11 +12,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the
-# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-# Boston, MA 02111-1307, USA.
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+# MA  02110-1301 USA
 
 '''
-
 Activity Metadata
 =================
 
@@ -30,8 +29,7 @@ an `[Activity]` header on the first line:
   1.2.3, 1.2.3-country, or 1.2.3~developer,
 
 * `bundle_id` - the activity bundle identifier, using [Java package
-  naming
-  conventions](http://en.wikipedia.org/wiki/Java_package#Package_naming_conventions),
+  naming conventions](http://en.wikipedia.org/wiki/Java_package#Package_naming_conventions),
   should conform to the [D-Bus specification for message protocol
   names](http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names)(hyphens
   are not allowed), usually an organisation or individual domain name
@@ -58,8 +56,7 @@ Optional metadata keys are;
   files of these MIME types.  Used to offer your activity when opening a
   downloaded file or a journal object.
 
-* `url` - link to a home page or user documentation on
-  https://help.sugarlabs.org/,
+* `url` - link to a home page or user documentation on https://help.sugarlabs.org/,
 
 * `repository` - link to repository for activity code, for use by git clone,
 
@@ -70,9 +67,9 @@ Optional metadata keys are;
 * `max_participants` - maximum participants for sharing an activity,
 
 * `tags` - a semicolon or whitespace delimited list of keywords that
-   describe the activity.  Suggested keywords are Programming,
-   Robotics, Internet, Science, Maths, Language, Geography, Documents,
-   Music, Media, Art, Teacher, or System,
+   describe the activity. Suggested keywords are Programming,
+   Robotics, Internet, Science, Maths, Language, Geography, Game, Documents,
+   Music, Media, Art, Teacher, System, or Tools,
 
 * `show_launcher` - if set to "no", the activity is not shown in list view,
 
@@ -120,16 +117,16 @@ Example `activity.info`
     [Activity]
     name = Browse
     bundle_id = org.laptop.WebActivity
-    exec = sugar-activity webactivity.WebActivity
+    exec = sugar-activity webactivity.WebActivity -s
     activity_version = 200
     icon = activity-web
     max_participants = 100
     summary = Surf the world!
 
-    license = GPL-3.0+
+    license = GPLv2+;LGPLv2+;GPLv3+
     repository = https://github.com/sugarlabs/browse-activity.git
     url = https://help.sugarlabs.org/en/browse.html
-    tags = Utilities;Web
+    tags = Utilities;Internet
 
     metadata_license = CC0-1.0
     description:
