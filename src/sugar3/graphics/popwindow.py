@@ -35,8 +35,6 @@ from gi.repository import GObject
 from sugar3.graphics import style
 from sugar3.graphics.toolbutton import ToolButton
 
-from jarabe.model import shell
-
 
 class PopWindow(Gtk.Window):
     """
@@ -70,7 +68,6 @@ class PopWindow(Gtk.Window):
 
         self.connect('realize', self.__realize_cb)
         self.connect('key-press-event', self.__key_press_event_cb)
-        self.connect('hide', self.__hide_cb)
 
         self._vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(self._vbox)
@@ -135,10 +132,6 @@ class PopWindow(Gtk.Window):
             parent = GdkX11.X11Window.foreign_new_for_display(
                 display, self._parent_window_xid)
             window.set_transient_for(parent)
-            shell.get_model().push_modal()
-
-    def __hide_cb(self, widget):
-        shell.get_model().pop_modal()
 
     def add_view(self, widget, expand=True, fill=True, padding=0):
         '''
