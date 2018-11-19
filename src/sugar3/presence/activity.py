@@ -29,6 +29,7 @@ import dbus
 from dbus import PROPERTIES_IFACE
 from gi.repository import GObject
 from gi.repository import TelepathyGLib
+from telepathy.client import Channel
 
 from sugar3.presence.buddy import Buddy
 
@@ -592,11 +593,11 @@ class _JoinCommand(_BaseCommand):
             dbus_interface=TelepathyGLib.IFACE_CONNECTION)
 
     def __create_text_channel_cb(self, channel_path):
-        TelepathyGLib.Channel(self._connection.requested_bus_name, channel_path,
+        Channel(self._connection.requested_bus_name, channel_path,
                 ready_handler=self.__text_channel_ready_cb)
 
     def __create_tubes_channel_cb(self, channel_path):
-        TelepathyGLib.Channel(self._connection.requested_bus_name, channel_path,
+        Channel(self._connection.requested_bus_name, channel_path,
                 ready_handler=self.__tubes_channel_ready_cb)
 
     def __tubes_error_handler_cb(self, error):
