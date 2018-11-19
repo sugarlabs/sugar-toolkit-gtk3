@@ -32,6 +32,11 @@ from sugar3.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
+if not hasattr(GObject.ParamFlags, 'READWRITE'):
+    GObject.ParamFlags.READWRITE = GObject.ParamFlags.WRITABLE | \
+        GObject.ParamFlags.READABLE
+
+
 def get_svg_color_string(color):
     return '#%.2X%.2X%.2X' % (color.red / 257, color.green / 257,
                               color.blue / 257)

@@ -49,6 +49,11 @@ CONN_INTERFACE_ROOM_CONFIG = \
 _logger = logging.getLogger('sugar3.presence.activity')
 
 
+if not hasattr(GObject.ParamFlags, 'READWRITE'):
+    GObject.ParamFlags.READWRITE = GObject.ParamFlags.WRITABLE | \
+        GObject.ParamFlags.READABLE
+
+
 class Activity(GObject.GObject):
     """UI interface for an Activity in the presence service
 

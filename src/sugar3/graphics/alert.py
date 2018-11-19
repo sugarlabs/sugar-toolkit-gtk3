@@ -64,6 +64,11 @@ from sugar3.graphics.icon import Icon
 _ = lambda msg: gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
+if not hasattr(GObject.ParamFlags, 'READWRITE'):
+    GObject.ParamFlags.READWRITE = GObject.ParamFlags.WRITABLE | \
+        GObject.ParamFlags.READABLE
+
+
 class Alert(Gtk.EventBox):
     """
     Alerts are inside the activity window instead of being a

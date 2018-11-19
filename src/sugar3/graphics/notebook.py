@@ -29,6 +29,11 @@ from gi.repository import Gtk
 from gi.repository import GObject
 
 
+if not hasattr(GObject.ParamFlags, 'READWRITE'):
+    GObject.ParamFlags.READWRITE = GObject.ParamFlags.WRITABLE | \
+        GObject.ParamFlags.READABLE
+
+
 class Notebook(Gtk.Notebook):
     '''
     Notebook class that creates a :class:`Gtk.Notebook`. It is possible to set

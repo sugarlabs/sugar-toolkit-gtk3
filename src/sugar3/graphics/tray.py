@@ -33,6 +33,11 @@ _PREVIOUS_PAGE = 0
 _NEXT_PAGE = 1
 
 
+if not hasattr(GObject.ParamFlags, 'READWRITE'):
+    GObject.ParamFlags.READWRITE = GObject.ParamFlags.WRITABLE | \
+        GObject.ParamFlags.READABLE
+
+
 class _TrayViewport(Gtk.Viewport):
 
     __gproperties__ = {
