@@ -316,7 +316,9 @@ class Activity(Window, Gtk.Container):
     }
 
     def __init__(self, handle, create_jobject=True):
-        GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT, self.close)
+        if hasattr(GLib, 'unix_signal_add'):
+            GLib.unix_signal_add(
+                GLib.PRIORITY_DEFAULT, signal.SIGINT, self.close)
 
         # Stuff that needs to be done early
         icons_path = os.path.join(get_bundle_path(), 'icons')
