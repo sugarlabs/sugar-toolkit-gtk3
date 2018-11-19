@@ -19,8 +19,7 @@
 STABLE.
 """
 
-from telepathy.constants import (
-    CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES)
+from gi.repository import TelepathyGLib
 
 from sugar3.presence.tubeconn import TubeConnection
 from sugar3.presence import presenceservice
@@ -39,7 +38,7 @@ class SugarTubeConnection(TubeConnection):
         return self
 
     def get_buddy(self, cs_handle):
-        """Retrieve a Buddy object given a telepathy handle.
+        """Retrieve a Buddy object given a TelepathyGLib handle.
 
         cs_handle: A channel-specific CONTACT type handle.
         returns: sugar3.presence Buddy object or None
@@ -49,7 +48,7 @@ class SugarTubeConnection(TubeConnection):
             # It's me, just get my global handle
             handle = self._conn.GetSelfHandle()
         elif self._group_iface.GetGroupFlags() & \
-                CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
+                TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES:
             # The group (channel) has channel specific handles
             handle = self._group_iface.GetHandleOwners([cs_handle])[0]
         else:
