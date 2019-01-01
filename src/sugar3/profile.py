@@ -115,12 +115,12 @@ class Profile(object):
         end_found = False
         for l in lines:
             l = l.strip()
-            if l.startswith(['-----BEGIN DSA PRIVATE KEY-----',
-                             '-----BEGIN OPENSSH PRIVATE KEY-----']):
+            if l.startswith(('-----BEGIN DSA PRIVATE KEY-----',
+                             '-----BEGIN OPENSSH PRIVATE KEY-----')):
                 begin_found = True
                 continue
-            if l.startswith(['-----END DSA PRIVATE KEY-----',
-                             '-----END OPENSSH PRIVATE KEY-----']):
+            if l.startswith(('-----END DSA PRIVATE KEY-----',
+                             '-----END OPENSSH PRIVATE KEY-----')):
                 end_found = True
                 continue
             key += l
