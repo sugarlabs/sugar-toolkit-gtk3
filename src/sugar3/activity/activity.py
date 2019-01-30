@@ -727,20 +727,6 @@ class Activity(Window, Gtk.Container):
         '''
         Deprecated. This part of the API has been moved
         out of this class to the module itself
-
-        Returns:
-            str: a path for saving Activity specific preferences, etc.
-
-        Returns a path to the location in the filesystem where the activity can
-        store activity related data that doesn't pertain to the current
-        execution of the activity and thus cannot go into the DataStore.
-
-        Currently, this will return something like
-        ~/.sugar/default/MyActivityName/
-
-        Activities should ONLY save settings, user preferences and other data
-        which isn't specific to a journal item here. If (meta-)data is in
-        anyway specific to a journal entry, it MUST be stored in the DataStore.
         '''
         return get_activity_root()
 
@@ -1497,6 +1483,19 @@ def get_activity_root():
     '''
     Returns:
         str: a path for saving Activity specific preferences, etc.
+
+    Returns a path to the location in the filesystem where the
+    activity can store activity related data that doesn't pertain to
+    the current execution of the activity and thus cannot go into the
+    DataStore.
+
+    Currently, this will return something like
+    ~/.sugar/default/MyActivityName/
+
+    Activities should ONLY save settings, user preferences and other
+    data which isn't specific to a journal item here. If (meta-)data
+    is in anyway specific to a journal entry, it MUST be stored in the
+    DataStore.
     '''
     if os.environ.get('SUGAR_ACTIVITY_ROOT'):
         return os.environ['SUGAR_ACTIVITY_ROOT']
