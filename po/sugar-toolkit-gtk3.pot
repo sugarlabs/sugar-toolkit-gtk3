@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 18:58+1100\n"
+"POT-Creation-Date: 2019-03-13 14:50+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,204 +19,224 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
+#: src/sugar3/activity/activity.py:475
 #, python-format
 msgid "%s Activity"
 msgstr ""
 
 #: ../src/sugar3/activity/activity.py:967 src/sugar3/activity/activity.py:1127
+#: src/sugar3/activity/activity.py:1122
 msgid "Keep error"
 msgstr ""
 
 #: ../src/sugar3/activity/activity.py:968 src/sugar3/activity/activity.py:1128
+#: src/sugar3/activity/activity.py:1123
 msgid "Keep error: all changes will be lost"
 msgstr ""
 
 #: ../src/sugar3/activity/activity.py:971 src/sugar3/activity/activity.py:1131
+#: src/sugar3/activity/activity.py:1126
 msgid "Don't stop"
 msgstr ""
 
 #: ../src/sugar3/activity/activity.py:975 src/sugar3/activity/activity.py:1135
+#: src/sugar3/activity/activity.py:1130
 msgid "Stop anyway"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:86 src/sugar3/activity/activity.py:1169
-#: src/sugar3/activity/widgets.py:86
+#: src/sugar3/activity/widgets.py:86 src/sugar3/activity/activity.py:1164
+#: src/sugar3/activity/widgets.py:88
 msgid "Stop"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:98 src/sugar3/activity/widgets.py:99
+#: src/sugar3/activity/widgets.py:101
 msgid "Undo"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:106 src/sugar3/activity/widgets.py:107
+#: src/sugar3/activity/widgets.py:109
 msgid "Redo"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:113 src/sugar3/activity/widgets.py:114
+#: src/sugar3/activity/widgets.py:116
 msgid "Copy"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:121 src/sugar3/activity/widgets.py:122
+#: src/sugar3/activity/widgets.py:124
 msgid "Paste"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:132 src/sugar3/activity/widgets.py:133
+#: src/sugar3/activity/widgets.py:135
 msgid "Private"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:139 src/sugar3/activity/widgets.py:140
+#: src/sugar3/activity/widgets.py:142
 msgid "My Neighborhood"
 msgstr ""
 
 #: ../src/sugar3/activity/widgets.py:233 src/sugar3/activity/widgets.py:234
+#: src/sugar3/activity/widgets.py:249
 msgid "Description"
 msgstr ""
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 #: src/sugar3/activity/activity.py:1189 src/sugar3/graphics/alert.py:301
-#: src/sugar3/graphics/alert.py:467
+#: src/sugar3/graphics/alert.py:467 src/sugar3/activity/activity.py:1184
+#: src/sugar3/graphics/alert.py:308 src/sugar3/graphics/alert.py:476
 msgid "Cancel"
 msgstr ""
 
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479 src/sugar3/graphics/alert.py:305
 #: src/sugar3/graphics/alert.py:346 src/sugar3/graphics/alert.py:393
-#: src/sugar3/graphics/alert.py:512
+#: src/sugar3/graphics/alert.py:512 src/sugar3/graphics/alert.py:312
+#: src/sugar3/graphics/alert.py:353 src/sugar3/graphics/alert.py:402
+#: src/sugar3/graphics/alert.py:521
 msgid "Ok"
 msgstr ""
 
 #: ../src/sugar3/graphics/alert.py:434 src/sugar3/graphics/alert.py:464
+#: src/sugar3/graphics/alert.py:473
 msgid "Continue"
 msgstr ""
 
 #: ../src/sugar3/graphics/colorbutton.py:54
-#: src/sugar3/graphics/colorbutton.py:55
+#: src/sugar3/graphics/colorbutton.py:55 src/sugar3/graphics/colorbutton.py:60
 msgid "Choose a color"
 msgstr ""
 
 #: ../src/sugar3/graphics/colorbutton.py:279
 #: src/sugar3/graphics/colorbutton.py:300
+#: src/sugar3/graphics/colorbutton.py:305
 msgid "Red"
 msgstr ""
 
 #: ../src/sugar3/graphics/colorbutton.py:281
 #: src/sugar3/graphics/colorbutton.py:302
+#: src/sugar3/graphics/colorbutton.py:307
 msgid "Green"
 msgstr ""
 
 #: ../src/sugar3/graphics/colorbutton.py:283
 #: src/sugar3/graphics/colorbutton.py:304
+#: src/sugar3/graphics/colorbutton.py:309
 msgid "Blue"
 msgstr ""
 
-#: ../src/sugar3/util.py:217 src/sugar3/util.py:217
+#: ../src/sugar3/util.py:217 src/sugar3/util.py:217 src/sugar3/util.py:224
 msgid " and "
 msgstr ""
 
-#: ../src/sugar3/util.py:218 src/sugar3/util.py:218
+#: ../src/sugar3/util.py:218 src/sugar3/util.py:218 src/sugar3/util.py:225
 msgid ", "
 msgstr ""
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
-#: ../src/sugar3/util.py:221 src/sugar3/util.py:221
+#: ../src/sugar3/util.py:221 src/sugar3/util.py:221 src/sugar3/util.py:228
 msgid "Seconds ago"
 msgstr ""
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
-#: ../src/sugar3/util.py:225 src/sugar3/util.py:225
+#: ../src/sugar3/util.py:225 src/sugar3/util.py:225 src/sugar3/util.py:232
 #, python-format
 msgid "%s ago"
 msgstr ""
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
-#: ../src/sugar3/util.py:240 src/sugar3/util.py:240
+#: ../src/sugar3/util.py:240 src/sugar3/util.py:240 src/sugar3/util.py:247
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/sugar3/util.py:241 src/sugar3/util.py:241
+#: ../src/sugar3/util.py:241 src/sugar3/util.py:241 src/sugar3/util.py:248
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/sugar3/util.py:242 src/sugar3/util.py:242
+#: ../src/sugar3/util.py:242 src/sugar3/util.py:242 src/sugar3/util.py:249
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/sugar3/util.py:243 src/sugar3/util.py:243
+#: ../src/sugar3/util.py:243 src/sugar3/util.py:243 src/sugar3/util.py:250
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/sugar3/util.py:244 src/sugar3/util.py:244
+#: ../src/sugar3/util.py:244 src/sugar3/util.py:244 src/sugar3/util.py:251
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/sugar3/util.py:245 src/sugar3/util.py:245
+#: ../src/sugar3/util.py:245 src/sugar3/util.py:245 src/sugar3/util.py:252
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/sugar3/util.py:346 src/sugar3/util.py:346
+#: ../src/sugar3/util.py:346 src/sugar3/util.py:346 src/sugar3/util.py:354
 msgid "Empty"
 msgstr ""
 
-#: ../src/sugar3/util.py:348 src/sugar3/util.py:348
+#: ../src/sugar3/util.py:348 src/sugar3/util.py:348 src/sugar3/util.py:356
 #, python-format
 msgid "%d B"
 msgstr ""
 
-#: ../src/sugar3/util.py:350 src/sugar3/util.py:350
+#: ../src/sugar3/util.py:350 src/sugar3/util.py:350 src/sugar3/util.py:358
 #, python-format
 msgid "%d KB"
 msgstr ""
 
-#: ../src/sugar3/util.py:352 src/sugar3/util.py:352
+#: ../src/sugar3/util.py:352 src/sugar3/util.py:352 src/sugar3/util.py:360
 #, python-format
 msgid "%d MB"
 msgstr ""
 
-#: ../src/sugar3/util.py:354 src/sugar3/util.py:354
+#: ../src/sugar3/util.py:354 src/sugar3/util.py:354 src/sugar3/util.py:362
 #, python-format
 msgid "%d GB"
 msgstr ""
 
-#: ../src/sugar3/mime.py:56 src/sugar3/mime.py:59
+#: ../src/sugar3/mime.py:56 src/sugar3/mime.py:59 src/sugar3/mime.py:61
 msgid "Text"
 msgstr ""
 
-#: ../src/sugar3/mime.py:63 src/sugar3/mime.py:66
+#: ../src/sugar3/mime.py:63 src/sugar3/mime.py:66 src/sugar3/mime.py:68
 msgid "Image"
 msgstr ""
 
-#: ../src/sugar3/mime.py:68 src/sugar3/mime.py:71
+#: ../src/sugar3/mime.py:68 src/sugar3/mime.py:71 src/sugar3/mime.py:73
 msgid "Audio"
 msgstr ""
 
-#: ../src/sugar3/mime.py:75 src/sugar3/mime.py:78
+#: ../src/sugar3/mime.py:75 src/sugar3/mime.py:78 src/sugar3/mime.py:80
 msgid "Video"
 msgstr ""
 
-#: ../src/sugar3/mime.py:86 src/sugar3/mime.py:89
+#: ../src/sugar3/mime.py:86 src/sugar3/mime.py:89 src/sugar3/mime.py:91
 msgid "Link"
 msgstr ""
 
-#: ../src/sugar3/mime.py:91 src/sugar3/mime.py:94
+#: ../src/sugar3/mime.py:91 src/sugar3/mime.py:94 src/sugar3/mime.py:96
 msgid "Bundle"
 msgstr ""
 
@@ -492,43 +512,43 @@ msgstr ""
 msgid "Cantonese"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1170
+#: src/sugar3/activity/activity.py:1170 src/sugar3/activity/activity.py:1165
 msgid "Stop: name your journal entry"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1193
+#: src/sugar3/activity/activity.py:1193 src/sugar3/activity/activity.py:1188
 msgid "Cancel stop and continue the activity"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1230
+#: src/sugar3/activity/activity.py:1230 src/sugar3/activity/activity.py:1225
 msgid "Save new"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1231
+#: src/sugar3/activity/activity.py:1231 src/sugar3/activity/activity.py:1226
 msgid "Save a new journal entry"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1234
+#: src/sugar3/activity/activity.py:1234 src/sugar3/activity/activity.py:1229
 msgid "Save"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1235
+#: src/sugar3/activity/activity.py:1235 src/sugar3/activity/activity.py:1230
 msgid "Save into the old journal entry"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1241
+#: src/sugar3/activity/activity.py:1241 src/sugar3/activity/activity.py:1236
 msgid "Erase changes"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1242
+#: src/sugar3/activity/activity.py:1242 src/sugar3/activity/activity.py:1237
 msgid "Erase what you have done, and leave your old journal entry unchanged"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1245
+#: src/sugar3/activity/activity.py:1245 src/sugar3/activity/activity.py:1240
 msgid "Erase"
 msgstr ""
 
-#: src/sugar3/activity/activity.py:1246
+#: src/sugar3/activity/activity.py:1246 src/sugar3/activity/activity.py:1241
 msgid "Erase what you have done, and avoid making a journal entry"
 msgstr ""
 
