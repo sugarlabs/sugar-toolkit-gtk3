@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-04-09 06:10+0000\n"
+"PO-Revision-Date: 2017-12-06 17:23+0000\n"
 "Last-Translator: whe <heppew@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1491718224.000000\n"
+"X-POOTLE-MTIME: 1512581018.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -498,43 +498,43 @@ msgstr "Kantonees"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "Stop: geef je logboekitem een naam"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "Annuleer stop en ga verder met de activiteit"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "Bewaar nieuw"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "Bewaar een nieuw logboekitem"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "Bewaar"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "Bewaar in het oude logboekitem"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "Wis wijzigingen"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
-msgstr ""
+msgstr "Wis wat je gedaan hebt en laat je oude logboek ongewijzigd"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "Wis"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "Wis wat je hebt gedaan en voorkom een logboekitem te maken"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
@@ -542,7 +542,7 @@ msgstr "Sluit"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "Engels"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"

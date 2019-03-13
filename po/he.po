@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-04-23 18:12+0000\n"
+"PO-Revision-Date: 2017-12-03 16:10+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1492971128.000000\n"
+"X-POOTLE-MTIME: 1512317407.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -500,43 +500,43 @@ msgstr "קנטונית"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "עצירה: מתן שם לרשומת היומן שלך"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "לבטל את העצירה ולהמשיך את הפעילות"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "שמירת חדש"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "שמירת רשומת יומן חדשה"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "שמירה"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "שמירה לרשומת היומן הישנה"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "מחיקת שינויים"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
-msgstr ""
+msgstr "מחיקת השינויים שביצעת תוך נטישת רשומת היומן הישנה שלך ללא שינוי"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "מחיקה"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "מחיקת מה שביצעת ולהימנע מיצירת רשומת יומן"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
@@ -544,7 +544,7 @@ msgstr "סגירה"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "אנגלית"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"

@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-05-28 19:30+0000\n"
-"Last-Translator: dark159123 <r.j.hansen@protonmail.com>\n"
+"PO-Revision-Date: 2018-10-22 18:24+0000\n"
+"Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1495999837.000000\n"
+"X-POOTLE-MTIME: 1540232655.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -50,7 +50,7 @@ msgstr "Fortryd"
 
 #: ../src/sugar3/activity/widgets.py:106 src/sugar3/activity/widgets.py:107
 msgid "Redo"
-msgstr "Gentag"
+msgstr "Omgør"
 
 #: ../src/sugar3/activity/widgets.py:113 src/sugar3/activity/widgets.py:114
 msgid "Copy"
@@ -58,7 +58,7 @@ msgstr "Kopiér"
 
 #: ../src/sugar3/activity/widgets.py:121 src/sugar3/activity/widgets.py:122
 msgid "Paste"
-msgstr "Sæt ind"
+msgstr "Indsæt"
 
 #: ../src/sugar3/activity/widgets.py:132 src/sugar3/activity/widgets.py:133
 msgid "Private"
@@ -76,7 +76,7 @@ msgstr "Beskrivelse"
 #: src/sugar3/activity/activity.py:1189 src/sugar3/graphics/alert.py:301
 #: src/sugar3/graphics/alert.py:467
 msgid "Cancel"
-msgstr "Afbryd"
+msgstr "Annullér"
 
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479 src/sugar3/graphics/alert.py:305
@@ -494,43 +494,43 @@ msgstr "Kantonesisk"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "Stop: navngiv din journalpost"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "Annullér stop og fortsæt aktiviteten"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "Gem ny"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "Gem en ny journalpost"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "Gem"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "Gem i den gamle journalpost"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "Slet ændringer"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
-msgstr ""
+msgstr "Slet det du har lavet og forlad din journalpost uændret"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "Slet"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "Slet det du har lavet og undgå at lave en journalpost"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
@@ -538,7 +538,7 @@ msgstr "Luk"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "Engelsk"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"

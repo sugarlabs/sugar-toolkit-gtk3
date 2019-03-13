@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-10-07 10:05+0000\n"
-"Last-Translator: Berend <berendy@gmail.com>\n"
+"PO-Revision-Date: 2017-12-02 17:05+0000\n"
+"Last-Translator: Chris <cjl@sugarlabs.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fy\n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1507370736.000000\n"
+"X-POOTLE-MTIME: 1512234313.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
 msgid "%s Activity"
-msgstr "%s aktiviteit"
+msgstr "%s Aktiviteit"
 
 #: ../src/sugar3/activity/activity.py:967 src/sugar3/activity/activity.py:1127
 msgid "Keep error"
@@ -289,9 +289,8 @@ msgid "English USA"
 msgstr "Ingelsk FS"
 
 #: ../src/sugar3/speech.py:65
-#, fuzzy
 msgid "English west indies"
-msgstr "Ingelsk"
+msgstr "Ingelsk west Yndysk"
 
 #: ../src/sugar3/speech.py:66 src/sugar3/speech.py:90
 msgid "Esperanto"
@@ -303,7 +302,7 @@ msgstr "Spaansk"
 
 #: ../src/sugar3/speech.py:68 src/sugar3/speech.py:93
 msgid "Spanish latin american"
-msgstr "Spaansk Latynsk Amearika "
+msgstr "Spaansk Latynsk Amearika"
 
 #: ../src/sugar3/speech.py:69 src/sugar3/speech.py:95
 msgid "Estonian"
@@ -495,43 +494,43 @@ msgstr "Kantoneesk"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "Ophâlde: jo deiboek ynfier opneame"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "Ophâlde ôfbrekke en trochgean mei de aktiviteit"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "Nij bewarje"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "In nije deiboek ynfier bewarje"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "Bewarje"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "Yn it âlde deiboek ynfier bewarje"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "Feroarings wiskje"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
-msgstr ""
+msgstr "Wiskje wat jo dien ha, en behâld it âlde deiboek ynfier"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "Wiskje"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "Wiskje wat jo dien ha, en foarkom in nije deiboek ynfier"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
@@ -539,7 +538,7 @@ msgstr "Slute"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "Ingelsk"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"

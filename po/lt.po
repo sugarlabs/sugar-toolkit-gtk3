@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-11-05 19:14+0000\n"
+"PO-Revision-Date: 2018-06-19 09:53+0000\n"
 "Last-Translator: Moo <hazap@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: lt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1509909243.000000\n"
+"X-POOTLE-MTIME: 1529401983.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -517,7 +517,7 @@ msgstr ""
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "Įrašyti"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"

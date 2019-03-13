@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-04-09 08:44+0000\n"
+"PO-Revision-Date: 2018-02-10 11:44+0000\n"
 "Last-Translator: Besnik_b <besnik@programeshqip.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sq\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1491727488.000000\n"
+"X-POOTLE-MTIME: 1518263064.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -33,7 +33,7 @@ msgstr "Mbaje gabimin: do të humbin krejt ndryshimet"
 
 #: ../src/sugar3/activity/activity.py:971 src/sugar3/activity/activity.py:1131
 msgid "Don't stop"
-msgstr "Mos ndalo"
+msgstr "Mos e ndal"
 
 #: ../src/sugar3/activity/activity.py:975 src/sugar3/activity/activity.py:1135
 msgid "Stop anyway"
@@ -322,7 +322,7 @@ msgstr "Finlandisht"
 
 #: ../src/sugar3/speech.py:73 src/sugar3/speech.py:103
 msgid "French belgium"
-msgstr "Frënge Belgjike"
+msgstr "Frëngjisht Belgjike"
 
 #: ../src/sugar3/speech.py:74 src/sugar3/speech.py:105
 msgid "French"
@@ -330,11 +330,11 @@ msgstr "Frëngjisht"
 
 #: ../src/sugar3/speech.py:75 src/sugar3/speech.py:107
 msgid "Irish-gaeilge"
-msgstr "Irlandisht"
+msgstr "Irlandisht-gaeilge"
 
 #: ../src/sugar3/speech.py:76 src/sugar3/speech.py:109
 msgid "Greek-ancient"
-msgstr "Greqishte e Lashtë"
+msgstr "Greqishte e lashtë"
 
 #: ../src/sugar3/speech.py:77 src/sugar3/speech.py:111
 msgid "Hindi"
@@ -422,7 +422,7 @@ msgstr "Norvegjisht"
 
 #: ../src/sugar3/speech.py:98 src/sugar3/speech.py:153
 msgid "Punjabi"
-msgstr "Punxhabisht"
+msgstr "Panxhabisht"
 
 #: ../src/sugar3/speech.py:99 src/sugar3/speech.py:155
 msgid "Polish"
@@ -494,43 +494,44 @@ msgstr "Kantoneze"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "Ndal: i vin një emër zërit tuaj të ditarit"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "Anuloni, ndaleni dhe vazhdoni veprimtarinë"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "Ruaje si të re"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "Ruaje një zë të ri ditari"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "Ruaje"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "Ruaje te zëri i vjetër i ditarit"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "Fshi ndryshimet"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
 msgstr ""
+"Fshini ç’keni bërë, dhe lëreni të pandryshuar zërin tuaj të vjetër të ditarit"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "Fshije"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "Fshini ç’keni bërë, dhe shmangni krijimin e një zëri ditari"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
@@ -538,7 +539,7 @@ msgstr "Mbylle"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "Anglisht"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"

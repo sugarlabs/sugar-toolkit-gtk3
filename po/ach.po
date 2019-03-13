@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-05-07 10:18+0000\n"
+"PO-Revision-Date: 2018-02-26 10:29+0000\n"
 "Last-Translator: Olot <agwanta2004@yahoo.co.uk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ach\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1494152306.000000\n"
+"X-POOTLE-MTIME: 1519640990.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -494,43 +494,43 @@ msgstr "Dano me Kantone"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "Cungi: cak nying gin iketo ijanol"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "Ngol cungi eka ite mede kede tic"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "Gwoki anyen"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "Gwoki gin iketo manyen iyi janol"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "Gwoki"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "Gwoki igin iketo ijanol macon"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "Jwa woko alokaloka"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
-msgstr ""
+msgstr "Jwa oko gin ame ityeko timo, ite weko gin iketo ijanol macon kakare"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "Jwa"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "Jwa gin ame ityeko timo, dang gwok keto ginoro ijanol"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
@@ -538,7 +538,7 @@ msgstr "Lor woko"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "Leb Muno"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"
