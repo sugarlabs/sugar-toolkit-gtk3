@@ -137,7 +137,7 @@ def open_log_file(activity):
         path = env.get_logs_path('%s-%s.log' % (activity.get_bundle_id(), i))
         try:
             fd = os.open(path, os.O_EXCL | os.O_CREAT | os.O_WRONLY, 0o644)
-            f = open(fd, 'w')
+            f = os.fdopen(fd, 'w')
             return (path, f)
         except OSError as e:
             if e.errno == EEXIST:
