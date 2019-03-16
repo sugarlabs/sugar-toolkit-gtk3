@@ -125,19 +125,27 @@ class Activity(GObject.GObject):
 
     def _start_tracking_properties(self):
         bus = dbus.SessionBus()
-        arg_dict = dict(reply_handler=self.__got_properties_cb,
-                        error_handler=self.__error_handler_cb)
         if six.PY2:
-            arg_dict = arg_dict.update(utf8_strings=True)
-
-        self._get_properties_call = bus.call_async(
-            self.telepathy_conn.requested_bus_name,
-            self.telepathy_conn.object_path,
-            CONN_INTERFACE_ACTIVITY_PROPERTIES,
-            'GetProperties',
-            'u',
-            (self.room_handle,),
-            arg_dict)
+            self._get_properties_call = bus.call_async(
+                self.telepathy_conn.requested_bus_name,
+                self.telepathy_conn.object_path,
+                CONN_INTERFACE_ACTIVITY_PROPERTIES,
+                'GetProperties',
+                'u',
+                (self.room_handle,),
+                reply_handler=self.__got_properties_cb,
+                error_handler=self.__error_handler_cb,
+                utf8_strings=True)
+        else:
+            self._get_properties_call = bus.call_async(
+                self.telepathy_conn.requested_bus_name,
+                self.telepathy_conn.object_path,
+                CONN_INTERFACE_ACTIVITY_PROPERTIES,
+                'GetProperties',
+                'u',
+                (self.room_handle,),
+                reply_handler=self.__got_properties_cb,
+                error_handler=self.__error_handler_cb)
 
         # As only one Activity instance is needed per activity process,
         # we can afford listening to ActivityPropertiesChanged like this.
