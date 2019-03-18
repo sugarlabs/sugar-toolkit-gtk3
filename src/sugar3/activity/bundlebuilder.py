@@ -207,6 +207,15 @@ class Packager(object):
                 # pylint: disable=E1103
                 git_output = [path.strip() for path in
                               stdout.strip('\n').split('\n')]
+                gitignore_patterns = open(os.path.join(self.config.source_dir,
+                                          '.gitignore')).read().split()
+
+                for pattern in gitignore_patterns:
+                    if pattern.endswith('/'):
+                        IGNORE_DIRS.append(pattern.rstrip('/'))
+                    else:
+                        IGNORE_FILES.append(pattern)
+
                 files = []
                 for line in git_output:
                     ignore = False
