@@ -27,3 +27,4 @@ ltmain.sh
 missing
 compile
 /doc
+*.tar.xz
