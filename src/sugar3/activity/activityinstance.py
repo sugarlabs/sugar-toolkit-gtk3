@@ -40,10 +40,19 @@ from sugar3 import logger
 
 from sugar3.bundle.bundle import MalformedBundleException
 
-from distutils.dir_util import mkpath
+from errno import EEXIST
+
 import time
 import hashlib
 import random
+
+
+def _makedirs(path):
+    try:
+        os.makedirs(path)
+    except OSError as e:
+        if e.errno != EEXIST:
+            raise e
 
 
 def create_activity_instance(constructor, handle):
@@ -113,9 +122,7 @@ def main():
         else:
             activity_class = args[0]
 
-    os.environ['SUGAR_BUNDLE_PATH'] = os.path.abspath(os.curdir)
-
-    bundle_path = os.environ['SUGAR_BUNDLE_PATH']
+    bundle_path = os.path.abspath(os.curdir)
     sys.path.insert(0, bundle_path)
 
     try:
@@ -131,25 +138,28 @@ def main():
                 logging.warning("Activity written for Python 2, consider porting to Python 3.")
             activity_class = command.split(" ")[1]
 
-    if 'SUGAR_VERSION' not in os.environ:
+    # when an activity is started outside sugar,
+    # activityfactory.get_environment has not executed in parent
+    # process, so parts of get_environment must happen here.
+    if 'SUGAR_BUNDLE_PATH' not in os.environ:
         profile_id = os.environ.get('SUGAR_PROFILE', 'default')
         home_dir = os.environ.get('SUGAR_HOME', os.path.expanduser('~/.sugar'))
         base = os.path.join(home_dir, profile_id)
         activity_root = os.path.join(base, bundle.get_bundle_id())
 
         instance_dir = os.path.join(activity_root, 'instance')
-        mkpath(instance_dir)
+        _makedirs(instance_dir)
 
         data_dir = os.path.join(activity_root, 'data')
-        mkpath(data_dir)
+        _makedirs(data_dir)
 
         tmp_dir = os.path.join(activity_root, 'tmp')
-        mkpath(tmp_dir)
+        _makedirs(tmp_dir)
 
+        os.environ['SUGAR_BUNDLE_PATH'] = bundle_path
+        os.environ['SUGAR_BUNDLE_ID'] = bundle.get_bundle_id()
         os.environ['SUGAR_ACTIVITY_ROOT'] = activity_root
-        os.environ['SUGAR_BUNDLE_PATH'] = bundle.get_path()
 
-    os.environ['SUGAR_BUNDLE_ID'] = bundle.get_bundle_id()
     os.environ['SUGAR_BUNDLE_NAME'] = bundle.get_name()
     os.environ['SUGAR_BUNDLE_VERSION'] = str(bundle.get_activity_version())
 
