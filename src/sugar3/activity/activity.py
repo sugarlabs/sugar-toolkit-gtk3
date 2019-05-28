@@ -361,6 +361,8 @@ class Activity(Window, Gtk.Container):
         self.connect('realize', self.__realize_cb)
         self.connect('delete-event', self.__delete_event_cb)
 
+        self._in_main = False
+        self._iconify = False
         self._active = False
         self._active_time = None
         self._spent_time = 0
@@ -468,7 +470,16 @@ class Activity(Window, Gtk.Container):
         """
         self._stop_buttons.append(button)
 
+    def iconify(self):
+        if not self._in_main:
+            self._iconify = True  # i.e. do after Window.show()
+        else:
+            Window.iconify(self)
+
     def run_main_loop(self):
+        if self._iconify:
+            Window.iconify(self)
+        self._in_main = True
         Gtk.main()
 
     def _initialize_journal_object(self):
