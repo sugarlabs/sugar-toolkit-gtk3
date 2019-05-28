@@ -183,7 +183,6 @@ from gi.repository import TelepathyGLib
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
-from telepathy.server import DBusProperties
 
 from sugar3 import util
 from sugar3 import power
@@ -1414,7 +1413,7 @@ class Activity(Window, Gtk.Container):
         Gdk.flush()
 
 
-class _ClientHandler(dbus.service.Object, DBusProperties):
+class _ClientHandler(dbus.service.Object):
     def __init__(self, bundle_id, got_channel_cb):
         self._interfaces = set([TelepathyGLib.IFACE_CLIENT, TelepathyGLib.IFACE_CLIENT_HANDLER, PROPERTIES_IFACE])
         self._got_channel_cb = got_channel_cb
@@ -1425,12 +1424,12 @@ class _ClientHandler(dbus.service.Object, DBusProperties):
 
         path = '/' + name.replace('.', '/')
         dbus.service.Object.__init__(self, bus_name, path)
-        DBusProperties.__init__(self)
 
-        self._implement_property_get(TelepathyGLib.IFACE_CLIENT, {
+        self._prop_getters = {}
+        self._prop_getters.setdefault(TelepathyGLib.IFACE_CLIENT, {}).update({
             'Interfaces': lambda: list(self._interfaces),
         })
-        self._implement_property_get(TelepathyGLib.IFACE_CLIENT_HANDLER, {
+        self._prop_getters.setdefault(TelepathyGLib.IFACE_CLIENT_HANDLER, {}).update({
             'HandlerChannelFilter': self.__get_filters_cb,
         })
 
