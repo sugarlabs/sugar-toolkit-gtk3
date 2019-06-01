@@ -706,11 +706,11 @@ class _JoinCommand(_BaseCommand):
             return
 
         # Use RoomConfig1 to configure the text channel. If this
-        # doesn't exist, fall-back on old-style IFACE_DBUS_PROPERTIES.
+        # doesn't exist, fall-back on old-style IFACE_PROPERTIES_INTERFACE.
         if TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG in self.text_channel:
             self.__update_room_config()
-        elif TelepathyGLib.IFACE_DBUS_PROPERTIES in self.text_channel:
-            self.text_channel[TelepathyGLib.IFACE_DBUS_PROPERTIES].ListProperties(
+        elif TelepathyGLib.IFACE_PROPERTIES_INTERFACE in self.text_channel:
+            self.text_channel[TelepathyGLib.IFACE_PROPERTIES_INTERFACE].ListProperties(
                 reply_handler=self.__list_properties_cb,
                 error_handler=self.__error_handler_cb)
         else:
@@ -781,7 +781,7 @@ class _JoinCommand(_BaseCommand):
         # supported here - raise an error?
 
         if props_to_set:
-            self.text_channel[TelepathyGLib.IFACE_DBUS_PROPERTIES].SetProperties(
+            self.text_channel[TelepathyGLib.IFACE_PROPERTIES_INTERFACE].SetProperties(
                 props_to_set, reply_handler=self.__set_properties_cb,
                 error_handler=self.__error_handler_cb)
         else:
