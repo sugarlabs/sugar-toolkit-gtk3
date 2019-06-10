@@ -16,7 +16,7 @@ SUBDIRS = bin src po
 check-po:
 	@for i in $(top_srcdir)/po/*.po ; do \
         if ! grep -q ^`basename $$i | \
-        sed 's,.po,,'`$$ $(top_srcdir)/po/LINGUAS ; then \
+        sed 's,.po,,'` $(top_srcdir)/po/LINGUAS ; then \
             echo '***' `basename $$i | \
             sed 's,.po,,'` missing from po/LINGUAS '***' ; \
             exit 1; \
