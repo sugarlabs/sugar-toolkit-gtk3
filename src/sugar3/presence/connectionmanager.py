@@ -21,6 +21,8 @@ UNSTABLE. It should really be internal to the sugar3.presence package.
 
 from functools import partial
 
+import gi
+gi.require_version('TelepathyGLib', '0.12')
 from gi.repository import TelepathyGLib
 import dbus
 from dbus import PROPERTIES_IFACE

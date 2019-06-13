@@ -22,6 +22,8 @@ STABLE.
 
 import logging
 
+import gi
+gi.require_version('TelepathyGLib', '0.12')
 from gi.repository import GObject
 from gi.repository import TelepathyGLib
 import dbus
