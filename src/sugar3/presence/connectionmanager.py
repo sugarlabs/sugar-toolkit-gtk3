@@ -24,9 +24,8 @@ from functools import partial
 import gi
 gi.require_version('TelepathyGLib', '0.12')
 from gi.repository import TelepathyGLib
-from gi.repository import GObject
-#import dbus
-#from dbus import PROPERTIES_IFACE
+import dbus
+from dbus import PROPERTIES_IFACE
 
 
 class Connection(object):
@@ -40,36 +39,22 @@ class ConnectionManager(object):
     """Track available TelepathyGLib connections"""
 
     def __init__(self):
-        loop = GObject.MainLoop()
-        manager = TelepathyGLib.AccountManager.dup()
-        factory = manager.get_factory()
-        manager.prepare_async(None, self.__initialize_conn, loop)
-        loop.run()
-
-
-    def __initialize_conn(self,manager, result,loop):
         self._connections_per_account = {}
 
-        '''
         bus = dbus.SessionBus()
         obj = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, TelepathyGLib.ACCOUNT_MANAGER_OBJECT_PATH)
         account_manager = dbus.Interface(obj, TelepathyGLib.IFACE_ACCOUNT_MANAGER)
         account_paths = account_manager.Get(TelepathyGLib.IFACE_ACCOUNT_MANAGER, 'ValidAccounts',
-                                dbus_interface=PROPERTIES_IFACE)
-        
-        '''
-
-        for account in manager.get_valid_accounts():
-            connection = account.get_connection()
-            '''obj.connect_to_signal('AccountPropertyChanged',
+                                            dbus_interface=PROPERTIES_IFACE)
+        for account_path in account_paths:
+            obj = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, account_path)
+            obj.connect_to_signal('AccountPropertyChanged',
                                   partial(self.__account_property_changed_cb,
                                           account_path))
-            '''            
-            if connection != None:
-                self._track_connection(account.object_path, connection, account.props.connection_status)
-        loop.quit()
+            connection_path = obj.Get(TelepathyGLib.IFACE_ACCOUNT, 'Connection')
+            if connection_path != '/':
+                self._track_connection(account_path, connection_path)
 
-    '''
     def __account_property_changed_cb(self, account_path, properties):
         if 'Connection' not in properties:
             return
@@ -78,33 +63,30 @@ class ConnectionManager(object):
                 del self._connections_per_account[account_path]
         else:
             self._track_connection(account_path, properties['Connection'])
-    '''
 
-    def _track_connection(self, account_path, connection, status):
-        '''connection_name = connection_path.replace('/', '.')[1:]
+    def _track_connection(self, account_path, connection_path):
+        connection_name = connection_path.replace('/', '.')[1:]
         bus = dbus.SessionBus()
         connection = bus.get_object(connection_name, connection_path)
-        '''
-        '''connection.connect_to_signal('StatusChanged',
+        connection.connect_to_signal('StatusChanged',
                                      partial(self.__status_changed_cb,
-                                             account_path))'''
+                                             account_path))
         self._connections_per_account[account_path] = \
             Connection(account_path, connection)
 
-        '''account = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, account_path)
+        account = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, account_path)
         status = account.Get(TelepathyGLib.IFACE_ACCOUNT, 'ConnectionStatus')
-        '''
         if status == TelepathyGLib.ConnectionStatus.CONNECTED:
             self._connections_per_account[account_path].connected = True
         else:
             self._connections_per_account[account_path].connected = False
-            '''
+
     def __status_changed_cb(self, account_path, status, reason):
         if status == TelepathyGLib.ConnectionStatus.CONNECTED:
             self._connections_per_account[account_path].connected = True
         else:
             self._connections_per_account[account_path].connected = False
-            '''
+
     def get_preferred_connection(self):
         best_connection = None, None
         for account_path, connection in list(
