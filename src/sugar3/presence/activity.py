@@ -91,8 +91,6 @@ class Activity(GObject.GObject):
 
         self._account_path = account_path
         self.telepathy_conn = connection
-        self.telepathy_text_chan = None
-        self.telepathy_tubes_chan = None
 
         self.room_handle = room_handle
         self._join_command = None
@@ -264,7 +262,8 @@ class Activity(GObject.GObject):
         if not self._joined:
             raise RuntimeError('Cannot invite a buddy to an activity that is'
                                'not shared.')
-        self.telepathy_text_chan.AddMembers(
+        chan = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL)
+        chan.AddMembers(
             [buddy.contact_handle], message,
             dbus_interface=TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP,
             reply_handler=partial(
@@ -281,15 +280,14 @@ class Activity(GObject.GObject):
         _logger.debug('%r: Join finished %r' % (self, error))
         if error is not None:
             self.emit('joined', error is None, str(error))
-        self.telepathy_text_chan = join_command.text_channel
-        self.telepathy_tubes_chan = join_command.tubes_channel
+        self.obj = join_command.obj
         self._channel_self_handle = join_command.channel_self_handle
         self._text_channel_group_flags = join_command.text_channel_group_flags
         self._start_tracking_buddies()
         self._start_tracking_channel()
 
     def _start_tracking_buddies(self):
-        group = self.telepathy_text_chan[TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP]
+        group = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP)
 
         group.GetAllMembers(reply_handler=self.__get_all_members_cb,
                             error_handler=self.__error_handler_cb)
@@ -298,7 +296,7 @@ class Activity(GObject.GObject):
                                 self.__text_channel_members_changed_cb)
 
     def _start_tracking_channel(self):
-        channel = self.telepathy_text_chan[TelepathyGLib.IFACE_CHANNEL]
+        channel = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL)
         channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
     def __get_all_members_cb(self, members, local_pending, remote_pending):
@@ -324,7 +322,7 @@ class Activity(GObject.GObject):
         if self._text_channel_group_flags & \
                 TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES:
 
-            group = self.telepathy_text_chan[TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP]
+            group = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP)
             group.GetHandleOwners(input_handles,
                                   reply_handler=get_handle_owners_cb,
                                   error_handler=self.__error_handler_cb)
@@ -414,8 +412,8 @@ class Activity(GObject.GObject):
         if error is None:
             self._joined = True
             self.room_handle = share_command.room_handle
-            self.telepathy_text_chan = share_command.text_channel
-            self.telepathy_tubes_chan = share_command.tubes_channel
+            self.obj = share_command.obj
+            self.channel_path = share_command.channel_path
             self._channel_self_handle = share_command.channel_self_handle
             self._text_channel_group_flags = \
                 share_command.text_channel_group_flags
@@ -464,9 +462,8 @@ class Activity(GObject.GObject):
         """
         bus_name = self.telepathy_conn.requested_bus_name
         connection_path = self.telepathy_conn.object_path
-        channels = [self.telepathy_text_chan.object_path,
-                    self.telepathy_tubes_chan.object_path]
-
+        channels = [self.channel_path,
+                    self.channel_path]
         _logger.debug('%r: bus name is %s, connection is %s, channels are %r' %
                       (self, bus_name, connection_path, channels))
         return bus_name, connection_path, channels
@@ -479,7 +476,8 @@ class Activity(GObject.GObject):
     def leave(self):
         """Leave this shared activity"""
         _logger.debug('%r: leaving' % self)
-        self.telepathy_text_chan.Close()
+        chan = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL)
+        chan.Close()
 
 
 class _BaseCommand(GObject.GObject):
@@ -491,9 +489,7 @@ class _BaseCommand(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
 
-        self.text_channel = None
         self.text_channel_group_flags = None
-        self.tubes_channel = None
         self.room_handle = None
         self.channel_self_handle = None
 
@@ -532,10 +528,9 @@ class _ShareCommand(_BaseCommand):
             self._finished = True
             self.emit('finished', error)
             return
-
-        self.text_channel = join_command.text_channel
+        self.obj = join_command.obj
         self.text_channel_group_flags = join_command.text_channel_group_flags
-        self.tubes_channel = join_command.tubes_channel
+        self.channel_path = join_command.channel_path
         self.channel_self_handle = join_command.channel_self_handle
 
         self._connection.AddActivity(
@@ -552,52 +547,6 @@ class _ShareCommand(_BaseCommand):
     def __error_handler_cb(self, error):
         self._finished = True
         self.emit('finished', error)
-
-
-class _Channel():
-    def __init__(self, service_name, object_path, ready_handler=None):
-
-        self.service_name = service_name
-        self.object_path = object_path
-        self._ready_handler = ready_handler
-        self._dbus_object = dbus.Bus().get_object(service_name, object_path)
-        self._interfaces = {}
-        self._valid_interfaces = set()
-        self._valid_interfaces.add(dbus.PROPERTIES_IFACE)
-        self._valid_interfaces.add(TelepathyGLib.IFACE_CHANNEL)
-        self[TelepathyGLib.IFACE_CHANNEL].GetChannelType(
-            reply_handler=self.get_channel_type_reply_cb,
-            error_handler=self.default_error_handler)
-
-    def get_channel_type_reply_cb(self, interface):
-        self._valid_interfaces.add(interface)
-        self[TelepathyGLib.IFACE_CHANNEL].GetInterfaces(
-            reply_handler=self.get_interfaces_reply_cb,
-            error_handler=self.default_error_handler)
-
-    def get_interfaces_reply_cb(self, interfaces):
-        self._valid_interfaces.update(interfaces)
-        if self._ready_handler is not None:
-            self._ready_handler(self)
-
-    def default_error_handler(exception):
-        logging.basicConfig()
-        _logger.warning('Exception from asynchronous method call:\n%s' % exception)
-
-    def __getitem__(self, name):
-        if name not in self._interfaces:
-            if name not in self._valid_interfaces:
-                raise KeyError(name)
-
-            self._interfaces[name] = dbus.Interface(self._dbus_object, name)
-
-        return self._interfaces[name]
-
-    def __contains__(self, name):
-        return name in self._interfaces or name in self._valid_interfaces
-
-    def __getattr__(self, name):
-        return getattr(self[TelepathyGLib.IFACE_CHANNEL], name)
 
 
 class _JoinCommand(_BaseCommand):
@@ -630,54 +579,14 @@ class _JoinCommand(_BaseCommand):
             error_handler=self.__error_handler_cb,
             dbus_interface=TelepathyGLib.IFACE_CONNECTION)
 
-        self._connection.RequestChannel(
-            TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES,
-            TelepathyGLib.HandleType.ROOM,
-            self.room_handle,
-            True,
-            reply_handler=self.__create_tubes_channel_cb,
-            error_handler=self.__tubes_error_handler_cb,
-            dbus_interface=TelepathyGLib.IFACE_CONNECTION)
-
     def __create_text_channel_cb(self, channel_path):
-        _Channel(self._connection.requested_bus_name, channel_path,
-                ready_handler=self.__text_channel_ready_cb)
-
-    def __create_tubes_channel_cb(self, channel_path):
-        _Channel(self._connection.requested_bus_name, channel_path,
-                ready_handler=self.__tubes_channel_ready_cb)
-
-    def __tubes_error_handler_cb(self, error):
-        if (error.get_dbus_name() ==
-                'org.freedesktop.Telepathy.Error.NotImplemented'):
-            self._tubes_supported = False
-            self._tubes_ready()
-        else:
-            self._finished = True
-            self.emit('finished', error)
+        self.obj = dbus.Bus().get_object(self._connection.requested_bus_name, channel_path)
+        self.channel_path = channel_path
+        self._add_self_to_channel()
 
     def __error_handler_cb(self, error):
         self._finished = True
         self.emit('finished', error)
-
-    def __tubes_channel_ready_cb(self, channel):
-        _logger.debug('%r: Tubes channel %r is ready' % (self, channel))
-        self.tubes_channel = channel
-        self._tubes_ready()
-
-    def __text_channel_ready_cb(self, channel):
-        _logger.debug('%r: Text channel %r is ready' % (self, channel))
-        self.text_channel = channel
-        self._tubes_ready()
-
-    def _tubes_ready(self):
-        if self.text_channel is None or \
-                (self._tubes_supported and self.tubes_channel is None):
-            return
-
-        _logger.debug('%r: finished setting up tubes' % self)
-
-        self._add_self_to_channel()
 
     def __text_channel_group_flags_changed_cb(self, added, removed):
         _logger.debug(
@@ -690,7 +599,7 @@ class _JoinCommand(_BaseCommand):
         # FIXME: cope with non-Group channels here if we want to support
         # non-OLPC-compatible IMs
 
-        group = self.text_channel[TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP]
+        group = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP)
 
         def got_all_members(members, local_pending, remote_pending):
             _logger.debug('got_all_members members %r local_pending %r '
@@ -752,89 +661,5 @@ class _JoinCommand(_BaseCommand):
         if self_handle not in added:
             return
 
-        # Use RoomConfig1 to configure the text channel. If this
-        # doesn't exist, fall-back on old-style IFACE_PROPERTIES_INTERFACE.
-        if TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG in self.text_channel:
-            self.__update_room_config()
-        elif TelepathyGLib.IFACE_PROPERTIES_INTERFACE in self.text_channel:
-            self.text_channel[TelepathyGLib.IFACE_PROPERTIES_INTERFACE].ListProperties(
-                reply_handler=self.__list_properties_cb,
-                error_handler=self.__error_handler_cb)
-        else:
-            # FIXME: when does this codepath get hit?
-            # It could be related to no property configuration being available
-            # in the selected backend, or it could be called at some stage
-            # of the protocol when properties aren't available yet.
-            self._finished = True
-            self.emit('finished', None)
-
-    def __update_room_config(self):
-        # FIXME: invite-only ought to be set on private activities; but
-        # since only the owner can change invite-only, that would break
-        # activity scope changes.
-        props = {
-            # otherwise buddy resolution breaks
-            'Anonymous': False,
-            # anyone who knows about the channel can join
-            'InviteOnly': False,
-            # vanish when there are no members
-            'Persistent': False,
-            # don't appear in server room lists
-            'Private': True,
-        }
-        room_cfg = self.text_channel[TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG]
-        room_cfg.UpdateConfiguration(props,
-                                     reply_handler=self.__room_cfg_updated_cb,
-                                     error_handler=self.__room_cfg_error_cb)
-
-    def __room_cfg_updated_cb(self):
-        self._finished = True
-        self.emit('finished', None)
-
-    def __room_cfg_error_cb(self, error):
-        # If RoomConfig update fails, it's probably because we don't have
-        # permission (e.g. we are not the session initiator). Thats OK -
-        # ignore the failure and carry on.
-        if (error.get_dbus_name() !=
-                'org.freedesktop.Telepathy.Error.PermissionDenied'):
-            logging.error("Error setting room configuration: %s", error)
-        self._finished = True
-        self.emit('finished', None)
-
-    def __list_properties_cb(self, prop_specs):
-        # FIXME: invite-only ought to be set on private activities; but
-        # since only the owner can change invite-only, that would break
-        # activity scope changes.
-        props = {
-            # otherwise buddy resolution breaks
-            'anonymous': False,
-            # anyone who knows about the channel can join
-            'invite-only': False,
-            # so non-owners can invite others
-            'invite-restricted': False,
-            # vanish when there are no members
-            'persistent': False,
-            # don't appear in server room lists
-            'private': True,
-        }
-        props_to_set = []
-        for ident, name, sig_, flags in prop_specs:
-            value = props.pop(name, None)
-            if value is not None:
-                if flags & TelepathyGLib.PropertyFlags.WRITE:
-                    props_to_set.append((ident, value))
-                # FIXME: else error, but only if we're creating the room?
-        # FIXME: if props is nonempty, then we want to set props that aren't
-        # supported here - raise an error?
-
-        if props_to_set:
-            self.text_channel[TelepathyGLib.IFACE_PROPERTIES_INTERFACE].SetProperties(
-                props_to_set, reply_handler=self.__set_properties_cb,
-                error_handler=self.__error_handler_cb)
-        else:
-            self._finished = True
-            self.emit('finished', None)
-
-    def __set_properties_cb(self):
         self._finished = True
         self.emit('finished', None)
