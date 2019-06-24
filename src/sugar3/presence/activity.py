@@ -582,6 +582,16 @@ class _JoinCommand(_BaseCommand):
     def __create_text_channel_cb(self, channel_path):
         self.obj = dbus.Bus().get_object(self._connection.requested_bus_name, channel_path)
         self.channel_path = channel_path
+        self._valid_interfaces = set()
+        channel_type = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL).GetChannelType()
+        self._valid_interfaces.add(channel_type)
+
+        dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL).GetInterfaces(
+            reply_handler=self.__text_channel_ready_cb,
+            error_handler=self.__error_handler_cb)
+
+    def __text_channel_ready_cb(self, interfaces):
+        self._valid_interfaces.update(interfaces)
         self._add_self_to_channel()
 
     def __error_handler_cb(self, error):
@@ -661,5 +671,89 @@ class _JoinCommand(_BaseCommand):
         if self_handle not in added:
             return
 
+        # Use RoomConfig1 to configure the text channel. If this
+        # doesn't exist, fall-back on old-style IFACE_PROPERTIES_INTERFACE.
+        if TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG in self._valid_interfaces:
+            self.__update_room_config()
+        elif TelepathyGLib.IFACE_PROPERTIES_INTERFACE in self._valid_interfaces:
+            dbus.Interface(self.obj, TelepathyGLib.IFACE_PROPERTIES_INTERFACE).ListProperties(
+                reply_handler=self.__list_properties_cb,
+                error_handler=self.__error_handler_cb)
+        else:
+            # FIXME: when does this codepath get hit?
+            # It could be related to no property configuration being available
+            # in the selected backend, or it could be called at some stage
+            # of the protocol when properties aren't available yet.
+            self._finished = True
+            self.emit('finished', None)
+
+    def __update_room_config(self):
+        # FIXME: invite-only ought to be set on private activities; but
+        # since only the owner can change invite-only, that would break
+        # activity scope changes.
+        props = {
+            # otherwise buddy resolution breaks
+            'Anonymous': False,
+            # anyone who knows about the channel can join
+            'InviteOnly': False,
+            # vanish when there are no members
+            'Persistent': False,
+            # don't appear in server room lists
+            'Private': True,
+        }
+        room_cfg = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG)
+        room_cfg.UpdateConfiguration(props,
+                                     reply_handler=self.__room_cfg_updated_cb,
+                                     error_handler=self.__room_cfg_error_cb)
+
+    def __room_cfg_updated_cb(self):
+        self._finished = True
+        self.emit('finished', None)
+
+    def __room_cfg_error_cb(self, error):
+        # If RoomConfig update fails, it's probably because we don't have
+        # permission (e.g. we are not the session initiator). Thats OK -
+        # ignore the failure and carry on.
+        if (error.get_dbus_name() !=
+                'org.freedesktop.Telepathy.Error.PermissionDenied'):
+            logging.error("Error setting room configuration: %s", error)
+        self._finished = True
+        self.emit('finished', None)
+
+    def __list_properties_cb(self, prop_specs):
+        # FIXME: invite-only ought to be set on private activities; but
+        # since only the owner can change invite-only, that would break
+        # activity scope changes.
+        props = {
+            # otherwise buddy resolution breaks
+            'anonymous': False,
+            # anyone who knows about the channel can join
+            'invite-only': False,
+            # so non-owners can invite others
+            'invite-restricted': False,
+            # vanish when there are no members
+            'persistent': False,
+            # don't appear in server room lists
+            'private': True,
+        }
+        props_to_set = []
+        for ident, name, sig_, flags in prop_specs:
+            value = props.pop(name, None)
+            if value is not None:
+                if flags & TelepathyGLib.PropertyFlags.WRITE:
+                    props_to_set.append((ident, value))
+                # FIXME: else error, but only if we're creating the room?
+        # FIXME: if props is nonempty, then we want to set props that aren't
+        # supported here - raise an error?
+
+        if props_to_set:
+            dbus.Interface(self.obj, TelepathyGLib.IFACE_PROPERTIES_INTERFACE).SetProperties(
+                props_to_set, reply_handler=self.__set_properties_cb,
+                error_handler=self.__error_handler_cb)
+        else:
+            self._finished = True
+            self.emit('finished', None)
+
+    def __set_properties_cb(self):
         self._finished = True
         self.emit('finished', None)
