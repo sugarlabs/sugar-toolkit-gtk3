@@ -21,11 +21,6 @@ STABLE.
 """
 
 import logging
-
-import gi
-gi.require_version('TelepathyGLib', '0.12')
-from gi.repository import GObject
-from gi.repository import TelepathyGLib
 import dbus
 import dbus.exceptions
 from dbus import PROPERTIES_IFACE
@@ -34,8 +29,20 @@ from sugar3.presence.buddy import Buddy, Owner
 from sugar3.presence.activity import Activity
 from sugar3.presence.connectionmanager import get_connection_manager
 
+from gi.repository import GObject
+from gi.repository import TelepathyGLib
 
 _logger = logging.getLogger('sugar3.presence.presenceservice')
+
+ACCOUNT_MANAGER_SERVICE = TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME
+ACCOUNT_MANAGER_PATH = TelepathyGLib.ACCOUNT_MANAGER_OBJECT_PATH
+ACCOUNT_MANAGER = TelepathyGLib.IFACE_ACCOUNT_MANAGER
+
+ACCOUNT = TelepathyGLib.IFACE_ACCOUNT
+
+HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+
+CONNECTION = TelepathyGLib.IFACE_CONNECTION
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
@@ -141,26 +148,26 @@ class PresenceService(GObject.GObject):
                 The object path of the Telepathy connection
             `handle` : int or long
                 The handle of a Telepathy contact on that connection,
-                of type HandleType.CONTACT. This may not be a
+                of type HANDLE_TYPE_CONTACT. This may not be a
                 channel-specific handle.
         :Returns: the Buddy object, or None if the buddy is not found
         """
 
         bus = dbus.Bus()
-        obj = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, TelepathyGLib.ACCOUNT_MANAGER_OBJECT_PATH)
-        account_manager = dbus.Interface(obj, TelepathyGLib.IFACE_ACCOUNT_MANAGER)
-        account_paths = account_manager.Get(TelepathyGLib.IFACE_ACCOUNT_MANAGER, 'ValidAccounts',
+        obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, ACCOUNT_MANAGER_PATH)
+        account_manager = dbus.Interface(obj, ACCOUNT_MANAGER)
+        account_paths = account_manager.Get(ACCOUNT_MANAGER, 'ValidAccounts',
                                             dbus_interface=PROPERTIES_IFACE)
         for account_path in account_paths:
-            obj = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, account_path)
-            connection_path = obj.Get(TelepathyGLib.IFACE_ACCOUNT, 'Connection')
+            obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
+            connection_path = obj.Get(ACCOUNT, 'Connection')
             if connection_path == tp_conn_path:
                 connection_name = connection_path.replace('/', '.')[1:]
                 connection = bus.get_object(connection_name, connection_path)
                 contact_ids = connection.InspectHandles(
-                    TelepathyGLib.HandleType.CONTACT,
+                    HANDLE_TYPE_CONTACT,
                     [handle],
-                    dbus_interface=TelepathyGLib.IFACE_CONNECTION)
+                    dbus_interface=CONNECTION)
                 return self.get_buddy(account_path, contact_ids[0])
 
         raise ValueError('Unknown buddy in connection %s with handle %d' %
@@ -223,8 +230,8 @@ class PresenceService(GObject.GObject):
                               self.__share_activity_error_cb)
 
     def get_preferred_connection(self):
-        """Gets the preferred TelepathyGLib connection object that an activity
-        should use when talking directly to TelepathyGLib
+        """Gets the preferred telepathy connection object that an activity
+        should use when talking directly to telepathy
 
         returns the bus name and the object path of the Telepathy connection
         """

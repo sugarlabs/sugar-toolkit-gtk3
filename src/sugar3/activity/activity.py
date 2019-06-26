@@ -217,6 +217,14 @@ N_BUS_NAME = 'org.freedesktop.Notifications'
 N_OBJ_PATH = '/org/freedesktop/Notifications'
 N_IFACE_NAME = 'org.freedesktop.Notifications'
 
+CHANNEL = TelepathyGLib.IFACE_CHANNEL
+CHANNEL_TYPE_TEXT = TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT
+CLIENT = TelepathyGLib.IFACE_CLIENT
+CLIENT_HANDLER = TelepathyGLib.IFACE_CLIENT_HANDLER
+
+CONNECTION_HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+CONNECTION_HANDLE_TYPE_ROOM = TelepathyGLib.HandleType.ROOM
+
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
 PREVIEW_SIZE = style.zoom(300), style.zoom(225)
@@ -541,11 +549,11 @@ class Activity(Window, Gtk.Container):
         logging.debug('Activity.__got_channel_cb')
         pservice = presenceservice.get_instance()
 
-        if handle_type == TelepathyGLib.HandleType.ROOM:
+        if handle_type == CONNECTION_HANDLE_TYPE_ROOM:
             connection_name = connection_path.replace('/', '.')[1:]
             bus = dbus.SessionBus()
             channel = bus.get_object(connection_name, channel_path)
-            room_handle = channel.Get(TelepathyGLib.IFACE_CHANNEL, 'TargetHandle')
+            room_handle = channel.Get(CHANNEL, 'TargetHandle')
             mesh_instance = pservice.get_activity_by_handle(connection_path,
                                                             room_handle)
         else:
@@ -1415,36 +1423,36 @@ class Activity(Window, Gtk.Container):
 
 class _ClientHandler(dbus.service.Object):
     def __init__(self, bundle_id, got_channel_cb):
-        self._interfaces = set([TelepathyGLib.IFACE_CLIENT, TelepathyGLib.IFACE_CLIENT_HANDLER, PROPERTIES_IFACE])
+        self._interfaces = set([CLIENT, CLIENT_HANDLER, PROPERTIES_IFACE])
         self._got_channel_cb = got_channel_cb
 
         bus = dbus.Bus()
-        name = TelepathyGLib.IFACE_CLIENT + '.' + bundle_id
+        name = CLIENT + '.' + bundle_id
         bus_name = dbus.service.BusName(name, bus=bus)
 
         path = '/' + name.replace('.', '/')
         dbus.service.Object.__init__(self, bus_name, path)
 
         self._prop_getters = {}
-        self._prop_getters.setdefault(TelepathyGLib.IFACE_CLIENT, {}).update({
+        self._prop_getters.setdefault(CLIENT, {}).update({
             'Interfaces': lambda: list(self._interfaces),
         })
-        self._prop_getters.setdefault(TelepathyGLib.IFACE_CLIENT_HANDLER, {}).update({
+        self._prop_getters.setdefault(CLIENT_HANDLER, {}).update({
             'HandlerChannelFilter': self.__get_filters_cb,
         })
 
     def __get_filters_cb(self):
         logging.debug('__get_filters_cb')
         filters = {
-            TelepathyGLib.IFACE_CHANNEL + '.ChannelType': TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT,
-            TelepathyGLib.IFACE_CHANNEL + '.TargetHandleType': TelepathyGLib.HandleType.CONTACT,
+            CHANNEL + '.ChannelType': CHANNEL_TYPE_TEXT,
+            CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
         }
         filter_dict = dbus.Dictionary(filters, signature='sv')
         logging.debug('__get_filters_cb %r' % dbus.Array([filter_dict],
                                                          signature='a{sv}'))
         return dbus.Array([filter_dict], signature='a{sv}')
 
-    @dbus.service.method(dbus_interface=TelepathyGLib.IFACE_CLIENT_HANDLER,
+    @dbus.service.method(dbus_interface=CLIENT_HANDLER,
                          in_signature='ooa(oa{sv})aota{sv}', out_signature='')
     def HandleChannels(self, account, connection, channels, requests_satisfied,
                        user_action_time, handler_info):
@@ -1453,9 +1461,9 @@ class _ClientHandler(dbus.service.Object):
                           user_action_time, handler_info))
         try:
             for object_path, properties in channels:
-                channel_type = properties[TelepathyGLib.IFACE_CHANNEL + '.ChannelType']
-                handle_type = properties[TelepathyGLib.IFACE_CHANNEL + '.TargetHandleType']
-                if channel_type == TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT:
+                channel_type = properties[CHANNEL + '.ChannelType']
+                handle_type = properties[CHANNEL + '.TargetHandleType']
+                if channel_type == CHANNEL_TYPE_TEXT:
                     self._got_channel_cb(connection, object_path, handle_type)
         except Exception as e:
             logging.exception(e)

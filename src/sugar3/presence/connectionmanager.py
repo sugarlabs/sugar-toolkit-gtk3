@@ -21,11 +21,22 @@ UNSTABLE. It should really be internal to the sugar3.presence package.
 
 from functools import partial
 
-import gi
-gi.require_version('TelepathyGLib', '0.12')
-from gi.repository import TelepathyGLib
 import dbus
 from dbus import PROPERTIES_IFACE
+
+from gi.repository import TelepathyGLib
+
+ACCOUNT_MANAGER_SERVICE = TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME
+ACCOUNT_MANAGER_PATH = TelepathyGLib.ACCOUNT_MANAGER_OBJECT_PATH
+ACCOUNT_MANAGER = TelepathyGLib.IFACE_ACCOUNT_MANAGER
+
+ACCOUNT = TelepathyGLib.IFACE_ACCOUNT
+
+HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+
+CONNECTION = TelepathyGLib.IFACE_CONNECTION
+
+CONNECTION_STATUS_CONNECTED = TelepathyGLib.ConnectionStatus.CONNECTED
 
 
 class Connection(object):
@@ -36,22 +47,22 @@ class Connection(object):
 
 
 class ConnectionManager(object):
-    """Track available TelepathyGLib connections"""
+    """Track available telepathy connections"""
 
     def __init__(self):
         self._connections_per_account = {}
 
         bus = dbus.SessionBus()
-        obj = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, TelepathyGLib.ACCOUNT_MANAGER_OBJECT_PATH)
-        account_manager = dbus.Interface(obj, TelepathyGLib.IFACE_ACCOUNT_MANAGER)
-        account_paths = account_manager.Get(TelepathyGLib.IFACE_ACCOUNT_MANAGER, 'ValidAccounts',
+        obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, ACCOUNT_MANAGER_PATH)
+        account_manager = dbus.Interface(obj, ACCOUNT_MANAGER)
+        account_paths = account_manager.Get(ACCOUNT_MANAGER, 'ValidAccounts',
                                             dbus_interface=PROPERTIES_IFACE)
         for account_path in account_paths:
-            obj = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, account_path)
+            obj = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
             obj.connect_to_signal('AccountPropertyChanged',
                                   partial(self.__account_property_changed_cb,
                                           account_path))
-            connection_path = obj.Get(TelepathyGLib.IFACE_ACCOUNT, 'Connection')
+            connection_path = obj.Get(ACCOUNT, 'Connection')
             if connection_path != '/':
                 self._track_connection(account_path, connection_path)
 
@@ -74,15 +85,15 @@ class ConnectionManager(object):
         self._connections_per_account[account_path] = \
             Connection(account_path, connection)
 
-        account = bus.get_object(TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME, account_path)
-        status = account.Get(TelepathyGLib.IFACE_ACCOUNT, 'ConnectionStatus')
-        if status == TelepathyGLib.ConnectionStatus.CONNECTED:
+        account = bus.get_object(ACCOUNT_MANAGER_SERVICE, account_path)
+        status = account.Get(ACCOUNT, 'ConnectionStatus')
+        if status == CONNECTION_STATUS_CONNECTED:
             self._connections_per_account[account_path].connected = True
         else:
             self._connections_per_account[account_path].connected = False
 
     def __status_changed_cb(self, account_path, status, reason):
-        if status == TelepathyGLib.ConnectionStatus.CONNECTED:
+        if status == CONNECTION_STATUS_CONNECTED:
             self._connections_per_account[account_path].connected = True
         else:
             self._connections_per_account[account_path].connected = False
