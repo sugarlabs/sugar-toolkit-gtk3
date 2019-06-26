@@ -34,6 +34,22 @@ from gi.repository import TelepathyGLib
 
 from sugar3.presence.buddy import Buddy
 
+CHANNEL = TelepathyGLib.IFACE_CHANNEL
+CHANNEL_INTERFACE_GROUP = TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP
+CONN_INTERFACE_ROOM_CONFIG = \
+    TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG
+CHANNEL_TYPE_TUBES = TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES
+CHANNEL_TYPE_TEXT = TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT
+CONNECTION = TelepathyGLib.IFACE_CONNECTION
+PROPERTIES_INTERFACE = TelepathyGLib.IFACE_PROPERTIES_INTERFACE
+
+# from telepathy.constants import
+CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES = \
+    TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES
+HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+HANDLE_TYPE_ROOM = TelepathyGLib.HandleType.ROOM
+PROPERTY_FLAG_WRITE = TelepathyGLib.PropertyFlags.WRITE
+
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 
@@ -242,7 +258,7 @@ class Activity(GObject.GObject):
         return list(self._joined_buddies.values())
 
     def get_buddy_by_handle(self, handle):
-        """Retrieve the Buddy object given a TelepathyGLib handle.
+        """Retrieve the Buddy object given a telepathy handle.
 
         buddy object paths are cached in self._handle_to_buddy_path,
         so we can get the buddy without calling PS.
@@ -262,10 +278,10 @@ class Activity(GObject.GObject):
         if not self._joined:
             raise RuntimeError('Cannot invite a buddy to an activity that is'
                                'not shared.')
-        chan = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL)
+        chan = dbus.Interface(self.obj, CHANNEL)
         chan.AddMembers(
             [buddy.contact_handle], message,
-            dbus_interface=TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP,
+            dbus_interface=CHANNEL_INTERFACE_GROUP,
             reply_handler=partial(
                 self.__invite_cb, response_cb),
             error_handler=partial(self.__invite_cb, response_cb))
@@ -287,7 +303,7 @@ class Activity(GObject.GObject):
         self._start_tracking_channel()
 
     def _start_tracking_buddies(self):
-        group = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP)
+        group = dbus.Interface(self.obj, CHANNEL_INTERFACE_GROUP)
 
         group.GetAllMembers(reply_handler=self.__get_all_members_cb,
                             error_handler=self.__error_handler_cb)
@@ -296,7 +312,7 @@ class Activity(GObject.GObject):
                                 self.__text_channel_members_changed_cb)
 
     def _start_tracking_channel(self):
-        channel = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL)
+        channel = dbus.Interface(self.obj, CHANNEL)
         channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
     def __get_all_members_cb(self, members, local_pending, remote_pending):
@@ -314,15 +330,15 @@ class Activity(GObject.GObject):
     def _resolve_handles(self, input_handles, reply_cb):
         def get_handle_owners_cb(handles):
             self.telepathy_conn.InspectHandles(
-                TelepathyGLib.HandleType.CONTACT, handles,
+                HANDLE_TYPE_CONTACT, handles,
                 reply_handler=reply_cb,
                 error_handler=self.__error_handler_cb,
-                dbus_interface=TelepathyGLib.IFACE_CONNECTION)
+                dbus_interface=CONNECTION)
 
         if self._text_channel_group_flags & \
-                TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES:
+                CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
 
-            group = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP)
+            group = dbus.Interface(self.obj, CHANNEL_INTERFACE_GROUP)
             group.GetHandleOwners(input_handles,
                                   reply_handler=get_handle_owners_cb,
                                   error_handler=self.__error_handler_cb)
@@ -476,7 +492,7 @@ class Activity(GObject.GObject):
     def leave(self):
         """Leave this shared activity"""
         _logger.debug('%r: leaving' % self)
-        chan = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL)
+        chan = dbus.Interface(self.obj, CHANNEL)
         chan.Close()
 
 
@@ -508,11 +524,11 @@ class _ShareCommand(_BaseCommand):
 
     def run(self):
         self._connection.RequestHandles(
-            TelepathyGLib.HandleType.ROOM,
+            HANDLE_TYPE_ROOM,
             [self._activity_id],
             reply_handler=self.__got_handles_cb,
             error_handler=self.__error_handler_cb,
-            dbus_interface=TelepathyGLib.IFACE_CONNECTION)
+            dbus_interface=CONNECTION)
 
     def __got_handles_cb(self, handles):
         logging.debug('__got_handles_cb %r' % handles)
@@ -563,7 +579,7 @@ class _JoinCommand(_BaseCommand):
         if self._finished:
             raise RuntimeError('This command has already finished')
 
-        self._connection.Get(TelepathyGLib.IFACE_CONNECTION, 'SelfHandle',
+        self._connection.Get(CONNECTION, 'SelfHandle',
                              reply_handler=self.__get_self_handle_cb,
                              error_handler=self.__error_handler_cb,
                              dbus_interface=PROPERTIES_IFACE)
@@ -572,21 +588,21 @@ class _JoinCommand(_BaseCommand):
         self._global_self_handle = handle
 
         self._connection.RequestChannel(
-            TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT,
-            TelepathyGLib.HandleType.ROOM,
+            CHANNEL_TYPE_TEXT,
+            HANDLE_TYPE_ROOM,
             self.room_handle, True,
             reply_handler=self.__create_text_channel_cb,
             error_handler=self.__error_handler_cb,
-            dbus_interface=TelepathyGLib.IFACE_CONNECTION)
+            dbus_interface=CONNECTION)
 
     def __create_text_channel_cb(self, channel_path):
         self.obj = dbus.Bus().get_object(self._connection.requested_bus_name, channel_path)
         self.channel_path = channel_path
         self._valid_interfaces = set()
-        channel_type = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL).GetChannelType()
+        channel_type = dbus.Interface(self.obj, CHANNEL).GetChannelType()
         self._valid_interfaces.add(channel_type)
 
-        dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL).GetInterfaces(
+        dbus.Interface(self.obj, CHANNEL).GetInterfaces(
             reply_handler=self.__text_channel_ready_cb,
             error_handler=self.__error_handler_cb)
 
@@ -609,7 +625,7 @@ class _JoinCommand(_BaseCommand):
         # FIXME: cope with non-Group channels here if we want to support
         # non-OLPC-compatible IMs
 
-        group = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP)
+        group = dbus.Interface(self.obj, CHANNEL_INTERFACE_GROUP)
 
         def got_all_members(members, local_pending, remote_pending):
             _logger.debug('got_all_members members %r local_pending %r '
@@ -617,7 +633,7 @@ class _JoinCommand(_BaseCommand):
                                                  remote_pending))
 
             if self.text_channel_group_flags & \
-                    TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES:
+                    CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
                 self_handle = self.channel_self_handle
             else:
                 self_handle = self._global_self_handle
@@ -663,7 +679,7 @@ class _JoinCommand(_BaseCommand):
                               self.channel_self_handle))
 
         if self.text_channel_group_flags & \
-                TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES:
+                CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
             self_handle = self.channel_self_handle
         else:
             self_handle = self._global_self_handle
@@ -672,11 +688,11 @@ class _JoinCommand(_BaseCommand):
             return
 
         # Use RoomConfig1 to configure the text channel. If this
-        # doesn't exist, fall-back on old-style IFACE_PROPERTIES_INTERFACE.
-        if TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG in self._valid_interfaces:
+        # doesn't exist, fall-back on old-style PROPERTIES_INTERFACE.
+        if CONN_INTERFACE_ROOM_CONFIG in self._valid_interfaces:
             self.__update_room_config()
-        elif TelepathyGLib.IFACE_PROPERTIES_INTERFACE in self._valid_interfaces:
-            dbus.Interface(self.obj, TelepathyGLib.IFACE_PROPERTIES_INTERFACE).ListProperties(
+        elif PROPERTIES_INTERFACE in self._valid_interfaces:
+            dbus.Interface(self.obj, PROPERTIES_INTERFACE).ListProperties(
                 reply_handler=self.__list_properties_cb,
                 error_handler=self.__error_handler_cb)
         else:
@@ -701,7 +717,7 @@ class _JoinCommand(_BaseCommand):
             # don't appear in server room lists
             'Private': True,
         }
-        room_cfg = dbus.Interface(self.obj, TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG)
+        room_cfg = dbus.Interface(self.obj, CONN_INTERFACE_ROOM_CONFIG)
         room_cfg.UpdateConfiguration(props,
                                      reply_handler=self.__room_cfg_updated_cb,
                                      error_handler=self.__room_cfg_error_cb)
@@ -740,14 +756,14 @@ class _JoinCommand(_BaseCommand):
         for ident, name, sig_, flags in prop_specs:
             value = props.pop(name, None)
             if value is not None:
-                if flags & TelepathyGLib.PropertyFlags.WRITE:
+                if flags & PROPERTY_FLAG_WRITE:
                     props_to_set.append((ident, value))
                 # FIXME: else error, but only if we're creating the room?
         # FIXME: if props is nonempty, then we want to set props that aren't
         # supported here - raise an error?
 
         if props_to_set:
-            dbus.Interface(self.obj, TelepathyGLib.IFACE_PROPERTIES_INTERFACE).SetProperties(
+            dbus.Interface(self.obj, PROPERTIES_INTERFACE).SetProperties(
                 props_to_set, reply_handler=self.__set_properties_cb,
                 error_handler=self.__error_handler_cb)
         else:
