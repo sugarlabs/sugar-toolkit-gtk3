@@ -43,7 +43,6 @@ CHANNEL_TYPE_TEXT = TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT
 CONNECTION = TelepathyGLib.IFACE_CONNECTION
 PROPERTIES_INTERFACE = TelepathyGLib.IFACE_PROPERTIES_INTERFACE
 
-# from telepathy.constants import
 CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES = \
     TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES
 HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
@@ -107,6 +106,8 @@ class Activity(GObject.GObject):
 
         self._account_path = account_path
         self.telepathy_conn = connection
+        self.telepathy_text_chan = None
+        self.telepathy_tubes_chan = None
 
         self.room_handle = room_handle
         self._join_command = None
@@ -278,8 +279,7 @@ class Activity(GObject.GObject):
         if not self._joined:
             raise RuntimeError('Cannot invite a buddy to an activity that is'
                                'not shared.')
-        chan = dbus.Interface(self.obj, CHANNEL)
-        chan.AddMembers(
+        self.telepathy_text_chan[CHANNEL].AddMembers(
             [buddy.contact_handle], message,
             dbus_interface=CHANNEL_INTERFACE_GROUP,
             reply_handler=partial(
@@ -296,14 +296,15 @@ class Activity(GObject.GObject):
         _logger.debug('%r: Join finished %r' % (self, error))
         if error is not None:
             self.emit('joined', error is None, str(error))
-        self.obj = join_command.obj
+        self.telepathy_text_chan = join_command.text_channel
+        self.telepathy_tubes_chan = join_command.tubes_channel
         self._channel_self_handle = join_command.channel_self_handle
         self._text_channel_group_flags = join_command.text_channel_group_flags
         self._start_tracking_buddies()
         self._start_tracking_channel()
 
     def _start_tracking_buddies(self):
-        group = dbus.Interface(self.obj, CHANNEL_INTERFACE_GROUP)
+        group = self.telepathy_text_chan[CHANNEL_INTERFACE_GROUP]
 
         group.GetAllMembers(reply_handler=self.__get_all_members_cb,
                             error_handler=self.__error_handler_cb)
@@ -312,7 +313,7 @@ class Activity(GObject.GObject):
                                 self.__text_channel_members_changed_cb)
 
     def _start_tracking_channel(self):
-        channel = dbus.Interface(self.obj, CHANNEL)
+        channel = self.telepathy_text_chan[CHANNEL]
         channel.connect_to_signal('Closed', self.__text_channel_closed_cb)
 
     def __get_all_members_cb(self, members, local_pending, remote_pending):
@@ -338,7 +339,7 @@ class Activity(GObject.GObject):
         if self._text_channel_group_flags & \
                 CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
 
-            group = dbus.Interface(self.obj, CHANNEL_INTERFACE_GROUP)
+            group = self.telepathy_text_chan[CHANNEL_INTERFACE_GROUP]
             group.GetHandleOwners(input_handles,
                                   reply_handler=get_handle_owners_cb,
                                   error_handler=self.__error_handler_cb)
@@ -428,8 +429,8 @@ class Activity(GObject.GObject):
         if error is None:
             self._joined = True
             self.room_handle = share_command.room_handle
-            self.obj = share_command.obj
-            self.channel_path = share_command.channel_path
+            self.telepathy_text_chan = share_command.text_channel
+            self.telepathy_tubes_chan = share_command.tubes_channel
             self._channel_self_handle = share_command.channel_self_handle
             self._text_channel_group_flags = \
                 share_command.text_channel_group_flags
@@ -478,8 +479,9 @@ class Activity(GObject.GObject):
         """
         bus_name = self.telepathy_conn.requested_bus_name
         connection_path = self.telepathy_conn.object_path
-        channels = [self.channel_path,
-                    self.channel_path]
+        channels = [self.telepathy_text_chan.object_path,
+                    self.telepathy_tubes_chan.object_path]
+
         _logger.debug('%r: bus name is %s, connection is %s, channels are %r' %
                       (self, bus_name, connection_path, channels))
         return bus_name, connection_path, channels
@@ -492,8 +494,7 @@ class Activity(GObject.GObject):
     def leave(self):
         """Leave this shared activity"""
         _logger.debug('%r: leaving' % self)
-        chan = dbus.Interface(self.obj, CHANNEL)
-        chan.Close()
+        self.telepathy_text_chan[CHANNEL].Close()
 
 
 class _BaseCommand(GObject.GObject):
@@ -505,7 +506,9 @@ class _BaseCommand(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
 
+        self.text_channel = None
         self.text_channel_group_flags = None
+        self.tubes_channel = None
         self.room_handle = None
         self.channel_self_handle = None
 
@@ -544,9 +547,10 @@ class _ShareCommand(_BaseCommand):
             self._finished = True
             self.emit('finished', error)
             return
-        self.obj = join_command.obj
+
+        self.text_channel = join_command.text_channel
         self.text_channel_group_flags = join_command.text_channel_group_flags
-        self.channel_path = join_command.channel_path
+        self.tubes_channel = join_command.tubes_channel
         self.channel_self_handle = join_command.channel_self_handle
 
         self._connection.AddActivity(
@@ -585,8 +589,10 @@ class _JoinCommand(_BaseCommand):
                              dbus_interface=PROPERTIES_IFACE)
 
     def __get_self_handle_cb(self, handle):
+        _logger.error('_JoinCommand.__get_self_handle_cb')
         self._global_self_handle = handle
 
+        self._text_ready = False
         self._connection.RequestChannel(
             CHANNEL_TYPE_TEXT,
             HANDLE_TYPE_ROOM,
@@ -595,24 +601,81 @@ class _JoinCommand(_BaseCommand):
             error_handler=self.__error_handler_cb,
             dbus_interface=CONNECTION)
 
-    def __create_text_channel_cb(self, channel_path):
-        self.obj = dbus.Bus().get_object(self._connection.requested_bus_name, channel_path)
-        self.channel_path = channel_path
-        self._valid_interfaces = set()
-        channel_type = dbus.Interface(self.obj, CHANNEL).GetChannelType()
-        self._valid_interfaces.add(channel_type)
+        self._tubes_ready = False
+        self._connection.RequestChannel(
+            CHANNEL_TYPE_TUBES,
+            HANDLE_TYPE_ROOM,
+            self.room_handle,
+            True,
+            reply_handler=self.__create_tubes_channel_cb,
+            error_handler=self.__tubes_error_handler_cb,
+            dbus_interface=CONNECTION)
 
-        dbus.Interface(self.obj, CHANNEL).GetInterfaces(
-            reply_handler=self.__text_channel_ready_cb,
+    def __create_text_channel_cb(self, channel_path):
+        _logger.error('_JoinCommand.__create_text_channel_cb %s' % channel_path)
+        self.text_channel = {}
+        self.text_proxy = dbus.Bus().get_object(
+            self._connection.requested_bus_name, channel_path)
+        self.text_channel[PROPERTIES_IFACE] = dbus.Interface(
+            self.text_proxy, PROPERTIES_IFACE)
+        self.text_channel[CHANNEL_TYPE_TEXT] = dbus.Interface(self.text_proxy, CHANNEL_TYPE_TEXT)
+        self.text_channel[CHANNEL] = dbus.Interface(self.text_proxy, CHANNEL)
+        self.text_channel[CHANNEL].GetInterfaces(
+            reply_handler=self.__text_get_interfaces_reply_cb,
             error_handler=self.__error_handler_cb)
 
-    def __text_channel_ready_cb(self, interfaces):
-        self._valid_interfaces.update(interfaces)
-        self._add_self_to_channel()
+    def __text_get_interfaces_reply_cb(self, interfaces):
+        _logger.error('_JoinCommand.__text_get_interfaces_reply_cb %r' % interfaces)
+        for interface in interfaces:
+            self.text_channel[interface] = dbus.Interface(
+                self.text_proxy, interface)
+        _logger.debug('%r: Text channel is ready' % (self))
+        self._text_ready = True
+        self._ready()
+
+    def __create_tubes_channel_cb(self, channel_path):
+        _logger.error('_JoinCommand.__create_tubes_channel_cb %s' % channel_path)
+        self.tubes_channel = {}
+        self.tubes_proxy = dbus.Bus().get_object(
+            self._connection.requested_bus_name, channel_path)
+        self.tubes_channel[PROPERTIES_IFACE] = dbus.Interface(
+            self.tubes_proxy, PROPERTIES_IFACE)
+        self.tubes_channel[CHANNEL_TYPE_TUBES] = dbus.Interface(self.tubes_proxy, CHANNEL_TYPE_TUBES)
+        self.tubes_channel[CHANNEL] = dbus.Interface(self.tubes_proxy, CHANNEL)
+        self.tubes_channel[CHANNEL].GetInterfaces(
+            reply_handler=self.__tubes_get_interfaces_reply_cb,
+            error_handler=self.__error_handler_cb)
+
+    def __tubes_get_interfaces_reply_cb(self, interfaces):
+        _logger.error('_JoinCommand.__tubes_get_interfaces_reply_cb %r' % interfaces)
+        for interface in interfaces:
+            self.tubes_channel[interface] = dbus.Interface(
+                self.tubes_proxy, interface)
+        _logger.debug('%r: Tubes channel is ready' % (self))
+        self._tubes_ready = True
+        self._ready()
+
+    def __tubes_error_handler_cb(self, error):
+        if (error.get_dbus_name() ==
+                'org.freedesktop.Telepathy.Error.NotImplemented'):
+            self._tubes_supported = False
+            self._ready()
+        else:
+            self._finished = True
+            self.emit('finished', error)
 
     def __error_handler_cb(self, error):
         self._finished = True
         self.emit('finished', error)
+
+    def _ready(self):
+        if not self._text_ready or \
+                (self._tubes_supported and not self._tubes_ready):
+            return
+
+        _logger.error('%r: finished setting up channel' % self)
+
+        self._add_self_to_channel()
 
     def __text_channel_group_flags_changed_cb(self, added, removed):
         _logger.debug(
@@ -625,7 +688,7 @@ class _JoinCommand(_BaseCommand):
         # FIXME: cope with non-Group channels here if we want to support
         # non-OLPC-compatible IMs
 
-        group = dbus.Interface(self.obj, CHANNEL_INTERFACE_GROUP)
+        group = self.text_channel[CHANNEL_INTERFACE_GROUP]
 
         def got_all_members(members, local_pending, remote_pending):
             _logger.debug('got_all_members members %r local_pending %r '
@@ -689,10 +752,10 @@ class _JoinCommand(_BaseCommand):
 
         # Use RoomConfig1 to configure the text channel. If this
         # doesn't exist, fall-back on old-style PROPERTIES_INTERFACE.
-        if CONN_INTERFACE_ROOM_CONFIG in self._valid_interfaces:
+        if CONN_INTERFACE_ROOM_CONFIG in self.text_channel:
             self.__update_room_config()
-        elif PROPERTIES_INTERFACE in self._valid_interfaces:
-            dbus.Interface(self.obj, PROPERTIES_INTERFACE).ListProperties(
+        elif PROPERTIES_INTERFACE in self.text_channel:
+            self.text_channel[PROPERTIES_INTERFACE].ListProperties(
                 reply_handler=self.__list_properties_cb,
                 error_handler=self.__error_handler_cb)
         else:
@@ -717,7 +780,7 @@ class _JoinCommand(_BaseCommand):
             # don't appear in server room lists
             'Private': True,
         }
-        room_cfg = dbus.Interface(self.obj, CONN_INTERFACE_ROOM_CONFIG)
+        room_cfg = self.text_channel[CONN_INTERFACE_ROOM_CONFIG]
         room_cfg.UpdateConfiguration(props,
                                      reply_handler=self.__room_cfg_updated_cb,
                                      error_handler=self.__room_cfg_error_cb)
@@ -763,7 +826,7 @@ class _JoinCommand(_BaseCommand):
         # supported here - raise an error?
 
         if props_to_set:
-            dbus.Interface(self.obj, PROPERTIES_INTERFACE).SetProperties(
+            self.text_channel[PROPERTIES_INTERFACE].SetProperties(
                 props_to_set, reply_handler=self.__set_properties_cb,
                 error_handler=self.__error_handler_cb)
         else:
