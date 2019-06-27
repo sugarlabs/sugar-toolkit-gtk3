@@ -589,7 +589,6 @@ class _JoinCommand(_BaseCommand):
                              dbus_interface=PROPERTIES_IFACE)
 
     def __get_self_handle_cb(self, handle):
-        _logger.error('_JoinCommand.__get_self_handle_cb')
         self._global_self_handle = handle
 
         self._text_ready = False
@@ -612,20 +611,19 @@ class _JoinCommand(_BaseCommand):
             dbus_interface=CONNECTION)
 
     def __create_text_channel_cb(self, channel_path):
-        _logger.error('_JoinCommand.__create_text_channel_cb %s' % channel_path)
         self.text_channel = {}
         self.text_proxy = dbus.Bus().get_object(
             self._connection.requested_bus_name, channel_path)
         self.text_channel[PROPERTIES_IFACE] = dbus.Interface(
             self.text_proxy, PROPERTIES_IFACE)
-        self.text_channel[CHANNEL_TYPE_TEXT] = dbus.Interface(self.text_proxy, CHANNEL_TYPE_TEXT)
+        self.text_channel[CHANNEL_TYPE_TEXT] = \
+            dbus.Interface(self.text_proxy, CHANNEL_TYPE_TEXT)
         self.text_channel[CHANNEL] = dbus.Interface(self.text_proxy, CHANNEL)
         self.text_channel[CHANNEL].GetInterfaces(
             reply_handler=self.__text_get_interfaces_reply_cb,
             error_handler=self.__error_handler_cb)
 
     def __text_get_interfaces_reply_cb(self, interfaces):
-        _logger.error('_JoinCommand.__text_get_interfaces_reply_cb %r' % interfaces)
         for interface in interfaces:
             self.text_channel[interface] = dbus.Interface(
                 self.text_proxy, interface)
@@ -634,20 +632,19 @@ class _JoinCommand(_BaseCommand):
         self._ready()
 
     def __create_tubes_channel_cb(self, channel_path):
-        _logger.error('_JoinCommand.__create_tubes_channel_cb %s' % channel_path)
         self.tubes_channel = {}
         self.tubes_proxy = dbus.Bus().get_object(
             self._connection.requested_bus_name, channel_path)
         self.tubes_channel[PROPERTIES_IFACE] = dbus.Interface(
             self.tubes_proxy, PROPERTIES_IFACE)
-        self.tubes_channel[CHANNEL_TYPE_TUBES] = dbus.Interface(self.tubes_proxy, CHANNEL_TYPE_TUBES)
+        self.tubes_channel[CHANNEL_TYPE_TUBES] = \
+            dbus.Interface(self.tubes_proxy, CHANNEL_TYPE_TUBES)
         self.tubes_channel[CHANNEL] = dbus.Interface(self.tubes_proxy, CHANNEL)
         self.tubes_channel[CHANNEL].GetInterfaces(
             reply_handler=self.__tubes_get_interfaces_reply_cb,
             error_handler=self.__error_handler_cb)
 
     def __tubes_get_interfaces_reply_cb(self, interfaces):
-        _logger.error('_JoinCommand.__tubes_get_interfaces_reply_cb %r' % interfaces)
         for interface in interfaces:
             self.tubes_channel[interface] = dbus.Interface(
                 self.tubes_proxy, interface)
@@ -673,7 +670,7 @@ class _JoinCommand(_BaseCommand):
                 (self._tubes_supported and not self._tubes_ready):
             return
 
-        _logger.error('%r: finished setting up channel' % self)
+        _logger.debug('%r: finished setting up channel' % self)
 
         self._add_self_to_channel()
 
