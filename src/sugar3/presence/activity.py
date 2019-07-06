@@ -25,27 +25,32 @@ import six
 import logging
 from functools import partial
 
+import gi
+gi.require_version('TelepathyGLib', '0.12')
 import dbus
 from dbus import PROPERTIES_IFACE
 from gi.repository import GObject
-from telepathy.client import Channel
-from telepathy.interfaces import CHANNEL, \
-    CHANNEL_INTERFACE_GROUP, \
-    CHANNEL_TYPE_TUBES, \
-    CHANNEL_TYPE_TEXT, \
-    CONNECTION, \
-    PROPERTIES_INTERFACE
-from telepathy.constants import CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES, \
-    HANDLE_TYPE_ROOM, \
-    HANDLE_TYPE_CONTACT, \
-    PROPERTY_FLAG_WRITE
+from gi.repository import TelepathyGLib
 
 from sugar3.presence.buddy import Buddy
 
+CHANNEL = TelepathyGLib.IFACE_CHANNEL
+CHANNEL_INTERFACE_GROUP = TelepathyGLib.IFACE_CHANNEL_INTERFACE_GROUP
+CONN_INTERFACE_ROOM_CONFIG = \
+    TelepathyGLib.IFACE_CHANNEL_INTERFACE_ROOM_CONFIG
+CHANNEL_TYPE_TUBES = TelepathyGLib.IFACE_CHANNEL_TYPE_TUBES
+CHANNEL_TYPE_TEXT = TelepathyGLib.IFACE_CHANNEL_TYPE_TEXT
+CONNECTION = TelepathyGLib.IFACE_CONNECTION
+PROPERTIES_INTERFACE = TelepathyGLib.IFACE_PROPERTIES_INTERFACE
+
+CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES = \
+    TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES
+HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+HANDLE_TYPE_ROOM = TelepathyGLib.HandleType.ROOM
+PROPERTY_FLAG_WRITE = TelepathyGLib.PropertyFlags.WRITE
+
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
-CONN_INTERFACE_ROOM_CONFIG = \
-    'org.freedesktop.Telepathy.Channel.Interface.RoomConfig1'
 
 _logger = logging.getLogger('sugar3.presence.activity')
 
@@ -274,7 +279,7 @@ class Activity(GObject.GObject):
         if not self._joined:
             raise RuntimeError('Cannot invite a buddy to an activity that is'
                                'not shared.')
-        self.telepathy_text_chan.AddMembers(
+        self.telepathy_text_chan[CHANNEL].AddMembers(
             [buddy.contact_handle], message,
             dbus_interface=CHANNEL_INTERFACE_GROUP,
             reply_handler=partial(
@@ -489,7 +494,7 @@ class Activity(GObject.GObject):
     def leave(self):
         """Leave this shared activity"""
         _logger.debug('%r: leaving' % self)
-        self.telepathy_text_chan.Close()
+        self.telepathy_text_chan[CHANNEL].Close()
 
 
 class _BaseCommand(GObject.GObject):
@@ -586,6 +591,7 @@ class _JoinCommand(_BaseCommand):
     def __get_self_handle_cb(self, handle):
         self._global_self_handle = handle
 
+        self._text_ready = False
         self._connection.RequestChannel(
             CHANNEL_TYPE_TEXT,
             HANDLE_TYPE_ROOM,
@@ -594,6 +600,7 @@ class _JoinCommand(_BaseCommand):
             error_handler=self.__error_handler_cb,
             dbus_interface=CONNECTION)
 
+        self._tubes_ready = False
         self._connection.RequestChannel(
             CHANNEL_TYPE_TUBES,
             HANDLE_TYPE_ROOM,
@@ -604,18 +611,52 @@ class _JoinCommand(_BaseCommand):
             dbus_interface=CONNECTION)
 
     def __create_text_channel_cb(self, channel_path):
-        Channel(self._connection.requested_bus_name, channel_path,
-                ready_handler=self.__text_channel_ready_cb)
+        self.text_channel = {}
+        self.text_proxy = dbus.Bus().get_object(
+            self._connection.requested_bus_name, channel_path)
+        self.text_channel[PROPERTIES_IFACE] = dbus.Interface(
+            self.text_proxy, PROPERTIES_IFACE)
+        self.text_channel[CHANNEL_TYPE_TEXT] = \
+            dbus.Interface(self.text_proxy, CHANNEL_TYPE_TEXT)
+        self.text_channel[CHANNEL] = dbus.Interface(self.text_proxy, CHANNEL)
+        self.text_channel[CHANNEL].GetInterfaces(
+            reply_handler=self.__text_get_interfaces_reply_cb,
+            error_handler=self.__error_handler_cb)
+
+    def __text_get_interfaces_reply_cb(self, interfaces):
+        for interface in interfaces:
+            self.text_channel[interface] = dbus.Interface(
+                self.text_proxy, interface)
+        _logger.debug('%r: Text channel is ready' % (self))
+        self._text_ready = True
+        self._ready()
 
     def __create_tubes_channel_cb(self, channel_path):
-        Channel(self._connection.requested_bus_name, channel_path,
-                ready_handler=self.__tubes_channel_ready_cb)
+        self.tubes_channel = {}
+        self.tubes_proxy = dbus.Bus().get_object(
+            self._connection.requested_bus_name, channel_path)
+        self.tubes_channel[PROPERTIES_IFACE] = dbus.Interface(
+            self.tubes_proxy, PROPERTIES_IFACE)
+        self.tubes_channel[CHANNEL_TYPE_TUBES] = \
+            dbus.Interface(self.tubes_proxy, CHANNEL_TYPE_TUBES)
+        self.tubes_channel[CHANNEL] = dbus.Interface(self.tubes_proxy, CHANNEL)
+        self.tubes_channel[CHANNEL].GetInterfaces(
+            reply_handler=self.__tubes_get_interfaces_reply_cb,
+            error_handler=self.__error_handler_cb)
+
+    def __tubes_get_interfaces_reply_cb(self, interfaces):
+        for interface in interfaces:
+            self.tubes_channel[interface] = dbus.Interface(
+                self.tubes_proxy, interface)
+        _logger.debug('%r: Tubes channel is ready' % (self))
+        self._tubes_ready = True
+        self._ready()
 
     def __tubes_error_handler_cb(self, error):
         if (error.get_dbus_name() ==
                 'org.freedesktop.Telepathy.Error.NotImplemented'):
             self._tubes_supported = False
-            self._tubes_ready()
+            self._ready()
         else:
             self._finished = True
             self.emit('finished', error)
@@ -624,22 +665,12 @@ class _JoinCommand(_BaseCommand):
         self._finished = True
         self.emit('finished', error)
 
-    def __tubes_channel_ready_cb(self, channel):
-        _logger.debug('%r: Tubes channel %r is ready' % (self, channel))
-        self.tubes_channel = channel
-        self._tubes_ready()
-
-    def __text_channel_ready_cb(self, channel):
-        _logger.debug('%r: Text channel %r is ready' % (self, channel))
-        self.text_channel = channel
-        self._tubes_ready()
-
-    def _tubes_ready(self):
-        if self.text_channel is None or \
-                (self._tubes_supported and self.tubes_channel is None):
+    def _ready(self):
+        if not self._text_ready or \
+                (self._tubes_supported and not self._tubes_ready):
             return
 
-        _logger.debug('%r: finished setting up tubes' % self)
+        _logger.debug('%r: finished setting up channel' % self)
 
         self._add_self_to_channel()
 

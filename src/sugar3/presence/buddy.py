@@ -22,18 +22,26 @@ STABLE.
 """
 
 import logging
+
 import six
+import gi
+gi.require_version('TelepathyGLib', '0.12')
 from gi.repository import GObject
 import dbus
-from telepathy.interfaces import CONNECTION, \
-    CONNECTION_INTERFACE_ALIASING, \
-    CONNECTION_INTERFACE_CONTACTS
-from telepathy.constants import HANDLE_TYPE_CONTACT
 
 from sugar3.presence.connectionmanager import get_connection_manager
 from sugar3.profile import get_color, get_nick_name
 
-ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
+from gi.repository import TelepathyGLib
+
+CONNECTION = TelepathyGLib.IFACE_CONNECTION
+CONNECTION_INTERFACE_ALIASING = \
+    TelepathyGLib.IFACE_CONNECTION_INTERFACE_ALIASING
+CONNECTION_INTERFACE_CONTACTS = \
+    TelepathyGLib.IFACE_CONNECTION_INTERFACE_CONTACTS
+
+HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+
 CONN_INTERFACE_BUDDY_INFO = 'org.laptop.Telepathy.BuddyInfo'
 
 _logger = logging.getLogger('sugar3.presence.buddy')

@@ -21,8 +21,6 @@ STABLE.
 """
 
 import logging
-
-from gi.repository import GObject
 import dbus
 import dbus.exceptions
 from dbus import PROPERTIES_IFACE
@@ -31,16 +29,20 @@ from sugar3.presence.buddy import Buddy, Owner
 from sugar3.presence.activity import Activity
 from sugar3.presence.connectionmanager import get_connection_manager
 
-from telepathy.interfaces import ACCOUNT, \
-    ACCOUNT_MANAGER, \
-    CONNECTION
-from telepathy.constants import HANDLE_TYPE_CONTACT
-
+from gi.repository import GObject
+from gi.repository import TelepathyGLib
 
 _logger = logging.getLogger('sugar3.presence.presenceservice')
 
-ACCOUNT_MANAGER_SERVICE = 'org.freedesktop.Telepathy.AccountManager'
-ACCOUNT_MANAGER_PATH = '/org/freedesktop/Telepathy/AccountManager'
+ACCOUNT_MANAGER_SERVICE = TelepathyGLib.ACCOUNT_MANAGER_BUS_NAME
+ACCOUNT_MANAGER_PATH = TelepathyGLib.ACCOUNT_MANAGER_OBJECT_PATH
+ACCOUNT_MANAGER = TelepathyGLib.IFACE_ACCOUNT_MANAGER
+
+ACCOUNT = TelepathyGLib.IFACE_ACCOUNT
+
+HANDLE_TYPE_CONTACT = TelepathyGLib.HandleType.CONTACT
+
+CONNECTION = TelepathyGLib.IFACE_CONNECTION
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 

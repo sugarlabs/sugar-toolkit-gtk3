@@ -19,11 +19,12 @@
 STABLE.
 """
 
-from telepathy.constants import (
-    CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES)
-
 from sugar3.presence.tubeconn import TubeConnection
 from sugar3.presence import presenceservice
+from gi.repository import TelepathyGLib
+
+CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES = \
+    TelepathyGLib.ChannelGroupFlags.CHANNEL_SPECIFIC_HANDLES
 
 
 class SugarTubeConnection(TubeConnection):
