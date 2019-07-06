@@ -202,7 +202,8 @@ from errno import EEXIST
 from gi.repository import SugarExt
 
 
-def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg):
+    return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 SCOPE_PRIVATE = 'private'
@@ -288,16 +289,26 @@ class Activity(Window, Gtk.Container):
     Initialise an Activity.
 
     Args:
-        handle (:class:`~sugar3.activity.activityhandle.ActivityHandle`): instance providing the activity id and access to the presence service which *may* provide sharing for this application
-        create_jobject (boolean): DEPRECATED: define if it should create a journal object if we are not resuming. The parameter is ignored, and always will be created a object in the Journal.
+        handle (:class:`~sugar3.activity.activityhandle.ActivityHandle`):
+            instance providing the activity id and access to the presence
+            service which *may* provide sharing for this application
+
+        create_jobject (boolean):
+            DEPRECATED: define if it should create a journal object if
+            we are not resuming. The parameter is ignored, and always
+            will be created a object in the Journal.
 
     **Signals:**
-        * **shared** - the activity has been shared on a network in order that other users may join,
-        * **joined** - the activity has joined with other instances of the activity to create a shared network activity.
+        * **shared** - the activity has been shared on a network in
+            order that other users may join,
+
+        * **joined** - the activity has joined with other instances of
+            the activity to create a shared network activity.
 
     Side effects:
 
-        * sets the gdk screen DPI setting (resolution) to the Sugar screen resolution.
+        * sets the gdk screen DPI setting (resolution) to the Sugar
+          screen resolution.
 
         * connects our "destroy" message to our _destroy_cb method.
 
@@ -1097,8 +1108,8 @@ class Activity(Window, Gtk.Container):
         '''
         self._invites_queue.append((account_path, contact_id))
 
-        if (self.shared_activity is None
-                or not self.shared_activity.props.joined):
+        if (self.shared_activity is None or
+                not self.shared_activity.props.joined):
             self.share(True)
         else:
             self._send_invites()
@@ -1473,7 +1484,7 @@ class _ClientHandler(dbus.service.Object):
                          in_signature='ss', out_signature='v')
     def Get(self, interface_name, property_name):
         if interface_name in self._prop_getters \
-            and property_name in self._prop_getters[interface_name]:
+           and property_name in self._prop_getters[interface_name]:
                 return self._prop_getters[interface_name][property_name]()
         else:
             logging.debug('InvalidArgument')
@@ -1482,7 +1493,7 @@ class _ClientHandler(dbus.service.Object):
                          in_signature='ssv', out_signature='')
     def Set(self, interface_name, property_name, value):
         if interface_name in self._prop_setters \
-            and property_name in self._prop_setters[interface_name]:
+           and property_name in self._prop_setters[interface_name]:
                 self._prop_setters[interface_name][property_name](value)
         else:
             logging.debug('PermissionDenied')
@@ -1497,6 +1508,7 @@ class _ClientHandler(dbus.service.Object):
             return r
         else:
             logging.debug('InvalidArgument')
+
 
 _session = None
 
