@@ -34,7 +34,8 @@ from sugar3.graphics.palettemenu import PaletteMenuBox
 from sugar3 import profile
 
 
-def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg):
+    return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 def _create_activity_icon(metadata):
@@ -337,7 +338,8 @@ class ActivityToolbar(Gtk.Toolbar):
 
         if activity.metadata:
             title_button = TitleEntry(activity)
-            title_button.connect('enter-key-press', lambda widget: self.emit('enter-key-press'))
+            title_button.connect('enter-key-press',
+                                 lambda widget: self.emit('enter-key-press'))
             title_button.show()
             self.insert(title_button, -1)
             self.title = title_button.entry

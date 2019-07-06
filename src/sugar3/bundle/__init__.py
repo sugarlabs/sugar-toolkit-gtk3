@@ -29,10 +29,12 @@ an `[Activity]` header on the first line:
   1.2.3, 1.2.3-country, or 1.2.3~developer,
 
 * `bundle_id` - the activity bundle identifier, using [Java package
-  naming conventions](http://en.wikipedia.org/wiki/Java_package#Package_naming_conventions),
+  naming conventions]
+  (http://en.wikipedia.org/wiki/Java_package#Package_naming_conventions),
   should conform to the [D-Bus specification for message protocol
-  names](http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names)(hyphens
-  are not allowed), usually an organisation or individual domain name
+  names]
+  (http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names)
+  (hyphens are not allowed), usually an organisation or individual domain name
   in reverse order, e.g. `org.sugarlabs.Name`,
 
 * `license` - an identifier for the software license of the bundle,
@@ -58,7 +60,8 @@ Optional metadata keys are;
   files of these MIME types.  Used to offer your activity when opening a
   downloaded file or a journal object.
 
-* `url` - link to a home page or user documentation on https://help.sugarlabs.org/,
+* `url` - link to a home page or user documentation on
+  https://help.sugarlabs.org/,
 
 * `repository` - link to repository for activity code, for use by git clone,
 
@@ -84,7 +87,8 @@ Deprecated metadata keys are;
 * `update_url` - the updater no longer uses this.
 
 .. _SPDX License Identifier: http://spdx.org/licenses/
-.. _Fedora License Short Name: https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Good_Licenses
+.. _Fedora License Short Name:
+  https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Good_Licenses
 
 AppStream Metadata
 ==================
@@ -132,12 +136,27 @@ Example `activity.info`
 
     metadata_license = CC0-1.0
     description:
-        <p>Surf the world! Here you can do research, watch educational videos, take online courses, find books, connect with friends and more.  Browse is powered by the WebKit2 rendering engine with the Faster Than Light javascript interpreter - allowing you to view the full beauty of the web.</p>
+        <p>
+        Surf the world! Here you can do research, watch educational videos,
+        take online courses, find books, connect with friends and more.
+        Browse is powered by the WebKit2 rendering engine with the Faster
+        Than Light javascript interpreter - allowing you to view the
+        full beauty of the web.
+        </p>
         <p>To help in researching, Browse offers many features:</p>
         <ul>
-            <li>Bookmark (save) good pages you find - never loose good resources or forget to add them to your bibliography</li>
-            <li>Bookmark pages with collaborators in real time - great for researching as a group or teachers showing pages to their class</li>
-            <li>Comment on your bookmarked pages - a great tool for making curated collections</li>
+            <li>
+            Bookmark (save) good pages you find - never loose good resources
+            or forget to add them to your bibliography
+            </li>
+            <li>
+            Bookmark pages with collaborators in real time - great for
+            researching as a group or teachers showing pages to their class
+            </li>
+            <li>
+            Comment on your bookmarked pages - a great tool for making curated
+            collections
+            </li>
         </ul>
     screenshots = https://people.sugarlabs.org/sam/activity-ss/browse-1-1.png https://people.sugarlabs.org/sam/activity-ss/browse-1-2.png
 '''

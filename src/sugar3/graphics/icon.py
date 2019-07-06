@@ -209,7 +209,7 @@ class _IconBuffer(object):
             # try read from the .icon file
             icon_filename = info.get_filename().replace('.svg', '.icon')
             if icon_filename != info.get_filename() and \
-                            os.path.exists(icon_filename):
+                    os.path.exists(icon_filename):
 
                 try:
                     with open(icon_filename) as config_file:
@@ -1309,8 +1309,7 @@ class CellRendererIcon(Gtk.CellRenderer):
                 # widget is the treeview
                 x, y = widget.get_pointer()
                 x, y = widget.convert_widget_to_bin_window_coords(x, y)
-                return ((cell_area.x <= x <= cell_area.x + cell_area.width)
-                        and
+                return ((cell_area.x <= x <= cell_area.x + cell_area.width) and
                         (cell_area.y <= y <= cell_area.y + cell_area.height))
 
             pointer_inside = is_pointer_inside()
@@ -1379,10 +1378,10 @@ def get_icon_state(base_name, perc, step=5):
     '''
     Get the closest icon name for a given state in percent.
 
-    First, you need a set of icons.  They must be prefixed with `base_name`, for
-    example "network-wireless".  They must be suffixed with 3 digit percentage
-    numbers, for example "-000", "-200", etc.  Eventually, you get a collection
-    of icon names like:
+    First, you need a set of icons. They must be prefixed with `base_name`,
+    for example "network-wireless". They must be suffixed with 3 digit
+    percentage numbers, for example "-000", "-200", etc. Eventually, you get
+    a collection of icon names like:
 
     * network-wireless-000
     * network-wireless-020

@@ -1319,7 +1319,7 @@ class CursorInvoker(Invoker):
         self._leave_hid = self._item.connect('leave-notify-event',
                                              self.__leave_notify_event_cb)
         self._release_hid = self._item.connect('button-release-event',
-                                             self.__button_release_event_cb)
+                                               self.__button_release_event_cb)
         self._long_pressed_hid = self._long_pressed_controller.connect(
             'pressed',
             self.__long_pressed_event_cb, self._item)

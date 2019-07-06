@@ -210,7 +210,8 @@ colors = [['#B20008', '#FF2B34'],
 
 def _parse_string(color_string):
     '''
-    Returns array of length 2 of two colors in standard html form of [stroke color, fill color]
+    Returns array of length 2 of two colors in standard html
+    form of [stroke color, fill color]
 
     Args:
         color_string (string): two html format strings separated by a comma

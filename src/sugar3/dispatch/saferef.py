@@ -167,7 +167,8 @@ class BoundMethodWeakref(object):
     def __cmp__(self, other):
         """Compare with another reference"""
         if not isinstance(other, self.__class__):
-            return ((self.__class__ > type(other)) - (self.__class__ < type(other)))
+            return ((self.__class__ > type(other)) -
+                    (self.__class__ < type(other)))
         return ((self.key > other.key) - (self.key < other.key))
 
     def __call__(self):

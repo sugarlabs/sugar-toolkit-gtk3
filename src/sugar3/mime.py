@@ -33,7 +33,8 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gio
 
 
-def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg):
+    return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 GENERIC_TYPE_TEXT = 'Text'

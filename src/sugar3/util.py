@@ -32,7 +32,8 @@ import logging
 import atexit
 
 
-def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg):
+    return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 def printable_hash(in_hash):
