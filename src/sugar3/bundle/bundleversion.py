@@ -43,7 +43,8 @@ Based on the implementation of :pep:`386`, but adapted to our
 numeration schema.
 
 Attributes:
-    VERSION_RE (RegexObject): regular expression for versions, deprecated, as it is insufficient by itself.
+    VERSION_RE (RegexObject): regular expression for versions,\
+    deprecated, as it is insufficient by itself.
 """
 
 import re

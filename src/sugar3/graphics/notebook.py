@@ -37,7 +37,8 @@ if not hasattr(GObject.ParamFlags, 'READWRITE'):
 class Notebook(Gtk.Notebook):
     '''
     Notebook class that creates a :class:`Gtk.Notebook`. It is possible to set
-    the `can-close-tabs` property from the constructor through Notebook(can_close_tabs=True)
+    the `can-close-tabs` property from the constructor
+    through Notebook(can_close_tabs=True)
     '''
     __gtype_name__ = 'SugarNotebook'
 
@@ -112,7 +113,8 @@ class Notebook(Gtk.Notebook):
         '''
         Adds a page to the notebook and sets the newly added page as current.
         Returns True if the page is successfully added to the notebook.
-        If `can-close-tabs` is true, then a GtkEventBox is also created to close the tab.
+        If `can-close-tabs` is true, then a GtkEventBox is also created
+        to close the tab.
 
         Args:
             text_label (string): label of page to be added

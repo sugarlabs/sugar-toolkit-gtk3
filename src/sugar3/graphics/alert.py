@@ -61,7 +61,8 @@ from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 
 
-def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg):
+    return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 if not hasattr(GObject.ParamFlags, 'READWRITE'):

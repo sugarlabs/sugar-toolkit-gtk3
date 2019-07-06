@@ -29,7 +29,8 @@ from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 
 
-def _(msg): return gettext.dgettext('sugar-toolkit-gtk3', msg)
+def _(msg):
+    return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
 
 if not hasattr(GObject.ParamFlags, 'READWRITE'):
@@ -123,7 +124,8 @@ class _ColorButton(Gtk.Button):
         context = self.get_style_context()
         fg_color = context.get_color(Gtk.StateType.NORMAL)
         # the color components are stored as float values between 0.0 and 1.0
-        return '#%.2X%.2X%.2X' % (int(fg_color.red * 255), int(fg_color.green * 255),
+        return '#%.2X%.2X%.2X' % (int(fg_color.red * 255),
+                                  int(fg_color.green * 255),
                                   int(fg_color.blue * 255))
 
     def set_color(self, color):

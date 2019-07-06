@@ -78,7 +78,8 @@ class Toolbox(Gtk.VBox):
         Args:
             name (string): name of toolbar to be added
 
-            toolbar (.. :class:`Gtk.Toolbar`): Gtk.Toolbar to be appended to this toolbox
+            toolbar (.. :class:`Gtk.Toolbar`):
+            Gtk.Toolbar to be appended to this toolbox
         '''
         label = Gtk.Label(label=name)
         req = label.size_request()

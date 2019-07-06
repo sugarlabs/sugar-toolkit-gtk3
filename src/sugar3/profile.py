@@ -88,11 +88,11 @@ class Profile(object):
             return None
 
         magic = 'ssh-dss '
-        for l in lines:
-            l = l.strip()
-            if not l.startswith(magic):
+        for line in lines:
+            line = line.strip()
+            if not line.startswith(magic):
                 continue
-            return l[len(magic):]
+            return line[len(magic):]
         else:
             logging.error('Error parsing public key.')
             return None
@@ -114,17 +114,17 @@ class Profile(object):
         key = ""
         begin_found = False
         end_found = False
-        for l in lines:
-            l = l.strip()
-            if l.startswith(('-----BEGIN DSA PRIVATE KEY-----',
-                             '-----BEGIN OPENSSH PRIVATE KEY-----')):
+        for line in lines:
+            line = line.strip()
+            if line.startswith(('-----BEGIN DSA PRIVATE KEY-----',
+                                '-----BEGIN OPENSSH PRIVATE KEY-----')):
                 begin_found = True
                 continue
-            if l.startswith(('-----END DSA PRIVATE KEY-----',
-                             '-----END OPENSSH PRIVATE KEY-----')):
+            if line.startswith(('-----END DSA PRIVATE KEY-----',
+                                '-----END OPENSSH PRIVATE KEY-----')):
                 end_found = True
                 continue
-            key += l
+            key += line
         if not (len(key) and begin_found and end_found):
             logging.error('Error parsing public key.')
             return None

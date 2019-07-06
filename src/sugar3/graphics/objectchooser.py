@@ -51,8 +51,10 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
             sugar3.datastore.datastore.DSObject.get_metadata() method.
 
     Keyword Args:
-        width (int): the pixbuf width, if is not set, the default width will be used
-        height (int): the pixbuf width, if is not set, the default height will be used
+        width (int): the pixbuf width, if is not set,
+        the default width will be used
+        height (int): the pixbuf width, if is not set,
+        the default height will be used
 
     Returns:
         Pixbuf, the generated Pixbuf
@@ -117,8 +119,9 @@ class ObjectChooser(object):
     """
     UI interface for object choosers.
 
-    Object choosers can be used by acivities to allow the user to select objects
-    from the file system or from some other similar source.
+    Object choosers can be used by acivities to allow the
+    user to select objects from the file system or from
+    some other similar source.
 
     Keyword Args:
         parent (:class:`Gtk.Widget`): the widget calling ObjectChooser
@@ -194,8 +197,8 @@ class ObjectChooser(object):
         Runs the object chooser and displays it.
 
         Returns:
-            Gtk.ResponseType constant, the response received from displaying the
-                object chooser.
+            Gtk.ResponseType constant, the response received
+            from displaying the object chooser.
         """
         self._object_id = None
 
