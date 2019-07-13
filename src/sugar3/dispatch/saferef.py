@@ -21,13 +21,19 @@ def safeRef(target, onDelete=None):
         goes out of scope with the reference object, (either a
         weakref or a BoundMethodWeakref) as argument.
     """
-    if hasattr(target, 'im_self'):
+    if hasattr(target, 'im_self') or hasattr(target, '__self__'):
         if im_self(target) is not None:
             # Turn a bound method into a BoundMethodWeakref instance.
             # Keep track of these instances for lookup by disconnect().
-            assert hasattr(target, 'im_func'), \
-                "safeRef target %r has im_self, but no im_func, " \
-                "don't know how to create reference" % (target,)
+            if six.PY2:
+                assert hasattr(target, 'im_func'), \
+                    "safeRef target %r has im_self, but no im_func, " \
+                    "don't know how to create reference" % (target,)
+            else:
+                assert hasattr(target, '__func__'), \
+                    "safeRef target %r has __self__, but no __func__, " \
+                    "don't know how to create reference" % (target,)
+
             reference = get_bound_method_weakref(
                 target=target,
                 onDelete=onDelete

@@ -12,7 +12,7 @@ WEAKREF_TYPES = (weakref.ReferenceType, saferef.BoundMethodWeakref)
 
 
 def _make_id(target):
-    if hasattr(target, 'im_func'):
+    if hasattr(target, 'im_func') or hasattr(target, '__func__'):
         return (id(im_self(target)), id(im_func(target)))
     return id(target)
 
