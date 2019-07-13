@@ -1503,7 +1503,7 @@ class _ClientHandler(dbus.service.Object):
     def GetAll(self, interface_name):
         if interface_name in self._prop_getters:
             r = {}
-            for k, v in self._prop_getters[interface_name].items():
+            for k, v in list(self._prop_getters[interface_name].items()):
                 r[k] = v()
             return r
         else:
