@@ -917,7 +917,10 @@ class Activity(Window, Gtk.Container):
             buddies = {}
             for buddy in self.shared_activity.get_joined_buddies():
                 if not buddy.props.owner:
-                    buddy_id = sha1(buddy.props.key).hexdigest()
+                    if six.PY2:
+                        buddy_id = sha1(buddy.props.key).hexdigest()
+                    else:
+                        buddy_id = sha1((buddy.props.key).encode('utf-8')).hexdigest()
                     buddies[buddy_id] = [buddy.props.nick, buddy.props.color]
             return buddies
         else:
