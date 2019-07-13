@@ -88,7 +88,7 @@ class DSMetadata(GObject.GObject):
             self._properties = {}
         else:
             if six.PY3:
-                for x, y in properties.items():
+                for x, y in list(properties.items()):
                     try:
                         properties[x] = y.decode()
                     except BaseException:

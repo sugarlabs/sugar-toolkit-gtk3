@@ -208,7 +208,7 @@ class LRU:
         return iter(self.d)
 
     def itervalues(self):
-        for i_, j in self.iteritems():
+        for i_, j in six.iteritems(self):
             yield j
 
     def keys(self):
