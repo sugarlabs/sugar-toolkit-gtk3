@@ -267,7 +267,7 @@ def timestamp_to_elapsed_string(timestamp, max_levels=2):
     elapsed_seconds = int(time.time() - timestamp)
 
     for name_singular, name_plural, factor in units:
-        elapsed_units = elapsed_seconds / factor
+        elapsed_units = int(elapsed_seconds / factor)
         if elapsed_units > 0:
 
             if levels > 0:
