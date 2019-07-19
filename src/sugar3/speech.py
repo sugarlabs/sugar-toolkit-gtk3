@@ -193,7 +193,8 @@ class SpeechManager(GObject.GObject):
     __gsignals__ = {
         'play': (GObject.SignalFlags.RUN_FIRST, None, []),
         'pause': (GObject.SignalFlags.RUN_FIRST, None, []),
-        'stop': (GObject.SignalFlags.RUN_FIRST, None, [])
+        'stop': (GObject.SignalFlags.RUN_FIRST, None, []),
+        'mark': (GObject.SignalFlags.RUN_FIRST, None, [str])
     }
 
     MIN_PITCH = -100
@@ -212,6 +213,7 @@ class SpeechManager(GObject.GObject):
         self._player.connect('play', self._update_state, 'play')
         self._player.connect('stop', self._update_state, 'stop')
         self._player.connect('pause', self._update_state, 'pause')
+        self._player.connect('mark', self._mark_cb)
         self._default_voice_name = self._player.get_default_voice()
         self._pitch = DEFAULT_PITCH
         self._rate = DEFAULT_RATE
@@ -227,6 +229,9 @@ class SpeechManager(GObject.GObject):
         self._is_playing = (signal == 'play')
         self._is_paused = (signal == 'pause')
         self.emit(signal)
+
+    def _mark_cb(self, player, value):
+        self.emit('mark', value)
 
     def get_is_playing(self):
         return self._is_playing
@@ -331,7 +336,8 @@ class _GstSpeechPlayer(GObject.GObject):
     __gsignals__ = {
         'play': (GObject.SignalFlags.RUN_FIRST, None, []),
         'pause': (GObject.SignalFlags.RUN_FIRST, None, []),
-        'stop': (GObject.SignalFlags.RUN_FIRST, None, [])
+        'stop': (GObject.SignalFlags.RUN_FIRST, None, []),
+        'mark': (GObject.SignalFlags.RUN_FIRST, None, [str])
     }
 
     def __init__(self):
@@ -382,6 +388,10 @@ class _GstSpeechPlayer(GObject.GObject):
             self._pipeline = None
             power.get_power_manager().restore_suspend()
             self.emit('stop')
+        elif message.type is Gst.MessageType.ELEMENT and \
+                message.get_structure().get_name() == 'espeak-mark':
+            mark_value = message.get_structure().get_value('mark')
+            self.emit('mark', mark_value)
 
     def speak(self, pitch, rate, voice_name, text):
         # TODO workaround for http://bugs.sugarlabs.org/ticket/1801
