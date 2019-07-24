@@ -205,16 +205,16 @@ class SpeechManager(GObject.GObject):
 
     def __init__(self, **kwargs):
         GObject.GObject.__init__(self, **kwargs)
-        self._player = None
+        self.player = None
         if not self.enabled():
             return
 
-        self._player = _GstSpeechPlayer()
-        self._player.connect('play', self._update_state, 'play')
-        self._player.connect('stop', self._update_state, 'stop')
-        self._player.connect('pause', self._update_state, 'pause')
-        self._player.connect('mark', self._mark_cb)
-        self._default_voice_name = self._player.get_default_voice()
+        self.player = _GstSpeechPlayer()
+        self.player.connect('play', self._update_state, 'play')
+        self.player.connect('stop', self._update_state, 'stop')
+        self.player.connect('pause', self._update_state, 'pause')
+        self.player.connect('mark', self._mark_cb)
+        self._default_voice_name = self.player.get_default_voice()
         self._pitch = DEFAULT_PITCH
         self._rate = DEFAULT_RATE
         self._is_playing = False
@@ -271,7 +271,7 @@ class SpeechManager(GObject.GObject):
         if lang_code is None:
             voice_name = self._default_voice_name
         else:
-            voice_name = self._player.get_all_voices()[lang_code]
+            voice_name = self.player.get_all_voices()[lang_code]
         if text:
             logging.error(
                 'PLAYING %r lang %r pitch %r rate %r',
@@ -279,20 +279,20 @@ class SpeechManager(GObject.GObject):
                 voice_name,
                 pitch,
                 rate)
-            self._player.speak(pitch, rate, voice_name, text)
+            self.player.speak(pitch, rate, voice_name, text)
 
     def say_selected_text(self):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
         clipboard.request_text(self.__primary_selection_cb, None)
 
     def pause(self):
-        self._player.pause_sound_device()
+        self.player.pause_sound_device()
 
     def restart(self):
-        self._player.restart_sound_device()
+        self.player.restart_sound_device()
 
     def stop(self):
-        self._player.stop_sound_device()
+        self.player.stop_sound_device()
 
     def __primary_selection_cb(self, clipboard, text, user_data):
         self.say_text(text)
@@ -315,23 +315,23 @@ class SpeechManager(GObject.GObject):
                       self._pitch, self._rate)
 
     def get_all_voices(self):
-        if self._player:
-            return self._player.get_all_voices()
+        if self.player:
+            return self.player.get_all_voices()
         return None
 
     def get_all_traslated_voices(self):
         """ deprecated after 0.112, due to method name spelling error """
-        if self._player:
-            return self._player.get_all_translated_voices()
+        if self.player:
+            return self.player.get_all_translated_voices()
         return None
 
     def get_all_translated_voices(self):
-        if self._player:
-            return self._player.get_all_translated_voices()
+        if self.player:
+            return self.player.get_all_translated_voices()
         return None
 
 
-class _GstSpeechPlayer(GObject.GObject):
+class GstSpeechPlayer(GObject.GObject):
 
     __gsignals__ = {
         'play': (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -342,50 +342,50 @@ class _GstSpeechPlayer(GObject.GObject):
 
     def __init__(self):
         GObject.GObject.__init__(self)
-        self._pipeline = None
+        self.pipeline = None
         self._all_voices = None
         self._all_translated_voices = None
 
     def restart_sound_device(self):
-        if self._pipeline is None:
+        if self.pipeline is None:
             logging.debug('Trying to restart not initialized sound device')
             return
 
         power.get_power_manager().inhibit_suspend()
-        self._pipeline.set_state(Gst.State.PLAYING)
+        self.pipeline.set_state(Gst.State.PLAYING)
         self.emit('play')
 
     def pause_sound_device(self):
-        if self._pipeline is None:
+        if self.pipeline is None:
             return
 
-        self._pipeline.set_state(Gst.State.PAUSED)
+        self.pipeline.set_state(Gst.State.PAUSED)
         power.get_power_manager().restore_suspend()
         self.emit('pause')
 
     def stop_sound_device(self):
-        if self._pipeline is None:
+        if self.pipeline is None:
             return
 
-        self._pipeline.set_state(Gst.State.NULL)
+        self.pipeline.set_state(Gst.State.NULL)
         power.get_power_manager().restore_suspend()
         self.emit('stop')
 
     def make_pipeline(self, command):
-        if self._pipeline is not None:
+        if self.pipeline is not None:
             self.stop_sound_device()
-            del self._pipeline
+            del self.pipeline
 
-        self._pipeline = Gst.parse_launch(command)
+        self.pipeline = Gst.parse_launch(command)
 
-        bus = self._pipeline.get_bus()
+        bus = self.pipeline.get_bus()
         bus.add_signal_watch()
         bus.connect('message', self.__pipe_message_cb)
 
     def __pipe_message_cb(self, bus, message):
         if message.type in (Gst.MessageType.EOS, Gst.MessageType.ERROR):
-            self._pipeline.set_state(Gst.State.NULL)
-            self._pipeline = None
+            self.pipeline.set_state(Gst.State.NULL)
+            self.pipeline = None
             power.get_power_manager().restore_suspend()
             self.emit('stop')
         elif message.type is Gst.MessageType.ELEMENT and \
@@ -399,7 +399,7 @@ class _GstSpeechPlayer(GObject.GObject):
             return
 
         self.make_pipeline('espeak name=espeak ! autoaudiosink')
-        src = self._pipeline.get_by_name('espeak')
+        src = self.pipeline.get_by_name('espeak')
 
         src.props.text = text
         src.props.pitch = pitch
