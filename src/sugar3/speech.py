@@ -209,7 +209,7 @@ class SpeechManager(GObject.GObject):
         if not self.enabled():
             return
 
-        self.player = _GstSpeechPlayer()
+        self.player = GstSpeechPlayer()
         self.player.connect('play', self._update_state, 'play')
         self.player.connect('stop', self._update_state, 'stop')
         self.player.connect('pause', self._update_state, 'pause')
