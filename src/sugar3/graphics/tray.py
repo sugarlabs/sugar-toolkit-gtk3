@@ -64,7 +64,7 @@ class _TrayViewport(Gtk.Viewport):
         self.add(self.traybar)
         self.traybar.show()
 
-        self.connect('size_allocate', self._size_allocate_cb)
+        self.connect('size-allocate', self._size_allocate_cb)
 
         if self.orientation == Gtk.Orientation.HORIZONTAL:
             adj = self.get_hadjustment()
