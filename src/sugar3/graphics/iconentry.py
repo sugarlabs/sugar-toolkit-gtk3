@@ -37,7 +37,7 @@ class IconEntry(Gtk.Entry):
         self._clear_icon = None
         self._clear_shown = False
 
-        self.connect('key_press_event', self._keypress_event_cb)
+        self.connect('key-press-event', self._keypress_event_cb)
 
     def set_icon_from_name(self, position, name):
         icon_theme = Gtk.IconTheme.get_default()

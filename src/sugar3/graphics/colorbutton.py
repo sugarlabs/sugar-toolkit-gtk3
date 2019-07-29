@@ -83,8 +83,8 @@ class _ColorButton(Gtk.Button):
                              [Gtk.TargetEntry.new(
                                  'application/x-color', 0, 0)],
                              Gdk.DragAction.COPY)
-        self.connect('drag_data_received', self.__drag_data_received_cb)
-        self.connect('drag_data_get', self.__drag_data_get_cb)
+        self.connect('drag-data-received', self.__drag_data_received_cb)
+        self.connect('drag-data-get', self.__drag_data_get_cb)
 
         self._preview.fill_color = get_svg_color_string(self._color)
         self._preview.stroke_color = self._get_fg_style_color_str()
