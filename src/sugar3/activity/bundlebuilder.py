@@ -155,7 +155,7 @@ class Builder(object):
                 if self._no_fail:
                     continue
 
-            cat = gettext.GNUTranslations(open(mo_file, 'r'))
+            cat = gettext.GNUTranslations(open(mo_file, 'rb'))
             translated_name = cat.gettext(self.config.activity_name)
             translated_summary = cat.gettext(self.config.summary)
             if translated_summary is None:
