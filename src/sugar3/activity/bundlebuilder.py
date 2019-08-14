@@ -368,9 +368,9 @@ class Installer(Packager):
             if not info.has_option('Activity', name):
                 print('[WARNING] Activity needs more metadata for AppStream '
                       'file')
-                print('  Without an AppStream file, the activity will NOT '
-                      'show in software stores!')
-                print('  Please `pydoc sugar3.activity.bundlebuilder` for'
+                print('  Without an AppStream file, the activity will not '
+                      'show in software stores')
+                print('  Please `pydoc sugar3.activity.bundlebuilder` for '
                       'more info')
                 return
 
