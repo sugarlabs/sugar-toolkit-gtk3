@@ -301,7 +301,10 @@ def _child_watch_cb(pid, condition, user_data):
     if os.WIFEXITED(condition):
         status = os.WEXITSTATUS(condition)
         signum = None
-        message = 'Exited with status %s' % status
+        if status == 0:
+            message = 'Normal successful completion'
+        else:
+            message = 'Exited with status %s' % status
     elif os.WIFSIGNALED(condition):
         status = None
         signum = os.WTERMSIG(condition)
@@ -312,7 +315,8 @@ def _child_watch_cb(pid, condition, user_data):
         message = 'Undefined status with signal %s' % signum
 
     try:
-        log_file.write('%s, pid %s data %s\n' % (message, pid, user_data))
+        log_file.write(
+            '%s, pid %s activity_id %s\n' % (message, pid, activity_id))
     finally:
         log_file.close()
 
