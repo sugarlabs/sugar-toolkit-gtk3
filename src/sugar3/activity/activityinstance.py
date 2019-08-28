@@ -135,8 +135,8 @@ def main():
         command = bundle.get_command()
         if command.startswith('sugar-activity'):
             if not command.startswith('sugar-activity3'):
-                logging.warning("Activity written for Python 2,\
-                                consider porting to Python 3.")
+                logging.warning("Activity written for Python 2,"
+                                " consider porting to Python 3.")
             activity_class = command.split(" ")[1]
 
     # when an activity is started outside sugar,
