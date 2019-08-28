@@ -206,7 +206,7 @@ class Packager(object):
             elif stdout:
                 # pylint: disable=E1103
                 git_output = [path.strip() for path in
-                              stdout.strip('\n').split('\n')]
+                              stdout.decode().strip('\n').split('\n')]
                 files = []
                 for line in git_output:
                     ignore = False
