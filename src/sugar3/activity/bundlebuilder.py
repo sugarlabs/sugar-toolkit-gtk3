@@ -366,12 +366,8 @@ class Installer(Packager):
                            'description']
         for name in required_fields:
             if not info.has_option('Activity', name):
-                print('[WARNING] Activity needs more metadata for AppStream '
-                      'file')
-                print('  Without an AppStream file, the activity will not '
-                      'show in software stores')
-                print('  Please `pydoc sugar3.activity.bundlebuilder` for '
-                      'more info')
+                print('[WARNING] missing AppStream metadata, '
+                      'see `pydoc sugar3.bundle`')
                 return
 
         # See https://www.freedesktop.org/software/appstream/docs/
