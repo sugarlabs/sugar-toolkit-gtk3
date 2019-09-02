@@ -79,12 +79,12 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
     pixbuf = None
 
     if len(preview_data) > 4:
-        if preview_data[1:4] != 'PNG':
+        if preview_data[1:4] != b'PNG':
             # TODO: We are close to be able to drop this.
             import base64
             preview_data = base64.b64decode(preview_data)
 
-        png_file = six.StringIO(preview_data)
+        png_file = six.BytesIO(preview_data)
         try:
             # Load image and scale to dimensions
             surface = cairo.ImageSurface.create_from_png(png_file)
