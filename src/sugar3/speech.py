@@ -273,7 +273,7 @@ class SpeechManager(GObject.GObject):
         else:
             voice_name = self.player.get_all_voices()[lang_code]
         if text:
-            logging.error(
+            logging.debug(
                 'PLAYING %r lang %r pitch %r rate %r',
                 text,
                 voice_name,
