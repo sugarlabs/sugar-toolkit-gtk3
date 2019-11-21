@@ -59,7 +59,7 @@ class _ColorButton(Gtk.Button):
 
     def __init__(self, **kwargs):
         self._title = _('Choose a color')
-        self._color = Gdk.Color(0, 0, 0)
+        self._color = Gdk.RGBA(0, 0, 0)
         self._has_palette = True
         self._has_invoker = True
         self._palette = None
@@ -129,14 +129,14 @@ class _ColorButton(Gtk.Button):
                                   int(fg_color.blue * 255))
 
     def set_color(self, color):
-        assert isinstance(color, Gdk.Color)
+        assert isinstance(color, Gdk.RGBA)
 
         if self._color.red == color.red and \
            self._color.green == color.green and \
            self._color.blue == color.blue:
             return
 
-        self._color = Gdk.Color(color.red, color.green, color.blue)
+        self._color = Gdk.RGBA(color.red, color.green, color.blue)
         self._preview.fill_color = get_svg_color_string(self._color)
         if self._palette:
             self._palette.props.color = self._color
@@ -256,7 +256,7 @@ class _ColorButton(Gtk.Button):
         blue = struct.unpack_from('=H', dropped, 4)[0]
         # dropped[6] and dropped[7] is alpha, but we ignore the alpha channel
 
-        color = Gdk.Color(red, green, blue)
+        color = Gdk.RGBA(red, green, blue)
         self.set_color(color)
 
 
@@ -276,7 +276,7 @@ class _ColorPalette(Palette):
                                   tuple())}
 
     def __init__(self, **kwargs):
-        self._color = Gdk.Color(0, 0, 0)
+        self._color = Gdk.RGBA(0, 0, 0)
         self._previous_color = self._color.copy()
         self._scales = None
 
@@ -400,7 +400,7 @@ class _ColorPalette(Palette):
         self.props.color = button.get_color()
 
     def set_color(self, color):
-        assert isinstance(color, Gdk.Color)
+        assert isinstance(color, Gdk.RGBA)
 
         if self._color.red == color.red and \
            self._color.green == color.green and \

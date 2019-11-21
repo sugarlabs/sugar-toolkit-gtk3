@@ -776,9 +776,9 @@ class EventIcon(Gtk.EventBox):
     the :class:`Icon`.  The added arguments are as follows:
 
     Keyword Args:
-        background_color (Gdk.Color): the color to draw the icon on top of.
+        background_color (Gdk.RGBA): the color to draw the icon on top of.
             It defaults to None, which means no background is drawn
-            (transparent).  The alpha channel of the Gdk.Color is disregarded.
+            (transparent).  The alpha channel of the Gdk.RGBA is disregarded.
         cache (bool): if True, the icon file contents will be cached to
             reduce disk usage
         palette (sugar3.graphics.palette.Palette): a palette to connect
@@ -908,7 +908,7 @@ class EventIcon(Gtk.EventBox):
     def set_background_color(self, value):
         '''
         Args:
-            value (Gdk.Color): color use as background (alpha is ignored),
+            value (Gdk.RGBA): color use as background (alpha is ignored),
                 or None meaning no background is drawn (transparent)
         '''
         if self._buffer.background_color != value:
@@ -918,7 +918,7 @@ class EventIcon(Gtk.EventBox):
     def get_background_color(self):
         '''
         Returns:
-            Gdk.Color, current background color, may be None
+            Gdk.RGBA, current background color, may be None
         '''
         return self._buffer.background_color
 
