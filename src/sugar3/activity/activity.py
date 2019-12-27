@@ -1342,7 +1342,7 @@ class Activity(Window, Gtk.Container):
             xid = window.get_window().get_xid()
             SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
             SugarExt.wm_set_activity_id(xid, str(self._activity_id))
-        elif display_name is 'Broadway':
+        elif display_name == 'Broadway':
             # GTK3's HTML5 backend
             # This is needed so that the window takes the whole browser window
             self.maximize()
