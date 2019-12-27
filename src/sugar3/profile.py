@@ -68,8 +68,8 @@ class Profile(object):
         nick = get_nick_name()
         color = get_color()
 
-        return nick is not '' and \
-            color is not '' and \
+        return nick != '' and \
+            color != '' and \
             self.pubkey is not None and \
             self.privkey_hash is not None
 
