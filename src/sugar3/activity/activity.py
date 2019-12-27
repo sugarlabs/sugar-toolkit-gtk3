@@ -328,7 +328,7 @@ class Activity(Window, Gtk.Container):
         'joined': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         # For internal use only, use can_close() if you want to perform extra
         # checks before actually closing
-        '_closing': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'closing': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
     def __init__(self, handle, create_jobject=True):
@@ -1301,7 +1301,7 @@ class Activity(Window, Gtk.Container):
 
     def _do_close(self, skip_save):
         self.busy()
-        self.emit('_closing')
+        self.emit('closing')
         if not self._closing:
             if not self._prepare_close(skip_save):
                 return

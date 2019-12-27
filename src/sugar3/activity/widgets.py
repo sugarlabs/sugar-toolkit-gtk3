@@ -189,7 +189,7 @@ class TitleEntry(Gtk.ToolItem):
         self.add(self.entry)
 
         activity.metadata.connect('updated', self.__jobject_updated_cb)
-        activity.connect('_closing', self.__closing_cb)
+        activity.connect('closing', self.__closing_cb)
 
     def __activate_cb(self, entry, activity):
         self.save_title(activity)
