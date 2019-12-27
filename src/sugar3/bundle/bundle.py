@@ -115,7 +115,7 @@ class Bundle(object):
         if self._zip_file is None:
             path = os.path.join(self._path, filename)
             try:
-                f = open(path, 'r')
+                f = open(path, 'rb')
             except IOError:
                 logging.debug("cannot open path %s" % path)
                 return None
@@ -123,7 +123,7 @@ class Bundle(object):
             path = os.path.join(self._zip_root_dir, filename)
             try:
                 data = self._zip_file.read(path)
-                f = six.StringIO(data)
+                f = six.BytesIO(data)
             except KeyError:
                 logging.debug('%s not found in zip %s.' % (filename, path))
                 return None

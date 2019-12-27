@@ -129,7 +129,7 @@ class ActivityBundle(Bundle):
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
-        cp.readfp(info_file)
+        cp.read_string(info_file.read().decode())
 
         section = 'Activity'
 
@@ -251,7 +251,7 @@ class ActivityBundle(Bundle):
     def _parse_linfo(self, linfo_file):
         cp = ConfigParser()
         try:
-            cp.readfp(linfo_file)
+            cp.read_string(linfo_file.read().decode())
 
             section = 'Activity'
 
