@@ -48,6 +48,9 @@ DEFAULT_RATE = 0
 _SAVE_TIMEOUT = 500
 
 
+SPEECH_SCHEMA = 'org.sugarlabs.speech'
+
+
 # This voice names are use dto allow the translation of the voice names.
 # If espeak add new voices, we need update this list.
 
@@ -300,7 +303,11 @@ class SpeechManager(GObject.GObject):
     def save(self):
         self._save_timeout_id = -1
 
-        settings = Gio.Settings('org.sugarlabs.speech')
+        schema_source = Gio.SettingsSchemaSource.get_default()
+        if schema_source.lookup(SPEECH_SCHEMA, True) is None:
+            return False
+
+        settings = Gio.Settings(SPEECH_SCHEMA)
         settings.set_int('pitch', self._pitch)
         settings.set_int('rate', self._rate)
         logging.debug('saving speech configuration pitch %s rate %s',
@@ -308,7 +315,11 @@ class SpeechManager(GObject.GObject):
         return False
 
     def restore(self):
-        settings = Gio.Settings('org.sugarlabs.speech')
+        schema_source = Gio.SettingsSchemaSource.get_default()
+        if schema_source.lookup(SPEECH_SCHEMA, True) is None:
+            return
+
+        settings = Gio.Settings(SPEECH_SCHEMA)
         self._pitch = settings.get_int('pitch')
         self._rate = settings.get_int('rate')
         logging.debug('loading speech configuration pitch %s rate %s',
