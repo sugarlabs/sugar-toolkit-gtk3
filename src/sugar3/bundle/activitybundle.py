@@ -21,6 +21,7 @@ UNSTABLE.
 """
 
 from six.moves.configparser import ConfigParser, ParsingError
+import six
 from locale import normalize
 import os
 import shutil
@@ -129,7 +130,10 @@ class ActivityBundle(Bundle):
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
-        cp.read_string(info_file.read().decode())
+        if six.PY2:
+            cp.readfp(info_file)
+        else:
+            cp.read_string(info_file.read().decode())
 
         section = 'Activity'
 
@@ -251,7 +255,10 @@ class ActivityBundle(Bundle):
     def _parse_linfo(self, linfo_file):
         cp = ConfigParser()
         try:
-            cp.read_string(linfo_file.read().decode())
+            if six.PY2:
+                cp.readfp(linfo_file)
+            else:
+                cp.read_string(linfo_file.read().decode())
         except ParsingError as e:
             logging.exception('Exception reading linfo file: %s', e)
             return
