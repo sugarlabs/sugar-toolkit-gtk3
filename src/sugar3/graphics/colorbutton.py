@@ -66,7 +66,7 @@ class _ColorButton(Gtk.Button):
         self._accept_drag = True
 
         self._preview = Icon(icon_name='color-preview',
-                             pixel_size=style.SMALL_ICON_SIZE)
+                             pixel_size=style.STANDARD_ICON_SIZE)
 
         GObject.GObject.__init__(self, **kwargs)
 
@@ -359,7 +359,7 @@ class _ColorPalette(Palette):
             button = _ColorButton(has_palette=False,
                                   color=Gdk.color_parse(color),
                                   accept_drag=False,
-                                  icon_size=Gtk.IconSize.LARGE_TOOLBAR)
+                                  icon_size=style.STANDARD_ICON_SIZE)
             button.set_relief(Gtk.ReliefStyle.NONE)
             self._swatch_tray.attach(button,
                                      i % rows, i % rows + 1,
@@ -476,7 +476,7 @@ class ColorToolButton(Gtk.ToolItem):
 
         # The following is so that the behaviour on the toolbar is correct.
         color_button.set_relief(Gtk.ReliefStyle.NONE)
-        color_button.icon_size = Gtk.IconSize.LARGE_TOOLBAR
+        color_button.icon_size = style.STANDARD_ICON_SIZE
 
         self._palette_invoker.attach_tool(self)
         self._palette_invoker.props.toggle_palette = True
