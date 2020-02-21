@@ -26,6 +26,7 @@ is setup by creating a `setup.py` file in the project with the following::
     bundlebuilder.start()
 '''
 
+import six
 import argparse
 import operator
 import os
@@ -563,7 +564,10 @@ def cmd_genpot(config, options):
     f.close()
 
     args = ['xgettext', '--join-existing', '--language=Python',
-            '--keyword=_', '--add-comments=TRANS:', '--output=%s' % pot_file]
+            '--keyword=_', '--add-comments=TRANS:',
+            '--output=%s' % pot_file]
+    if six.PY3:
+        args.insert(5, '--from-code=UTF-8')
 
     args += python_files
     retcode = subprocess.call(args)
