@@ -16,16 +16,16 @@ GNOME_COMPILE_WARNINGS(maximum)
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 
 AC_ARG_WITH([python2],
-        AS_HELP_STRING([--with-python2], [build for Python 2 (default)]),
-        [], [with_python2=unset])
+        AS_HELP_STRING([--with-python2], [build for Python 2]),
+        [with_python3=no], [with_python2=unset])
 
 AC_ARG_WITH([python3],
-        AS_HELP_STRING([--with-python3], [build for Python 3]),
-        [with_python2=no], [with_python3=unset])
+        AS_HELP_STRING([--with-python3], [build for Python 3 (default)]),
+        [], [with_python3=unset])
 
-AS_IF([test "x$with_python2" != xno],
-      	[AM_PATH_PYTHON([2.7])],
-	[AS_IF([test "x$with_python3" = xyes], [AM_PATH_PYTHON([3])],)])
+AS_IF([test "x$with_python3" != xno],
+	[AM_PATH_PYTHON([3])],
+	[AS_IF([test "x$with_python2" = xyes], [AM_PATH_PYTHON([2.7])],)])
 
 PKG_CHECK_MODULES(EXT, gtk+-3.0 gdk-3.0 gdk-pixbuf-2.0 sm ice alsa
                        librsvg-2.0 xfixes xi x11)
