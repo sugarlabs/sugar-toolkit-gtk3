@@ -108,6 +108,7 @@ class RedoButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-redo', **kwargs)
         self.props.tooltip = _('Redo')
+        self.props.accelerator = '<Ctrl>Y'
 
 
 class CopyButton(ToolButton):
