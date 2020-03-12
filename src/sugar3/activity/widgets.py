@@ -108,6 +108,7 @@ class RedoButton(ToolButton):
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'edit-redo', **kwargs)
         self.props.tooltip = _('Redo')
+        # From here, redo will be Ctrl + Y to be consistent with Write activity
         self.props.accelerator = '<Ctrl>Y'
 
 
