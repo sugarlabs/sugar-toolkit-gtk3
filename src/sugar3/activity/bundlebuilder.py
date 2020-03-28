@@ -42,7 +42,7 @@ import logging
 from glob import glob
 from fnmatch import fnmatch
 from six.moves.configparser import ConfigParser
-import xml.etree.cElementTree as ET
+import xml.etree.ElementTree as ET
 from six.moves.html_parser import HTMLParser
 
 from sugar3 import env
