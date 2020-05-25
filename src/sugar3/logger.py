@@ -171,7 +171,7 @@ def start(log_filename=None):
         try:
             log_path = os.path.join(logs_path, log_filename + '.log')
 
-            log_fd = os.open(log_path, os.O_WRONLY | os.O_CREAT)
+            log_fd = os.open(log_path, os.O_WRONLY | os.O_CREAT, buffer=1)
             os.dup2(log_fd, sys.stdout.fileno())
             os.dup2(log_fd, sys.stderr.fileno())
             os.close(log_fd)
