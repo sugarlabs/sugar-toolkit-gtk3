@@ -854,7 +854,7 @@ class Activity(Window, Gtk.Container):
         is seeing at the time.
 
         Returns:
-            str: image data in PNG format
+            bytes: image data in PNG format
 
         Activities may override this method, and return a string with
         image data in PNG format with a width and height of
