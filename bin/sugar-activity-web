@@ -17,8 +17,4 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-if [ "$SUGAR_USE_WEBKIT1" = "yes" ]; then
-    exec sugar-activity3 sugar3.activity.webkit1.WebActivity $@
-else
-    exec sugar-activity3 sugar3.activity.webactivity.WebActivity $@
-fi
+exec sugar-activity3 sugar3.activity.webactivity.WebActivity $@

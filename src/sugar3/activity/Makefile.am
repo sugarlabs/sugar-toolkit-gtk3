@@ -7,7 +7,6 @@ sugar_PYTHON =              \
 	activityhandle.py       \
 	activityservice.py      \
 	bundlebuilder.py        \
-	webkit1.py				\
 	webactivity.py         \
 	i18n.py			\
 	widgets.py
