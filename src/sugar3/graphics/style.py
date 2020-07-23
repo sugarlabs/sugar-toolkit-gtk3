@@ -155,7 +155,7 @@ def zoom(units):
     Returns size of units pixels at current zoom level
 
     Args:
-        units (int): size of item at full size
+        units (int or float): size of item at full size
     '''
     return int(ZOOM_FACTOR * units)
 
