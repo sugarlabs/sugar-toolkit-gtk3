@@ -629,9 +629,9 @@ def start():
     source_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
     config = Config(source_dir)
 
-    try:
-        globals()['cmd_' + options.command](config, options)
-    except (KeyError, IndexError):
+    if 'cmd_' + (options.command or '') in globals():
+        globals()['cmd_' + (options.command or '')](config, options)
+    else:
         parser.print_help()
 
 
