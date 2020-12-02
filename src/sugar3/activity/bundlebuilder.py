@@ -280,7 +280,8 @@ class Installer(Packager):
         Packager.__init__(self, builder.config)
         self.builder = builder
 
-    def install(self, prefix, install_mime=True, install_desktop_file=True):
+    def install(self, destdir, prefix,
+                install_mime=True, install_desktop_file=True):
         self.builder.build()
 
         activity_path = os.path.join(prefix, 'share', 'sugar', 'activities',
@@ -290,16 +291,21 @@ class Installer(Packager):
 
         for f in self.get_files_in_git():
             source_path = os.path.join(self.config.source_dir, f)
-            dest_path = os.path.join(activity_path, f)
+            dest_path = os.path.join(destdir,
+                                     os.path.relpath(activity_path, '/'), f)
             source_to_dest[source_path] = dest_path
 
         for f in self.builder.get_locale_files():
             source_path = os.path.join(self.builder.locale_dir, f)
 
             if source_path.endswith(".mo"):
-                dest_path = os.path.join(prefix, 'share', 'locale', f)
+                dest_path = os.path.join(destdir,
+                                         os.path.relpath(prefix, '/'),
+                                         'share', 'locale', f)
             else:
-                dest_path = os.path.join(activity_path, 'locale', f)
+                dest_path = os.path.join(destdir,
+                                         os.path.relpath(activity_path, '/'),
+                                         'locale', f)
 
             source_to_dest[source_path] = dest_path
 
@@ -316,10 +322,10 @@ class Installer(Packager):
             self.config.bundle.install_mime_type(self.config.source_dir)
 
         if install_desktop_file:
-            self._install_desktop_file(prefix, activity_path)
-            self._generate_appdata(prefix, activity_path)
+            self._install_desktop_file(destdir, prefix, activity_path)
+            self._generate_appdata(destdir, prefix, activity_path)
 
-    def _install_desktop_file(self, prefix, activity_path):
+    def _install_desktop_file(self, destdir, prefix, activity_path):
         cp = ConfigParser()
         section = 'Desktop Entry'
         cp.add_section(section)
@@ -327,7 +333,9 @@ class Installer(Packager):
 
         # Get it from the activity.info for the non-translated version
         info = ConfigParser()
-        info.read(os.path.join(activity_path, 'activity', 'activity.info'))
+        info_path = os.path.join(destdir, os.path.relpath(activity_path, '/'),
+                                 'activity', 'activity.info')
+        info.read(info_path)
         cp.set(section, 'Name', info.get('Activity', 'name'))
         if info.has_option('Activity', 'summary'):
             cp.set(section, 'Comment', info.get('Activity', 'summary'))
@@ -353,16 +361,19 @@ class Installer(Packager):
         cp.set(section, 'Path', activity_path)  # Path == CWD for running
 
         name = '{}.activity.desktop'.format(self.config.bundle_id)
-        path = os.path.join(prefix, 'share', 'applications', name)
+        path = os.path.join(destdir, os.path.relpath(prefix, '/'),
+                            'share', 'applications', name)
         if not os.path.isdir(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
         with open(path, 'w') as f:
             cp.write(f)
         print('Install %s' % (path))
 
-    def _generate_appdata(self, prefix, activity_path):
+    def _generate_appdata(self, destdir, prefix, activity_path):
         info = ConfigParser()
-        info.read(os.path.join(activity_path, 'activity', 'activity.info'))
+        info_path = os.path.join(destdir, os.path.relpath(activity_path, '/'),
+                                 'activity', 'activity.info')
+        info.read(info_path)
 
         required_fields = ['metadata_license', 'license', 'name', 'icon',
                            'description']
@@ -409,7 +420,8 @@ class Installer(Packager):
             ET.SubElement(root, 'url', type='bugtracker').text = \
                 info.get('Activity', 'repository')
 
-        path = os.path.join(prefix, 'share', 'metainfo',
+        path = os.path.join(destdir, os.path.relpath(prefix, '/'),
+                            'share', 'metainfo',
                             self.config.bundle_id + '.appdata.xml')
         if not os.path.isdir(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
@@ -507,6 +519,7 @@ def cmd_install(config, options):
 
     installer = Installer(Builder(config))
     installer.install(
+        options.destdir,
         options.prefix,
         options.install_mime,
         options.install_desktop_file)
@@ -594,6 +607,9 @@ def start():
     install_parser.add_argument(
         "--prefix", dest="prefix", default=sys.prefix,
         help="Path for installing")
+    install_parser.add_argument(
+        "--destdir", dest="destdir", default="/",
+        help="Path for staged install")
     install_parser.add_argument(
         "--skip-install-mime", dest="install_mime",
         action="store_false", default=True,
