@@ -358,6 +358,7 @@ class Installer(Packager):
             os.makedirs(os.path.dirname(path))
         with open(path, 'w') as f:
             cp.write(f)
+        print('Install %s' % (path))
 
     def _generate_appdata(self, prefix, activity_path):
         info = ConfigParser()
