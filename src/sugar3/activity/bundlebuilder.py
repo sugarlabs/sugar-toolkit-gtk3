@@ -304,7 +304,7 @@ class Installer(Packager):
             source_to_dest[source_path] = dest_path
 
         for source, dest in list(source_to_dest.items()):
-            print('Install %s to %s.' % (source, dest))
+            print('Install %s' % (dest))
 
             path = os.path.dirname(dest)
             if not os.path.exists(path):
