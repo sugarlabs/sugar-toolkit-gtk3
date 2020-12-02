@@ -415,6 +415,7 @@ class Installer(Packager):
             os.makedirs(os.path.dirname(path))
         tree = ET.ElementTree(root)
         tree.write(path, encoding='UTF-8')
+        print('Install %s' % (path))
 
 
 def cmd_check(config, options):
