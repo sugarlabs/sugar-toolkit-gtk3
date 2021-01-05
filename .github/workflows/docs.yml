@@ -1,0 +1,45 @@
+
+name: Documentation
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Prepare apt repositories
+        run: | 
+          sudo sed -i '/deb-src/s/^# //' /etc/apt/sources.list
+          sudo apt update
+
+      - name: Install sugar-toolkit-gtk3
+        run: |
+          sudo apt build-dep sugar-toolkit-gtk3
+          sudo apt install python-is-python3 python3-cairo python3-gi python3-gi-cairo python3-dateutil python3-decorator \
+            gir1.2-telepathyglib-0.12 gir1.2-webkit2-4.0 python3-empy gir1.2-sugarext-1.0
+          ./autogen.sh --with-python2
+          make
+          ./autogen.sh --with-python3
+          make
+          
+      - name: Install Sphinx
+        run: |
+          sudo apt-get -qqy install sphinx-common
+          
+      - name: Build docs
+        run: |
+          ./make-doc.sh
+          mkdir deploy
+          mv doc/_build/html deploy/sugar3
+          touch deploy/.nojekyll
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: deploy  # The folder the action should deploy.
