@@ -2,40 +2,35 @@
 name: Documentation
 on:
   push:
-    branches: [ master ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        
-      - name: Prepare apt repositories
-        run: | 
-          sudo sed -i '/deb-src/s/^# //' /etc/apt/sources.list
-          sudo apt update
+    container:
+      image: 'archlinux:latest'
 
-      - name: Install sugar-toolkit-gtk3
+    steps:
+      - name: Install dependencies
         run: |
-          sudo apt build-dep sugar-toolkit-gtk3
-          sudo apt install python-is-python3 python3-cairo python3-gi python3-gi-cairo python3-dateutil python3-decorator \
-            gir1.2-telepathyglib-0.12 gir1.2-webkit2-4.0 python3-empy gir1.2-sugarext-1.0
-          ./autogen.sh --with-python2
-          make
-          ./autogen.sh --with-python3
-          make
-          
-      - name: Install Sphinx
+          # assume yes and do not ask for confirmation when installing deps using pacman
+          yes | pacman -Syu base-devel sudo git wget curl python-sphinx rsync --noconfirm
+
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Create builduser
         run: |
-          sudo apt-get -qqy install sphinx-common
-          
-      - name: Build docs
+          # A user is required so that the docs are not built as root
+          useradd builduser -m # Create the builduser
+          passwd -d builduser # Delete the buildusers password
+          printf 'builduser ALL=(ALL) ALL\n' | tee -a /etc/sudoers
+
+      - name: Build documentation
         run: |
-          ./make-doc.sh
-          mkdir deploy
-          mv doc/_build/html deploy/sugar3
-          touch deploy/.nojekyll
+          sudo chown builduser:builduser . -R
+          sudo -u builduser ./ci/docs.sh
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
