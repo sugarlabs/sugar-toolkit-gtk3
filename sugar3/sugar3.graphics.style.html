@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.style module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.toggletoolbutton module" href="sugar3.graphics.toggletoolbutton.html" />
+    <link rel="prev" title="sugar3.graphics.scrollingdetector module" href="sugar3.graphics.scrollingdetector.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.style">
+<span id="sugar3-graphics-style-module"></span><h1>sugar3.graphics.style module<a class="headerlink" href="#module-sugar3.graphics.style" title="Permalink to this headline">¶</a></h1>
+<p>The style module defines constants for spacing and sizing, as well as
+classes for  Colors and Fonts. Text rendering is handled by Pango and
+colors are inputted by their HTML code (e.g. #FFFFFFFF)</p>
+<p>All the constants are expressed in pixels. They are defined for the XO
+screen and are usually adapted to different resolution by applying a
+zoom factor.</p>
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_BLACK">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_BLACK</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_BLACK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Black</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_BUTTON_GREY">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_BUTTON_GREY</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_BUTTON_GREY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color of buttons</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_HIGHLIGHT">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_HIGHLIGHT</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_HIGHLIGHT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color of highlighted text</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_INACTIVE_FILL">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_INACTIVE_FILL</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_INACTIVE_FILL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill colour of an inactive button</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_INACTIVE_STROKE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_INACTIVE_STROKE</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_INACTIVE_STROKE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stroke colour of an inactive button</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_PANEL_GREY">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_PANEL_GREY</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_PANEL_GREY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default background color of a window</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_SELECTION_GREY">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_SELECTION_GREY</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_SELECTION_GREY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Background color of selected entry</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_TEXT_FIELD_GREY">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_TEXT_FIELD_GREY</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_TEXT_FIELD_GREY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Background color of entry</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_TOOLBAR_GREY">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_TOOLBAR_GREY</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_TOOLBAR_GREY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color of toolbars</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_TRANSPARENT">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_TRANSPARENT</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_TRANSPARENT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fully transparent color</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.COLOR_WHITE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">COLOR_WHITE</code><em class="property"> = &lt;sugar3.graphics.style.Color object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.COLOR_WHITE" title="Permalink to this definition">¶</a></dt>
+<dd><p>White</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.style.Color">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">Color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Color object defines a specific color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<em>str</em>) – String in the form #FFFFFF representing the color</p></li>
+<li><p><strong>alpha</strong> (<em>double</em>) – transparency of color</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="sugar3.graphics.style.Color.get_gdk_color">
+<code class="sig-name descname">get_gdk_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Color.get_gdk_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns GDK standard color</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.style.Color.get_html">
+<code class="sig-name descname">get_html</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Color.get_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string in the standard html Color format (#FFFFFF)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.style.Color.get_int">
+<code class="sig-name descname">get_int</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Color.get_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns color encoded as an int, in the form rgba</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.style.Color.get_rgba">
+<code class="sig-name descname">get_rgba</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Color.get_rgba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 4-tuple of red, green, blue, and alpha levels in range 0-1</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.style.Color.get_svg">
+<code class="sig-name descname">get_svg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Color.get_svg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns HTML formatted color, unless the color is completely
+transparent, in which case returns “none”</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.DEFAULT_PADDING">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">DEFAULT_PADDING</code><em class="property"> = 6</em><a class="headerlink" href="#sugar3.graphics.style.DEFAULT_PADDING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Padding is placed around an element</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.DEFAULT_SPACING">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">DEFAULT_SPACING</code><em class="property"> = 15</em><a class="headerlink" href="#sugar3.graphics.style.DEFAULT_SPACING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spacing is placed in-between elements</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.FONT_BOLD">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">FONT_BOLD</code><em class="property"> = &lt;sugar3.graphics.style.Font object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.FONT_BOLD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bold font</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.FONT_BOLD_H">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">FONT_BOLD_H</code><em class="property"> = 24</em><a class="headerlink" href="#sugar3.graphics.style.FONT_BOLD_H" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height in pixels of bold font</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.FONT_FACE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">FONT_FACE</code><em class="property"> = 'Sans Serif'</em><a class="headerlink" href="#sugar3.graphics.style.FONT_FACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>User’s preferred font face</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.FONT_NORMAL">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">FONT_NORMAL</code><em class="property"> = &lt;sugar3.graphics.style.Font object&gt;</em><a class="headerlink" href="#sugar3.graphics.style.FONT_NORMAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normal font</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.FONT_NORMAL_H">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">FONT_NORMAL_H</code><em class="property"> = 24</em><a class="headerlink" href="#sugar3.graphics.style.FONT_NORMAL_H" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height in pixels of normal font</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.FONT_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">FONT_SIZE</code><em class="property"> = 10</em><a class="headerlink" href="#sugar3.graphics.style.FONT_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>User’s preferred font size</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.style.Font">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">Font</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">desc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A font defines the style of how the text should be rendered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>desc</strong> (<em>str</em>) – a description of the Font object</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="sugar3.graphics.style.Font.get_pango_desc">
+<code class="sig-name descname">get_pango_desc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.Font.get_pango_desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns Pango description of font</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.GRID_CELL_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">GRID_CELL_SIZE</code><em class="property"> = 75</em><a class="headerlink" href="#sugar3.graphics.style.GRID_CELL_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>allow elements to tile neatly within boundaries of a grid
+<a class="reference external" href="http://wiki.sugarlabs.org/go/Human_Interface_Guidelines#The_Grid_System">http://wiki.sugarlabs.org/go/Human_Interface_Guidelines#The_Grid_System</a></p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.LARGE_ICON_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">LARGE_ICON_SIZE</code><em class="property"> = 110</em><a class="headerlink" href="#sugar3.graphics.style.LARGE_ICON_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>larger than medium, used in journal empty view</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.LINE_WIDTH">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">LINE_WIDTH</code><em class="property"> = 2</em><a class="headerlink" href="#sugar3.graphics.style.LINE_WIDTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thickness of a separator line</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.MEDIUM_ICON_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">MEDIUM_ICON_SIZE</code><em class="property"> = 82</em><a class="headerlink" href="#sugar3.graphics.style.MEDIUM_ICON_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>larger than standard</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.MENU_WIDTH_CHARS">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">MENU_WIDTH_CHARS</code><em class="property"> = 60</em><a class="headerlink" href="#sugar3.graphics.style.MENU_WIDTH_CHARS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Max width of text in a palette menu, in chars</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.PALETTE_CURSOR_DISTANCE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">PALETTE_CURSOR_DISTANCE</code><em class="property"> = 10</em><a class="headerlink" href="#sugar3.graphics.style.PALETTE_CURSOR_DISTANCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cursor invoked palettes will be placed this far from the cursor</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.SMALL_ICON_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">SMALL_ICON_SIZE</code><em class="property"> = 33</em><a class="headerlink" href="#sugar3.graphics.style.SMALL_ICON_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>small icon, used in palette menu items</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.STANDARD_ICON_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">STANDARD_ICON_SIZE</code><em class="property"> = 55</em><a class="headerlink" href="#sugar3.graphics.style.STANDARD_ICON_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon that fits within a grid cell</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.TOOLBAR_ARROW_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">TOOLBAR_ARROW_SIZE</code><em class="property"> = 24</em><a class="headerlink" href="#sugar3.graphics.style.TOOLBAR_ARROW_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of arrow displayed under toolbar buttons to represent their status</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.XLARGE_ICON_SIZE">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">XLARGE_ICON_SIZE</code><em class="property"> = 151</em><a class="headerlink" href="#sugar3.graphics.style.XLARGE_ICON_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>larger than large, used in activity pulsing launcher icon</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.graphics.style.ZOOM_FACTOR">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">ZOOM_FACTOR</code><em class="property"> = 1.0</em><a class="headerlink" href="#sugar3.graphics.style.ZOOM_FACTOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>scale factor, as float (eg. 0.72, 1.0)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.graphics.style.zoom">
+<code class="sig-prename descclassname">sugar3.graphics.style.</code><code class="sig-name descname">zoom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.style.zoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns size of units pixels at current zoom level</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>units</strong> (<em>int</em><em> or </em><em>float</em>) – size of item at full size</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.scrollingdetector.html" title="previous chapter">sugar3.graphics.scrollingdetector module</a></li>
+      <li>Next: <a href="sugar3.graphics.toggletoolbutton.html" title="next chapter">sugar3.graphics.toggletoolbutton module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.style.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

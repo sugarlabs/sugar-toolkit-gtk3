@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.bundle.activitybundle module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.bundle.bundle module" href="sugar3.bundle.bundle.html" />
+    <link rel="prev" title="sugar3.bundle package" href="sugar3.bundle.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.bundle.activitybundle">
+<span id="sugar3-bundle-activitybundle-module"></span><h1>sugar3.bundle.activitybundle module<a class="headerlink" href="#module-sugar3.bundle.activitybundle" title="Permalink to this headline">¶</a></h1>
+<p>Sugar activity bundles</p>
+<p>UNSTABLE.</p>
+<dl class="py class">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.bundle.activitybundle.</code><code class="sig-name descname">ActivityBundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">translated</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sugar3.bundle.bundle.html#sugar3.bundle.bundle.Bundle" title="sugar3.bundle.bundle.Bundle"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.bundle.bundle.Bundle</span></code></a></p>
+<p>A Sugar activity bundle</p>
+<p>See <a class="reference external" href="http://wiki.sugarlabs.org/go/Development_Team/Almanac/Activity_Bundles">http://wiki.sugarlabs.org/go/Development_Team/Almanac/Activity_Bundles</a>
+for details</p>
+<dl class="py attribute">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.MIME_TYPE">
+<code class="sig-name descname">MIME_TYPE</code><em class="property"> = 'application/vnd.olpc-sugar'</em><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.MIME_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_activity_version">
+<code class="sig-name descname">get_activity_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_activity_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the activity version</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_bundle_id">
+<code class="sig-name descname">get_bundle_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_bundle_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the activity bundle id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_command">
+<code class="sig-name descname">get_command</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the command to execute to launch the activity factory</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_description">
+<code class="sig-name descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description for the activity.  The description is a
+pace of multi paragraph text about the activity.  It is written
+in a HTML subset using only the p, ul, li and ol tags.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_icon">
+<code class="sig-name descname">get_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the activity icon name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_icon_filename">
+<code class="sig-name descname">get_icon_filename</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_icon_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the icon file name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_icons_path">
+<code class="sig-name descname">get_icons_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_icons_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the icons path inside the (installed) activity bundle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_locale_path">
+<code class="sig-name descname">get_locale_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_locale_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the locale path inside the (installed) activity bundle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_max_participants">
+<code class="sig-name descname">get_max_participants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_max_participants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get maximum number of participants in share</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_mime_types">
+<code class="sig-name descname">get_mime_types</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_mime_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the MIME types supported by the activity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the activity user-visible name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_show_launcher">
+<code class="sig-name descname">get_show_launcher</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_show_launcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get whether there should be a visible launcher for the activity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_single_instance">
+<code class="sig-name descname">get_single_instance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_single_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get whether there should be a single instance for the activity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_summary">
+<code class="sig-name descname">get_summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the summary that describe the activity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.get_tags">
+<code class="sig-name descname">get_tags</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.get_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the tags that describe the activity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.install">
+<code class="sig-name descname">install</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.install" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.install_mime_type">
+<code class="sig-name descname">install_mime_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">install_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.install_mime_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the mime type database and install the mime type icon</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.is_user_activity">
+<code class="sig-name descname">is_user_activity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.is_user_activity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.bundle.activitybundle.ActivityBundle.uninstall">
+<code class="sig-name descname">uninstall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">delete_profile</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.ActivityBundle.uninstall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.bundle.activitybundle.get_bundle_instance">
+<code class="sig-prename descclassname">sugar3.bundle.activitybundle.</code><code class="sig-name descname">get_bundle_instance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">translated</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.bundle.activitybundle.get_bundle_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.bundle.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.bundle.activitybundle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.bundle.html">sugar3.bundle.bundle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.bundleversion.html">sugar3.bundle.bundleversion module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.contentbundle.html">sugar3.bundle.contentbundle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.helpers.html">sugar3.bundle.helpers module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.bundle.html#module-sugar3.bundle">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.bundle.html">sugar3.bundle package</a><ul>
+      <li>Previous: <a href="sugar3.bundle.html" title="previous chapter">sugar3.bundle package</a></li>
+      <li>Next: <a href="sugar3.bundle.bundle.html" title="next chapter">sugar3.bundle.bundle module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.bundle.activitybundle.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

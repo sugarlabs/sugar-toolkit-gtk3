@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.activity.activityhandle module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.activity.activityinstance module" href="sugar3.activity.activityinstance.html" />
+    <link rel="prev" title="sugar3.activity.activityfactory module" href="sugar3.activity.activityfactory.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.activity.activityhandle">
+<span id="sugar3-activity-activityhandle-module"></span><h1>sugar3.activity.activityhandle module<a class="headerlink" href="#module-sugar3.activity.activityhandle" title="Permalink to this headline">¶</a></h1>
+<p>Provides a class for storing activity metadata such as activity id’s,
+journal object id’s,</p>
+<dl class="py class">
+<dt id="sugar3.activity.activityhandle.ActivityHandle">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.activity.activityhandle.</code><code class="sig-name descname">ActivityHandle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">activity_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">object_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">uri</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">invited</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.ActivityHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data structure storing simple activity metadata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>activity_id</strong> (<em>string</em>) – unique id for the activity to be</p></li>
+<li><p><strong>created</strong> – </p></li>
+<li><p><strong>object_id</strong> (<em>string</em>) – identity of the journal object</p></li>
+<li><p><strong>with the activity.</strong> (<em>associated</em>) – </p></li>
+<li><p><strong>you resume an activity from the journal</strong> (<em>When</em>) – </p></li>
+<li><p><strong>object_id will be passed in. It is optional</strong> (<em>the</em>) – </p></li>
+<li><p><strong>new activities does not have an</strong> (<em>since</em>) – </p></li>
+<li><p><strong>object.</strong> (<em>associated</em>) – </p></li>
+<li><p><strong>uri</strong> (<em>string</em>) – URI associated with the activity. Used when</p></li>
+<li><p><strong>an external file</strong><strong> or </strong><strong>resource in the</strong> (<em>opening</em>) – </p></li>
+<li><p><strong>activity</strong> – </p></li>
+<li><p><strong>than a journal object</strong> (<em>rather</em>) – </p></li>
+<li><p><strong>stored on the file system for</strong> (<em>(</em><em>downloads</em>) – </p></li>
+<li><p><strong>or web pages</strong><strong>)</strong> (<em>example</em>) – </p></li>
+<li><p><strong>invited</strong> (<em>bool</em>) – True if the activity is being</p></li>
+<li><p><strong>for handling an invite from the network</strong> (<em>launched</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="sugar3.activity.activityhandle.ActivityHandle.get_dict">
+<code class="sig-name descname">get_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.ActivityHandle.get_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns activity settings as a dictionary in format
+{activity_id:XXXX, object_id:XXXX, uri:XXXX, invited:BOOL}</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.activity.activityhandle.create_from_dict">
+<code class="sig-prename descclassname">sugar3.activity.activityhandle.</code><code class="sig-name descname">create_from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">handle_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.create_from_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an activity handle from a dictionary of parameters</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.activity.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activity.html">sugar3.activity.activity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityfactory.html">sugar3.activity.activityfactory module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.activity.activityhandle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityinstance.html">sugar3.activity.activityinstance module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityservice.html">sugar3.activity.activityservice module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.bundlebuilder.html">sugar3.activity.bundlebuilder module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.i18n.html">sugar3.activity.i18n module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.webactivity.html">sugar3.activity.webactivity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.widgets.html">sugar3.activity.widgets module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.activity.html#module-sugar3.activity">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.activity.html">sugar3.activity package</a><ul>
+      <li>Previous: <a href="sugar3.activity.activityfactory.html" title="previous chapter">sugar3.activity.activityfactory module</a></li>
+      <li>Next: <a href="sugar3.activity.activityinstance.html" title="next chapter">sugar3.activity.activityinstance module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.activity.activityhandle.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

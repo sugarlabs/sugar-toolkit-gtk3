@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.combobox module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.icon module" href="sugar3.graphics.icon.html" />
+    <link rel="prev" title="sugar3.graphics.colorbutton module" href="sugar3.graphics.colorbutton.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.combobox">
+<span id="sugar3-graphics-combobox-module"></span><h1>sugar3.graphics.combobox module<a class="headerlink" href="#module-sugar3.graphics.combobox" title="Permalink to this headline">¶</a></h1>
+<p>The combobox module provides a combo box; a button like widget which
+creates a list popup when clicked.  It’s best used outside of a
+toolbar when the user needs to choose from a <em>short</em> list of items.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Gtk</span>
+
+<span class="kn">from</span> <span class="nn">sugar3.graphics.combobox</span> <span class="kn">import</span> <span class="n">ComboBox</span>
+<span class="kn">from</span> <span class="nn">common</span> <span class="kn">import</span> <span class="n">set_theme</span>
+<span class="n">set_theme</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">__combo_changed_cb</span><span class="p">(</span><span class="n">combo</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Combo changed to </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">combo</span><span class="o">.</span><span class="n">get_value</span><span class="p">())</span>
+
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;delete-event&quot;</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">main_quit</span><span class="p">)</span>
+
+<span class="n">combo</span> <span class="o">=</span> <span class="n">ComboBox</span><span class="p">()</span>
+<span class="n">combo</span><span class="o">.</span><span class="n">append_item</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">)</span>
+<span class="n">combo</span><span class="o">.</span><span class="n">append_item</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;go-next&#39;</span><span class="p">)</span>
+<span class="n">combo</span><span class="o">.</span><span class="n">append_item</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">)</span>
+<span class="c1"># This will make &#39;two&#39; active (zero indexed)</span>
+<span class="n">combo</span><span class="o">.</span><span class="n">set_active</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">combo</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;changed&#39;</span><span class="p">,</span> <span class="n">__combo_changed_cb</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">combo</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">show_all</span><span class="p">()</span>
+<span class="n">Gtk</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt id="sugar3.graphics.combobox.ComboBox">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.combobox.</code><code class="sig-name descname">ComboBox</code><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.Gtk.ComboBox</span></code></p>
+<p>This class provides a simple wrapper based on the <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/ComboBox.html#Gtk.ComboBox" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ComboBox</span></code></a>.
+This lets you make a list of items, with a value, label and optionally an
+icon.</p>
+<dl class="py method">
+<dt id="sugar3.graphics.combobox.ComboBox.append_item">
+<code class="sig-name descname">append_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">icon_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.append_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function adds another item to the bottom of the combo box list.</p>
+<p>If either <cite>icon_name</cite> or <cite>file_name</cite> are supplied and icon column
+will be added to the combo box list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>object</em>) – the value that will be returned by <cite>get_value</cite>,
+when this item is selected</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – the user visible label for the item</p></li>
+<li><p><strong>icon_name</strong> (<em>str</em>) – the name of the icon in the theme to use for
+this item, optional and conflicting with <cite>file_name</cite></p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – the path to a sugar (svg) icon to use for this
+item, optional and conflicting with <cite>icon_name</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.combobox.ComboBox.append_separator">
+<code class="sig-name descname">append_separator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.append_separator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a separator to the bottom of the combo box list.  The separator
+can not be selected.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.combobox.ComboBox.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.combobox.ComboBox.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.combobox.ComboBox.get_active_item">
+<code class="sig-name descname">get_active_item</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.get_active_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the row of data for the currently selected item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>row of data in the format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">value</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">pixbuf</span><span class="p">,</span> <span class="n">is_separator</span><span class="p">]</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.combobox.ComboBox.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the currently selected item; the same as the <cite>value</cite>
+argument that was passed to the <cite>append_item</cite> func.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>object, value of selected item</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.combobox.ComboBox.remove_all">
+<code class="sig-name descname">remove_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.remove_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all list items from the combo box.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.combobox.ComboBox.value">
+<code class="sig-name descname">value</code><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the currently selected item; the same as the <cite>value</cite>
+argument that was passed to the <cite>append_item</cite> func.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>object, value of selected item</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.colorbutton.html" title="previous chapter">sugar3.graphics.colorbutton module</a></li>
+      <li>Next: <a href="sugar3.graphics.icon.html" title="next chapter">sugar3.graphics.icon module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.combobox.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

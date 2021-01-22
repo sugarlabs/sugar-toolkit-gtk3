@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.activity package &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.activity.activity module" href="sugar3.activity.activity.html" />
+    <link rel="prev" title="sugar3 package" href="sugar3.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="sugar3-activity-package">
+<h1>sugar3.activity package<a class="headerlink" href="#sugar3-activity-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.activity.html">sugar3.activity.activity module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.activity.activity.html#activity">Activity</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.activityfactory.html">sugar3.activity.activityfactory module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.activityhandle.html">sugar3.activity.activityhandle module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.activityinstance.html">sugar3.activity.activityinstance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.activityservice.html">sugar3.activity.activityservice module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.bundlebuilder.html">sugar3.activity.bundlebuilder module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.i18n.html">sugar3.activity.i18n module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.webactivity.html">sugar3.activity.webactivity module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.activity.widgets.html">sugar3.activity.widgets module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-sugar3.activity">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sugar3.activity" title="Permalink to this headline">¶</a></h2>
+<p>Activity implementation code for Sugar-based activities</p>
+<p>Each activity within the Sugar environment must provide two
+dbus services.  The first, patterned after the</p>
+<blockquote>
+<div><p>sugar3.activity.activityfactory.ActivityFactory</p>
+</div></blockquote>
+<p>class is responsible for providing a “create” method which
+takes a small dictionary with values corresponding to a</p>
+<blockquote>
+<div><p>sugar3.activity.activityhandle.ActivityHandle</p>
+</div></blockquote>
+<p>describing an individual instance of the activity.</p>
+<p>Each activity so registered is described by a</p>
+<blockquote>
+<div><p>sugar3.activity.bundle.Bundle</p>
+</div></blockquote>
+<p>instance, which parses a specially formatted activity.info
+file (stored in the activity directory’s ./activity
+subdirectory).  The</p>
+<blockquote>
+<div><p>sugar3.activity.bundlebuilder</p>
+</div></blockquote>
+<p>module provides facilities for the standard setup.py module
+which produces and registers bundles from activity source
+directories.</p>
+<p>Once instantiated by the ActivityFactory’s create method,
+each activity must provide an introspection API patterned
+after the</p>
+<blockquote>
+<div><p>sugar3.activity.activityservice.ActivityService</p>
+</div></blockquote>
+<p>class.  This class allows for querying the ID of the root
+window, requesting sharing across the network, and basic
+“what type of application are you” queries.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sugar3.activity package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activity.html">sugar3.activity.activity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityfactory.html">sugar3.activity.activityfactory module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityhandle.html">sugar3.activity.activityhandle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityinstance.html">sugar3.activity.activityinstance module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityservice.html">sugar3.activity.activityservice module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.bundlebuilder.html">sugar3.activity.bundlebuilder module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.i18n.html">sugar3.activity.i18n module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.webactivity.html">sugar3.activity.webactivity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.widgets.html">sugar3.activity.widgets module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sugar3.activity">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+      <li>Previous: <a href="sugar3.html" title="previous chapter">sugar3 package</a></li>
+      <li>Next: <a href="sugar3.activity.activity.html" title="next chapter">sugar3.activity.activity module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.activity.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.speech module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.util module" href="sugar3.util.html" />
+    <link rel="prev" title="sugar3.profile module" href="sugar3.profile.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.speech">
+<span id="sugar3-speech-module"></span><h1>sugar3.speech module<a class="headerlink" href="#module-sugar3.speech" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="sugar3.speech.GstSpeechPlayer">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.speech.</code><code class="sig-name descname">GstSpeechPlayer</code><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.get_all_translated_voices">
+<code class="sig-name descname">get_all_translated_voices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.get_all_translated_voices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.get_all_voices">
+<code class="sig-name descname">get_all_voices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.get_all_voices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.get_default_voice">
+<code class="sig-name descname">get_default_voice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.get_default_voice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to figure out the default voice, from the current locale ($LANG)
+Fall back to espeak’s voice called Default.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.make_pipeline">
+<code class="sig-name descname">make_pipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">command</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.make_pipeline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.pause_sound_device">
+<code class="sig-name descname">pause_sound_device</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.pause_sound_device" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.restart_sound_device">
+<code class="sig-name descname">restart_sound_device</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.restart_sound_device" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.speak">
+<code class="sig-name descname">speak</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pitch</span></em>, <em class="sig-param"><span class="n">rate</span></em>, <em class="sig-param"><span class="n">voice_name</span></em>, <em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.speak" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.GstSpeechPlayer.stop_sound_device">
+<code class="sig-name descname">stop_sound_device</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.GstSpeechPlayer.stop_sound_device" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.speech.SpeechManager">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.speech.</code><code class="sig-name descname">SpeechManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<dl class="py attribute">
+<dt id="sugar3.speech.SpeechManager.MAX_PITCH">
+<code class="sig-name descname">MAX_PITCH</code><em class="property"> = 100</em><a class="headerlink" href="#sugar3.speech.SpeechManager.MAX_PITCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.speech.SpeechManager.MAX_RATE">
+<code class="sig-name descname">MAX_RATE</code><em class="property"> = 100</em><a class="headerlink" href="#sugar3.speech.SpeechManager.MAX_RATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.speech.SpeechManager.MIN_PITCH">
+<code class="sig-name descname">MIN_PITCH</code><em class="property"> = -100</em><a class="headerlink" href="#sugar3.speech.SpeechManager.MIN_PITCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.speech.SpeechManager.MIN_RATE">
+<code class="sig-name descname">MIN_RATE</code><em class="property"> = -100</em><a class="headerlink" href="#sugar3.speech.SpeechManager.MIN_RATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.enabled">
+<code class="sig-name descname">enabled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.get_all_translated_voices">
+<code class="sig-name descname">get_all_translated_voices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.get_all_translated_voices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.get_all_traslated_voices">
+<code class="sig-name descname">get_all_traslated_voices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.get_all_traslated_voices" title="Permalink to this definition">¶</a></dt>
+<dd><p>deprecated after 0.112, due to method name spelling error</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.get_all_voices">
+<code class="sig-name descname">get_all_voices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.get_all_voices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.get_is_paused">
+<code class="sig-name descname">get_is_paused</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.get_is_paused" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.get_is_playing">
+<code class="sig-name descname">get_is_playing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.get_is_playing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.get_pitch">
+<code class="sig-name descname">get_pitch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.get_pitch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.get_rate">
+<code class="sig-name descname">get_rate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.get_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.speech.SpeechManager.is_paused">
+<code class="sig-name descname">is_paused</code><a class="headerlink" href="#sugar3.speech.SpeechManager.is_paused" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.speech.SpeechManager.is_playing">
+<code class="sig-name descname">is_playing</code><a class="headerlink" href="#sugar3.speech.SpeechManager.is_playing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.pause">
+<code class="sig-name descname">pause</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.pause" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.restart">
+<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.restart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.restore">
+<code class="sig-name descname">restore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.restore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.say_selected_text">
+<code class="sig-name descname">say_selected_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.say_selected_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.say_text">
+<code class="sig-name descname">say_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">pitch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lang_code</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.say_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.set_pitch">
+<code class="sig-name descname">set_pitch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pitch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.set_pitch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.set_rate">
+<code class="sig-name descname">set_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rate</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.set_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.speech.SpeechManager.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.speech.SpeechManager.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.config.html">sugar3.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.env.html">sugar3.env module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.logger.html">sugar3.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.mime.html">sugar3.mime module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.network.html">sugar3.network module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.power.html">sugar3.power module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.profile.html">sugar3.profile module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sugar3.speech module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.util.html">sugar3.util module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+      <li>Previous: <a href="sugar3.profile.html" title="previous chapter">sugar3.profile module</a></li>
+      <li>Next: <a href="sugar3.util.html" title="next chapter">sugar3.util module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.speech.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

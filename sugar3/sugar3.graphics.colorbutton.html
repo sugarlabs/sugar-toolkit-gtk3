@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.colorbutton module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.combobox module" href="sugar3.graphics.combobox.html" />
+    <link rel="prev" title="sugar3.graphics.animator module" href="sugar3.graphics.animator.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.colorbutton">
+<span id="sugar3-graphics-colorbutton-module"></span><h1>sugar3.graphics.colorbutton module<a class="headerlink" href="#module-sugar3.graphics.colorbutton" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.colorbutton.</code><code class="sig-name descname">ColorToolButton</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon_name</span><span class="o">=</span><span class="default_value">'color-preview'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.ToolItem</span></code></p>
+<dl class="py attribute">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.accelerator">
+<code class="sig-name descname">accelerator</code><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.accelerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the above accelerator string.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.color">
+<code class="sig-name descname">color</code><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the above set color string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.create_palette">
+<code class="sig-name descname">create_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.create_palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_palette function is called when the palette needs to be
+invoked.  For example, when the user has right clicked the icon or
+the user has hovered over the icon for a long time.</p>
+<p>The create_palette will only be called once or zero times.  The palette
+returned will be stored and re-used if the user invokes the palette
+multiple times.</p>
+<p>Your create_palette implementation does not need to
+<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget.show" title="(in Gtk 3.0 v3.0)"><code class="xref any docutils literal notranslate"><span class="pre">Gtk.Widget.show</span></code></a> the palette, as this will be done by the
+invoker.  However, you still need to show
+the menu items, etc that you place in the palette.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sugar3.graphics.palette.Palette, or None to indicate that you
+do not want a palette shown</p>
+</dd>
+</dl>
+<p>The default implementation returns None, to indicate no palette should
+be shown.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.do_draw">
+<code class="sig-name descname">do_draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.do_draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw(self, cr:cairo.Context) -&gt; bool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.get_accelerator">
+<code class="sig-name descname">get_accelerator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.get_accelerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the above accelerator string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.get_color">
+<code class="sig-name descname">get_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.get_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the above set color string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.get_icon_name">
+<code class="sig-name descname">get_icon_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.get_icon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_icon_name() method returns the value of the icon_name
+property that contains the name of a themed icon or None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.get_icon_size">
+<code class="sig-name descname">get_icon_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.get_icon_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the size of icons in the colorbutton.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.get_palette_invoker">
+<code class="sig-name descname">get_palette_invoker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.get_palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.get_title">
+<code class="sig-name descname">get_title</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.get_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the above title string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.get_toolbar_box">
+<code class="sig-name descname">get_toolbar_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.get_toolbar_box" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.icon_name">
+<code class="sig-name descname">icon_name</code><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.icon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_icon_name() method returns the value of the icon_name
+property that contains the name of a themed icon or None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.icon_size">
+<code class="sig-name descname">icon_size</code><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.icon_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the size of icons in the colorbutton.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.palette_invoker">
+<code class="sig-name descname">palette_invoker</code><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.set_accelerator">
+<code class="sig-name descname">set_accelerator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">accelerator</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.set_accelerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets keyboard shortcut that activates this button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>accelerator</strong> (<em>string</em>) – accelerator to be set. Should be in</p></li>
+<li><p><strong>&lt;modifier&gt;Letter</strong> (<em>form</em>) – </p></li>
+<li><p><strong>about format here</strong> (<em>Find</em>) – </p></li>
+<li><p><strong>https</strong> – //developer.gnome.org/gtk3/stable/gtk3-Keyboard-Accelerators.html#gtk-accelerator-parse</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>set_accelerator(self, ‘accel’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.set_color">
+<code class="sig-name descname">set_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.set_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the color of the colorbutton</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.set_expanded">
+<code class="sig-name descname">set_expanded</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">expanded</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.set_expanded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.set_icon_name">
+<code class="sig-name descname">set_icon_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.set_icon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the icon for the tool button from a named themed icon.
+If it is none then no icon will be shown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icon_name</strong> (<em>string</em>) – The name for a themed icon.</p></li>
+<li><p><strong>can be set as 'None' too.</strong> (<em>It</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>set_icon_name(‘view-radial’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.set_icon_size">
+<code class="sig-name descname">set_icon_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.set_icon_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the size of icons in the colorbutton.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.set_palette_invoker">
+<code class="sig-name descname">set_palette_invoker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette_invoker</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.set_palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.set_title">
+<code class="sig-name descname">set_title</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.set_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set_title() method sets the “title” property to the value of
+title. The “title” property contains the string that is used to
+set the colorbutton title.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.title">
+<code class="sig-name descname">title</code><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the above title string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.colorbutton.ColorToolButton.toolbar_box">
+<em class="property">property </em><code class="sig-name descname">toolbar_box</code><a class="headerlink" href="#sugar3.graphics.colorbutton.ColorToolButton.toolbar_box" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.graphics.colorbutton.get_svg_color_string">
+<code class="sig-prename descclassname">sugar3.graphics.colorbutton.</code><code class="sig-name descname">get_svg_color_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.get_svg_color_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.graphics.colorbutton.setup_accelerator">
+<code class="sig-prename descclassname">sugar3.graphics.colorbutton.</code><code class="sig-name descname">setup_accelerator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tool_button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.colorbutton.setup_accelerator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.animator.html" title="previous chapter">sugar3.graphics.animator module</a></li>
+      <li>Next: <a href="sugar3.graphics.combobox.html" title="next chapter">sugar3.graphics.combobox module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.colorbutton.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

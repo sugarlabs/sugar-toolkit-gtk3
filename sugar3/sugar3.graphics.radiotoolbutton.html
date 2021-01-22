@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.radiotoolbutton module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.scrollingdetector module" href="sugar3.graphics.scrollingdetector.html" />
+    <link rel="prev" title="sugar3.graphics.radiopalette module" href="sugar3.graphics.radiopalette.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.radiotoolbutton">
+<span id="sugar3-graphics-radiotoolbutton-module"></span><h1>sugar3.graphics.radiotoolbutton module<a class="headerlink" href="#module-sugar3.graphics.radiotoolbutton" title="Permalink to this headline">¶</a></h1>
+<p>Provides a RadioToolButton class, similar to a “push” button.
+A group of RadioToolButtons can be set, so that only one can be
+selected at a time. When a button is clicked, it depresses and
+is shaded darker.</p>
+<p>It is also possible to set a tooltip to be dispalyed when the
+user scrolls over it with their cursor as well as an accelerator
+keyboard shortcut.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Gtk</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.radiotoolbutton</span> <span class="kn">import</span> <span class="n">RadioToolButton</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.radiopalette</span> <span class="kn">import</span> <span class="n">RadioPalette</span><span class="p">,</span> <span class="n">RadioMenuButton</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.xocolor</span> <span class="kn">import</span> <span class="n">XoColor</span>
+
+
+<span class="kn">from</span> <span class="nn">common</span> <span class="kn">import</span> <span class="n">set_theme</span>
+<span class="n">set_theme</span><span class="p">()</span>
+
+<span class="n">window</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">()</span>
+<span class="n">window</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">window</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;delete-event&quot;</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">main_quit</span><span class="p">)</span>
+
+<span class="n">box</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">HORIZONTAL</span><span class="p">)</span>
+<span class="n">window</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+<span class="n">box</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">button</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+
+<span class="n">palette</span> <span class="o">=</span> <span class="n">RadioPalette</span><span class="p">()</span>
+<span class="c1"># Adding 3 RadioToolButtons to a palette</span>
+
+<span class="n">button1</span> <span class="o">=</span> <span class="n">RadioToolButton</span><span class="p">(</span><span class="n">icon_name</span><span class="o">=</span><span class="s1">&#39;document-save&#39;</span><span class="p">,</span> <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;&lt;ctrl&gt;S&quot;</span><span class="p">,</span>
+                          <span class="n">xo_color</span><span class="o">=</span><span class="n">XoColor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">))</span>
+<span class="n">button1</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;toggled&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">button</span><span class="p">:</span> <span class="n">echo</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="s1">&#39;document-save&#39;</span><span class="p">))</span>
+<span class="n">palette</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">button1</span><span class="p">,</span> <span class="s1">&#39;menu.document-save&#39;</span><span class="p">)</span>
+
+<span class="n">button2</span> <span class="o">=</span> <span class="n">RadioToolButton</span><span class="p">(</span><span class="n">icon_name</span><span class="o">=</span><span class="s1">&#39;document-open&#39;</span><span class="p">,</span> <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;&lt;ctrl&gt;O&quot;</span><span class="p">,</span>
+                          <span class="n">xo_color</span><span class="o">=</span><span class="n">XoColor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">),</span> <span class="n">group</span><span class="o">=</span><span class="n">button1</span><span class="p">)</span>
+<span class="n">button2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;toggled&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">button</span><span class="p">:</span> <span class="n">echo</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="s1">&#39;document-open&#39;</span><span class="p">))</span>
+<span class="n">palette</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">button2</span><span class="p">,</span> <span class="s1">&#39;menu.document-open&#39;</span><span class="p">)</span>
+
+<span class="n">button3</span> <span class="o">=</span> <span class="n">RadioToolButton</span><span class="p">(</span><span class="n">icon_name</span><span class="o">=</span><span class="s1">&#39;document-send&#39;</span><span class="p">,</span> <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;&lt;ctrl&gt;F&quot;</span><span class="p">,</span>
+                          <span class="n">xo_color</span><span class="o">=</span><span class="n">XoColor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">),</span> <span class="n">group</span><span class="o">=</span><span class="n">button1</span><span class="p">)</span>
+<span class="n">button3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;toggled&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">button</span><span class="p">:</span> <span class="n">echo</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="s1">&#39;document-send&#39;</span><span class="p">))</span>
+<span class="n">palette</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">button3</span><span class="p">,</span> <span class="s1">&#39;menu.document-send&#39;</span><span class="p">)</span>
+
+<span class="n">button</span> <span class="o">=</span> <span class="n">RadioMenuButton</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">)</span>
+<span class="n">box</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">button</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">Gtk</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.radiotoolbutton.</code><code class="sig-name descname">RadioToolButton</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.RadioToolButton</span></code></p>
+<p>The RadioToolButton class manages a Gtk.RadioToolButton styled for
+Sugar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>icon_name</strong> (<em>string</em>) – name of icon to be used.</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>accelerator</strong> (<em>string</em>) – keyboard shortcut to be used to
+activate this button.</p></li>
+<li><p><strong>tooltip</strong> (<em>string</em>) – tooltip to be displayed when user hovers
+over button.</p></li>
+<li><p><strong>xo_color</strong> (<a class="reference internal" href="sugar3.graphics.xocolor.html#sugar3.graphics.xocolor.XoColor" title="sugar3.graphics.xocolor.XoColor"><em>sugar3.graphics.xocolor.XoColor</em></a>) – XoColor of button.</p></li>
+<li><p><strong>hide_tooltip_on_click</strong> (<em>bool</em>) – Whether or not the tooltip
+is hidden when user clicks on button.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.accelerator">
+<code class="sig-name descname">accelerator</code><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.accelerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return accelerator string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.create_palette">
+<code class="sig-name descname">create_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.create_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.do_clicked">
+<code class="sig-name descname">do_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.do_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation method for hiding the tooltip when
+the button is clicked.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.do_draw">
+<code class="sig-name descname">do_draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.do_draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation method for drawing the button.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.get_accelerator">
+<code class="sig-name descname">get_accelerator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.get_accelerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return accelerator string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.get_hide_tooltip_on_click">
+<code class="sig-name descname">get_hide_tooltip_on_click</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.get_hide_tooltip_on_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the tooltip is hidden when a user
+clicks on the button, otherwise return False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.get_icon_name">
+<code class="sig-name descname">get_icon_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.get_icon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return icon name, or None if there is no icon name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.get_palette">
+<code class="sig-name descname">get_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.get_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.get_palette_invoker">
+<code class="sig-name descname">get_palette_invoker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.get_palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.get_tooltip">
+<code class="sig-name descname">get_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the tooltip.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.get_xo_color">
+<code class="sig-name descname">get_xo_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.get_xo_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return xocolor.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.hide_tooltip_on_click">
+<code class="sig-name descname">hide_tooltip_on_click</code><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.hide_tooltip_on_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the tooltip is hidden when a user
+clicks on the button, otherwise return False.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.icon_name">
+<code class="sig-name descname">icon_name</code><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.icon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return icon name, or None if there is no icon name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.palette">
+<code class="sig-name descname">palette</code><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.palette_invoker">
+<code class="sig-name descname">palette_invoker</code><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.set_accelerator">
+<code class="sig-name descname">set_accelerator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">accelerator</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.set_accelerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set keyboard shortcut that activates this button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>accelerator</strong> (<em>string</em>) – accelerator to be set. Should be in</p></li>
+<li><p><strong>&lt;modifier&gt;Letter.</strong> (<em>form</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.set_hide_tooltip_on_click">
+<code class="sig-name descname">set_hide_tooltip_on_click</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hide_tooltip_on_click</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.set_hide_tooltip_on_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether or not the tooltip is hidden when a user
+clicks on the button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hide_tooltip_on_click</strong> (<em>bool</em>) – True if the tooltip is</p></li>
+<li><p><strong>on click</strong> (<em>hidden</em>) – </p></li>
+<li><p><strong>False otherwise.</strong> (<em>and</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.set_icon_name">
+<code class="sig-name descname">set_icon_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.set_icon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set name of icon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>icon_name</strong> (<em>string</em>) – name of icon</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.set_palette">
+<code class="sig-name descname">set_palette</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.set_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.set_palette_invoker">
+<code class="sig-name descname">set_palette_invoker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette_invoker</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.set_palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.set_tooltip">
+<code class="sig-name descname">set_tooltip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tooltip</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.set_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the tooltip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tooltip</strong> (<em>string</em>) – tooltip to be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.set_xo_color">
+<code class="sig-name descname">set_xo_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xo_color</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.set_xo_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set XoColor of button icon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xo_color</strong> (<a class="reference internal" href="sugar3.graphics.xocolor.html#sugar3.graphics.xocolor.XoColor" title="sugar3.graphics.xocolor.XoColor"><em>sugar3.graphics.xocolor.XoColor</em></a>) – xocolor to be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.tooltip">
+<code class="sig-name descname">tooltip</code><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the tooltip.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.radiotoolbutton.RadioToolButton.xo_color">
+<code class="sig-name descname">xo_color</code><a class="headerlink" href="#sugar3.graphics.radiotoolbutton.RadioToolButton.xo_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return xocolor.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.radiopalette.html" title="previous chapter">sugar3.graphics.radiopalette module</a></li>
+      <li>Next: <a href="sugar3.graphics.scrollingdetector.html" title="next chapter">sugar3.graphics.scrollingdetector module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.radiotoolbutton.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

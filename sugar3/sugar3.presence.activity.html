@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.presence.activity module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.presence.buddy module" href="sugar3.presence.buddy.html" />
+    <link rel="prev" title="sugar3.presence package" href="sugar3.presence.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.presence.activity">
+<span id="sugar3-presence-activity-module"></span><h1>sugar3.presence.activity module<a class="headerlink" href="#module-sugar3.presence.activity" title="Permalink to this headline">¶</a></h1>
+<p>UI interface to an activity in the presence service</p>
+<p>STABLE.</p>
+<dl class="py class">
+<dt id="sugar3.presence.activity.Activity">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.presence.activity.</code><code class="sig-name descname">Activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account_path</span></em>, <em class="sig-param"><span class="n">connection</span></em>, <em class="sig-param"><span class="n">room_handle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">properties</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<p>UI interface for an Activity in the presence service</p>
+<p>Activities in the presence service represent your and other user’s
+shared activities.</p>
+<dl class="simple">
+<dt>Properties:</dt><dd><p>id
+color
+name
+type
+joined</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a particular property from our property dictionary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a particular property in our property dictionary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.get_buddy_by_handle">
+<code class="sig-name descname">get_buddy_by_handle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">handle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_buddy_by_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the Buddy object given a telepathy handle.</p>
+<p>buddy object paths are cached in self._handle_to_buddy_path,
+so we can get the buddy without calling PS.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.get_channels">
+<code class="sig-name descname">get_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve communications channel descriptions for the activity</p>
+<dl class="simple">
+<dt>Returns a tuple containing:</dt><dd><ul class="simple">
+<li><p>the D-Bus well-known service name of the connection
+(FIXME: this is redundant; in Telepathy it can be derived
+from that of the connection)</p></li>
+<li><p>the D-Bus object path of the connection</p></li>
+<li><p>a list of D-Bus object paths representing the channels
+associated with this activity</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.get_joined_buddies">
+<code class="sig-name descname">get_joined_buddies</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_joined_buddies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the set of Buddy objects attached to this activity</p>
+<p>returns list of presence Buddy objects that we can successfully
+create from the buddy object paths that PS has for this activity.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.invite">
+<code class="sig-name descname">invite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buddy</span></em>, <em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">response_cb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.invite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invite the given buddy to join this activity.</p>
+<p>The callback will be called with one parameter: None on success,
+or an exception on failure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.join">
+<code class="sig-name descname">join</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join this activity.</p>
+<p>Emits ‘joined’ and otherwise does nothing if we’re already joined.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.leave">
+<code class="sig-name descname">leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.leave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leave this shared activity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.object_path">
+<code class="sig-name descname">object_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.object_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get our dbus object path</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.set_private">
+<code class="sig-name descname">set_private</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em>, <em class="sig-param"><span class="n">reply_handler</span></em>, <em class="sig-param"><span class="n">error_handler</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.set_private" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.set_up_tubes">
+<code class="sig-name descname">set_up_tubes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reply_handler</span></em>, <em class="sig-param"><span class="n">error_handler</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.set_up_tubes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.activity.Activity.share">
+<code class="sig-name descname">share</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">share_activity_cb</span></em>, <em class="sig-param"><span class="n">share_activity_error_cb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.share" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.presence.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.presence.activity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.buddy.html">sugar3.presence.buddy module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.connectionmanager.html">sugar3.presence.connectionmanager module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.presenceservice.html">sugar3.presence.presenceservice module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.sugartubeconn.html">sugar3.presence.sugartubeconn module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.tubeconn.html">sugar3.presence.tubeconn module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.presence.html#module-sugar3.presence">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.presence.html">sugar3.presence package</a><ul>
+      <li>Previous: <a href="sugar3.presence.html" title="previous chapter">sugar3.presence package</a></li>
+      <li>Next: <a href="sugar3.presence.buddy.html" title="next chapter">sugar3.presence.buddy module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.presence.activity.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

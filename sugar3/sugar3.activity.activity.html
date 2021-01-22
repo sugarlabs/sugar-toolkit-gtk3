@@ -1,0 +1,891 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.activity.activity module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.activity.activityfactory module" href="sugar3.activity.activityfactory.html" />
+    <link rel="prev" title="sugar3.activity package" href="sugar3.activity.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.activity.activity">
+<span id="sugar3-activity-activity-module"></span><h1>sugar3.activity.activity module<a class="headerlink" href="#module-sugar3.activity.activity" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="activity">
+<h2>Activity<a class="headerlink" href="#activity" title="Permalink to this headline">¶</a></h2>
+<p>A definitive reference for what a Sugar Python activity must do to
+participate in the Sugar desktop.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This API is STABLE.</p>
+</div>
+<p>The <a class="reference internal" href="#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Activity</span></code></a> class is used to derive all Sugar Python
+activities.  This is where your activity starts.</p>
+<p><strong>Derive from the class</strong></p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sugar3.activity.activity</span> <span class="kn">import</span> <span class="n">Activity</span>
+
+<span class="k">class</span> <span class="nc">MyActivity</span><span class="p">(</span><span class="n">Activity</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="n">Activity</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An activity must implement a new class derived from
+<a class="reference internal" href="#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Activity</span></code></a>.</p>
+<p>Name the new class <cite>MyActivity</cite>, where <cite>My</cite> is the name of your
+activity.  Use bundle metadata to tell Sugar to instantiate this
+class.  See <a class="reference internal" href="sugar3.bundle.html#module-sugar3.bundle" title="sugar3.bundle"><code class="xref py py-class docutils literal notranslate"><span class="pre">bundle</span></code></a> for bundle metadata.</p>
+</div></blockquote>
+<p><strong>Create a ToolbarBox</strong></p>
+<blockquote>
+<div><p>In your <code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code> method create a
+<a class="reference internal" href="sugar3.graphics.toolbarbox.html#sugar3.graphics.toolbarbox.ToolbarBox" title="sugar3.graphics.toolbarbox.ToolbarBox"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolbarBox</span></code></a>, with an
+<a class="reference internal" href="sugar3.activity.widgets.html#sugar3.activity.widgets.ActivityToolbarButton" title="sugar3.activity.widgets.ActivityToolbarButton"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActivityToolbarButton</span></code></a>, a
+<a class="reference internal" href="sugar3.activity.widgets.html#sugar3.activity.widgets.StopButton" title="sugar3.activity.widgets.StopButton"><code class="xref py py-class docutils literal notranslate"><span class="pre">StopButton</span></code></a>, and then call
+<a class="reference internal" href="sugar3.graphics.window.html#sugar3.graphics.window.Window.set_toolbar_box" title="sugar3.graphics.window.Window.set_toolbar_box"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_toolbar_box()</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sugar3.activity.activity</span> <span class="kn">import</span> <span class="n">Activity</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">sugar3.graphics.toolbarbox</span> <span class="kn">import</span> <span class="n">ToolbarBox</span>
+</span><span class="hll"><span class="kn">from</span> <span class="nn">sugar3.activity.widgets</span> <span class="kn">import</span> <span class="n">ActivityToolbarButton</span>
+</span><span class="hll"><span class="kn">from</span> <span class="nn">sugar3.activity.widgets</span> <span class="kn">import</span> <span class="n">StopButton</span>
+</span>
+<span class="k">class</span> <span class="nc">MyActivity</span><span class="p">(</span><span class="n">Activity</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="n">Activity</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
+
+<span class="hll">        <span class="n">toolbar_box</span> <span class="o">=</span> <span class="n">ToolbarBox</span><span class="p">()</span>
+</span><span class="hll">        <span class="n">activity_button</span> <span class="o">=</span> <span class="n">ActivityToolbarButton</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">toolbar_box</span><span class="o">.</span><span class="n">toolbar</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">activity_button</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">activity_button</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span><span class="hll">
+</span><span class="hll">        <span class="n">separator</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">SeparatorToolItem</span><span class="p">(</span><span class="n">draw</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">separator</span><span class="o">.</span><span class="n">set_expand</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">toolbar_box</span><span class="o">.</span><span class="n">toolbar</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">separator</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">separator</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span><span class="hll">
+</span><span class="hll">        <span class="n">stop_button</span> <span class="o">=</span> <span class="n">StopButton</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">toolbar_box</span><span class="o">.</span><span class="n">toolbar</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">stop_button</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">stop_button</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span><span class="hll">
+</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">set_toolbar_box</span><span class="p">(</span><span class="n">toolbar_box</span><span class="p">)</span>
+</span><span class="hll">        <span class="n">toolbar_box</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</div></blockquote>
+<p><strong>Journal methods</strong></p>
+<blockquote>
+<div><p>In your activity class, code
+<a class="reference internal" href="#sugar3.activity.activity.Activity.read_file" title="sugar3.activity.activity.Activity.read_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_file()</span></code></a> and
+<a class="reference internal" href="#sugar3.activity.activity.Activity.write_file" title="sugar3.activity.activity.Activity.write_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_file()</span></code></a> methods.</p>
+<p>Most activities create and resume journal objects.  For example,
+the Write activity saves the document as a journal object, and
+reads it from the journal object when resumed.</p>
+<p><a class="reference internal" href="#sugar3.activity.activity.Activity.read_file" title="sugar3.activity.activity.Activity.read_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_file()</span></code></a> and
+<a class="reference internal" href="#sugar3.activity.activity.Activity.write_file" title="sugar3.activity.activity.Activity.write_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_file()</span></code></a> will be
+called by the toolkit to tell your activity that it must load or
+save the data the user is working on.</p>
+</div></blockquote>
+<p><strong>Activity toolbars</strong></p>
+<blockquote>
+<div><p>Add any activity toolbars before the last separator in the
+<a class="reference internal" href="sugar3.graphics.toolbarbox.html#sugar3.graphics.toolbarbox.ToolbarBox" title="sugar3.graphics.toolbarbox.ToolbarBox"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolbarBox</span></code></a>, so that the
+<a class="reference internal" href="sugar3.activity.widgets.html#sugar3.activity.widgets.StopButton" title="sugar3.activity.widgets.StopButton"><code class="xref py py-class docutils literal notranslate"><span class="pre">StopButton</span></code></a> is aligned to the
+right.</p>
+<p>There are a number of standard Toolbars.</p>
+<p>You may need the <a class="reference internal" href="sugar3.activity.widgets.html#sugar3.activity.widgets.EditToolbar" title="sugar3.activity.widgets.EditToolbar"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditToolbar</span></code></a>.
+This has copy and paste buttons.  You may derive your own
+class from
+<a class="reference internal" href="sugar3.activity.widgets.html#sugar3.activity.widgets.EditToolbar" title="sugar3.activity.widgets.EditToolbar"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditToolbar</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sugar3.activity.widgets</span> <span class="kn">import</span> <span class="n">EditToolbar</span>
+
+<span class="k">class</span> <span class="nc">MyEditToolbar</span><span class="p">(</span><span class="n">EditToolbar</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="sugar3.activity.widgets.html#sugar3.activity.widgets.EditToolbar" title="sugar3.activity.widgets.EditToolbar"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditToolbar</span></code></a> for the
+methods you should implement in your class.</p>
+<p>You may need some activity specific buttons and options which
+you can create as toolbars by deriving a class from
+<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Toolbar.html#Gtk.Toolbar" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Toolbar</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MySpecialToolbar</span><span class="p">(</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Toolbar</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>Sharing</strong></p>
+<blockquote>
+<div><p>An activity can be shared across the network with other users.  Near
+the end of your <code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code>, test if the activity is shared,
+and connect to signals to detect sharing.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_activity</span><span class="p">:</span>
+    <span class="c1"># we are joining the activity</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;joined&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_joined_cb</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_shared</span><span class="p">():</span>
+        <span class="c1"># we have already joined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_joined_cb</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># we are creating the activity</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;shared&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shared_cb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add methods to handle the signals.</p>
+</div></blockquote>
+<p>Read through the methods of the <a class="reference internal" href="#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Activity</span></code></a> class below, to learn
+more about how to make an activity work.</p>
+<p>Hint: A good and simple activity to learn from is the Read activity.
+You may copy it and use it as a template.</p>
+<dl class="py class">
+<dt id="sugar3.activity.activity.Activity">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">Activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">handle</span></em>, <em class="sig-param"><span class="n">create_jobject</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sugar3.graphics.window.html#sugar3.graphics.window.Window" title="sugar3.graphics.window.Window"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.window.Window</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.Gtk.Container</span></code></p>
+<p>Initialise an Activity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<a class="reference internal" href="sugar3.activity.activityhandle.html#sugar3.activity.activityhandle.ActivityHandle" title="sugar3.activity.activityhandle.ActivityHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActivityHandle</span></code></a>) – instance providing the activity id and access to the presence
+service which <em>may</em> provide sharing for this application</p></li>
+<li><p><strong>create_jobject</strong> (<em>boolean</em>) – DEPRECATED: define if it should create a journal object if
+we are not resuming. The parameter is ignored, and always
+will be created a object in the Journal.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt><strong>Signals:</strong></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt><strong>shared</strong> - the activity has been shared on a network in</dt><dd><p>order that other users may join,</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>joined</strong> - the activity has joined with other instances of</dt><dd><p>the activity to create a shared network activity.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Side effects:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>sets the gdk screen DPI setting (resolution) to the Sugar
+screen resolution.</p></li>
+<li><p>connects our “destroy” message to our _destroy_cb method.</p></li>
+<li><p>creates a base Gtk.Window within this window.</p></li>
+<li><p>creates an ActivityService (self._bus) servicing this application.</p></li>
+</ul>
+</div></blockquote>
+<p>When your activity implements <code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code>, it must call the
+<a class="reference internal" href="#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Activity</span></code></a> class <code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code> before any
+<a class="reference internal" href="#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Activity</span></code></a> specific code.</p>
+<dl class="py attribute">
+<dt id="sugar3.activity.activity.Activity.active">
+<code class="sig-name descname">active</code><a class="headerlink" href="#sugar3.activity.activity.Activity.active" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether an activity is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.add_stop_button">
+<code class="sig-name descname">add_stop_button</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">button</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.add_stop_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register an extra stop button.  Normally not required.  Use only
+when an activity has more than the default stop button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>button</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Button.html#Gtk.Button" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Button</span></code></a>) – a stop button</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.busy">
+<code class="sig-name descname">busy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.busy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show that the activity is busy.  If used, must be called once
+before a lengthy operation, and <a class="reference internal" href="#sugar3.activity.activity.Activity.unbusy" title="sugar3.activity.activity.Activity.unbusy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unbusy()</span></code></a> must be called
+after the operation completes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">busy</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">long_operation</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">unbusy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.can_close">
+<code class="sig-name descname">can_close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.can_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether <a class="reference internal" href="#sugar3.activity.activity.Activity.close" title="sugar3.activity.activity.Activity.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a> is permitted.</p>
+<p>An activity may override this function to code extra checks
+before closing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether <a class="reference internal" href="#sugar3.activity.activity.Activity.close" title="sugar3.activity.activity.Activity.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a> is permitted by activity,
+default True.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.canvas">
+<em class="property">property </em><code class="sig-name descname">canvas</code><a class="headerlink" href="#sugar3.activity.activity.Activity.canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a> used as canvas, or work area of your
+activity.  A common canvas is <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/ScrolledWindow.html#Gtk.ScrolledWindow" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ScrolledWindow</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip_save</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save to the journal and stop the activity.</p>
+<p>Activities should not override this method, but should
+implement <a class="reference internal" href="#sugar3.activity.activity.Activity.write_file" title="sugar3.activity.activity.Activity.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write_file()</span></code></a> to do any state saving
+instead. If the activity wants to control wether it can close,
+it should override <a class="reference internal" href="#sugar3.activity.activity.Activity.can_close" title="sugar3.activity.activity.Activity.can_close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">can_close()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>skip_save</strong> (<em>bool</em>) – avoid last-chance save; but does not prevent
+a journal object, as an object is created when the activity
+starts.  Use this when an activity calls <a class="reference internal" href="#sugar3.activity.activity.Activity.save" title="sugar3.activity.activity.Activity.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a> just
+prior to <a class="reference internal" href="#sugar3.activity.activity.Activity.close" title="sugar3.activity.activity.Activity.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a copy of the journal object.</p>
+<p>Activities may use this to ‘Keep in Journal’ the current state
+of the activity.  A new journal object will be created for the
+running activity.</p>
+<p>Activities should not override this method. Instead, like
+<a class="reference internal" href="#sugar3.activity.activity.Activity.save" title="sugar3.activity.activity.Activity.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a> do any copy work that needs to be done in
+<a class="reference internal" href="#sugar3.activity.activity.Activity.write_file" title="sugar3.activity.activity.Activity.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write_file()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_active">
+<code class="sig-name descname">get_active</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get whether the activity is active.  An activity may be made
+inactive by the shell as a result of another activity being
+active.  An active activity accumulates usage metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if the activity is active.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_activity_root">
+<code class="sig-name descname">get_activity_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_activity_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated. This part of the API has been moved
+out of this class to the module itself</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_bundle_id">
+<code class="sig-name descname">get_bundle_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_bundle_id" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the bundle_id from the activity.info file</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_canvas">
+<code class="sig-name descname">get_canvas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <a class="reference internal" href="#sugar3.activity.activity.Activity.canvas" title="sugar3.activity.activity.Activity.canvas"><code class="xref py py-attr docutils literal notranslate"><span class="pre">canvas</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the widget used as canvas</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_document_path">
+<code class="sig-name descname">get_document_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">async_cb</span></em>, <em class="sig-param"><span class="n">async_err_cb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_document_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not implemented.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_id">
+<code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the activity id, a likely-unique identifier for the
+instance of an activity, randomly assigned when a new instance
+is started, or read from the journal object metadata when a
+saved instance is resumed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the activity id</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+<p>See also
+<a class="reference internal" href="sugar3.activity.activityfactory.html#sugar3.activity.activityfactory.create_activity_id" title="sugar3.activity.activityfactory.create_activity_id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_activity_id()</span></code></a>
+and <a class="reference internal" href="sugar3.util.html#sugar3.util.unique_id" title="sugar3.util.unique_id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unique_id()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_max_participants">
+<code class="sig-name descname">get_max_participants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_max_participants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the maximum number of users that can share a instance
+of this activity.  Should be configured in the activity.info
+file.  When not configured, it will be zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the maximum number of participants</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<p>See also
+<a class="reference internal" href="sugar3.bundle.activitybundle.html#sugar3.bundle.activitybundle.ActivityBundle.get_max_participants" title="sugar3.bundle.activitybundle.ActivityBundle.get_max_participants"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_max_participants()</span></code></a>
+in <a class="reference internal" href="sugar3.bundle.activitybundle.html#sugar3.bundle.activitybundle.ActivityBundle" title="sugar3.bundle.activitybundle.ActivityBundle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActivityBundle</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_metadata">
+<code class="sig-name descname">get_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the journal object metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the journal object metadata, or None if there is no object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p>Activities can set metadata in write_file() using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;MyKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Something&#39;</span>
+</pre></div>
+</div>
+<p>and retrieve metadata in read_file() using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MyKey&#39;</span><span class="p">,</span> <span class="s1">&#39;aDefaultValue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make sure your activity works properly if one or more of the
+metadata items is missing. Never assume they will all be
+present.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_preview">
+<code class="sig-name descname">get_preview</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a preview image from the <a class="reference internal" href="#sugar3.activity.activity.Activity.canvas" title="sugar3.activity.activity.Activity.canvas"><code class="xref py py-attr docutils literal notranslate"><span class="pre">canvas</span></code></a>, for use as
+metadata for the journal object.  This should be what the user
+is seeing at the time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image data in PNG format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bytes</p>
+</dd>
+</dl>
+<p>Activities may override this method, and return a string with
+image data in PNG format with a width and height of
+<a class="reference internal" href="#sugar3.activity.activity.PREVIEW_SIZE" title="sugar3.activity.activity.PREVIEW_SIZE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">PREVIEW_SIZE</span></code></a> pixels.</p>
+<p>The method creates a Cairo surface similar to that of the
+<span class="xref std std-ref">Gdk.Window</span> of the <a class="reference internal" href="#sugar3.activity.activity.Activity.canvas" title="sugar3.activity.activity.Activity.canvas"><code class="xref py py-meth docutils literal notranslate"><span class="pre">canvas()</span></code></a> widget, draws on it,
+then resizes to a surface with the preview size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_shared">
+<code class="sig-name descname">get_shared</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_shared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get whether the activity is shared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the activity is shared.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.get_shared_activity">
+<code class="sig-name descname">get_shared_activity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_shared_activity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the shared activity of type
+<a class="reference internal" href="sugar3.presence.activity.html#sugar3.presence.activity.Activity" title="sugar3.presence.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.presence.activity.Activity</span></code></a>, or None if the
+activity is not shared, or is shared and not yet joined.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>instance of</dt><dd><p>the shared activity or None</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="sugar3.presence.activity.html#sugar3.presence.activity.Activity" title="sugar3.presence.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.presence.activity.Activity</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.handle_view_source">
+<code class="sig-name descname">handle_view_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.handle_view_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>An activity may override this method to show aditional
+information in the View Source window. Examples can be seen in
+Browse and TurtleArt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.iconify">
+<code class="sig-name descname">iconify</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.iconify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.invite">
+<code class="sig-name descname">invite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account_path</span></em>, <em class="sig-param"><span class="n">contact_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.invite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invite a buddy to join this activity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>account_path</strong> – </p></li>
+<li><p><strong>contact_id</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt><strong>Side Effects:</strong></dt><dd><p>Calls <a class="reference internal" href="#sugar3.activity.activity.Activity.share" title="sugar3.activity.activity.Activity.share"><code class="xref py py-meth docutils literal notranslate"><span class="pre">share()</span></code></a> to privately share the activity if it wasn’t
+shared before.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.activity.activity.Activity.max_participants">
+<code class="sig-name descname">max_participants</code><a class="headerlink" href="#sugar3.activity.activity.Activity.max_participants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the maximum number of users that can share a instance
+of this activity.  Should be configured in the activity.info
+file.  When not configured, it will be zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the maximum number of participants</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<p>See also
+<a class="reference internal" href="sugar3.bundle.activitybundle.html#sugar3.bundle.activitybundle.ActivityBundle.get_max_participants" title="sugar3.bundle.activitybundle.ActivityBundle.get_max_participants"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_max_participants()</span></code></a>
+in <a class="reference internal" href="sugar3.bundle.activitybundle.html#sugar3.bundle.activitybundle.ActivityBundle" title="sugar3.bundle.activitybundle.ActivityBundle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActivityBundle</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.metadata">
+<em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#sugar3.activity.activity.Activity.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the journal object metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the journal object metadata, or None if there is no object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p>Activities can set metadata in write_file() using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;MyKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Something&#39;</span>
+</pre></div>
+</div>
+<p>and retrieve metadata in read_file() using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MyKey&#39;</span><span class="p">,</span> <span class="s1">&#39;aDefaultValue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make sure your activity works properly if one or more of the
+metadata items is missing. Never assume they will all be
+present.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.notify_user">
+<code class="sig-name descname">notify_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">summary</span></em>, <em class="sig-param"><span class="n">body</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.notify_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a notification with the given summary and body.
+The notification will go under the activities icon in the frame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.read_file">
+<code class="sig-name descname">read_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclasses implement this method if they support resuming objects from
+the journal. ‘file_path’ is the file to read from.</p>
+<p>You should immediately open the file from the file_path,
+because the file_name will be deleted immediately after
+returning from <a class="reference internal" href="#sugar3.activity.activity.Activity.read_file" title="sugar3.activity.activity.Activity.read_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_file()</span></code></a>.</p>
+<p>Once the file has been opened, you do not have to read it immediately:
+After you have opened it, the file will only be really gone when you
+close it.</p>
+<p>Although not required, this is also a good time to read all meta-data:
+the file itself cannot be changed externally, but the title,
+description and other metadata[‘tags’] may change. So if it is
+important for you to notice changes, this is the time to record the
+originals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – the file path to read</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.run_main_loop">
+<code class="sig-name descname">run_main_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.run_main_loop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save to the journal.</p>
+<p>This may be called by the <a class="reference internal" href="#sugar3.activity.activity.Activity.close" title="sugar3.activity.activity.Activity.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> method.</p>
+<p>Activities should not override this method. This method is part of the
+public API of an activity, and should behave in standard ways. Use your
+own implementation of write_file() to save your activity specific data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.set_active">
+<code class="sig-name descname">set_active</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">active</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether the activity is active.  An activity may declare
+itself active or inactive, as can the shell.  An active activity
+accumulates usage metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>active</strong> (<em>boolean</em>) – if the activity is active.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.set_canvas">
+<code class="sig-name descname">set_canvas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">canvas</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="#sugar3.activity.activity.Activity.canvas" title="sugar3.activity.activity.Activity.canvas"><code class="xref py py-attr docutils literal notranslate"><span class="pre">canvas</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>canvas</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a>) – the widget used as canvas</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.set_max_participants">
+<code class="sig-name descname">set_max_participants</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_max_participants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the maximum number of users that can share a instance of
+this activity.  An activity may use this method instead of or
+as well as configuring the activity.info file.  When both are
+used, this method takes precedence over the activity.info
+file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>participants</strong> (<em>int</em>) – the maximum number of participants</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.share">
+<code class="sig-name descname">share</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">private</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.share" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request that the activity be shared on the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>private</strong> (<em>bool</em>) – True to share by invitation only,
+False to advertise as shared to everyone.</p>
+</dd>
+</dl>
+<p>Once the activity is shared, its privacy can be changed by
+setting the <code class="xref py py-attr docutils literal notranslate"><span class="pre">private</span></code> property of the
+<a class="reference internal" href="sugar3.presence.activity.html#sugar3.presence.activity.Activity" title="sugar3.presence.activity.Activity"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sugar3.presence.activity.Activity</span></code></a> class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.unbusy">
+<code class="sig-name descname">unbusy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.unbusy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show that the activity is not busy.  An equal number of calls
+to <a class="reference internal" href="#sugar3.activity.activity.Activity.unbusy" title="sugar3.activity.activity.Activity.unbusy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unbusy()</span></code></a> are required to balance the calls to
+<a class="reference internal" href="#sugar3.activity.activity.Activity.busy" title="sugar3.activity.activity.Activity.busy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">busy()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a count of further calls to <a class="reference internal" href="#sugar3.activity.activity.Activity.unbusy" title="sugar3.activity.activity.Activity.unbusy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unbusy()</span></code></a> expected</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.activity.activity.Activity.write_file">
+<code class="sig-name descname">write_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclasses implement this method if they support saving data to objects
+in the journal. ‘file_path’ is the file to write to.</p>
+<p>If the user did make changes, you should create the file_path and save
+all document data to it.</p>
+<p>Additionally, you should also write any metadata needed to resume your
+activity. For example, the Read activity saves the current page and
+zoom level, so it can display the page.</p>
+<p>Note: Currently, the file_path <em>WILL</em> be different from the
+one you received in <a class="reference internal" href="#sugar3.activity.activity.Activity.read_file" title="sugar3.activity.activity.Activity.read_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_file()</span></code></a>. Even if you kept the
+file_path from <a class="reference internal" href="#sugar3.activity.activity.Activity.read_file" title="sugar3.activity.activity.Activity.read_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_file()</span></code></a> open until now, you must
+still write the entire file to this file_path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – complete path of the file to write</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt id="sugar3.activity.activity.PREVIEW_SIZE">
+<code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">PREVIEW_SIZE</code><em class="property"> = (300, 225)</em><a class="headerlink" href="#sugar3.activity.activity.PREVIEW_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of a preview image for journal object metadata.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.activity.activity.get_activity_root">
+<code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">get_activity_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_activity_root" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a path for saving Activity specific preferences, etc.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+<p>Returns a path to the location in the filesystem where the
+activity can store activity related data that doesn’t pertain to
+the current execution of the activity and thus cannot go into the
+DataStore.</p>
+<p>Currently, this will return something like
+~/.sugar/default/MyActivityName/</p>
+<p>Activities should ONLY save settings, user preferences and other
+data which isn’t specific to a journal item here. If (meta-)data
+is in anyway specific to a journal entry, it MUST be stored in the
+DataStore.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.activity.activity.get_bundle">
+<code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">get_bundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bundle_id</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">object_id</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the bundle id of an activity that can open a journal object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bundle_id</strong> (<em>str</em>) – activity bundle id, optional</p></li>
+<li><p><strong>object_id</strong> (<em>object</em>) – journal object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.activity.activity.get_bundle_name">
+<code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">get_bundle_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the bundle name for the current process’ bundle</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.activity.activity.get_bundle_path">
+<code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">get_bundle_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle_path" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the bundle path for the current process’ bundle</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.activity.activity.launch_bundle">
+<code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">launch_bundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bundle_id</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">object_id</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.launch_bundle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch an activity for a journal object, or an activity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bundle_id</strong> (<em>str</em>) – activity bundle id, optional</p></li>
+<li><p><strong>object_id</strong> (<em>object</em>) – journal object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.activity.activity.show_object_in_journal">
+<code class="sig-prename descclassname">sugar3.activity.activity.</code><code class="sig-name descname">show_object_in_journal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.show_object_in_journal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise the journal activity and show a journal object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object_id</strong> (<em>object</em>) – journal object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.activity.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.activity.activity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityfactory.html">sugar3.activity.activityfactory module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityhandle.html">sugar3.activity.activityhandle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityinstance.html">sugar3.activity.activityinstance module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.activityservice.html">sugar3.activity.activityservice module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.bundlebuilder.html">sugar3.activity.bundlebuilder module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.i18n.html">sugar3.activity.i18n module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.webactivity.html">sugar3.activity.webactivity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.activity.widgets.html">sugar3.activity.widgets module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.activity.html#module-sugar3.activity">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.activity.html">sugar3.activity package</a><ul>
+      <li>Previous: <a href="sugar3.activity.html" title="previous chapter">sugar3.activity package</a></li>
+      <li>Next: <a href="sugar3.activity.activityfactory.html" title="next chapter">sugar3.activity.activityfactory module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.activity.activity.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

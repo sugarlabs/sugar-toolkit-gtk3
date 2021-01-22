@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.bundle package &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.bundle.activitybundle module" href="sugar3.bundle.activitybundle.html" />
+    <link rel="prev" title="sugar3.activity.widgets module" href="sugar3.activity.widgets.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="sugar3-bundle-package">
+<h1>sugar3.bundle package<a class="headerlink" href="#sugar3-bundle-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.bundle.activitybundle.html">sugar3.bundle.activitybundle module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.bundle.bundle.html">sugar3.bundle.bundle module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.bundle.bundleversion.html">sugar3.bundle.bundleversion module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.bundle.contentbundle.html">sugar3.bundle.contentbundle module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar3.bundle.helpers.html">sugar3.bundle.helpers module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-sugar3.bundle">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sugar3.bundle" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="activity-metadata">
+<h3>Activity Metadata<a class="headerlink" href="#activity-metadata" title="Permalink to this headline">¶</a></h3>
+<p>Your <cite>activity/activity.info</cite> file must have these metadata keys after
+an <cite>[Activity]</cite> header on the first line:</p>
+<ul class="simple">
+<li><p><cite>name</cite> - the name of the activity, shown by Sugar in the list of
+installed activities, e.g. Browse,</p></li>
+<li><p><cite>activity_version</cite> - the version of the activity, e.g. 1, 1.2,
+1.2.3, 1.2.3-country, or 1.2.3~developer,</p></li>
+<li><p><cite>bundle_id</cite> - the activity bundle identifier, using [Java package
+naming conventions]
+(<a class="reference external" href="http://en.wikipedia.org/wiki/Java_package#Package_naming_conventions">http://en.wikipedia.org/wiki/Java_package#Package_naming_conventions</a>),
+should conform to the [D-Bus specification for message protocol
+names]
+(<a class="reference external" href="http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names">http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names</a>)
+(hyphens are not allowed), usually an organisation or individual domain name
+in reverse order, e.g. <cite>org.sugarlabs.Name</cite>,</p></li>
+<li><p><cite>license</cite> - an identifier for the software license of the bundle,
+either a <a class="reference external" href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Good_Licenses">Fedora License Short Name</a>, (e.g. GPLv3+) or an <a class="reference external" href="http://spdx.org/licenses/">SPDX
+License Identifier</a>, with an optional <cite>or later version</cite> suffix,
+e.g. <cite>GPL-3.0+</cite>, and multiple licenses are to be separated with
+semicolons,</p></li>
+<li><p><cite>icon</cite> - the icon file for the activity, shown by Sugar in the list
+of installed activities,</p></li>
+<li><p><cite>exec</cite> - how to execute the activity, e.g.
+<cite>sugar-activity3 module.Class</cite> (For activities written for Python 3),
+<cite>sugar-activity module.Class</cite> (For activities written for Python 2)</p></li>
+</ul>
+<p>Optional metadata keys are;</p>
+<ul class="simple">
+<li><p><cite>summary</cite> - a short summary of the activity that may be displayed in
+the List or Home Views,</p></li>
+<li><p><cite>mime_types</cite> - list of MIME types supported by the activity,
+separated by semicolons.  Your <cite>read_file</cite> method must be able to read
+files of these MIME types.  Used to offer your activity when opening a
+downloaded file or a journal object.</p></li>
+<li><p><cite>url</cite> - link to a home page or user documentation on
+<a class="reference external" href="https://help.sugarlabs.org/">https://help.sugarlabs.org/</a>,</p></li>
+<li><p><cite>repository</cite> - link to repository for activity code, for use by git clone,</p></li>
+<li><p><cite>single_instance</cite> - if yes, only a single instance of an activity
+should be started at any one time, and if another instance is requested
+the existing instance shown,</p></li>
+<li><p><cite>max_participants</cite> - maximum participants for sharing an activity,</p></li>
+<li><dl class="simple">
+<dt><cite>tags</cite> - a semicolon or whitespace delimited list of keywords that</dt><dd><p>describe the activity. Suggested keywords are Programming,
+Robotics, Internet, Science, Maths, Language, Geography, Game, Documents,
+Music, Media, Art, Teacher, or System,</p>
+</dd>
+</dl>
+</li>
+<li><p><cite>show_launcher</cite> - if set to “no”, the activity is not shown in list view,</p></li>
+</ul>
+<p>Deprecated metadata keys are;</p>
+<ul class="simple">
+<li><p><cite>category</cite> or <cite>categories</cite> - aliases for <cite>tags</cite>,</p></li>
+<li><p><cite>website</cite> - alias for <cite>url</cite>,</p></li>
+<li><p><cite>update_url</cite> - the updater no longer uses this.</p></li>
+</ul>
+</div>
+<div class="section" id="appstream-metadata">
+<h3>AppStream Metadata<a class="headerlink" href="#appstream-metadata" title="Permalink to this headline">¶</a></h3>
+<p>AppStream is a standard, distribution independent package metadata.
+For Sugar activities, the AppStream metadata is automatically exported
+from the activity.info file by the bundlebuilder during the install
+step.</p>
+<p>In order to be compliant with AppStream, activities must have the
+following metadata fields under the [Activity] header (of the
+<cite>activity.info</cite> file):</p>
+<ul class="simple">
+<li><p><cite>metadata_license</cite> - license for screenshots and description.  AppStream
+requests only using one of the following: <cite>CC0-1.0</cite>, <cite>CC-BY-3.0</cite>,
+<cite>CC-BY-SA-3.0</cite> or <cite>GFDL-1.3</cite></p></li>
+<li><p><cite>description</cite> - a long (multi paragraph) description of your application.
+This must be written in a subset of HTML.  Only the p, ol, ul and li tags
+are supported.</p></li>
+</ul>
+<p>Optional metadata key:</p>
+<ul class="simple">
+<li><p><cite>screenshots</cite> - a space separated list of screenshot URLs.  PNG or JPEG files
+are supported.</p></li>
+</ul>
+<div class="section" id="example-activity-info">
+<h4>Example <cite>activity.info</cite><a class="headerlink" href="#example-activity-info" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[Activity]</span>
+<span class="na">name</span> <span class="o">=</span> <span class="s">Browse</span>
+<span class="na">bundle_id</span> <span class="o">=</span> <span class="s">org.laptop.WebActivity</span>
+<span class="na">exec</span> <span class="o">=</span> <span class="s">sugar-activity3 webactivity.WebActivity -s</span>
+<span class="na">activity_version</span> <span class="o">=</span> <span class="s">200</span>
+<span class="na">icon</span> <span class="o">=</span> <span class="s">activity-web</span>
+<span class="na">max_participants</span> <span class="o">=</span> <span class="s">100</span>
+<span class="na">summary</span> <span class="o">=</span> <span class="s">Surf the world!</span>
+
+<span class="na">license</span> <span class="o">=</span> <span class="s">GPLv2+;LGPLv2+;GPLv3+</span>
+<span class="na">repository</span> <span class="o">=</span> <span class="s">https://github.com/sugarlabs/browse-activity.git</span>
+<span class="na">url</span> <span class="o">=</span> <span class="s">https://help.sugarlabs.org/en/browse.html</span>
+<span class="na">tags</span> <span class="o">=</span> <span class="s">Utilities;Internet</span>
+
+<span class="na">metadata_license</span> <span class="o">=</span> <span class="s">CC0-1.0</span>
+<span class="na">description:</span>
+    <span class="na">&lt;p&gt;</span>
+    <span class="na">Surf the world! Here you can do research, watch educational videos,</span>
+    <span class="na">take online courses, find books, connect with friends and more.</span>
+    <span class="na">Browse is powered by the WebKit2 rendering engine with the Faster</span>
+    <span class="na">Than Light javascript interpreter - allowing you to view the</span>
+    <span class="na">full beauty of the web.</span>
+    <span class="na">&lt;/p&gt;</span>
+    <span class="na">&lt;p&gt;To help in researching, Browse offers many features:&lt;/p&gt;</span>
+    <span class="na">&lt;ul&gt;</span>
+        <span class="na">&lt;li&gt;</span>
+        <span class="na">Bookmark (save) good pages you find - never loose good resources</span>
+        <span class="na">or forget to add them to your bibliography</span>
+        <span class="na">&lt;/li&gt;</span>
+        <span class="na">&lt;li&gt;</span>
+        <span class="na">Bookmark pages with collaborators in real time - great for</span>
+        <span class="na">researching as a group or teachers showing pages to their class</span>
+        <span class="na">&lt;/li&gt;</span>
+        <span class="na">&lt;li&gt;</span>
+        <span class="na">Comment on your bookmarked pages - a great tool for making curated</span>
+        <span class="na">collections</span>
+        <span class="na">&lt;/li&gt;</span>
+    <span class="na">&lt;/ul&gt;</span>
+<span class="na">screenshots</span> <span class="o">=</span> <span class="s">https://people.sugarlabs.org/sam/activity-ss/browse-1-1.png https://people.sugarlabs.org/sam/activity-ss/browse-1-2.png</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sugar3.bundle package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.activitybundle.html">sugar3.bundle.activitybundle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.bundle.html">sugar3.bundle.bundle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.bundleversion.html">sugar3.bundle.bundleversion module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.contentbundle.html">sugar3.bundle.contentbundle module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.bundle.helpers.html">sugar3.bundle.helpers module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sugar3.bundle">Module contents</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#activity-metadata">Activity Metadata</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#appstream-metadata">AppStream Metadata</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+      <li>Previous: <a href="sugar3.activity.widgets.html" title="previous chapter">sugar3.activity.widgets module</a></li>
+      <li>Next: <a href="sugar3.bundle.activitybundle.html" title="next chapter">sugar3.bundle.activitybundle module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.bundle.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

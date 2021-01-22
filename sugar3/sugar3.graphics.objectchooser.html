@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.objectchooser module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.palette module" href="sugar3.graphics.palette.html" />
+    <link rel="prev" title="sugar3.graphics.notebook module" href="sugar3.graphics.notebook.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.objectchooser">
+<span id="sugar3-graphics-objectchooser-module"></span><h1>sugar3.graphics.objectchooser module<a class="headerlink" href="#module-sugar3.graphics.objectchooser" title="Permalink to this headline">¶</a></h1>
+<p>STABLE.</p>
+<dl class="py class">
+<dt id="sugar3.graphics.objectchooser.ObjectChooser">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.objectchooser.</code><code class="sig-name descname">ObjectChooser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">what_filter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filter_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">show_preview</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>UI interface for object choosers.</p>
+<p>Object choosers can be used by acivities to allow the
+user to select objects from the file system or from
+some other similar source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a>) – the widget calling ObjectChooser</p></li>
+<li><p><strong>what_filter</strong> (<em>str</em>) – an activity bundle_id or a generic mime type as
+defined in <a class="reference internal" href="sugar3.mime.html#module-sugar3.mime" title="sugar3.mime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sugar3.mime</span></code></a> used to determine which objects
+will be presented in the object chooser</p></li>
+<li><p><strong>filter_type</strong> (<em>str</em>) – <p>should be one of [None, FILTER_TYPE_GENERIC_MIME,
+FILTER_TYPE_ACTIVITY, FILTER_TYPE_MIME_BY_ACTIVITY]</p>
+<p>If filter_type is None, the default behavior of the
+what_filter is applied (for backward compatibility),
+this option is DEPRECATED.</p>
+<p>If filter_type is FILTER_TYPE_GENERIC_MIME, the
+what_filter should be a generic mime type defined in
+mime.py; the object chooser will filter based in the
+‘mime_type’ metadata field.</p>
+<p>If filter_type is FILTER_TYPE_ACTIVITY, the what_filter
+should by an activity bundle_id; the object chooser
+will filter based in the ‘activity’ metadata field.</p>
+<p>If filter_type is FILTER_TYPE_MIME_BY_ACTIVITY, the
+what_filter should be an activity bundle_id; the object
+chooser will filter based on the ‘mime_type’ metadata
+field and the mime types defined by the activity in the
+activity.info file.</p>
+</p></li>
+<li><p><strong>show_preview</strong> (<em>bool</em>) – if True will show the preview image asociated with
+the object in the Journal. This option is only available if
+filter_type is selected.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>chooser = ObjectChooser(self._activity, what_filter=’Image’)</p>
+<dl class="simple">
+<dt>chooser = ObjectChooser(parent=self,</dt><dd><p>what_filter=self.get_bundle_id(),
+filter_type=FILTER_TYPE_ACTIVITY)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="sugar3.graphics.objectchooser.ObjectChooser.destroy">
+<code class="sig-name descname">destroy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys and cleans up (disposes) the object chooser.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.objectchooser.ObjectChooser.get_selected_object">
+<code class="sig-name descname">get_selected_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.get_selected_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object selected using the object chooser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>object, the object selected</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.objectchooser.ObjectChooser.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the object chooser and displays it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Gtk.ResponseType constant, the response received
+from displaying the object chooser.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.graphics.objectchooser.get_preview_pixbuf">
+<code class="sig-prename descclassname">sugar3.graphics.objectchooser.</code><code class="sig-name descname">get_preview_pixbuf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preview_data</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.get_preview_pixbuf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrive a pixbuf with the content of the preview field</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metadata</strong> (<em>dictionary</em>) – preview data from the metadata dictionary. Can’t
+be None. Returned from the
+sugar3.datastore.datastore.DSObject.get_metadata() method.</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>width</strong> (<em>int</em>) – the pixbuf width, if is not set,</p></li>
+<li><p><strong>default width will be used</strong> (<em>the</em>) – </p></li>
+<li><p><strong>height</strong> (<em>int</em>) – the pixbuf width, if is not set,</p></li>
+<li><p><strong>default height will be used</strong> (<em>the</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Pixbuf, the generated Pixbuf
+None, if it could not be created</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>pixbuf = get_preview_pixbuf(metadata.get(‘preview’, ‘’))
+has_preview = pixbuf is not None</p>
+<dl class="simple">
+<dt>if has_preview:</dt><dd><p>im = Gtk.Image()
+im.set_from_pixbuf(pixbuf)
+box.add(im)
+im.show()</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.notebook.html" title="previous chapter">sugar3.graphics.notebook module</a></li>
+      <li>Next: <a href="sugar3.graphics.palette.html" title="next chapter">sugar3.graphics.palette module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.objectchooser.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

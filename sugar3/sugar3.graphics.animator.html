@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.animator module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.colorbutton module" href="sugar3.graphics.colorbutton.html" />
+    <link rel="prev" title="sugar3.graphics.alert module" href="sugar3.graphics.alert.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.animator">
+<span id="sugar3-graphics-animator-module"></span><h1>sugar3.graphics.animator module<a class="headerlink" href="#module-sugar3.graphics.animator" title="Permalink to this headline">¶</a></h1>
+<p>The animator module provides a simple framework to create animations.</p>
+<p class="rubric">Example</p>
+<p>Animate the size of a window:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Gtk</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.animator</span> <span class="kn">import</span> <span class="n">Animator</span><span class="p">,</span> <span class="n">Animation</span>
+
+<span class="c1"># Construct a window to animate</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;destroy&#39;</span><span class="p">,</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">main_quit</span><span class="p">)</span>
+<span class="c1"># Start the animation when the window is shown</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;realize&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">animator</span><span class="o">.</span><span class="n">start</span><span class="p">())</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Construct a 5 second animator</span>
+<span class="n">animator</span> <span class="o">=</span> <span class="n">Animator</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+
+<span class="c1"># Create an animation subclass to animate the widget</span>
+<span class="k">class</span> <span class="nc">SizeAnimation</span><span class="p">(</span><span class="n">Animation</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Tell the animation to give us values between 20 and</span>
+        <span class="c1"># 420 during the animation</span>
+        <span class="n">Animation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">420</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">next_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">w</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+<span class="c1"># Add the animation the the animator</span>
+<span class="n">animation</span> <span class="o">=</span> <span class="n">SizeAnimation</span><span class="p">()</span>
+<span class="n">animator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">animation</span><span class="p">)</span>
+
+<span class="c1"># The animation needs to run inside a GObject main loop</span>
+<span class="n">Gtk</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>STABLE.</p>
+<dl class="py class">
+<dt id="sugar3.graphics.animator.Animation">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.animator.</code><code class="sig-name descname">Animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">end</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The animation class is a base class for creating an animation.
+It should be subclassed.  Subclasses should specify a <cite>next_frame</cite>
+function to set the required properties based on the animation
+progress.  The range of the <cite>frame</cite> value passed to the <cite>next_frame</cite>
+function is defined by the <cite>start</cite> and <cite>end</cite> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>float</em>) – the first <cite>frame</cite> value for the <cite>next_frame</cite> method</p></li>
+<li><p><strong>end</strong> (<em>float</em>) – the last <cite>frame</cite> value for the <cite>next_frame</cite> method</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an animation subclass</span>
+<span class="k">class</span> <span class="nc">MyAnimation</span><span class="p">(</span><span class="n">Animation</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thing</span><span class="p">):</span>
+        <span class="c1"># Tell the animation to give us values between 0.0 and</span>
+        <span class="c1"># 1.0 during the animation</span>
+        <span class="n">Animation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_thing</span> <span class="o">=</span> <span class="n">thing</span>
+
+    <span class="k">def</span> <span class="nf">next_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="c1"># Use the `frame` value to set properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_thing</span><span class="o">.</span><span class="n">set_green_value</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="sugar3.graphics.animator.Animation.do_frame">
+<code class="sig-name descname">do_frame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">easing</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.do_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the animator class every frame.  This
+method calculated the <cite>frame</cite> value to then call <cite>next_frame</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>float</em>) – the current time elapsed of the animation in seconds</p></li>
+<li><p><strong>duration</strong> (<em>float</em>) – the length of the animation in seconds</p></li>
+<li><p><strong>easing</strong> (<em>int</em>) – the easing mode passed to the animator</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.animator.Animation.do_stop">
+<code class="sig-name descname">do_stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.do_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called whenever the animation is stopped, either
+due to the animation ending or being stopped by the animation.
+<cite>next_frame</cite> will not be called after do_stop, unless the animation
+is restarted.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.109.0.3.</span></p>
+</div>
+<p>This should be used in subclasses if they bind any signals.  Eg.
+if they bind the draw signal for a widget:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SignalAnimation</span><span class="p">(</span><span class="n">Animation</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">):</span>
+        <span class="n">Animation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_hid</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span> <span class="o">=</span> <span class="n">widget</span>
+
+    <span class="k">def</span> <span class="nf">next_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_hid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_hid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="o">.</span><span class="n">connect_after</span><span class="p">(</span>
+                <span class="s1">&#39;draw&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__draw_cb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="o">.</span><span class="n">queue_draw</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__draw_cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="n">cr</span><span class="p">):</span>
+        <span class="n">cr</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="c1"># Do the draw</span>
+        <span class="n">cr</span><span class="o">.</span><span class="n">restore</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">do_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_draw_hid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="o">.</span><span class="n">queue_draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.animator.Animation.next_frame">
+<code class="sig-name descname">next_frame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.next_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called every frame and should be overridden by
+subclasses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>frame</strong> (<em>float</em>) – a value between <cite>start</cite> and <cite>end</cite> representing
+the current progress in the animation</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.animator.Animator">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.animator.</code><code class="sig-name descname">Animator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">fps</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">easing</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<p>The animator class manages the timing for calling the
+animations.  The animations can be added using the <cite>add</cite> function
+and then started with the <cite>start</cite> function.  If multiple animations
+are added, then they will be played back at the same time and rate
+as each other.</p>
+<p>The <cite>completed</cite> signal is emitted upon the completion of the
+animation and also when the <cite>stop</cite> function is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> (<em>float</em>) – the duration of the animation in seconds</p></li>
+<li><p><strong>fps</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of animation callbacks to make
+per second (frames per second)</p></li>
+<li><p><strong>easing</strong> (<em>int</em>) – the desired easing mode, either <cite>EASE_OUT_EXPO</cite>
+or <cite>EASE_IN_EXPO</cite></p></li>
+<li><p><strong>widget</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a>) – one of the widgets that the animation
+is acting on.  If supplied and if the user’s Gtk+ version
+supports it, the animation will run on the frame clock of the
+widget, resulting in a smoother animation and the fps value
+will be disregarded.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When creating an animation, take into account the limited cpu power
+on some devices, such as the XO.  Setting the fps too high on can
+use significant cpu usage on the XO.</p>
+</div>
+<dl class="py method">
+<dt id="sugar3.graphics.animator.Animator.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">animation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an animation to this animator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>animation</strong> (<a class="reference internal" href="#sugar3.graphics.animator.Animation" title="sugar3.graphics.animator.Animation"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.animator.Animation</span></code></a>) – the animation instance to add</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.animator.Animator.remove_all">
+<code class="sig-name descname">remove_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.remove_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all animations and stop this animator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.animator.Animator.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the animation running.  This will stop and restart the
+animation if the animation is currently running</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.animator.Animator.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the animation and emit the <cite>completed</cite> signal</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.alert.html" title="previous chapter">sugar3.graphics.alert module</a></li>
+      <li>Next: <a href="sugar3.graphics.colorbutton.html" title="next chapter">sugar3.graphics.colorbutton module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.animator.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.presence.presenceservice module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.presence.sugartubeconn module" href="sugar3.presence.sugartubeconn.html" />
+    <link rel="prev" title="sugar3.presence.connectionmanager module" href="sugar3.presence.connectionmanager.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.presence.presenceservice">
+<span id="sugar3-presence-presenceservice-module"></span><h1>sugar3.presence.presenceservice module<a class="headerlink" href="#module-sugar3.presence.presenceservice" title="Permalink to this headline">¶</a></h1>
+<p>STABLE.</p>
+<dl class="py class">
+<dt id="sugar3.presence.presenceservice.PresenceService">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.presence.presenceservice.</code><code class="sig-name descname">PresenceService</code><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<p>Provides simplified access to the Telepathy framework to activities</p>
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_activities">
+<code class="sig-name descname">get_activities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_activities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_activities_async">
+<code class="sig-name descname">get_activities_async</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reply_handler</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">error_handler</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_activities_async" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_activity">
+<code class="sig-name descname">get_activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">activity_id</span></em>, <em class="sig-param"><span class="n">warn_if_none</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_activity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve single Activity object for the given unique id</p>
+<p>activity_id – unique ID for the activity</p>
+<dl class="simple">
+<dt>returns single Activity object or None if the activity</dt><dd><p>is not found using GetActivityById on the service</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_activity_by_handle">
+<code class="sig-name descname">get_activity_by_handle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection_path</span></em>, <em class="sig-param"><span class="n">room_handle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_activity_by_handle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_buddies">
+<code class="sig-name descname">get_buddies</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_buddies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_buddies_async">
+<code class="sig-name descname">get_buddies_async</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reply_handler</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">error_handler</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_buddies_async" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_buddy">
+<code class="sig-name descname">get_buddy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account_path</span></em>, <em class="sig-param"><span class="n">contact_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_buddy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_buddy_by_telepathy_handle">
+<code class="sig-name descname">get_buddy_by_telepathy_handle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tp_conn_name</span></em>, <em class="sig-param"><span class="n">tp_conn_path</span></em>, <em class="sig-param"><span class="n">handle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_buddy_by_telepathy_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve single Buddy object for the given public key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><cite>tp_conn_name</cite><span class="classifier">str</span></dt><dd><p>The well-known bus name of a Telepathy connection</p>
+</dd>
+<dt><cite>tp_conn_path</cite><span class="classifier">dbus.ObjectPath</span></dt><dd><p>The object path of the Telepathy connection</p>
+</dd>
+<dt><cite>handle</cite><span class="classifier">int or long</span></dt><dd><p>The handle of a Telepathy contact on that connection,
+of type HANDLE_TYPE_CONTACT. This may not be a
+channel-specific handle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the Buddy object, or None if the buddy is not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_owner">
+<code class="sig-name descname">get_owner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the laptop Buddy object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.get_preferred_connection">
+<code class="sig-name descname">get_preferred_connection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.get_preferred_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the preferred telepathy connection object that an activity
+should use when talking directly to telepathy</p>
+<p>returns the bus name and the object path of the Telepathy connection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.presence.presenceservice.PresenceService.share_activity">
+<code class="sig-name descname">share_activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">activity</span></em>, <em class="sig-param"><span class="n">properties</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">private</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.PresenceService.share_activity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.presence.presenceservice.get_instance">
+<code class="sig-prename descclassname">sugar3.presence.presenceservice.</code><code class="sig-name descname">get_instance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">allow_offline_iface</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.presenceservice.get_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve this process’ view of the PresenceService</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.presence.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.activity.html">sugar3.presence.activity module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.buddy.html">sugar3.presence.buddy module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.connectionmanager.html">sugar3.presence.connectionmanager module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.presence.presenceservice module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.sugartubeconn.html">sugar3.presence.sugartubeconn module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.presence.tubeconn.html">sugar3.presence.tubeconn module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.presence.html#module-sugar3.presence">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.presence.html">sugar3.presence package</a><ul>
+      <li>Previous: <a href="sugar3.presence.connectionmanager.html" title="previous chapter">sugar3.presence.connectionmanager module</a></li>
+      <li>Next: <a href="sugar3.presence.sugartubeconn.html" title="next chapter">sugar3.presence.sugartubeconn module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.presence.presenceservice.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

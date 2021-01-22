@@ -1,0 +1,19 @@
+sugar3.test package
+===================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   sugar3.test.discover
+   sugar3.test.uitree
+
+Module contents
+---------------
+
+.. automodule:: sugar3.test
+   :members:
+   :undoc-members:
+   :show-inheritance:

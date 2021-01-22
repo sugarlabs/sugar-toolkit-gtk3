@@ -1,0 +1,1089 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.icon module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.iconentry module" href="sugar3.graphics.iconentry.html" />
+    <link rel="prev" title="sugar3.graphics.combobox module" href="sugar3.graphics.combobox.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.icon">
+<span id="sugar3-graphics-icon-module"></span><h1>sugar3.graphics.icon module<a class="headerlink" href="#module-sugar3.graphics.icon" title="Permalink to this headline">¶</a></h1>
+<p>Icons are small pictures that are used to decorate components.  In Sugar, icons
+are SVG files that are re-coloured with a fill and a stroke colour.  Typically,
+icons representing the system use a greyscale color palette, whereas icons
+representing people take on their selected XoColors.</p>
+<div class="section" id="designing-a-sugar-icon">
+<h2>Designing a Sugar Icon<a class="headerlink" href="#designing-a-sugar-icon" title="Permalink to this headline">¶</a></h2>
+<p>If you want to make an icon to use in Sugar, start by designing something in
+a vector program, like Inkscape.  When you are designing the icon, use a canvas
+that is 55x55px.</p>
+<p>When designing your icon, use 2 colors.  For example, use a black stroke and a
+white fill color.  You need to keep this consistent and remember those colors.</p>
+<p>You should also keep the subcell grid in mind when designing the icon.  A grid
+cell (which the size of an icon) is made up of 5 by 5 subcells.  To use this in
+Inkscape, enable the page grid (View -&gt; Page Grid), the go to grid properties
+(File -&gt; Document Properties -&gt; Grids).  In grid properties, set the “Spacing
+X” option to 11, “Spacing Y” to 11 and “Major grid line every” to 1.</p>
+<p>Before your icon is ready to be used in Sugar, it needs to be Sugarized.  This
+converts the colors to SVG entities, which allows Sugar to change the colors
+of the icon.  To do that, just run the <a class="reference external" href="https://github.com/GhostAlgorithm/sugariconify/blob/master/sugariconify.py">sugar-iconify</a> script.  Usually, it
+“just works” like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">sugar</span><span class="o">-</span><span class="n">iconify</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">o</span> <span class="n">icon</span><span class="o">.</span><span class="n">svg</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Permalink to this headline">¶</a></h2>
+<p>Example of using icons with badges:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Gtk</span>
+
+<span class="kn">from</span> <span class="nn">sugar3.graphics.icon</span> <span class="kn">import</span> <span class="n">EventIcon</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.icon</span> <span class="kn">import</span> <span class="n">Icon</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics</span> <span class="kn">import</span> <span class="n">style</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.xocolor</span> <span class="kn">import</span> <span class="n">XoColor</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.palette</span> <span class="kn">import</span> <span class="n">Palette</span>
+
+<span class="kn">import</span> <span class="nn">common</span>
+
+
+<span class="n">test</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">Test</span><span class="p">()</span>
+<span class="n">test</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">box</span> <span class="o">=</span> <span class="n">Gtk</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="n">Gtk</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+<span class="n">test</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">box</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># An XO Icon, normal size, setting the color via the XoColor object</span>
+<span class="n">icon</span> <span class="o">=</span> <span class="n">Icon</span><span class="p">(</span><span class="n">icon_name</span><span class="o">=</span><span class="s1">&#39;computer-xo&#39;</span><span class="p">,</span>
+            <span class="n">pixel_size</span><span class="o">=</span><span class="n">style</span><span class="o">.</span><span class="n">STANDARD_ICON_SIZE</span><span class="p">,</span>
+            <span class="n">xo_color</span><span class="o">=</span><span class="n">XoColor</span><span class="p">(</span><span class="s1">&#39;#00BEFF,#FF7800&#39;</span><span class="p">))</span>
+<span class="n">box</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">icon</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># You can mix constructor keyword argument and setting</span>
+<span class="c1"># properties after creation</span>
+<span class="n">icon</span> <span class="o">=</span> <span class="n">EventIcon</span><span class="p">(</span><span class="n">icon_name</span><span class="o">=</span><span class="s1">&#39;network-wireless-080&#39;</span><span class="p">,</span>
+                 <span class="n">pixel_size</span><span class="o">=</span><span class="n">style</span><span class="o">.</span><span class="n">STANDARD_ICON_SIZE</span><span class="p">)</span>
+<span class="c1"># Badges are little icons displayed</span>
+<span class="n">icon</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">badge_name</span> <span class="o">=</span> <span class="s1">&#39;emblem-favorite&#39;</span>
+<span class="c1"># Instead of using the XoColor, you can use any SVG color specifier:</span>
+<span class="n">icon</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">fill_color</span> <span class="o">=</span> <span class="s1">&#39;rgb(230, 0, 10)&#39;</span>
+<span class="n">icon</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">stroke_color</span> <span class="o">=</span> <span class="s1">&#39;#78E600&#39;</span>
+<span class="c1"># Unlike normal icons, EventIcons support palettes:</span>
+<span class="n">icon</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">palette</span> <span class="o">=</span> <span class="n">Palette</span><span class="p">(</span><span class="s1">&#39;Hello World&#39;</span><span class="p">)</span>
+<span class="n">box</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">icon</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">common</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="badge-icons">
+<h2>Badge Icons<a class="headerlink" href="#badge-icons" title="Permalink to this headline">¶</a></h2>
+<p>Badge icons are small icons that are attached to the normal icon.
+For example, a WiFi network icon might have a star badge attached to
+the bottom left corner (the “attach point”) that indicates that the
+network is connected to.</p>
+<p>Badge icons are displayed at _BADGE_SIZE percent (45% currently),
+of their main icon.</p>
+<p>Badge icons are specified by the icon name, in the same sense that
+normal icons have a <code class="xref any docutils literal notranslate"><span class="pre">Icon.set_icon_name</span></code> function.</p>
+<div class="section" id="attach-points">
+<h3>Attach Points<a class="headerlink" href="#attach-points" title="Permalink to this headline">¶</a></h3>
+<p>Where the badge icon is placed is defined by the main icon.  By
+default, it is centered on 0, 0.  That means that the 3 quarters of
+the icon will be cut off!  Therefore, it is helpful to define the
+attach points.</p>
+<p>When Sugar loads the main icon, it looks for a <cite>.icon</cite> file.  For
+example, if the icon path is resolved to <cite>/theme/computer-xo.svg</cite>,
+the <cite>/theme/computer-xo.icon</cite> will be tried to find the attach points.</p>
+<p>The <cite>.icon</cite> files are to be formatted as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Icon</span> <span class="n">Data</span><span class="p">]</span>
+<span class="n">AttachPoints</span><span class="o">=</span><span class="mi">970</span><span class="p">,</span><span class="mi">850</span>
+</pre></div>
+</div>
+<p>In this example, the badge will be centered at 97.0% on the X axis,
+and 85.0% on the Y axis.</p>
+<dl class="py class">
+<dt id="sugar3.graphics.icon.CanvasIcon">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.icon.</code><code class="sig-name descname">CanvasIcon</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CanvasIcon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.icon.EventIcon" title="sugar3.graphics.icon.EventIcon"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.icon.EventIcon</span></code></a></p>
+<p>An EventIcon with active and prelight states, and a styleable
+background.  If the icon pops up a palette, the prelight state is
+set until the palette pops down.  This is used to render a light
+grey highlight, however can be configured by Gtk+ CSS with the
+<cite>:prelight</cite> selector.</p>
+<p>Care should to use <a class="reference internal" href="#sugar3.graphics.icon.CanvasIcon.connect_to_palette_pop_events" title="sugar3.graphics.icon.CanvasIcon.connect_to_palette_pop_events"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">connect_to_palette_pop_events</span></code></a> for all palettes
+created and shown around this icon.</p>
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CanvasIcon.connect_to_palette_pop_events">
+<code class="sig-name descname">connect_to_palette_pop_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CanvasIcon.connect_to_palette_pop_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the palette’s popup and popdown events, so that the prelight
+state is set at the right times.  You should run this call
+before you <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.set_palette" title="sugar3.graphics.icon.EventIcon.set_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">EventIcon.set_palette</span></code></a> or before you return from
+your <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.create_palette" title="sugar3.graphics.icon.EventIcon.create_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">EventIcon.create_palette</span></code></a> function, eg:</p>
+<blockquote>
+<div><dl>
+<dt>def create_palette(self):</dt><dd><p>palette = …</p>
+<p>self.connect_to_palette_pop_events(palette)
+return palette</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>palette</strong> (<a class="reference internal" href="sugar3.graphics.palette.html#sugar3.graphics.palette.Palette" title="sugar3.graphics.palette.Palette"><em>sugar3.graphics.palette.Palette</em></a>) – palette to connect</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CanvasIcon.do_draw">
+<code class="sig-name descname">do_draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CanvasIcon.do_draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gtk widget implementation method</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.icon.CellRendererIcon">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.icon.</code><code class="sig-name descname">CellRendererIcon</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">treeview</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.CellRenderer</span></code></p>
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.background_color">
+<code class="sig-name descname">background_color</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.background_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.connect_to_scroller">
+<code class="sig-name descname">connect_to_scroller</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scrolled</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.connect_to_scroller" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.create_palette">
+<code class="sig-name descname">create_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.create_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.do_activate">
+<code class="sig-name descname">do_activate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em>, <em class="sig-param"><span class="n">widget</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">background_area</span></em>, <em class="sig-param"><span class="n">cell_area</span></em>, <em class="sig-param"><span class="n">flags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.do_activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>activate(self, event:Gdk.Event, widget:Gtk.Widget, path:str, background_area:Gdk.Rectangle, cell_area:Gdk.Rectangle, flags:Gtk.CellRendererState) -&gt; bool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.do_get_size">
+<code class="sig-name descname">do_get_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span></em>, <em class="sig-param"><span class="n">cell_area</span></em>, <em class="sig-param"><span class="n">x_offset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_offset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.do_get_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>get_size(self, widget:Gtk.Widget, cell_area:Gdk.Rectangle=None) -&gt; x_offset:int, y_offset:int, width:int, height:int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.do_render">
+<code class="sig-name descname">do_render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cr</span></em>, <em class="sig-param"><span class="n">widget</span></em>, <em class="sig-param"><span class="n">background_area</span></em>, <em class="sig-param"><span class="n">cell_area</span></em>, <em class="sig-param"><span class="n">flags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.do_render" title="Permalink to this definition">¶</a></dt>
+<dd><p>render(self, cr:cairo.Context, widget:Gtk.Widget, background_area:Gdk.Rectangle, cell_area:Gdk.Rectangle, flags:Gtk.CellRendererState)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.do_start_editing">
+<code class="sig-name descname">do_start_editing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em>, <em class="sig-param"><span class="n">widget</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">background_area</span></em>, <em class="sig-param"><span class="n">cell_area</span></em>, <em class="sig-param"><span class="n">flags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.do_start_editing" title="Permalink to this definition">¶</a></dt>
+<dd><p>start_editing(self, event:Gdk.Event=None, widget:Gtk.Widget, path:str, background_area:Gdk.Rectangle, cell_area:Gdk.Rectangle, flags:Gtk.CellRendererState) -&gt; Gtk.CellEditable or None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.file_name">
+<code class="sig-name descname">file_name</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.fill_color">
+<code class="sig-name descname">fill_color</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.fill_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.get_xo_color">
+<code class="sig-name descname">get_xo_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.get_xo_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.icon_name">
+<code class="sig-name descname">icon_name</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.icon_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.is_scrolling">
+<code class="sig-name descname">is_scrolling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.is_scrolling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.prelit_fill_color">
+<code class="sig-name descname">prelit_fill_color</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.prelit_fill_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.prelit_stroke_color">
+<code class="sig-name descname">prelit_stroke_color</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.prelit_stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_background_color">
+<code class="sig-name descname">set_background_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_background_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_file_name">
+<code class="sig-name descname">set_file_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_fill_color">
+<code class="sig-name descname">set_fill_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_fill_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_icon_name">
+<code class="sig-name descname">set_icon_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_icon_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_prelit_fill_color">
+<code class="sig-name descname">set_prelit_fill_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_prelit_fill_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_prelit_stroke_color">
+<code class="sig-name descname">set_prelit_stroke_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_prelit_stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_size">
+<code class="sig-name descname">set_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_stroke_color">
+<code class="sig-name descname">set_stroke_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.CellRendererIcon.set_xo_color">
+<code class="sig-name descname">set_xo_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.set_xo_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.size">
+<code class="sig-name descname">size</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.stroke_color">
+<code class="sig-name descname">stroke_color</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.CellRendererIcon.xo_color">
+<code class="sig-name descname">xo_color</code><a class="headerlink" href="#sugar3.graphics.icon.CellRendererIcon.xo_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.icon.EventIcon">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.icon.</code><code class="sig-name descname">EventIcon</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.EventBox</span></code></p>
+<p>An Icon class that provides access to mouse events and that can act as a
+cursor-positioned palette invoker.</p>
+<p>The palette invoker can be used in 3 ways:</p>
+<ol class="arabic simple">
+<li><p>Set the palette during your constructor, see <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.set_palette" title="sugar3.graphics.icon.EventIcon.set_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_palette</span></code></a></p></li>
+<li><p>Override the create_palette method, see <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.create_palette" title="sugar3.graphics.icon.EventIcon.create_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">create_palette</span></code></a></p></li>
+<li><p>Set the tooltip, see <code class="xref any docutils literal notranslate"><span class="pre">create_tooltip</span></code></p></li>
+</ol>
+<p>Otherwise, the icon setup api is the same as the basic <a class="reference internal" href="#sugar3.graphics.icon.Icon" title="sugar3.graphics.icon.Icon"><code class="xref py py-class docutils literal notranslate"><span class="pre">Icon</span></code></a>.
+This EventIcon class supports the icon_name, stroke_color, fill_color,
+file_name, xo_color, pixel_size, scale and alpha keyword arguments as
+the <a class="reference internal" href="#sugar3.graphics.icon.Icon" title="sugar3.graphics.icon.Icon"><code class="xref py py-class docutils literal notranslate"><span class="pre">Icon</span></code></a>.  The added arguments are as follows:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>background_color</strong> (<em>Gdk.Color</em>) – the color to draw the icon on top of.
+It defaults to None, which means no background is drawn
+(transparent).  The alpha channel of the Gdk.Color is disregarded.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em>) – if True, the icon file contents will be cached to
+reduce disk usage</p></li>
+<li><p><strong>palette</strong> (<a class="reference internal" href="sugar3.graphics.palette.html#sugar3.graphics.palette.Palette" title="sugar3.graphics.palette.Palette"><em>sugar3.graphics.palette.Palette</em></a>) – a palette to connect</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.alpha">
+<code class="sig-name descname">alpha</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.alpha" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.background_color">
+<code class="sig-name descname">background_color</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.background_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>event_icon.props.get_background_color -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.set_background_color" title="sugar3.graphics.icon.EventIcon.set_background_color"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_background_color</span></code></a>
+and <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.get_background_color" title="sugar3.graphics.icon.EventIcon.get_background_color"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">get_background_color</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.badge_name">
+<code class="sig-name descname">badge_name</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.badge_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.cache">
+<code class="sig-name descname">cache</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>event_icon.props.cache -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.set_cache" title="sugar3.graphics.icon.EventIcon.set_cache"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_cache</span></code></a> and <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.get_cache" title="sugar3.graphics.icon.EventIcon.get_cache"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">get_cache</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.create_palette">
+<code class="sig-name descname">create_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.create_palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_palette function is called when the palette needs to be
+invoked.  For example, when the user has right clicked the icon or
+the user has hovered over the icon for a long time.</p>
+<p>The create_palette will only be called once or zero times.  The palette
+returned will be stored and re-used if the user invokes the palette
+multiple times.</p>
+<p>Your create_palette implementation does not need to
+<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget.show" title="(in Gtk 3.0 v3.0)"><code class="xref any docutils literal notranslate"><span class="pre">Gtk.Widget.show</span></code></a> the palette, as this will be done by the
+invoker.  However, you still need to show
+the menu items, etc that you place in the palette.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sugar3.graphics.palette.Palette, or None to indicate that you
+do not want a palette shown</p>
+</dd>
+</dl>
+<p>The default implementation returns None, to indicate no palette should
+be shown.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.do_draw">
+<code class="sig-name descname">do_draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.do_draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gtk widget implementation method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.do_get_preferred_height">
+<code class="sig-name descname">do_get_preferred_height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.do_get_preferred_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gtk widget implementation method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.do_get_preferred_width">
+<code class="sig-name descname">do_get_preferred_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.do_get_preferred_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gtk widget implementation method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.file_name">
+<code class="sig-name descname">file_name</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.fill_color">
+<code class="sig-name descname">fill_color</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.fill_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_background_color">
+<code class="sig-name descname">get_background_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_background_color" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Gdk.Color, current background color, may be None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_badge_name">
+<code class="sig-name descname">get_badge_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_badge_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_cache">
+<code class="sig-name descname">get_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_cache" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool, if the icon file will be saved in the LRU</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_file_name">
+<code class="sig-name descname">get_file_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_fill_color">
+<code class="sig-name descname">get_fill_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_fill_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_icon_name">
+<code class="sig-name descname">get_icon_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_icon_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_palette">
+<code class="sig-name descname">get_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current palette, either set by <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.set_palette" title="sugar3.graphics.icon.EventIcon.set_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_palette</span></code></a> or cached
+after a call to <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.create_palette" title="sugar3.graphics.icon.EventIcon.create_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">create_palette</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_palette_invoker">
+<code class="sig-name descname">get_palette_invoker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_scale">
+<code class="sig-name descname">get_scale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_size">
+<code class="sig-name descname">get_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.get_stroke_color">
+<code class="sig-name descname">get_stroke_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.get_stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.icon_name">
+<code class="sig-name descname">icon_name</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.icon_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.palette">
+<code class="sig-name descname">palette</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>event_icon.props.palette -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.get_palette" title="sugar3.graphics.icon.EventIcon.get_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">get_palette</span></code></a> and <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.set_palette" title="sugar3.graphics.icon.EventIcon.set_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_palette</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.palette_invoker">
+<code class="sig-name descname">palette_invoker</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.pixel_size">
+<code class="sig-name descname">pixel_size</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.pixel_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.scale">
+<code class="sig-name descname">scale</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_alpha">
+<code class="sig-name descname">set_alpha</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_alpha" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_background_color">
+<code class="sig-name descname">set_background_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_background_color" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>Gdk.Color</em>) – color use as background (alpha is ignored),
+or None meaning no background is drawn (transparent)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_badge_name">
+<code class="sig-name descname">set_badge_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_badge_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_cache">
+<code class="sig-name descname">set_cache</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sugar caches icon file contents in a smart cache.  Currently, we use
+a LRU (Least Recently Used) algorithm to manage the cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – if True, the icon file will be cached in the LRU</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_file_name">
+<code class="sig-name descname">set_file_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_fill_color">
+<code class="sig-name descname">set_fill_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_fill_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_icon_name">
+<code class="sig-name descname">set_icon_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_icon_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_palette">
+<code class="sig-name descname">set_palette</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the palette to show.  If the palette is not None, this will
+override the palette set by create_palette.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>palette</strong> (<a class="reference internal" href="sugar3.graphics.palette.html#sugar3.graphics.palette.Palette" title="sugar3.graphics.palette.Palette"><em>sugar3.graphics.palette.Palette</em></a>) – palette or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_palette_invoker">
+<code class="sig-name descname">set_palette_invoker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette_invoker</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_palette_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_scale">
+<code class="sig-name descname">set_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_size">
+<code class="sig-name descname">set_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_stroke_color">
+<code class="sig-name descname">set_stroke_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_tooltip">
+<code class="sig-name descname">set_tooltip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a palette with the tooltip text.  This will override any
+current palette set through <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.set_palette" title="sugar3.graphics.icon.EventIcon.set_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_palette</span></code></a> or that will ever be
+returned by <a class="reference internal" href="#sugar3.graphics.icon.EventIcon.create_palette" title="sugar3.graphics.icon.EventIcon.create_palette"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">create_palette</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – tooltip text</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.EventIcon.set_xo_color">
+<code class="sig-name descname">set_xo_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.set_xo_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.stroke_color">
+<code class="sig-name descname">stroke_color</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.EventIcon.xo_color">
+<code class="sig-name descname">xo_color</code><a class="headerlink" href="#sugar3.graphics.icon.EventIcon.xo_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.icon.Icon">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.icon.</code><code class="sig-name descname">Icon</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.Image</span></code></p>
+<p>The most basic Sugar icon class.  Displays the icon given.</p>
+<p>You must set either the <cite>file_name</cite>, <cite>file</cite> or <cite>icon_name</cite> properties,
+otherwise, no icon will be visible.</p>
+<p>You should set the <cite>pixel_size</cite>, using constants the <cite>*_ICON_SIZE</cite>
+constants from <a class="reference internal" href="sugar3.graphics.style.html"><span class="doc">sugar3.graphics.style module</span></a>.</p>
+<p>You should set the color (either via <cite>xo_color</cite> or <cite>fill_color</cite> and
+<cite>stroke_color</cite>), otherwise the default black and white fill and stroke
+will be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – a path to the SVG icon file</p></li>
+<li><p><strong>file</strong> (<em>object</em>) – same behaviour as file_name, but for
+<a class="reference internal" href="sugar3.util.html#sugar3.util.TempFilePath" title="sugar3.util.TempFilePath"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.util.TempFilePath</span></code></a> type objects</p></li>
+<li><p><strong>icon_name</strong> (<em>str</em>) – a name of an icon in the theme to display.  The
+icons in the theme include those in the sugar-artwork project
+and icons in the activity’s ‘/icons’ directory</p></li>
+<li><p><strong>pixel_size</strong> (<em>int</em>) – size of the icon, in pixels.  Best to use the
+constants from <a class="reference internal" href="sugar3.graphics.style.html#module-sugar3.graphics.style" title="sugar3.graphics.style"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.style</span></code></a>, as those constants
+are scaled based on the user’s preferences</p></li>
+<li><p><strong>xo_color</strong> (<a class="reference internal" href="sugar3.graphics.xocolor.html#sugar3.graphics.xocolor.XoColor" title="sugar3.graphics.xocolor.XoColor"><em>sugar3.graphics.xocolor.XoColor</em></a>) – color to display icon,
+a shortcut that just sets the fill_color and stroke_color</p></li>
+<li><p><strong>fill_color</strong> (<em>str</em>) – a string, like ‘#FFFFFF’, that will serve as the
+fill color for the icon</p></li>
+<li><p><strong>stroke_color</strong> (<em>str</em>) – a string, like ‘#282828’, that will serve as the
+stroke color for the icon</p></li>
+<li><p><strong>icon_size</strong> – deprecated since 0.102.0, use pixel_size instead</p></li>
+<li><p><strong>badge_name</strong> (<em>str</em>) – the icon_name for a badge icon,
+see <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_badge_name" title="sugar3.graphics.icon.Icon.set_badge_name"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_badge_name</span></code></a></p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – transparency of the icon, defaults to 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.alpha">
+<code class="sig-name descname">alpha</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon.props.alpha -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_alpha" title="sugar3.graphics.icon.Icon.set_alpha"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_alpha</span></code></a>, note no getter</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.badge_name">
+<code class="sig-name descname">badge_name</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.badge_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon.props.badge_name -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.Icon.get_badge_name" title="sugar3.graphics.icon.Icon.get_badge_name"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">get_badge_name</span></code></a>
+and <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_badge_name" title="sugar3.graphics.icon.Icon.set_badge_name"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_badge_name</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.do_draw">
+<code class="sig-name descname">do_draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.do_draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gtk widget implementation method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.do_get_preferred_height">
+<code class="sig-name descname">do_get_preferred_height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.do_get_preferred_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gtk widget implementation method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.do_get_preferred_width">
+<code class="sig-name descname">do_get_preferred_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.do_get_preferred_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gtk widget implementation method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.file">
+<code class="sig-name descname">file</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.fill_color">
+<code class="sig-name descname">fill_color</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.fill_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon.props.fill_color -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.Icon.get_fill_color" title="sugar3.graphics.icon.Icon.get_fill_color"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">get_fill_color</span></code></a>
+and <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_fill_color" title="sugar3.graphics.icon.Icon.set_fill_color"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_fill_color</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.get_badge_name">
+<code class="sig-name descname">get_badge_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.get_badge_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the badge name, as set by <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_badge_name" title="sugar3.graphics.icon.Icon.set_badge_name"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_badge_name</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str, badge icon name</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.get_badge_size">
+<code class="sig-name descname">get_badge_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.get_badge_size" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>int, size of badge icon, in pixels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.get_file">
+<code class="sig-name descname">get_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.get_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.get_fill_color">
+<code class="sig-name descname">get_fill_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.get_fill_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the color used to fill the icon</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str, SVG color string, like ‘#FFFFFF’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.get_pixbuf">
+<code class="sig-name descname">get_pixbuf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.get_pixbuf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <code class="xref py py-class docutils literal notranslate"><span class="pre">GdkPixbuf.Pixbuf</span></code> for the icon, if one has been
+loaded yet.  If the icon has been drawn (<a class="reference internal" href="#sugar3.graphics.icon.Icon.do_draw" title="sugar3.graphics.icon.Icon.do_draw"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">do_draw</span></code></a>), the icon
+will be loaded.</p>
+<p>The pixbuf only contains the SVG icon that has been loaded and
+recoloured.  It does not contain the badge.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.get_stroke_color">
+<code class="sig-name descname">get_stroke_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.get_stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the color used to paint the icon stroke</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str, SVG color string, like ‘#282828’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.pixbuf">
+<code class="sig-name descname">pixbuf</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.pixbuf" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon.props.pixbuf -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.Icon.get_pixbuf" title="sugar3.graphics.icon.Icon.get_pixbuf"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">get_pixbuf</span></code></a> and <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_pixbuf" title="sugar3.graphics.icon.Icon.set_pixbuf"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_pixbuf</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.scale">
+<code class="sig-name descname">scale</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon.props.scale -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_scale" title="sugar3.graphics.icon.Icon.set_scale"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_scale</span></code></a>, note no getter</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_alpha">
+<code class="sig-name descname">set_alpha</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the transparency for the icon.  Defaults to 1.0, which is
+fully visible icon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>float</em>) – alpha value from 0.0 to 1.0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_badge_name">
+<code class="sig-name descname">set_badge_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_badge_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the Badge Icons section at the top of the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – the icon name for the badge</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_file">
+<code class="sig-name descname">set_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_fill_color">
+<code class="sig-name descname">set_fill_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_fill_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the color used to fill the icon</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – SVG color string, like ‘#FFFFFF’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_pixbuf">
+<code class="sig-name descname">set_pixbuf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pixbuf</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_pixbuf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the pixbuf.  This will force the icon to be rendered with the
+given pixbuf.  The icon will still be centered, badge added, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pixbuf</strong> (<em>GdkPixbuf.Pixbuf</em>) – pixbuf to set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_scale">
+<code class="sig-name descname">set_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales the icon, with the transformation origin at the top left
+corner.  Note that this only scales the resulting drawing, so
+at large scales the icon will appear pixilated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>float</em>) – new scaling factor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_stroke_color">
+<code class="sig-name descname">set_stroke_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the color used to paint the icon stroke</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – SVG color string, like ‘#282828’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.icon.Icon.set_xo_color">
+<code class="sig-name descname">set_xo_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.Icon.set_xo_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the colors used to display the icon</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference internal" href="sugar3.graphics.xocolor.html#sugar3.graphics.xocolor.XoColor" title="sugar3.graphics.xocolor.XoColor"><em>sugar3.graphics.xocolor.XoColor</em></a>) – new XoColor to use</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.stroke_color">
+<code class="sig-name descname">stroke_color</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.stroke_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon.props.stroke_color -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.Icon.get_stroke_color" title="sugar3.graphics.icon.Icon.get_stroke_color"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">get_stroke_color</span></code></a>
+and <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_stroke_color" title="sugar3.graphics.icon.Icon.set_stroke_color"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_stroke_color</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.icon.Icon.xo_color">
+<code class="sig-name descname">xo_color</code><a class="headerlink" href="#sugar3.graphics.icon.Icon.xo_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>icon.props.xo_color -&gt; see <a class="reference internal" href="#sugar3.graphics.icon.Icon.set_xo_color" title="sugar3.graphics.icon.Icon.set_xo_color"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_xo_color</span></code></a>, note there is no getter</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.graphics.icon.get_icon_file_name">
+<code class="sig-prename descclassname">sugar3.graphics.icon.</code><code class="sig-name descname">get_icon_file_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.get_icon_file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves a given icon name into a file path.  Looks for any icon in them
+theme, including those in sugar-artwork and those in the activities
+‘/icons/’ directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str, path to icon, or None is the icon is not found in the theme</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.graphics.icon.get_icon_state">
+<code class="sig-prename descclassname">sugar3.graphics.icon.</code><code class="sig-name descname">get_icon_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_name</span></em>, <em class="sig-param"><span class="n">perc</span></em>, <em class="sig-param"><span class="n">step</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.get_icon_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the closest icon name for a given state in percent.</p>
+<p>First, you need a set of icons. They must be prefixed with <cite>base_name</cite>,
+for example “network-wireless”. They must be suffixed with 3 digit
+percentage numbers, for example “-000”, “-200”, etc. Eventually, you get
+a collection of icon names like:</p>
+<ul class="simple">
+<li><p>network-wireless-000</p></li>
+<li><p>network-wireless-020</p></li>
+<li><p>network-wireless-040</p></li>
+<li><p>network-wireless-060</p></li>
+<li><p>network-wireless-080</p></li>
+<li><p>network-wireless-100</p></li>
+</ul>
+<p>All of these icons must be placed in the icon theme, such that they are
+addressable by their <cite>icon_name</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_name</strong> (<em>str</em>) – base icon name, eg <cite>network-wireless</cite></p></li>
+<li><p><strong>perc</strong> (<em>float</em>) – desired percentage between 0 and 100, eg. 67.8</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p><strong>step</strong> (<em>int</em>) – <p>step to increment to find all possible icons</p>
+<p>From the example above, we could step 5, because 0, 5, 10, 15, etc,
+includes all number suffixes in our set of icons (0, 20, 40, etc).</p>
+<p>If we had the number suffixes 0, 33, 66, 99, we could not use 5,
+as none of the numbers are divisible by 5.</p>
+</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str, icon name that represent given state, or None if not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.graphics.icon.get_surface">
+<code class="sig-prename descclassname">sugar3.graphics.icon.</code><code class="sig-name descname">get_surface</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.icon.get_surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get cairo surface of the icon.  Supports the same arguments as
+<a class="reference internal" href="#sugar3.graphics.icon.Icon" title="sugar3.graphics.icon.Icon"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Icon</span></code></a>, in exactly the same way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>cairo surface or None if image was not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.combobox.html" title="previous chapter">sugar3.graphics.combobox module</a></li>
+      <li>Next: <a href="sugar3.graphics.iconentry.html" title="next chapter">sugar3.graphics.iconentry module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.icon.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

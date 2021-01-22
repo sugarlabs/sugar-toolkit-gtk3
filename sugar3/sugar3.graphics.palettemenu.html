@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.palettemenu module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.palettewindow module" href="sugar3.graphics.palettewindow.html" />
+    <link rel="prev" title="sugar3.graphics.palettegroup module" href="sugar3.graphics.palettegroup.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.palettemenu">
+<span id="sugar3-graphics-palettemenu-module"></span><h1>sugar3.graphics.palettemenu module<a class="headerlink" href="#module-sugar3.graphics.palettemenu" title="Permalink to this headline">¶</a></h1>
+<p>The palettemenu module is the main port of call for making palettes.  It
+covers creating menu items, seperators and placing them in a box.</p>
+<p class="rubric">Example</p>
+<p>Create a palette menu with 2 items with a seperator in the middle.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Gtk</span>
+<span class="kn">from</span> <span class="nn">gettext</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="kn">from</span> <span class="nn">sugar3.graphics.palette</span> <span class="kn">import</span> <span class="n">Palette</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.palettemenu</span> <span class="kn">import</span> <span class="n">PaletteMenuBox</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.palettemenu</span> <span class="kn">import</span> <span class="n">PaletteMenuItem</span>
+<span class="kn">from</span> <span class="nn">sugar3.graphics.palettemenu</span> <span class="kn">import</span> <span class="n">PaletteMenuItemSeparator</span>
+
+
+<span class="k">class</span> <span class="nc">ItemPalette</span><span class="p">(</span><span class="n">Palette</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Palette</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">primary_text</span><span class="o">=</span><span class="s1">&#39;List Item&#39;</span><span class="p">)</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">PaletteMenuBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="n">menu_item</span> <span class="o">=</span> <span class="n">PaletteMenuItem</span><span class="p">(</span>
+            <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Edit&#39;</span><span class="p">),</span> <span class="n">icon_name</span><span class="o">=</span><span class="s1">&#39;toolbar-edit&#39;</span><span class="p">)</span>
+        <span class="n">menu_item</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;activate&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__edit_cb</span><span class="p">)</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">append_item</span><span class="p">(</span><span class="n">menu_item</span><span class="p">)</span>
+        <span class="n">menu_item</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="n">sep</span> <span class="o">=</span> <span class="n">PaletteMenuItemSeparator</span><span class="p">()</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">append_item</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+        <span class="n">sep</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="n">menu_item</span> <span class="o">=</span> <span class="n">PaletteMenuItem</span><span class="p">(</span>
+            <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Delete&#39;</span><span class="p">),</span> <span class="n">icon_name</span><span class="o">=</span><span class="s1">&#39;edit-delete&#39;</span><span class="p">)</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">append_item</span><span class="p">(</span><span class="n">menu_item</span><span class="p">)</span>
+        <span class="n">menu_item</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__edit_cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">menu_item</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Edit...&#39;</span><span class="p">)</span>
+
+<span class="c1"># Usually the Palette instance is returned in a create_palette function</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">ItemPalette</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">popup</span><span class="p">()</span>
+<span class="n">Gtk</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Add a palettebox to a toolbutton:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">ToolButton</span><span class="p">(</span><span class="s1">&#39;insert-picture&#39;</span><span class="p">)</span>
+<span class="n">image</span><span class="o">.</span><span class="n">set_tooltip</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Insert Image&#39;</span><span class="p">))</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">_image_id</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;clicked&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_cb</span><span class="p">)</span>
+<span class="n">toolbar_box</span><span class="o">.</span><span class="n">toolbar</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">palette</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get_palette</span><span class="p">()</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">PaletteMenuBox</span><span class="p">()</span>
+<span class="n">palette</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+<span class="n">box</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">menu_item</span> <span class="o">=</span> <span class="n">PaletteMenuItem</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Floating&#39;</span><span class="p">))</span>
+<span class="n">menu_item</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;activate&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__image_cb</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">box</span><span class="o">.</span><span class="n">append_item</span><span class="p">(</span><span class="n">menu_item</span><span class="p">)</span>
+<span class="n">menu_item</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuBox">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettemenu.</code><code class="sig-name descname">PaletteMenuBox</code><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.VBox</span></code></p>
+<p>The PaletteMenuBox is a box that is useful for making palettes.  It
+supports adding <a class="reference internal" href="#sugar3.graphics.palettemenu.PaletteMenuItem" title="sugar3.graphics.palettemenu.PaletteMenuItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettemenu.PaletteMenuItem</span></code></a>,
+<a class="reference internal" href="#sugar3.graphics.palettemenu.PaletteMenuItemSeparator" title="sugar3.graphics.palettemenu.PaletteMenuItemSeparator"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettemenu.PaletteMenuItemSeparator</span></code></a> and
+it automatically adds padding to other widgets.</p>
+<dl class="py method">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuBox.append_item">
+<code class="sig-name descname">append_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item_or_widget</span></em>, <em class="sig-param"><span class="n">horizontal_padding</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vertical_padding</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuBox.append_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a menu item, seperator or other widget to the end of the palette
+(simmilar to <cite>Gtk.Box.pack_start</cite>).</p>
+<p>If an item is appended
+(a <a class="reference internal" href="#sugar3.graphics.palettemenu.PaletteMenuItem" title="sugar3.graphics.palettemenu.PaletteMenuItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettemenu.PaletteMenuItem</span></code></a> or a
+<a class="reference internal" href="#sugar3.graphics.palettemenu.PaletteMenuItemSeparator" title="sugar3.graphics.palettemenu.PaletteMenuItemSeparator"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettemenu.PaletteMenuItemSeparator</span></code></a>) no
+padding will be added, as that is handled by the item.  If a widget is
+appended (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a> subclass) padding will be added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_or_widget</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a> or menu item or seperator) – item or widget to add the the palette</p></li>
+<li><p><strong>horizontal_padding</strong> (<em>int</em>) – by default,
+<a class="reference internal" href="sugar3.graphics.style.html#sugar3.graphics.style.DEFAULT_SPACING" title="sugar3.graphics.style.DEFAULT_SPACING"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.style.DEFAULT_SPACING</span></code></a> is applied</p></li>
+<li><p><strong>vertical_padding</strong> (<em>int</em>) – by default,
+<a class="reference internal" href="sugar3.graphics.style.html#sugar3.graphics.style.DEFAULT_SPACING" title="sugar3.graphics.style.DEFAULT_SPACING"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.style.DEFAULT_SPACING</span></code></a> is applied</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuItem">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettemenu.</code><code class="sig-name descname">PaletteMenuItem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">icon_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">text_maxlen</span><span class="o">=</span><span class="default_value">60</span></em>, <em class="sig-param"><span class="n">xo_color</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">accelerator</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.EventBox</span></code></p>
+<p>A palette menu item is a line of text, and optionally an icon, that the
+user can activate.</p>
+<p>The <cite>activate</cite> signal is usually emitted when the item is clicked.  It has
+no arguments.  When a menu item is activated, the palette is also closed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text_label</strong> (<em>str</em>) – a text to display in the menu</p></li>
+<li><p><strong>icon_name</strong> (<em>str</em>) – the name of a sugar icon to be displayed. Takse
+precedence over file_name</p></li>
+<li><p><strong>text_maxlen</strong> (<em>int</em>) – the desired maximum width of the label, in
+characters.  By default set to 60 chars</p></li>
+<li><p><strong>xo_color</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">sugar.graphics.XoColor</span></code>) – the color to be applied to
+the icon</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – the path to a svg file used as icon</p></li>
+<li><p><strong>accelerator</strong> (<em>str</em>) – a text used to display the keyboard shortcut
+associated to the menu</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuItem.set_accelerator">
+<code class="sig-name descname">set_accelerator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuItem.set_accelerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the text used to display the keyboard shortcut associated with
+the menu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – accelerator text</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuItem.set_image">
+<code class="sig-name descname">set_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuItem.set_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the icon widget.  Usually this will be a
+<a class="reference internal" href="sugar3.graphics.icon.html#sugar3.graphics.icon.Icon" title="sugar3.graphics.icon.Icon"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.icon.Icon</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>icon</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a>) – icon widget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuItem.set_label">
+<code class="sig-name descname">set_label</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_label</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuItem.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the text to display in the menu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text_label</strong> (<em>str</em>) – text label</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuItem.set_sensitive">
+<code class="sig-name descname">set_sensitive</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sensitive</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuItem.set_sensitive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether the widget should be activateable by the user and changes
+the widget’s appearence to the appropriate state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sensitive</strong> (<em>bool</em>) – if <cite>True</cite>, the widget will be activateable by
+the user. Otherwise, it will not be activateable</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettemenu.PaletteMenuItemSeparator">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettemenu.</code><code class="sig-name descname">PaletteMenuItemSeparator</code><a class="headerlink" href="#sugar3.graphics.palettemenu.PaletteMenuItemSeparator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.EventBox</span></code></p>
+<p>Horizontal seperator to put in a palette</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettewindow.html">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.palettegroup.html" title="previous chapter">sugar3.graphics.palettegroup module</a></li>
+      <li>Next: <a href="sugar3.graphics.palettewindow.html" title="next chapter">sugar3.graphics.palettewindow module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.palettemenu.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,642 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.graphics.palettewindow module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.graphics.panel module" href="sugar3.graphics.panel.html" />
+    <link rel="prev" title="sugar3.graphics.palettemenu module" href="sugar3.graphics.palettemenu.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.graphics.palettewindow">
+<span id="sugar3-graphics-palettewindow-module"></span><h1>sugar3.graphics.palettewindow module<a class="headerlink" href="#module-sugar3.graphics.palettewindow" title="Permalink to this headline">¶</a></h1>
+<p>STABLE.</p>
+<dl class="py class">
+<dt id="sugar3.graphics.palettewindow.CursorInvoker">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettewindow.</code><code class="sig-name descname">CursorInvoker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.CursorInvoker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.palettewindow.Invoker" title="sugar3.graphics.palettewindow.Invoker"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettewindow.Invoker</span></code></a></p>
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.CursorInvoker.attach">
+<code class="sig-name descname">attach</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.CursorInvoker.attach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.CursorInvoker.detach">
+<code class="sig-name descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.CursorInvoker.detach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.CursorInvoker.get_default_position">
+<code class="sig-name descname">get_default_position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.CursorInvoker.get_default_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.CursorInvoker.get_rect">
+<code class="sig-name descname">get_rect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.CursorInvoker.get_rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.CursorInvoker.get_toplevel">
+<code class="sig-name descname">get_toplevel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.CursorInvoker.get_toplevel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettewindow.Invoker">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettewindow.</code><code class="sig-name descname">Invoker</code><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.ANCHORED">
+<code class="sig-name descname">ANCHORED</code><em class="property"> = 0</em><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.ANCHORED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.AT_CURSOR">
+<code class="sig-name descname">AT_CURSOR</code><em class="property"> = 1</em><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.AT_CURSOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.BOTTOM">
+<code class="sig-name descname">BOTTOM</code><em class="property"> = [(0.0, 0.0, 0.0, 1.0), (-1.0, 0.0, 1.0, 1.0)]</em><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.BOTTOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.LEFT">
+<code class="sig-name descname">LEFT</code><em class="property"> = [(-1.0, 0.0, 0.0, 0.0), (-1.0, -1.0, 0.0, 1.0)]</em><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.LEFT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.RIGHT">
+<code class="sig-name descname">RIGHT</code><em class="property"> = [(0.0, 0.0, 1.0, 0.0), (0.0, -1.0, 1.0, 1.0)]</em><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.RIGHT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.TOP">
+<code class="sig-name descname">TOP</code><em class="property"> = [(0.0, -1.0, 0.0, 0.0), (-1.0, -1.0, 1.0, 0.0)]</em><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.TOP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.attach">
+<code class="sig-name descname">attach</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.attach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.cache_palette">
+<code class="sig-name descname">cache_palette</code><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.cache_palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the invoker will cache the palette after its creation. Defaults
+to True.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.detach">
+<code class="sig-name descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.detach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.draw_rectangle">
+<code class="sig-name descname">draw_rectangle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em>, <em class="sig-param"><span class="n">palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.draw_rectangle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.get_alignment">
+<code class="sig-name descname">get_alignment</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette_dim</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.get_alignment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.get_cache_palette">
+<code class="sig-name descname">get_cache_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.get_cache_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.get_lock_palette">
+<code class="sig-name descname">get_lock_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.get_lock_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.get_palette">
+<code class="sig-name descname">get_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.get_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.get_position">
+<code class="sig-name descname">get_position</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette_dim</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.get_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.get_position_for_alignment">
+<code class="sig-name descname">get_position_for_alignment</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alignment</span></em>, <em class="sig-param"><span class="n">palette_dim</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.get_position_for_alignment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.get_toggle_palette">
+<code class="sig-name descname">get_toggle_palette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.get_toggle_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.has_rectangle_gap">
+<code class="sig-name descname">has_rectangle_gap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.has_rectangle_gap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.lock_palette">
+<code class="sig-name descname">lock_palette</code><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.lock_palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the invoker will lock the Palette and
+ignore mouse events. Defaults to False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.notify_mouse_enter">
+<code class="sig-name descname">notify_mouse_enter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.notify_mouse_enter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.notify_mouse_leave">
+<code class="sig-name descname">notify_mouse_leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.notify_mouse_leave" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.notify_popdown">
+<code class="sig-name descname">notify_popdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.notify_popdown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.notify_popup">
+<code class="sig-name descname">notify_popup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.notify_popup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.notify_right_click">
+<code class="sig-name descname">notify_right_click</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.notify_right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Notify the palette invoker of a right click and expand the
+palette as required.  The x and y args should be that of
+where the event happened, relative to the root of the screen.</p>
+<dl class="simple">
+<dt>Args</dt><dd><dl class="simple">
+<dt>x (float): the x coord of the event relative to the root</dt><dd><p>of the screen, eg. <code class="xref py py-class docutils literal notranslate"><span class="pre">Gdk.EventTouch.x_root</span></code></p>
+</dd>
+<dt>y (float): the y coord of the event relative to the root</dt><dd><p>of the screen, eg. <code class="xref py py-class docutils literal notranslate"><span class="pre">Gdk.EventTouch.y_root</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.notify_toggle_state">
+<code class="sig-name descname">notify_toggle_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.notify_toggle_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.palette">
+<code class="sig-name descname">palette</code><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.primary_text_clicked">
+<code class="sig-name descname">primary_text_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.primary_text_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implemented by invokers that can be clicked</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.set_cache_palette">
+<code class="sig-name descname">set_cache_palette</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cache_palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.set_cache_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.set_lock_palette">
+<code class="sig-name descname">set_lock_palette</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lock_palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.set_lock_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.set_palette">
+<code class="sig-name descname">set_palette</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.set_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.Invoker.set_toggle_palette">
+<code class="sig-name descname">set_toggle_palette</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">toggle_palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.set_toggle_palette" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.Invoker.toggle_palette">
+<code class="sig-name descname">toggle_palette</code><a class="headerlink" href="#sugar3.graphics.palettewindow.Invoker.toggle_palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the invoker will popup/popdown the Palette on
+button left click/touch tap. Defaults to False.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettewindow.MouseSpeedDetector">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettewindow.</code><code class="sig-name descname">MouseSpeedDetector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">delay</span></em>, <em class="sig-param"><span class="n">thresh</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.MouseSpeedDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.MouseSpeedDetector.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.MouseSpeedDetector.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.MouseSpeedDetector.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.MouseSpeedDetector.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettewindow.</code><code class="sig-name descname">PaletteWindow</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<p>Base class for _ToolbarPalette and Palette.</p>
+<p>Provides basic management of child widget, invoker, and animation.</p>
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.destroy">
+<code class="sig-name descname">destroy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.get_full_size_request">
+<code class="sig-name descname">get_full_size_request</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.get_full_size_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.get_group_id">
+<code class="sig-name descname">get_group_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.get_group_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.get_invoker">
+<code class="sig-name descname">get_invoker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.get_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.get_rect">
+<code class="sig-name descname">get_rect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.get_rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.group_id">
+<code class="sig-name descname">group_id</code><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.group_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.invoker">
+<code class="sig-name descname">invoker</code><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.is_up">
+<code class="sig-name descname">is_up</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.is_up" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.on_enter">
+<code class="sig-name descname">on_enter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.on_enter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.on_invoker_enter">
+<code class="sig-name descname">on_invoker_enter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.on_invoker_enter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.on_invoker_leave">
+<code class="sig-name descname">on_invoker_leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.on_invoker_leave" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.on_leave">
+<code class="sig-name descname">on_leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.on_leave" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.popdown">
+<code class="sig-name descname">popdown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">immediate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.popdown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.popup">
+<code class="sig-name descname">popup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">immediate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.popup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.set_group_id">
+<code class="sig-name descname">set_group_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.set_group_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.set_invoker">
+<code class="sig-name descname">set_invoker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">invoker</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.set_invoker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.PaletteWindow.update_position">
+<code class="sig-name descname">update_position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.PaletteWindow.update_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettewindow.ToolInvoker">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettewindow.</code><code class="sig-name descname">ToolInvoker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.ToolInvoker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.palettewindow.WidgetInvoker" title="sugar3.graphics.palettewindow.WidgetInvoker"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettewindow.WidgetInvoker</span></code></a></p>
+<p>A palette invoker for toolbar buttons and other items.  This invoker
+will properly align the palette so that is perpendicular to the toolbar
+(a horizontal toolbar will spawn a palette going downwards).  It also
+draws the highlights specific to a toolitem.</p>
+<p>For <a class="reference internal" href="sugar3.graphics.toolbutton.html#sugar3.graphics.toolbutton.ToolButton" title="sugar3.graphics.toolbutton.ToolButton"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.toolbutton.ToolButton</span></code></a> and subclasses, you
+should not use the toolinvoker directly.  Instead, just subclass the
+tool button and override the <cite>create_palette</cite> function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><em>Gtk.Widget</em></a>) – toolitem to connect invoker to</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.ToolInvoker.attach_tool">
+<code class="sig-name descname">attach_tool</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.ToolInvoker.attach_tool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a toolitem to the invoker.  Same behaviour as passing the
+<cite>parent</cite> argument to the constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><em>Gtk.Widget</em></a>) – toolitem to connect invoker to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.ToolInvoker.notify_popdown">
+<code class="sig-name descname">notify_popdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.ToolInvoker.notify_popdown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.ToolInvoker.notify_popup">
+<code class="sig-name descname">notify_popup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.ToolInvoker.notify_popup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.ToolInvoker.primary_text_clicked">
+<code class="sig-name descname">primary_text_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.ToolInvoker.primary_text_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implemented by invokers that can be clicked</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettewindow.TreeViewInvoker">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettewindow.</code><code class="sig-name descname">TreeViewInvoker</code><a class="headerlink" href="#sugar3.graphics.palettewindow.TreeViewInvoker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.palettewindow.Invoker" title="sugar3.graphics.palettewindow.Invoker"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettewindow.Invoker</span></code></a></p>
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.TreeViewInvoker.attach_treeview">
+<code class="sig-name descname">attach_treeview</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tree_view</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.TreeViewInvoker.attach_treeview" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.TreeViewInvoker.detach">
+<code class="sig-name descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.TreeViewInvoker.detach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.TreeViewInvoker.get_rect">
+<code class="sig-name descname">get_rect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.TreeViewInvoker.get_rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.TreeViewInvoker.get_toplevel">
+<code class="sig-name descname">get_toplevel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.TreeViewInvoker.get_toplevel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.TreeViewInvoker.notify_popdown">
+<code class="sig-name descname">notify_popdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.TreeViewInvoker.notify_popdown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.palettewindow.</code><code class="sig-name descname">WidgetInvoker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.palettewindow.Invoker" title="sugar3.graphics.palettewindow.Invoker"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.palettewindow.Invoker</span></code></a></p>
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.attach_widget">
+<code class="sig-name descname">attach_widget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.attach_widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.detach">
+<code class="sig-name descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.detach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.do_get_property">
+<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.do_set_property">
+<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.draw_rectangle">
+<code class="sig-name descname">draw_rectangle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cr</span></em>, <em class="sig-param"><span class="n">palette</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.draw_rectangle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.get_rect">
+<code class="sig-name descname">get_rect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.get_rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.get_toplevel">
+<code class="sig-name descname">get_toplevel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.get_toplevel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.has_rectangle_gap">
+<code class="sig-name descname">has_rectangle_gap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.has_rectangle_gap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.notify_popdown">
+<code class="sig-name descname">notify_popdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.notify_popdown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.notify_popup">
+<code class="sig-name descname">notify_popup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.notify_popup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="sugar3.graphics.palettewindow.WidgetInvoker.widget">
+<code class="sig-name descname">widget</code><a class="headerlink" href="#sugar3.graphics.palettewindow.WidgetInvoker.widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.activity.html">sugar3.activity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.bundle.html">sugar3.bundle package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.datastore.html">sugar3.datastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.dispatch.html">sugar3.dispatch package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sugar3.graphics.html">sugar3.graphics package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="sugar3.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.alert.html">sugar3.graphics.alert module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.animator.html">sugar3.graphics.animator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.colorbutton.html">sugar3.graphics.colorbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.combobox.html">sugar3.graphics.combobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.icon.html">sugar3.graphics.icon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.iconentry.html">sugar3.graphics.iconentry module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.menuitem.html">sugar3.graphics.menuitem module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.notebook.html">sugar3.graphics.notebook module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.objectchooser.html">sugar3.graphics.objectchooser module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palette.html">sugar3.graphics.palette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettegroup.html">sugar3.graphics.palettegroup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.palettemenu.html">sugar3.graphics.palettemenu module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">sugar3.graphics.palettewindow module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.panel.html">sugar3.graphics.panel module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.progressicon.html">sugar3.graphics.progressicon module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiopalette.html">sugar3.graphics.radiopalette module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.radiotoolbutton.html">sugar3.graphics.radiotoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.scrollingdetector.html">sugar3.graphics.scrollingdetector module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.style.html">sugar3.graphics.style module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toggletoolbutton.html">sugar3.graphics.toggletoolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbarbox.html">sugar3.graphics.toolbarbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbox.html">sugar3.graphics.toolbox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolbutton.html">sugar3.graphics.toolbutton module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.toolcombobox.html">sugar3.graphics.toolcombobox module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.tray.html">sugar3.graphics.tray module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.window.html">sugar3.graphics.window module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sugar3.graphics.xocolor.html">sugar3.graphics.xocolor module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sugar3.graphics.html#module-sugar3.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.presence.html">sugar3.presence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.test.html">sugar3.test package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+  <li><a href="sugar3.graphics.html">sugar3.graphics package</a><ul>
+      <li>Previous: <a href="sugar3.graphics.palettemenu.html" title="previous chapter">sugar3.graphics.palettemenu module</a></li>
+      <li>Next: <a href="sugar3.graphics.panel.html" title="next chapter">sugar3.graphics.panel module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.graphics.palettewindow.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

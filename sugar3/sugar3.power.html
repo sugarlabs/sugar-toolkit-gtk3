@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sugar3.power module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sugar3.profile module" href="sugar3.profile.html" />
+    <link rel="prev" title="sugar3.network module" href="sugar3.network.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sugar3.power">
+<span id="sugar3-power-module"></span><h1>sugar3.power module<a class="headerlink" href="#module-sugar3.power" title="Permalink to this headline">¶</a></h1>
+<p>The power module provides an interface to <em>powerd</em>, a daemon that
+manages the aggressive suspend and wakeup policies for early OLPC
+laptops.</p>
+<p>The module does nothing if <em>powerd</em> is not present.  <em>powerd</em> is not
+required on laptops other than OLPC XO-1, XO-1.5, XO-1.75 and XO-4.
+Distributions of Sugar on other hardware need not include the <em>powerd</em>
+package.</p>
+<dl class="py class">
+<dt id="sugar3.power.PowerManager">
+<em class="property">class </em><code class="sig-prename descclassname">sugar3.power.</code><code class="sig-name descname">PowerManager</code><a class="headerlink" href="#sugar3.power.PowerManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Control of automatic idle suspend, with reference counting.</p>
+<p><a class="reference internal" href="sugar3.activity.activity.html#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.activity.activity.Activity</span></code></a> calls
+<a class="reference internal" href="#sugar3.power.PowerManager.inhibit_suspend" title="sugar3.power.PowerManager.inhibit_suspend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inhibit_suspend()</span></code></a> before speaking text, or when an
+activity collaboration begins.</p>
+<p>Activities may call <a class="reference internal" href="#sugar3.power.PowerManager.inhibit_suspend" title="sugar3.power.PowerManager.inhibit_suspend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inhibit_suspend()</span></code></a> before playing
+music, video, speaking large amounts of text, collaborating, or
+waiting for response to network operations.</p>
+<p>As an example, the Clock activity inhibits automatic idle suspend
+while it is active, so that the displayed clock-face continues to
+change.  Otherwise it would freeze.</p>
+<p><a class="reference internal" href="sugar3.activity.activity.html#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.activity.activity.Activity</span></code></a> calls
+<a class="reference internal" href="#sugar3.power.PowerManager.shutdown" title="sugar3.power.PowerManager.shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">shutdown()</span></code></a> as an activity terminates, in case the
+activity has failed to call <a class="reference internal" href="#sugar3.power.PowerManager.restore_suspend" title="sugar3.power.PowerManager.restore_suspend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restore_suspend()</span></code></a>.</p>
+<p>While automatic idle suspend is inhibited, <em>powerd</em> will
+continue to dim and blank the display.</p>
+<p>Both the <a class="reference internal" href="#sugar3.power.PowerManager.inhibit_suspend" title="sugar3.power.PowerManager.inhibit_suspend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inhibit_suspend()</span></code></a> and <a class="reference internal" href="#sugar3.power.PowerManager.restore_suspend" title="sugar3.power.PowerManager.restore_suspend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restore_suspend()</span></code></a>
+methods are reference counted; automatic idle suspend is not
+restored until the same number of calls to restore are made.</p>
+<p><em>powerd</em> is resilient against failure to restore automatic idle
+suspend; it verifies an inhibit request and deletes it if the
+requesting process has terminated.</p>
+<dl class="py method">
+<dt id="sugar3.power.PowerManager.inhibit_suspend">
+<code class="sig-name descname">inhibit_suspend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.power.PowerManager.inhibit_suspend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inhibit automatic idle suspend until restored.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.power.PowerManager.is_suspend_inhibited">
+<code class="sig-name descname">is_suspend_inhibited</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.power.PowerManager.is_suspend_inhibited" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if automatic idle suspend is inhibited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether automatic idle suspend is inhibited.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>inhibited (bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.power.PowerManager.restore_suspend">
+<code class="sig-name descname">restore_suspend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.power.PowerManager.restore_suspend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Possibly restore automatic idle suspend.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.power.PowerManager.shutdown">
+<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.power.PowerManager.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shutdown the power manager.</p>
+<p>Restores automatic idle suspend regardless of reference counting.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sugar3.power.PowerManager.suspend_breaks_collaboration">
+<code class="sig-name descname">suspend_breaks_collaboration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.power.PowerManager.suspend_breaks_collaboration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does automatic idle suspend break collaboration with this
+toolkit?  Yes.  For future use by a toolkit with more
+resilient collaboration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="sugar3.power.get_power_manager">
+<code class="sig-prename descclassname">sugar3.power.</code><code class="sig-name descname">get_power_manager</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.power.get_power_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the power manager instance.  Only one instance exists, and
+will always be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an instance of <a class="reference internal" href="#sugar3.power.PowerManager" title="sugar3.power.PowerManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.power.PowerManager</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sugar Toolkit GTK3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sugar3.html">sugar3 package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sugar3.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sugar3.config.html">sugar3.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.env.html">sugar3.env module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.logger.html">sugar3.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.mime.html">sugar3.mime module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.network.html">sugar3.network module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sugar3.power module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.profile.html">sugar3.profile module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.speech.html">sugar3.speech module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sugar3.util.html">sugar3.util module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sugar3.html#module-sugar3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sugar3.html">sugar3 package</a><ul>
+      <li>Previous: <a href="sugar3.network.html" title="previous chapter">sugar3.network module</a></li>
+      <li>Next: <a href="sugar3.profile.html" title="next chapter">sugar3.profile module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Sugar Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sugar3.power.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
