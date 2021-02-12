@@ -191,7 +191,7 @@ class Packager(object):
 
         git_ls = None
         try:
-            git_ls = subprocess.Popen(['git', 'ls-files'],
+            git_ls = subprocess.Popen(['git', 'ls-files', '-z'],
                                       stdout=subprocess.PIPE,
                                       cwd=root)
         except OSError:
@@ -207,9 +207,11 @@ class Packager(object):
             elif stdout:
                 # pylint: disable=E1103
                 git_output = [path.strip() for path in
-                              stdout.decode().strip('\n').split('\n')]
+                              stdout.decode().strip('\n').split('\x00')]
                 files = []
                 for line in git_output:
+                    if line == '':
+                        continue
                     ignore = False
                     for directory in IGNORE_DIRS:
                         if line.startswith(directory + '/'):
