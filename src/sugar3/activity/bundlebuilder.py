@@ -316,7 +316,9 @@ class Installer(Packager):
 
             path = os.path.dirname(dest)
             if not os.path.exists(path):
-                os.makedirs(path)
+                # os.makedirs(path)
+                args = ['mkdir', '-p', path]
+                subprocess.run(args)
 
             shutil.copy(source, dest)
 
