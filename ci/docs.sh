@@ -42,8 +42,8 @@ mv doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
 # create an index.html so that users dont become confused
 show-green "Writing index.html"
-echo "<h1>Page Moved</h1>" > index.html
-echo "<p>We have moved this page to <a href=\"https://github.com/sugarlabs/sugar-docs/blob/master/README.md\">GitHub</a>.</p>" >> index.html
-echo "<p>How did you get here? Please <a href=\"https://github.com/sugarlabs/sugar-docs/issues\">report</a> any lingering links.</p>" >> index.html
+echo "<h1>Page Moved</h1>" > deploy/index.html
+echo "<p>We have moved this page to <a href=\"https://github.com/sugarlabs/sugar-docs/blob/master/README.md\">GitHub</a>.</p>" >> deploy/index.html
+echo "<p>How did you get here? Please <a href=\"https://github.com/sugarlabs/sugar-docs/issues\">report</a> any lingering links.</p>" >> deploy/index.html
 
 show-green "Done"
