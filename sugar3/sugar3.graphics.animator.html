@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.graphics.animator module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,7 +33,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.graphics.animator">
+  <section id="module-sugar3.graphics.animator">
 <span id="sugar3-graphics-animator-module"></span><h1>sugar3.graphics.animator module<a class="headerlink" href="#module-sugar3.graphics.animator" title="Permalink to this headline">¶</a></h1>
 <p>The animator module provides a simple framework to create animations.</p>
 <p class="rubric">Example</p>
@@ -70,8 +71,8 @@
 </div>
 <p>STABLE.</p>
 <dl class="py class">
-<dt id="sugar3.graphics.animator.Animation">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.animator.</code><code class="sig-name descname">Animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">end</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.animator.</span></span><span class="sig-name descname"><span class="pre">Animation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The animation class is a base class for creating an animation.
 It should be subclassed.  Subclasses should specify a <cite>next_frame</cite>
@@ -100,8 +101,8 @@ function is defined by the <cite>start</cite> and <cite>end</cite> values.</p>
 </pre></div>
 </div>
 <dl class="py method">
-<dt id="sugar3.graphics.animator.Animation.do_frame">
-<code class="sig-name descname">do_frame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">easing</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.do_frame" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animation.do_frame">
+<span class="sig-name descname"><span class="pre">do_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">easing</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.do_frame" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method is called by the animator class every frame.  This
 method calculated the <cite>frame</cite> value to then call <cite>next_frame</cite>.</p>
 <dl class="field-list simple">
@@ -116,8 +117,8 @@ method calculated the <cite>frame</cite> value to then call <cite>next_frame</ci
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.animator.Animation.do_stop">
-<code class="sig-name descname">do_stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.do_stop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animation.do_stop">
+<span class="sig-name descname"><span class="pre">do_stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.do_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method is called whenever the animation is stopped, either
 due to the animation ending or being stopped by the animation.
 <cite>next_frame</cite> will not be called after do_stop, unless the animation
@@ -154,8 +155,8 @@ if they bind the draw signal for a widget:</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.animator.Animation.next_frame">
-<code class="sig-name descname">next_frame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.next_frame" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animation.next_frame">
+<span class="sig-name descname"><span class="pre">next_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animation.next_frame" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method is called every frame and should be overridden by
 subclasses.</p>
 <dl class="field-list simple">
@@ -169,8 +170,8 @@ the current progress in the animation</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="sugar3.graphics.animator.Animator">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.animator.</code><code class="sig-name descname">Animator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">fps</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">easing</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.animator.</span></span><span class="sig-name descname"><span class="pre">Animator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">easing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
 <p>The animator class manages the timing for calling the
 animations.  The animations can be added using the <cite>add</cite> function
@@ -202,8 +203,8 @@ on some devices, such as the XO.  Setting the fps too high on can
 use significant cpu usage on the XO.</p>
 </div>
 <dl class="py method">
-<dt id="sugar3.graphics.animator.Animator.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">animation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.add" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animator.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an animation to this animator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -213,27 +214,27 @@ use significant cpu usage on the XO.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.animator.Animator.remove_all">
-<code class="sig-name descname">remove_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.remove_all" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animator.remove_all">
+<span class="sig-name descname"><span class="pre">remove_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.remove_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove all animations and stop this animator</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.animator.Animator.start">
-<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.start" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animator.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start the animation running.  This will stop and restart the
 animation if the animation is currently running</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.animator.Animator.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.stop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.animator.Animator.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.animator.Animator.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop the animation and emit the <cite>completed</cite> signal</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -320,7 +321,7 @@ animation if the animation is currently running</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -342,7 +343,7 @@ animation if the animation is currently running</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.presence.activity module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,13 +33,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.presence.activity">
+  <section id="module-sugar3.presence.activity">
 <span id="sugar3-presence-activity-module"></span><h1>sugar3.presence.activity module<a class="headerlink" href="#module-sugar3.presence.activity" title="Permalink to this headline">¶</a></h1>
 <p>UI interface to an activity in the presence service</p>
 <p>STABLE.</p>
 <dl class="py class">
-<dt id="sugar3.presence.activity.Activity">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.presence.activity.</code><code class="sig-name descname">Activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">account_path</span></em>, <em class="sig-param"><span class="n">connection</span></em>, <em class="sig-param"><span class="n">room_handle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">properties</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.presence.activity.</span></span><span class="sig-name descname"><span class="pre">Activity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">room_handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
 <p>UI interface for an Activity in the presence service</p>
 <p>Activities in the presence service represent your and other user’s
@@ -52,28 +53,28 @@ joined</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.do_get_property">
-<code class="sig-name descname">do_get_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.do_get_property" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.do_get_property">
+<span class="sig-name descname"><span class="pre">do_get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.do_get_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a particular property from our property dictionary</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.do_set_property">
-<code class="sig-name descname">do_set_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pspec</span></em>, <em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.do_set_property" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.do_set_property">
+<span class="sig-name descname"><span class="pre">do_set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.do_set_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a particular property in our property dictionary</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.get_buddy_by_handle">
-<code class="sig-name descname">get_buddy_by_handle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">handle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_buddy_by_handle" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.get_buddy_by_handle">
+<span class="sig-name descname"><span class="pre">get_buddy_by_handle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_buddy_by_handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the Buddy object given a telepathy handle.</p>
 <p>buddy object paths are cached in self._handle_to_buddy_path,
 so we can get the buddy without calling PS.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.get_channels">
-<code class="sig-name descname">get_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_channels" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.get_channels">
+<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_channels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve communications channel descriptions for the activity</p>
 <dl class="simple">
 <dt>Returns a tuple containing:</dt><dd><ul class="simple">
@@ -89,58 +90,58 @@ associated with this activity</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.get_joined_buddies">
-<code class="sig-name descname">get_joined_buddies</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_joined_buddies" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.get_joined_buddies">
+<span class="sig-name descname"><span class="pre">get_joined_buddies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.get_joined_buddies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the set of Buddy objects attached to this activity</p>
 <p>returns list of presence Buddy objects that we can successfully
 create from the buddy object paths that PS has for this activity.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.invite">
-<code class="sig-name descname">invite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buddy</span></em>, <em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">response_cb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.invite" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.invite">
+<span class="sig-name descname"><span class="pre">invite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buddy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_cb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.invite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invite the given buddy to join this activity.</p>
 <p>The callback will be called with one parameter: None on success,
 or an exception on failure.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.join">
-<code class="sig-name descname">join</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.join" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.join">
+<span class="sig-name descname"><span class="pre">join</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.join" title="Permalink to this definition">¶</a></dt>
 <dd><p>Join this activity.</p>
 <p>Emits ‘joined’ and otherwise does nothing if we’re already joined.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.leave">
-<code class="sig-name descname">leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.leave" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.leave">
+<span class="sig-name descname"><span class="pre">leave</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.leave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Leave this shared activity</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.object_path">
-<code class="sig-name descname">object_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.object_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.object_path">
+<span class="sig-name descname"><span class="pre">object_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.object_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get our dbus object path</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.set_private">
-<code class="sig-name descname">set_private</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em>, <em class="sig-param"><span class="n">reply_handler</span></em>, <em class="sig-param"><span class="n">error_handler</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.set_private" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.set_private">
+<span class="sig-name descname"><span class="pre">set_private</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reply_handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.set_private" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.set_up_tubes">
-<code class="sig-name descname">set_up_tubes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reply_handler</span></em>, <em class="sig-param"><span class="n">error_handler</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.set_up_tubes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.set_up_tubes">
+<span class="sig-name descname"><span class="pre">set_up_tubes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reply_handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.set_up_tubes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.presence.activity.Activity.share">
-<code class="sig-name descname">share</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">share_activity_cb</span></em>, <em class="sig-param"><span class="n">share_activity_error_cb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.share" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.presence.activity.Activity.share">
+<span class="sig-name descname"><span class="pre">share</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">share_activity_cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">share_activity_error_cb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.presence.activity.Activity.share" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -206,7 +207,7 @@ or an exception on failure.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -228,7 +229,7 @@ or an exception on failure.</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

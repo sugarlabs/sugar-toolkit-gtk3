@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.graphics.toolbox module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,14 +33,14 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.graphics.toolbox">
+  <section id="module-sugar3.graphics.toolbox">
 <span id="sugar3-graphics-toolbox-module"></span><h1>sugar3.graphics.toolbox module<a class="headerlink" href="#module-sugar3.graphics.toolbox" title="Permalink to this headline">¶</a></h1>
 <p>A toolbox holds a group of toolbars in a list. One toolbar is displayed
 at a time. Toolbars are assigned an index and can be accessed using this index.
 Indices are generated in the order the toolbars are added.</p>
 <dl class="py class">
-<dt id="sugar3.graphics.toolbox.Toolbox">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.graphics.toolbox.</code><code class="sig-name descname">Toolbox</code><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.toolbox.Toolbox">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.toolbox.</span></span><span class="sig-name descname"><span class="pre">Toolbox</span></span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.VBox</span></code></p>
 <p>Class to represent the toolbox of an activity. Groups a
 number of toolbars vertically, which can be accessed using their
@@ -48,8 +49,8 @@ indices. The current toolbar is the only one displayed.</p>
 current toolbar is changed. This signal takes the current page index
 as an argument.</p>
 <dl class="py method">
-<dt id="sugar3.graphics.toolbox.Toolbox.add_toolbar">
-<code class="sig-name descname">add_toolbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">toolbar</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.add_toolbar" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.toolbox.Toolbox.add_toolbar">
+<span class="sig-name descname"><span class="pre">add_toolbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toolbar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.add_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a toolbar to this toolbox. Toolbar will be added
 to the end of this toolbox, and it’s index will be
 1 greater than the previously added index (index will be
@@ -59,27 +60,27 @@ to the end of this toolbox, and it’s index will be
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>string</em>) – name of toolbar to be added</p></li>
 <li><p><strong>toolbar</strong> – </p></li>
-<li><p><strong>to be appended to this toolbox</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Toolbar.html#Gtk.Toolbar" title="(in Gtk 3.0 v3.0)"><em>Gtk.Toolbar</em></a>) – </p></li>
+<li><p><strong>toolbox</strong> (<em>Gtk.Toolbar to be appended to this</em>) – </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="sugar3.graphics.toolbox.Toolbox.current_toolbar">
-<em class="property">property </em><code class="sig-name descname">current_toolbar</code><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.current_toolbar" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="sugar3.graphics.toolbox.Toolbox.current_toolbar">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">current_toolbar</span></span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.current_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current toolbar.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.toolbox.Toolbox.get_current_toolbar">
-<code class="sig-name descname">get_current_toolbar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.get_current_toolbar" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.toolbox.Toolbox.get_current_toolbar">
+<span class="sig-name descname"><span class="pre">get_current_toolbar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.get_current_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current toolbar.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.toolbox.Toolbox.remove_toolbar">
-<code class="sig-name descname">remove_toolbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.remove_toolbar" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.toolbox.Toolbox.remove_toolbar">
+<span class="sig-name descname"><span class="pre">remove_toolbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.remove_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes toolbar at the index specified.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -89,8 +90,8 @@ to the end of this toolbox, and it’s index will be
 </dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.graphics.toolbox.Toolbox.set_current_toolbar">
-<code class="sig-name descname">set_current_toolbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.set_current_toolbar" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.graphics.toolbox.Toolbox.set_current_toolbar">
+<span class="sig-name descname"><span class="pre">set_current_toolbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.toolbox.Toolbox.set_current_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the current toolbar to that of the index specified and
 displays it.</p>
 <dl class="field-list simple">
@@ -102,7 +103,7 @@ displays it.</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -189,7 +190,7 @@ displays it.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -211,7 +212,7 @@ displays it.</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

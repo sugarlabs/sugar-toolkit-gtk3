@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.util module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -31,85 +32,85 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.util">
+  <section id="module-sugar3.util">
 <span id="sugar3-util-module"></span><h1>sugar3.util module<a class="headerlink" href="#module-sugar3.util" title="Permalink to this headline">¶</a></h1>
 <p>Various utility functions</p>
 <dl class="py class">
-<dt id="sugar3.util.LRU">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">LRU</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">count</span></em>, <em class="sig-param"><span class="n">pairs</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.LRU">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">LRU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Implementation of a length-limited O(1) LRU queue.
 Built for and used by PyPE:
 <a class="reference external" href="http://pype.sourceforge.net">http://pype.sourceforge.net</a>
 Copyright 2003 Josiah Carlson.</p>
 <dl class="py method">
-<dt id="sugar3.util.LRU.iteritems">
-<code class="sig-name descname">iteritems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.iteritems" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.LRU.iteritems">
+<span class="sig-name descname"><span class="pre">iteritems</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.iteritems" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.util.LRU.iterkeys">
-<code class="sig-name descname">iterkeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.iterkeys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.LRU.iterkeys">
+<span class="sig-name descname"><span class="pre">iterkeys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.iterkeys" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.util.LRU.itervalues">
-<code class="sig-name descname">itervalues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.itervalues" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.LRU.itervalues">
+<span class="sig-name descname"><span class="pre">itervalues</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.itervalues" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.util.LRU.keys">
-<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.keys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.LRU.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.LRU.keys" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="sugar3.util.Node">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prev</span></em>, <em class="sig-param"><span class="n">me</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.Node" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.Node">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt id="sugar3.util.Node.me">
-<code class="sig-name descname">me</code><a class="headerlink" href="#sugar3.util.Node.me" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.Node.me">
+<span class="sig-name descname"><span class="pre">me</span></span><a class="headerlink" href="#sugar3.util.Node.me" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="sugar3.util.Node.next">
-<code class="sig-name descname">next</code><a class="headerlink" href="#sugar3.util.Node.next" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.Node.next">
+<span class="sig-name descname"><span class="pre">next</span></span><a class="headerlink" href="#sugar3.util.Node.next" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="sugar3.util.Node.prev">
-<code class="sig-name descname">prev</code><a class="headerlink" href="#sugar3.util.Node.prev" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.Node.prev">
+<span class="sig-name descname"><span class="pre">prev</span></span><a class="headerlink" href="#sugar3.util.Node.prev" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="sugar3.util.TempFilePath">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">TempFilePath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.TempFilePath" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.TempFilePath">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">TempFilePath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.TempFilePath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.format_size">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">format_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.format_size" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.format_size">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">format_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.format_size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.is_hex">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">is_hex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.is_hex" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.is_hex">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">is_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.is_hex" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.printable_hash">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">printable_hash</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_hash</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.printable_hash" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.printable_hash">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">printable_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_hash</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.printable_hash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert binary hash data into printable characters.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.set_proc_title">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">set_proc_title</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.set_proc_title" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.set_proc_title">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">set_proc_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.set_proc_title" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the process title so ps and top show more
 descriptive names.  This does not modify argv[0]
 and only the first 15 characters will be shown.</p>
@@ -124,19 +125,19 @@ debugging</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.sha_data">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">sha_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.sha_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.sha_data">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">sha_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.sha_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>sha1 hash some bytes.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.timestamp_to_elapsed_string">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">timestamp_to_elapsed_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timestamp</span></em>, <em class="sig-param"><span class="n">max_levels</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.timestamp_to_elapsed_string" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.timestamp_to_elapsed_string">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">timestamp_to_elapsed_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.timestamp_to_elapsed_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.unique_id">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">unique_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.unique_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.unique_id">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">unique_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.unique_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a likely-unique ID for whatever purpose</p>
 <p>data – suffix appended to working data before hashing</p>
 <p>Returns a 40-character string with hexidecimal digits
@@ -151,12 +152,12 @@ perfectly unique values.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.util.validate_activity_id">
-<code class="sig-prename descclassname">sugar3.util.</code><code class="sig-name descname">validate_activity_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actid</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.validate_activity_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.util.validate_activity_id">
+<span class="sig-prename descclassname"><span class="pre">sugar3.util.</span></span><span class="sig-name descname"><span class="pre">validate_activity_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.util.validate_activity_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate an activity ID.</p>
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -209,7 +210,7 @@ perfectly unique values.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -231,7 +232,7 @@ perfectly unique values.</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.dispatch.saferef module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,14 +33,14 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.dispatch.saferef">
+  <section id="module-sugar3.dispatch.saferef">
 <span id="sugar3-dispatch-saferef-module"></span><h1>sugar3.dispatch.saferef module<a class="headerlink" href="#module-sugar3.dispatch.saferef" title="Permalink to this headline">¶</a></h1>
 <p>“Safe weakrefs”, originally from pyDispatcher.</p>
 <p>Provides a way to safely weakref any function, including bound methods (which
 aren’t handled by the core weakref module).</p>
 <dl class="py class">
-<dt id="sugar3.dispatch.saferef.BoundMethodWeakref">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.dispatch.saferef.</code><code class="sig-name descname">BoundMethodWeakref</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">onDelete</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">arguments</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">named</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.BoundMethodWeakref" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.dispatch.saferef.BoundMethodWeakref">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.dispatch.saferef.</span></span><span class="sig-name descname"><span class="pre">BoundMethodWeakref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onDelete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">named</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.BoundMethodWeakref" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>‘Safe’ and reusable weak references to instance methods</p>
 <p>BoundMethodWeakref objects provide a mechanism for
@@ -49,15 +50,15 @@ object) is kept alive.  Instead, the BoundMethodWeakref
 object keeps weak references to both the object and the
 function which together define the instance method.</p>
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">key -- the identity key for the reference, calculated</code></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">key</span> <span class="pre">--</span> <span class="pre">the</span> <span class="pre">identity</span> <span class="pre">key</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">reference,</span> <span class="pre">calculated</span></span></dt>
 <dd><p>by the class’s calculateKey method applied to the
 target instance method</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">deletionMethods -- sequence of callable objects taking</code></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">deletionMethods</span> <span class="pre">--</span> <span class="pre">sequence</span> <span class="pre">of</span> <span class="pre">callable</span> <span class="pre">objects</span> <span class="pre">taking</span></span></dt>
 <dd><p>single argument, a reference to this object which
 will be called when <em>either</em> the target object or
 target function is garbage collected (i.e. when
@@ -66,13 +67,13 @@ as the onDelete parameters of safeRef calls.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">weakSelf -- weak reference to the target object</code></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">weakSelf</span> <span class="pre">--</span> <span class="pre">weak</span> <span class="pre">reference</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">target</span> <span class="pre">object</span></span></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">weakFunc -- weak reference to the target function</code></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">weakFunc</span> <span class="pre">--</span> <span class="pre">weak</span> <span class="pre">reference</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">target</span> <span class="pre">function</span></span></dt>
 <dd></dd></dl>
 
 <dl class="simple">
@@ -88,8 +89,8 @@ same BoundMethodWeakref instance.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="sugar3.dispatch.saferef.BoundMethodWeakref.calculateKey">
-<em class="property">classmethod </em><code class="sig-name descname">calculateKey</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.BoundMethodWeakref.calculateKey" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.dispatch.saferef.BoundMethodWeakref.calculateKey">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">calculateKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.BoundMethodWeakref.calculateKey" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the reference key for this reference</p>
 <p>Currently this is a two-tuple of the id()’s of the
 target object and the target function respectively.</p>
@@ -98,8 +99,8 @@ target object and the target function respectively.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="sugar3.dispatch.saferef.BoundNonDescriptorMethodWeakref">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.dispatch.saferef.</code><code class="sig-name descname">BoundNonDescriptorMethodWeakref</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">onDelete</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">arguments</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">named</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.BoundNonDescriptorMethodWeakref" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.dispatch.saferef.BoundNonDescriptorMethodWeakref">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.dispatch.saferef.</span></span><span class="sig-name descname"><span class="pre">BoundNonDescriptorMethodWeakref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onDelete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">named</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.BoundNonDescriptorMethodWeakref" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#sugar3.dispatch.saferef.BoundMethodWeakref" title="sugar3.dispatch.saferef.BoundMethodWeakref"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.dispatch.saferef.BoundMethodWeakref</span></code></a></p>
 <p>A specialized BoundMethodWeakref, for platforms where instance methods
 are not descriptors.</p>
@@ -116,25 +117,25 @@ of working in the most cases.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.dispatch.saferef.get_bound_method_weakref">
-<code class="sig-prename descclassname">sugar3.dispatch.saferef.</code><code class="sig-name descname">get_bound_method_weakref</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">onDelete</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.get_bound_method_weakref" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.dispatch.saferef.get_bound_method_weakref">
+<span class="sig-prename descclassname"><span class="pre">sugar3.dispatch.saferef.</span></span><span class="sig-name descname"><span class="pre">get_bound_method_weakref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onDelete</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.get_bound_method_weakref" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instantiates the appropiate BoundMethodWeakRef, depending on the
 details of the underlying class method implementation</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.dispatch.saferef.im_func">
-<code class="sig-prename descclassname">sugar3.dispatch.saferef.</code><code class="sig-name descname">im_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.im_func" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.dispatch.saferef.im_func">
+<span class="sig-prename descclassname"><span class="pre">sugar3.dispatch.saferef.</span></span><span class="sig-name descname"><span class="pre">im_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.im_func" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.dispatch.saferef.im_self">
-<code class="sig-prename descclassname">sugar3.dispatch.saferef.</code><code class="sig-name descname">im_self</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.im_self" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.dispatch.saferef.im_self">
+<span class="sig-prename descclassname"><span class="pre">sugar3.dispatch.saferef.</span></span><span class="sig-name descname"><span class="pre">im_self</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.im_self" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.dispatch.saferef.safeRef">
-<code class="sig-prename descclassname">sugar3.dispatch.saferef.</code><code class="sig-name descname">safeRef</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">onDelete</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.safeRef" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.dispatch.saferef.safeRef">
+<span class="sig-prename descclassname"><span class="pre">sugar3.dispatch.saferef.</span></span><span class="sig-name descname"><span class="pre">safeRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onDelete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.dispatch.saferef.safeRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <em>safe</em> weak reference to a callable target</p>
 <dl class="simple">
 <dt>target – the object to be weakly referenced, if it’s a</dt><dd><p>bound method reference, will create a BoundMethodWeakref,
@@ -147,7 +148,7 @@ weakref or a BoundMethodWeakref) as argument.</p>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -209,7 +210,7 @@ weakref or a BoundMethodWeakref) as argument.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -231,7 +232,7 @@ weakref or a BoundMethodWeakref) as argument.</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

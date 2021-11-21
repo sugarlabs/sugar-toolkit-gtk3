@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.logger module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,60 +33,60 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.logger">
+  <section id="module-sugar3.logger">
 <span id="sugar3-logger-module"></span><h1>sugar3.logger module<a class="headerlink" href="#module-sugar3.logger" title="Permalink to this headline">¶</a></h1>
 <p>Logging service setup.</p>
 <p>STABLE.</p>
 <dl class="py class">
-<dt id="sugar3.logger.TraceRepr">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.logger.</code><code class="sig-name descname">TraceRepr</code><a class="headerlink" href="#sugar3.logger.TraceRepr" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.TraceRepr">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.logger.</span></span><span class="sig-name descname"><span class="pre">TraceRepr</span></span><a class="headerlink" href="#sugar3.logger.TraceRepr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">reprlib.Repr</span></code></p>
 <dl class="py method">
-<dt id="sugar3.logger.TraceRepr.repr1">
-<code class="sig-name descname">repr1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.TraceRepr.repr1" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.TraceRepr.repr1">
+<span class="sig-name descname"><span class="pre">repr1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.TraceRepr.repr1" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.logger.TraceRepr.repr_bool">
-<code class="sig-name descname">repr_bool</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.TraceRepr.repr_bool" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.TraceRepr.repr_bool">
+<span class="sig-name descname"><span class="pre">repr_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.TraceRepr.repr_bool" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.logger.TraceRepr.repr_int">
-<code class="sig-name descname">repr_int</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.TraceRepr.repr_int" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.TraceRepr.repr_int">
+<span class="sig-name descname"><span class="pre">repr_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.TraceRepr.repr_int" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.logger.cleanup">
-<code class="sig-prename descclassname">sugar3.logger.</code><code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.cleanup" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.cleanup">
+<span class="sig-prename descclassname"><span class="pre">sugar3.logger.</span></span><span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.cleanup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clean up the log directory, moving old logs into a numbered backup
 directory.  We only keep <cite>_MAX_BACKUP_DIRS</cite> of these backup directories
 around; the rest are removed.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.logger.get_logs_dir">
-<code class="sig-prename descclassname">sugar3.logger.</code><code class="sig-name descname">get_logs_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.get_logs_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.get_logs_dir">
+<span class="sig-prename descclassname"><span class="pre">sugar3.logger.</span></span><span class="sig-name descname"><span class="pre">get_logs_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.get_logs_dir" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.logger.set_level">
-<code class="sig-prename descclassname">sugar3.logger.</code><code class="sig-name descname">set_level</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.set_level" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.set_level">
+<span class="sig-prename descclassname"><span class="pre">sugar3.logger.</span></span><span class="sig-name descname"><span class="pre">set_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.set_level" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.logger.start">
-<code class="sig-prename descclassname">sugar3.logger.</code><code class="sig-name descname">start</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.start" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.start">
+<span class="sig-prename descclassname"><span class="pre">sugar3.logger.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.logger.trace">
-<code class="sig-prename descclassname">sugar3.logger.</code><code class="sig-name descname">trace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logger_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">skip_args</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">skip_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">maxsize_list</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">maxsize_dict</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">maxsize_string</span><span class="o">=</span><span class="default_value">300</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.trace" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.logger.trace">
+<span class="sig-prename descclassname"><span class="pre">sugar3.logger.</span></span><span class="sig-name descname"><span class="pre">trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxsize_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxsize_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxsize_string</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.logger.trace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -139,7 +140,7 @@ around; the rest are removed.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -161,7 +162,7 @@ around; the rest are removed.</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

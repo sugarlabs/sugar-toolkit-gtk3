@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.mime module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,74 +33,74 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.mime">
+  <section id="module-sugar3.mime">
 <span id="sugar3-mime-module"></span><h1>sugar3.mime module<a class="headerlink" href="#module-sugar3.mime" title="Permalink to this headline">¶</a></h1>
 <p>MIME helpers based on freedesktop specification.</p>
 <p>STABLE.</p>
 <dl class="py class">
-<dt id="sugar3.mime.ObjectType">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">ObjectType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_id</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">icon</span></em>, <em class="sig-param"><span class="n">mime_types</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.ObjectType" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.ObjectType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">ObjectType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mime_types</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.ObjectType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.choose_most_significant">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">choose_most_significant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mime_types</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.choose_most_significant" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.choose_most_significant">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">choose_most_significant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mime_types</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.choose_most_significant" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_all_generic_types">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_all_generic_types</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_all_generic_types" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_all_generic_types">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_all_generic_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_all_generic_types" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_extensions_by_mimetype">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_extensions_by_mimetype</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mime_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_extensions_by_mimetype" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_extensions_by_mimetype">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_extensions_by_mimetype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mime_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_extensions_by_mimetype" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_for_file">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_for_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_for_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_for_file">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_for_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_for_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_from_file_name">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_from_file_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_from_file_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_from_file_name">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_from_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_from_file_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>DEPRECATED: 0.102 (removed in 4 releases)
 Use Gio.content_type_guess(file_name, None)[0] instead.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_generic_type">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_generic_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_generic_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_generic_type">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_generic_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_generic_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_mime_description">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_mime_description</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mime_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_mime_description" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_mime_description">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_mime_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mime_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_mime_description" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_mime_icon">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_mime_icon</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mime_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_mime_icon" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_mime_icon">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_mime_icon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mime_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_mime_icon" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_mime_parents">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_mime_parents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mime_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_mime_parents" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_mime_parents">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_mime_parents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mime_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_mime_parents" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.get_primary_extension">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">get_primary_extension</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mime_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_primary_extension" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.get_primary_extension">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">get_primary_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mime_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.get_primary_extension" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.mime.split_uri_list">
-<code class="sig-prename descclassname">sugar3.mime.</code><code class="sig-name descname">split_uri_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">uri_list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.split_uri_list" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.mime.split_uri_list">
+<span class="sig-prename descclassname"><span class="pre">sugar3.mime.</span></span><span class="sig-name descname"><span class="pre">split_uri_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.mime.split_uri_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -153,7 +154,7 @@ Use Gio.content_type_guess(file_name, None)[0] instead.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -175,7 +176,7 @@ Use Gio.content_type_guess(file_name, None)[0] instead.</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

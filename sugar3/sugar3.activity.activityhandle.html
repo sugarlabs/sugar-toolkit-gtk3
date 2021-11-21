@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.activity.activityhandle module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,13 +33,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.activity.activityhandle">
+  <section id="module-sugar3.activity.activityhandle">
 <span id="sugar3-activity-activityhandle-module"></span><h1>sugar3.activity.activityhandle module<a class="headerlink" href="#module-sugar3.activity.activityhandle" title="Permalink to this headline">¶</a></h1>
 <p>Provides a class for storing activity metadata such as activity id’s,
 journal object id’s,</p>
 <dl class="py class">
-<dt id="sugar3.activity.activityhandle.ActivityHandle">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.activity.activityhandle.</code><code class="sig-name descname">ActivityHandle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">activity_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">object_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">uri</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">invited</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.ActivityHandle" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.activity.activityhandle.ActivityHandle">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityhandle.</span></span><span class="sig-name descname"><span class="pre">ActivityHandle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activity_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.ActivityHandle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Data structure storing simple activity metadata</p>
 <dl class="field-list simple">
@@ -47,25 +48,24 @@ journal object id’s,</p>
 <li><p><strong>activity_id</strong> (<em>string</em>) – unique id for the activity to be</p></li>
 <li><p><strong>created</strong> – </p></li>
 <li><p><strong>object_id</strong> (<em>string</em>) – identity of the journal object</p></li>
-<li><p><strong>with the activity.</strong> (<em>associated</em>) – </p></li>
-<li><p><strong>you resume an activity from the journal</strong> (<em>When</em>) – </p></li>
-<li><p><strong>object_id will be passed in. It is optional</strong> (<em>the</em>) – </p></li>
-<li><p><strong>new activities does not have an</strong> (<em>since</em>) – </p></li>
+<li><p><strong>activity.</strong> (<em>associated with the</em>) – </p></li>
+<li><p><strong>journal</strong> (<em>When you resume an activity from the</em>) – </p></li>
+<li><p><strong>optional</strong> (<em>the object_id will be passed in. It is</em>) – </p></li>
+<li><p><strong>an</strong> (<em>since new activities does not have</em>) – </p></li>
 <li><p><strong>object.</strong> (<em>associated</em>) – </p></li>
 <li><p><strong>uri</strong> (<em>string</em>) – URI associated with the activity. Used when</p></li>
-<li><p><strong>an external file</strong><strong> or </strong><strong>resource in the</strong> (<em>opening</em>) – </p></li>
-<li><p><strong>activity</strong> – </p></li>
-<li><p><strong>than a journal object</strong> (<em>rather</em>) – </p></li>
-<li><p><strong>stored on the file system for</strong> (<em>(</em><em>downloads</em>) – </p></li>
-<li><p><strong>or web pages</strong><strong>)</strong> (<em>example</em>) – </p></li>
+<li><p><strong>the</strong> (<em>opening an external file</em><em> or </em><em>resource in</em>) – </p></li>
+<li><p><strong>object</strong> (<em>activity</em><em>, </em><em>rather than a journal</em>) – </p></li>
+<li><p><strong>for</strong> (<em>(</em><em>downloads stored on the file system</em>) – </p></li>
+<li><p><strong>pages</strong><strong>)</strong> (<em>example</em><em> or </em><em>web</em>) – </p></li>
 <li><p><strong>invited</strong> (<em>bool</em>) – True if the activity is being</p></li>
-<li><p><strong>for handling an invite from the network</strong> (<em>launched</em>) – </p></li>
+<li><p><strong>network</strong> (<em>launched for handling an invite from the</em>) – </p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="sugar3.activity.activityhandle.ActivityHandle.get_dict">
-<code class="sig-name descname">get_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.ActivityHandle.get_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.activity.activityhandle.ActivityHandle.get_dict">
+<span class="sig-name descname"><span class="pre">get_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.ActivityHandle.get_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns activity settings as a dictionary in format
 {activity_id:XXXX, object_id:XXXX, uri:XXXX, invited:BOOL}</p>
 </dd></dl>
@@ -73,12 +73,12 @@ journal object id’s,</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.activity.activityhandle.create_from_dict">
-<code class="sig-prename descclassname">sugar3.activity.activityhandle.</code><code class="sig-name descname">create_from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">handle_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.create_from_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.activity.activityhandle.create_from_dict">
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityhandle.</span></span><span class="sig-name descname"><span class="pre">create_from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityhandle.create_from_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an activity handle from a dictionary of parameters</p>
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -147,7 +147,7 @@ journal object id’s,</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -169,7 +169,7 @@ journal object id’s,</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

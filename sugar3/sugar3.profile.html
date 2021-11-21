@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>sugar3.profile module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,74 +33,74 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-sugar3.profile">
+  <section id="module-sugar3.profile">
 <span id="sugar3-profile-module"></span><h1>sugar3.profile module<a class="headerlink" href="#module-sugar3.profile" title="Permalink to this headline">¶</a></h1>
 <p>User settings/configuration loading.</p>
 <dl class="py class">
-<dt id="sugar3.profile.Profile">
-<em class="property">class </em><code class="sig-prename descclassname">sugar3.profile.</code><code class="sig-name descname">Profile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.Profile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.Profile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.profile.</span></span><span class="sig-name descname"><span class="pre">Profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.Profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Local user’s current options/profile information</p>
 <p>The profile is also responsible for loading the user’s
 public and private ssh keys from disk.</p>
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">pubkey -- public ssh key</code></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">pubkey</span> <span class="pre">--</span> <span class="pre">public</span> <span class="pre">ssh</span> <span class="pre">key</span></span></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">privkey_hash -- SHA has of the child's public key</code></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">privkey_hash</span> <span class="pre">--</span> <span class="pre">SHA</span> <span class="pre">has</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">child's</span> <span class="pre">public</span> <span class="pre">key</span></span></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.profile.Profile.convert_profile">
-<code class="sig-name descname">convert_profile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.Profile.convert_profile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.Profile.convert_profile">
+<span class="sig-name descname"><span class="pre">convert_profile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.Profile.convert_profile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="sugar3.profile.Profile.is_valid">
-<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.Profile.is_valid" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.Profile.is_valid">
+<span class="sig-name descname"><span class="pre">is_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.Profile.is_valid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="sugar3.profile.Profile.privkey_hash">
-<em class="property">property </em><code class="sig-name descname">privkey_hash</code><a class="headerlink" href="#sugar3.profile.Profile.privkey_hash" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="sugar3.profile.Profile.privkey_hash">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">privkey_hash</span></span><a class="headerlink" href="#sugar3.profile.Profile.privkey_hash" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="sugar3.profile.Profile.pubkey">
-<em class="property">property </em><code class="sig-name descname">pubkey</code><a class="headerlink" href="#sugar3.profile.Profile.pubkey" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="sugar3.profile.Profile.pubkey">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pubkey</span></span><a class="headerlink" href="#sugar3.profile.Profile.pubkey" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.profile.get_color">
-<code class="sig-prename descclassname">sugar3.profile.</code><code class="sig-name descname">get_color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_color" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.get_color">
+<span class="sig-prename descclassname"><span class="pre">sugar3.profile.</span></span><span class="sig-name descname"><span class="pre">get_color</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_color" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.profile.get_nick_name">
-<code class="sig-prename descclassname">sugar3.profile.</code><code class="sig-name descname">get_nick_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_nick_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.get_nick_name">
+<span class="sig-prename descclassname"><span class="pre">sugar3.profile.</span></span><span class="sig-name descname"><span class="pre">get_nick_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_nick_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.profile.get_profile">
-<code class="sig-prename descclassname">sugar3.profile.</code><code class="sig-name descname">get_profile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_profile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.get_profile">
+<span class="sig-prename descclassname"><span class="pre">sugar3.profile.</span></span><span class="sig-name descname"><span class="pre">get_profile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_profile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.profile.get_pubkey">
-<code class="sig-prename descclassname">sugar3.profile.</code><code class="sig-name descname">get_pubkey</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_pubkey" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.get_pubkey">
+<span class="sig-prename descclassname"><span class="pre">sugar3.profile.</span></span><span class="sig-name descname"><span class="pre">get_pubkey</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_pubkey" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="sugar3.profile.get_save_as">
-<code class="sig-prename descclassname">sugar3.profile.</code><code class="sig-name descname">get_save_as</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_save_as" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="sugar3.profile.get_save_as">
+<span class="sig-prename descclassname"><span class="pre">sugar3.profile.</span></span><span class="sig-name descname"><span class="pre">get_save_as</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.profile.get_save_as" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -153,7 +154,7 @@ public and private ssh keys from disk.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -175,7 +176,7 @@ public and private ssh keys from disk.</p>
       &copy;2021, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
