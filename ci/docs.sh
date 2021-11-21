@@ -15,6 +15,11 @@ show-green () {
 # build package from the AUR (arch user repository)
 if command -v makepkg &> /dev/null
 then
+    # sphinx extensions 
+    
+    # sphinxcontrib.napolean
+    pip install sphinxcontrib-napoleon --user
+
     show-green "Cloning sugar-toolkit-gtk3-git from AUR"
     mkdir .cache
     cd .cache 

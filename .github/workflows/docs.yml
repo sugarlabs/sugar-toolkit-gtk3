@@ -3,6 +3,8 @@ name: Documentation
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -15,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           # assume yes and do not ask for confirmation when installing deps using pacman
-          yes | pacman -Syu base-devel sudo git wget curl python-sphinx rsync --noconfirm
+          yes | pacman -Syu base-devel sudo git wget curl python-sphinx rsync python-pip --noconfirm
 
       - uses: actions/checkout@v2
         with:
@@ -35,6 +37,9 @@ jobs:
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
+        # build the documentation, but only deploy them when the PR
+        # gets merged
+        if: github.ref == 'refs/heads/master'
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
