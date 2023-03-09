@@ -109,7 +109,7 @@ def main():
                         help='the activity is being launched for handling an '
                              'invite from the network')
     
-    options = parser.parse_args()
+    options, args = parser.parse_known_args()
 
     logger.start()
 
