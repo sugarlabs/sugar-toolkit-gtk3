@@ -26,7 +26,7 @@ if six.PY2:
     sys.setdefaultencoding('utf-8')
 
 import gettext
-from optparse import OptionParser
+from argparse import ArgumentParser
 
 import dbus
 import dbus.service
@@ -92,23 +92,24 @@ def main():
              'a directory containing a Sugar Activity [activity dir], a '\
              '[python_class], or both.'
 
-    parser = OptionParser(usage=usage, epilog=epilog)
-    parser.add_option('-b', '--bundle-id', dest='bundle_id',
-                      help='identifier of the activity bundle')
-    parser.add_option('-a', '--activity-id', dest='activity_id',
-                      help='identifier of the activity instance')
-    parser.add_option('-o', '--object-id', dest='object_id',
-                      help='identifier of the associated datastore object')
-    parser.add_option('-u', '--uri', dest='uri',
-                      help='URI to load')
-    parser.add_option('-s', '--single-process', dest='single_process',
-                      action='store_true',
-                      help='start all the instances in the same process')
-    parser.add_option('-i', '--invited', dest='invited',
-                      action='store_true', default=False,
-                      help='the activity is being launched for handling an '
-                           'invite from the network')
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(usage=usage, epilog=epilog)
+    parser.add_argument('-b', '--bundle-id', dest='bundle_id',
+                        help='identifier of the activity bundle')
+    parser.add_argument('-a', '--activity-id', dest='activity_id',
+                        help='identifier of the activity instance')
+    parser.add_argument('-o', '--object-id', dest='object_id',
+                        help='identifier of the associated datastore object')
+    parser.add_argument('-u', '--uri', dest='uri',
+                        help='URI to load')
+    parser.add_argument('-s', '--single-process', dest='single_process',
+                        action='store_true',
+                        help='start all the instances in the same process')
+    parser.add_argument('-i', '--invited', dest='invited',
+                        action='store_true', default=False,
+                        help='the activity is being launched for handling an '
+                             'invite from the network')
+    
+    options = parser.parse_args()
 
     logger.start()
 
