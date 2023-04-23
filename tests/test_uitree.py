@@ -33,6 +33,43 @@ class TestUITree(unittest.TestCase):
             process.terminate()
 
         self.assertIsNotNone(button)
+   def test_find_menu_item(self):
+        process = subprocess.Popen(["python3", __file__, "show_window2"])
+
+        try:
+            root = uitree.get_root()
+            window = root.find_child(name="window2", role_name="frame")
+            menu = window.find_child(name="menu1", role_name="menu")
+            item = menu.find_child(name="item1", role_name="menu item")
+        finally:
+            process.terminate()
+
+        self.assertIsNotNone(item)
+
+    def test_find_checkbox(self):
+        process = subprocess.Popen(["python3", __file__, "show_window3"])
+
+        try:
+            root = uitree.get_root()
+            window = root.find_child(name="window3", role_name="frame")
+            checkbox = window.find_child(name="checkbox1", role_name="check box")
+        finally:
+            process.terminate()
+
+        self.assertIsNotNone(checkbox)
+
+    def test_find_text_field(self):
+        process = subprocess.Popen(["python3", __file__, "show_window4"])
+
+        try:
+            root = uitree.get_root()
+            window = root.find_child(name="window4", role_name="frame")
+            text_field = window.find_child(name="text1", role_name="text")
+        finally:
+            process.terminate()
+
+        self.assertIsNotNone(text_field)
+
 
 
 def show_window1():
@@ -48,7 +85,56 @@ def show_window1():
     window.show()
 
     Gtk.main()
+def show_window2():
+    from gi.repository import Gtk
+
+    window = Gtk.Window()
+    window.set_title("window2")
+
+    menu_bar = Gtk.MenuBar()
+    window.add(menu_bar)
+
+    menu = Gtk.Menu()
+    menu_item = Gtk.MenuItem(label="item1")
+    menu_item.set_submenu(menu)
+    menu_bar.add(menu_item)
+    menu.show()
+
+    window.show()
+
+    Gtk.main()
+
+def show_window3():
+    from gi.repository import Gtk
+
+    window = Gtk.Window()
+    window.set_title("window3")
+
+    checkbox = Gtk.CheckButton(label="checkbox1")
+    window.add(checkbox)
+    checkbox.show()
+
+    window.show()
+
+    Gtk.main()
+
+def show_window4():
+    from gi.repository import Gtk
+
+    window = Gtk.Window()
+    window.set_title("window4")
+
+    text_field = Gtk.Entry()
+    window.add(text_field)
+    text_field.show()
+
+    window.show()
+
+    Gtk.main()
 
 
 if __name__ == '__main__':
-    globals()[sys.argv[1]]()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestUITree)
+    unittest.TextTestRunner().run(suite)
+
+
