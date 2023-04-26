@@ -39,6 +39,7 @@
 #include <X11/SM/SMlib.h>
 
 #include <gdk/gdk.h>
+#include <gdk/gdkx.h>
 
 static const char *state_names[] = {
   "start",
