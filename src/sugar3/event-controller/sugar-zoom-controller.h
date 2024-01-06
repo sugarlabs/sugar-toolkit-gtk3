@@ -40,11 +40,12 @@ G_BEGIN_DECLS
 
 typedef struct _SugarZoomController SugarZoomController;
 typedef struct _SugarZoomControllerClass SugarZoomControllerClass;
+typedef struct _SugarZoomControllerPrivate SugarZoomControllerPrivate;
 
 struct _SugarZoomController
 {
   SugarTouchController parent_instance;
-  gpointer _priv;
+  SugarZoomControllerPrivate *priv;
 };
 
 struct _SugarZoomControllerClass
@@ -53,6 +54,11 @@ struct _SugarZoomControllerClass
 
   void (* scale_changed) (SugarZoomController *controller,
                           gdouble              scale);
+};
+
+struct _SugarZoomControllerPrivate
+{
+  gdouble initial_distance;
 };
 
 GType                  sugar_zoom_controller_get_type        (void) G_GNUC_CONST;

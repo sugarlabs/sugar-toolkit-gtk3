@@ -22,30 +22,21 @@
 #include <math.h>
 #include "sugar-zoom-controller.h"
 
-typedef struct _SugarZoomControllerPriv SugarZoomControllerPriv;
-
 enum {
   SCALE_CHANGED,
   LAST_SIGNAL
 };
 
-struct _SugarZoomControllerPriv
-{
-  gdouble initial_distance;
-};
-
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (SugarZoomController,
-               sugar_zoom_controller,
-               SUGAR_TYPE_TOUCH_CONTROLLER)
+G_DEFINE_TYPE_WITH_PRIVATE (SugarZoomController,
+                            sugar_zoom_controller,
+                            SUGAR_TYPE_TOUCH_CONTROLLER)
 
 static void
 sugar_zoom_controller_init (SugarZoomController *controller)
 {
-  controller->_priv = G_TYPE_INSTANCE_GET_PRIVATE (controller,
-                                                   SUGAR_TYPE_ZOOM_CONTROLLER,
-                                                   SugarZoomControllerPriv);
+  controller->priv = sugar_zoom_controller_get_instance_private (controller);
 }
 
 static void
@@ -67,12 +58,12 @@ static gboolean
 _sugar_zoom_controller_get_distance (SugarZoomController *controller,
                                      gdouble             *distance)
 {
-  SugarZoomControllerPriv *priv;
+  SugarZoomControllerPrivate *priv;
   gint x1, y1, x2, y2;
   GList *touches;
   gdouble dx, dy;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (sugar_touch_controller_get_num_touches (SUGAR_TOUCH_CONTROLLER (controller)) != 2)
     return FALSE;
@@ -94,13 +85,13 @@ _sugar_zoom_controller_get_distance (SugarZoomController *controller,
 static gboolean
 _sugar_zoom_controller_check_emit (SugarZoomController *controller)
 {
-  SugarZoomControllerPriv *priv;
+  SugarZoomControllerPrivate *priv;
   gdouble distance, zoom;
 
   if (!_sugar_zoom_controller_get_distance (controller, &distance))
     return FALSE;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (distance == 0 || priv->initial_distance == 0)
     return FALSE;
@@ -114,10 +105,10 @@ _sugar_zoom_controller_check_emit (SugarZoomController *controller)
 SugarEventControllerState
 sugar_zoom_controller_get_state (SugarEventController *controller)
 {
-  SugarZoomControllerPriv *priv;
+  SugarZoomControllerPrivate *priv;
   gint num_touches;
 
-  priv = SUGAR_ZOOM_CONTROLLER (controller)->_priv;
+  priv = SUGAR_ZOOM_CONTROLLER (controller)->priv;
   num_touches = sugar_touch_controller_get_num_touches (SUGAR_TOUCH_CONTROLLER (controller));
 
   if (num_touches == 2)
@@ -131,9 +122,9 @@ sugar_zoom_controller_get_state (SugarEventController *controller)
 static void
 sugar_zoom_controller_began (SugarEventController *controller)
 {
-  SugarZoomControllerPriv *priv;
+  SugarZoomControllerPrivate *priv;
 
-  priv = SUGAR_ZOOM_CONTROLLER (controller)->_priv;
+  priv = SUGAR_ZOOM_CONTROLLER (controller)->priv;
   _sugar_zoom_controller_get_distance (SUGAR_ZOOM_CONTROLLER (controller),
                                        &priv->initial_distance);
   g_object_notify (G_OBJECT (controller), "state");
@@ -174,8 +165,6 @@ sugar_zoom_controller_class_init (SugarZoomControllerClass *klass)
                   g_cclosure_marshal_VOID__DOUBLE,
                   G_TYPE_NONE, 1,
                   G_TYPE_DOUBLE);
-
-  g_type_class_add_private (klass, sizeof (SugarZoomControllerPriv));
 }
 
 SugarEventController *
@@ -200,7 +189,7 @@ gboolean
 sugar_zoom_controller_get_scale_delta (SugarZoomController *controller,
                                        gdouble             *scale)
 {
-  SugarZoomControllerPriv *priv;
+  SugarZoomControllerPrivate *priv;
   gdouble distance;
 
   g_return_val_if_fail (SUGAR_IS_ZOOM_CONTROLLER (controller), FALSE);
@@ -208,7 +197,7 @@ sugar_zoom_controller_get_scale_delta (SugarZoomController *controller,
   if (!_sugar_zoom_controller_get_distance (controller, &distance))
     return FALSE;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (scale)
     *scale = distance / priv->initial_distance;

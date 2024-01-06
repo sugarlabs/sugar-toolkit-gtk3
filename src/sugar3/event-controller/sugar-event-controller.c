@@ -24,7 +24,6 @@
 
 typedef struct _SugarControllerItem SugarControllerItem;
 typedef struct _SugarControllerWidgetData SugarControllerWidgetData;
-typedef struct _SugarEventControllerPriv SugarEventControllerPriv;
 
 enum {
   PROP_STATE = 1,
@@ -36,11 +35,6 @@ enum {
   UPDATED,
   ENDED,
   LAST_SIGNAL
-};
-
-struct _SugarEventControllerPriv
-{
-  GtkWidget *widget;
 };
 
 struct _SugarControllerItem
@@ -58,7 +52,9 @@ struct _SugarControllerWidgetData
   SugarEventController *current_exclusive;
 };
 
-G_DEFINE_ABSTRACT_TYPE (SugarEventController, sugar_event_controller, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (SugarEventController,
+                                     sugar_event_controller,
+                                     G_TYPE_OBJECT)
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GQuark quark_widget_controller_data = 0;
@@ -69,9 +65,9 @@ sugar_event_controller_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  SugarEventControllerPriv *priv;
+  SugarEventControllerPrivate *priv;
 
-  priv = SUGAR_EVENT_CONTROLLER (object)->_priv;
+  priv = SUGAR_EVENT_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -97,9 +93,9 @@ sugar_event_controller_set_property (GObject      *object,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  SugarEventControllerPriv *priv;
+  SugarEventControllerPrivate *priv;
 
-  priv = SUGAR_EVENT_CONTROLLER (object)->_priv;
+  priv = SUGAR_EVENT_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -165,16 +161,13 @@ sugar_event_controller_class_init (SugarEventControllerClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
-  g_type_class_add_private (object_class, sizeof (SugarEventControllerPriv));
   quark_widget_controller_data = g_quark_from_static_string ("sugar-widget-controller-data");
 }
 
 static void
 sugar_event_controller_init (SugarEventController *controller)
 {
-  controller->_priv = G_TYPE_INSTANCE_GET_PRIVATE (controller,
-                                                   SUGAR_TYPE_EVENT_CONTROLLER,
-                                                   SugarEventControllerPriv);
+  controller->priv = sugar_event_controller_get_instance_private (controller);
 }
 
 static gboolean
