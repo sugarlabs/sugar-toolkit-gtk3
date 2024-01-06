@@ -23,12 +23,14 @@
 #define __SUGAR_GESTURE_GRABBER_H__
 
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 #include "event-controller/sugar-event-controllers.h"
 
 G_BEGIN_DECLS
 
 typedef struct _SugarGestureGrabber SugarGestureGrabber;
 typedef struct _SugarGestureGrabberClass SugarGestureGrabberClass;
+typedef struct _SugarGestureGrabberPrivate SugarGestureGrabberPrivate;
 
 #define SUGAR_TYPE_GESTURE_GRABBER              (sugar_gesture_grabber_get_type())
 #define SUGAR_GESTURE_GRABBER(object)           (G_TYPE_CHECK_INSTANCE_CAST((object), SUGAR_TYPE_GESTURE_GRABBER, SugarGestureGrabber))
@@ -39,11 +41,19 @@ typedef struct _SugarGestureGrabberClass SugarGestureGrabberClass;
 
 struct _SugarGestureGrabber {
 	GObject parent_instance;
-	gpointer _priv;
+	SugarGestureGrabberPrivate *priv;
 };
 
 struct _SugarGestureGrabberClass {
 	GObjectClass parent_class;
+};
+
+struct _SugarGestureGrabberPrivate
+{
+        GdkWindow *root_window;
+        GArray *controllers;
+        GArray *touches;
+        guint cancel_timeout_id;
 };
 
 GType                 sugar_gesture_grabber_get_type (void);

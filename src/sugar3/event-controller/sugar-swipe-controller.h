@@ -40,6 +40,7 @@ G_BEGIN_DECLS
 
 typedef struct _SugarSwipeController SugarSwipeController;
 typedef struct _SugarSwipeControllerClass SugarSwipeControllerClass;
+typedef struct _SugarSwipeControllerPrivate SugarSwipeControllerPrivate;
 
 typedef enum {
   SUGAR_SWIPE_DIRECTION_LEFT,
@@ -58,7 +59,7 @@ typedef enum {
 struct _SugarSwipeController
 {
   SugarEventController parent_instance;
-  gpointer _priv;
+  SugarSwipeControllerPrivate *priv;
 };
 
 struct _SugarSwipeControllerClass
@@ -67,6 +68,16 @@ struct _SugarSwipeControllerClass
 
   void (* swipe_ended) (SugarSwipeController *controller,
                         SugarSwipeDirection   direction);
+};
+
+struct _SugarSwipeControllerPrivate
+{
+  GdkDevice *device;
+  GdkEventSequence *sequence;
+  GArray *event_data;
+  guint swiping : 1;
+  guint swiped : 1;
+  guint directions : 4;
 };
 
 GType                  sugar_swipe_controller_get_type (void) G_GNUC_CONST;

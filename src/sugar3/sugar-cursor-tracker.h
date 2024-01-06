@@ -23,12 +23,14 @@
 #define __SUGAR_CURSOR_TRACKER_H__
 
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 #include "event-controller/sugar-event-controllers.h"
 
 G_BEGIN_DECLS
 
 typedef struct _SugarCursorTracker SugarCursorTracker;
 typedef struct _SugarCursorTrackerClass SugarCursorTrackerClass;
+typedef struct _SugarCursorTrackerPrivate SugarCursorTrackerPrivate;
 
 #define SUGAR_TYPE_CURSOR_TRACKER              (sugar_cursor_tracker_get_type())
 #define SUGAR_CURSOR_TRACKER(object)           (G_TYPE_CHECK_INSTANCE_CAST((object), SUGAR_TYPE_CURSOR_TRACKER, SugarCursorTracker))
@@ -39,11 +41,17 @@ typedef struct _SugarCursorTrackerClass SugarCursorTrackerClass;
 
 struct _SugarCursorTracker {
 	GObject parent_instance;
-	gpointer _priv;
+	SugarCursorTrackerPrivate *priv;
 };
 
 struct _SugarCursorTrackerClass {
 	GObjectClass parent_class;
+};
+
+struct _SugarCursorTrackerPrivate
+{
+        GdkWindow *root_window;
+        gboolean cursor_shown;
 };
 
 GType                sugar_cursor_tracker_get_type (void);

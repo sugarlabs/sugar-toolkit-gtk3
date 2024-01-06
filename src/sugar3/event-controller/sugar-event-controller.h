@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 
 typedef struct _SugarEventController SugarEventController;
 typedef struct _SugarEventControllerClass SugarEventControllerClass;
+typedef struct _SugarEventControllerPrivate SugarEventControllerPrivate;
 
 typedef enum {
   SUGAR_EVENT_CONTROLLER_STATE_NONE,
@@ -55,7 +56,8 @@ typedef enum {
 struct _SugarEventController
 {
   GObject parent_instance;
-  gpointer _priv;
+
+  SugarEventControllerPrivate *priv;
 };
 
 struct _SugarEventControllerClass
@@ -72,6 +74,11 @@ struct _SugarEventControllerClass
                                               GdkEvent             *event);
   SugarEventControllerState (* get_state)    (SugarEventController *controller);
   void                      (* reset)        (SugarEventController *controller);
+};
+
+struct _SugarEventControllerPrivate
+{
+  GtkWidget *widget;
 };
 
 GType     sugar_event_controller_get_type     (void) G_GNUC_CONST;

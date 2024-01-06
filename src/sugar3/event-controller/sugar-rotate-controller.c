@@ -22,30 +22,21 @@
 #include <math.h>
 #include "sugar-rotate-controller.h"
 
-typedef struct _SugarRotateControllerPriv SugarRotateControllerPriv;
-
 enum {
   ANGLE_CHANGED,
   LAST_SIGNAL
 };
 
-struct _SugarRotateControllerPriv
-{
-  gdouble initial_angle;
-};
-
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (SugarRotateController,
-               sugar_rotate_controller,
-               SUGAR_TYPE_TOUCH_CONTROLLER)
+G_DEFINE_TYPE_WITH_PRIVATE (SugarRotateController,
+                            sugar_rotate_controller,
+                            SUGAR_TYPE_TOUCH_CONTROLLER)
 
 static void
 sugar_rotate_controller_init (SugarRotateController *controller)
 {
-  controller->_priv = G_TYPE_INSTANCE_GET_PRIVATE (controller,
-                                                   SUGAR_TYPE_ROTATE_CONTROLLER,
-                                                   SugarRotateControllerPriv);
+  controller->priv = sugar_rotate_controller_get_instance_private (controller);
 }
 
 static void
@@ -67,12 +58,12 @@ static gboolean
 _sugar_rotate_controller_get_angle (SugarRotateController *controller,
                                     gdouble               *angle)
 {
-  SugarRotateControllerPriv *priv;
+  SugarRotateControllerPrivate *priv;
   gint x1, y1, x2, y2;
   gdouble dx, dy;
   GList *touches;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (sugar_touch_controller_get_num_touches (SUGAR_TOUCH_CONTROLLER (controller)) != 2)
     return FALSE;
@@ -101,13 +92,13 @@ _sugar_rotate_controller_get_angle (SugarRotateController *controller,
 static gboolean
 _sugar_rotate_controller_check_emit (SugarRotateController *controller)
 {
-  SugarRotateControllerPriv *priv;
+  SugarRotateControllerPrivate *priv;
   gdouble angle;
 
   if (!_sugar_rotate_controller_get_angle (controller, &angle))
     return FALSE;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   g_signal_emit (controller, signals[ANGLE_CHANGED], 0,
                  angle, angle - priv->initial_angle);
@@ -117,10 +108,10 @@ _sugar_rotate_controller_check_emit (SugarRotateController *controller)
 SugarEventControllerState
 sugar_rotate_controller_get_state (SugarEventController *controller)
 {
-  SugarRotateControllerPriv *priv;
+  SugarRotateControllerPrivate *priv;
   gint num_touches;
 
-  priv = SUGAR_ROTATE_CONTROLLER (controller)->_priv;
+  priv = SUGAR_ROTATE_CONTROLLER (controller)->priv;
   num_touches = sugar_touch_controller_get_num_touches (SUGAR_TOUCH_CONTROLLER (controller));
 
   if (num_touches == 2)
@@ -134,9 +125,9 @@ sugar_rotate_controller_get_state (SugarEventController *controller)
 void
 sugar_rotate_controller_began (SugarEventController *controller)
 {
-  SugarRotateControllerPriv *priv;
+  SugarRotateControllerPrivate *priv;
 
-  priv = SUGAR_ROTATE_CONTROLLER (controller)->_priv;
+  priv = SUGAR_ROTATE_CONTROLLER (controller)->priv;
   _sugar_rotate_controller_get_angle (SUGAR_ROTATE_CONTROLLER (controller),
                                       &priv->initial_angle);
   g_object_notify (G_OBJECT (controller), "state");
@@ -178,8 +169,6 @@ sugar_rotate_controller_class_init (SugarRotateControllerClass *klass)
                   g_cclosure_marshal_generic,
                   G_TYPE_NONE, 2,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
-
-  g_type_class_add_private (klass, sizeof (SugarRotateControllerPriv));
 }
 
 SugarEventController *
@@ -203,7 +192,7 @@ gboolean
 sugar_rotate_controller_get_angle_delta (SugarRotateController *controller,
                                          gdouble               *delta)
 {
-  SugarRotateControllerPriv *priv;
+  SugarRotateControllerPrivate *priv;
   gdouble angle;
 
   g_return_val_if_fail (SUGAR_IS_ROTATE_CONTROLLER (controller), FALSE);
@@ -211,7 +200,7 @@ sugar_rotate_controller_get_angle_delta (SugarRotateController *controller,
   if (!_sugar_rotate_controller_get_angle (controller, &angle))
     return FALSE;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (delta)
     *delta = angle - priv->initial_angle;

@@ -22,7 +22,6 @@
 #include "sugar-touch-controller.h"
 #define TOUCHES_IN_RANGE(t,p) ((t) >= (p)->min_touches && (t) <= (p)->max_touches)
 
-typedef struct _SugarTouchControllerPriv SugarTouchControllerPriv;
 typedef struct _SugarTouch SugarTouch;
 
 enum {
@@ -30,15 +29,9 @@ enum {
   PROP_MAX_TOUCHES
 };
 
-struct _SugarTouchControllerPriv
-{
-  GHashTable *touches;
-  gint min_touches;
-  gint max_touches;
-};
-
-G_DEFINE_ABSTRACT_TYPE (SugarTouchController, sugar_touch_controller,
-                        SUGAR_TYPE_EVENT_CONTROLLER)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (SugarTouchController,
+                                     sugar_touch_controller,
+                                     SUGAR_TYPE_EVENT_CONTROLLER)
 
 static void
 sugar_touch_controller_get_property (GObject    *object,
@@ -46,9 +39,9 @@ sugar_touch_controller_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
 
-  priv = SUGAR_TOUCH_CONTROLLER (object)->_priv;
+  priv = SUGAR_TOUCH_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -69,9 +62,9 @@ sugar_touch_controller_set_property (GObject      *object,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
 
-  priv = SUGAR_TOUCH_CONTROLLER (object)->_priv;
+  priv = SUGAR_TOUCH_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -89,9 +82,9 @@ sugar_touch_controller_set_property (GObject      *object,
 static void
 sugar_touch_controller_finalize (GObject *object)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
 
-  priv = SUGAR_TOUCH_CONTROLLER (object)->_priv;
+  priv = SUGAR_TOUCH_CONTROLLER (object)->priv;
   g_hash_table_destroy (priv->touches);
 
   G_OBJECT_CLASS (sugar_touch_controller_parent_class)->finalize (object);
@@ -101,14 +94,14 @@ static gboolean
 sugar_touch_controller_handle_event (SugarEventController *controller,
                                      GdkEvent             *event)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
   GdkEventSequence *sequence;
   gboolean handled = TRUE;
   GdkPoint *point;
   gint n_touches, prev_n_touches;
   gboolean is_in_range, was_in_range;
 
-  priv = SUGAR_TOUCH_CONTROLLER (controller)->_priv;
+  priv = SUGAR_TOUCH_CONTROLLER (controller)->priv;
   sequence = gdk_event_get_event_sequence (event);
   prev_n_touches = g_hash_table_size (priv->touches);
   was_in_range = TOUCHES_IN_RANGE (prev_n_touches, priv);
@@ -164,10 +157,10 @@ sugar_touch_controller_handle_event (SugarEventController *controller,
 static void
 sugar_touch_controller_reset (SugarEventController *controller)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
   gint n_touches;
 
-  priv = SUGAR_TOUCH_CONTROLLER (controller)->_priv;
+  priv = SUGAR_TOUCH_CONTROLLER (controller)->priv;
   n_touches = g_hash_table_size (priv->touches);
 
   if (TOUCHES_IN_RANGE (n_touches, priv))
@@ -212,17 +205,13 @@ sugar_touch_controller_class_init (SugarTouchControllerClass *klass)
                                                      G_PARAM_STATIC_NAME |
                                                      G_PARAM_STATIC_NICK |
                                                      G_PARAM_STATIC_BLURB));
-
-  g_type_class_add_private (object_class, sizeof (SugarTouchControllerPriv));
 }
 
 static void
 sugar_touch_controller_init (SugarTouchController *controller)
 {
-  SugarTouchControllerPriv *priv;
-  controller->_priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (controller,
-                                                          SUGAR_TYPE_TOUCH_CONTROLLER,
-                                                          SugarTouchControllerPriv);
+  SugarTouchControllerPrivate *priv;
+  controller->priv = priv = sugar_touch_controller_get_instance_private (controller);
   priv->touches = g_hash_table_new_full (NULL, NULL, NULL,
                                          (GDestroyNotify) g_free);
 }
@@ -243,14 +232,14 @@ sugar_touch_controller_get_center (SugarTouchController *controller,
                                    gint                 *center_x,
                                    gint                 *center_y)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
   GHashTableIter iter;
   GdkPoint *point;
   gint x1, y1, x2, y2, dx, dy;
 
   g_return_val_if_fail (SUGAR_IS_TOUCH_CONTROLLER (controller), FALSE);
 
-  priv = controller->_priv;
+  priv = controller->priv;
   x1 = y1 = G_MAXINT;
   x2 = y2 = G_MININT;
 
@@ -293,11 +282,11 @@ sugar_touch_controller_get_center (SugarTouchController *controller,
 gint
 sugar_touch_controller_get_num_touches (SugarTouchController *controller)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
 
   g_return_val_if_fail (SUGAR_IS_TOUCH_CONTROLLER (controller), 0);
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   return g_hash_table_size (priv->touches);
 }
@@ -313,11 +302,11 @@ sugar_touch_controller_get_num_touches (SugarTouchController *controller)
 GList *
 sugar_touch_controller_get_sequences (SugarTouchController *controller)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
 
   g_return_val_if_fail (SUGAR_IS_TOUCH_CONTROLLER (controller), NULL);
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   return g_hash_table_get_keys (priv->touches);
 }
@@ -340,13 +329,13 @@ sugar_touch_controller_get_coords (SugarTouchController *controller,
                                    gint                 *x,
                                    gint                 *y)
 {
-  SugarTouchControllerPriv *priv;
+  SugarTouchControllerPrivate *priv;
   GdkPoint *point;
 
   g_return_val_if_fail (SUGAR_IS_TOUCH_CONTROLLER (controller), FALSE);
   g_return_val_if_fail (sequence != NULL, FALSE);
 
-  priv = controller->_priv;
+  priv = controller->priv;
   point = g_hash_table_lookup (priv->touches, sequence);
 
   if (!point)

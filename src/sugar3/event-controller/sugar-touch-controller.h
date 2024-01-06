@@ -40,16 +40,24 @@ G_BEGIN_DECLS
 
 typedef struct _SugarTouchController SugarTouchController;
 typedef struct _SugarTouchControllerClass SugarTouchControllerClass;
+typedef struct _SugarTouchControllerPrivate SugarTouchControllerPrivate;
 
 struct _SugarTouchController
 {
   SugarEventController parent_instance;
-  gpointer _priv;
+  SugarTouchControllerPrivate *priv;
 };
 
 struct _SugarTouchControllerClass
 {
   SugarEventControllerClass parent_class;
+};
+
+struct _SugarTouchControllerPrivate
+{
+  GHashTable *touches;
+  gint min_touches;
+  gint max_touches;
 };
 
 GType     sugar_touch_controller_get_type     (void) G_GNUC_CONST;

@@ -26,7 +26,6 @@
 #define SWIPE_PX_THRESHOLD 80
 #define PROPORTION_FACTOR_THRESHOLD 4
 
-typedef struct _SugarSwipeControllerPriv SugarSwipeControllerPriv;
 typedef struct _SugarEventData SugarEventData;
 
 enum {
@@ -45,30 +44,18 @@ struct _SugarEventData
   guint32 time;
 };
 
-struct _SugarSwipeControllerPriv
-{
-  GdkDevice *device;
-  GdkEventSequence *sequence;
-  GArray *event_data;
-  guint swiping : 1;
-  guint swiped : 1;
-  guint directions : 4;
-};
-
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (SugarSwipeController,
-               sugar_swipe_controller,
-               SUGAR_TYPE_EVENT_CONTROLLER)
+G_DEFINE_TYPE_WITH_PRIVATE (SugarSwipeController,
+                            sugar_swipe_controller,
+                            SUGAR_TYPE_EVENT_CONTROLLER)
 
 static void
 sugar_swipe_controller_init (SugarSwipeController *controller)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
 
-  controller->_priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (controller,
-                                                          SUGAR_TYPE_SWIPE_CONTROLLER,
-                                                          SugarSwipeControllerPriv);
+  controller->priv = priv = sugar_swipe_controller_get_instance_private (controller);
   priv->event_data = g_array_new (FALSE, FALSE, sizeof (SugarEventData));
 }
 
@@ -78,7 +65,7 @@ sugar_swipe_controller_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  SugarSwipeControllerPriv *priv = SUGAR_SWIPE_CONTROLLER (object)->_priv;
+  SugarSwipeControllerPrivate *priv = SUGAR_SWIPE_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -96,7 +83,7 @@ sugar_swipe_controller_set_property (GObject      *object,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  SugarSwipeControllerPriv *priv = SUGAR_SWIPE_CONTROLLER (object)->_priv;
+  SugarSwipeControllerPrivate *priv = SUGAR_SWIPE_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -117,9 +104,9 @@ sugar_swipe_controller_finalize (GObject *object)
 static void
 _sugar_swipe_controller_clear_events (SugarSwipeController *controller)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (priv->event_data &&
       priv->event_data->len > 0)
@@ -133,13 +120,13 @@ static void
 _sugar_swipe_controller_store_event (SugarSwipeController *controller,
                                      GdkEvent             *event)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
   SugarEventData data;
   gdouble x, y;
   guint32 time;
   guint i;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (!gdk_event_get_coords (event, &x, &y))
     return;
@@ -211,12 +198,12 @@ static gboolean
 _sugar_swipe_controller_get_event_direction (SugarSwipeController *controller,
                                              SugarSwipeDirection  *direction)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
   SugarEventData *last, *check;
   SugarSwipeDirection dir;
   gint i;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (!priv->event_data || priv->event_data->len == 0)
     return FALSE;
@@ -248,10 +235,10 @@ _sugar_swipe_controller_get_event_direction (SugarSwipeController *controller,
 static void
 _sugar_swipe_controller_check_emit (SugarSwipeController *controller)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
   SugarSwipeDirection direction;
 
-  priv = controller->_priv;
+  priv = controller->priv;
 
   if (!priv->swiping)
     return;
@@ -269,7 +256,7 @@ static gboolean
 sugar_swipe_controller_handle_event (SugarEventController *controller,
                                      GdkEvent             *event)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
   SugarSwipeController *swipe;
   SugarSwipeDirection direction;
   GdkEventSequence *sequence;
@@ -283,7 +270,7 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
     return FALSE;
 
   swipe = SUGAR_SWIPE_CONTROLLER (controller);
-  priv = swipe->_priv;
+  priv = swipe->priv;
 
   if ((priv->device && priv->device != device) ||
       (priv->sequence && priv->sequence != sequence))
@@ -329,9 +316,9 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
 SugarEventControllerState
 sugar_swipe_controller_get_state (SugarEventController *controller)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
 
-  priv = SUGAR_SWIPE_CONTROLLER (controller)->_priv;
+  priv = SUGAR_SWIPE_CONTROLLER (controller)->priv;
 
   if (priv->device)
     {
@@ -347,11 +334,11 @@ sugar_swipe_controller_get_state (SugarEventController *controller)
 void
 sugar_swipe_controller_reset (SugarEventController *controller)
 {
-  SugarSwipeControllerPriv *priv;
+  SugarSwipeControllerPrivate *priv;
   SugarSwipeController *swipe;
 
   swipe = SUGAR_SWIPE_CONTROLLER (controller);
-  priv = swipe->_priv;
+  priv = swipe->priv;
 
   if (priv->device)
     {
@@ -397,8 +384,6 @@ sugar_swipe_controller_class_init (SugarSwipeControllerClass *klass)
                   g_cclosure_marshal_VOID__ENUM,
                   G_TYPE_NONE, 1,
                   SUGAR_TYPE_SWIPE_DIRECTION);
-
-  g_type_class_add_private (klass, sizeof (SugarSwipeControllerPriv));
 }
 
 SugarEventController *

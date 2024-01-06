@@ -24,8 +24,6 @@
 #define DEFAULT_THRESHOLD     32
 #define DEFAULT_TRIGGER_DELAY 600
 
-typedef struct _SugarLongPressControllerPriv SugarLongPressControllerPriv;
-
 enum {
   PROP_0,
   PROP_THRESHOLD,
@@ -37,36 +35,17 @@ enum {
   N_SIGNALS
 };
 
-struct _SugarLongPressControllerPriv
-{
-  GdkDevice *device;
-  GdkEventSequence *sequence;
-  gint64 start_time;
-  gint x;
-  gint y;
-  gint root_x;
-  gint root_y;
-  guint timeout_id;
-  guint threshold;
-  guint delay;
-  guint cancelled : 1;
-  guint triggered : 1;
-};
-
 static guint signals[N_SIGNALS] = { 0 };
 
-G_DEFINE_TYPE (SugarLongPressController,
-               sugar_long_press_controller,
-               SUGAR_TYPE_EVENT_CONTROLLER)
-
+G_DEFINE_TYPE_WITH_PRIVATE (SugarLongPressController,
+                            sugar_long_press_controller,
+                            SUGAR_TYPE_EVENT_CONTROLLER)
 static void
 sugar_long_press_controller_init (SugarLongPressController *controller)
 {
-  SugarLongPressControllerPriv *priv;
+  SugarLongPressControllerPrivate *priv;
 
-  controller->_priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (controller,
-                                                          SUGAR_TYPE_LONG_PRESS_CONTROLLER,
-                                                          SugarLongPressControllerPriv);
+  controller->priv = priv = sugar_long_press_controller_get_instance_private (controller);
   priv->threshold = DEFAULT_THRESHOLD;
   priv->delay = DEFAULT_TRIGGER_DELAY;
   priv->x = priv->y = -1;
@@ -76,7 +55,7 @@ sugar_long_press_controller_init (SugarLongPressController *controller)
 static void
 _sugar_long_press_controller_unset_device (SugarLongPressController *controller)
 {
-  SugarLongPressControllerPriv *priv = controller->_priv;
+  SugarLongPressControllerPrivate *priv = controller->priv;
 
   if (priv->device)
     {
@@ -93,7 +72,7 @@ _sugar_long_press_controller_unset_device (SugarLongPressController *controller)
 static gboolean
 _sugar_long_press_controller_cancel (SugarLongPressController *controller)
 {
-  SugarLongPressControllerPriv *priv = controller->_priv;
+  SugarLongPressControllerPrivate *priv = controller->priv;
 
   if (priv->timeout_id)
     {
@@ -114,7 +93,7 @@ sugar_long_press_controller_get_property (GObject    *object,
                                           GValue     *value,
                                           GParamSpec *pspec)
 {
-  SugarLongPressControllerPriv *priv = SUGAR_LONG_PRESS_CONTROLLER (object)->_priv;
+  SugarLongPressControllerPrivate *priv = SUGAR_LONG_PRESS_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -136,7 +115,7 @@ sugar_long_press_controller_set_property (GObject      *object,
                                           const GValue *value,
                                           GParamSpec   *pspec)
 {
-  SugarLongPressControllerPriv *priv = SUGAR_LONG_PRESS_CONTROLLER (object)->_priv;
+  SugarLongPressControllerPrivate *priv = SUGAR_LONG_PRESS_CONTROLLER (object)->priv;
 
   switch (prop_id)
     {
@@ -167,7 +146,7 @@ static gboolean
 _sugar_long_press_controller_timeout (gpointer user_data)
 {
   SugarLongPressController *controller = user_data;
-  SugarLongPressControllerPriv *priv = controller->_priv;
+  SugarLongPressControllerPrivate *priv = controller->priv;
 
   priv->timeout_id = 0;
   priv->triggered = TRUE;
@@ -181,9 +160,9 @@ _sugar_long_press_controller_timeout (gpointer user_data)
 static SugarEventControllerState
 sugar_long_press_controller_get_state (SugarEventController *controller)
 {
-  SugarLongPressControllerPriv *priv;
+  SugarLongPressControllerPrivate *priv;
 
-  priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->_priv;
+  priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->priv;
 
   if (priv->device)
     {
@@ -201,9 +180,9 @@ sugar_long_press_controller_get_state (SugarEventController *controller)
 static void
 sugar_long_press_controller_reset (SugarEventController *controller)
 {
-  SugarLongPressControllerPriv *priv;
+  SugarLongPressControllerPrivate *priv;
 
-  priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->_priv;
+  priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->priv;
 
   if (priv->triggered)
     g_signal_emit_by_name (controller, "ended");
@@ -217,12 +196,12 @@ static gboolean
 sugar_long_press_controller_handle_event (SugarEventController *controller,
                                           GdkEvent             *event)
 {
-  SugarLongPressControllerPriv *priv;
+  SugarLongPressControllerPrivate *priv;
   GdkEventSequence *sequence;
   gboolean handled = TRUE;
   GdkDevice *device;
 
-  priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->_priv;
+  priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->priv;
   device = gdk_event_get_device (event);
   sequence = gdk_event_get_event_sequence (event);
 
@@ -321,8 +300,6 @@ sugar_long_press_controller_class_init (SugarLongPressControllerClass *klass)
                   g_cclosure_marshal_generic,
                   G_TYPE_NONE, 2,
                   G_TYPE_INT, G_TYPE_INT);
-
-  g_type_class_add_private (klass, sizeof (SugarLongPressControllerPriv));
 }
 
 SugarEventController *

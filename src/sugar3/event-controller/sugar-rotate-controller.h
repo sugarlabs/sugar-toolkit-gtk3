@@ -40,11 +40,12 @@ G_BEGIN_DECLS
 
 typedef struct _SugarRotateController SugarRotateController;
 typedef struct _SugarRotateControllerClass SugarRotateControllerClass;
+typedef struct _SugarRotateControllerPrivate SugarRotateControllerPrivate;
 
 struct _SugarRotateController
 {
   SugarTouchController parent_instance;
-  gpointer _priv;
+  SugarRotateControllerPrivate *priv;
 };
 
 struct _SugarRotateControllerClass
@@ -54,6 +55,11 @@ struct _SugarRotateControllerClass
   void (* angle_changed) (SugarRotateController *controller,
                           gdouble                angle,
                           gdouble                delta);
+};
+
+struct _SugarRotateControllerPrivate
+{
+  gdouble initial_angle;
 };
 
 GType                  sugar_rotate_controller_get_type        (void) G_GNUC_CONST;

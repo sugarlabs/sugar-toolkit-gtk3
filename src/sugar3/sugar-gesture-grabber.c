@@ -23,7 +23,6 @@
 #include <X11/extensions/XInput2.h>
 #include "sugar-gesture-grabber.h"
 
-typedef struct _SugarGestureGrabberPriv SugarGestureGrabberPriv;
 typedef struct _ControllerData ControllerData;
 typedef struct _TouchData TouchData;
 
@@ -40,15 +39,7 @@ struct _ControllerData
 	GdkRectangle rect;
 };
 
-struct _SugarGestureGrabberPriv
-{
-	GdkWindow *root_window;
-	GArray *controllers;
-	GArray *touches;
-	guint cancel_timeout_id;
-};
-
-G_DEFINE_TYPE (SugarGestureGrabber, sugar_gesture_grabber, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (SugarGestureGrabber, sugar_gesture_grabber, G_TYPE_OBJECT)
 
 static void
 _sugar_gesture_grabber_notify_touch (SugarGestureGrabber *grabber,
@@ -56,7 +47,7 @@ _sugar_gesture_grabber_notify_touch (SugarGestureGrabber *grabber,
 				     GdkEventSequence    *sequence,
 				     gboolean             handled)
 {
-	SugarGestureGrabberPriv *priv = grabber->_priv;
+	SugarGestureGrabberPrivate *priv = grabber->priv;
 	GdkDisplay *display;
 	guint i;
 
@@ -93,7 +84,7 @@ _sugar_gesture_grabber_add_touch (SugarGestureGrabber *grabber,
 				  GdkDevice           *device,
 				  GdkEventSequence    *sequence)
 {
-	SugarGestureGrabberPriv *priv = grabber->_priv;
+	SugarGestureGrabberPrivate *priv = grabber->priv;
 	TouchData data;
 
 	data.device = device;
@@ -107,7 +98,7 @@ _sugar_gesture_grabber_remove_touch (SugarGestureGrabber *grabber,
 				     GdkDevice           *device,
 				     GdkEventSequence    *sequence)
 {
-	SugarGestureGrabberPriv *priv = grabber->_priv;
+	SugarGestureGrabberPrivate *priv = grabber->priv;
 	guint i;
 
 	for (i = 0; i < priv->touches->len; i++) {
@@ -126,7 +117,7 @@ _sugar_gesture_grabber_remove_touch (SugarGestureGrabber *grabber,
 static gboolean
 _sugar_gesture_grabber_cancel_timeout (SugarGestureGrabber *grabber)
 {
-	SugarGestureGrabberPriv *priv = grabber->_priv;
+	SugarGestureGrabberPrivate *priv = grabber->priv;
 
 	_sugar_gesture_grabber_notify_touch (grabber, NULL, NULL, FALSE);
 	priv->cancel_timeout_id = 0;
@@ -137,7 +128,7 @@ _sugar_gesture_grabber_cancel_timeout (SugarGestureGrabber *grabber)
 static void
 sugar_gesture_grabber_finalize (GObject *object)
 {
-	SugarGestureGrabberPriv *priv = SUGAR_GESTURE_GRABBER (object)->_priv;
+	SugarGestureGrabberPrivate *priv = SUGAR_GESTURE_GRABBER (object)->priv;
 	guint i;
 
 	if (priv->cancel_timeout_id) {
@@ -167,8 +158,6 @@ sugar_gesture_grabber_class_init (SugarGestureGrabberClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = sugar_gesture_grabber_finalize;
-
-	g_type_class_add_private (klass, sizeof (SugarGestureGrabberPriv));
 }
 
 static void
@@ -212,7 +201,7 @@ static gboolean
 _sugar_gesture_grabber_run_controllers (SugarGestureGrabber *grabber,
 					GdkEvent            *event)
 {
-	SugarGestureGrabberPriv *priv = grabber->_priv;
+	SugarGestureGrabberPrivate *priv = grabber->priv;
 	gboolean handled = FALSE;
 	guint i;
 
@@ -256,7 +245,7 @@ filter_function (GdkXEvent *xevent,
         XGenericEventCookie *xge = xevent;
         GdkDeviceManager *device_manager;
         SugarGestureGrabber *grabber;
-        SugarGestureGrabberPriv *priv;
+        SugarGestureGrabberPrivate *priv;
         gboolean handled = FALSE;
         GdkDevice *device;
         XIDeviceEvent *ev;
@@ -267,7 +256,7 @@ filter_function (GdkXEvent *xevent,
                 return GDK_FILTER_CONTINUE;
 
         grabber = user_data;
-        priv = grabber->_priv;
+        priv = grabber->priv;
 
         display = gdk_window_get_display (priv->root_window);
         device_manager = gdk_display_get_device_manager (display);
@@ -346,11 +335,9 @@ filter_function (GdkXEvent *xevent,
 static void
 sugar_gesture_grabber_init (SugarGestureGrabber *grabber)
 {
-	SugarGestureGrabberPriv *priv;
+	SugarGestureGrabberPrivate *priv;
 
-	grabber->_priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (grabber,
-							     SUGAR_TYPE_GESTURE_GRABBER,
-							     SugarGestureGrabberPriv);
+	grabber->priv = priv = sugar_gesture_grabber_get_instance_private (grabber);
 	priv->root_window = _get_default_root_window ();
 	_grab_touch_events (priv->root_window);
 	gdk_window_add_filter (NULL, filter_function, grabber);
@@ -370,10 +357,10 @@ _sugar_gesture_grabber_find_controller (SugarGestureGrabber  *grabber,
 					SugarEventController *controller,
 					gint		     *pos)
 {
-	SugarGestureGrabberPriv *priv;
+	SugarGestureGrabberPrivate *priv;
 	guint i;
 
-	priv = grabber->_priv;
+	priv = grabber->priv;
 
 	for (i = 0; i < priv->controllers->len; i++) {
 		ControllerData *data;
@@ -396,7 +383,7 @@ sugar_gesture_grabber_add (SugarGestureGrabber  *grabber,
 			   SugarEventController *controller,
 			   const GdkRectangle   *rect)
 {
-	SugarGestureGrabberPriv *priv;
+	SugarGestureGrabberPrivate *priv;
 	ControllerData data;
 
 	g_return_if_fail (SUGAR_IS_GESTURE_GRABBER (grabber));
@@ -408,7 +395,7 @@ sugar_gesture_grabber_add (SugarGestureGrabber  *grabber,
 		return;
 	}
 
-	priv = grabber->_priv;
+	priv = grabber->priv;
 
 	data.controller = g_object_ref (controller);
 	data.rect = *rect;
@@ -419,14 +406,14 @@ void
 sugar_gesture_grabber_remove (SugarGestureGrabber  *grabber,
 			      SugarEventController *controller)
 {
-	SugarGestureGrabberPriv *priv;
+	SugarGestureGrabberPrivate *priv;
 	ControllerData *data;
 	gint pos;
 
 	g_return_if_fail (SUGAR_IS_GESTURE_GRABBER (grabber));
 	g_return_if_fail (SUGAR_IS_EVENT_CONTROLLER (controller));
 
-	priv = grabber->_priv;
+	priv = grabber->priv;
 	data = _sugar_gesture_grabber_find_controller (grabber, controller, &pos);
 
 	if (data) {

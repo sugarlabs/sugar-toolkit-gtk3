@@ -23,21 +23,12 @@
 #include <X11/extensions/XInput2.h>
 #include "sugar-cursor-tracker.h"
 
-typedef struct _SugarCursorTrackerPriv SugarCursorTrackerPriv;
-
-struct _SugarCursorTrackerPriv
-{
-	GdkWindow *root_window;
-        gboolean cursor_shown;
-};
-
-G_DEFINE_TYPE (SugarCursorTracker, sugar_cursor_tracker, G_TYPE_OBJECT)
-
+G_DEFINE_TYPE_WITH_PRIVATE (SugarCursorTracker, sugar_cursor_tracker, G_TYPE_OBJECT)
 
 static void
 sugar_cursor_tracker_finalize (GObject *object)
 {
-	SugarCursorTrackerPriv *priv = SUGAR_CURSOR_TRACKER (object)->_priv;
+	SugarCursorTrackerPrivate *priv = SUGAR_CURSOR_TRACKER (object)->priv;
 
 	G_OBJECT_CLASS (sugar_cursor_tracker_parent_class)->finalize (object);
 }
@@ -48,8 +39,6 @@ sugar_cursor_tracker_class_init (SugarCursorTrackerClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = sugar_cursor_tracker_finalize;
-
-	g_type_class_add_private (klass, sizeof (SugarCursorTrackerPriv));
 }
 
 static GdkWindow *
@@ -94,9 +83,9 @@ _set_cursor_visibility (SugarCursorTracker *tracker,
 {
         GdkDisplay *display;
 	Display *xdisplay;
-        SugarCursorTrackerPriv *priv;
+        SugarCursorTrackerPrivate *priv;
 
-        priv = tracker->_priv;
+        priv = tracker->priv;
 	display = gdk_display_get_default ();
 	xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
@@ -155,16 +144,12 @@ filter_function (GdkXEvent *xevent,
 static void
 sugar_cursor_tracker_init (SugarCursorTracker *tracker)
 {
-	SugarCursorTrackerPriv *priv;
-	tracker->_priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (tracker,
-                                                             SUGAR_TYPE_CURSOR_TRACKER,
-                                                             SugarCursorTrackerPriv);
+	SugarCursorTrackerPrivate *priv;
+	tracker->priv = priv = sugar_cursor_tracker_get_instance_private (tracker);
         priv->root_window = _get_default_root_window ();
 	priv->cursor_shown = True;
 
-	tracker->_priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (tracker,
-							     SUGAR_TYPE_CURSOR_TRACKER,
-							     SugarCursorTrackerPriv);
+	tracker->priv = priv = sugar_cursor_tracker_get_instance_private (tracker);
 	priv->root_window = _get_default_root_window ();
 	_track_raw_events (priv->root_window);
 	gdk_window_add_filter (NULL, filter_function, tracker);

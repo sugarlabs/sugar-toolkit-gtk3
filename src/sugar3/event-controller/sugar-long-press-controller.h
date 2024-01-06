@@ -40,11 +40,12 @@ G_BEGIN_DECLS
 
 typedef struct _SugarLongPressController SugarLongPressController;
 typedef struct _SugarLongPressControllerClass SugarLongPressControllerClass;
+typedef struct _SugarLongPressControllerPrivate SugarLongPressControllerPrivate;
 
 struct _SugarLongPressController
 {
   SugarEventController parent_instance;
-  gpointer _priv;
+  SugarLongPressControllerPrivate *priv;
 };
 
 struct _SugarLongPressControllerClass
@@ -54,6 +55,22 @@ struct _SugarLongPressControllerClass
   void (* pressed) (SugarLongPressController *controller,
                     gint                      x,
                     gint                      y);
+};
+
+struct _SugarLongPressControllerPrivate
+{
+  GdkDevice *device;
+  GdkEventSequence *sequence;
+  gint64 start_time;
+  gint x;
+  gint y;
+  gint root_x;
+  gint root_y;
+  guint timeout_id;
+  guint threshold;
+  guint delay;
+  guint cancelled : 1;
+  guint triggered : 1;
 };
 
 GType                  sugar_long_press_controller_get_type (void) G_GNUC_CONST;
