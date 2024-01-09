@@ -89,7 +89,7 @@ _set_cursor_visibility (SugarCursorTracker *tracker,
 	display = gdk_display_get_default ();
 	xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
-	gdk_error_trap_push ();
+	gdk_x11_display_error_trap_push (display);
 
 	if (visible == TRUE) {
 	    if (priv->cursor_shown == FALSE) {
@@ -104,7 +104,7 @@ _set_cursor_visibility (SugarCursorTracker *tracker,
 	    }
 	}
 
-	if (gdk_error_trap_pop ()) {
+	if (gdk_x11_display_error_trap_pop (display)) {
 	    g_warning ("An error occurred trying to %s the cursor",
 		       FALSE ? "show" : "hide");
 	}

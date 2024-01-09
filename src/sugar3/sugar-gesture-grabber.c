@@ -67,14 +67,14 @@ _sugar_gesture_grabber_notify_touch (SugarGestureGrabber *grabber,
 		if (data->consumed)
 			continue;
 
-		gdk_error_trap_push ();
+		gdk_x11_display_error_trap_push (display);
 		XIAllowTouchEvents (gdk_x11_display_get_xdisplay (display),
 				    gdk_x11_device_get_id (data->device),
 				    GPOINTER_TO_INT (data->sequence),
 				    gdk_x11_window_get_xid (priv->root_window),
 				    (handled) ? XIAcceptTouch : XIRejectTouch);
 
-		gdk_error_trap_pop_ignored ();
+		gdk_x11_display_error_trap_pop_ignored (display);
 		data->consumed = TRUE;
 	}
 }
@@ -243,11 +243,9 @@ filter_function (GdkXEvent *xevent,
                  gpointer   user_data)
 {
         XGenericEventCookie *xge = xevent;
-        GdkDeviceManager *device_manager;
         SugarGestureGrabber *grabber;
         SugarGestureGrabberPrivate *priv;
         gboolean handled = FALSE;
-        GdkDevice *device;
         XIDeviceEvent *ev;
         GdkDisplay *display;
         GdkEvent *event;
@@ -259,7 +257,6 @@ filter_function (GdkXEvent *xevent,
         priv = grabber->priv;
 
         display = gdk_window_get_display (priv->root_window);
-        device_manager = gdk_display_get_device_manager (display);
         ev = (XIDeviceEvent *) xge->data;
 
         switch (ev->evtype) {
@@ -288,21 +285,15 @@ filter_function (GdkXEvent *xevent,
         event->touch.sequence = GINT_TO_POINTER (ev->detail);
         event->touch.emulating_pointer = (ev->flags & XITouchEmulatingPointer);
 
-        device = gdk_x11_device_manager_lookup (device_manager, ev->deviceid);
-        gdk_event_set_device (event, device);
-
-        device = gdk_x11_device_manager_lookup (device_manager, ev->sourceid);
-        gdk_event_set_source_device (event, device);
-
         handled = _sugar_gesture_grabber_run_controllers (grabber, event);
 
         if (!handled) {
-                gdk_error_trap_push ();
+                gdk_x11_display_error_trap_push (display);
                 XIAllowTouchEvents (gdk_x11_display_get_xdisplay (display),
                                     ev->deviceid, ev->detail,
                                     gdk_x11_window_get_xid (priv->root_window),
                                     XIRejectTouch);
-                gdk_error_trap_pop_ignored ();
+                gdk_x11_display_error_trap_pop_ignored (display);
         } else if (event->type == GDK_TOUCH_BEGIN) {
                 _sugar_gesture_grabber_add_touch (grabber,
                                                   event->touch.device,
