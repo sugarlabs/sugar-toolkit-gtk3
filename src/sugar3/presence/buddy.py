@@ -226,7 +226,7 @@ class Buddy(BaseBuddy):
 
     def _update_properties(self, properties):
         if 'key' in properties:
-            self.props.key = properties['key']
+            self.props.key = properties['key'].decode()
         if 'color' in properties:
             self.props.color = properties['color']
         if 'current-activity' in properties:
