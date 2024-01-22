@@ -260,6 +260,7 @@ class DescriptionItem(ToolButton):
                             2 * style.GRID_CELL_SIZE)
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self._text_view = Gtk.TextView()
+        self._text_view.set_cursor_visible(True)
         self._text_view.set_left_margin(style.DEFAULT_PADDING)
         self._text_view.set_right_margin(style.DEFAULT_PADDING)
         self._text_view.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
