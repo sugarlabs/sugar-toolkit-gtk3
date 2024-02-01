@@ -1,6 +1,6 @@
 AC_INIT([sugar-toolkit-gtk3],[0.120],[],[sugar-toolkit-gtk3])
 
-AC_PREREQ([2.59])
+AC_PREREQ([2.71])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([configure.ac])
@@ -9,7 +9,7 @@ AM_INIT_AUTOMAKE([1.9 foreign dist-xz no-dist-gzip])
 
 AM_MAINTAINER_MODE
 AC_DISABLE_STATIC
-AC_PROG_LIBTOOL
+LT_INIT
 
 GNOME_COMPILE_WARNINGS(maximum)
 
@@ -40,7 +40,7 @@ AM_GLIB_GNU_GETTEXT
 
 GOBJECT_INTROSPECTION_REQUIRE([1.30.0])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 bin/Makefile
 src/Makefile
@@ -56,3 +56,4 @@ src/sugar3/test/Makefile
 src/sugar3/config.py
 po/Makefile.in
 ])
+AC_OUTPUT
