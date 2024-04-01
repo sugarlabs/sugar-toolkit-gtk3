@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2016-10-04 04:37+0000\n"
-"Last-Translator: Chris <cjl@sugarlabs.org>\n"
+"PO-Revision-Date: 2023-02-26 17:50+0000\n"
+"Last-Translator: NF <rkavt@smartprojects.ge>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1475555872.000000\n"
+"X-POOTLE-MTIME: 1677433808.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -25,74 +25,74 @@ msgstr "%s სამუშაო"
 
 #: ../src/sugar3/activity/activity.py:967 src/sugar3/activity/activity.py:1127
 msgid "Keep error"
-msgstr ""
+msgstr "შეცდომის შენარჩუნება"
 
 #: ../src/sugar3/activity/activity.py:968 src/sugar3/activity/activity.py:1128
 msgid "Keep error: all changes will be lost"
-msgstr ""
+msgstr "შეცდომის შენარჩუნება: ყველა ცვლილება დაიკარგება"
 
 #: ../src/sugar3/activity/activity.py:971 src/sugar3/activity/activity.py:1131
 msgid "Don't stop"
-msgstr ""
+msgstr "არ გაჩერდე"
 
 #: ../src/sugar3/activity/activity.py:975 src/sugar3/activity/activity.py:1135
 msgid "Stop anyway"
-msgstr ""
+msgstr "მაინც შეჩერება"
 
 #: ../src/sugar3/activity/widgets.py:86 src/sugar3/activity/activity.py:1169
 #: src/sugar3/activity/widgets.py:86
 msgid "Stop"
-msgstr ""
+msgstr "გაჩერება"
 
 #: ../src/sugar3/activity/widgets.py:98 src/sugar3/activity/widgets.py:99
 msgid "Undo"
-msgstr ""
+msgstr "დაბრუნება"
 
 #: ../src/sugar3/activity/widgets.py:106 src/sugar3/activity/widgets.py:107
 msgid "Redo"
-msgstr ""
+msgstr "აღდგენა"
 
 #: ../src/sugar3/activity/widgets.py:113 src/sugar3/activity/widgets.py:114
 msgid "Copy"
-msgstr ""
+msgstr "კოპირება"
 
 #: ../src/sugar3/activity/widgets.py:121 src/sugar3/activity/widgets.py:122
 msgid "Paste"
-msgstr ""
+msgstr "ჩასმა"
 
 #: ../src/sugar3/activity/widgets.py:132 src/sugar3/activity/widgets.py:133
 msgid "Private"
-msgstr ""
+msgstr "პირადი"
 
 #: ../src/sugar3/activity/widgets.py:139 src/sugar3/activity/widgets.py:140
 msgid "My Neighborhood"
-msgstr ""
+msgstr "სამეზობლო"
 
 #: ../src/sugar3/activity/widgets.py:233 src/sugar3/activity/widgets.py:234
 msgid "Description"
-msgstr ""
+msgstr "აღწერა"
 
 #: ../src/sugar3/graphics/alert.py:287 ../src/sugar3/graphics/alert.py:429
 #: src/sugar3/activity/activity.py:1189 src/sugar3/graphics/alert.py:301
 #: src/sugar3/graphics/alert.py:467
 msgid "Cancel"
-msgstr ""
+msgstr "გაუქმება"
 
 #: ../src/sugar3/graphics/alert.py:291 ../src/sugar3/graphics/alert.py:337
 #: ../src/sugar3/graphics/alert.py:479 src/sugar3/graphics/alert.py:305
 #: src/sugar3/graphics/alert.py:346 src/sugar3/graphics/alert.py:393
 #: src/sugar3/graphics/alert.py:512
 msgid "Ok"
-msgstr ""
+msgstr "დიახ"
 
 #: ../src/sugar3/graphics/alert.py:434 src/sugar3/graphics/alert.py:464
 msgid "Continue"
-msgstr ""
+msgstr "გაგრძელება"
 
 #: ../src/sugar3/graphics/colorbutton.py:54
 #: src/sugar3/graphics/colorbutton.py:55
 msgid "Choose a color"
-msgstr ""
+msgstr "აირჩიეთ ფერი"
 
 #: ../src/sugar3/graphics/colorbutton.py:279
 #: src/sugar3/graphics/colorbutton.py:300
@@ -111,108 +111,108 @@ msgstr "ლურჯი"
 
 #: ../src/sugar3/util.py:217 src/sugar3/util.py:217
 msgid " and "
-msgstr ""
+msgstr " და "
 
 #: ../src/sugar3/util.py:218 src/sugar3/util.py:218
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #. TRANS: Indicating something that just happened, eg. "just now", "moments ago"
 #: ../src/sugar3/util.py:221 src/sugar3/util.py:221
 msgid "Seconds ago"
-msgstr ""
+msgstr "წამის წინ"
 
 #. TRANS: Indicating time passed, eg. "[10 day, 5 hours] ago",
 #. "[2 minutes] in the past", or "[3 years, 1 month] earlier"
 #: ../src/sugar3/util.py:225 src/sugar3/util.py:225
 #, python-format
 msgid "%s ago"
-msgstr ""
+msgstr "%s-ის წინ"
 
 #. TRANS: Relative dates (eg. 1 month and 5 days).
 #: ../src/sugar3/util.py:240 src/sugar3/util.py:240
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
+msgstr[0] "%d წელი"
 
 #: ../src/sugar3/util.py:241 src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
+msgstr[0] "%d თვე"
 
 #: ../src/sugar3/util.py:242 src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
+msgstr[0] "%d კვირა"
 
 #: ../src/sugar3/util.py:243 src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
+msgstr[0] "%d დღე"
 
 #: ../src/sugar3/util.py:244 src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
+msgstr[0] "%d საათი"
 
 #: ../src/sugar3/util.py:245 src/sugar3/util.py:245
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] ""
+msgstr[0] "%d წუთი"
 
 #: ../src/sugar3/util.py:346 src/sugar3/util.py:346
 msgid "Empty"
-msgstr ""
+msgstr "ცარიელი"
 
 #: ../src/sugar3/util.py:348 src/sugar3/util.py:348
 #, python-format
 msgid "%d B"
-msgstr ""
+msgstr "%d ბ"
 
 #: ../src/sugar3/util.py:350 src/sugar3/util.py:350
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d კბ"
 
 #: ../src/sugar3/util.py:352 src/sugar3/util.py:352
 #, python-format
 msgid "%d MB"
-msgstr ""
+msgstr "%d მბ"
 
 #: ../src/sugar3/util.py:354 src/sugar3/util.py:354
 #, python-format
 msgid "%d GB"
-msgstr ""
+msgstr "%d გბ"
 
 #: ../src/sugar3/mime.py:56 src/sugar3/mime.py:59
 msgid "Text"
-msgstr ""
+msgstr "ტექსტი"
 
 #: ../src/sugar3/mime.py:63 src/sugar3/mime.py:66
 msgid "Image"
-msgstr ""
+msgstr "გამოსახულება"
 
 #: ../src/sugar3/mime.py:68 src/sugar3/mime.py:71
 msgid "Audio"
-msgstr ""
+msgstr "აუდიო"
 
 #: ../src/sugar3/mime.py:75 src/sugar3/mime.py:78
 msgid "Video"
-msgstr ""
+msgstr "ვიდეო"
 
 #: ../src/sugar3/mime.py:86 src/sugar3/mime.py:89
 msgid "Link"
-msgstr ""
+msgstr "ბმული"
 
 #: ../src/sugar3/mime.py:91 src/sugar3/mime.py:94
 msgid "Bundle"
-msgstr ""
+msgstr "ნაკრები"
 
 #: ../src/sugar3/speech.py:48 src/sugar3/speech.py:56
 msgid "Afrikaans"
@@ -256,39 +256,35 @@ msgstr "ბერძნული"
 
 #: ../src/sugar3/speech.py:58
 msgid "Default"
-msgstr ""
+msgstr "ნაგულისხმები"
 
 #: ../src/sugar3/speech.py:59 src/sugar3/speech.py:77
 msgid "English Britain"
 msgstr "ბრიტანული ინგლისური"
 
 #: ../src/sugar3/speech.py:60 src/sugar3/speech.py:79
-#, fuzzy
 msgid "English scottish"
-msgstr "ინგლისური"
+msgstr "ინგლისური შოტლანდიური"
 
 #: ../src/sugar3/speech.py:61 src/sugar3/speech.py:80
-#, fuzzy
 msgid "English-north"
-msgstr "ინგლისური"
+msgstr "ინგლისური-ჩრდილო"
 
 #: ../src/sugar3/speech.py:62 src/sugar3/speech.py:82
 msgid "English_rp"
 msgstr "ინგლისური"
 
 #: ../src/sugar3/speech.py:63 src/sugar3/speech.py:84
-#, fuzzy
 msgid "English_wmids"
-msgstr "ინგლისური"
+msgstr "English_wmids"
 
 #: ../src/sugar3/speech.py:64 src/sugar3/speech.py:86
 msgid "English USA"
 msgstr "ინგლისური (აშშ)"
 
 #: ../src/sugar3/speech.py:65
-#, fuzzy
 msgid "English west indies"
-msgstr "ინგლისური"
+msgstr "ბრიტანული უესტ-ინდოეთი"
 
 #: ../src/sugar3/speech.py:66 src/sugar3/speech.py:90
 msgid "Esperanto"
@@ -319,9 +315,8 @@ msgid "Finnish"
 msgstr "ფინური"
 
 #: ../src/sugar3/speech.py:73 src/sugar3/speech.py:103
-#, fuzzy
 msgid "French belgium"
-msgstr "ფრანგული"
+msgstr "ფრანგული ბელგიური"
 
 #: ../src/sugar3/speech.py:74 src/sugar3/speech.py:105
 msgid "French"
@@ -332,9 +327,8 @@ msgid "Irish-gaeilge"
 msgstr "ირლანდიური"
 
 #: ../src/sugar3/speech.py:76 src/sugar3/speech.py:109
-#, fuzzy
 msgid "Greek-ancient"
-msgstr "ბერძნული"
+msgstr "ძველბერძნული"
 
 #: ../src/sugar3/speech.py:77 src/sugar3/speech.py:111
 msgid "Hindi"
@@ -353,9 +347,8 @@ msgid "Armenian"
 msgstr "სომხური"
 
 #: ../src/sugar3/speech.py:81 src/sugar3/speech.py:119
-#, fuzzy
 msgid "Armenian (west)"
-msgstr "სომხური"
+msgstr "სომხური (დასავლეთი)"
 
 #: ../src/sugar3/speech.py:82 src/sugar3/speech.py:121
 msgid "Indonesian"
@@ -475,20 +468,17 @@ msgstr "თურქული"
 
 #: ../src/sugar3/speech.py:111 src/sugar3/speech.py:179
 msgid "Vietnam"
-msgstr "ვიეტნამური"
+msgstr "ვიეტნამი"
 
 #: ../src/sugar3/speech.py:112 src/sugar3/speech.py:180
-#, fuzzy
 msgid "Vietnam_hue"
-msgstr "ვიეტნამური"
+msgstr "ვიეტნამი_ტონი"
 
 #: ../src/sugar3/speech.py:113 src/sugar3/speech.py:181
-#, fuzzy
 msgid "Vietnam_sgn"
-msgstr "ვიეტნამური"
+msgstr "Vietnam_sgn"
 
 #: ../src/sugar3/speech.py:114 src/sugar3/speech.py:183
-#, fuzzy
 msgid "Mandarin"
 msgstr "ჩინური"
 
@@ -498,56 +488,58 @@ msgstr "კანტონური"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "გაჩერდი: თქვენს ჟურნალის ჩანაწერს სახელი სჭირდება"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "გაჩერების გაუქმება და აქტივობის გაგრძელება"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "ახლის სენახვა"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "ახალი ჟურნალის ჩანაწერის შენახვა"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "შენახვა"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "ჟურნალის ძველ ჩანაწერში შენახვა"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "ცვლილებების წაშლა"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
 msgstr ""
+"წაშლა, რაც გააკეთეთ და თქვენი ძველი ჟურნალის ჩანაწერის ცვლილების გარეშე "
+"დატოვება"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "წაშლა"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "წაშლა, რაც გააკეთეთ და ჟურნალიც ჩანაწერის თავიდან აცილება"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
-msgstr ""
+msgstr "დახურვა"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "ინგლისური"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"
-msgstr ""
+msgstr "ბრიტანული უესტ-ინდოეთი"
 
 #: src/sugar3/speech.py:173
 msgid "Swahili"
-msgstr ""
+msgstr "სუაჰილი"

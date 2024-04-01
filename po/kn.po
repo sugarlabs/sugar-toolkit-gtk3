@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2021-07-07 16:56+0000\n"
+"PO-Revision-Date: 2022-10-07 07:34+0000\n"
 "Last-Translator: Sourabha <sourabha.project@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: kn\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1625677015.000000\n"
+"X-POOTLE-MTIME: 1665128079.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -142,36 +142,36 @@ msgstr "%s ಹಿಂದೆ"
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ವರ್ಷ"
+msgstr[1] "%d ವರ್ಷಗಳು"
 
 #: ../src/sugar3/util.py:241 src/sugar3/util.py:241
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ತಿಂಗಳು"
+msgstr[1] "%d ತಿಂಗಳುಗಳು"
 
 #: ../src/sugar3/util.py:242 src/sugar3/util.py:242
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ವಾರ"
+msgstr[1] "%d ವಾರಗಳು"
 
 #: ../src/sugar3/util.py:243 src/sugar3/util.py:243
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ದಿನ"
+msgstr[1] "%d ದಿನಗಳು"
 
 #: ../src/sugar3/util.py:244 src/sugar3/util.py:244
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ಗಂಟೆ"
+msgstr[1] "%d ಗಂಟೆಗಳು"
 
 #: ../src/sugar3/util.py:245 src/sugar3/util.py:245
 #, python-format
@@ -283,23 +283,22 @@ msgid "English Britain"
 msgstr "ಇಂಗ್ಲಿಷ್ (ಬ್ರಿಟಿಷ್)"
 
 #: ../src/sugar3/speech.py:60 src/sugar3/speech.py:79
-#, fuzzy
 msgid "English scottish"
-msgstr "ಇಂಗ್ಲೀಷ್"
+msgstr "ಇಂಗ್ಲಿಷ್ ಸ್ಕಾಟಿಷ್"
 
 #: ../src/sugar3/speech.py:61 src/sugar3/speech.py:80
 #, fuzzy
 msgid "English-north"
-msgstr "ಇಂಗ್ಲೀಷ್"
+msgstr "ಇಂಗ್ಲೀಷ್-ಉತ್ತರ"
 
 #: ../src/sugar3/speech.py:62 src/sugar3/speech.py:82
 msgid "English_rp"
-msgstr "ಇಂಗ್ಲೀಷ್"
+msgstr "ಇಂಗ್ಲೀಷ್_ಆರ್ಪಿ"
 
 #: ../src/sugar3/speech.py:63 src/sugar3/speech.py:84
 #, fuzzy
 msgid "English_wmids"
-msgstr "ಇಂಗ್ಲೀಷ್"
+msgstr "ಇಂಗ್ಲೀಷ್_wmids"
 
 #: ../src/sugar3/speech.py:64 src/sugar3/speech.py:86
 msgid "English USA"
@@ -308,7 +307,7 @@ msgstr "ಇಂಗ್ಲಿಷ್ (ಯುಎಸ್ಎ)"
 #: ../src/sugar3/speech.py:65
 #, fuzzy
 msgid "English west indies"
-msgstr "ಇಂಗ್ಲೀಷ್"
+msgstr "ಇಂಗ್ಲೀಷ್ ವೆಸ್ಟ್ ಇಂಡೀಸ್"
 
 #: ../src/sugar3/speech.py:66 src/sugar3/speech.py:90
 msgid "Esperanto"
@@ -546,7 +545,7 @@ msgstr "ಬದಲಾವಣೆಗಳನ್ನು ಅಳಿಸಿಹಾಕು"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
-msgstr ""
+msgstr "ನೀವು ಮಾಡಿದ್ದನ್ನು ಅಳಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಹಳೆಯ ಜರ್ನಲ್ ನಮೂದನ್ನು ಬದಲಾಗದೆ ಬಿಡಿ"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
@@ -554,7 +553,7 @@ msgstr "ಅಳಿಸಿಹಾಕು"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "ನೀವು ಮಾಡಿದ್ದನ್ನು ಅಳಿಸಿ ಮತ್ತು ಜರ್ನಲ್ ಪ್ರವೇಶವನ್ನು ತಪ್ಪಿಸಿ"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
@@ -571,4 +570,4 @@ msgstr "ಇಂಗ್ಲೀಷ್"
 
 #: src/sugar3/speech.py:173
 msgid "Swahili"
-msgstr ""
+msgstr "ಸ್ವಾಹಿಲಿ"

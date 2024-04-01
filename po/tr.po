@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-16 18:58+1100\n"
-"PO-Revision-Date: 2017-03-09 07:00+0000\n"
-"Last-Translator: kara <muhammetk@gmail.com>\n"
+"PO-Revision-Date: 2022-09-12 13:37+0000\n"
+"Last-Translator: libreajans <libreajans@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1489042814.000000\n"
+"X-POOTLE-MTIME: 1662989865.000000\n"
 
 #: ../src/sugar3/activity/activity.py:416 src/sugar3/activity/activity.py:467
 #, python-format
@@ -495,56 +495,56 @@ msgstr "Kantonca"
 
 #: src/sugar3/activity/activity.py:1170
 msgid "Stop: name your journal entry"
-msgstr ""
+msgstr "Durdur: günlük girdisini adlandır"
 
 #: src/sugar3/activity/activity.py:1193
 msgid "Cancel stop and continue the activity"
-msgstr ""
+msgstr "Durdurmayı sonlandırıp etkinliğe devam et"
 
 #: src/sugar3/activity/activity.py:1230
 msgid "Save new"
-msgstr ""
+msgstr "Yeni kaydet"
 
 #: src/sugar3/activity/activity.py:1231
 msgid "Save a new journal entry"
-msgstr ""
+msgstr "Yeni günlük girdisi kaydet"
 
 #: src/sugar3/activity/activity.py:1234
 msgid "Save"
-msgstr ""
+msgstr "Kaydet"
 
 #: src/sugar3/activity/activity.py:1235
 msgid "Save into the old journal entry"
-msgstr ""
+msgstr "Eski günlük girdisine kaydet"
 
 #: src/sugar3/activity/activity.py:1241
 msgid "Erase changes"
-msgstr ""
+msgstr "Değişiklikleri sil"
 
 #: src/sugar3/activity/activity.py:1242
 msgid "Erase what you have done, and leave your old journal entry unchanged"
-msgstr ""
+msgstr "Yaptıklarınızı silin ve eski günlük girdisini değiştirmeden bırak"
 
 #: src/sugar3/activity/activity.py:1245
 msgid "Erase"
-msgstr ""
+msgstr "Sil"
 
 #: src/sugar3/activity/activity.py:1246
 msgid "Erase what you have done, and avoid making a journal entry"
-msgstr ""
+msgstr "Yaptıklarınızı silin ve günlük girdisi oluşturmayın"
 
 #: src/sugar3/graphics/popwindow.py:179
 msgid "Close"
-msgstr ""
+msgstr "Kapat"
 
 #: src/sugar3/speech.py:75
 msgid "English"
-msgstr ""
+msgstr "İngilizce"
 
 #: src/sugar3/speech.py:88
 msgid "English West Indies"
-msgstr ""
+msgstr "İngilizce West Indies"
 
 #: src/sugar3/speech.py:173
 msgid "Swahili"
-msgstr ""
+msgstr "Savahilice"
