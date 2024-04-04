@@ -16,9 +16,8 @@ show-green () {
 if command -v makepkg &> /dev/null
 then
     # sphinx extensions 
-    
-    # sphinxcontrib.napolean
-    pip install sphinxcontrib-napoleon --user
+    python3 -m venv env
+    env/bin/pip install sphinxcontrib-napoleon
 
     show-green "Cloning sugar-toolkit-gtk3-git from AUR"
     mkdir .cache
