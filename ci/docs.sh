@@ -14,8 +14,8 @@ show-green () {
 
 # make source
 show-green "Compiling"
-./autogen.sh --with-python3
-make
+sudo ./autogen.sh --with-python3
+sudo make
 
 # make documentation
 show-green "Building documentation"
@@ -23,7 +23,7 @@ show-green "Building documentation"
 mkdir deploy
 mv doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
-# create an index.html so that users dont become confused
+# create an index.html so that users don't become confused
 show-green "Writing index.html"
 echo "<h1>Page Moved</h1>" > deploy/index.html
 echo "<p>We have moved this page to <a href=\"https://github.com/sugarlabs/sugar-docs/blob/master/README.md\">GitHub</a>.</p>" >> deploy/index.html
