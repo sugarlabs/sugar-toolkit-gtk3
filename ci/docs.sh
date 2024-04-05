@@ -12,6 +12,10 @@ show-green () {
     echo -e "${GREEN} ==> ${1} ${NC}" 
 }
 
+# clone repo
+git clone https://github.com/sugarlabs/sugar-toolkit-gtk3.git
+cd sugar-toolkit-gtk3
+
 # make source
 show-green "Compiling"
 sudo ./autogen.sh --with-python3
