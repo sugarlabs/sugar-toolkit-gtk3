@@ -34,9 +34,9 @@ jobs:
       - name: Create builduser
         run: |
           # A user is required so that the docs are not built as root
-          useradd builduser -m # Create the builduser
-          passwd -d builduser # Delete the buildusers password
-          printf 'builduser ALL=(ALL) ALL\n' | tee -a /etc/sudoers
+          sudo useradd builduser -m # Create the builduser
+          sudo passwd -d builduser # Delete the buildusers password
+          printf 'builduser ALL=(ALL) ALL\n' | sudo tee -a /etc/sudoers
 
       - name: Build documentation
         run: |
