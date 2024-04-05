@@ -9,15 +9,20 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    container:
-      image: 'archlinux:latest'
-
+    runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
         run: |
           # assume yes and do not ask for confirmation when installing deps using pacman
-          yes | pacman -Syu base-devel sudo git wget curl python-sphinx rsync python-virtualenv --noconfirm
+          apt update
+          apt install -y build-essential sudo git wget curl python3-sphinx rsync
+
+          # install sugar-toolkit-gtk3 dependencies
+          apt install -y python-all-dev python3-all-dev libgtk-3-dev
+          apt install -y libgdk-pixbuf2.0-dev libsm-dev libice-dev librsvg2-dev
+          apt install -y libxfixes-dev libxi-dev libx11-dev gettext intltool
+          apt install -y libxml-parser-perl x11proto-core-dev libasound2-dev
+          apt install -y libgirepository1.0-dev linux-libc-dev
 
       - uses: actions/checkout@v4
         with:

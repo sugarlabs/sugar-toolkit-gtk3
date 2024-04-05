@@ -12,27 +12,6 @@ show-green () {
     echo -e "${GREEN} ==> ${1} ${NC}" 
 }
 
-# build package from the AUR (arch user repository)
-if command -v makepkg &> /dev/null
-then
-    # sphinx extensions 
-    python3 -m venv env
-    env/bin/pip install sphinxcontrib-napoleon
-
-    show-green "Cloning sugar-toolkit-gtk3-git from AUR"
-    mkdir .cache
-    cd .cache 
-    git clone https://aur.archlinux.org/sugar-toolkit-gtk3-git.git
-    cd sugar-toolkit-gtk3-git
-    makepkg -sif --noconfirm 
-    show-green "Installing optional dependencies"
-    yes | sudo pacman -S --needed $(cat .SRCINFO| grep 'optdepends' | grep -o '= .*:' | sed 's,= ,,g' | sed 's,:,,g') --noconfirm
-    cd ../..
-    show-green "Dependencies synced, packages built"
-
-fi
-
-
 # make source
 show-green "Compiling"
 ./autogen.sh --with-python3
