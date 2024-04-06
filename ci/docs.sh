@@ -13,7 +13,7 @@ show-green () {
 }
 
 # clone repo
-git clone https://github.com/sugarlabs/sugar-toolkit-gtk3.git
+sudo git clone https://github.com/sugarlabs/sugar-toolkit-gtk3.git
 cd sugar-toolkit-gtk3
 
 # make source
@@ -23,9 +23,9 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
-./make-doc.sh
-mkdir deploy
-mv doc/_build/html deploy/sugar3
+sudo ./make-doc.sh
+sudo mkdir deploy
+sudo mv doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
 # create an index.html so that users don't become confused
 show-green "Writing index.html"
