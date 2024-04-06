@@ -21,7 +21,7 @@ jobs:
           sudo apt install -y libgdk-pixbuf2.0-dev libsm-dev libice-dev librsvg2-dev
           sudo apt install -y libxfixes-dev libxi-dev libx11-dev gettext intltool
           sudo apt install -y libxml-parser-perl x11proto-core-dev libasound2-dev
-          sudo apt install -y libgirepository1.0-dev linux-libc-dev
+          sudo apt install -y libgirepository1.0-dev linux-libc-dev gir1.2-sugarext-1.0
 
           # install python3 dependencies
           sudo apt install -y gir1.2-webkit2-4.1 python3-six python3-decorator
