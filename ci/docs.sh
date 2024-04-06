@@ -26,7 +26,7 @@ show-green "Building documentation"
 sudo ./make-doc.sh
 sudo mkdir deploy
 sudo mv doc/_build/html deploy/sugar3
-touch deploy/.nojekyll
+sudo touch deploy/.nojekyll
 # create an index.html so that users don't become confused
 show-green "Writing index.html"
 echo "<h1>Page Moved</h1>" > deploy/index.html
