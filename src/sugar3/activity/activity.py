@@ -911,7 +911,7 @@ class Activity(Window, Gtk.Container):
         preview_str = six.BytesIO()
         preview_surface.write_to_png(preview_str)
         return preview_str.getvalue()
-
+// PORTED TILL HERE 
     def _get_buddies(self):
         if self.shared_activity is not None:
             buddies = {}
