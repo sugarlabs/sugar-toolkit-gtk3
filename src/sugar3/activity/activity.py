@@ -67,6 +67,60 @@ CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 PREVIEW_SIZE = style.zoom(300), style.zoom(225)
 
 # Class _ActivitySession remains the same for GTK 4
+"""
+Size of a preview image for journal object metadata.
+"""
+
+
+class _ActivitySession(GObject.GObject):
+
+    __gsignals__ = {
+        'quit-requested': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'quit': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+    }
+
+    def __init__(self):
+        GObject.GObject.__init__(self)
+
+        self._xsmp_client = SugarExt.ClientXSMP()
+        self._xsmp_client.connect('quit-requested',
+                                  self.__sm_quit_requested_cb)
+        self._xsmp_client.connect('quit', self.__sm_quit_cb)
+        self._xsmp_client.startup()
+
+        self._activities = []
+        self._will_quit = []
+
+    def register(self, activity):
+        self._activities.append(activity)
+
+    def unregister(self, activity):
+        self._activities.remove(activity)
+
+        if len(self._activities) == 0:
+            logging.debug('Quitting the activity process.')
+            Gtk.main_quit()
+
+    def will_quit(self, activity, will_quit):
+        if will_quit:
+            self._will_quit.append(activity)
+
+            # We can quit only when all the instances agreed to
+            for activity in self._activities:
+                if activity not in self._will_quit:
+                    return
+
+            self._xsmp_client.will_quit(True)
+        else:
+            self._will_quit = []
+            self._xsmp_client.will_quit(False)
+
+    def __sm_quit_requested_cb(self, client):
+        self.emit('quit-requested')
+
+    def __sm_quit_cb(self, client):
+        self.emit('quit')
+
 
 class Activity(Window, Gtk.Container):
     """
