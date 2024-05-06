@@ -118,11 +118,10 @@ Hint: A good and simple activity to learn from is the Read activity.
 You may copy it and use it as a template.
 '''
 
-
-# import six
-import gettext
-import logging
 import os
+import logging
+import six
+import gettext
 import signal
 import time
 from hashlib import sha1
@@ -815,7 +814,7 @@ class Activity(Window, Gtk.Container):
         preview_surface.write_to_png(preview_str)
         return preview_str.getvalue()
 // PORTED TILL HERE ----------------------------------------------------------------------------------------------------------
-    def _get_buddies(self):
+     def _get_buddies(self):
         if self.shared_activity is not None:
             buddies = {}
             for buddy in self.shared_activity.get_joined_buddies():
@@ -875,8 +874,7 @@ class Activity(Window, Gtk.Container):
         if not self.metadata.get('activity_id', ''):
             self.metadata['activity_id'] = self.get_id()
 
-        file_path = os.path.join(get_activity_root(), 'instance',
-                                 '%i' % time.time())
+        file_path = os.path.join(get_activity_root(), 'instance', '%i' % time.time())
         try:
             self.write_file(file_path)
         except NotImplementedError:
@@ -892,10 +890,7 @@ class Activity(Window, Gtk.Container):
             datastore.write(self._jobject, transfer_ownership=True)
         else:
             self._updating_jobject = True
-            datastore.write(self._jobject,
-                            transfer_ownership=True,
-                            reply_handler=self.__save_cb,
-                            error_handler=self.__save_error_cb)
+            datastore.write(self._jobject, transfer_ownership=True, reply_handler=self.__save_cb, error_handler=self.__save_error_cb)
 
     def copy(self):
         '''
@@ -914,8 +909,7 @@ class Activity(Window, Gtk.Container):
         self._jobject.object_id = None
 
     def __privacy_changed_cb(self, shared_activity, param_spec):
-        logging.debug('__privacy_changed_cb %r' %
-                      shared_activity.props.private)
+        logging.debug('__privacy_changed_cb %r' % shared_activity.props.private)
         if shared_activity.props.private:
             self._jobject.metadata['share-scope'] = SCOPE_INVITE_ONLY
         else:
@@ -937,6 +931,7 @@ class Activity(Window, Gtk.Container):
         self.reveal()
         self.emit('joined')
         self.__privacy_changed_cb(self.shared_activity, None)
+    # PORTED TILL HERE
 
     def get_shared_activity(self):
         '''
