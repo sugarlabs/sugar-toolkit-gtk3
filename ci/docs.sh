@@ -19,7 +19,7 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
-./make-doc.sh
+sudo ./make-doc.sh
 mkdir deploy
 mv doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
