@@ -44,11 +44,10 @@ jobs:
           sudo -u builduser ./ci/docs.sh
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@4.0.0
         # build the documentation, but only deploy them when the PR
         # gets merged
         if: github.ref == 'refs/heads/master'
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: deploy  # The folder the action should deploy.
+          branch: gh-pages # The branch the action should deploy to.
+          folder: deploy  # The folder the action should deploy.
