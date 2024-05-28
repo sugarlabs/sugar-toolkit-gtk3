@@ -136,26 +136,33 @@ gi.require_version('Gdk', '4.0')
 gi.require_version('TelepathyGLib', '0.12')
 gi.require_version('SugarExt', '1.0')
 
+
 # Import only necessary modules from gi.repository
 from gi.repository import GLib, GObject, Gdk, Gtk, TelepathyGLib
 import dbus
 import dbus.service
+from dbus.mainloop.glib import DBusGMainLoop
 from dbus import PROPERTIES_IFACE
 
 from sugar3 import util
 from sugar3 import power
 from sugar3.profile import get_color, get_save_as
 from sugar3.presence import presenceservice
+from sugar3.presence.buddy import Buddy
 from sugar3.activity.activityservice import ActivityService
 from sugar3.graphics import style
 from sugar3.graphics.window import Window
 from sugar3.graphics.alert import Alert
 from sugar3.graphics.icon import Icon
+from sugar3.graphics.toolbutton import ToolButton
 from sugar3.datastore import datastore
 from sugar3.bundle.activitybundle import get_bundle_instance
 from sugar3.bundle.helpers import bundle_from_dir
 from sugar3 import env
 from errno import EEXIST
+
+from sugar3.activity.activity import Activity #activity 
+
 
 # No need to import SugarExt separately, it's already included in gi.repository
 
@@ -813,8 +820,8 @@ class Activity(Window, Gtk.Container):
         preview_str = BytesIO()
         preview_surface.write_to_png(preview_str)
         return preview_str.getvalue()
-// PORTED TILL HERE ----------------------------------------------------------------------------------------------------------
-     def _get_buddies(self):
+
+    def _get_buddies(self):
         if self.shared_activity is not None:
             buddies = {}
             for buddy in self.shared_activity.get_joined_buddies():
@@ -829,16 +836,6 @@ class Activity(Window, Gtk.Container):
             return {}
 
     def save(self):
-        '''
-        Save to the journal.
-
-        This may be called by the :meth:`close` method.
-
-        Activities should not override this method. This method is part of the
-        public API of an activity, and should behave in standard ways. Use your
-        own implementation of write_file() to save your activity specific data.
-        '''
-
         if self._jobject is None:
             logging.debug('Cannot save, no journal object.')
             return
@@ -869,7 +866,7 @@ class Activity(Window, Gtk.Container):
 
         preview = self.get_preview()
         if preview is not None:
-            self.metadata['preview'] = dbus.ByteArray(preview)
+            self.metadata['preview'] = GLib.Bytes.new(preview)
 
         if not self.metadata.get('activity_id', ''):
             self.metadata['activity_id'] = self.get_id()
@@ -884,8 +881,6 @@ class Activity(Window, Gtk.Container):
                 self._owns_file = True
                 self._jobject.file_path = file_path
 
-        # Cannot call datastore.write async for creates:
-        # https://dev.laptop.org/ticket/3071
         if self._jobject.object_id is None:
             datastore.write(self._jobject, transfer_ownership=True)
         else:
@@ -893,17 +888,6 @@ class Activity(Window, Gtk.Container):
             datastore.write(self._jobject, transfer_ownership=True, reply_handler=self.__save_cb, error_handler=self.__save_error_cb)
 
     def copy(self):
-        '''
-        Make a copy of the journal object.
-
-        Activities may use this to 'Keep in Journal' the current state
-        of the activity.  A new journal object will be created for the
-        running activity.
-
-        Activities should not override this method. Instead, like
-        :meth:`save` do any copy work that needs to be done in
-        :meth:`write_file`.
-        '''
         logging.debug('Activity.copy: %r' % self._jobject.object_id)
         self.save()
         self._jobject.object_id = None
@@ -916,7 +900,6 @@ class Activity(Window, Gtk.Container):
             self._jobject.metadata['share-scope'] = SCOPE_NEIGHBORHOOD
 
     def __joined_cb(self, activity, success, err):
-        """Callback when join has finished"""
         logging.debug('Activity.__joined_cb %r' % success)
         self.shared_activity.disconnect(self._join_id)
         self._join_id = None
@@ -931,39 +914,21 @@ class Activity(Window, Gtk.Container):
         self.reveal()
         self.emit('joined')
         self.__privacy_changed_cb(self.shared_activity, None)
-    # PORTED TILL HERE
 
     def get_shared_activity(self):
-        '''
-        Get the shared activity of type
-        :class:`sugar3.presence.activity.Activity`, or None if the
-        activity is not shared, or is shared and not yet joined.
-
-        Returns:
-            :class:`sugar3.presence.activity.Activity`: instance of
-                the shared activity or None
-        '''
         return self.shared_activity
 
     def get_shared(self):
-        '''
-        Get whether the activity is shared.
-
-        Returns:
-            bool: the activity is shared.
-        '''
         if not self.shared_activity:
             return False
         return self.shared_activity.props.joined
 
     def __share_cb(self, ps, success, activity, err):
         if not success:
-            logging.debug('Share of activity %s failed: %s.' %
-                          (self._activity_id, err))
+            logging.debug('Share of activity %s failed: %s.' % (self._activity_id, err))
             return
 
-        logging.debug('Share of activity %s successful, PS activity is %r.' %
-                      (self._activity_id, activity))
+        logging.debug('Share of activity %s successful, PS activity is %r.' % (self._activity_id, activity))
 
         activity.props.name = self._jobject.metadata['title']
 
@@ -972,8 +937,7 @@ class Activity(Window, Gtk.Container):
             power_manager.inhibit_suspend()
 
         self.shared_activity = activity
-        self.shared_activity.connect('notify::private',
-                                     self.__privacy_changed_cb)
+        self.shared_activity.connect('notify::private', self.__privacy_changed_cb)
         self.emit('shared')
         self.__privacy_changed_cb(self.shared_activity, None)
 
@@ -989,11 +953,9 @@ class Activity(Window, Gtk.Container):
             pservice = presenceservice.get_instance()
             buddy = pservice.get_buddy(account_path, contact_id)
             if buddy:
-                self.shared_activity.invite(
-                    buddy, '', self._invite_response_cb)
+                self.shared_activity.invite(buddy, '', self._invite_response_cb)
             else:
-                logging.error('Cannot invite %s %s, no such buddy',
-                              account_path, contact_id)
+                logging.error('Cannot invite %s %s, no such buddy', account_path, contact_id)
 
     def invite(self, account_path, contact_id):
         '''
@@ -1030,7 +992,7 @@ class Activity(Window, Gtk.Container):
         if self.shared_activity and self.shared_activity.props.joined:
             raise RuntimeError('Activity %s already shared.' %
                                self._activity_id)
-        verb = private and 'private' or 'public'
+        verb = 'private' if private else 'public'
         logging.debug(
             'Requesting %s share of activity %s.' %
             (verb, self._activity_id))
@@ -1049,8 +1011,7 @@ class Activity(Window, Gtk.Container):
         alert.props.msg = _('Keep error: all changes will be lost')
 
         cancel_icon = Icon(icon_name='dialog-cancel')
-        alert.add_button(Gtk.ResponseType.CANCEL, _('Don\'t stop'),
-                         cancel_icon)
+        alert.add_button(Gtk.ResponseType.CANCEL, _('Don\'t stop'), cancel_icon)
 
         stop_icon = Icon(icon_name='dialog-ok')
         alert.add_button(Gtk.ResponseType.OK, _('Stop anyway'), stop_icon)
@@ -1080,7 +1041,6 @@ class Activity(Window, Gtk.Container):
             bool: whether :func:`close` is permitted by activity,
             default True.
         '''
-
         return True
 
     def _show_stop_dialog(self):
@@ -1095,22 +1055,17 @@ class Activity(Window, Gtk.Container):
         alert.entry.set_text(title)
 
         label, tip = self._get_save_label_tip(title)
-        button = alert.add_button(Gtk.ResponseType.OK, label,
-                                  Icon(icon_name='dialog-ok'))
-        button.add_accelerator('clicked', self.sugar_accel_group,
-                               Gdk.KEY_Return, 0, 0)
+        button = alert.add_button(Gtk.ResponseType.OK, label, Icon(icon_name='dialog-ok'))
+        button.add_accelerator('clicked', self.sugar_accel_group, Gdk.KEY_Return, 0, 0)
         button.set_tooltip_text(tip)
         alert.ok = button
 
         label, tip = self._get_erase_label_tip()
-        button = alert.add_button(Gtk.ResponseType.ACCEPT, label,
-                                  Icon(icon_name='list-remove'))
+        button = alert.add_button(Gtk.ResponseType.ACCEPT, label, Icon(icon_name='list-remove'))
         button.set_tooltip_text(tip)
 
-        button = alert.add_button(Gtk.ResponseType.CANCEL, _('Cancel'),
-                                  Icon(icon_name='dialog-cancel'))
-        button.add_accelerator('clicked', self.sugar_accel_group,
-                               Gdk.KEY_Escape, 0, 0)
+        button = alert.add_button(Gtk.ResponseType.CANCEL, _('Cancel'), Icon(icon_name='dialog-cancel'))
+        button.add_accelerator('clicked', self.sugar_accel_group, Gdk.KEY_Escape, 0, 0)
         button.set_tooltip_text(_('Cancel stop and continue the activity'))
 
         alert.connect('realize', self.__stop_dialog_realize_cb)
@@ -1125,8 +1080,7 @@ class Activity(Window, Gtk.Container):
     def __stop_dialog_response_cb(self, alert, response_id):
         if response_id == Gtk.ResponseType.OK:
             title = alert.entry.get_text()
-            if self._is_resumed and \
-                    title == self._original_title:
+            if self._is_resumed and title == self._original_title:
                 datastore.delete(self._jobject_old.get_object_id())
             self._jobject.metadata['title'] = title
             self._do_close(False)
@@ -1150,8 +1104,7 @@ class Activity(Window, Gtk.Container):
     def _get_save_label_tip(self, title):
         label = _('Save new')
         tip = _('Save a new journal entry')
-        if self._is_resumed and \
-                title == self._original_title:
+        if self._is_resumed and title == self._original_title:
             label = _('Save')
             tip = _('Save into the old journal entry')
 
@@ -1160,12 +1113,10 @@ class Activity(Window, Gtk.Container):
     def _get_erase_label_tip(self):
         if self._is_resumed:
             label = _('Erase changes')
-            tip = _('Erase what you have done, '
-                    'and leave your old journal entry unchanged')
+            tip = _('Erase what you have done, and leave your old journal entry unchanged')
         else:
             label = _('Erase')
-            tip = _('Erase what you have done, '
-                    'and avoid making a journal entry')
+            tip = _('Erase what you have done, and avoid making a journal entry')
 
         return label, tip
 
@@ -1174,7 +1125,6 @@ class Activity(Window, Gtk.Container):
             try:
                 self.save()
             except BaseException:
-                # pylint: disable=W0702
                 logging.exception('Error saving activity object to datastore')
                 self._show_keep_failed_dialog()
                 return False
@@ -1254,7 +1204,6 @@ class Activity(Window, Gtk.Container):
         Get the journal object metadata.
 
         Returns:
-
             dict: the journal object metadata, or None if there is no object.
 
         Activities can set metadata in write_file() using:
@@ -1311,7 +1260,7 @@ class Activity(Window, Gtk.Container):
         '''
         if self._busy_count == 0:
             self._old_cursor = self.get_window().get_cursor()
-            self._set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+            self._set_cursor(Gdk.Cursor.new_from_name(Gdk.Display.get_default(), "wait"))
         self._busy_count += 1
 
     def unbusy(self):
@@ -1330,15 +1279,26 @@ class Activity(Window, Gtk.Container):
 
     def _set_cursor(self, cursor):
         self.get_window().set_cursor(cursor)
-        Gdk.flush()
+        Gdk.Display.get_default().flush()
+            
+# --------------------------------------------------------------------------
 
+# Ensure DBus main loop is set to GLib
+DBusGMainLoop(set_as_default=True)
+
+CLIENT = 'org.freedesktop.Telepathy.Client'
+CLIENT_HANDLER = 'org.freedesktop.Telepathy.Client.Handler'
+PROPERTIES_IFACE = 'org.freedesktop.DBus.Properties'
+CHANNEL = 'org.freedesktop.Telepathy.Channel'
+CHANNEL_TYPE_TEXT = 'org.freedesktop.Telepathy.Channel.Type.Text'
+CONNECTION_HANDLE_TYPE_CONTACT = 1
 
 class _ClientHandler(dbus.service.Object):
     def __init__(self, bundle_id, got_channel_cb):
         self._interfaces = set([CLIENT, CLIENT_HANDLER, PROPERTIES_IFACE])
         self._got_channel_cb = got_channel_cb
 
-        bus = dbus.Bus()
+        bus = dbus.SessionBus()
         name = CLIENT + '.' + bundle_id
         bus_name = dbus.service.BusName(name, bus=bus)
 
@@ -1361,17 +1321,13 @@ class _ClientHandler(dbus.service.Object):
             CHANNEL + '.TargetHandleType': CONNECTION_HANDLE_TYPE_CONTACT,
         }
         filter_dict = dbus.Dictionary(filters, signature='sv')
-        logging.debug('__get_filters_cb %r' % dbus.Array([filter_dict],
-                                                         signature='a{sv}'))
+        logging.debug('__get_filters_cb %r' % dbus.Array([filter_dict], signature='a{sv}'))
         return dbus.Array([filter_dict], signature='a{sv}')
 
-    @dbus.service.method(dbus_interface=CLIENT_HANDLER,
-                         in_signature='ooa(oa{sv})aota{sv}', out_signature='')
-    def HandleChannels(self, account, connection, channels, requests_satisfied,
-                       user_action_time, handler_info):
+    @dbus.service.method(dbus_interface=CLIENT_HANDLER, in_signature='ooa(oa{sv})aota{sv}', out_signature='')
+    def HandleChannels(self, account, connection, channels, requests_satisfied, user_action_time, handler_info):
         logging.debug('HandleChannels\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r\n\t%r' %
-                      (account, connection, channels, requests_satisfied,
-                          user_action_time, handler_info))
+                      (account, connection, channels, requests_satisfied, user_action_time, handler_info))
         try:
             for object_path, properties in channels:
                 channel_type = properties[CHANNEL + '.ChannelType']
@@ -1381,26 +1337,21 @@ class _ClientHandler(dbus.service.Object):
         except Exception as e:
             logging.exception(e)
 
-    @dbus.service.method(dbus_interface=dbus.PROPERTIES_IFACE,
-                         in_signature='ss', out_signature='v')
+    @dbus.service.method(dbus_interface=PROPERTIES_IFACE, in_signature='ss', out_signature='v')
     def Get(self, interface_name, property_name):
-        if interface_name in self._prop_getters \
-           and property_name in self._prop_getters[interface_name]:
-                return self._prop_getters[interface_name][property_name]()
+        if interface_name in self._prop_getters and property_name in self._prop_getters[interface_name]:
+            return self._prop_getters[interface_name][property_name]()
         else:
             logging.debug('InvalidArgument')
 
-    @dbus.service.method(dbus_interface=dbus.PROPERTIES_IFACE,
-                         in_signature='ssv', out_signature='')
+    @dbus.service.method(dbus_interface=PROPERTIES_IFACE, in_signature='ssv', out_signature='')
     def Set(self, interface_name, property_name, value):
-        if interface_name in self._prop_setters \
-           and property_name in self._prop_setters[interface_name]:
-                self._prop_setters[interface_name][property_name](value)
+        if interface_name in self._prop_setters and property_name in self._prop_setters[interface_name]:
+            self._prop_setters[interface_name][property_name](value)
         else:
             logging.debug('PermissionDenied')
 
-    @dbus.service.method(dbus_interface=dbus.PROPERTIES_IFACE,
-                         in_signature='s', out_signature='a{sv}')
+    @dbus.service.method(dbus_interface=PROPERTIES_IFACE, in_signature='s', out_signature='a{sv}')
     def GetAll(self, interface_name):
         if interface_name in self._prop_getters:
             r = {}
@@ -1410,18 +1361,15 @@ class _ClientHandler(dbus.service.Object):
         else:
             logging.debug('InvalidArgument')
 
+# Session management
 
 _session = None
 
-
 def _get_session():
     global _session
-
     if _session is None:
         _session = _ActivitySession()
-
     return _session
-
 
 def get_bundle_name():
     '''
@@ -1430,14 +1378,12 @@ def get_bundle_name():
     '''
     return os.environ['SUGAR_BUNDLE_NAME']
 
-
 def get_bundle_path():
     '''
     Returns:
         str: the bundle path for the current process' bundle
     '''
     return os.environ['SUGAR_BUNDLE_PATH']
-
 
 def get_activity_root():
     '''
@@ -1464,10 +1410,9 @@ def get_activity_root():
         try:
             os.mkdir(activity_root)
         except OSError as e:
-            if e.errno != EEXIST:
+            if e.errno != os.errno.EEXIST:
                 raise e
         return activity_root
-
 
 def show_object_in_journal(object_id):
     '''
@@ -1477,10 +1422,9 @@ def show_object_in_journal(object_id):
         object_id (object): journal object
     '''
     bus = dbus.SessionBus()
-    obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
-    journal = dbus.Interface(obj, J_DBUS_INTERFACE)
+    obj = bus.get_object('org.laptop.Journal', '/org/laptop/Journal')
+    journal = dbus.Interface(obj, 'org.laptop.Journal')
     journal.ShowObject(object_id)
-
 
 def launch_bundle(bundle_id='', object_id=''):
     '''
@@ -1491,10 +1435,13 @@ def launch_bundle(bundle_id='', object_id=''):
         object_id (object): journal object
     '''
     bus = dbus.SessionBus()
-    obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
-    bundle_launcher = dbus.Interface(obj, J_DBUS_INTERFACE)
+    obj = bus.get_object('org.laptop.Journal', '/org/laptop/Journal')
+    bundle_launcher = dbus.Interface(obj, 'org.laptop.Journal')
     return bundle_launcher.LaunchBundle(bundle_id, object_id)
 
+# J_DBUS_SERVICE = 'org.laptop.Journal'
+# J_DBUS_PATH = '/org/laptop/Journal'
+# J_DBUS_INTERFACE = 'org.laptop.Journal'
 
 def get_bundle(bundle_id='', object_id=''):
     '''
@@ -1502,12 +1449,21 @@ def get_bundle(bundle_id='', object_id=''):
 
     Args:
         bundle_id (str): activity bundle id, optional
-        object_id (object): journal object
+        object_id (str): journal object id
+
+    Returns:
+        The bundle object if the bundle path is found, otherwise None.
     '''
     bus = dbus.SessionBus()
     obj = bus.get_object(J_DBUS_SERVICE, J_DBUS_PATH)
     journal = dbus.Interface(obj, J_DBUS_INTERFACE)
-    bundle_path = journal.GetBundlePath(bundle_id, object_id)
+    
+    try:
+        bundle_path = journal.GetBundlePath(bundle_id, object_id)
+    except dbus.DBusException as e:
+        logging.error(f"DBusException while getting bundle path: {e}")
+        return None
+
     if bundle_path:
         return bundle_from_dir(bundle_path)
     else:
