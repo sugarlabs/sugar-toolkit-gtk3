@@ -48,7 +48,8 @@ jobs:
         # build the documentation, but only deploy them when the PR
         # gets merged
         if: github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ github.token }}
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: deploy  # The folder the action should deploy.
-          token: {{ github.token }}
