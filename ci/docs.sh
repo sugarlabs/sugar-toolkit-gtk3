@@ -19,14 +19,14 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
-sudo ./make-doc.sh
+./make-doc.sh
 mkdir deploy
-sudo cp -r doc/_build/html deploy/sugar3
+cp -r doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
 # create an index.html so that users don't become confused
 show-green "Writing index.html"
-sudo echo "<h1>Page Moved</h1>" > deploy/index.html
-sudo echo "<p>We have moved this page to <a href=\"https://github.com/sugarlabs/sugar-docs/blob/master/README.md\">GitHub</a>.</p>" >> deploy/index.html
-sudo echo "<p>How did you get here? Please <a href=\"https://github.com/sugarlabs/sugar-docs/issues\">report</a> any lingering links.</p>" >> deploy/index.html
+echo "<h1>Page Moved</h1>" > deploy/index.html
+echo "<p>We have moved this page to <a href=\"https://github.com/sugarlabs/sugar-docs/blob/master/README.md\">GitHub</a>.</p>" >> deploy/index.html
+echo "<p>How did you get here? Please <a href=\"https://github.com/sugarlabs/sugar-docs/issues\">report</a> any lingering links.</p>" >> deploy/index.html
 
 show-green "Done"
