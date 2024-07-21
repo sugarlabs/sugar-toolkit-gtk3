@@ -2,9 +2,9 @@
 name: Documentation
 on:
   push:
-    branches: [master]
+    branches: [test]
   pull_request:
-    branches: [master]
+    branches: [test]
   workflow_dispatch:
 
 jobs:
