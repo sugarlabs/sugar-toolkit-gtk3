@@ -19,7 +19,7 @@ desktop](https://github.com/sugarlabs/sugar).
 To install Sugar Toolkit alone without Sugar desktop,
 
 ```
-sudo apt install python-sugar3
+sudo apt install python3-sugar3
 ```
 
 Installing on Fedora
