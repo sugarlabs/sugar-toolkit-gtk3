@@ -133,7 +133,7 @@ class ActivityBundle(Bundle):
         if six.PY2:
             cp.readfp(info_file)
         else:
-            cp.read_string(info_file.read().decode())
+            cp.read_file(info_file)
 
         section = 'Activity'
 
@@ -258,7 +258,7 @@ class ActivityBundle(Bundle):
             if six.PY2:
                 cp.readfp(linfo_file)
             else:
-                cp.read_string(linfo_file.read().decode())
+                cp.read_file(linfo_file)
         except ParsingError as e:
             logging.exception('Exception reading linfo file: %s', e)
             return
