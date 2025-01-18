@@ -214,7 +214,7 @@ class _IconBuffer(object):
                 try:
                     with open(icon_filename) as config_file:
                         cp = ConfigParser()
-                        cp.readfp(config_file)
+                        cp.read_file(config_file)
                         attach_points_str = cp.get('Icon Data', 'AttachPoints')
                         attach_points = attach_points_str.split(',')
                         attach_x = float(attach_points[0].strip()) / 1000
