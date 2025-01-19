@@ -170,8 +170,8 @@ import cairo
 import json
 
 import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Gdk', '3.0')
+gi.require_version('Gtk', '4.0')
+gi.require_version('Gdk', '4.0')
 gi.require_version('TelepathyGLib', '0.12')
 gi.require_version('SugarExt', '1.0')
 
@@ -284,7 +284,7 @@ class _ActivitySession(GObject.GObject):
         self.emit('quit')
 
 
-class Activity(Window, Gtk.Container):
+class Activity(Gtk.Window):
     """
     Initialise an Activity.
 
@@ -315,10 +315,6 @@ class Activity(Window, Gtk.Container):
         * creates a base Gtk.Window within this window.
 
         * creates an ActivityService (self._bus) servicing this application.
-
-    When your activity implements :func:`__init__`, it must call the
-    :class:`Activity` class :func:`__init__` before any
-    :class:`Activity` specific code.
     """
 
     __gtype_name__ = 'SugarActivity'
@@ -332,6 +328,8 @@ class Activity(Window, Gtk.Container):
     }
 
     def __init__(self, handle, create_jobject=True):
+        super().__init__()
+
         if hasattr(GLib, 'unix_signal_add'):
             GLib.unix_signal_add(
                 GLib.PRIORITY_DEFAULT, signal.SIGINT, self.close)
@@ -354,7 +352,7 @@ class Activity(Window, Gtk.Container):
         settings.set_property('gtk-font-name',
                               '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
 
-        Window.__init__(self)
+        self.set_titlebar(Gtk.HeaderBar())
 
         if 'SUGAR_ACTIVITY_ROOT' in os.environ:
             # If this activity runs inside Sugar, we want it to take all the
@@ -396,9 +394,6 @@ class Activity(Window, Gtk.Container):
 
         self._session = _get_session()
         self._session.register(self)
-        self._session.connect('quit-requested',
-                              self.__session_quit_requested_cb)
-        self._session.connect('quit', self.__session_quit_cb)
 
         accel_group = Gtk.AccelGroup()
         self.sugar_accel_group = accel_group
@@ -442,9 +437,6 @@ class Activity(Window, Gtk.Container):
             self._client_handler = _ClientHandler(
                 self.get_bundle_id(),
                 partial(self.__got_channel_cb, wait_loop))
-            # FIXME: The current API requires that self.shared_activity is set
-            # before exiting from __init__, so we wait until we have got the
-            # shared activity. http://bugs.sugarlabs.org/ticket/2168
             wait_loop.run()
         else:
             pservice = presenceservice.get_instance()
@@ -468,7 +460,6 @@ class Activity(Window, Gtk.Container):
         self._stop_buttons = []
 
         if self._is_resumed and get_save_as():
-            # preserve original and use a copy for editing
             self._jobject_old = self._jobject
             self._jobject = datastore.copy(self._jobject, '/')
 
@@ -531,7 +522,7 @@ class Activity(Window, Gtk.Container):
         logging.debug('*** Act %s, mesh instance %r, scope %s' %
                       (self._activity_id, mesh_instance, share_scope))
         if mesh_instance is not None:
-            # There's already an instance on the mesh, join it
+            # There's already an instance on the mesh, join its
             logging.debug('*** Act %s joining existing mesh instance %r' %
                           (self._activity_id, mesh_instance))
             self.shared_activity = mesh_instance
