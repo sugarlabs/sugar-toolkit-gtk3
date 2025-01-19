@@ -21,7 +21,7 @@ STABLE.
 """
 
 import gi
-gi.require_version('GdkX11', '3.0')
+gi.require_version('GdkX11', '4.0')
 
 from gi.repository import GObject
 from gi.repository import GLib
