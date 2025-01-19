@@ -97,7 +97,7 @@ from six.moves.configparser import ConfigParser
 
 import gi
 gi.require_version('Rsvg', '2.0')
-gi.require_version('Gtk', '3.0')
+gi.require_version('Gtk', '4.0')
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -434,6 +434,7 @@ class _IconBuffer(object):
     xo_color = property(_get_xo_color, _set_xo_color)
 
 
+
 class Icon(Gtk.Image):
     '''
     The most basic Sugar icon class.  Displays the icon given.
@@ -471,9 +472,6 @@ class Icon(Gtk.Image):
     '''
 
     __gtype_name__ = 'SugarIcon'
-
-    _MENU_SIZES = (Gtk.IconSize.MENU, Gtk.IconSize.DND,
-                   Gtk.IconSize.SMALL_TOOLBAR, Gtk.IconSize.BUTTON)
 
     def __init__(self, **kwargs):
         self._buffer = _IconBuffer()
@@ -534,10 +532,7 @@ class Icon(Gtk.Image):
 
         pixel_size = None
         if self.props.pixel_size == -1:
-            if self.props.icon_size in self._MENU_SIZES:
-                pixel_size = style.SMALL_ICON_SIZE
-            else:
-                pixel_size = style.STANDARD_ICON_SIZE
+            pixel_size = style.STANDARD_ICON_SIZE
         else:
             pixel_size = self.props.pixel_size
 
@@ -759,7 +754,7 @@ class Icon(Gtk.Image):
     '''
 
 
-class EventIcon(Gtk.EventBox):
+class EventIcon(Gtk.Box):
     '''
     An Icon class that provides access to mouse events and that can act as a
     cursor-positioned palette invoker.
@@ -794,7 +789,7 @@ class EventIcon(Gtk.EventBox):
         self._buffer = _IconBuffer()
         self._alpha = 1.0
 
-        Gtk.EventBox.__init__(self)
+        Gtk.Box.__init__(self)
         self.set_visible_window(False)
         self.set_above_child(True)
         self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK |
