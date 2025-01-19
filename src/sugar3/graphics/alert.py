@@ -51,7 +51,9 @@ STABLE.
 # Boston, MA 02111-1307, USA.
 
 import gettext
+import gi
 
+gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk
 from gi.repository import GObject
 from gi.repository import GLib
@@ -70,7 +72,7 @@ if not hasattr(GObject.ParamFlags, 'READWRITE'):
         GObject.ParamFlags.READABLE
 
 
-class Alert(Gtk.EventBox):
+class Alert(Gtk.Box):
     """
     Alerts are inside the activity window instead of being a
     separate popup window. They do not hide the canvas.
@@ -355,16 +357,21 @@ class ErrorAlert(Alert):
         icon.show()
 
 
-class _TimeoutIcon(Gtk.Alignment):
+class _TimeoutIcon(Gtk.Box):
     __gtype_name__ = 'SugarTimeoutIcon'
 
     def __init__(self):
-        Gtk.Alignment.__init__(self, xalign=0, yalign=0, xscale=1, yscale=1)
+        super().__init__()
+        self.set_orientation(Gtk.Orientation.HORIZONTAL)
+        self.set_halign(Gtk.Align.CENTER)
+        self.set_valign(Gtk.Align.CENTER)
         self.set_app_paintable(True)
+
         self._text = Gtk.Label()
-        self._text.set_alignment(0.5, 0.5)
-        self.add(self._text)
-        self._text.show()
+        self._text.set_halign(Gtk.Align.CENTER)
+        self._text.set_valign(Gtk.Align.CENTER)
+        self.append(self._text)
+
         self.connect('draw', self.__draw_cb)
 
     def __draw_cb(self, widget, context):
