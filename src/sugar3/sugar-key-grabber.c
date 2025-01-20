@@ -22,7 +22,6 @@
 #include <X11/extensions/XInput2.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
-
 #include "sugar-key-grabber.h"
 #include "eggaccelerators.h"
 #include "sugar-marshal.h"
@@ -37,9 +36,9 @@
 #define USED_MODS (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)
 
 enum {
-	KEY_PRESSED,
-	KEY_RELEASED,
-	N_SIGNALS
+    KEY_PRESSED,
+    KEY_RELEASED,
+    N_SIGNALS
 };
 
 typedef struct {
@@ -56,30 +55,30 @@ static guint signals[N_SIGNALS];
 static void
 free_key_info(Key *key_info)
 {
-	g_free(key_info->key);
-	g_free(key_info);
+    g_free(key_info->key);
+    g_free(key_info);
 }
 
 static void
 sugar_key_grabber_dispose (GObject *object)
 {
-	SugarKeyGrabber *grabber = SUGAR_KEY_GRABBER(object);
+    SugarKeyGrabber *grabber = SUGAR_KEY_GRABBER(object);
 
-	if (grabber->keys) {
-		g_list_foreach(grabber->keys, (GFunc)free_key_info, NULL);
-		g_list_free(grabber->keys);
-		grabber->keys = NULL;
-	}
+    if (grabber->keys) {
+        g_list_foreach(grabber->keys, (GFunc)free_key_info, NULL);
+        g_list_free(grabber->keys);
+        grabber->keys = NULL;
+    }
 }
 
 static void
 sugar_key_grabber_class_init(SugarKeyGrabberClass *grabber_class)
 {
-	GObjectClass *g_object_class = G_OBJECT_CLASS (grabber_class);
+    GObjectClass *g_object_class = G_OBJECT_CLASS (grabber_class);
 
-	g_object_class->dispose = sugar_key_grabber_dispose;
+    g_object_class->dispose = sugar_key_grabber_dispose;
 
-	signals[KEY_PRESSED] = g_signal_new ("key-pressed",
+    signals[KEY_PRESSED] = g_signal_new ("key-pressed",
                          G_TYPE_FROM_CLASS (grabber_class),
                          G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                          G_STRUCT_OFFSET (SugarKeyGrabberClass, key_pressed),
@@ -89,7 +88,7 @@ sugar_key_grabber_class_init(SugarKeyGrabberClass *grabber_class)
                          G_TYPE_UINT,
                          G_TYPE_UINT,
                          G_TYPE_UINT);
-	signals[KEY_RELEASED] = g_signal_new ("key-released",
+    signals[KEY_RELEASED] = g_signal_new ("key-released",
                          G_TYPE_FROM_CLASS (grabber_class),
                          G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                          G_STRUCT_OFFSET (SugarKeyGrabberClass, key_released),
@@ -104,73 +103,73 @@ sugar_key_grabber_class_init(SugarKeyGrabberClass *grabber_class)
 char *
 sugar_key_grabber_get_key(SugarKeyGrabber *grabber, guint keycode, guint state)
 {
-	GList *l;
+    GList *l;
 
-	for (l = grabber->keys; l != NULL; l = l->next) {
-		Key *keyinfo = (Key *)l->data;
-		if ((keyinfo->keycode == keycode) &&
-			((state & USED_MODS) == keyinfo->state)) {
-			return g_strdup(keyinfo->key);
-		}
-	}
+    for (l = grabber->keys; l != NULL; l = l->next) {
+        Key *keyinfo = (Key *)l->data;
+        if ((keyinfo->keycode == keycode) &&
+            ((state & USED_MODS) == keyinfo->state)) {
+            return g_strdup(keyinfo->key);
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 static GdkFilterReturn
 filter_events(GdkXEvent *xevent, GdkEvent *event, gpointer data)
 {
-	SugarKeyGrabber *grabber = (SugarKeyGrabber *)data;
-	XEvent *xev = (XEvent *)xevent;
+    SugarKeyGrabber *grabber = (SugarKeyGrabber *)data;
+    XEvent *xev = (XEvent *)xevent;
 
-	if (xev->type == KeyRelease) {
-		int return_value;
-		g_signal_emit (grabber, signals[KEY_RELEASED], 0, xev->xkey.keycode,
-					   xev->xkey.state, xev->xkey.time, &return_value);
-		if(return_value)
-			return GDK_FILTER_REMOVE;
-	}
+    if (xev->type == KeyRelease) {
+        int return_value;
+        g_signal_emit (grabber, signals[KEY_RELEASED], 0, xev->xkey.keycode,
+                       xev->xkey.state, xev->xkey.time, &return_value);
+        if(return_value)
+            return GDK_FILTER_REMOVE;
+    }
 
-	if (xev->type == KeyPress) {
-		int return_value;
-		g_signal_emit (grabber, signals[KEY_PRESSED], 0, xev->xkey.keycode,
-					   xev->xkey.state, xev->xkey.time, &return_value);
-		if(return_value)
-			return GDK_FILTER_REMOVE;
-	}
+    if (xev->type == KeyPress) {
+        int return_value;
+        g_signal_emit (grabber, signals[KEY_PRESSED], 0, xev->xkey.keycode,
+                       xev->xkey.state, xev->xkey.time, &return_value);
+        if(return_value)
+            return GDK_FILTER_REMOVE;
+    }
 
-	if (xev->type == GenericEvent) {
-		XIDeviceEvent *ev;
-		int return_value = FALSE;
+    if (xev->type == GenericEvent) {
+        XIDeviceEvent *ev;
+        int return_value = FALSE;
 
-		ev = (XIDeviceEvent *) ((XGenericEventCookie *) xev)->data;
+        ev = (XIDeviceEvent *) ((XGenericEventCookie *) xev)->data;
 
-		if (ev->evtype == XI_KeyPress) {
-			g_signal_emit (grabber, signals[KEY_PRESSED], 0,
-				       ev->detail, ev->mods.effective, ev->time, &return_value);
-		} else if (ev->evtype == XI_KeyRelease) {
-			g_signal_emit (grabber, signals[KEY_RELEASED], 0,
-				       ev->detail, ev->mods.effective, ev->time, &return_value);
-		}
+        if (ev->evtype == XI_KeyPress) {
+            g_signal_emit (grabber, signals[KEY_PRESSED], 0,
+                       ev->detail, ev->mods.effective, ev->time, &return_value);
+        } else if (ev->evtype == XI_KeyRelease) {
+            g_signal_emit (grabber, signals[KEY_RELEASED], 0,
+                       ev->detail, ev->mods.effective, ev->time, &return_value);
+        }
 
-		if (return_value)
-			return GDK_FILTER_REMOVE;
-	}
+        if (return_value)
+            return GDK_FILTER_REMOVE;
+    }
 
 
-	return GDK_FILTER_CONTINUE;
+    return GDK_FILTER_CONTINUE;
 }
 
 static void
 sugar_key_grabber_init(SugarKeyGrabber *grabber)
 {
-	GdkScreen *screen;
+    GdkScreen *screen;
 
-	screen = gdk_screen_get_default();
-	grabber->root = gdk_screen_get_root_window(screen);
-	grabber->keys = NULL;
+    screen = gdk_screen_get_default();
+    grabber->root = gdk_screen_get_root_window(screen);
+    grabber->keys = NULL;
 
-	gdk_window_add_filter(grabber->root, filter_events, grabber);
+    gdk_window_add_filter(grabber->root, filter_events, grabber);
 }
 
 /* grab_key and grab_key_real are from
@@ -230,11 +229,10 @@ grab_key (SugarKeyGrabber *grabber, Key *key, gboolean grab)
  **/
 void
 sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber,
-			    const gchar  *keys[],
-			    gint          n_elements)
+                const gchar  *keys[],
+                gint          n_elements)
 {
     gint i;
-    const char *key;
     Key *keyinfo = NULL;
     gint min_keycodes, max_keycodes;
 
@@ -242,8 +240,8 @@ sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber,
                      &min_keycodes, &max_keycodes);
 
     for (i = 0; i < n_elements; i++){
-	keyinfo = g_new0 (Key, 1);
-	keyinfo->key = g_strdup(keys[i]);
+    keyinfo = g_new0 (Key, 1);
+    keyinfo->key = g_strdup(keys[i]);
 
         if (!egg_accelerator_parse_virtual (keys[i], &keyinfo->keysym,
                                             &keyinfo->keycode,
@@ -257,12 +255,12 @@ sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber,
             continue;
         }
 
-        gdk_error_trap_push();
+        gdk_x11_display_error_trap_push(gdk_display_get_default());
 
         grab_key(grabber, keyinfo, TRUE);
 
-        gdk_flush();
-        gint error_code = gdk_error_trap_pop ();
+        gdk_display_flush(gdk_display_get_default());
+        gint error_code = gdk_x11_display_error_trap_pop(gdk_display_get_default());
         if(!error_code)
             grabber->keys = g_list_append(grabber->keys, keyinfo);
         else if(error_code == BadAccess)
@@ -279,37 +277,37 @@ sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber,
 gboolean
 sugar_key_grabber_is_modifier(SugarKeyGrabber *grabber, guint keycode, guint mask)
 {
-	Display *xdisplay;
-	XModifierKeymap *modmap;
-	gint start, end, i, mod_index;
-	gboolean is_modifier = FALSE;
+    Display *xdisplay;
+    XModifierKeymap *modmap;
+    gint start, end, i, mod_index;
+    gboolean is_modifier = FALSE;
 
-	xdisplay = GDK_DISPLAY_XDISPLAY(gdk_display_get_default ());
+    xdisplay = GDK_DISPLAY_XDISPLAY(gdk_display_get_default ());
 
-	modmap = XGetModifierMapping(xdisplay);
+    modmap = XGetModifierMapping(xdisplay);
 
-	if (mask != -1) {
-		mod_index = 0;
-		mask = mask >> 1;
-		while (mask != 0) {
-			mask = mask >> 1;
-			mod_index += 1;
-		}
-		start = mod_index * modmap->max_keypermod;
-		end = (mod_index + 1) * modmap->max_keypermod;
-	} else {
-		start = 0;
-		end = 8 * modmap->max_keypermod;
-	}
+    if (mask != -1) {
+        mod_index = 0;
+        mask = mask >> 1;
+        while (mask != 0) {
+            mask = mask >> 1;
+            mod_index += 1;
+        }
+        start = mod_index * modmap->max_keypermod;
+        end = (mod_index + 1) * modmap->max_keypermod;
+    } else {
+        start = 0;
+        end = 8 * modmap->max_keypermod;
+    }
 
-	for (i = start; i < end; i++) {
-		if (keycode == modmap->modifiermap[i]) {
-			is_modifier = TRUE;
-			break;
-		}
-	}
+    for (i = start; i < end; i++) {
+        if (keycode == modmap->modifiermap[i]) {
+            is_modifier = TRUE;
+            break;
+        }
+    }
 
-	XFreeModifiermap (modmap);
+    XFreeModifiermap (modmap);
 
-	return is_modifier;
+    return is_modifier;
 }
