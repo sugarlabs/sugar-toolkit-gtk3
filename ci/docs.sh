@@ -19,7 +19,7 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
-sphinx-build -b html doc/source doc/_build/html
+sphinx-build -b html doc doc/_build/html
 ./make-doc.sh
 mkdir -p deploy
 cp -r doc/_build/html deploy/sugar3
