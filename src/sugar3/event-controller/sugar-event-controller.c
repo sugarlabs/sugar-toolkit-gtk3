@@ -21,6 +21,7 @@
 
 #include "sugar-event-controller.h"
 #include "sugar-enum-types.h"
+#include <glib-object.h>
 
 typedef struct _SugarControllerItem SugarControllerItem;
 typedef struct _SugarControllerWidgetData SugarControllerWidgetData;
@@ -51,6 +52,24 @@ struct _SugarControllerWidgetData
   GtkWidget *widget;
   SugarEventController *current_exclusive;
 };
+
+GType sugar_event_controller_state_get_type(void) {
+    static GType etype = 0;
+    static const GEnumValue values[] = {
+        {SUGAR_EVENT_CONTROLLER_STATE_NONE, "SUGAR_EVENT_CONTROLLER_STATE_NONE", "none"},
+        {SUGAR_EVENT_CONTROLLER_STATE_COLLECTING, "SUGAR_EVENT_CONTROLLER_STATE_COLLECTING", "collecting"},
+        {SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED, "SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED", "recognized"},
+        {SUGAR_EVENT_CONTROLLER_STATE_NOT_RECOGNIZED, "SUGAR_EVENT_CONTROLLER_STATE_NOT_RECOGNIZED", "not-recognized"},
+        {0, NULL, NULL}
+    };
+
+    if (etype == 0) {
+        etype = g_enum_register_static("SugarEventControllerState", values);
+    }
+
+    return etype;
+}
+
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (SugarEventController,
                                      sugar_event_controller,
