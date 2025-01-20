@@ -19,12 +19,15 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
-sphinx-build -b html -d doc/source _build/html
+sphinx-build -b html doc/source doc/_build/html
 ./make-doc.sh
-mkdir deploy
+mkdir -p deploy
 cp -r doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
 # create an index.html so that users don't become confused
 show-green "Writing index.html"
 echo "<h1>Page Moved</h1>" > deploy/index.html
 echo "<p>We have moved this page to <a href=\"https://github.com/sugarlabs/sugar-docs/blob/master/README.md\">GitHub</a>.</p>" >> deploy/index.html
+echo "<p>How did you get here? Please <a href=\"https://github.com/sugarlabs/sugar-docs/issues\">report</a> any lingering links.</p>" >> deploy/index.html
+
+show-green "Done"
