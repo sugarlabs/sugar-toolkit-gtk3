@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 #define SUGAR_IS_EVENT_CONTROLLER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), SUGAR_TYPE_EVENT_CONTROLLER))
 #define SUGAR_IS_EVENT_CONTROLLER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), SUGAR_TYPE_EVENT_CONTROLLER))
 #define SUGAR_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), SUGAR_TYPE_EVENT_CONTROLLER, SugarEventControllerClass))
+#define SUGAR_TYPE_EVENT_CONTROLLER_STATE (sugar_event_controller_state_get_type())
 
 typedef struct _SugarEventController SugarEventController;
 typedef struct _SugarEventControllerClass SugarEventControllerClass;
@@ -82,6 +83,7 @@ struct _SugarEventControllerPrivate
 };
 
 GType     sugar_event_controller_get_type     (void) G_GNUC_CONST;
+GType sugar_event_controller_state_get_type(void) G_GNUC_CONST;
 gboolean  sugar_event_controller_handle_event (SugarEventController *controller,
 					       GdkEvent             *event);
 gboolean  sugar_event_controller_attach       (SugarEventController      *controller,
