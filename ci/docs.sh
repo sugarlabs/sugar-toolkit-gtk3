@@ -19,6 +19,10 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
+if [ ! -d "doc" ]; then
+    echo "Error: doc directory does not exist."
+    exit 1
+fi
 cd doc
 make html
 cd ..
