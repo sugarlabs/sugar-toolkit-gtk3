@@ -19,14 +19,16 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
+
 if [ ! -d "doc" ]; then
     echo "Error: doc directory does not exist."
     exit 1
 fi
+
 cd doc
-make html
+sphinx-build -b html -d _build/doctrees . _build/html
 cd ..
-mkdir deploy
+mkdir -p deploy
 cp -r doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
 # create an index.html so that users don't become confused
