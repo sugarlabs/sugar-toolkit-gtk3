@@ -19,8 +19,9 @@ sudo make
 
 # make documentation
 show-green "Building documentation"
+sphinx-build -b html doc doc/_build/html
 ./make-doc.sh
-mkdir deploy
+mkdir -p deploy
 cp -r doc/_build/html deploy/sugar3
 touch deploy/.nojekyll
 # create an index.html so that users don't become confused
