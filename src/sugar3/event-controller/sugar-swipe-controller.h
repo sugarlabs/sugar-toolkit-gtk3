@@ -23,79 +23,66 @@
 #error "Only <sugar/event-controller/sugar-event-controllers.h> can be included directly."
 #endif
 
-#ifndef __SUGAR_EVENT_CONTROLLER_H__
-#define __SUGAR_EVENT_CONTROLLER_H__
+#ifndef __SUGAR_SWIPE_CONTROLLER_H__
+#define __SUGAR_SWIPE_CONTROLLER_H__
 
+#include "sugar-event-controller.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define SUGAR_TYPE_EVENT_CONTROLLER         (sugar_event_controller_get_type ())
-#define SUGAR_EVENT_CONTROLLER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), SUGAR_TYPE_EVENT_CONTROLLER, SugarEventController))
-#define SUGAR_EVENT_CONTROLLER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), SUGAR_TYPE_EVENT_CONTROLLER, SugarEventControllerClass))
-#define SUGAR_IS_EVENT_CONTROLLER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), SUGAR_TYPE_EVENT_CONTROLLER))
-#define SUGAR_IS_EVENT_CONTROLLER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), SUGAR_TYPE_EVENT_CONTROLLER))
-#define SUGAR_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), SUGAR_TYPE_EVENT_CONTROLLER, SugarEventControllerClass))
-#define SUGAR_TYPE_EVENT_CONTROLLER_STATE (sugar_event_controller_state_get_type())
+#define SUGAR_TYPE_SWIPE_CONTROLLER         (sugar_swipe_controller_get_type ())
+#define SUGAR_SWIPE_CONTROLLER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), SUGAR_TYPE_SWIPE_CONTROLLER, SugarSwipeController))
+#define SUGAR_SWIPE_CONTROLLER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), SUGAR_TYPE_SWIPE_CONTROLLER, SugarSwipeControllerClass))
+#define SUGAR_IS_SWIPE_CONTROLLER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), SUGAR_TYPE_SWIPE_CONTROLLER))
+#define SUGAR_IS_SWIPE_CONTROLLER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), SUGAR_TYPE_SWIPE_CONTROLLER))
+#define SUGAR_SWIPE_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), SUGAR_TYPE_SWIPE_CONTROLLER, SugarSwipeControllerClass))
 
-typedef struct _SugarEventController SugarEventController;
-typedef struct _SugarEventControllerClass SugarEventControllerClass;
-typedef struct _SugarEventControllerPrivate SugarEventControllerPrivate;
-
-typedef enum {
-  SUGAR_EVENT_CONTROLLER_STATE_NONE,
-  SUGAR_EVENT_CONTROLLER_STATE_COLLECTING,
-  SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED,
-  SUGAR_EVENT_CONTROLLER_STATE_NOT_RECOGNIZED
-} SugarEventControllerState;
+typedef struct _SugarSwipeController SugarSwipeController;
+typedef struct _SugarSwipeControllerClass SugarSwipeControllerClass;
+typedef struct _SugarSwipeControllerPrivate SugarSwipeControllerPrivate;
 
 typedef enum {
-  SUGAR_EVENT_CONTROLLER_FLAG_NONE = 0,
-  SUGAR_EVENT_CONTROLLER_FLAG_EXCLUSIVE = 1 << 0
-} SugarEventControllerFlags;
+  SUGAR_SWIPE_DIRECTION_LEFT,
+  SUGAR_SWIPE_DIRECTION_RIGHT,
+  SUGAR_SWIPE_DIRECTION_UP,
+  SUGAR_SWIPE_DIRECTION_DOWN
+} SugarSwipeDirection;
 
-struct _SugarEventController
+typedef enum {
+  SUGAR_SWIPE_DIRECTION_FLAG_LEFT  = 1 << SUGAR_SWIPE_DIRECTION_LEFT,
+  SUGAR_SWIPE_DIRECTION_FLAG_RIGHT = 1 << SUGAR_SWIPE_DIRECTION_RIGHT,
+  SUGAR_SWIPE_DIRECTION_FLAG_UP    = 1 << SUGAR_SWIPE_DIRECTION_UP,
+  SUGAR_SWIPE_DIRECTION_FLAG_DOWN  = 1 << SUGAR_SWIPE_DIRECTION_DOWN,
+} SugarSwipeDirectionFlags;
+
+struct _SugarSwipeController
 {
-  GObject parent_instance;
-
-  SugarEventControllerPrivate *priv;
+  SugarEventController parent_instance;
+  SugarSwipeControllerPrivate *priv;
 };
 
-struct _SugarEventControllerClass
+struct _SugarSwipeControllerClass
 {
-  GObjectClass parent_class;
+  SugarEventControllerClass parent_class;
 
-  /* Signals */
-  void                      (* began)        (SugarEventController *controller);
-  void                      (* updated)      (SugarEventController *controller);
-  void                      (* ended)        (SugarEventController *controller);
-
-  /* vmethods */
-  gboolean                  (* handle_event) (SugarEventController *controller,
-                                              GdkEvent             *event);
-  SugarEventControllerState (* get_state)    (SugarEventController *controller);
-  void                      (* reset)        (SugarEventController *controller);
+  void (* swipe_ended) (SugarSwipeController *controller,
+                        SugarSwipeDirection   direction);
 };
 
-struct _SugarEventControllerPrivate
+struct _SugarSwipeControllerPrivate
 {
-  GtkWidget *widget;
+  GdkDevice *device;
+  GdkEventSequence *sequence;
+  GArray *event_data;
+  guint swiping : 1;
+  guint swiped : 1;
+  guint directions : 4;
 };
 
-GType     sugar_event_controller_get_type     (void) G_GNUC_CONST;
-GType sugar_event_controller_state_get_type(void) G_GNUC_CONST;
-gboolean  sugar_event_controller_handle_event (SugarEventController *controller,
-					       GdkEvent             *event);
-gboolean  sugar_event_controller_attach       (SugarEventController      *controller,
-					       GtkWidget                 *widget,
-                                               SugarEventControllerFlags  flags);
-gboolean  sugar_event_controller_detach       (SugarEventController      *controller,
-					       GtkWidget                 *widget);
-gboolean  sugar_event_controller_reset        (SugarEventController *controller);
-
-SugarEventControllerState
-          sugar_event_controller_get_state    (SugarEventController *controller);
+GType                  sugar_swipe_controller_get_type (void) G_GNUC_CONST;
+SugarEventController * sugar_swipe_controller_new      (SugarSwipeDirectionFlags directions);
 
 G_END_DECLS
 
-#endif /* __SUGAR_EVENT_CONTROLLER_H__ */
+#endif /* __SUGAR_SWIPE_CONTROLLER_H__ */
