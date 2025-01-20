@@ -21,6 +21,8 @@
 
 #include "sugar-swipe-controller.h"
 #include "sugar-enum-types.h"
+#include <glib-object.h>
+
 
 #define CHECK_TIME 100
 #define SWIPE_PX_THRESHOLD 80
@@ -45,6 +47,40 @@ struct _SugarEventData
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+GType sugar_swipe_direction_get_type(void) {
+    static GType etype = 0;
+    static const GEnumValue values[] = {
+        {SUGAR_SWIPE_DIRECTION_LEFT, "SUGAR_SWIPE_DIRECTION_LEFT", "left"},
+        {SUGAR_SWIPE_DIRECTION_RIGHT, "SUGAR_SWIPE_DIRECTION_RIGHT", "right"},
+        {SUGAR_SWIPE_DIRECTION_UP, "SUGAR_SWIPE_DIRECTION_UP", "up"},
+        {SUGAR_SWIPE_DIRECTION_DOWN, "SUGAR_SWIPE_DIRECTION_DOWN", "down"},
+        {0, NULL, NULL}
+    };
+
+    if (etype == 0) {
+        etype = g_enum_register_static("SugarSwipeDirection", values);
+    }
+
+    return etype;
+}
+
+GType sugar_swipe_direction_flags_get_type(void) {
+    static GType etype = 0;
+    static const GFlagsValue values[] = {
+        {SUGAR_SWIPE_DIRECTION_FLAG_LEFT, "SUGAR_SWIPE_DIRECTION_FLAG_LEFT", "left"},
+        {SUGAR_SWIPE_DIRECTION_FLAG_RIGHT, "SUGAR_SWIPE_DIRECTION_FLAG_RIGHT", "right"},
+        {SUGAR_SWIPE_DIRECTION_FLAG_UP, "SUGAR_SWIPE_DIRECTION_FLAG_UP", "up"},
+        {SUGAR_SWIPE_DIRECTION_FLAG_DOWN, "SUGAR_SWIPE_DIRECTION_FLAG_DOWN", "down"},
+        {0, NULL, NULL}
+    };
+
+    if (etype == 0) {
+        etype = g_flags_register_static("SugarSwipeDirectionFlags", values);
+    }
+
+    return etype;
+}
 
 G_DEFINE_TYPE_WITH_PRIVATE (SugarSwipeController,
                             sugar_swipe_controller,
