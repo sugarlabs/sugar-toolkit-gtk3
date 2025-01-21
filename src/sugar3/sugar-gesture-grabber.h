@@ -23,6 +23,7 @@
 #define __SUGAR_GESTURE_GRABBER_H__
 
 #include <gtk/gtk.h>
+
 #ifdef GDK_WINDOWING_X11
   #if GTK_CHECK_VERSION(4,0,0)
     #include <gdk/x11/gdkx.h>
