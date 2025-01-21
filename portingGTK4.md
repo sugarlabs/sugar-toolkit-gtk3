@@ -4,9 +4,6 @@
 
 1. Open a terminal.
 2. Navigate to your project directory:
-    ```sh
-    cd /home/mostlyk/Documents/GitHub/sugar-toolkit-gtk3
-    ```
 3. Create a virtual environment:
     ```sh
     python3 -m venv venv
@@ -26,10 +23,6 @@
 1. Ensure you have `pip` installed. If not, install it:
     ```sh
     python3 -m ensurepip --upgrade
-    ```
-2. Install the required dependencies:
-    ```sh
-    pip install -r requirements.txt
     ```
 
 ## Setting the PYTHONPATH
@@ -52,14 +45,6 @@
 1. When you are done, deactivate the virtual environment:
     ```sh
     deactivate
-    ```
-
-## Additional Notes
-
-- Ensure you have Python 3.6 or higher installed.
-- Update your `requirements.txt` file with any new dependencies using:
-    ```sh
-    pip freeze > requirements.txt
     ```
 
 
