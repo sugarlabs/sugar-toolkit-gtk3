@@ -73,3 +73,39 @@
 6. **Refactored Activity Class Initialization:**
     - Updated the initialization process of the `Activity` class to be compatible with GTK 4.0.
 
+
+## Installing Build Dependencies
+
+### On Debian/Ubuntu:
+```bash
+sudo apt-get install \
+    build-essential \
+    python3-dev \
+    libgtk-4-dev \
+    libgdk-pixbuf-2.0-dev \
+    gobject-introspection \
+    libgirepository1.0-dev \
+    gir1.2-gtk-4.0 \
+    python3-gi \
+    libx11-dev \
+    libxi-dev \
+    libxext-dev \
+    libxrandr-dev \
+    libxrender-dev \
+    libxtst-dev \
+    autoconf \
+    automake \
+    libtool
+```
+
+
+- If using Debian 11 (Bullseye):
+- Add backports to /etc/apt/sources.list:
+```bash
+sudo echo "deb http://deb.debian.org/debian bullseye-backports main" >> /etc/apt/sources.list
+```
+-Update and install from backports:
+```
+sudo apt update
+sudo apt -t bullseye-backports install libgtk-4-dev
+```
