@@ -39,7 +39,14 @@
 #include <X11/SM/SMlib.h>
 
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
+#ifdef GDK_WINDOWING_X11
+  #if GTK_CHECK_VERSION(4,0,0)
+    #include <gdk/x11/gdkx.h>
+  #else
+    #include <gdk/gdkx.h>
+  #endif
+#endif
+
 
 static const char *state_names[] = {
   "start",

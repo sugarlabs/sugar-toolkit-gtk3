@@ -125,8 +125,8 @@ SugarExt_1_0_gir_FILES = \
     sugar-wm.h
 
 SugarExt_1_0_gir: libsugarext.la
-SugarExt_1_0_gir_INCLUDES = Gtk-4.0 Gdk-4.0
-SugarExt_1_0_gir_PACKAGES = gtk4 gdk-4.0
+SugarExt_1_0_gir_INCLUDES = Gtk-4.0 
+SugarExt_1_0_gir_PACKAGES = gtk4 
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
 
 girdir = $(datadir)/gir-1.0

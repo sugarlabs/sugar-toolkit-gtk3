@@ -21,7 +21,14 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/XInput2.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
+#ifdef GDK_WINDOWING_X11
+  #if GTK_CHECK_VERSION(4,0,0)
+    #include <gdk/x11/gdkx.h>
+  #else
+    #include <gdk/gdkx.h>
+  #endif
+#endif
+
 
 #include "sugar-key-grabber.h"
 #include "eggaccelerators.h"

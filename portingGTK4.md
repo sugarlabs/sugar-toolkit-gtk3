@@ -75,7 +75,6 @@
 
 
 ## Installing Build Dependencies
-
 ### On Debian/Ubuntu:
 ```bash
 sudo apt-get install \
@@ -95,9 +94,10 @@ sudo apt-get install \
     libxtst-dev \
     autoconf \
     automake \
-    libtool
+    libtool \
+    libasound2-dev \
+    librsvg2-dev \
 ```
-
 
 - If using Debian 11 (Bullseye):
 - Add backports to /etc/apt/sources.list:
