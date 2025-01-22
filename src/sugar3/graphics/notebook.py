@@ -59,7 +59,7 @@ class Notebook(Gtk.Notebook):
         GObject.GObject.__init__(self, **kwargs)
 
         self.set_scrollable(True)
-        self.show()
+        self.set_visible(True)
 
     def do_set_property(self, pspec, value):
         '''
@@ -71,24 +71,21 @@ class Notebook(Gtk.Notebook):
             raise AssertionError
 
     def _add_icon_to_button(self, button):
-        icon_box = Gtk.HBox()
-        image = Gtk.Image()
-        image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
+        icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        image = Gtk.Image.new_from_icon_name("window-close", Gtk.IconSize.MENU)
         Gtk.Button.set_relief(button, Gtk.ReliefStyle.NONE)
 
         settings = Gtk.Widget.get_settings(button)
         valid_, w, h = Gtk.icon_size_lookup_for_settings(settings,
                                                          Gtk.IconSize.MENU)
         Gtk.Widget.set_size_request(button, w + 4, h + 4)
-        image.show()
-        icon_box.pack_start(image, True, False, 0)
-        button.add(icon_box)
-        icon_box.show()
+        image.set_visible(True)
+        icon_box.append(image)
+        button.set_child(icon_box)
+        icon_box.set_visible(True)
 
     def _create_custom_tab(self, text, child):
-        event_box = Gtk.EventBox()
-
-        tab_box = Gtk.HBox(False, 2)
+        tab_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
         tab_label = Gtk.Label(label=text)
 
         tab_button = Gtk.Button()
@@ -97,17 +94,15 @@ class Notebook(Gtk.Notebook):
         # Add a picture on a button
         self._add_icon_to_button(tab_button)
 
-        event_box.show()
-        tab_button.show()
-        tab_label.show()
+        tab_label.set_visible(True)
+        tab_button.set_visible(True)
 
-        tab_box.pack_start(tab_label, True, False, 0)
-        tab_box.pack_start(tab_button, True, False, 0)
+        tab_box.append(tab_label)
+        tab_box.append(tab_button)
 
-        tab_box.show_all()
-        event_box.add(tab_box)
+        tab_box.set_visible(True)
 
-        return event_box
+        return tab_box
 
     def add_page(self, text_label, widget):
         '''
@@ -123,8 +118,8 @@ class Notebook(Gtk.Notebook):
         '''
         # Add a new page to the notebook
         if self._can_close_tabs:
-            eventbox = self._create_custom_tab(text_label, widget)
-            self.append_page(widget, eventbox)
+            tab_box = self._create_custom_tab(text_label, widget)
+            self.append_page(widget, tab_box)
         else:
             self.append_page(widget, Gtk.Label(label=text_label))
 
@@ -132,7 +127,7 @@ class Notebook(Gtk.Notebook):
 
         # Set the new page
         self.set_current_page(pages - 1)
-        self.show_all()
+        self.set_visible(True)
 
         return True
 

@@ -38,9 +38,9 @@ from sugar3.graphics.palette import Palette, ToolInvoker
 from sugar3.graphics import toolbutton
 
 
-class RadioToolButton(Gtk.RadioToolButton):
+class RadioToolButton(Gtk.ToggleButton):
     '''
-    The RadioToolButton class manages a Gtk.RadioToolButton styled for
+    The RadioToolButton class manages a Gtk.ToggleButton styled for
     Sugar.
 
     Args:
@@ -62,7 +62,7 @@ class RadioToolButton(Gtk.RadioToolButton):
 
     __gtype_name__ = 'SugarRadioToolButton'
 
-    def __init__(self, icon_name=None, **kwargs):
+    def __init__(self, icon_name=None, group=None, **kwargs):
         self._accelerator = None
         self._tooltip = None
         self._xo_color = None
@@ -77,16 +77,26 @@ class RadioToolButton(Gtk.RadioToolButton):
         if icon_name:
             self.set_icon_name(icon_name)
 
-        # HACK: stop Gtk from adding a label and expanding the size of
-        # the button. This happen when set_icon_widget is called
-        # if label_widget is None
-        self.props.label_widget = Gtk.Box()
+        self._group = group
+        if self._group is not None:
+            self._group.append(self)
+        else:
+            self._group = [self]
 
+        self.connect('toggled', self.__toggled_cb)
         self.connect('destroy', self.__destroy_cb)
 
     def __destroy_cb(self, icon):
         if self._palette_invoker is not None:
             self._palette_invoker.detach()
+        if self in self._group:
+            self._group.remove(self)
+
+    def __toggled_cb(self, button):
+        if button.get_active():
+            for btn in self._group:
+                if btn != button:
+                    btn.set_active(False)
 
     def set_tooltip(self, tooltip):
         '''
@@ -103,7 +113,7 @@ class RadioToolButton(Gtk.RadioToolButton):
         self._tooltip = tooltip
 
         # Set label, shows up when toolbar overflows
-        Gtk.RadioToolButton.set_label(self, tooltip)
+        Gtk.ToggleButton.set_label(self, tooltip)
 
     def get_tooltip(self):
         '''
@@ -143,15 +153,15 @@ class RadioToolButton(Gtk.RadioToolButton):
         '''
         icon = Icon(icon_name=icon_name,
                     xo_color=self._xo_color)
-        self.set_icon_widget(icon)
-        icon.show()
+        self.set_child(icon)
+        icon.set_visible(True)
 
     def get_icon_name(self):
         '''
         Return icon name, or None if there is no icon name.
         '''
-        if self.props.icon_widget is not None:
-            return self.props.icon_widget.props.icon_name
+        if self.get_child() is not None:
+            return self.get_child().props.icon_name
         else:
             return None
 
@@ -167,8 +177,8 @@ class RadioToolButton(Gtk.RadioToolButton):
         '''
         if self._xo_color != xo_color:
             self._xo_color = xo_color
-            if self.props.icon_widget is not None:
-                self.props.icon_widget.props.xo_color = xo_color
+            if self.get_child() is not None:
+                self.get_child().props.xo_color = xo_color
 
     def get_xo_color(self):
         '''
@@ -212,7 +222,7 @@ class RadioToolButton(Gtk.RadioToolButton):
             cr.rectangle(0, 0, allocation.width, allocation.height)
             cr.paint()
 
-        Gtk.RadioToolButton.do_draw(self, cr)
+        Gtk.ToggleButton.do_draw(self, cr)
 
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker

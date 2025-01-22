@@ -57,8 +57,8 @@ class RadioPalette(Palette):
     def __init__(self, **kwargs):
         Palette.__init__(self, **kwargs)
 
-        self.button_box = Gtk.HBox()
-        self.button_box.show()
+        self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        self.button_box.set_visible(True)
         self.set_content(self.button_box)
 
     def append(self, button, label):
@@ -67,9 +67,9 @@ class RadioPalette(Palette):
         if button.palette is not None:
             raise RuntimeError("Palette's button should not have sub-palettes")
 
-        button.show()
+        button.set_visible(True)
         button.connect('clicked', self.__clicked_cb)
-        self.button_box.pack_start(button, True, False, 0)
+        self.button_box.append(button)
         button.palette_label = label
 
         if not children:
