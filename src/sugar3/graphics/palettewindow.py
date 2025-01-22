@@ -90,29 +90,35 @@ def _calculate_gap(a, b):
         return False
 
 
-class _PaletteMenuWidget(Gtk.Menu):
-
+class _PaletteMenuWidget(Gtk.PopoverMenu):
     __gtype_name__ = "SugarPaletteMenuWidget"
 
     __gsignals__ = {
         'enter-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
-        'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([]))
     }
 
     def __init__(self):
-        Gtk.Menu.__init__(self)
-
-        accel_group = Gtk.AccelGroup()
-        self.sugar_accel_group = accel_group
-        self.get_toplevel().add_accel_group(accel_group)
-
+        super().__init__()
+        
+        # gtk4 specific
+        self.set_has_arrow(False)
+        self.set_autohide(False)
+        
+        self.menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.set_child(self.menu_box)
+                
         self._popup_position = (0, 0)
         self._entered = False
         self._mouse_in_palette = False
         self._mouse_in_invoker = False
         self._up = False
         self._invoker = None
-        self._menus = []
+        
+        self._motion_controller = Gtk.EventControllerMotion.new()
+        self._motion_controller.connect("enter", self._enter_notify_cb)
+        self._motion_controller.connect("leave", self._leave_notify_cb)
+        self.add_controller(self._motion_controller)
 
     def set_accept_focus(self, focus):
         pass
@@ -122,7 +128,9 @@ class _PaletteMenuWidget(Gtk.Menu):
         return x, y
 
     def move(self, x, y):
+        """Position the palette menu"""
         self._popup_position = (x, y)
+        self.set_pointing_to(Gdk.Rectangle().new(x, y, 1, 1))
 
     def set_transient_for(self, window):
         pass
@@ -133,7 +141,13 @@ class _PaletteMenuWidget(Gtk.Menu):
     def _position(self, widget, *data):
         return self._popup_position[0], self._popup_position[1], False
 
+    def add_item(self, item):
+        """Add a menu item to the palette"""
+        self.menu_box.append(item)
+
+        
     def popup(self, invoker):
+        """Show the palette menu"""
         if self._up:
             return
 
@@ -168,33 +182,16 @@ class _PaletteMenuWidget(Gtk.Menu):
         # invoker, and this lets us track enter/leave for the invoker widget.
 
         self._invoker = invoker
-        self._find_all_menus(self)
-        self.realize()
-        for menu in self._menus:
-            if self._invoker:
-                menu.connect('motion-notify-event', self._motion_notify_cb)
-            menu.connect('enter-notify-event', self._enter_notify_cb)
-            menu.connect('leave-notify-event', self._leave_notify_cb)
-            menu.connect('button-release-event', self._button_release_event_cb)
-        self._entered = False
-        self._mouse_in_palette = False
-        self._mouse_in_invoker = False
-        Gtk.Menu.popup(self, None, None, self._position, None, 0, 0)
+        self.set_parent(invoker)
+        self.popup()
         self._up = True
 
     def popdown(self):
+        """Hide the palette menu"""
         if not self._up:
             return
-        Gtk.Menu.popdown(self)
-
-        for menu in self._menus:
-            menu.disconnect_by_func(self._motion_notify_cb)
-            menu.disconnect_by_func(self._enter_notify_cb)
-            menu.disconnect_by_func(self._leave_notify_cb)
-
+        self.popdown()
         self._up = False
-        self._menus = []
-        self._invoker = None
 
     def _find_all_menus(self, menu):
         """
