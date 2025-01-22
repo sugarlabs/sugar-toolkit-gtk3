@@ -18,7 +18,7 @@
 
 """
 The toolbutton module provides the ToolButton class, which is a
-Gtk.ToolButton with icon and tooltip styled for Sugar.
+Gtk.Button with icon and tooltip styled for Sugar.
 
 Example:
     Add a tool button to a window
@@ -78,9 +78,9 @@ def setup_accelerator(tool_button):
     tool_button.connect('hierarchy-changed', _hierarchy_changed_cb)
 
 
-class ToolButton(Gtk.ToolButton):
+class ToolButton(Gtk.Button):
     '''
-    The ToolButton class manages a Gtk.ToolButton styled for Sugar.
+    The ToolButton class manages a Gtk.Button styled for Sugar.
 
     Keyword Args:
         icon_name(string): name of themed icon.
@@ -111,9 +111,7 @@ class ToolButton(Gtk.ToolButton):
         if icon_name:
             self.set_icon_name(icon_name)
 
-        self.get_child().connect('can-activate-accel',
-                                 self.__button_can_activate_accel_cb)
-
+        self.connect('can-activate-accel', self.__button_can_activate_accel_cb)
         self.connect('destroy', self.__destroy_cb)
 
     def __destroy_cb(self, icon):
@@ -139,7 +137,7 @@ class ToolButton(Gtk.ToolButton):
         self._tooltip = tooltip
 
         # Set label, shows up when toolbar overflows
-        Gtk.ToolButton.set_label(self, tooltip)
+        self.set_tooltip_text(tooltip)
 
     def get_tooltip(self):
         '''
@@ -200,15 +198,15 @@ class ToolButton(Gtk.ToolButton):
             icon_name (string): name of icon
         '''
         icon = Icon(icon_name=icon_name)
-        self.set_icon_widget(icon)
-        icon.show()
+        self.set_child(icon)
+        icon.set_visible(True)
 
     def get_icon_name(self):
         '''
         Return icon name, or None if there is no icon name.
         '''
-        if self.props.icon_widget is not None:
-            return self.props.icon_widget.props.icon_name
+        if self.get_child() is not None:
+            return self.get_child().props.icon_name
         else:
             return None
 
@@ -248,7 +246,7 @@ class ToolButton(Gtk.ToolButton):
             cr.rectangle(0, 0, allocation.width, allocation.height)
             cr.paint()
 
-        Gtk.ToolButton.do_draw(self, cr)
+        Gtk.Button.do_draw(self, cr)
 
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker
