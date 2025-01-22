@@ -360,7 +360,8 @@ class Activity(Gtk.Window):
             # haven't found yet a good way to do it there. See #1263.
             self.connect('notify::window-state', self.__window_state_event_cb)
             display = Gdk.Display.get_default()
-            monitor = display.get_primary_monitor()
+            surface = self.get_surface()
+            monitor = display.get_monitor_at_surface(surface)
             monitor.connect('notify::geometry', self.__screen_size_changed_cb)
             self._adapt_window_to_screen()
 
