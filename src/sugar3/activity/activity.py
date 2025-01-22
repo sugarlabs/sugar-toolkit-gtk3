@@ -338,7 +338,7 @@ class Activity(Gtk.Window):
         icons_path = os.path.join(get_bundle_path(), 'icons')
         display = Gdk.Display.get_default()
         Gtk.IconTheme.get_for_display(display).add_search_path(icons_path)
-        
+
         sugar_theme = 'sugar-72'
         if 'SUGAR_SCALING' in os.environ:
             if os.environ['SUGAR_SCALING'] == '100':
@@ -350,7 +350,7 @@ class Activity(Gtk.Window):
         settings.set_property('gtk-theme-name', sugar_theme)
         settings.set_property('gtk-icon-theme-name', 'sugar')
         settings.set_property('gtk-font-name',
-                              '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
+                            '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
 
         self.set_titlebar(Gtk.HeaderBar())
 
@@ -359,8 +359,9 @@ class Activity(Gtk.Window):
             # screen. Would be better if it was the shell to do this, but we
             # haven't found yet a good way to do it there. See #1263.
             self.connect('notify::window-state', self.__window_state_event_cb)
-            screen = Gdk.Screen.get_default()
-            screen.connect('size-changed', self.__screen_size_changed_cb)
+            display = Gdk.Display.get_default()
+            monitor = display.get_primary_monitor()
+            monitor.connect('notify::geometry', self.__screen_size_changed_cb)
             self._adapt_window_to_screen()
 
         # process titles will only show 15 characters
