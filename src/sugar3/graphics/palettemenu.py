@@ -15,11 +15,11 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 '''
 The palettemenu module is the main port of call for making palettes.  It
-covers creating menu items, seperators and placing them in a box.
+covers creating menu items, separators and placing them in a box.
 
 Example:
 
-    Create a palette menu with 2 items with a seperator in the middle.
+    Create a palette menu with 2 items with a separator in the middle.
 
     .. code-block:: python
 
@@ -38,22 +38,22 @@ Example:
                     self, primary_text='List Item')
                 box = PaletteMenuBox()
                 self.set_content(box)
-                box.show()
+                box.set_visible(True)
 
                 menu_item = PaletteMenuItem(
                     _('Edit'), icon_name='toolbar-edit')
                 menu_item.connect('activate', self.__edit_cb)
                 box.append_item(menu_item)
-                menu_item.show()
+                menu_item.set_visible(True)
 
                 sep = PaletteMenuItemSeparator()
                 box.append_item(sep)
-                sep.show()
+                sep.set_visible(True)
 
                 menu_item = PaletteMenuItem(
                     _('Delete'), icon_name='edit-delete')
                 box.append_item(menu_item)
-                menu_item.show()
+                menu_item.set_visible(True)
 
             def __edit_cb(self, menu_item):
                 print('Edit...')
@@ -75,12 +75,12 @@ Example:
         palette = image.get_palette()
         box = PaletteMenuBox()
         palette.set_content(box)
-        box.show()
+        box.set_visible(True)
 
         menu_item = PaletteMenuItem(_('Floating'))
         menu_item.connect('activate', self.__image_cb, True)
         box.append_item(menu_item)
-        menu_item.show()
+        menu_item.set_visible(True)
 '''
 
 from gi.repository import GObject
@@ -168,7 +168,7 @@ class PaletteMenuItemSeparator(Gtk.Separator):
         self.set_visible(True)
 
 
-class PaletteMenuItem(Gtk.EventBox):
+class PaletteMenuItem(Gtk.Box):
     '''
     A palette menu item is a line of text, and optionally an icon, that the
     user can activate.
@@ -202,14 +202,14 @@ class PaletteMenuItem(Gtk.EventBox):
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
                  xo_color=None, file_name=None, accelerator=None):
-        super().__init__()
+        super().__init__(orientation=Gtk.Orientation.HORIZONTAL)
         self.set_above_child(True)
 
         self.icon = None
         self._hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.add(vbox)
+        self.append(vbox)
         vbox.set_visible(True)
 
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -319,5 +319,4 @@ class PaletteMenuItem(Gtk.EventBox):
             self.handler_block(self.id_bt_release_cb)
             self.handler_block(self.id_enter_notify_cb)
             self.handler_block(self.id_leave_notify_cb)
-            self.set_state_flags(Gtk.StateFlags.INSENSITIVE)
-            
+            self.set_state_flags(Gtk.StateFlags.INSENSITIVE)            

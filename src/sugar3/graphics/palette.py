@@ -462,3 +462,4 @@ class PaletteActionBar(Gtk.Box):
 
         self.append(button)
         button.set_visible(True)
+        
