@@ -711,18 +711,9 @@ class Activity(Gtk.Window):
         display = Gdk.Display.get_default()
         monitor = display.get_monitor_at_surface(self.get_surface())
         rect = monitor.get_geometry()
-        geometry = Gdk.Geometry()
-        geometry.max_width = geometry.base_width = geometry.min_width = \
-            rect.width
-        geometry.max_height = geometry.base_height = geometry.min_height = \
-            rect.height
-        geometry.width_inc = geometry.height_inc = geometry.min_aspect = \
-            geometry.max_aspect = 1
-        hints = Gdk.WindowHints(Gdk.WindowHints.ASPECT |
-                                Gdk.WindowHints.BASE_SIZE |
-                                Gdk.WindowHints.MAX_SIZE |
-                                Gdk.WindowHints.MIN_SIZE)
-        self.set_geometry_hints(None, geometry, hints)
+        
+        self.set_default_size(rect.width, rect.height)        
+        self.set_size_request(rect.width, rect.height)
 
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
