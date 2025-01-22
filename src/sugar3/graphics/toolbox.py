@@ -27,7 +27,7 @@ from gi.repository import GObject
 from sugar3.graphics import style
 
 
-class Toolbox(Gtk.VBox):
+class Toolbox(Gtk.Box):
     '''
     Class to represent the toolbox of an activity. Groups a
     number of toolbars vertically, which can be accessed using their
@@ -46,7 +46,7 @@ class Toolbox(Gtk.VBox):
     }
 
     def __init__(self):
-        GObject.GObject.__init__(self)
+        super().__init__(orientation=Gtk.Orientation.VERTICAL)
 
         self._notebook = Gtk.Notebook()
         self._notebook.set_tab_pos(Gtk.PositionType.BOTTOM)
@@ -54,14 +54,15 @@ class Toolbox(Gtk.VBox):
         self._notebook.set_show_tabs(False)
         self._notebook.props.tab_vborder = style.TOOLBOX_TAB_VBORDER
         self._notebook.props.tab_hborder = style.TOOLBOX_TAB_HBORDER
-        self.pack_start(self._notebook, True, True, 0)
-        self._notebook.show()
+        self.append(self._notebook)
+        self._notebook.set_visible(True)
 
-        self._separator = Gtk.HSeparator()
-        self._separator.modify_bg(Gtk.StateType.NORMAL,
-                                  style.COLOR_PANEL_GREY.get_gdk_color())
+        self._separator = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        self._separator.override_background_color(Gtk.StateFlags.NORMAL,
+                                                  style.COLOR_PANEL_GREY)
         self._separator.set_size_request(1, style.TOOLBOX_SEPARATOR_HEIGHT)
-        self.pack_start(self._separator, False, False, 0)
+        self.append(self._separator)
+        self._separator.set_visible(False)
 
         self._notebook.connect('notify::page', self._notify_page_cb)
 
@@ -82,27 +83,28 @@ class Toolbox(Gtk.VBox):
             Gtk.Toolbar to be appended to this toolbox
         '''
         label = Gtk.Label(label=name)
-        req = label.size_request()
-        label.set_size_request(max(req.width, style.TOOLBOX_TAB_LABEL_WIDTH),
+        req = label.get_preferred_size()
+        label.set_size_request(max(req[1].width, style.TOOLBOX_TAB_LABEL_WIDTH),
                                -1)
-        label.set_alignment(0.0, 0.5)
+        label.set_xalign(0.0)
+        label.set_yalign(0.5)
 
-        event_box = Gtk.EventBox()
+        event_box = Gtk.Box()
 
-        alignment = Gtk.Alignment(xscale=1.0, yscale=1.0)
-        alignment.set_padding(0, 0, style.TOOLBOX_HORIZONTAL_PADDING,
-                              style.TOOLBOX_HORIZONTAL_PADDING)
+        alignment = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        alignment.set_margin_start(style.TOOLBOX_HORIZONTAL_PADDING)
+        alignment.set_margin_end(style.TOOLBOX_HORIZONTAL_PADDING)
 
-        alignment.add(toolbar)
-        event_box.add(alignment)
-        alignment.show()
-        event_box.show()
+        alignment.append(toolbar)
+        event_box.append(alignment)
+        alignment.set_visible(True)
+        event_box.set_visible(True)
 
         self._notebook.append_page(event_box, label)
 
         if self._notebook.get_n_pages() > 1:
             self._notebook.set_show_tabs(True)
-            self._separator.show()
+            self._separator.set_visible(True)
 
     def remove_toolbar(self, index):
         '''
@@ -115,7 +117,7 @@ class Toolbox(Gtk.VBox):
 
         if self._notebook.get_n_pages() < 2:
             self._notebook.set_show_tabs(False)
-            self._separator.hide()
+            self._separator.set_visible(False)
 
     def set_current_toolbar(self, index):
         '''

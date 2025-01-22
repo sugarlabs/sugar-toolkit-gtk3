@@ -141,9 +141,9 @@ class Window(Gtk.Window):
         self._canvas = None
         self.tray = None
 
-        self.__vbox = Gtk.VBox()
-        self.__hbox = Gtk.HBox()
-        self.__vbox.pack_start(self.__hbox, True, True, 0)
+        self.__vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.__hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        self.__vbox.append(self.__hbox)
         self.__hbox.show()
 
         self.add_events(Gdk.EventMask.POINTER_MOTION_HINT_MASK |
@@ -246,7 +246,7 @@ class Window(Gtk.Window):
             self.__hbox.remove(self._canvas)
 
         if canvas:
-            self.__hbox.pack_start(canvas, True, True, 0)
+            self.__hbox.append(canvas)
 
         self._canvas = canvas
         self.__vbox.set_focus_child(self._canvas)
@@ -288,7 +288,7 @@ class Window(Gtk.Window):
             self.__vbox.remove(self._toolbar_box)
 
         if toolbar_box:
-            self.__vbox.pack_start(toolbar_box, False, False, 0)
+            self.__vbox.append(toolbar_box)
             self.__vbox.reorder_child(toolbar_box, 0)
 
         self._toolbar_box = toolbar_box
@@ -313,11 +313,11 @@ class Window(Gtk.Window):
             box.remove(self.tray)
 
         if position == Gtk.PositionType.LEFT:
-            self.__hbox.pack_start(tray, False, False, 0)
+            self.__hbox.append(tray)
         elif position == Gtk.PositionType.RIGHT:
-            self.__hbox.pack_end(tray, False, False, 0)
+            self.__hbox.append(tray)
         elif position == Gtk.PositionType.BOTTOM:
-            self.__vbox.pack_end(tray, False, False, 0)
+            self.__vbox.append(tray)
 
         self.tray = tray
 
@@ -334,7 +334,7 @@ class Window(Gtk.Window):
         """
         self._alerts.append(alert)
         if len(self._alerts) == 1:
-            self.__vbox.pack_start(alert, False, False, 0)
+            self.__vbox.append(alert)
             if self._toolbar_box is not None:
                 self.__vbox.reorder_child(alert, 1)
             else:
@@ -354,7 +354,7 @@ class Window(Gtk.Window):
             if alert.get_parent() is not None:
                 self.__vbox.remove(alert)
                 if len(self._alerts) >= 1:
-                    self.__vbox.pack_start(self._alerts[0], False, False, 0)
+                    self.__vbox.append(self._alerts[0])
                     if self._toolbar_box is not None:
                         self.__vbox.reorder_child(self._alerts[0], 1)
                     else:

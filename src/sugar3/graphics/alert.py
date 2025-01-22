@@ -113,7 +113,7 @@ class Alert(Gtk.Box):
         self._hbox.set_border_width(style.DEFAULT_SPACING)
         self._hbox.set_spacing(style.DEFAULT_SPACING)
 
-        self._msg_box = Gtk.VBox()
+        self._msg_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self._title_label = Gtk.Label()
         self._title_label.set_alignment(0, 0.5)
         self._title_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)

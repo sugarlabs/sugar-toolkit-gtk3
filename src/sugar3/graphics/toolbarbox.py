@@ -46,7 +46,7 @@ class ToolbarButton(ToolButton):
         if hasattr(parent, 'owner'):
             if self.page_widget and previous_toplevel is None:
                 self._unparent()
-                parent.owner.pack_start(self.page_widget, True, True, 0)
+                parent.owner.append(self.page_widget)
                 self.set_expanded(False)
 
     def get_toolbar_box(self):
@@ -107,9 +107,9 @@ class ToolbarButton(ToolButton):
 
         self._unparent()
 
-        self.modify_bg(Gtk.StateType.NORMAL, box.background)
+        self.override_background_color(Gtk.StateFlags.NORMAL, box.background)
         _setup_page(self.page_widget, box.background, box.props.padding)
-        box.pack_start(self.page_widget, True, True, 0)
+        box.append(self.page_widget)
 
     def _move_page_to_palette(self):
         if self.is_in_palette():
@@ -142,7 +142,7 @@ class ToolbarButton(ToolButton):
         return False
 
 
-class ToolbarBox(Gtk.VBox):
+class ToolbarBox(Gtk.Box):
 
     __gtype_name__ = 'SugarToolbarBox'
 
@@ -156,12 +156,12 @@ class ToolbarBox(Gtk.VBox):
         self._toolbar.connect('remove', self.__remove_cb)
 
         self._toolbar_widget, self._toolbar_alignment = \
-            _embed_page(Gtk.EventBox(), self._toolbar)
-        self.pack_start(self._toolbar_widget, True, True, 0)
+            _embed_page(Gtk.Box(), self._toolbar)
+        self.append(self._toolbar_widget)
 
         self.props.padding = padding
-        self.modify_bg(Gtk.StateType.NORMAL,
-                       style.COLOR_TOOLBAR_GREY.get_gdk_color())
+        self.override_background_color(Gtk.StateFlags.NORMAL,
+                                       style.COLOR_TOOLBAR_GREY)
 
     def get_toolbar(self):
         return self._toolbar
@@ -182,19 +182,20 @@ class ToolbarBox(Gtk.VBox):
     expanded_button = property(get_expanded_button, set_expanded_button)
 
     def get_padding(self):
-        return self._toolbar_alignment.props.left_padding
+        return self._toolbar_alignment.get_margin_start()
 
     def set_padding(self, pad):
-        self._toolbar_alignment.set_padding(0, 0, pad, pad)
+        self._toolbar_alignment.set_margin_start(pad)
+        self._toolbar_alignment.set_margin_end(pad)
 
-    padding = GObject.Property(type=object,
+    padding = GObject.Property(type=int,
                                getter=get_padding, setter=set_padding)
 
-    def modify_bg(self, state, color):
-        if state == Gtk.StateType.NORMAL:
+    def override_background_color(self, state, color):
+        if state == Gtk.StateFlags.NORMAL:
             self.background = color
-        self._toolbar_widget.modify_bg(state, color)
-        self.toolbar.modify_bg(state, color)
+        self._toolbar_widget.override_background_color(state, color)
+        self.toolbar.override_background_color(state, color)
 
     def __remove_cb(self, sender, button):
         if not isinstance(button, ToolbarButton):
@@ -263,8 +264,7 @@ class _ToolbarPalette(PaletteWindow):
         if button.is_expanded():
             return
         box = button.toolbar_box
-        _setup_page(button.page_widget, style.COLOR_BLACK.get_gdk_color(),
-                    box.props.padding)
+        _setup_page(button.page_widget, style.COLOR_BLACK, box.props.padding)
         PaletteWindow.popup(self, immediate)
 
     def __group_popdown_cb(self, group):
@@ -272,7 +272,7 @@ class _ToolbarPalette(PaletteWindow):
             self.popdown(immediate=True)
 
 
-class _Box(Gtk.EventBox):
+class _Box(Gtk.Box):
 
     def __init__(self, toolbar_button):
         GObject.GObject.__init__(self)
@@ -294,35 +294,36 @@ class _Box(Gtk.EventBox):
 
 
 def _setup_page(page_widget, color, hpad):
-    page_widget.get_child().set_padding(0, 0, hpad, hpad)
+    page_widget.get_child().set_margin_start(hpad)
+    page_widget.get_child().set_margin_end(hpad)
 
     page = _get_embedded_page(page_widget)
-    page.modify_bg(Gtk.StateType.NORMAL, color)
+    page.override_background_color(Gtk.StateFlags.NORMAL, color)
     if isinstance(page, Gtk.Container):
         for i in page.get_children():
-            i.modify_bg(Gtk.StateType.INSENSITIVE, color)
+            i.override_background_color(Gtk.StateFlags.INSENSITIVE, color)
 
-    page_widget.modify_bg(Gtk.StateType.NORMAL, color)
-    page_widget.modify_bg(Gtk.StateType.PRELIGHT, color)
+    page_widget.override_background_color(Gtk.StateFlags.NORMAL, color)
+    page_widget.override_background_color(Gtk.StateFlags.PRELIGHT, color)
 
 
 def _embed_page(page_widget, page):
     page.show()
 
-    alignment = Gtk.Alignment(xscale=1.0, yscale=1.0)
-    alignment.add(page)
-    alignment.show()
+    alignment = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+    alignment.append(page)
+    alignment.set_visible(True)
 
-    page_widget.modify_bg(Gtk.StateType.ACTIVE,
-                          style.COLOR_BUTTON_GREY.get_gdk_color())
+    page_widget.override_background_color(Gtk.StateFlags.ACTIVE,
+                                          style.COLOR_BUTTON_GREY)
     page_widget.add(alignment)
-    page_widget.show()
+    page_widget.set_visible(True)
 
     return (page_widget, alignment)
 
 
 def _get_embedded_page(page_widget):
-    return page_widget.get_child().get_child()
+    return page_widget.get_child().get_first_child()
 
 
 def _paint_arrow(widget, cr, angle):
