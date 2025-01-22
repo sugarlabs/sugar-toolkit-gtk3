@@ -709,7 +709,7 @@ class Activity(Gtk.Window):
 
     def _adapt_window_to_screen(self):
         display = Gdk.Display.get_default()
-        monitor = display.get_primary_monitor()
+        monitor = display.get_monitor_at_surface(self.get_surface())
         rect = monitor.get_geometry()
         geometry = Gdk.Geometry()
         geometry.max_width = geometry.base_width = geometry.min_width = \
