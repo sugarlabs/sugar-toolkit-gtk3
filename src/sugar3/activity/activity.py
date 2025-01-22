@@ -359,11 +359,7 @@ class Activity(Gtk.Window):
             # screen. Would be better if it was the shell to do this, but we
             # haven't found yet a good way to do it there. See #1263.
             self.connect('notify::window-state', self.__window_state_event_cb)
-            display = Gdk.Display.get_default()
-            surface = self.get_surface()
-            monitor = display.get_monitor_at_surface(surface)
-            monitor.connect('notify::geometry', self.__screen_size_changed_cb)
-            self._adapt_window_to_screen()
+            self.connect('realize', self.__on_realize)
 
         # process titles will only show 15 characters
         # but they get truncated anyway so if more characters
@@ -466,6 +462,14 @@ class Activity(Gtk.Window):
             self._jobject = datastore.copy(self._jobject, '/')
 
         self._original_title = self._jobject.metadata['title']
+        
+    def __on_realize(self, window):
+        display = Gdk.Display.get_default()
+        surface = self.get_surface()
+        if surface:
+            monitor = display.get_monitor_at_surface(surface)
+            monitor.connect('notify::geometry', self.__screen_size_changed_cb)
+            self._adapt_window_to_screen()
 
     def add_stop_button(self, button):
         """
