@@ -369,7 +369,7 @@ class Activity(Gtk.Window):
         util.set_proc_title(proc_title)
 
         self.connect('realize', self.__realize_cb)
-        self.connect('delete-event', self.__delete_event_cb)
+        self.connect('close-request', self.__delete_event_cb)
 
         self._in_main = False
         self._iconify = False
@@ -393,9 +393,8 @@ class Activity(Gtk.Window):
         self._session = _get_session()
         self._session.register(self)
 
-        accel_group = Gtk.AccelGroup()
-        self.sugar_accel_group = accel_group
-        self.add_accel_group(accel_group)
+        self.shortcut_controller = Gtk.ShortcutController()
+        self.add_controller(self.shortcut_controller)
 
         self._bus = ActivityService(self)
         self._owns_file = False
@@ -462,7 +461,7 @@ class Activity(Gtk.Window):
             self._jobject = datastore.copy(self._jobject, '/')
 
         self._original_title = self._jobject.metadata['title']
-        
+
     def __on_realize(self, window):
         display = Gdk.Display.get_default()
         surface = self.get_surface()
@@ -709,8 +708,9 @@ class Activity(Gtk.Window):
         self.move(0, 0)
 
     def _adapt_window_to_screen(self):
-        screen = Gdk.Screen.get_default()
-        rect = screen.get_monitor_geometry(screen.get_number())
+        display = Gdk.Display.get_default()
+        monitor = display.get_primary_monitor()
+        rect = monitor.get_geometry()
         geometry = Gdk.Geometry()
         geometry.max_width = geometry.base_width = geometry.min_width = \
             rect.width
