@@ -89,8 +89,7 @@ from gi.repository import Gtk
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import style
 
-
-class PaletteMenuBox(Gtk.VBox):
+class PaletteMenuBox(Gtk.Box):
     '''
     The PaletteMenuBox is a box that is useful for making palettes.  It
     supports adding :class:`sugar3.graphics.palettemenu.PaletteMenuItem`,
@@ -99,13 +98,13 @@ class PaletteMenuBox(Gtk.VBox):
     '''
 
     def __init__(self):
-        Gtk.VBox.__init__(self)
+        super().__init__(orientation=Gtk.Orientation.VERTICAL)
 
     def append_item(self, item_or_widget, horizontal_padding=None,
                     vertical_padding=None):
         '''
-        Add a menu item, seperator or other widget to the end of the palette
-        (simmilar to `Gtk.Box.pack_start`).
+        Add a menu item, separator or other widget to the end of the palette
+        (similar to `Gtk.Box.pack_start`).
 
         If an item is appended
         (a :class:`sugar3.graphics.palettemenu.PaletteMenuItem` or a
@@ -114,8 +113,8 @@ class PaletteMenuBox(Gtk.VBox):
         appended (:class:`Gtk.Widget` subclass) padding will be added.
 
         Args:
-            item_or_widget (:class:`Gtk.Widget` or menu item or seperator):
-                item or widget to add the the palette
+            item_or_widget (:class:`Gtk.Widget` or menu item or separator):
+                item or widget to add the palette
             horizontal_padding (int):  by default,
                 :class:`sugar3.graphics.style.DEFAULT_SPACING` is applied
             vertical_padding (int):  by default,
@@ -124,47 +123,49 @@ class PaletteMenuBox(Gtk.VBox):
         Returns:
             None
         '''
-        item = None
         if (isinstance(item_or_widget, PaletteMenuItem) or
                 isinstance(item_or_widget, PaletteMenuItemSeparator)):
-            item = item_or_widget
+            self.append(item_or_widget)
         else:
             item = self._wrap_widget(item_or_widget, horizontal_padding,
                                      vertical_padding)
-
-        self.pack_start(item, False, False, 0)
+            self.append(item)
 
     def _wrap_widget(self, widget, horizontal_padding, vertical_padding):
-        vbox = Gtk.VBox()
-        vbox.show()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        vbox.set_visible(True)
 
         if horizontal_padding is None:
             horizontal_padding = style.DEFAULT_SPACING
-
         if vertical_padding is None:
             vertical_padding = style.DEFAULT_SPACING
 
-        hbox = Gtk.HBox()
-        vbox.pack_start(hbox, True, True, vertical_padding)
-        hbox.show()
-
-        hbox.pack_start(widget, True, True, horizontal_padding)
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        hbox.set_visible(True)
+        
+        widget.set_margin_start(horizontal_padding)
+        widget.set_margin_end(horizontal_padding)
+        hbox.set_margin_top(vertical_padding)
+        hbox.set_margin_bottom(vertical_padding)
+        
+        hbox.append(widget)
+        vbox.append(hbox)
+        
         return vbox
 
 
-class PaletteMenuItemSeparator(Gtk.EventBox):
+class PaletteMenuItemSeparator(Gtk.Separator):
     '''
-    Horizontal seperator to put in a palette
+    Horizontal separator to put in a palette
     '''
 
     __gtype_name__ = 'SugarPaletteMenuItemSeparator'
 
     def __init__(self):
-        Gtk.EventBox.__init__(self)
-        separator = Gtk.HSeparator()
-        self.add(separator)
-        separator.show()
-        self.set_size_request(-1, style.DEFAULT_SPACING * 2)
+        super().__init__(orientation=Gtk.Orientation.HORIZONTAL)
+        self.set_margin_top(style.DEFAULT_SPACING)
+        self.set_margin_bottom(style.DEFAULT_SPACING)
+        self.set_visible(True)
 
 
 class PaletteMenuItem(Gtk.EventBox):
@@ -178,7 +179,7 @@ class PaletteMenuItem(Gtk.EventBox):
     Args:
         text_label (str):  a text to display in the menu
 
-        icon_name (str):  the name of a sugar icon to be displayed. Takse
+        icon_name (str):  the name of a sugar icon to be displayed. Takes
             precedence over file_name
 
         text_maxlen (int):  the desired maximum width of the label, in
@@ -201,51 +202,47 @@ class PaletteMenuItem(Gtk.EventBox):
 
     def __init__(self, text_label=None, icon_name=None, text_maxlen=60,
                  xo_color=None, file_name=None, accelerator=None):
-        Gtk.EventBox.__init__(self)
+        super().__init__()
         self.set_above_child(True)
 
         self.icon = None
-        self._hbox = Gtk.HBox()
+        self._hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
-        vbox = Gtk.VBox()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(vbox)
-        vbox.show()
+        vbox.set_visible(True)
 
-        hbox = Gtk.HBox()
-        vbox.pack_start(hbox, True, True, style.DEFAULT_PADDING)
-        hbox.show()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        vbox.append(hbox)
+        hbox.set_margin_top(style.DEFAULT_PADDING)
+        hbox.set_margin_bottom(style.DEFAULT_PADDING)
+        hbox.set_visible(True)
 
-        hbox.pack_start(self._hbox, True, True, style.DEFAULT_PADDING)
+        hbox.append(self._hbox)
 
         if icon_name is not None:
             self.icon = Icon(icon_name=icon_name,
                              pixel_size=style.SMALL_ICON_SIZE)
             if xo_color is not None:
                 self.icon.props.xo_color = xo_color
-            self._hbox.pack_start(self.icon, expand=False, fill=False,
-                                  padding=style.DEFAULT_PADDING)
+            self._hbox.append(self.icon)
         elif file_name is not None:
             self.icon = Icon(file=file_name,
                              pixel_size=style.SMALL_ICON_SIZE)
             if xo_color is not None:
                 self.icon.props.xo_color = xo_color
-            self._hbox.pack_start(self.icon, expand=False, fill=False,
-                                  padding=style.DEFAULT_PADDING)
+            self._hbox.append(self.icon)
 
-        align = Gtk.Alignment(xalign=0.0, yalign=0.5, xscale=0.0, yscale=0.0)
-        self.label = Gtk.Label(text_label)
+        self.label = Gtk.Label(label=text_label)
         if text_maxlen > 0:
             self.label.set_max_width_chars(text_maxlen)
             self.label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
-        align.add(self.label)
-        self._hbox.pack_start(align, expand=True, fill=True,
-                              padding=style.DEFAULT_PADDING)
+        self._hbox.append(self.label)
 
-        self._accelerator_label = Gtk.AccelLabel('')
+        self._accelerator_label = Gtk.Label(label='')
         if accelerator is not None:
             self._accelerator_label.set_text(accelerator)
-        self._hbox.pack_start(self._accelerator_label, expand=False,
-                              fill=False, padding=style.DEFAULT_PADDING)
+        self._hbox.append(self._accelerator_label)
 
         self.id_bt_release_cb = self.connect('button-release-event',
                                              self.__button_release_cb)
@@ -254,7 +251,7 @@ class PaletteMenuItem(Gtk.EventBox):
         self.id_leave_notify_cb = self.connect('leave-notify-event',
                                                self.__leave_notify_cb)
 
-        self.show_all()
+        self.set_visible(True)
 
     def __button_release_cb(self, widget, event):
         alloc = self.get_allocation()
@@ -262,12 +259,10 @@ class PaletteMenuItem(Gtk.EventBox):
             self.emit('activate')
 
     def __enter_notify_cb(self, widget, event):
-        self.modify_bg(Gtk.StateType.NORMAL,
-                       style.COLOR_BUTTON_GREY.get_gdk_color())
+        self.set_state_flags(Gtk.StateFlags.PRELIGHT, clear=False)
 
     def __leave_notify_cb(self, widget, event):
-        self.modify_bg(Gtk.StateType.NORMAL,
-                       style.COLOR_BLACK.get_gdk_color())
+        self.unset_state_flags(Gtk.StateFlags.PRELIGHT)
 
     def set_label(self, text_label):
         '''
@@ -288,8 +283,7 @@ class PaletteMenuItem(Gtk.EventBox):
         Args:
             icon (:class:`Gtk.Widget`):  icon widget
         '''
-        self._hbox.pack_start(icon, expand=False, fill=False,
-                              padding=style.DEFAULT_PADDING)
+        self._hbox.append(icon)
         self._hbox.reorder_child(icon, 0)
 
     def set_accelerator(self, text):
@@ -304,12 +298,12 @@ class PaletteMenuItem(Gtk.EventBox):
 
     def set_sensitive(self, sensitive):
         '''
-        Sets whether the widget should be activateable by the user and changes
-        the widget's appearence to the appropriate state.
+        Sets whether the widget should be activatable by the user and changes
+        the widget's appearance to the appropriate state.
 
         Args:
-            sensitive (bool):  if `True`, the widget will be activateable by
-                the user. Otherwise, it will not be activateable
+            sensitive (bool):  if `True`, the widget will be activatable by
+                the user. Otherwise, it will not be activatable
         '''
         is_sensitive = bool(not self.get_state_flags() &
                             Gtk.StateFlags.INSENSITIVE)
@@ -325,6 +319,5 @@ class PaletteMenuItem(Gtk.EventBox):
             self.handler_block(self.id_bt_release_cb)
             self.handler_block(self.id_enter_notify_cb)
             self.handler_block(self.id_leave_notify_cb)
-            self.set_state_flags(self.get_state_flags() |
-                                 Gtk.StateFlags.INSENSITIVE,
-                                 clear=True)
+            self.set_state_flags(Gtk.StateFlags.INSENSITIVE)
+            
