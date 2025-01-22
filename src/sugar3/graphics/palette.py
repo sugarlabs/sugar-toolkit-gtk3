@@ -47,17 +47,16 @@ assert ToolInvoker
 assert TreeViewInvoker
 
 
-class _HeaderItem(Gtk.MenuItem):
-    """A MenuItem with a custom child widget that gets all the
+
+class _HeaderItem(Gtk.ListBoxRow):
+    """A ListBoxRow with a custom child widget that gets all the
     available space.
     """
 
     __gtype_name__ = 'SugarPaletteHeader'
 
     def __init__(self, widget):
-        Gtk.MenuItem.__init__(self)
-        if self.get_child() is not None:
-            self.remove(self.get_child())
+        super().__init__()
         self.add(widget)
         # FIXME we have to mark it as insensitive again to make it an
         # informational element, when we realize how to get the icon
@@ -70,7 +69,7 @@ class _HeaderItem(Gtk.MenuItem):
 
     def do_draw(self, cr):
         # force state normal, we don't want change color when hover
-        self.set_state(Gtk.StateType.NORMAL)
+        self.set_state_flags(Gtk.StateFlags.NORMAL, clear=True)
 
         # draw separator
         allocation = self.get_allocation()
@@ -84,8 +83,9 @@ class _HeaderItem(Gtk.MenuItem):
         cr.restore()
 
         # draw content
-        Gtk.MenuItem.do_draw(self, cr)
+        super().do_draw(cr)
         return False
+
 
 
 class Palette(PaletteWindow):
@@ -122,10 +122,7 @@ class Palette(PaletteWindow):
         self._icon = None
         self._icon_visible = True
 
-        self._primary_event_box = Gtk.EventBox()
-        self._primary_event_box.set_visible(True)
         self._primary_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        self._primary_event_box.add(self._primary_box)
         self._primary_box.set_visible(True)
 
         self._icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -151,9 +148,10 @@ class Palette(PaletteWindow):
             self._label.set_max_width_chars(text_maxlen)
             self._label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
         labels_box.append(self._label)
-        self._primary_event_box.connect('button-release-event',
-                                        self.__button_release_event_cb)
-        self._primary_event_box.set_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
+
+        self._primary_box.connect('button-release-event',
+                                  self.__button_release_event_cb)
+        self._primary_box.set_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
 
         self._secondary_label = Gtk.Label()
         self._secondary_label.set_xalign(0)
@@ -327,7 +325,7 @@ class Palette(PaletteWindow):
             if self._icon:
                 self._icon_box.remove(self._icon_box.get_children()[0])
 
-            event_box = Gtk.EventBox()
+            event_box = Gtk.Box()
             event_box.connect('button-release-event',
                               self.__icon_button_release_event_cb)
             self._icon_box.append(event_box)
@@ -335,7 +333,7 @@ class Palette(PaletteWindow):
 
             self._icon = icon
             self._icon.props.pixel_size = style.STANDARD_ICON_SIZE
-            event_box.add(self._icon)
+            event_box.append(self._icon)
             self._icon.set_visible(True)
             self._show_icon()
 
@@ -372,13 +370,13 @@ class Palette(PaletteWindow):
             self._setup_widget()
 
             self._palette_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            self._palette_box.append(self._primary_event_box)
+            self._palette_box.append(self._primary_box)
             self._palette_box.append(self._secondary_box)
 
-            self._widget.add(self._palette_box)
+            self._widget.set_child(self._palette_box)
             self._palette_box.set_visible(True)
             height = style.GRID_CELL_SIZE - 2 * self._widget.get_border_width()
-            self._primary_event_box.set_size_request(-1, height)
+            self._primary_box.set_size_request(-1, height)
 
         if self._content.get_children():
             self._content.remove(self._content.get_children()[0])
@@ -418,7 +416,7 @@ class Palette(PaletteWindow):
 
     def _update_full_request(self):
         if self._widget is not None:
-            self._full_request = self._widget.size_request()
+            self._full_request = self._widget.get_preferred_size()
 
     def get_menu(self):
         assert self._content_widget is None
@@ -426,14 +424,14 @@ class Palette(PaletteWindow):
         if self._widget is None \
                 or not isinstance(self._widget, _PaletteMenuWidget):
             if self._widget is not None:
-                self._palette_box.remove(self._primary_event_box)
+                self._palette_box.remove(self._primary_box)
                 self._palette_box.remove(self._secondary_box)
                 self._teardown_widget()
                 self._widget.destroy()
 
             self._widget = _PaletteMenuWidget()
 
-            self._label_menuitem = _HeaderItem(self._primary_event_box)
+            self._label_menuitem = _HeaderItem(self._primary_box)
             self._label_menuitem.set_visible(True)
             self._widget.append(self._label_menuitem)
 
@@ -462,4 +460,3 @@ class PaletteActionBar(Gtk.Box):
 
         self.append(button)
         button.set_visible(True)
-        
