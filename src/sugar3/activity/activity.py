@@ -336,8 +336,9 @@ class Activity(Gtk.Window):
 
         # Stuff that needs to be done early
         icons_path = os.path.join(get_bundle_path(), 'icons')
-        Gtk.IconTheme.get_default().append_search_path(icons_path)
-
+        display = Gdk.Display.get_default()
+        Gtk.IconTheme.get_for_display(display).add_search_path(icons_path)
+        
         sugar_theme = 'sugar-72'
         if 'SUGAR_SCALING' in os.environ:
             if os.environ['SUGAR_SCALING'] == '100':
