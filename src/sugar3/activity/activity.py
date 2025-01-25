@@ -328,7 +328,7 @@ class Activity(Gtk.Window):
     }
 
     def __init__(self, handle, create_jobject=True):
-        super().__init__()
+        Gtk.Window.__init__(self)
 
         if hasattr(GLib, 'unix_signal_add'):
             GLib.unix_signal_add(
