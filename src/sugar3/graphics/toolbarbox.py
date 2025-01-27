@@ -153,7 +153,6 @@ class ToolbarBox(Gtk.Box):
 
         self._toolbar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self._toolbar.owner = self
-        self._toolbar.connect('remove', self.__remove_cb)
 
         self._toolbar_widget, self._toolbar_alignment = \
             _embed_page(Gtk.Box(), self._toolbar)
@@ -197,13 +196,17 @@ class ToolbarBox(Gtk.Box):
         self._toolbar_widget.override_background_color(state, color)
         self.toolbar.override_background_color(state, color)
 
-    def __remove_cb(self, sender, button):
+    def remove_button(self, button):
         if not isinstance(button, ToolbarButton):
             return
         button.popdown()
         if button == self.expanded_button:
             self.remove(button.page_widget)
             self._expanded_button_index = -1
+
+    def remove(self, widget):
+        self.remove_button(widget)
+        super().remove(widget)
 
 
 if hasattr(ToolbarBox, 'set_css_name'):
