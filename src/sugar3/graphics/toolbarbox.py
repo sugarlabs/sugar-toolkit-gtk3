@@ -301,13 +301,13 @@ def _setup_page(page_widget, color, hpad):
     page_widget.get_child().set_margin_end(hpad)
 
     page = _get_embedded_page(page_widget)
-    page.override_background_color(Gtk.StateFlags.NORMAL, color)
+    _override_background_color(page, Gtk.StateFlags.NORMAL, color)
     if isinstance(page, Gtk.Container):
         for i in page.get_children():
-            i.override_background_color(Gtk.StateFlags.INSENSITIVE, color)
+            _override_background_color(i, Gtk.StateFlags.INSENSITIVE, color)
 
-    page_widget.override_background_color(Gtk.StateFlags.NORMAL, color)
-    page_widget.override_background_color(Gtk.StateFlags.PRELIGHT, color)
+    _override_background_color(page_widget, Gtk.StateFlags.NORMAL, color)
+    _override_background_color(page_widget, Gtk.StateFlags.PRELIGHT, color)
 
 
 def _embed_page(page_widget, page):
@@ -317,8 +317,8 @@ def _embed_page(page_widget, page):
     alignment.append(page)
     alignment.set_visible(True)
 
-    page_widget.override_background_color(Gtk.StateFlags.ACTIVE,
-                                          style.COLOR_BUTTON_GREY)
+    _override_background_color(page_widget, Gtk.StateFlags.ACTIVE,
+                               style.COLOR_BUTTON_GREY)
     page_widget.add(alignment)
     page_widget.set_visible(True)
 
@@ -340,3 +340,18 @@ def _paint_arrow(widget, cr, angle):
     context.add_class('toolitem')
 
     Gtk.render_arrow(context, cr, angle, x, y, arrow_size)
+
+
+def _override_background_color(widget, state, color):
+    if hasattr(widget, 'override_background_color'):
+        widget.override_background_color(state, color)
+    else:
+        style_context = widget.get_style_context()
+        style_context.add_class('custom-bg')
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_data(f"""
+            .custom-bg {{
+                background-color: {color.to_string()};
+            }}
+        """.encode('utf-8'))
+        style_context.add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
