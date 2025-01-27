@@ -171,24 +171,50 @@ class ShareButton(RadioMenuButton):
 
 
 class TitleEntry(Gtk.Box):
+    __gsignals__ = {
+        'enter-key-press': (GObject.SignalFlags.RUN_FIRST, None, ())
+    }
+     
     def __init__(self, activity, **kwargs):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
-        self.set_expand(False)
-
+        self.set_hexpand(False)
+        self.set_vexpand(False)
         self.entry = Gtk.Entry(**kwargs)
         
         # Update screen dimension handling
         display = Gdk.Display.get_default()
-        monitor = display.get_primary_monitor()
+        monitors = display.get_monitors()
+        monitor = monitors.get_item(0)
         geometry = monitor.get_geometry()
         self.entry.set_size_request(int(geometry.width / 3), -1)
         
         self.entry.set_text(activity.metadata['title'])
-        self.entry.connect('focus-out', self.__focus_out_event_cb, activity)
+        self.entry.connect('notify::has-focus', self.__focus_changed_cb, activity)
+        # self.entry.connect('focus-out-event', self.__focus_out_event_cb, activity)
         self.entry.connect('activate', self.__activate_cb, activity)
-        self.entry.connect('button-press', self.__button_press_event_cb)
         self.entry.set_visible(True)
+        # Use a GestureClick on the entry
+        click_controller = Gtk.GestureClick()
+        click_controller.connect("pressed", self.__on_entry_clicked)
+        self.entry.add_controller(click_controller)
+        
         self.append(self.entry)
+
+    def __on_entry_clicked(self, gesture, n_press, x, y):
+        if not self.entry.is_focus():
+            self.entry.grab_focus()
+            self.entry.select_region(0, -1)
+        return True
+
+    def __focus_changed_cb(self, widget, param_spec, activity):
+        if not widget.has_focus():
+            widget.select_region(0, 0)
+            self.save_title(activity)
+            
+    def __focus_out_event_cb(self, widget, event, activity):
+        widget.select_region(0, 0)
+        self.save_title(activity)
+        return False
 
     def __activate_cb(self, entry, activity):
         self.save_title(activity)
