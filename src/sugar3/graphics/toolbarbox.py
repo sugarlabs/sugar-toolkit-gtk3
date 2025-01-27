@@ -151,7 +151,7 @@ class ToolbarBox(Gtk.Box):
         self._expanded_button_index = -1
         self.background = None
 
-        self._toolbar = Gtk.Toolbar()
+        self._toolbar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self._toolbar.owner = self
         self._toolbar.connect('remove', self.__remove_cb)
 
@@ -171,13 +171,13 @@ class ToolbarBox(Gtk.Box):
     def get_expanded_button(self):
         if self._expanded_button_index == -1:
             return None
-        return self.toolbar.get_nth_item(self._expanded_button_index)
+        return self.toolbar.get_child_at_index(self._expanded_button_index)
 
     def set_expanded_button(self, button):
-        if button not in self.toolbar:
+        if button not in self.toolbar.get_children():
             self._expanded_button_index = -1
             return
-        self._expanded_button_index = self.toolbar.get_item_index(button)
+        self._expanded_button_index = self.toolbar.get_children().index(button)
 
     expanded_button = property(get_expanded_button, set_expanded_button)
 
