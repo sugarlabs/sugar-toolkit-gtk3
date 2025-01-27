@@ -193,8 +193,8 @@ class ToolbarBox(Gtk.Box):
     def override_background_color(self, state, color):
         if state == Gtk.StateFlags.NORMAL:
             self.background = color
-        self._toolbar_widget.override_background_color(state, color)
-        self.toolbar.override_background_color(state, color)
+        _override_background_color(self._toolbar_widget, state, color)
+        _override_background_color(self.toolbar, state, color)
 
     def remove_button(self, button):
         if not isinstance(button, ToolbarButton):
@@ -319,7 +319,7 @@ def _embed_page(page_widget, page):
 
     _override_background_color(page_widget, Gtk.StateFlags.ACTIVE,
                                style.COLOR_BUTTON_GREY)
-    page_widget.add(alignment)
+    page_widget.append(alignment)
     page_widget.set_visible(True)
 
     return (page_widget, alignment)
@@ -342,16 +342,30 @@ def _paint_arrow(widget, cr, angle):
     Gtk.render_arrow(context, cr, angle, x, y, arrow_size)
 
 
+def _parse_rgba(color):
+    # If it's already a Gdk.RGBA, just return its components
+    if hasattr(color, 'red') and hasattr(color, 'green') and hasattr(color, 'blue') and hasattr(color, 'alpha'):
+        return (color.red, color.green, color.blue, color.alpha)
+
+    # If it's a tuple/list, assume up to 4 channels
+    if isinstance(color, (tuple, list)):
+        r, g, b = color[:3]
+        a = color[3] if len(color) > 3 else 1.0
+        return (r, g, b, a)
+
+    # Fallback to white
+    return (1.0, 1.0, 1.0, 1.0)
+
 def _override_background_color(widget, state, color):
-    if hasattr(widget, 'override_background_color'):
-        widget.override_background_color(state, color)
-    else:
-        style_context = widget.get_style_context()
-        style_context.add_class('custom-bg')
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_data(f"""
-            .custom-bg {{
-                background-color: {color.to_string()};
-            }}
-        """.encode('utf-8'))
-        style_context.add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+    r, g, b, a = _parse_rgba(color)
+    css_color = f"rgba({int(r * 255)}, {int(g * 255)}, {int(b * 255)}, {a})"
+    style_context = widget.get_style_context()
+    style_context.add_class('custom-bg')
+    css_provider = Gtk.CssProvider()
+    css_provider.load_from_data(f"""
+        .custom-bg {{
+            background-color: {css_color};
+        }}
+    """.encode('utf-8'))
+    style_context.add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
