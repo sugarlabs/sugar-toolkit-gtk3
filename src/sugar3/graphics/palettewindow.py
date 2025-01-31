@@ -45,15 +45,19 @@ _pointer = None
 
 
 def _get_pointer_position(widget):
-    global _pointer
-
-    if _pointer is None:
-        display = widget.get_display()
-        manager = display.get_device_manager()
-        _pointer = manager.get_client_pointer()
-    screen, x, y = _pointer.get_position()
-    return (x, y)
-
+    current = widget
+    while current is not None:
+        if hasattr(current, 'get_window'):
+            window = current.get_window()
+            if window is not None:
+                success, x, y = window.get_pointer()
+                if success:
+                    return (x, y)
+        if hasattr(current, 'get_parent'):
+            current = current.get_parent()
+        else:
+            break
+    return (0, 0)
 
 def _calculate_gap(a, b):
     """Helper function to find the gap position and size of widget a"""
@@ -808,8 +812,17 @@ class Invoker(GObject.GObject):
 
         self._screen_area = Gdk.Rectangle()
         self._screen_area.x = self._screen_area.y = 0
-        self._screen_area.width = Gdk.Screen.width()
-        self._screen_area.height = Gdk.Screen.height()
+        display = Gdk.Display.get_default()
+        monitors = display.get_monitors()
+        monitor = monitors.get_item(0)        
+        if monitor is not None:
+            geometry = monitor.get_geometry()
+            self._screen_area.width = geometry.width
+            self._screen_area.height = geometry.height
+        else:
+            # Fallback to default values or handle the absence of a primary monitor
+            self._screen_area.width = 1280  
+            self._screen_area.height = 800 
         self._position_hint = self.ANCHORED
         self._cursor_x = -1
         self._cursor_y = -1
@@ -1124,25 +1137,47 @@ class WidgetInvoker(Invoker):
 
         self.notify('widget')
 
-        self._enter_hid = self._widget.connect('enter-notify-event',
-                                               self.__enter_notify_event_cb)
-        self._leave_hid = self._widget.connect('leave-notify-event',
-                                               self.__leave_notify_event_cb)
-        if GObject.signal_lookup('clicked', self._widget) != 0:
-            self._click_hid = self._widget.connect('clicked',
-                                                   self.__click_event_cb)
-        self._touch_hid = self._widget.connect('touch-event',
-                                               self.__touch_event_cb)
-        self._release_hid = \
-            self._widget.connect('button-release-event',
-                                 self.__button_release_event_cb)
-        self._draw_hid = self._widget.connect_after('draw', self.__drawing_cb)
+        # Only connect 'enter-notify-event'/'leave-notify-event' if supported
+        if GObject.signal_lookup('enter-notify-event', self._widget.__class__):
+            self._enter_hid = self._widget.connect('enter-notify-event',
+                                                self.__enter_notify_event_cb)
+            self._leave_hid = self._widget.connect('leave-notify-event',
+                                                self.__leave_notify_event_cb)
+        else:
+            self._enter_hid = None
+            self._leave_hid = None
 
-        self._long_pressed_hid = self._long_pressed_controller.connect(
-            'pressed', self.__long_pressed_event_cb, self._widget)
-        self._long_pressed_controller.attach(
-            self._widget,
-            SugarGestures.EventControllerFlags.NONE)
+        if GObject.signal_lookup('clicked', self._widget.__class__):
+            self._click_hid = self._widget.connect('clicked',
+                                                self.__click_event_cb)
+        else:
+            self._click_hid = None
+
+        if GObject.signal_lookup('touch-event', self._widget.__class__):
+            self._touch_hid = self._widget.connect('touch-event',
+                                                self.__touch_event_cb)
+        else:
+            self._touch_hid = None
+            
+        if GObject.signal_lookup('button-release-event', self._widget.__class__):
+            self._release_hid = self._widget.connect('button-release-event',
+                                                self.__button_release_event_cb)
+        else:
+            self._release_hid = None    
+        
+                    
+        if GObject.signal_lookup('draw', self._widget.__class__):
+            self._draw_hid = self._widget.connect_after('draw', self.__drawing_cb)
+        else:
+            self._draw_hid = None
+
+        if hasattr(self._long_pressed_controller, 'connect'):
+            self._long_pressed_hid = self._long_pressed_controller.connect(
+                'pressed', self.__long_pressed_event_cb, self._widget)
+            self._long_pressed_controller.attach(
+                self._widget, SugarGestures.EventControllerFlags.NONE)
+        else:
+            self._long_pressed_hid = None
 
         self.attach(parent)
 
