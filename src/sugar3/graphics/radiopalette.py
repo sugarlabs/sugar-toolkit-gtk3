@@ -51,6 +51,13 @@ class RadioToolsButton(RadioMenuButton):
             return
         self.selected_button.emit('clicked')
 
+def _get_box_children(box):
+    children = []
+    child = box.get_first_child()
+    while child is not None:
+        children.append(child)
+        child = child.get_next_sibling()
+    return children
 
 class RadioPalette(Palette):
 
@@ -62,11 +69,12 @@ class RadioPalette(Palette):
         self.set_content(self.button_box)
 
     def append(self, button, label):
-        children = self.button_box.get_children()
+        children = _get_box_children(self.button_box)
 
         if button.palette is not None:
             raise RuntimeError("Palette's button should not have sub-palettes")
-
+        
+        self.button_box.append(button)
         button.set_visible(True)
         button.connect('clicked', self.__clicked_cb)
         self.button_box.append(button)
@@ -76,8 +84,9 @@ class RadioPalette(Palette):
             self.__clicked_cb(button)
 
     def update_button(self):
-        for i in self.button_box.get_children():
+        for i in _get_box_children(self.button_box):
             self.__clicked_cb(i)
+        
 
     def __clicked_cb(self, button):
         if not button.get_active():

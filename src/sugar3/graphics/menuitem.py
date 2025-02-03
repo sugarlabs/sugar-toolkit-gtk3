@@ -36,7 +36,7 @@ class MenuItem(Gtk.ImageMenuItem):
         GObject.GObject.__init__(self)
         self._accelerator = None
 
-        label = Gtk.AccelLabel(label=text_label)
+        label = Gtk.Label(label=text_label)
         label.set_alignment(0.0, 0.5)
         label.set_accel_widget(self)
         if text_maxlen > 0:

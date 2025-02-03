@@ -249,7 +249,12 @@ class Window(Gtk.Window):
             self.__hbox.append(canvas)
 
         self._canvas = canvas
-        self.__vbox.set_focus_child(self._canvas)
+        
+        if hasattr(self, "_Window__vbox"):
+            self.__vbox.set_focus_child(self._canvas)
+        else:
+            self.__hbox.grab_focus()
+            
 
     def get_canvas(self):
         """

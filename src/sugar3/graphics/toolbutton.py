@@ -70,13 +70,38 @@ def _add_accelerator(tool_button):
 
 
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
-    _add_accelerator(tool_button)
+    _add_accelerator_gtk4(tool_button)
+    # In GTK4, property notifications for "accelerator" can be handled by re-adding controllers,
+    # but for now we remove any obsolete signal connections.
 
+def _add_accelerator_gtk4(tool_button):
+    child = tool_button.get_child()
+    if not child:
+        return
 
+    accel = tool_button.get_property("accelerator")
+    if not accel:
+        return
+
+    try:
+        trigger = Gtk.ShortcutTrigger.parse(accel)
+    except Exception as e:
+        logging.error("Error parsing accelerator '%s': %s", accel, e)
+        return
+
+    # Create an action that activates the tool_button when the accelerator fires.
+    action = Gtk.CallbackAction.new(lambda *args: tool_button.activate())
+    shortcut = Gtk.Shortcut.new(trigger, action)
+
+    # Create a new ShortcutController and add the accelerator shortcut to the child.
+    controller = Gtk.ShortcutController.new()
+    controller.add_shortcut(shortcut)
+    child.add_controller(controller)
+    
 def setup_accelerator(tool_button):
     _add_accelerator(tool_button)
-    tool_button.connect('hierarchy-changed', _hierarchy_changed_cb)
-
+    tool_button.connect('notify::accelerator', _add_accelerator)
+    
 
 class ToolButton(Gtk.Button):
     '''
@@ -97,6 +122,15 @@ class ToolButton(Gtk.Button):
     '''
 
     __gtype_name__ = 'SugarToolButton'
+    
+    __gsignals__ = {
+        'can-activate-accel': (
+            GObject.SignalFlags.RUN_FIRST,
+            GObject.TYPE_BOOLEAN,
+            ()
+        )
+    }
+
 
     def __init__(self, icon_name=None, **kwargs):
         self._accelerator = None

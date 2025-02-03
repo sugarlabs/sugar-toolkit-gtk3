@@ -79,6 +79,8 @@ class RadioToolButton(Gtk.ToggleButton):
 
         self._group = group
         if self._group is not None:
+            if isinstance(self._group, RadioToolButton):
+                  self._group = self._group._group
             self._group.append(self)
         else:
             self._group = [self]

@@ -85,6 +85,7 @@ Example:
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from sugar3.graphics.icon import Icon
 from sugar3.graphics import style
@@ -96,6 +97,9 @@ class PaletteMenuBox(Gtk.Box):
     :class:`sugar3.graphics.palettemenu.PaletteMenuItemSeparator` and
     it automatically adds padding to other widgets.
     '''
+    __gsignals__ = {
+        "button-release-event": (GObject.SignalFlags.RUN_LAST, None, (Gdk.Event,)),
+    }
 
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)

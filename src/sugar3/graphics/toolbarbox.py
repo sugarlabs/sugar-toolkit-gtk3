@@ -33,21 +33,24 @@ class ToolbarButton(ToolButton):
         ToolButton.__init__(self, **kwargs)
 
         self.page_widget = None
+        self._last_parent = None  # track previous parent
+
 
         self.set_page(page)
 
         self.connect('clicked',
                      lambda widget: self.set_expanded(not self.is_expanded()))
-        self.connect_after('draw', self.__drawing_cb)
-        self.connect('hierarchy-changed', self.__hierarchy_changed_cb)
+        # self.connect_after('draw', self.__drawing_cb)
+        self.connect('notify::parent', self.__hierarchy_changed_cb)
 
     def __hierarchy_changed_cb(self, tool_button, previous_toplevel):
-        parent = self.get_parent()
-        if hasattr(parent, 'owner'):
-            if self.page_widget and previous_toplevel is None:
-                self._unparent()
-                parent.owner.append(self.page_widget)
-                self.set_expanded(False)
+        new_parent = self.get_parent()
+        if self._last_parent is None and new_parent is not None and \
+           hasattr(new_parent, 'owner') and self.page_widget:
+            self._unparent()
+            new_parent.owner.append(self.page_widget)
+            self.set_expanded(False)
+        self._last_parent = new_parent
 
     def get_toolbar_box(self):
         parent = self.get_parent()
@@ -118,13 +121,12 @@ class ToolbarButton(ToolButton):
         self._unparent()
 
         if isinstance(self.props.palette, _ToolbarPalette):
-            self.props.palette._widget.add(self.page_widget)
-
+            self.props.palette._widget.set_child(self.page_widget)
+            
     def _unparent(self):
-        page_parent = self.page_widget.get_parent()
-        if page_parent is None:
-            return
-        page_parent.remove(self.page_widget)
+        if self.page_widget.get_parent() is not None:
+            self.page_widget.unparent()
+            
 
     def __drawing_cb(self, button, cr):
         alloc = self.get_allocation()
@@ -140,8 +142,14 @@ class ToolbarButton(ToolButton):
                              Gtk.PositionType.BOTTOM, 0, alloc.width)
         _paint_arrow(self, cr, 0)
         return False
+    def do_snapshot(self, snapshot):
+        # Add default style classes for consistency.
+        self.get_style_context().add_class('toolitem')
+        self.get_style_context().add_class('toolbar-down')
 
-
+        # TODO: Implement custom arrow drawing using GTK4 snapshot APIs, if desired.
+        # For now, defer to the parent's snapshot handling.
+        return super().do_snapshot(snapshot)
 class ToolbarBox(Gtk.Box):
 
     __gtype_name__ = 'SugarToolbarBox'
@@ -223,8 +231,13 @@ class _ToolbarPalette(PaletteWindow):
         group.connect('popdown', self.__group_popdown_cb)
         self.set_group_id('toolbarbox')
 
-        self._widget = _PaletteWindowWidget()
-        self._widget.set_border_width(0)
+        self._widget = _PaletteWindowWidget(self)
+        # self._widget.set_border_width(0)
+        self._widget.set_margin_top(0)
+        self._widget.set_margin_bottom(0)
+        self._widget.set_margin_start(0)
+        self._widget.set_margin_end(0)
+        
         self._setup_widget()
 
         self._widget.connect('realize', self._realize_cb)
@@ -326,8 +339,16 @@ def _embed_page(page_widget, page):
 
 
 def _get_embedded_page(page_widget):
-    return page_widget.get_child().get_first_child()
-
+    if hasattr(page_widget, "get_first_child"):
+         first = page_widget.get_first_child()
+    elif hasattr(page_widget, "get_child"):
+         first = page_widget.get_child()
+    else:
+         first = None
+ 
+    if first is not None and hasattr(first, "get_first_child"):
+         return first.get_first_child()
+    return first
 
 def _paint_arrow(widget, cr, angle):
     alloc = widget.get_allocation()

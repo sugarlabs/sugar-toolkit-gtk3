@@ -93,7 +93,9 @@ class StopButton(ToolButton):
 
     def __stop_button_clicked_cb(self, button, activity):
         activity.close()
-
+    
+    def get_toplevel(self):
+        return self.get_ancestor(Gtk.Window)
 
 class UndoButton(ToolButton):
 
@@ -277,7 +279,7 @@ class DescriptionItem(ToolButton):
         description_box = PaletteMenuBox()
         sw = Gtk.ScrolledWindow()
         display = Gdk.Display.get_default()
-        monitor = display.get_primary_monitor()
+        monitor = display.get_monitors().get_item(0)
         geometry = monitor.get_geometry()
         sw.set_size_request(int(geometry.width / 2),
                             2 * style.GRID_CELL_SIZE)
@@ -291,14 +293,28 @@ class DescriptionItem(ToolButton):
         if 'description' in activity.metadata:
             text_buffer.set_text(activity.metadata['description'])
         self._text_view.set_buffer(text_buffer)
-        self._text_view.connect('focus-out',
-                                self.__description_changed_cb, activity)
+        # Replace "focus-out-event" with "notify::has-focus" for GTK4
+        # self._text_view.connect('focus-out-event', self.__description_changed_cb, activity)
+        self._text_view.connect('notify::has-focus', self.__focus_changed_cb, activity)
         sw.set_child(self._text_view)
         description_box.append_item(sw, vertical_padding=0)
         self._palette.set_content(description_box)
         description_box.set_visible(True)
 
         activity.metadata.connect('updated', self.__jobject_updated_cb)
+
+    def __focus_changed_cb(self, widget, pspec, activity):
+        if not widget.has_focus():
+            self.__description_changed_cb(widget, None, activity)
+
+    def __description_changed_cb(self, widget, event, activity):
+        description = self._get_text_from_buffer()
+        if 'description' in activity.metadata and \
+                description == activity.metadata['description']:
+            return
+        activity.metadata['description'] = description
+        activity.save()
+        return False
 
     def set_expanded(self, expanded):
         box = self.toolbar_box

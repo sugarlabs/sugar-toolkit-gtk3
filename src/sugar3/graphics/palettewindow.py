@@ -287,22 +287,37 @@ class _PaletteWindowWidget(Gtk.Window):
         'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
-    def __init__(self, palette=None):
-        Gtk.Window.__init__(self)
+    def __init__(self, palette, **kwargs):
+        super().__init__(**kwargs)
+
 
         self._palette = palette
         self.set_decorated(False)
         self.set_resizable(False)
-        self.set_position(Gtk.WindowPosition.NONE)
+        # gtk4 replacement doesn't exist
+        # self.set_position(Gtk.WindowPosition.NONE)
 
         context = self.get_style_context()
         # Just assume all borders are the same
-        border = context.get_border(Gtk.StateFlags.ACTIVE).right
-        self.set_border_width(border)
+        border = context.get_border()
+        # self.set_border_width(border_width)
+        border_width = border.right
 
-        accel_group = Gtk.AccelGroup()
-        self.sugar_accel_group = accel_group
-        self.add_accel_group(accel_group)
+        # In GTK 4, use margins (or CSS) instead of set_border_width:
+        self.set_margin_top(border_width)
+        self.set_margin_bottom(border_width)
+        self.set_margin_start(border_width)
+        self.set_margin_end(border_width)
+
+
+      # Remove references to Gtk.AccelGroup:
+        # accel_group = Gtk.AccelGroup()
+        # self.sugar_accel_group = accel_group
+        # self.add_accel_group(accel_group)
+
+        # Replace with a GTK 4 ShortcutController:
+        shortcut_controller = Gtk.ShortcutController()
+        self.add_controller(shortcut_controller)
 
         self._old_alloc = None
         self._invoker = None
@@ -310,8 +325,8 @@ class _PaletteWindowWidget(Gtk.Window):
 
     def set_accept_focus(self, focus):
         self._should_accept_focus = focus
-        if self.get_window() is not None:
-            self.get_window().set_accept_focus(focus)
+        if self.get_surface() is not None:
+            self.set_focusable(focus)
 
     def get_origin(self):
         res_, x, y = self.get_window().get_origin()
@@ -528,8 +543,13 @@ class PaletteWindow(GObject.GObject):
         self._widget.connect('destroy', self.__destroy_cb)
         self._widget.connect('enter-notify', self.__enter_notify_cb)
         self._widget.connect('leave-notify', self.__leave_notify_cb)
-        self._widget.connect('key-press-event', self.__key_press_event_cb)
+        # self._widget.connect('key-press-event', self.__key_press_event_cb)
 
+        # Replace it with a key controller:
+        key_controller = Gtk.EventControllerKey()
+        key_controller.connect('key-pressed', self.__key_press_event_cb)
+        self._widget.add_controller(key_controller)
+        
         self._set_effective_group_id(self._group_id)
         self._widget.set_invoker(self._invoker)
 
@@ -1124,6 +1144,11 @@ class WidgetInvoker(Invoker):
         self._long_pressed_hid = None
         self._long_pressed_controller = SugarGestures.LongPressController()
 
+        if self._widget is not None and GObject.signal_lookup('event', self._widget.__class__):
+            self._long_pressed_controller.attach(self._widget, SugarGestures.EventControllerFlags.NONE)
+        else:
+            logging.debug('Skipping attach() due to missing "event" signal or widget is None')
+            
         if parent or widget:
             self.attach_widget(parent, widget)
 
@@ -1179,6 +1204,11 @@ class WidgetInvoker(Invoker):
         else:
             self._long_pressed_hid = None
 
+        if GObject.signal_lookup('event', self._widget.__class__):
+            self._long_pressed_controller.attach(
+                self._widget, SugarGestures.EventControllerFlags.NONE)
+        else:
+            logging.debug('Skipping attach() due to missing "event" signal')
         self.attach(parent)
 
     def detach(self):

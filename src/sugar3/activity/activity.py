@@ -243,6 +243,7 @@ class _ActivitySession(GObject.GObject):
 
     def __init__(self):
         GObject.GObject.__init__(self)
+        self._main_loop = GLib.MainLoop()
 
         self._xsmp_client = SugarExt.ClientXSMP()
         self._xsmp_client.connect('quit-requested',
@@ -261,8 +262,8 @@ class _ActivitySession(GObject.GObject):
 
         if len(self._activities) == 0:
             logging.debug('Quitting the activity process.')
-            Gtk.main_quit()
-
+            self._main_loop.quit()
+            
     def will_quit(self, activity, will_quit):
         if will_quit:
             self._will_quit.append(activity)
@@ -488,9 +489,9 @@ class Activity(Gtk.Window):
 
     def run_main_loop(self):
         if self._iconify:
-            Window.iconify(self)
+            self.iconify()
         self._in_main = True
-        Gtk.main()
+        self._session._main_loop.run()
 
     def _initialize_journal_object(self):
         title = _('%s Activity') % get_bundle_name()
@@ -1335,7 +1336,7 @@ class Activity(Gtk.Window):
             # This is needed so that the window takes the whole browser window
             self.maximize()
 
-    def __delete_event_cb(self, widget, event):
+    def __delete_event_cb(self, *args):
         self.close()
         return True
 
@@ -1389,38 +1390,25 @@ class Activity(Gtk.Window):
 
     def busy(self):
         '''
-        Show that the activity is busy.  If used, must be called once
-        before a lengthy operation, and :meth:`unbusy` must be called
-        after the operation completes.
-
-        .. code-block:: python
-
-            self.busy()
-            self.long_operation()
-            self.unbusy()
+        Show that the activity is busy.
+        In GTK4 the busy indicator is implemented without changing the cursor.
         '''
-        if self._busy_count == 0:
-            self._old_cursor = self.get_window().get_cursor()
-            self._set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
         self._busy_count += 1
+        # Optionally, you could add a CSS class or overlay here for a busy indicator.
 
     def unbusy(self):
         '''
-        Show that the activity is not busy.  An equal number of calls
-        to :meth:`unbusy` are required to balance the calls to
-        :meth:`busy`.
-
+        Show that the activity is not busy.
         Returns:
-            int: a count of further calls to :meth:`unbusy` expected
+            int: the updated busy counter.
         '''
-        self._busy_count -= 1
-        if self._busy_count == 0:
-            self._set_cursor(self._old_cursor)
+        self._busy_count = max(0, self._busy_count - 1)
         return self._busy_count
 
     def _set_cursor(self, cursor):
-        self.get_window().set_cursor(cursor)
-        Gdk.flush()
+        # In GTK4, setting a cursor on a window is not supported.
+        # This method is now a no-op.
+        pass
 
 
 class _ClientHandler(dbus.service.Object):

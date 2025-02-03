@@ -140,7 +140,7 @@ class Palette(PaletteWindow):
         self._primary_box.append(self._label_alignment)
         labels_box.set_visible(True)
 
-        self._label = Gtk.AccelLabel(label='')
+        self._label = Gtk.Label(label='')
         self._label.set_xalign(0)
         self._label.set_yalign(0.5)
 
@@ -149,9 +149,13 @@ class Palette(PaletteWindow):
             self._label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
         labels_box.append(self._label)
 
-        self._primary_box.connect('button-release-event',
-                                  self.__button_release_event_cb)
-        self._primary_box.set_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
+        # self._primary_box.connect('button-release-event',
+        #                           self.__button_release_event_cb)
+        # self._primary_box.set_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
+                
+        self._click_controller = Gtk.GestureClick.new()
+        self._click_controller.connect('released', self.__button_release_event_cb)
+        self._primary_box.add_controller(self._click_controller)
 
         self._secondary_label = Gtk.Label()
         self._secondary_label.set_xalign(0)
@@ -250,8 +254,8 @@ class Palette(PaletteWindow):
         self._content.set_visible(True)
 
     def _update_accel_widget(self):
-        assert self.props.invoker is not None
-        self._label.props.accel_widget = self.props.invoker.props.widget
+        if hasattr(self._label.props, 'accel_widget'):
+            self._label.props.accel_widget = self.props.invoker.props.widget
 
     def set_primary_text(self, label, accel_path=None):
         self._primary_text = label
@@ -270,6 +274,7 @@ class Palette(PaletteWindow):
     def __button_release_event_cb(self, widget, event):
         if self.props.invoker is not None:
             self.props.invoker.primary_text_clicked()
+        return False
 
     def set_secondary_text(self, label):
         if label is None:
@@ -375,15 +380,17 @@ class Palette(PaletteWindow):
 
             self._widget.set_child(self._palette_box)
             self._palette_box.set_visible(True)
-            height = style.GRID_CELL_SIZE - 2 * self._widget.get_border_width()
+            border_width = max(self._widget.get_margin_top(), self._widget.get_margin_bottom())
+            height = style.GRID_CELL_SIZE - 2 * border_width
             self._primary_box.set_size_request(-1, height)
 
-        if self._content.get_children():
-            self._content.remove(self._content.get_children()[0])
+        if self._content.get_first_child():
+            self._content.remove_child(self._content.get_first_child()[0])
 
         if widget is not None:
-            widget.connect('button-release-event',
-                           self.__widget_button_release_cb)
+            gesture = Gtk.GestureClick.new()
+            gesture.connect("released", self.__widget_button_release_cb)
+            widget.add_controller(gesture)
             self._content.append(widget)
             self._content.set_visible(True)
         else:
@@ -407,11 +414,11 @@ class Palette(PaletteWindow):
         return label_width
 
     def _update_separators(self):
-        visible = self._content.get_children()
+        visible = self._content.get_first_child() is not None
         self._separator.props.visible = visible
 
     def _update_accept_focus(self):
-        accept_focus = len(self._content.get_children())
+        accept_focus = self._content.get_first_child() is not None
         self._widget.set_accept_focus(accept_focus)
 
     def _update_full_request(self):
