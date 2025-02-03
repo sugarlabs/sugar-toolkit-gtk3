@@ -174,12 +174,14 @@ gi.require_version('Gtk', '4.0')
 gi.require_version('Gdk', '4.0')
 gi.require_version('TelepathyGLib', '0.12')
 gi.require_version('SugarExt', '1.0')
+gi.require_version('GdkX11', '4.0')
 
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import TelepathyGLib
+from gi.repository import GdkX11
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
@@ -861,12 +863,15 @@ class Activity(Gtk.Window):
             return None
 
         alloc = self.canvas.get_allocation()
-
+        width, height = alloc.width, alloc.height
+        if width == 0 or height == 0:
+            return None
+        
         dummy_cr = Gdk.cairo_create(window)
         target = dummy_cr.get_target()
         canvas_width, canvas_height = alloc.width, alloc.height
         screenshot_surface = target.create_similar(cairo.CONTENT_COLOR,
-                                                   canvas_width, canvas_height)
+                                                canvas_width, canvas_height)
         del dummy_cr, target
 
         cr = cairo.Context(screenshot_surface)
@@ -878,7 +883,7 @@ class Activity(Gtk.Window):
 
         preview_width, preview_height = PREVIEW_SIZE
         preview_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
-                                             preview_width, preview_height)
+                                            preview_width, preview_height)
         cr = cairo.Context(preview_surface)
 
         scale_w = preview_width * 1.0 / canvas_width
@@ -1325,15 +1330,17 @@ class Activity(Gtk.Window):
             self._do_close(skip_save)
 
     def __realize_cb(self, window):
-        display_name = Gdk.Display.get_default().get_name()
-        if ':' in display_name:
-            # X11 for sure; this only works in X11
-            xid = window.get_window().get_xid()
-            SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
-            SugarExt.wm_set_activity_id(xid, str(self._activity_id))
-        elif display_name == 'Broadway':
-            # GTK3's HTML5 backend
-            # This is needed so that the window takes the whole browser window
+        display = Gdk.Display.get_default()
+        surface = self.get_surface()
+        if surface and display.__class__.__name__ == 'X11Display':
+            # Use X11Surface.get_xid(surface) in GTK4:
+            # GTK4 no longer supports SugarExt.wm_set_bundle_id()
+            # or SugarExt.wm_set_activity_id()
+            # Remove or comment them out entirely:
+            # # SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
+            # SugarExt.wm_set_activity_id(xid, str(self._activity_id))
+            pass
+        elif display.get_name() == 'Broadway':
             self.maximize()
 
     def __delete_event_cb(self, *args):
