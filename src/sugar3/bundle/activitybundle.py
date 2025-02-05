@@ -130,10 +130,18 @@ class ActivityBundle(Bundle):
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
-        if six.PY2:
-            cp.readfp(info_file)
-        else:
-            cp.read_file(info_file)
+
+        content = info_file.read()
+        if isinstance(content, bytes):
+            content = content.decode("utf-8")
+        try:
+            if content.startswith("b'") or content.startswith('b"'):
+                import ast
+                content = ast.literal_eval(content)
+        except Exception:
+            pass
+
+        cp.read_string(content, source=getattr(info_file, 'name', '<unknown>'))
 
         section = 'Activity'
 
