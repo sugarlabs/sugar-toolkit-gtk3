@@ -146,7 +146,8 @@ class _PaletteMenuWidget(Gtk.PopoverMenu):
         return self._popup_position[0], self._popup_position[1], False
 
     def add_item(self, item):
-        """Add a menu item to the palette"""
+        while item.get_parent() is not None:
+            item.get_parent().remove(item)
         self.menu_box.append(item)
 
         
@@ -1144,10 +1145,13 @@ class WidgetInvoker(Invoker):
         self._long_pressed_hid = None
         self._long_pressed_controller = SugarGestures.LongPressController()
 
-        if self._widget is not None and GObject.signal_lookup('event', self._widget.__class__):
-            self._long_pressed_controller.attach(self._widget, SugarGestures.EventControllerFlags.NONE)
+        if self._widget is not None:
+            self._long_pressed_controller.attach(
+                self._widget, SugarGestures.EventControllerFlags.NONE)
         else:
-            logging.debug('Skipping attach() due to missing "event" signal or widget is None')
+            logging.debug('Skipping attach() due to missing "event" signal')
+
+
             
         if parent or widget:
             self.attach_widget(parent, widget)
@@ -1196,19 +1200,19 @@ class WidgetInvoker(Invoker):
         else:
             self._draw_hid = None
 
-        if hasattr(self._long_pressed_controller, 'connect'):
+        if hasattr(self._long_pressed_controller, 'connect') and \
+           GObject.signal_lookup('event', self._widget.__class__):
             self._long_pressed_hid = self._long_pressed_controller.connect(
                 'pressed', self.__long_pressed_event_cb, self._widget)
-            self._long_pressed_controller.attach(
-                self._widget, SugarGestures.EventControllerFlags.NONE)
+            if self._widget.get_parent() is None:
+                self._long_pressed_controller.attach(
+                    self._widget, SugarGestures.EventControllerFlags.NONE)
+            else:
+                logging.debug('Widget already has a parent; skipping long-press attach to avoid gtk_box_append assertion')
         else:
             self._long_pressed_hid = None
-
-        if GObject.signal_lookup('event', self._widget.__class__):
-            self._long_pressed_controller.attach(
-                self._widget, SugarGestures.EventControllerFlags.NONE)
-        else:
             logging.debug('Skipping attach() due to missing "event" signal')
+
         self.attach(parent)
 
     def detach(self):
@@ -1376,12 +1380,14 @@ class CursorInvoker(Invoker):
 
         self._pointer_position = _get_pointer_position(self.parent)
 
-        self._enter_hid = self._item.connect('enter-notify-event',
-                                             self.__enter_notify_event_cb)
-        self._leave_hid = self._item.connect('leave-notify-event',
-                                             self.__leave_notify_event_cb)
-        self._release_hid = self._item.connect('button-release-event',
-                                               self.__button_release_event_cb)
+        if (self._widget is not None and
+            GObject.signal_lookup('enter-notify-event', self._widget.__class__)):
+            self._enter_hid = self._widget.connect('enter-notify-event',
+                                                self.__enter_notify_event_cb)
+        if (self._widget is not None and
+            GObject.signal_lookup('leave-notify-event', self._widget.__class__)):
+            self._leave_hid = self._widget.connect('leave-notify-event',
+                                                self.__leave_notify_event_cb)
         self._long_pressed_hid = self._long_pressed_controller.connect(
             'pressed',
             self.__long_pressed_event_cb, self._item)
