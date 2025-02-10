@@ -23,14 +23,8 @@
 #define __SUGAR_CURSOR_TRACKER_H__
 
 #include <gtk/gtk.h>
-
-#ifdef GDK_WINDOWING_X11
-  #if GTK_CHECK_VERSION(4,0,0)
-    #include <gdk/x11/gdkx.h>
-  #else
-    #include <gdk/gdkx.h>
-  #endif
-#endif
+#include <gdk/x11/gdkx.h>
+#include <X11/Xlib.h>
 
 #include "event-controller/sugar-event-controllers.h"
 
@@ -42,7 +36,7 @@ typedef struct _SugarCursorTrackerPrivate SugarCursorTrackerPrivate;
 
 #define SUGAR_TYPE_CURSOR_TRACKER              (sugar_cursor_tracker_get_type())
 #define SUGAR_CURSOR_TRACKER(object)           (G_TYPE_CHECK_INSTANCE_CAST((object), SUGAR_TYPE_CURSOR_TRACKER, SugarCursorTracker))
-#define SUGAR_CURSOR_TRACKER_CLASS(klass)      (G_TYPE_CHACK_CLASS_CAST((klass), SUGAR_TYPE_CURSOR_TRACKER, SugarCursorTrackerClass))
+#define SUGAR_CURSOR_TRACKER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), SUGAR_TYPE_CURSOR_TRACKER, SugarCursorTrackerClass))
 #define SUGAR_IS_CURSOR_TRACKER(object)        (G_TYPE_CHECK_INSTANCE_TYPE((object), SUGAR_TYPE_CURSOR_TRACKER))
 #define SUGAR_IS_CURSOR_TRACKER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE((klass), SUGAR_TYPE_CURSOR_TRACKER))
 #define SUGAR_CURSOR_TRACKER_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS((object), SUGAR_TYPE_CURSOR_TRACKER, SugarCursorTrackerClass))
@@ -58,8 +52,8 @@ struct _SugarCursorTrackerClass {
 
 struct _SugarCursorTrackerPrivate
 {
-        GdkWindow *root_window;
-        gboolean cursor_shown;
+		GdkSurface *root_surface;
+		gboolean    cursor_shown;
 };
 
 GType                sugar_cursor_tracker_get_type (void);

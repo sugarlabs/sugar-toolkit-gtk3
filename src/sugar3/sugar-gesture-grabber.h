@@ -23,14 +23,7 @@
 #define __SUGAR_GESTURE_GRABBER_H__
 
 #include <gtk/gtk.h>
-
-#ifdef GDK_WINDOWING_X11
-  #if GTK_CHECK_VERSION(4,0,0)
-    #include <gdk/x11/gdkx.h>
-  #else
-    #include <gdk/gdkx.h>
-  #endif
-#endif
+#include <gdk/x11/gdkx.h>
 #include "event-controller/sugar-event-controllers.h"
 
 G_BEGIN_DECLS
@@ -41,7 +34,7 @@ typedef struct _SugarGestureGrabberPrivate SugarGestureGrabberPrivate;
 
 #define SUGAR_TYPE_GESTURE_GRABBER              (sugar_gesture_grabber_get_type())
 #define SUGAR_GESTURE_GRABBER(object)           (G_TYPE_CHECK_INSTANCE_CAST((object), SUGAR_TYPE_GESTURE_GRABBER, SugarGestureGrabber))
-#define SUGAR_GESTURE_GRABBER_CLASS(klass)      (G_TYPE_CHACK_CLASS_CAST((klass), SUGAR_TYPE_GESTURE_GRABBER, SugarGestureGrabberClass))
+#define SUGAR_GESTURE_GRABBER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), SUGAR_TYPE_GESTURE_GRABBER, SugarGestureGrabberClass))
 #define SUGAR_IS_GESTURE_GRABBER(object)        (G_TYPE_CHECK_INSTANCE_TYPE((object), SUGAR_TYPE_GESTURE_GRABBER))
 #define SUGAR_IS_GESTURE_GRABBER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE((klass), SUGAR_TYPE_GESTURE_GRABBER))
 #define SUGAR_GESTURE_GRABBER_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS((object), SUGAR_TYPE_GESTURE_GRABBER, SugarGestureGrabberClass))
@@ -57,19 +50,20 @@ struct _SugarGestureGrabberClass {
 
 struct _SugarGestureGrabberPrivate
 {
-        GdkWindow *root_window;
-        GArray *controllers;
-        GArray *touches;
-        guint cancel_timeout_id;
+		/* Replace the old root window with a root surface */
+		GdkSurface *root_surface;
+		GArray *controllers;
+		GArray *touches;
+		guint cancel_timeout_id;
 };
 
 GType                 sugar_gesture_grabber_get_type (void);
 SugarGestureGrabber * sugar_gesture_grabber_new      (void);
 void                  sugar_gesture_grabber_add      (SugarGestureGrabber  *grabber,
-						      SugarEventController *controller,
-						      const GdkRectangle   *rect);
+							SugarEventController *controller,
+							const GdkRectangle   *rect);
 void		      sugar_gesture_grabber_remove   (SugarGestureGrabber  *grabber,
-						      SugarEventController *controller);
+							SugarEventController *controller);
 
 G_END_DECLS
 

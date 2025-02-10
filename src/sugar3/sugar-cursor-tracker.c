@@ -19,7 +19,8 @@
  * Author: Simon Schampijer  <simon@laptop.org>
  */
 
-#include <gdk/gdkx.h>
+#include <gdk/x11/gdkx.h>
+#include <gdk/gdk.h>
 #include <X11/extensions/XInput2.h>
 #include "sugar-cursor-tracker.h"
 
@@ -41,22 +42,19 @@ sugar_cursor_tracker_class_init (SugarCursorTrackerClass *klass)
 	object_class->finalize = sugar_cursor_tracker_finalize;
 }
 
-static GdkWindow *
-_get_default_root_window (void)
+/* In GTK4, we use GdkSurface instead of GdkWindow */
+static GdkSurface *
+_get_default_root_surface (void)
 {
-        GdkDisplay *display;
-        GdkScreen *screen;
-
-        display = gdk_display_get_default ();
-        screen = gdk_display_get_default_screen (display);
-
-        return gdk_screen_get_root_window (screen);
+		GdkDisplay *display;
+		display = gdk_display_get_default ();
+		return gdk_display_get_default_surface (display);
 }
 
 static void
-_track_raw_events (GdkWindow *window)
+_track_raw_events (GdkSurface *surface)
 {
-        XIEventMask mask;
+		XIEventMask mask;
 	guchar *evmask;
 	GdkDisplay *display;
 
@@ -68,76 +66,78 @@ _track_raw_events (GdkWindow *window)
 	XISetMask (evmask, XI_RawButtonPress);
 
 	mask.deviceid = XIAllMasterDevices;
-	mask.mask_len = sizeof (evmask);
+	mask.mask_len = XIMaskLen (XI_LASTEVENT);
 	mask.mask = evmask;
 
-	display = gdk_window_get_display (window);
+	display = gdk_surface_get_display (surface);
 	XISelectEvents (gdk_x11_display_get_xdisplay (display),
-			gdk_x11_window_get_xid (window),
+			gdk_x11_surface_get_xid (surface),
 			&mask, 1);
+
+	g_free (evmask);
 }
 
 static void
 _set_cursor_visibility (SugarCursorTracker *tracker,
 			gboolean visible)
 {
-        GdkDisplay *display;
+		GdkDisplay *display;
 	Display *xdisplay;
-        SugarCursorTrackerPrivate *priv;
+		SugarCursorTrackerPrivate *priv;
 
-        priv = tracker->priv;
+		priv = tracker->priv;
 	display = gdk_display_get_default ();
-	xdisplay = GDK_DISPLAY_XDISPLAY (display);
+	xdisplay = gdk_x11_display_get_xdisplay (display);
 
 	gdk_x11_display_error_trap_push (display);
 
 	if (visible == TRUE) {
-	    if (priv->cursor_shown == FALSE) {
-		XFixesShowCursor (xdisplay, GDK_WINDOW_XID (_get_default_root_window ()));
+		if (priv->cursor_shown == FALSE) {
+		XFixesShowCursor (xdisplay, gdk_x11_surface_get_xid (_get_default_root_surface ()));
 		priv->cursor_shown = TRUE;
-	    }
+		}
 	}
 	else {
-	    if (priv->cursor_shown == TRUE) {
-		XFixesHideCursor (xdisplay, GDK_WINDOW_XID (_get_default_root_window ()));
-		priv->cursor_shown = False;
-	    }
+		if (priv->cursor_shown == TRUE) {
+		XFixesHideCursor (xdisplay, gdk_x11_surface_get_xid (_get_default_root_surface ()));
+		priv->cursor_shown = FALSE;
+		}
 	}
 
 	if (gdk_x11_display_error_trap_pop (display)) {
-	    g_warning ("An error occurred trying to %s the cursor",
-		       FALSE ? "show" : "hide");
+		g_warning ("An error occurred trying to %s the cursor",
+			visible ? "show" : "hide");
 	}
 }
 
 static GdkFilterReturn
 filter_function (GdkXEvent *xevent,
-                 GdkEvent  *gdkevent,
-                 gpointer   user_data)
+				GdkEvent  *gdkevent,
+				gpointer   user_data)
 {
 	XEvent *ev = xevent;
 	XIEvent *xiev;
 	SugarCursorTracker *tracker;
 
 	if (ev->type != GenericEvent)
-	        return GDK_FILTER_CONTINUE;
+			return GDK_FILTER_CONTINUE;
 
 	tracker = user_data;
-
-        xiev = ev->xcookie.data;
+	
+		xiev = ev->xcookie.data;
 
 	switch (xiev->evtype) {
 	case XI_RawTouchBegin:
-	        _set_cursor_visibility (tracker, FALSE);
-	        return GDK_FILTER_REMOVE;
+			_set_cursor_visibility (tracker, FALSE);
+			return GDK_FILTER_REMOVE;
 	case XI_RawMotion:
-	        _set_cursor_visibility (tracker, TRUE);
-	        return GDK_FILTER_REMOVE;
+			_set_cursor_visibility (tracker, TRUE);
+			return GDK_FILTER_REMOVE;
 	case XI_RawButtonPress:
-	        _set_cursor_visibility (tracker, TRUE);
-	        return GDK_FILTER_REMOVE;
+			_set_cursor_visibility (tracker, TRUE);
+			return GDK_FILTER_REMOVE;
 	default:
-	        return GDK_FILTER_CONTINUE;
+			return GDK_FILTER_CONTINUE;
 	}
 }
 
@@ -146,13 +146,13 @@ sugar_cursor_tracker_init (SugarCursorTracker *tracker)
 {
 	SugarCursorTrackerPrivate *priv;
 	tracker->priv = priv = sugar_cursor_tracker_get_instance_private (tracker);
-        priv->root_window = _get_default_root_window ();
-	priv->cursor_shown = True;
 
-	tracker->priv = priv = sugar_cursor_tracker_get_instance_private (tracker);
-	priv->root_window = _get_default_root_window ();
-	_track_raw_events (priv->root_window);
-	gdk_window_add_filter (NULL, filter_function, tracker);
+		priv->root_surface = _get_default_root_surface ();
+	priv->cursor_shown = TRUE;
+
+	_track_raw_events (priv->root_surface);
+	/* Instead of gdk_window_add_filter, attach filter on the display */
+	gdk_display_add_filter (gdk_display_get_default (), filter_function, tracker);
 }
 
 SugarCursorTracker *

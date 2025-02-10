@@ -29,17 +29,18 @@ typedef struct _SugarKeyGrabber SugarKeyGrabber;
 typedef struct _SugarKeyGrabberClass SugarKeyGrabberClass;
 typedef struct _SugarKeyGrabberPrivate SugarKeyGrabberPrivate;
 
-#define SUGAR_TYPE_KEY_GRABBER			(sugar_key_grabber_get_type())
-#define SUGAR_KEY_GRABBER(object)	    (G_TYPE_CHECK_INSTANCE_CAST((object), SUGAR_TYPE_KEY_GRABBER, SugarKeyGrabber))
-#define SUGAR_KEY_GRABBER_CLASS(klass)	    (G_TYPE_CHACK_CLASS_CAST((klass), SUGAR_TYPE_KEY_GRABBER, SugarKeyGrabberClass))
-#define SUGAR_IS_KEY_GRABBER(object)	    (G_TYPE_CHECK_INSTANCE_TYPE((object), SUGAR_TYPE_KEY_GRABBER))
-#define SUGAR_IS_KEYGRABBER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE((klass), SUGAR_TYPE_KEY_GRABBER))
-#define SUGAR_KEY_GRABBER_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS((object), SUGAR_TYPE_KEY_GRABBER, SugarKeyGrabberClass))
+#define SUGAR_TYPE_KEY_GRABBER            (sugar_key_grabber_get_type())
+#define SUGAR_KEY_GRABBER(object)         (G_TYPE_CHECK_INSTANCE_CAST((object), SUGAR_TYPE_KEY_GRABBER, SugarKeyGrabber))
+#define SUGAR_KEY_GRABBER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), SUGAR_TYPE_KEY_GRABBER, SugarKeyGrabberClass))
+#define SUGAR_IS_KEY_GRABBER(object)      (G_TYPE_CHECK_INSTANCE_TYPE((object), SUGAR_TYPE_KEY_GRABBER))
+#define SUGAR_IS_KEYGRABBER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE((klass), SUGAR_TYPE_KEY_GRABBER))
+#define SUGAR_KEY_GRABBER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), SUGAR_TYPE_KEY_GRABBER, SugarKeyGrabberClass))
 
 struct _SugarKeyGrabber {
 	GObject base_instance;
 
-	GdkWindow *root;
+	/* Updated: use GdkSurface instead of GdkWindow for GTK4 */
+	GdkSurface *root;
 	GList *keys;
 };
 
@@ -47,23 +48,23 @@ struct _SugarKeyGrabberClass {
 	GObjectClass base_class;
 
 	gboolean (* key_pressed)  (SugarKeyGrabber *grabber,
-							   guint            keycode,
-							   guint            state);
+							guint            keycode,
+							guint            state);
 	gboolean (* key_released) (SugarKeyGrabber *grabber,
-							   guint            keycode,
-							   guint            state);
+							guint            keycode,
+							guint            state);
 };
 
 GType	 sugar_key_grabber_get_type	(void);
 void     sugar_key_grabber_grab_keys (SugarKeyGrabber *grabber,
-				      const gchar     *keys[],
-				      gint          n_elements);
+									const gchar     *keys[],
+									gint             n_elements);
 char    *sugar_key_grabber_get_key  (SugarKeyGrabber *grabber,
-									 guint            keycode,
-									 guint            state);
+									guint            keycode,
+									guint            state);
 gboolean sugar_key_grabber_is_modifier (SugarKeyGrabber *grabber,
-                                        guint            keycode,
-                                        guint            mask);
+										guint            keycode,
+										guint            mask);
 
 G_END_DECLS
 
