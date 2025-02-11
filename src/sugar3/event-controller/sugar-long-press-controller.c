@@ -193,6 +193,53 @@ sugar_long_press_controller_reset (SugarEventController *controller)
 }
 
 static gboolean
+_sugar_swipe_controller_store_event (GdkEvent *event)
+{
+    gdouble x, y;
+#if GTK_CHECK_VERSION(4,0,0)
+    // For GTK4
+    if (!gdk_event_get_position(event, &x, &y))
+#else
+    // For GTK3
+    if (!gdk_event_get_coords(event, &x, &y))
+#endif
+        return FALSE;
+
+    /* store x, y, etc. */
+    return TRUE;
+}
+
+static gboolean
+sugar_swipe_controller_handle_event (SugarEventController *controller,
+                                     GdkEvent             *event)
+{
+    GdkEventType type;
+#if GTK_CHECK_VERSION(4,0,0)
+    type = gdk_event_get_event_type (event);
+#else
+    type = event->type;
+#endif
+
+    switch (type)
+    {
+      case GDK_TOUCH_BEGIN:
+          // Handle GDK_TOUCH_BEGIN
+          break;
+      case GDK_TOUCH_UPDATE:
+          // Handle GDK_TOUCH_UPDATE
+          break;
+      case GDK_TOUCH_END:
+          // Handle GDK_TOUCH_END
+          break;
+      default:
+          return FALSE;
+    }
+
+    return TRUE;
+}
+
+
+static gboolean
 sugar_long_press_controller_handle_event (SugarEventController *controller,
                                           GdkEvent             *event)
 {
@@ -200,10 +247,19 @@ sugar_long_press_controller_handle_event (SugarEventController *controller,
   GdkEventSequence *sequence;
   gboolean handled = TRUE;
   GdkDevice *device;
+  GdkEventType type;
 
   priv = SUGAR_LONG_PRESS_CONTROLLER (controller)->priv;
   device = gdk_event_get_device (event);
   sequence = gdk_event_get_event_sequence (event);
+
+#if GTK_CHECK_VERSION(4,0,0)
+  // For GTK4, use accessor
+  type = gdk_event_get_event_type (event);
+#else
+  // For GTK3, can access event->type (deprecated usage otherwise)
+  type = event->type;
+#endif
 
   if (priv->device)
     {
@@ -212,40 +268,66 @@ sugar_long_press_controller_handle_event (SugarEventController *controller,
 
       if (sequence && priv->sequence != sequence)
         {
-          /* Another touch is simultaneously operating,
-           * give up on recognizing a long press.
-           */
+          // Another touch is simultaneously operating; give up on recognizing a long press.
           _sugar_long_press_controller_cancel (SUGAR_LONG_PRESS_CONTROLLER (controller));
-
           return FALSE;
         }
     }
 
-  switch (event->type)
+  switch (type)
     {
     case GDK_TOUCH_BEGIN:
-      priv->device = g_object_ref (device);
-      priv->start_time = g_get_monotonic_time ();
-      priv->x = event->touch.x;
-      priv->y = event->touch.y;
-      priv->root_x = event->touch.x_root;
-      priv->root_y = event->touch.y_root;
-      priv->sequence = sequence;
+      {
+#if GTK_CHECK_VERSION(4,0,0)
+        gdouble x, y;
+        gdk_event_get_position (event, &x, &y);
+        priv->x = x;
+        priv->y = y;
+        // GTK4 does not provide separate “root” values; reuse same values
+        priv->root_x = x;
+        priv->root_y = y;
+#else
+        priv->x = event->touch.x;
+        priv->y = event->touch.y;
+        priv->root_x = event->touch.x_root;
+        priv->root_y = event->touch.y_root;
+#endif
+        priv->device = g_object_ref (device);
+        priv->start_time = g_get_monotonic_time ();
+        priv->sequence = sequence;
 
-      priv->timeout_id =
-        gdk_threads_add_timeout (priv->delay,
-                                 _sugar_long_press_controller_timeout,
-                                 controller);
-      g_object_notify (G_OBJECT (controller), "state");
+#if GTK_CHECK_VERSION(4,0,0)
+        priv->timeout_id = g_timeout_add (priv->delay,
+                                          _sugar_long_press_controller_timeout,
+                                          controller);
+#else
+        priv->timeout_id = gdk_threads_add_timeout (priv->delay,
+                                                    _sugar_long_press_controller_timeout,
+                                                    controller);
+#endif
+        g_object_notify (G_OBJECT (controller), "state");
+      }
       break;
+
     case GDK_TOUCH_UPDATE:
-      if (ABS (priv->x - event->touch.x) > priv->threshold ||
-          ABS (priv->y - event->touch.y) > priv->threshold)
-        _sugar_long_press_controller_cancel (SUGAR_LONG_PRESS_CONTROLLER (controller));
+      {
+#if GTK_CHECK_VERSION(4,0,0)
+        gdouble x, y;
+        gdk_event_get_position (event, &x, &y);
+#else
+        gdouble x = event->touch.x;
+        gdouble y = event->touch.y;
+#endif
+        if (ABS (priv->x - x) > priv->threshold ||
+            ABS (priv->y - y) > priv->threshold)
+          _sugar_long_press_controller_cancel (SUGAR_LONG_PRESS_CONTROLLER (controller));
+      }
       break;
+
     case GDK_TOUCH_END:
       sugar_event_controller_reset (controller);
       break;
+
     default:
       handled = FALSE;
       break;

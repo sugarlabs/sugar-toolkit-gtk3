@@ -24,6 +24,11 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
+#if GTK_CHECK_VERSION(4,0,0)
+// In GTK4 the keymap API has been removed; provide a dummy type.
+typedef void GdkKeymap;
+#endif
+
 G_BEGIN_DECLS
 
 /* Where a value is also in GdkModifierType we coincide,
@@ -32,15 +37,15 @@ G_BEGIN_DECLS
 typedef enum
 {
   EGG_VIRTUAL_SHIFT_MASK    = 1 << 0,
-  EGG_VIRTUAL_LOCK_MASK	    = 1 << 1,
+  EGG_VIRTUAL_LOCK_MASK     = 1 << 1,
   EGG_VIRTUAL_CONTROL_MASK  = 1 << 2,
 
   EGG_VIRTUAL_ALT_MASK      = 1 << 3, /* fixed as Mod1 */
 
-  EGG_VIRTUAL_MOD2_MASK	    = 1 << 4,
-  EGG_VIRTUAL_MOD3_MASK	    = 1 << 5,
-  EGG_VIRTUAL_MOD4_MASK	    = 1 << 6,
-  EGG_VIRTUAL_MOD5_MASK	    = 1 << 7,
+  EGG_VIRTUAL_MOD2_MASK     = 1 << 4,
+  EGG_VIRTUAL_MOD3_MASK     = 1 << 5,
+  EGG_VIRTUAL_MOD4_MASK     = 1 << 6,
+  EGG_VIRTUAL_MOD5_MASK     = 1 << 7,
 
 #if 0
   GDK_BUTTON1_MASK  = 1 << 8,
@@ -70,7 +75,7 @@ typedef enum
 
 gboolean egg_accelerator_parse_virtual        (const gchar            *accelerator,
                                                guint                  *accelerator_key,
-					       guint                  *keycode,
+                                               guint                  *keycode,
                                                EggVirtualModifierType *accelerator_mods);
 void     egg_keymap_resolve_virtual_modifiers (GdkKeymap              *keymap,
                                                EggVirtualModifierType  virtual_mods,
@@ -80,10 +85,9 @@ void     egg_keymap_virtualize_modifiers      (GdkKeymap              *keymap,
                                                EggVirtualModifierType *virtual_mods);
 
 gchar* egg_virtual_accelerator_name (guint                  accelerator_key,
-				     guint		    keycode,
+                                     guint                  keycode,
                                      EggVirtualModifierType accelerator_mods);
 
 G_END_DECLS
-
 
 #endif /* __EGG_ACCELERATORS_H__ */

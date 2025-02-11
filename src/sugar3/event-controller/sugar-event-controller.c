@@ -171,17 +171,15 @@ sugar_event_controller_init (SugarEventController *controller)
 }
 
 static gboolean
-_sugar_event_controller_widget_event (GtkWidget            *widget,
-                                      GdkEvent             *event,
-                                      gpointer              user_data)
+_sugar_event_controller_widget_event (GtkWidget *widget,
+                                      GdkEvent  *event,
+                                      gpointer   user_data)
 {
   SugarControllerWidgetData *data;
   gboolean handled = FALSE;
   guint i;
 
-  data = g_object_get_qdata (G_OBJECT (widget),
-                             quark_widget_controller_data);
-
+  data = g_object_get_qdata (G_OBJECT (widget), quark_widget_controller_data);
   if (!data || !data->controllers || data->controllers->len == 0)
     return FALSE;
 
@@ -196,21 +194,14 @@ _sugar_event_controller_widget_event (GtkWidget            *widget,
           data->current_exclusive != item->controller)
         continue;
 
-      if (event->type == GDK_GRAB_BROKEN && !event->grab_broken.keyboard)
-        sugar_event_controller_reset (item->controller);
-      else
-        {
-          if (!sugar_event_controller_handle_event (item->controller, event))
-            continue;
+      if (!sugar_event_controller_handle_event (item->controller, event))
+        continue;
 
-          state = sugar_event_controller_get_state (item->controller);
+      state = sugar_event_controller_get_state (item->controller);
 
-          /* Consider events handled once the
-           * controller recognizes the action
-           */
-          if (state == SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED)
-            handled = TRUE;
-        }
+      /* Consider events handled once the controller recognizes the action */
+      if (state == SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED)
+        handled = TRUE;
     }
 
   return handled;

@@ -24,6 +24,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <gtk/gtk.h>
 
 #include "eggsmclient.h"
 #include "eggsmclient-xsmp.h"
@@ -39,8 +40,7 @@
 #include <X11/SM/SMlib.h>
 
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
-
+#include <gdk/x11/gdkx.h>
 
 static const char *state_names[] = {
   "start",
@@ -204,9 +204,13 @@ sm_client_xsmp_connect (gpointer user_data)
       xsmp->client_id = g_strdup (client_id);
       free (client_id);
 
-      gdk_threads_enter ();
-      gdk_x11_set_sm_client_id (xsmp->client_id);
-      gdk_threads_leave ();
+      #if GTK_CHECK_VERSION(4,0,0)
+             g_debug("GTK4: gdk_x11_set_sm_client_id is not available; skipping session id setup.");
+           #else
+             gdk_threads_enter ();
+             gdk_x11_set_sm_client_id (xsmp->client_id);
+             gdk_threads_leave ();
+           #endif
 
       g_debug ("Got client ID \"%s\"", xsmp->client_id);
     }
@@ -474,8 +478,10 @@ idle_do_pending_events (gpointer data)
 {
   EggSMClientXSMP *xsmp = data;
   EggSMClient *client = data;
-
-  gdk_threads_enter ();
+  
+  #if !GTK_CHECK_VERSION(4,0,0)
+    gdk_threads_enter ();
+  #endif
 
   xsmp->idle = 0;
 
@@ -498,9 +504,11 @@ idle_do_pending_events (gpointer data)
       xsmp->waiting_to_save_myself = FALSE;
       do_save_yourself (xsmp);
     }
-
- out:
-  gdk_threads_leave ();
+  
+  out:
+  #if !GTK_CHECK_VERSION(4,0,0)
+    gdk_threads_leave ();
+  #endif
   return FALSE;
 }
 
@@ -1211,9 +1219,13 @@ process_ice_messages (IceConn ice_conn)
 {
   IceProcessMessagesStatus status;
 
-  gdk_threads_enter ();
-  status = IceProcessMessages (ice_conn, NULL, NULL);
-  gdk_threads_leave ();
+    #if !GTK_CHECK_VERSION(4,0,0)
+      gdk_threads_enter ();
+    #endif
+    status = IceProcessMessages (ice_conn, NULL, NULL);
+  #if !GTK_CHECK_VERSION(4,0,0)
+    gdk_threads_leave ();
+  #endif
 
   switch (status)
     {

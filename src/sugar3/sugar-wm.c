@@ -20,8 +20,7 @@
 #include <string.h>
 #include <X11/Xatom.h>
 
-#include <gdk/gdkx.h>
-#include "sugar-wm.h"
+#include <gdk/x11/gdkx.h>#include "sugar-wm.h"
 
 #define MAX_PROPERTY_LEN 1024
 
