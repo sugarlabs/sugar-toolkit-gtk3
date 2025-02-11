@@ -20,7 +20,9 @@
 #include <string.h>
 #include <X11/Xatom.h>
 
-#include <gdk/x11/gdkx.h>#include "sugar-wm.h"
+#include <gdk/gdk.h>
+#include <gdk/x11/gdkx.h>
+#include "sugar-wm.h"
 
 #define MAX_PROPERTY_LEN 1024
 
@@ -35,12 +37,19 @@ get_property(Window window, const char *name)
     unsigned long bytes_after;
     unsigned char *data;
 
-    display = gdk_x11_get_default_xdisplay();
+    GdkDisplay *gdk_display = gdk_display_get_default();
+    if (!gdk_display)
+        return NULL;
+        
+    display = gdk_x11_display_get_xdisplay(gdk_display);
+    if (!display)
+        return NULL;
+
     property = XInternAtom(display, name, False);
 
     if (XGetWindowProperty(display, window, property, 0, MAX_PROPERTY_LEN,
-                           False, XA_STRING, &actual_type, &actual_format,
-                           &n_items, &bytes_after, &data) != Success) {
+                          False, XA_STRING, &actual_type, &actual_format,
+                          &n_items, &bytes_after, &data) != Success) {
         return NULL;
     }
 
@@ -53,11 +62,18 @@ set_property(Window window, const char *name, const char *value)
     Display *display;
     Atom property;
 
-    display = gdk_x11_get_default_xdisplay();
+    GdkDisplay *gdk_display = gdk_display_get_default();
+    if (!gdk_display)
+        return;
+        
+    display = gdk_x11_display_get_xdisplay(gdk_display);
+    if (!display)
+        return;
+
     property = XInternAtom(display, name, False);
 
-    XChangeProperty (display, window, property, XA_STRING, 8, PropModeReplace,
-                     (unsigned char *)value, strlen(value));
+    XChangeProperty(display, window, property, XA_STRING, 8, PropModeReplace,
+                   (unsigned char *)value, strlen(value));
 }
 
 char *
