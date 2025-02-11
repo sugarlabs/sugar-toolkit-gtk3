@@ -230,7 +230,28 @@ is_keycode(const gchar *string)
 
 /**
  * egg_accelerator_parse_virtual:
- * (implementation unchanged)
+ * @accelerator:      string representing an accelerator
+ * @accelerator_key:  return location for accelerator keyval
+ * @accelerator_mods: return location for accelerator modifier mask
+ *
+ * Parses a string representing a virtual accelerator. The format
+ * looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1" or
+ * "&lt;Release&gt;z" (the last one is for key release).  The parser
+ * is fairly liberal and allows lower or upper case, and also
+ * abbreviations such as "&lt;Ctl&gt;" and "&lt;Ctrl&gt;".
+ *
+ * If the parse fails, @accelerator_key and @accelerator_mods will
+ * be set to 0 (zero) and %FALSE will be returned. If the string contains
+ * only modifiers, @accelerator_key will be set to 0 but %TRUE will be
+ * returned.
+ *
+ * The virtual vs. concrete accelerator distinction is a relic of
+ * how the X Window System works; there are modifiers Mod2-Mod5 that
+ * can represent various keyboard keys (numlock, meta, hyper, etc.),
+ * the virtual modifier represents the keyboard key, the concrete
+ * modifier the actual Mod2-Mod5 bits in the key press event.
+ *
+ * Returns: %TRUE on success.
  */
 gboolean
 egg_accelerator_parse_virtual(const gchar *accelerator,
