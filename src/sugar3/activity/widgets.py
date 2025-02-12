@@ -190,7 +190,7 @@ class TitleEntry(Gtk.Box):
         geometry = monitor.get_geometry()
         self.entry.set_size_request(int(geometry.width / 3), -1)
         
-        self.entry.set_text(activity.metadata['title'])
+        self.entry.set_text(activity.metadata.get('title', ''))
         self.entry.connect('notify::has-focus', self.__focus_changed_cb, activity)
         # self.entry.connect('focus-out-event', self.__focus_out_event_cb, activity)
         self.entry.connect('activate', self.__activate_cb, activity)

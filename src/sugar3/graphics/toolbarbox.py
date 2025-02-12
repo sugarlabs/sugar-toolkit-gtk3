@@ -146,10 +146,8 @@ class ToolbarButton(ToolButton):
         # Add default style classes for consistency.
         self.get_style_context().add_class('toolitem')
         self.get_style_context().add_class('toolbar-down')
-
         # TODO: Implement custom arrow drawing using GTK4 snapshot APIs, if desired.
-        # For now, defer to the parent's snapshot handling.
-        return super().do_snapshot(snapshot)
+        return super(ToolbarBox, self).do_snapshot(snapshot)
 class ToolbarBox(Gtk.Box):
 
     __gtype_name__ = 'SugarToolbarBox'
