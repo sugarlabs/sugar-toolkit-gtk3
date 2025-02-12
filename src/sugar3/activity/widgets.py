@@ -237,11 +237,6 @@ class TitleEntry(Gtk.Box):
         self.save_title(activity)
         return False
 
-    def __focus_out_event_cb(self, widget, event, activity):
-        widget.select_region(0, 0)
-        self.save_title(activity)
-        return False
-
     def __button_press_event_cb(self, widget, event):
         if widget.is_focus():
             return False
@@ -252,7 +247,8 @@ class TitleEntry(Gtk.Box):
 
     def save_title(self, activity):
         title = self.entry.get_text()
-        if title == activity.metadata['title']:
+        # Use get('title', '') so that we have a default if "title" is missing.
+        if title == activity.metadata.get('title', ''):
             return
 
         activity.metadata['title'] = title
