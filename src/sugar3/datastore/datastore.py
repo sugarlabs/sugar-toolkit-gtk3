@@ -29,6 +29,8 @@ import tempfile
 from gi.repository import GObject
 from gi.repository import Gio
 import dbus
+_bus = dbus.SessionBus()
+import uuid
 
 from sugar3 import env
 from sugar3 import mime
@@ -93,8 +95,8 @@ class DSMetadata(GObject.GObject):
                         pass
             self._properties = properties
 
-        default_keys = ['activity', 'activity_id',
-                        'mime_type', 'title_set_by_user']
+        default_keys = ['activity', 'activity_id', 'mime_type', 'title',
+                        'title_set_by_user', 'spent-times']
         for key in default_keys:
             if key not in self._properties:
                 self._properties[key] = ''
@@ -149,16 +151,18 @@ class DSObject(object):
     def __init__(self, object_id, metadata=None, file_path=None):
         self._update_signal_match = None
         self._object_id = None
-
         self.set_object_id(object_id)
-
-        self._metadata = metadata
+        from sugar3.datastore.datastore import DSMetadata  
+        self._metadata = metadata if metadata is not None else DSMetadata()
         self._file_path = file_path
         self._destroyed = False
         self._owns_file = False
-
+        
     def get_object_id(self):
         return self._object_id
+    
+    def get_properties(self):
+        return self.metadata
 
     def set_object_id(self, object_id):
         if self._update_signal_match is not None:
@@ -224,6 +228,12 @@ class DSObject(object):
 
     def copy(self):
         return DSObject(None, self._metadata.copy(), self._file_path)
+    
+    def get_preview(self):
+        return self.metadata.get('preview', '')
+
+    def get_icon(self):
+        return self.metadata.get('icon', '')
 
 
 class RawObject(object):
@@ -364,19 +374,15 @@ def write(jobject):
     if jobject.object_id is None:
         try:
             jobject.object_id = _create_ds_entry(jobject.get_properties(),
-                                               jobject.get_file_path(),
-                                               jobject.get_preview(),
-                                               jobject.get_icon())
+                                                   jobject.get_file_path())
         except (TypeError, dbus.exceptions.DBusException) as e:
             logging.warning('Error writing to datastore: %s', e)
             # Create a temporary object ID if DataStore is not available
             jobject.object_id = 'temp_' + str(uuid.uuid4())
     else:
         _update_ds_entry(jobject.object_id,
-                        jobject.get_properties(),
-                        jobject.get_file_path(),
-                        jobject.get_preview(),
-                        jobject.get_icon())
+                         jobject.get_properties(),
+                         jobject.get_file_path())
 
 
 def delete(object_id):

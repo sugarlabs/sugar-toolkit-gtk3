@@ -47,7 +47,6 @@ def _create_activity_icon(metadata):
     from sugar3.activity.activity import get_bundle_path
     bundle = get_bundle_instance(get_bundle_path())
     icon = Icon(file=bundle.get_icon(), xo_color=color)
-
     return icon
 
 
@@ -55,18 +54,20 @@ class ActivityButton(ToolButton):
 
     def __init__(self, activity, **kwargs):
         ToolButton.__init__(self, **kwargs)
-
         icon = _create_activity_icon(activity.metadata)
         self.set_child(icon)
         icon.set_visible(True)
-
         self.props.hide_tooltip_on_click = False
         self.palette_invoker.props.toggle_palette = True
-        self.props.tooltip_text = activity.metadata['title']
+        # Use safe get for title
+        self.props.tooltip_text = activity.metadata.get('title', '')
         activity.metadata.connect('updated', self.__jobject_updated_cb)
 
     def __jobject_updated_cb(self, jobject):
-        self.props.tooltip_text = jobject['title']
+        # Use get('title', '') to avoid KeyError
+        self.props.tooltip_text = jobject.get('title', '')
+
+
 
 
 class ActivityToolbarButton(ToolbarButton):
@@ -74,12 +75,15 @@ class ActivityToolbarButton(ToolbarButton):
     def __init__(self, activity, **kwargs):
         toolbar = ActivityToolbar(activity, orientation_left=True)
         toolbar.connect('enter-key-press', lambda widget: self.emit('clicked'))
-
+        # Initialize with the toolbar as page.
         ToolbarButton.__init__(self, page=toolbar, **kwargs)
-
         icon = _create_activity_icon(activity.metadata)
         self.set_child(icon)
         icon.set_visible(True)
+
+    def do_snapshot(self, snapshot):
+        # Override do_snapshot to bypass ToolbarBox’s super() call that fails when self isn’t a ToolbarBox.
+        return None
 
 
 class StopButton(ToolButton):
@@ -93,7 +97,7 @@ class StopButton(ToolButton):
 
     def __stop_button_clicked_cb(self, button, activity):
         activity.close()
-    
+
     def get_toplevel(self):
         return self.get_ancestor(Gtk.Window)
 
@@ -190,9 +194,9 @@ class TitleEntry(Gtk.Box):
         geometry = monitor.get_geometry()
         self.entry.set_size_request(int(geometry.width / 3), -1)
         
+        # Safe retrieval of title
         self.entry.set_text(activity.metadata.get('title', ''))
         self.entry.connect('notify::has-focus', self.__focus_changed_cb, activity)
-        # self.entry.connect('focus-out-event', self.__focus_out_event_cb, activity)
         self.entry.connect('activate', self.__activate_cb, activity)
         self.entry.set_visible(True)
         # Use a GestureClick on the entry
@@ -213,11 +217,6 @@ class TitleEntry(Gtk.Box):
             widget.select_region(0, 0)
             self.save_title(activity)
             
-    def __focus_out_event_cb(self, widget, event, activity):
-        widget.select_region(0, 0)
-        self.save_title(activity)
-        return False
-
     def __activate_cb(self, entry, activity):
         self.save_title(activity)
         entry.select_region(0, 0)
@@ -227,36 +226,22 @@ class TitleEntry(Gtk.Box):
         return False
 
     def __jobject_updated_cb(self, jobject):
+        # Use get() to avoid KeyError while updating title
+        new_title = jobject.get('title', '')
         if self.entry.has_focus():
             return
-        if self.entry.get_text() == jobject['title']:
+        if self.entry.get_text() == new_title:
             return
-        self.entry.set_text(jobject['title'])
-
-    def __closing_cb(self, activity):
-        self.save_title(activity)
-        return False
-
-    def __button_press_event_cb(self, widget, event):
-        if widget.is_focus():
-            return False
-        else:
-            widget.grab_focus()
-            widget.select_region(0, -1)
-            return True
+        self.entry.set_text(new_title)
 
     def save_title(self, activity):
         title = self.entry.get_text()
-        # Use get('title', '') so that we have a default if "title" is missing.
         if title == activity.metadata.get('title', ''):
             return
-
         activity.metadata['title'] = title
         activity.metadata['title_set_by_user'] = '1'
         activity.save()
-
         activity.set_title(title)
-
         shared_activity = activity.get_shared_activity()
         if shared_activity is not None:
             shared_activity.props.name = title
@@ -277,8 +262,7 @@ class DescriptionItem(ToolButton):
         display = Gdk.Display.get_default()
         monitor = display.get_monitors().get_item(0)
         geometry = monitor.get_geometry()
-        sw.set_size_request(int(geometry.width / 2),
-                            2 * style.GRID_CELL_SIZE)
+        sw.set_size_request(int(geometry.width / 2), 2 * style.GRID_CELL_SIZE)
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self._text_view = Gtk.TextView()
         self._text_view.set_cursor_visible(True)
@@ -289,8 +273,6 @@ class DescriptionItem(ToolButton):
         if 'description' in activity.metadata:
             text_buffer.set_text(activity.metadata['description'])
         self._text_view.set_buffer(text_buffer)
-        # Replace "focus-out-event" with "notify::has-focus" for GTK4
-        # self._text_view.connect('focus-out-event', self.__description_changed_cb, activity)
         self._text_view.connect('notify::has-focus', self.__focus_changed_cb, activity)
         sw.set_child(self._text_view)
         description_box.append_item(sw, vertical_padding=0)
@@ -303,43 +285,29 @@ class DescriptionItem(ToolButton):
         if not widget.has_focus():
             self.__description_changed_cb(widget, None, activity)
 
+    def __jobject_updated_cb(self, jobject):
+        if self._text_view.has_focus():
+            return
+        descr = jobject.get('description', '')
+        if self._get_text_from_buffer() == descr:
+            return
+        buf = self._text_view.get_buffer()
+        buf.set_text(descr)
+
     def __description_changed_cb(self, widget, event, activity):
         description = self._get_text_from_buffer()
-        if 'description' in activity.metadata and \
-                description == activity.metadata['description']:
+        if 'description' in activity.metadata and description == activity.metadata['description']:
             return
         activity.metadata['description'] = description
         activity.save()
         return False
-
-    def set_expanded(self, expanded):
-        box = self.toolbar_box
-        if not box:
-            return
-
-        if not expanded:
-            self.palette_invoker.notify_popdown()
-            return
-
-        if box.expanded_button is not None:
-            box.expanded_button.queue_draw()
-            if box.expanded_button != self:
-                box.expanded_button.set_expanded(False)
-        box.expanded_button = self
-
-    def get_toolbar_box(self):
-        parent = self.get_parent()
-        if not hasattr(parent, 'owner'):
-            return None
-        return parent.owner
-
-    toolbar_box = property(get_toolbar_box)
 
     def _get_text_from_buffer(self):
         buf = self._text_view.get_buffer()
         start_iter = buf.get_start_iter()
         end_iter = buf.get_end_iter()
         return buf.get_text(start_iter, end_iter, False)
+
 
     def __jobject_updated_cb(self, jobject):
         if self._text_view.has_focus():
@@ -370,30 +338,35 @@ class ActivityToolbar(Gtk.Box):
 
     def __init__(self, activity, orientation_left=False):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
-
         self._activity = activity
+
+        # Helper: remove child from existing parent before appending.
+        def safe_append(box, widget):
+            if widget.get_parent() is not None:
+                widget.get_parent().remove(widget)
+            box.append(widget)
 
         if activity.metadata:
             title_button = TitleEntry(activity)
-            title_button.connect('enter-key-press',
-                                 lambda widget: self.emit('enter-key-press'))
+            title_button.connect('enter-key-press', lambda widget: self.emit('enter-key-press'))
             title_button.set_visible(True)
-            self.append(title_button)
+            safe_append(self, title_button)
 
         if not orientation_left:
             separator = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
             separator.set_visible(True)
             separator.set_expand(True)
-            self.append(separator)
+            safe_append(self, separator)
 
         if activity.metadata:
             description_item = DescriptionItem(activity)
             description_item.set_visible(True)
-            self.append(description_item)
+            safe_append(self, description_item)
 
         self.share = ShareButton(activity)
         self.share.set_visible(True)
-        self.append(self.share)
+        safe_append(self, self.share)
+
 
 
 class EditToolbar(Gtk.Box):

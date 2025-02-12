@@ -1178,7 +1178,7 @@ class WidgetInvoker(Invoker):
 
         if GObject.signal_lookup('clicked', self._widget.__class__):
             self._click_hid = self._widget.connect('clicked',
-                                                self.__click_event_cb)
+                                                self.__clicked_cb)
         else:
             self._click_hid = None
 
@@ -1284,17 +1284,21 @@ class WidgetInvoker(Invoker):
                 return True
         return False
 
-    def __click_event_cb(self, button):
-        event = Gtk.get_current_event()
+    def __clicked_cb(self, widget):
+            # For non-event driven activate (e.g. clicked) simply do:
+            if self.props.lock_palette and not self.locked:
+                self.locked = True
+                if hasattr(self.parent, 'set_expanded'):
+                    self.parent.set_expanded(True)
+            if self.props.toggle_palette:
+                self.notify_toggle_state()
+
+    # Retain __click_event_cb for event-driven signals:
+    def __click_event_cb(self, widget, event):
         if not event:
-            # not an event from a user interaction, this can be when
-            # the clicked event is emitted on a 'active' property
-            # change of ToggleToolButton for example
+            # This callback requires an event from a user interaction.
             return
-        if event and button != Gtk.get_event_widget(event):
-            # another special case for the ToggleToolButton: this handles
-            # the case where we select an item and the active property
-            # of the other one changes to 'False'
+        if widget != Gtk.get_event_widget(event):
             return
 
         if self.props.lock_palette and not self.locked:

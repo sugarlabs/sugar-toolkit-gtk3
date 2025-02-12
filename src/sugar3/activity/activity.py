@@ -185,7 +185,6 @@ from gi.repository import GdkX11
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
-
 from sugar3 import util
 from sugar3 import power
 from sugar3.profile import get_color, get_save_as
@@ -981,13 +980,15 @@ class Activity(Gtk.Window):
         # Cannot call datastore.write async for creates:
         # https://dev.laptop.org/ticket/3071
         if self._jobject.object_id is None:
-            datastore.write(self._jobject, transfer_ownership=True)
+            datastore.write(self._jobject)
         else:
             self._updating_jobject = True
-            datastore.write(self._jobject,
-                            transfer_ownership=True,
-                            reply_handler=self.__save_cb,
-                            error_handler=self.__save_error_cb)
+            try:
+                datastore.write(self._jobject)
+            except Exception as exc:
+                self.__save_error_cb(exc)
+            else:
+                self.__save_cb()
 
     def copy(self):
         '''
@@ -1417,6 +1418,10 @@ class Activity(Gtk.Window):
         # In GTK4, setting a cursor on a window is not supported.
         # This method is now a no-op.
         pass
+    
+    def reveal(self):
+        """Bring the activity window to the front."""
+        self.present()
 
 
 class _ClientHandler(dbus.service.Object):
@@ -1495,6 +1500,8 @@ class _ClientHandler(dbus.service.Object):
             return r
         else:
             logging.debug('InvalidArgument')
+            
+
 
 
 _session = None

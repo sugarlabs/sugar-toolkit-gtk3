@@ -161,7 +161,7 @@ class Alert(Gtk.Box):
             if self._msg != value:
                 self._msg = value
                 self._msg_label.set_markup(self._msg)
-                self._msg_label.set_line_wrap(True)
+                self._msg_label.set_wrap(True)
         elif pspec.name == 'icon':
             if self._icon != value:
                 self._icon = value
