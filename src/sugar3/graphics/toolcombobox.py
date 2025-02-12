@@ -40,22 +40,22 @@ class ToolComboBox(Gtk.ToolItem):
 
         self.set_border_width(style.DEFAULT_PADDING)
 
-        hbox = Gtk.HBox(False, style.DEFAULT_SPACING)
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=style.DEFAULT_SPACING)
 
         self.label = Gtk.Label(label=self._label_text)
-        hbox.pack_start(self.label, False, False, 0)
-        self.label.show()
+        hbox.append(self.label)
+        self.label.set_visible(True)
 
         if combo:
             self.combo = combo
         else:
             self.combo = ComboBox()
 
-        hbox.pack_start(self.combo, True, True, 0)
-        self.combo.show()
+        hbox.append(self.combo)
+        self.combo.set_visible(True)
 
         self.add(hbox)
-        hbox.show()
+        hbox.set_visible(True)
 
     def do_set_property(self, pspec, value):
         if pspec.name == 'label-text':

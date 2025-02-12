@@ -27,7 +27,7 @@ AS_IF([test "x$with_python3" != xno],
 	[AM_PATH_PYTHON([3])],
 	[AS_IF([test "x$with_python2" = xyes], [AM_PATH_PYTHON([2.7])],)])
 
-PKG_CHECK_MODULES(EXT, gtk+-3.0 gdk-3.0 gdk-pixbuf-2.0 sm ice alsa
+PKG_CHECK_MODULES(EXT, gtk4 gdk-pixbuf-2.0 sm ice alsa
                        librsvg-2.0 xfixes xi x11)
 
 GLIB_MKENUMS=`$PKG_CONFIG glib-2.0 --variable=glib_mkenums`

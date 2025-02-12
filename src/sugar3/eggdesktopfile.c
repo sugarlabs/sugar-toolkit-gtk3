@@ -1028,27 +1028,30 @@ array_putenv (GPtrArray *env, char *variable)
 
 static gboolean
 egg_desktop_file_launchv (EggDesktopFile *desktop_file,
-			  GSList *documents, va_list args,
-			  GError **error)
+              GSList *documents, va_list args,
+              GError **error)
 {
   EggDesktopFileLaunchOption option;
   GSList *translated_documents = NULL, *docs;
   char *command, **argv;
-  int argc, i, screen_num;
+  int argc, i, screen_num = 0;
   gboolean success, current_success;
   GdkDisplay *display;
   char *startup_id;
-
   GPtrArray   *env = NULL;
   char       **variables = NULL;
-  GdkScreen   *screen = NULL;
+#if !GTK_CHECK_VERSION(4,0,0)
+  GdkScreen *screen = NULL;
+#else
+  /* In GTK4, ignore screen options; declare a dummy variable */
+  void *screen = NULL;
+#endif
   int          workspace = -1;
   const char  *directory = NULL;
   guint32      launch_time = (guint32)-1;
   GSpawnFlags  flags = G_SPAWN_SEARCH_PATH;
   GSpawnChildSetupFunc setup_func = NULL;
   gpointer     setup_data = NULL;
-
   GPid        *ret_pid = NULL;
   int         *ret_stdin = NULL, *ret_stdout = NULL, *ret_stderr = NULL;
   char       **ret_startup_id = NULL;
@@ -1071,24 +1074,38 @@ egg_desktop_file_launchv (EggDesktopFile *desktop_file,
   while ((option = va_arg (args, EggDesktopFileLaunchOption)))
     {
       switch (option)
-	{
-	case EGG_DESKTOP_FILE_LAUNCH_CLEARENV:
-	  if (env)
-	    g_ptr_array_free (env, TRUE);
-	  env = g_ptr_array_new ();
-	  break;
-	case EGG_DESKTOP_FILE_LAUNCH_PUTENV:
-	  variables = va_arg (args, char **);
-	  for (i = 0; variables[i]; i++)
-	    env = array_putenv (env, variables[i]);
-	  break;
-
-	case EGG_DESKTOP_FILE_LAUNCH_SCREEN:
-	  screen = va_arg (args, GdkScreen *);
-	  break;
-	case EGG_DESKTOP_FILE_LAUNCH_WORKSPACE:
-	  workspace = va_arg (args, int);
-	  break;
+    {
+        case EGG_DESKTOP_FILE_LAUNCH_SCREEN:
+#if !GTK_CHECK_VERSION(4,0,0)
+      screen = va_arg (args, GdkScreen *);
+#else
+          /* Discard screen option in GTK4 */
+          (void)va_arg(args, void*);
+#endif
+      break;
+    case EGG_DESKTOP_FILE_LAUNCH_WORKSPACE:
+#if !GTK_CHECK_VERSION(4,0,0)
+          if (screen)
+        {
+          char *display_name = gdk_screen_make_display_name (screen);
+          char *display_env = g_strdup_printf ("DISPLAY=%s", display_name);
+          env = array_putenv (env, display_env);
+          g_free (display_name);
+          g_free (display_env);
+          display = gdk_screen_get_display (screen);
+        }
+      else
+        {
+          display = gdk_display_get_default ();
+          screen = gdk_display_get_default_screen (display);
+        }
+      screen_num = gdk_screen_get_number (screen);
+#else
+      /* In GTK4, ignore screen settings */
+      display = gdk_display_get_default ();
+      screen_num = 0;
+#endif
+      break;
 
 	case EGG_DESKTOP_FILE_LAUNCH_DIRECTORY:
 	  directory = va_arg (args, const char *);
@@ -1132,22 +1149,26 @@ egg_desktop_file_launchv (EggDesktopFile *desktop_file,
 	}
     }
 
-  if (screen)
-    {
-      char *display_name = gdk_screen_make_display_name (screen);
-      char *display_env = g_strdup_printf ("DISPLAY=%s", display_name);
-      env = array_putenv (env, display_env);
-      g_free (display_name);
-      g_free (display_env);
-
-      display = gdk_screen_get_display (screen);
-    }
-  else
-    {
+    #if !GTK_CHECK_VERSION(4,0,0)
+    if (screen)
+      {
+        char *display_name = gdk_screen_make_display_name (screen);
+        char *display_env = g_strdup_printf ("DISPLAY=%s", display_name);
+        env = array_putenv (env, display_env);
+        g_free (display_name);
+        g_free (display_env);
+        display = gdk_screen_get_display (screen);
+      }
+    else
+      {
+        display = gdk_display_get_default ();
+        screen = gdk_display_get_default_screen (display);
+      }
+    screen_num = gdk_screen_get_number (screen);
+    #else
       display = gdk_display_get_default ();
-      screen = gdk_display_get_default_screen (display);
-    }
-  screen_num = gdk_screen_get_number (screen);
+      screen_num = 0;
+    #endif
 
   translated_documents = translate_document_list (desktop_file, documents);
   docs = translated_documents;
@@ -1389,30 +1410,30 @@ void
 egg_set_desktop_file (const char *desktop_file_path)
 {
   GError *error = NULL;
-
   G_LOCK (egg_desktop_file);
   if (egg_desktop_file)
     egg_desktop_file_free (egg_desktop_file);
-
   egg_desktop_file = egg_desktop_file_new (desktop_file_path, &error);
   if (error)
     {
       g_warning ("Could not load desktop file '%s': %s",
-		 desktop_file_path, error->message);
+         desktop_file_path, error->message);
       g_error_free (error);
     }
-
   /* Set localized application name and default window icon */
   if (egg_desktop_file->name)
     g_set_application_name (egg_desktop_file->name);
   if (egg_desktop_file->icon)
     {
+#if !GTK_CHECK_VERSION(4,0,0)
       if (g_path_is_absolute (egg_desktop_file->icon))
-	gtk_window_set_default_icon_from_file (egg_desktop_file->icon, NULL);
+        gtk_window_set_default_icon_from_file (egg_desktop_file->icon, NULL);
       else
-	gtk_window_set_default_icon_name (egg_desktop_file->icon);
+        gtk_window_set_default_icon_name (egg_desktop_file->icon);
+#else
+        gtk_window_set_default_icon_name (egg_desktop_file->icon);
+#endif
     }
-
   G_UNLOCK (egg_desktop_file);
 }
 

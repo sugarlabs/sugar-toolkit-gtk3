@@ -51,7 +51,9 @@ STABLE.
 # Boston, MA 02111-1307, USA.
 
 import gettext
+import gi
 
+gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk
 from gi.repository import GObject
 from gi.repository import GLib
@@ -70,7 +72,7 @@ if not hasattr(GObject.ParamFlags, 'READWRITE'):
         GObject.ParamFlags.READABLE
 
 
-class Alert(Gtk.EventBox):
+class Alert(Gtk.Box):
     """
     Alerts are inside the activity window instead of being a
     separate popup window. They do not hide the canvas.
@@ -107,37 +109,42 @@ class Alert(Gtk.EventBox):
         self._icon = None
         self._buttons = {}
 
-        self._hbox = Gtk.HBox()
-        self._hbox.set_border_width(style.DEFAULT_SPACING)
+        self._hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        self._hbox.set_margin_start(style.DEFAULT_SPACING)
+        self._hbox.set_margin_end(style.DEFAULT_SPACING)
+        self._hbox.set_margin_top(style.DEFAULT_SPACING)
+        self._hbox.set_margin_bottom(style.DEFAULT_SPACING)
         self._hbox.set_spacing(style.DEFAULT_SPACING)
 
-        self._msg_box = Gtk.VBox()
+        self._msg_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self._title_label = Gtk.Label()
-        self._title_label.set_alignment(0, 0.5)
+        self._title_label.set_halign(Gtk.Align.START)
+        self._title_label.set_valign(Gtk.Align.CENTER)
         self._title_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
-        self._msg_box.pack_start(self._title_label, False, False, 0)
+        self._msg_box.append(self._title_label)
 
         self._msg_label = Gtk.Label()
-        self._msg_label.set_alignment(0, 0.5)
+        self._msg_label.set_halign(Gtk.Align.START)
+        self._msg_label.set_valign(Gtk.Align.CENTER)
         self._msg_label.set_ellipsize(style.ELLIPSIZE_MODE_DEFAULT)
-        self._msg_box.pack_start(self._msg_label, False, False, 0)
-        self._hbox.pack_start(self._msg_box, False, False, 0)
+        self._msg_box.append(self._msg_label)
+        self._hbox.append(self._msg_box)
 
-        self._buttons_box = Gtk.HButtonBox()
-        self._buttons_box.set_layout(Gtk.ButtonBoxStyle.END)
+        self._buttons_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        self._buttons_box.set_halign(Gtk.Align.END)
         self._buttons_box.set_spacing(style.DEFAULT_SPACING)
-        self._hbox.pack_end(self._buttons_box, True, True, 0)
+        self._hbox.append(self._buttons_box)
 
         GObject.GObject.__init__(self, **kwargs)
 
-        self.set_visible_window(True)
-        self.add(self._hbox)
-        self._title_label.show()
-        self._msg_label.show()
-        self._buttons_box.show()
-        self._msg_box.show()
-        self._hbox.show()
-        self.show()
+        self.set_visible(True)
+        self.append(self._hbox)
+        self._title_label.set_visible(True)
+        self._msg_label.set_visible(True)
+        self._buttons_box.set_visible(True)
+        self._msg_box.set_visible(True)
+        self._hbox.set_visible(True)
+        self.set_visible(True)
 
     def do_set_property(self, pspec, value):
         """
@@ -154,11 +161,11 @@ class Alert(Gtk.EventBox):
             if self._msg != value:
                 self._msg = value
                 self._msg_label.set_markup(self._msg)
-                self._msg_label.set_line_wrap(True)
+                self._msg_label.set_wrap(True)
         elif pspec.name == 'icon':
             if self._icon != value:
                 self._icon = value
-                self._hbox.pack_start(self._icon, False, False, 0)
+                self._hbox.append(self._icon)
                 self._hbox.reorder_child(self._icon, 0)
 
     def do_get_property(self, pspec):
@@ -187,8 +194,8 @@ class Alert(Gtk.EventBox):
             :class:`Gtk.Entry`: the entry added to the alert
         """
         entry = Gtk.Entry()
-        self._hbox.pack_start(entry, True, True, 0)
-        entry.show()
+        self._hbox.append(entry)
+        entry.set_visible(True)
 
         self._hbox.set_child_packing(self._buttons_box, False, False, 0,
                                      Gtk.PackType.END)
@@ -222,10 +229,10 @@ class Alert(Gtk.EventBox):
         button = Gtk.Button()
         self._buttons[response_id] = button
         if icon is not None:
-            button.set_image(icon)
+            button.set_child(icon)
         button.set_label(label)
-        self._buttons_box.pack_start(button, True, True, 0)
-        button.show()
+        self._buttons_box.append(button)
+        button.set_visible(True)
         button.connect('clicked', self.__button_clicked_cb, response_id)
         if position != -1:
             self._buttons_box.reorder_child(button, position)
@@ -307,11 +314,11 @@ class ConfirmationAlert(Alert):
 
         icon = Icon(icon_name='dialog-cancel')
         self.add_button(Gtk.ResponseType.CANCEL, _('Cancel'), icon)
-        icon.show()
+        icon.set_visible(True)
 
         icon = Icon(icon_name='dialog-ok')
         self.add_button(Gtk.ResponseType.OK, _('Ok'), icon)
-        icon.show()
+        icon.set_visible(True)
 
 
 class ErrorAlert(Alert):
@@ -352,19 +359,24 @@ class ErrorAlert(Alert):
 
         icon = Icon(icon_name='dialog-ok')
         self.add_button(Gtk.ResponseType.OK, _('Ok'), icon)
-        icon.show()
+        icon.set_visible(True)
 
 
-class _TimeoutIcon(Gtk.Alignment):
+class _TimeoutIcon(Gtk.Box):
     __gtype_name__ = 'SugarTimeoutIcon'
 
     def __init__(self):
-        Gtk.Alignment.__init__(self, xalign=0, yalign=0, xscale=1, yscale=1)
+        super().__init__()
+        self.set_orientation(Gtk.Orientation.HORIZONTAL)
+        self.set_halign(Gtk.Align.CENTER)
+        self.set_valign(Gtk.Align.CENTER)
         self.set_app_paintable(True)
+
         self._text = Gtk.Label()
-        self._text.set_alignment(0.5, 0.5)
-        self.add(self._text)
-        self._text.show()
+        self._text.set_halign(Gtk.Align.CENTER)
+        self._text.set_valign(Gtk.Align.CENTER)
+        self.append(self._text)
+
         self.connect('draw', self.__draw_cb)
 
     def __draw_cb(self, widget, context):
@@ -408,7 +420,7 @@ class _TimeoutAlert(Alert):
         self._timeout_text = _TimeoutIcon()
         self._timeout_text.set_text(self._timeout)
         self.add_button(Gtk.ResponseType.OK, label, self._timeout_text)
-        self._timeout_text.show()
+        self._timeout_text.set_visible(True)
 
         self._timeout_sid = GLib.timeout_add(1000, self.__timeout_cb)
 
@@ -475,7 +487,7 @@ class TimeoutAlert(_TimeoutAlert):
 
         icon = Icon(icon_name='dialog-cancel')
         self.add_button(Gtk.ResponseType.CANCEL, _('Cancel'), icon)
-        icon.show()
+        icon.set_visible(True)
 
 
 class NotifyAlert(_TimeoutAlert):

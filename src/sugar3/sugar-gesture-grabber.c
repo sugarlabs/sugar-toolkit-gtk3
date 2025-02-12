@@ -18,8 +18,12 @@
  *
  * Author: Carlos Garnacho  <carlos@lanedo.com>
  */
+#include <gtk/gtk.h>
+#include <gdk/gdk.h>
+#include <gdk/gdksurface.h>
 
-#include <gdk/gdkx.h>
+#include <gdk/x11/gdkx.h>
+#include <graphene.h>
 #include <X11/extensions/XInput2.h>
 #include "sugar-gesture-grabber.h"
 
@@ -41,17 +45,23 @@ struct _ControllerData
 
 G_DEFINE_TYPE_WITH_PRIVATE (SugarGestureGrabber, sugar_gesture_grabber, G_TYPE_OBJECT)
 
+static void handle_touch_event(GtkGesture *gesture,
+	GdkEventSequence *sequence,
+	gpointer user_data);
+
+
 static void
 _sugar_gesture_grabber_notify_touch (SugarGestureGrabber *grabber,
-				     GdkDevice           *device,
-				     GdkEventSequence    *sequence,
-				     gboolean             handled)
+					GdkDevice           *device,
+					GdkEventSequence    *sequence,
+					gboolean             handled)
 {
 	SugarGestureGrabberPrivate *priv = grabber->priv;
 	GdkDisplay *display;
 	guint i;
 
-	display = gdk_window_get_display (priv->root_window);
+	/* Use root_surface instead of root_window */
+	display = gdk_surface_get_display (priv->root_surface);
 
 	for (i = 0; i < priv->touches->len; i++) {
 		TouchData *data;
@@ -69,11 +79,10 @@ _sugar_gesture_grabber_notify_touch (SugarGestureGrabber *grabber,
 
 		gdk_x11_display_error_trap_push (display);
 		XIAllowTouchEvents (gdk_x11_display_get_xdisplay (display),
-				    gdk_x11_device_get_id (data->device),
-				    GPOINTER_TO_INT (data->sequence),
-				    gdk_x11_window_get_xid (priv->root_window),
-				    (handled) ? XIAcceptTouch : XIRejectTouch);
-
+					gdk_x11_device_get_id (data->device),
+					GPOINTER_TO_INT (data->sequence),
+					gdk_x11_surface_get_xid (priv->root_surface),
+					(handled) ? XIAcceptTouch : XIRejectTouch);
 		gdk_x11_display_error_trap_pop_ignored (display);
 		data->consumed = TRUE;
 	}
@@ -81,8 +90,8 @@ _sugar_gesture_grabber_notify_touch (SugarGestureGrabber *grabber,
 
 static void
 _sugar_gesture_grabber_add_touch (SugarGestureGrabber *grabber,
-				  GdkDevice           *device,
-				  GdkEventSequence    *sequence)
+				GdkDevice           *device,
+				GdkEventSequence    *sequence)
 {
 	SugarGestureGrabberPrivate *priv = grabber->priv;
 	TouchData data;
@@ -95,8 +104,8 @@ _sugar_gesture_grabber_add_touch (SugarGestureGrabber *grabber,
 
 static void
 _sugar_gesture_grabber_remove_touch (SugarGestureGrabber *grabber,
-				     GdkDevice           *device,
-				     GdkEventSequence    *sequence)
+					GdkDevice           *device,
+					GdkEventSequence    *sequence)
 {
 	SugarGestureGrabberPrivate *priv = grabber->priv;
 	guint i;
@@ -107,7 +116,7 @@ _sugar_gesture_grabber_remove_touch (SugarGestureGrabber *grabber,
 		data = &g_array_index (priv->touches, TouchData, i);
 
 		if (data->device == device &&
-		    data->sequence == sequence) {
+			data->sequence == sequence) {
 			g_array_remove_index_fast (priv->touches, i);
 			break;
 		}
@@ -137,7 +146,7 @@ sugar_gesture_grabber_finalize (GObject *object)
 	}
 
 	_sugar_gesture_grabber_notify_touch (SUGAR_GESTURE_GRABBER (object),
-					     NULL, NULL, FALSE);
+						NULL, NULL, FALSE);
 
 	for (i = 0; i < priv->controllers->len; i++) {
 		ControllerData *data;
@@ -160,181 +169,200 @@ sugar_gesture_grabber_class_init (SugarGestureGrabberClass *klass)
 	object_class->finalize = sugar_gesture_grabber_finalize;
 }
 
+/* Update _grab_touch_events to accept a GdkSurface instead of GdkWindow */
 static void
-_grab_touch_events (GdkWindow *window)
+_grab_touch_events (GdkSurface *surface)
 {
-        XIGrabModifiers mods = { 1 };
-        unsigned char mask[4] = { 0 };
-        GdkDisplay *display;
-        XIEventMask evmask;
+		XIGrabModifiers mods = { 1 };
+		unsigned char mask[4] = { 0 };
+		GdkDisplay *display;
+		XIEventMask evmask;
 
-        XISetMask (mask, XI_TouchBegin);
-        XISetMask (mask, XI_TouchUpdate);
-        XISetMask (mask, XI_TouchEnd);
+		XISetMask (mask, XI_TouchBegin);
+		XISetMask (mask, XI_TouchUpdate);
+		XISetMask (mask, XI_TouchEnd);
 
-        evmask.deviceid = XIAllMasterDevices;
-        evmask.mask_len = sizeof (mask);
-        evmask.mask = mask;
+		evmask.deviceid = XIAllMasterDevices;
+		evmask.mask_len = sizeof (mask);
+		evmask.mask = mask;
 
-        mods.modifiers = XIAnyModifier;
-        display = gdk_window_get_display (window);
+		mods.modifiers = XIAnyModifier;
+		display = gdk_surface_get_display (surface);
 
-        XIGrabTouchBegin (gdk_x11_display_get_xdisplay (display),
-                          XIAllMasterDevices,
-                          gdk_x11_window_get_xid (window),
-                          XINoOwnerEvents, &evmask, 1, &mods);
+		XIGrabTouchBegin (gdk_x11_display_get_xdisplay (display),
+						XIAllMasterDevices,
+						gdk_x11_surface_get_xid (surface),
+						XINoOwnerEvents, &evmask, 1, &mods);
 }
 
-static GdkWindow *
-_get_default_root_window (void)
+static GdkSurface *
+_get_default_root_surface (void)
 {
-        GdkDisplay *display;
-        GdkScreen *screen;
+    GdkDisplay *display;
+    GdkSurface *surface = NULL;
+    
+    display = gdk_display_get_default();
+    if (!display)
+        return NULL;
 
-        display = gdk_display_get_default ();
-        screen = gdk_display_get_default_screen (display);
+    /* Get the default seat for the display */
+    GdkSeat *seat = gdk_display_get_default_seat(display);
+    if (!seat)
+        return NULL;
 
-        return gdk_screen_get_root_window (screen);
+    /* Create fullscreen window on the primary monitor */
+    GtkWindow *window = GTK_WINDOW(gtk_window_new());
+    if (window) {
+        /* Make it fullscreen */
+        gtk_window_fullscreen(window);
+        gtk_window_set_decorated(window, FALSE);
+        
+        /* Show the window */
+        gtk_widget_set_visible(GTK_WIDGET(window), TRUE);
+        gtk_window_present(window);
+        
+        /* Get the native surface */
+        surface = gtk_native_get_surface(GTK_NATIVE(window));
+    }
+    
+    return surface;
 }
 
 static gboolean
 _sugar_gesture_grabber_run_controllers (SugarGestureGrabber *grabber,
-					GdkEvent            *event)
+                                      GdkEvent *event)
 {
-	SugarGestureGrabberPrivate *priv = grabber->priv;
-	gboolean handled = FALSE;
-	guint i;
+    SugarGestureGrabberPrivate *priv = grabber->priv;
+    gboolean handled = FALSE;
+    double x, y;
+    
+    if (!gdk_event_get_position(event, &x, &y))
+        return FALSE;
 
-	for (i = 0; i < priv->controllers->len; i++) {
-		ControllerData *data;
+    GdkSurface *surface = gdk_event_get_surface(event);
+    if (!surface)
+        return FALSE;
 
-		data = &g_array_index (priv->controllers, ControllerData, i);
+    /* Get surface position relative to root */
+    graphene_point_t pos = GRAPHENE_POINT_INIT (0, 0);
+    
+    /* Get the surface's position in the root coordinate system */
+    GdkDisplay *display = gdk_surface_get_display(surface);
+    if (display) {
+        GdkMonitor *monitor = gdk_display_get_monitor_at_surface(display, surface);
+        if (monitor) {
+            GdkRectangle geometry;
+            gdk_monitor_get_geometry(monitor, &geometry);
+            pos.x = geometry.x;
+            pos.y = geometry.y;
+        }
+    }
 
-		if (event->type == GDK_TOUCH_BEGIN &&
-                    (event->touch.x_root < data->rect.x ||
-                     event->touch.x_root > data->rect.x + data->rect.width ||
-                     event->touch.y_root < data->rect.y ||
-                     event->touch.y_root > data->rect.y + data->rect.height))
-			continue;
+    double x_root = x + pos.x;
+    double y_root = y + pos.y;
 
-		handled = sugar_event_controller_handle_event (data->controller,
-							       event);
+    for (guint i = 0; i < priv->controllers->len; i++) {
+        ControllerData *data = &g_array_index(priv->controllers, ControllerData, i);
 
-		if (handled) {
-			guint state;
+        if (gdk_event_get_event_type(event) == GDK_TOUCH_BEGIN) {
+            if (x_root < data->rect.x ||
+                x_root > data->rect.x + data->rect.width ||
+                y_root < data->rect.y ||
+                y_root > data->rect.y + data->rect.height)
+                continue;
+        }
 
-			state = sugar_event_controller_get_state (data->controller);
+        handled = sugar_event_controller_handle_event(data->controller, event);
 
-			if (state == SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED) {
-				_sugar_gesture_grabber_notify_touch (grabber,
-								     event->touch.device,
-								     event->touch.sequence,
-								     TRUE);
-			}
-		}
-	}
+        if (handled && 
+            sugar_event_controller_get_state(data->controller) == SUGAR_EVENT_CONTROLLER_STATE_RECOGNIZED) {
+            _sugar_gesture_grabber_notify_touch(grabber,
+                                              gdk_event_get_device(event),
+                                              gdk_event_get_event_sequence(event),
+                                              TRUE);
+        }
+    }
 
-	return handled;
+    return handled;
 }
 
-static GdkFilterReturn
-filter_function (GdkXEvent *xevent,
-                 GdkEvent  *gdkevent,
-                 gpointer   user_data)
+
+static void
+gesture_controller_event_cb (GtkEventController *controller,
+                           GdkEvent           *event,
+                           SugarGestureGrabber *grabber)
 {
-        XGenericEventCookie *xge = xevent;
-        SugarGestureGrabber *grabber;
-        SugarGestureGrabberPrivate *priv;
-        gboolean handled = FALSE;
-        XIDeviceEvent *ev;
-        GdkDisplay *display;
-        GdkEvent *event;
+    SugarGestureGrabberPrivate *priv = grabber->priv;
+    gboolean handled = FALSE;
+    
+    if (!priv->root_surface)
+        return;
 
-        if (xge->type != GenericEvent)
-                return GDK_FILTER_CONTINUE;
+    handled = _sugar_gesture_grabber_run_controllers(grabber, event);
 
-        grabber = user_data;
-        priv = grabber->priv;
+    if (!handled) {
+        GdkDevice *device = gdk_event_get_device(event);
+        GdkEventSequence *sequence = gdk_event_get_event_sequence(event);
+        _sugar_gesture_grabber_notify_touch(grabber, device, sequence, FALSE);
+    } else if (gdk_event_get_event_type(event) == GDK_TOUCH_BEGIN) {
+        GdkDevice *device = gdk_event_get_device(event);
+        GdkEventSequence *sequence = gdk_event_get_event_sequence(event);
+        _sugar_gesture_grabber_add_touch(grabber, device, sequence);
+    } else if (gdk_event_get_event_type(event) == GDK_TOUCH_END) {
+        GdkDevice *device = gdk_event_get_device(event);
+        GdkEventSequence *sequence = gdk_event_get_event_sequence(event);
+        _sugar_gesture_grabber_notify_touch(grabber, device, sequence, FALSE);
+        _sugar_gesture_grabber_remove_touch(grabber, device, sequence);
+    }
+}
 
-        display = gdk_window_get_display (priv->root_window);
-        ev = (XIDeviceEvent *) xge->data;
 
-        switch (ev->evtype) {
-        case XI_TouchBegin:
-                event = gdk_event_new (GDK_TOUCH_BEGIN);
-                break;
-        case XI_TouchEnd:
-                event = gdk_event_new (GDK_TOUCH_END);
-                break;
-        case XI_TouchUpdate:
-                event = gdk_event_new (GDK_TOUCH_UPDATE);
-                break;
-        default:
-                return GDK_FILTER_CONTINUE;
-        }
-
-        if (ev->event != gdk_x11_window_get_xid (priv->root_window))
-                return GDK_FILTER_CONTINUE;
-
-        event->touch.window = g_object_ref (priv->root_window);
-        event->touch.time = ev->time;
-        event->touch.x = ev->event_x;
-        event->touch.y = ev->event_y;
-        event->touch.x_root = ev->root_x;
-        event->touch.y_root = ev->root_y;
-        event->touch.sequence = GINT_TO_POINTER (ev->detail);
-        event->touch.emulating_pointer = (ev->flags & XITouchEmulatingPointer);
-
-        handled = _sugar_gesture_grabber_run_controllers (grabber, event);
-
-        if (!handled) {
-                gdk_x11_display_error_trap_push (display);
-                XIAllowTouchEvents (gdk_x11_display_get_xdisplay (display),
-                                    ev->deviceid, ev->detail,
-                                    gdk_x11_window_get_xid (priv->root_window),
-                                    XIRejectTouch);
-                gdk_x11_display_error_trap_pop_ignored (display);
-        } else if (event->type == GDK_TOUCH_BEGIN) {
-                _sugar_gesture_grabber_add_touch (grabber,
-                                                  event->touch.device,
-                                                  event->touch.sequence);
-        } else if (event->type == GDK_TOUCH_END) {
-                _sugar_gesture_grabber_notify_touch (grabber,
-                                                     event->touch.device,
-                                                     event->touch.sequence,
-                                                     FALSE);
-                _sugar_gesture_grabber_remove_touch (grabber,
-                                                     event->touch.device,
-                                                     event->touch.sequence);
-        }
-
-        if (handled) {
-                if (priv->cancel_timeout_id)
-                        g_source_remove (priv->cancel_timeout_id);
-
-                priv->cancel_timeout_id =
-                        gdk_threads_add_timeout (150,
-                                                 (GSourceFunc) _sugar_gesture_grabber_cancel_timeout,
-                                                 grabber);
-        }
-
-        gdk_event_free (event);
-
-        return GDK_FILTER_REMOVE;
+static void
+handle_touch_event (GtkGesture *gesture,
+                   GdkEventSequence *sequence,
+                   gpointer user_data)
+{
+    SugarGestureGrabber *grabber = SUGAR_GESTURE_GRABBER(user_data);
+    GdkEvent *event;
+    
+    event = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(gesture));
+    if (!event)
+        return;
+    
+    gboolean handled = _sugar_gesture_grabber_run_controllers(grabber, event);
+    
+    if (!handled) {
+        GdkDevice *device = gdk_event_get_device(event);
+        GdkEventSequence *seq = gdk_event_get_event_sequence(event);
+        _sugar_gesture_grabber_notify_touch(grabber, device, seq, FALSE);
+    }
 }
 
 static void
 sugar_gesture_grabber_init (SugarGestureGrabber *grabber)
 {
-	SugarGestureGrabberPrivate *priv;
+    SugarGestureGrabberPrivate *priv;
+    
+    grabber->priv = priv = sugar_gesture_grabber_get_instance_private(grabber);
+    priv->root_surface = _get_default_root_surface();
+    
+    if (priv->root_surface) {
+        GtkWidget *widget = gtk_widget_get_ancestor(GTK_WIDGET(priv->root_surface), 
+                                                  GTK_TYPE_WINDOW);
+        if (widget) {
+            /* Add touch gesture controller */
+            GtkGesture *gesture = gtk_gesture_click_new();
+            gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(gesture), TRUE);
+            gtk_widget_add_controller(widget, GTK_EVENT_CONTROLLER(gesture));
+            
+            /* Connect to touch event */
+            g_signal_connect(gesture, "begin",
+                           G_CALLBACK(handle_touch_event), grabber);
+        }
+    }
 
-	grabber->priv = priv = sugar_gesture_grabber_get_instance_private (grabber);
-	priv->root_window = _get_default_root_window ();
-	_grab_touch_events (priv->root_window);
-	gdk_window_add_filter (NULL, filter_function, grabber);
-
-	priv->touches = g_array_new (FALSE, FALSE, sizeof (TouchData));
-	priv->controllers = g_array_new (FALSE, FALSE, sizeof (ControllerData));
+    priv->touches = g_array_new(FALSE, FALSE, sizeof(TouchData));
+    priv->controllers = g_array_new(FALSE, FALSE, sizeof(ControllerData));
 }
 
 SugarGestureGrabber *
@@ -371,8 +399,8 @@ _sugar_gesture_grabber_find_controller (SugarGestureGrabber  *grabber,
 
 void
 sugar_gesture_grabber_add (SugarGestureGrabber  *grabber,
-			   SugarEventController *controller,
-			   const GdkRectangle   *rect)
+			SugarEventController *controller,
+			const GdkRectangle   *rect)
 {
 	SugarGestureGrabberPrivate *priv;
 	ControllerData data;
@@ -382,7 +410,7 @@ sugar_gesture_grabber_add (SugarGestureGrabber  *grabber,
 
 	if (_sugar_gesture_grabber_find_controller (grabber, controller, NULL)) {
 		g_warning ("Controller is already on the gesture grabber"
-			   " list. Controllers can only be added once.");
+			" list. Controllers can only be added once.");
 		return;
 	}
 
@@ -395,7 +423,7 @@ sugar_gesture_grabber_add (SugarGestureGrabber  *grabber,
 
 void
 sugar_gesture_grabber_remove (SugarGestureGrabber  *grabber,
-			      SugarEventController *controller)
+				SugarEventController *controller)
 {
 	SugarGestureGrabberPrivate *priv;
 	ControllerData *data;

@@ -17,36 +17,48 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <gtk/gtk.h>
 #include "sugar-clipboard.h"
 
 /**
  * sugar_clipboard_set_with_data:
- * @clipboard: a #GtkClipboard
- * @targets: (array length=n_targets): array containing information
- *     about the available forms for the clipboard data
- * @n_targets: number of elements in @targets
- * @get_func: (closure user_data) (scope notified): function to call to get the
- *     actual clipboard data
- * @clear_func: (closure user_data) (scope async): when the clipboard
- *     contents are set again, this function will be called, and @get_func
- *     will not be subsequently called.
+ * @clipboard: a clipboard object. In GTK3, this is a #GtkClipboard. In GTK4, it is a #GdkClipboard.
+ * @targets: (array length=n_targets): array containing information about the available clipboard formats.
+ * @n_targets: number of elements in @targets.
+ * @get_func: a callback to retrieve the clipboard data.
+ * @clear_func: a callback to clear the clipboard data when it is updated.
  * @user_data: user data to pass to @get_func and @clear_func.
  *
- * Virtually sets the contents of the specified clipboard by providing
- * a list of supported formats for the clipboard data and a function
- * to call to get the actual data when it is requested.
+ * Sets the contents of the specified clipboard by providing a list of supported
+ * formats and callbacks to retrieve or clear the data.
  *
  * Return value: %TRUE if setting the clipboard data succeeded.
- *    If setting the clipboard data failed the provided callback
- *    functions will be ignored.
- **/
+ */
+#if GTK_CHECK_VERSION(4, 0, 0)
+gboolean
+sugar_clipboard_set_with_data (GdkClipboard *clipboard,
+                               const GtkTargetEntry *targets,
+                               guint n_targets,
+                               GtkClipboardGetFunc get_func,
+                               GtkClipboardClearFunc clear_func,
+                               gpointer user_data)
+{
+    /* 
+     * In GTK4 the clipboard API has changed.
+     * Replace this stub with an implementation using the new GTK4 clipboard API,
+     * such as using gdk_clipboard_set_content() with a GdkContentProvider.
+     */
+    g_warning ("sugar_clipboard_set_with_data is not yet implemented for GTK4.");
+    return FALSE;
+}
+#else
 gboolean
 sugar_clipboard_set_with_data (GtkClipboard *clipboard,
-                              const GtkTargetEntry *targets,
-                              guint n_targets,
-                              GtkClipboardGetFunc get_func,
-                              GtkClipboardClearFunc clear_func,
-                              gpointer user_data)
+                               const GtkTargetEntry *targets,
+                               guint n_targets,
+                               GtkClipboardGetFunc get_func,
+                               GtkClipboardClearFunc clear_func,
+                               gpointer user_data)
 {
     return gtk_clipboard_set_with_data (clipboard,
                                         targets,
@@ -55,3 +67,4 @@ sugar_clipboard_set_with_data (GtkClipboard *clipboard,
                                         clear_func,
                                         user_data);
 }
+#endif

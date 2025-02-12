@@ -130,7 +130,7 @@ class Builder(object):
         po_dir = os.path.join(self.config.source_dir, 'po')
 
         if not self.config.bundle.is_dir(po_dir):
-            logging.warn('Missing po/ dir, cannot build_locale')
+            logging.warning('Missing po/ dir, cannot build_locale')
             return
 
         if os.path.exists(self.locale_dir):
@@ -163,7 +163,7 @@ class Builder(object):
                 translated_summary = ''
             if translated_summary.find('\n') > -1:
                 translated_summary = translated_summary.replace('\n', '')
-                logging.warn(
+                logging.warning(
                     'Translation of summary on file %s have \\n chars. '
                     'Should be removed' % file_name)
             linfo_file = os.path.join(localedir, 'activity.linfo')
@@ -195,14 +195,14 @@ class Packager(object):
                                       stdout=subprocess.PIPE,
                                       cwd=root)
         except OSError:
-            logging.warn('Packager: git is not installed, '
+            logging.warning('Packager: git is not installed, '
                          'fall back to filtered list')
 
         if git_ls is not None:
             stdout, _ = git_ls.communicate()
             if git_ls.returncode:
                 # Fall back to filtered list
-                logging.warn('Packager: this is not a git repository, '
+                logging.warning('Packager: this is not a git repository, '
                              'fall back to filtered list')
             elif stdout:
                 # pylint: disable=E1103

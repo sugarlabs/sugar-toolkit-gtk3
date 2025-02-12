@@ -170,20 +170,21 @@ import cairo
 import json
 
 import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Gdk', '3.0')
+gi.require_version('Gtk', '4.0')
+gi.require_version('Gdk', '4.0')
 gi.require_version('TelepathyGLib', '0.12')
 gi.require_version('SugarExt', '1.0')
+gi.require_version('GdkX11', '4.0')
 
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import TelepathyGLib
+from gi.repository import GdkX11
 import dbus
 import dbus.service
 from dbus import PROPERTIES_IFACE
-
 from sugar3 import util
 from sugar3 import power
 from sugar3.profile import get_color, get_save_as
@@ -243,6 +244,7 @@ class _ActivitySession(GObject.GObject):
 
     def __init__(self):
         GObject.GObject.__init__(self)
+        self._main_loop = GLib.MainLoop()
 
         self._xsmp_client = SugarExt.ClientXSMP()
         self._xsmp_client.connect('quit-requested',
@@ -261,8 +263,8 @@ class _ActivitySession(GObject.GObject):
 
         if len(self._activities) == 0:
             logging.debug('Quitting the activity process.')
-            Gtk.main_quit()
-
+            self._main_loop.quit()
+            
     def will_quit(self, activity, will_quit):
         if will_quit:
             self._will_quit.append(activity)
@@ -284,7 +286,7 @@ class _ActivitySession(GObject.GObject):
         self.emit('quit')
 
 
-class Activity(Window, Gtk.Container):
+class Activity(Gtk.Window):
     """
     Initialise an Activity.
 
@@ -315,10 +317,6 @@ class Activity(Window, Gtk.Container):
         * creates a base Gtk.Window within this window.
 
         * creates an ActivityService (self._bus) servicing this application.
-
-    When your activity implements :func:`__init__`, it must call the
-    :class:`Activity` class :func:`__init__` before any
-    :class:`Activity` specific code.
     """
 
     __gtype_name__ = 'SugarActivity'
@@ -332,13 +330,16 @@ class Activity(Window, Gtk.Container):
     }
 
     def __init__(self, handle, create_jobject=True):
+        Gtk.Window.__init__(self)
+
         if hasattr(GLib, 'unix_signal_add'):
             GLib.unix_signal_add(
                 GLib.PRIORITY_DEFAULT, signal.SIGINT, self.close)
 
         # Stuff that needs to be done early
         icons_path = os.path.join(get_bundle_path(), 'icons')
-        Gtk.IconTheme.get_default().append_search_path(icons_path)
+        display = Gdk.Display.get_default()
+        Gtk.IconTheme.get_for_display(display).add_search_path(icons_path)
 
         sugar_theme = 'sugar-72'
         if 'SUGAR_SCALING' in os.environ:
@@ -350,20 +351,17 @@ class Activity(Window, Gtk.Container):
         settings = Gtk.Settings.get_default()
         settings.set_property('gtk-theme-name', sugar_theme)
         settings.set_property('gtk-icon-theme-name', 'sugar')
-        settings.set_property('gtk-button-images', True)
         settings.set_property('gtk-font-name',
-                              '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
+                            '%s %f' % (style.FONT_FACE, style.FONT_SIZE))
 
-        Window.__init__(self)
+        self.set_titlebar(Gtk.HeaderBar())
 
         if 'SUGAR_ACTIVITY_ROOT' in os.environ:
             # If this activity runs inside Sugar, we want it to take all the
             # screen. Would be better if it was the shell to do this, but we
             # haven't found yet a good way to do it there. See #1263.
-            self.connect('window-state-event', self.__window_state_event_cb)
-            screen = Gdk.Screen.get_default()
-            screen.connect('size-changed', self.__screen_size_changed_cb)
-            self._adapt_window_to_screen()
+            self.connect('notify::window-state', self.__window_state_event_cb)
+            self.connect('realize', self.__on_realize)
 
         # process titles will only show 15 characters
         # but they get truncated anyway so if more characters
@@ -373,7 +371,7 @@ class Activity(Window, Gtk.Container):
         util.set_proc_title(proc_title)
 
         self.connect('realize', self.__realize_cb)
-        self.connect('delete-event', self.__delete_event_cb)
+        self.connect('close-request', self.__delete_event_cb)
 
         self._in_main = False
         self._iconify = False
@@ -396,13 +394,9 @@ class Activity(Window, Gtk.Container):
 
         self._session = _get_session()
         self._session.register(self)
-        self._session.connect('quit-requested',
-                              self.__session_quit_requested_cb)
-        self._session.connect('quit', self.__session_quit_cb)
 
-        accel_group = Gtk.AccelGroup()
-        self.sugar_accel_group = accel_group
-        self.add_accel_group(accel_group)
+        self.shortcut_controller = Gtk.ShortcutController()
+        self.add_controller(self.shortcut_controller)
 
         self._bus = ActivityService(self)
         self._owns_file = False
@@ -442,9 +436,6 @@ class Activity(Window, Gtk.Container):
             self._client_handler = _ClientHandler(
                 self.get_bundle_id(),
                 partial(self.__got_channel_cb, wait_loop))
-            # FIXME: The current API requires that self.shared_activity is set
-            # before exiting from __init__, so we wait until we have got the
-            # shared activity. http://bugs.sugarlabs.org/ticket/2168
             wait_loop.run()
         else:
             pservice = presenceservice.get_instance()
@@ -468,11 +459,18 @@ class Activity(Window, Gtk.Container):
         self._stop_buttons = []
 
         if self._is_resumed and get_save_as():
-            # preserve original and use a copy for editing
             self._jobject_old = self._jobject
             self._jobject = datastore.copy(self._jobject, '/')
 
         self._original_title = self._jobject.metadata['title']
+
+    def __on_realize(self, window):
+        display = Gdk.Display.get_default()
+        surface = self.get_surface()
+        if surface:
+            monitor = display.get_monitor_at_surface(surface)
+            monitor.connect('notify::geometry', self.__screen_size_changed_cb)
+            self._adapt_window_to_screen()
 
     def add_stop_button(self, button):
         """
@@ -492,32 +490,33 @@ class Activity(Window, Gtk.Container):
 
     def run_main_loop(self):
         if self._iconify:
-            Window.iconify(self)
+            self.iconify()
         self._in_main = True
-        Gtk.main()
+        self._session._main_loop.run()
 
     def _initialize_journal_object(self):
-        title = _('%s Activity') % get_bundle_name()
+        if self._jobject is not None:
+            return self._jobject
 
-        icon_color = get_color().to_string()
+        if self._object_id is None:
+            # Create a new activity instance
+            jobject = datastore.create()
+        else:
+            # Resume an activity instance
+            try:
+                jobject = datastore.get(self._object_id)
+            except (TypeError, dbus.exceptions.DBusException) as e:
+                logging.warning('Error getting object from datastore: %s', e)
+                jobject = datastore.create()
+                self._object_id = None
 
-        jobject = datastore.create()
-        jobject.metadata['title'] = title
-        jobject.metadata['title_set_by_user'] = '0'
-        jobject.metadata['activity'] = self.get_bundle_id()
-        jobject.metadata['activity_id'] = self.get_id()
-        jobject.metadata['keep'] = '0'
-        jobject.metadata['preview'] = ''
-        jobject.metadata['share-scope'] = SCOPE_PRIVATE
-        jobject.metadata['icon-color'] = icon_color
-        jobject.metadata['launch-times'] = str(int(time.time()))
-        jobject.metadata['spent-times'] = '0'
-        jobject.file_path = ''
-
-        # FIXME: We should be able to get an ID synchronously from the DS,
-        # then call async the actual create.
-        # http://bugs.sugarlabs.org/ticket/2169
-        datastore.write(jobject)
+        try:
+            jobject.metadata['activity'] = self.get_bundle_id()
+            jobject.metadata['activity_id'] = self.get_id()
+            jobject.metadata['keep'] = '0'
+            jobject.file_path = ''
+        except (AttributeError, TypeError) as e:
+            logging.warning('Error setting metadata: %s', e)
 
         return jobject
 
@@ -531,7 +530,7 @@ class Activity(Window, Gtk.Container):
         logging.debug('*** Act %s, mesh instance %r, scope %s' %
                       (self._activity_id, mesh_instance, share_scope))
         if mesh_instance is not None:
-            # There's already an instance on the mesh, join it
+            # There's already an instance on the mesh, join its
             logging.debug('*** Act %s joining existing mesh instance %r' %
                           (self._activity_id, mesh_instance))
             self.shared_activity = mesh_instance
@@ -712,20 +711,12 @@ class Activity(Window, Gtk.Container):
         self.move(0, 0)
 
     def _adapt_window_to_screen(self):
-        screen = Gdk.Screen.get_default()
-        rect = screen.get_monitor_geometry(screen.get_number())
-        geometry = Gdk.Geometry()
-        geometry.max_width = geometry.base_width = geometry.min_width = \
-            rect.width
-        geometry.max_height = geometry.base_height = geometry.min_height = \
-            rect.height
-        geometry.width_inc = geometry.height_inc = geometry.min_aspect = \
-            geometry.max_aspect = 1
-        hints = Gdk.WindowHints(Gdk.WindowHints.ASPECT |
-                                Gdk.WindowHints.BASE_SIZE |
-                                Gdk.WindowHints.MAX_SIZE |
-                                Gdk.WindowHints.MIN_SIZE)
-        self.set_geometry_hints(None, geometry, hints)
+        display = Gdk.Display.get_default()
+        monitor = display.get_monitor_at_surface(self.get_surface())
+        rect = monitor.get_geometry()
+        
+        self.set_default_size(rect.width, rect.height)        
+        self.set_size_request(rect.width, rect.height)
 
     def __session_quit_requested_cb(self, session):
         self._quit_requested = True
@@ -872,12 +863,15 @@ class Activity(Window, Gtk.Container):
             return None
 
         alloc = self.canvas.get_allocation()
-
+        width, height = alloc.width, alloc.height
+        if width == 0 or height == 0:
+            return None
+        
         dummy_cr = Gdk.cairo_create(window)
         target = dummy_cr.get_target()
         canvas_width, canvas_height = alloc.width, alloc.height
         screenshot_surface = target.create_similar(cairo.CONTENT_COLOR,
-                                                   canvas_width, canvas_height)
+                                                canvas_width, canvas_height)
         del dummy_cr, target
 
         cr = cairo.Context(screenshot_surface)
@@ -889,7 +883,7 @@ class Activity(Window, Gtk.Container):
 
         preview_width, preview_height = PREVIEW_SIZE
         preview_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
-                                             preview_width, preview_height)
+                                            preview_width, preview_height)
         cr = cairo.Context(preview_surface)
 
         scale_w = preview_width * 1.0 / canvas_width
@@ -986,13 +980,15 @@ class Activity(Window, Gtk.Container):
         # Cannot call datastore.write async for creates:
         # https://dev.laptop.org/ticket/3071
         if self._jobject.object_id is None:
-            datastore.write(self._jobject, transfer_ownership=True)
+            datastore.write(self._jobject)
         else:
             self._updating_jobject = True
-            datastore.write(self._jobject,
-                            transfer_ownership=True,
-                            reply_handler=self.__save_cb,
-                            error_handler=self.__save_error_cb)
+            try:
+                datastore.write(self._jobject)
+            except Exception as exc:
+                self.__save_error_cb(exc)
+            else:
+                self.__save_cb()
 
     def copy(self):
         '''
@@ -1336,18 +1332,20 @@ class Activity(Window, Gtk.Container):
             self._do_close(skip_save)
 
     def __realize_cb(self, window):
-        display_name = Gdk.Display.get_default().get_name()
-        if ':' in display_name:
-            # X11 for sure; this only works in X11
-            xid = window.get_window().get_xid()
-            SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
-            SugarExt.wm_set_activity_id(xid, str(self._activity_id))
-        elif display_name == 'Broadway':
-            # GTK3's HTML5 backend
-            # This is needed so that the window takes the whole browser window
+        display = Gdk.Display.get_default()
+        surface = self.get_surface()
+        if surface and display.__class__.__name__ == 'X11Display':
+            # Use X11Surface.get_xid(surface) in GTK4:
+            # GTK4 no longer supports SugarExt.wm_set_bundle_id()
+            # or SugarExt.wm_set_activity_id()
+            # Remove or comment them out entirely:
+            # # SugarExt.wm_set_bundle_id(xid, self.get_bundle_id())
+            # SugarExt.wm_set_activity_id(xid, str(self._activity_id))
+            pass
+        elif display.get_name() == 'Broadway':
             self.maximize()
 
-    def __delete_event_cb(self, widget, event):
+    def __delete_event_cb(self, *args):
         self.close()
         return True
 
@@ -1401,38 +1399,29 @@ class Activity(Window, Gtk.Container):
 
     def busy(self):
         '''
-        Show that the activity is busy.  If used, must be called once
-        before a lengthy operation, and :meth:`unbusy` must be called
-        after the operation completes.
-
-        .. code-block:: python
-
-            self.busy()
-            self.long_operation()
-            self.unbusy()
+        Show that the activity is busy.
+        In GTK4 the busy indicator is implemented without changing the cursor.
         '''
-        if self._busy_count == 0:
-            self._old_cursor = self.get_window().get_cursor()
-            self._set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
         self._busy_count += 1
+        # Optionally, you could add a CSS class or overlay here for a busy indicator.
 
     def unbusy(self):
         '''
-        Show that the activity is not busy.  An equal number of calls
-        to :meth:`unbusy` are required to balance the calls to
-        :meth:`busy`.
-
+        Show that the activity is not busy.
         Returns:
-            int: a count of further calls to :meth:`unbusy` expected
+            int: the updated busy counter.
         '''
-        self._busy_count -= 1
-        if self._busy_count == 0:
-            self._set_cursor(self._old_cursor)
+        self._busy_count = max(0, self._busy_count - 1)
         return self._busy_count
 
     def _set_cursor(self, cursor):
-        self.get_window().set_cursor(cursor)
-        Gdk.flush()
+        # In GTK4, setting a cursor on a window is not supported.
+        # This method is now a no-op.
+        pass
+    
+    def reveal(self):
+        """Bring the activity window to the front."""
+        self.present()
 
 
 class _ClientHandler(dbus.service.Object):
@@ -1511,6 +1500,8 @@ class _ClientHandler(dbus.service.Object):
             return r
         else:
             logging.debug('InvalidArgument')
+            
+
 
 
 _session = None

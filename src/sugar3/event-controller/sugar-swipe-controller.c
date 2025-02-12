@@ -128,7 +128,11 @@ _sugar_swipe_controller_store_event (SugarSwipeController *controller,
 
   priv = controller->priv;
 
+#if GTK_CHECK_VERSION(4,0,0)
+  if (!gdk_event_get_position (event, &x, &y))
+#else
   if (!gdk_event_get_coords (event, &x, &y))
+#endif
     return;
 
   time = gdk_event_get_time (event);
@@ -262,7 +266,8 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
   GdkEventSequence *sequence;
   gboolean handled = TRUE;
   GdkDevice *device;
-
+  GdkEventType type;
+  
   device = gdk_event_get_device (event);
   sequence = gdk_event_get_event_sequence (event);
 
@@ -276,7 +281,13 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
       (priv->sequence && priv->sequence != sequence))
     return FALSE;
 
-  switch (event->type)
+#if GTK_CHECK_VERSION(4,0,0)
+  type = gdk_event_get_event_type (event);
+#else
+  type = event->type;
+#endif
+
+  switch (type)
     {
     case GDK_TOUCH_BEGIN:
       priv->device = g_object_ref (device);
@@ -285,6 +296,7 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
       _sugar_swipe_controller_store_event (swipe, event);
       g_object_notify (G_OBJECT (controller), "state");
       break;
+
     case GDK_TOUCH_END:
       if (priv->device)
         g_object_unref (priv->device);
@@ -295,6 +307,7 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
       _sugar_swipe_controller_clear_events (swipe);
       g_object_notify (G_OBJECT (controller), "state");
       break;
+
     case GDK_TOUCH_UPDATE:
       _sugar_swipe_controller_store_event (swipe, event);
 
@@ -305,6 +318,7 @@ sugar_swipe_controller_handle_event (SugarEventController *controller,
           g_object_notify (G_OBJECT (controller), "state");
         }
       break;
+
     default:
       handled = FALSE;
       break;

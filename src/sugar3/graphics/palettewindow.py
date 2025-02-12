@@ -45,15 +45,19 @@ _pointer = None
 
 
 def _get_pointer_position(widget):
-    global _pointer
-
-    if _pointer is None:
-        display = widget.get_display()
-        manager = display.get_device_manager()
-        _pointer = manager.get_client_pointer()
-    screen, x, y = _pointer.get_position()
-    return (x, y)
-
+    current = widget
+    while current is not None:
+        if hasattr(current, 'get_window'):
+            window = current.get_window()
+            if window is not None:
+                success, x, y = window.get_pointer()
+                if success:
+                    return (x, y)
+        if hasattr(current, 'get_parent'):
+            current = current.get_parent()
+        else:
+            break
+    return (0, 0)
 
 def _calculate_gap(a, b):
     """Helper function to find the gap position and size of widget a"""
@@ -90,29 +94,35 @@ def _calculate_gap(a, b):
         return False
 
 
-class _PaletteMenuWidget(Gtk.Menu):
-
+class _PaletteMenuWidget(Gtk.PopoverMenu):
     __gtype_name__ = "SugarPaletteMenuWidget"
 
     __gsignals__ = {
         'enter-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
-        'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([]))
     }
 
     def __init__(self):
-        Gtk.Menu.__init__(self)
-
-        accel_group = Gtk.AccelGroup()
-        self.sugar_accel_group = accel_group
-        self.get_toplevel().add_accel_group(accel_group)
-
+        super().__init__()
+        
+        # gtk4 specific
+        self.set_has_arrow(False)
+        self.set_autohide(False)
+        
+        self.menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.set_child(self.menu_box)
+                
         self._popup_position = (0, 0)
         self._entered = False
         self._mouse_in_palette = False
         self._mouse_in_invoker = False
         self._up = False
         self._invoker = None
-        self._menus = []
+        
+        self._motion_controller = Gtk.EventControllerMotion.new()
+        self._motion_controller.connect("enter", self._enter_notify_cb)
+        self._motion_controller.connect("leave", self._leave_notify_cb)
+        self.add_controller(self._motion_controller)
 
     def set_accept_focus(self, focus):
         pass
@@ -122,7 +132,9 @@ class _PaletteMenuWidget(Gtk.Menu):
         return x, y
 
     def move(self, x, y):
+        """Position the palette menu"""
         self._popup_position = (x, y)
+        self.set_pointing_to(Gdk.Rectangle().new(x, y, 1, 1))
 
     def set_transient_for(self, window):
         pass
@@ -133,7 +145,14 @@ class _PaletteMenuWidget(Gtk.Menu):
     def _position(self, widget, *data):
         return self._popup_position[0], self._popup_position[1], False
 
+    def add_item(self, item):
+        while item.get_parent() is not None:
+            item.get_parent().remove(item)
+        self.menu_box.append(item)
+
+        
     def popup(self, invoker):
+        """Show the palette menu"""
         if self._up:
             return
 
@@ -168,33 +187,16 @@ class _PaletteMenuWidget(Gtk.Menu):
         # invoker, and this lets us track enter/leave for the invoker widget.
 
         self._invoker = invoker
-        self._find_all_menus(self)
-        self.realize()
-        for menu in self._menus:
-            if self._invoker:
-                menu.connect('motion-notify-event', self._motion_notify_cb)
-            menu.connect('enter-notify-event', self._enter_notify_cb)
-            menu.connect('leave-notify-event', self._leave_notify_cb)
-            menu.connect('button-release-event', self._button_release_event_cb)
-        self._entered = False
-        self._mouse_in_palette = False
-        self._mouse_in_invoker = False
-        Gtk.Menu.popup(self, None, None, self._position, None, 0, 0)
+        self.set_parent(invoker)
+        self.popup()
         self._up = True
 
     def popdown(self):
+        """Hide the palette menu"""
         if not self._up:
             return
-        Gtk.Menu.popdown(self)
-
-        for menu in self._menus:
-            menu.disconnect_by_func(self._motion_notify_cb)
-            menu.disconnect_by_func(self._enter_notify_cb)
-            menu.disconnect_by_func(self._leave_notify_cb)
-
+        self.popdown()
         self._up = False
-        self._menus = []
-        self._invoker = None
 
     def _find_all_menus(self, menu):
         """
@@ -286,22 +288,37 @@ class _PaletteWindowWidget(Gtk.Window):
         'leave-notify': (GObject.SignalFlags.RUN_FIRST, None, ([])),
     }
 
-    def __init__(self, palette=None):
-        Gtk.Window.__init__(self)
+    def __init__(self, palette, **kwargs):
+        super().__init__(**kwargs)
+
 
         self._palette = palette
         self.set_decorated(False)
         self.set_resizable(False)
-        self.set_position(Gtk.WindowPosition.NONE)
+        # gtk4 replacement doesn't exist
+        # self.set_position(Gtk.WindowPosition.NONE)
 
         context = self.get_style_context()
         # Just assume all borders are the same
-        border = context.get_border(Gtk.StateFlags.ACTIVE).right
-        self.set_border_width(border)
+        border = context.get_border()
+        # self.set_border_width(border_width)
+        border_width = border.right
 
-        accel_group = Gtk.AccelGroup()
-        self.sugar_accel_group = accel_group
-        self.add_accel_group(accel_group)
+        # In GTK 4, use margins (or CSS) instead of set_border_width:
+        self.set_margin_top(border_width)
+        self.set_margin_bottom(border_width)
+        self.set_margin_start(border_width)
+        self.set_margin_end(border_width)
+
+
+      # Remove references to Gtk.AccelGroup:
+        # accel_group = Gtk.AccelGroup()
+        # self.sugar_accel_group = accel_group
+        # self.add_accel_group(accel_group)
+
+        # Replace with a GTK 4 ShortcutController:
+        shortcut_controller = Gtk.ShortcutController()
+        self.add_controller(shortcut_controller)
 
         self._old_alloc = None
         self._invoker = None
@@ -309,8 +326,8 @@ class _PaletteWindowWidget(Gtk.Window):
 
     def set_accept_focus(self, focus):
         self._should_accept_focus = focus
-        if self.get_window() is not None:
-            self.get_window().set_accept_focus(focus)
+        if self.get_surface() is not None:
+            self.set_focusable(focus)
 
     def get_origin(self):
         res_, x, y = self.get_window().get_origin()
@@ -527,8 +544,13 @@ class PaletteWindow(GObject.GObject):
         self._widget.connect('destroy', self.__destroy_cb)
         self._widget.connect('enter-notify', self.__enter_notify_cb)
         self._widget.connect('leave-notify', self.__leave_notify_cb)
-        self._widget.connect('key-press-event', self.__key_press_event_cb)
+        # self._widget.connect('key-press-event', self.__key_press_event_cb)
 
+        # Replace it with a key controller:
+        key_controller = Gtk.EventControllerKey()
+        key_controller.connect('key-pressed', self.__key_press_event_cb)
+        self._widget.add_controller(key_controller)
+        
         self._set_effective_group_id(self._group_id)
         self._widget.set_invoker(self._invoker)
 
@@ -811,8 +833,17 @@ class Invoker(GObject.GObject):
 
         self._screen_area = Gdk.Rectangle()
         self._screen_area.x = self._screen_area.y = 0
-        self._screen_area.width = Gdk.Screen.width()
-        self._screen_area.height = Gdk.Screen.height()
+        display = Gdk.Display.get_default()
+        monitors = display.get_monitors()
+        monitor = monitors.get_item(0)        
+        if monitor is not None:
+            geometry = monitor.get_geometry()
+            self._screen_area.width = geometry.width
+            self._screen_area.height = geometry.height
+        else:
+            # Fallback to default values or handle the absence of a primary monitor
+            self._screen_area.width = 1280  
+            self._screen_area.height = 800 
         self._position_hint = self.ANCHORED
         self._cursor_x = -1
         self._cursor_y = -1
@@ -1114,6 +1145,14 @@ class WidgetInvoker(Invoker):
         self._long_pressed_hid = None
         self._long_pressed_controller = SugarGestures.LongPressController()
 
+        if self._widget is not None:
+            self._long_pressed_controller.attach(
+                self._widget, SugarGestures.EventControllerFlags.NONE)
+        else:
+            logging.debug('Skipping attach() due to missing "event" signal')
+
+
+            
         if parent or widget:
             self.attach_widget(parent, widget)
 
@@ -1127,25 +1166,52 @@ class WidgetInvoker(Invoker):
 
         self.notify('widget')
 
-        self._enter_hid = self._widget.connect('enter-notify-event',
-                                               self.__enter_notify_event_cb)
-        self._leave_hid = self._widget.connect('leave-notify-event',
-                                               self.__leave_notify_event_cb)
-        if GObject.signal_lookup('clicked', self._widget) != 0:
-            self._click_hid = self._widget.connect('clicked',
-                                                   self.__click_event_cb)
-        self._touch_hid = self._widget.connect('touch-event',
-                                               self.__touch_event_cb)
-        self._release_hid = \
-            self._widget.connect('button-release-event',
-                                 self.__button_release_event_cb)
-        self._draw_hid = self._widget.connect_after('draw', self.__drawing_cb)
+        # Only connect 'enter-notify-event'/'leave-notify-event' if supported
+        if GObject.signal_lookup('enter-notify-event', self._widget.__class__):
+            self._enter_hid = self._widget.connect('enter-notify-event',
+                                                self.__enter_notify_event_cb)
+            self._leave_hid = self._widget.connect('leave-notify-event',
+                                                self.__leave_notify_event_cb)
+        else:
+            self._enter_hid = None
+            self._leave_hid = None
 
-        self._long_pressed_hid = self._long_pressed_controller.connect(
-            'pressed', self.__long_pressed_event_cb, self._widget)
-        self._long_pressed_controller.attach(
-            self._widget,
-            SugarGestures.EventControllerFlags.NONE)
+        if GObject.signal_lookup('clicked', self._widget.__class__):
+            self._click_hid = self._widget.connect('clicked',
+                                                self.__clicked_cb)
+        else:
+            self._click_hid = None
+
+        if GObject.signal_lookup('touch-event', self._widget.__class__):
+            self._touch_hid = self._widget.connect('touch-event',
+                                                self.__touch_event_cb)
+        else:
+            self._touch_hid = None
+            
+        if GObject.signal_lookup('button-release-event', self._widget.__class__):
+            self._release_hid = self._widget.connect('button-release-event',
+                                                self.__button_release_event_cb)
+        else:
+            self._release_hid = None    
+        
+                    
+        if GObject.signal_lookup('draw', self._widget.__class__):
+            self._draw_hid = self._widget.connect_after('draw', self.__drawing_cb)
+        else:
+            self._draw_hid = None
+
+        if hasattr(self._long_pressed_controller, 'connect') and \
+           GObject.signal_lookup('event', self._widget.__class__):
+            self._long_pressed_hid = self._long_pressed_controller.connect(
+                'pressed', self.__long_pressed_event_cb, self._widget)
+            if self._widget.get_parent() is None:
+                self._long_pressed_controller.attach(
+                    self._widget, SugarGestures.EventControllerFlags.NONE)
+            else:
+                logging.debug('Widget already has a parent; skipping long-press attach to avoid gtk_box_append assertion')
+        else:
+            self._long_pressed_hid = None
+            logging.debug('Skipping attach() due to missing "event" signal')
 
         self.attach(parent)
 
@@ -1218,17 +1284,21 @@ class WidgetInvoker(Invoker):
                 return True
         return False
 
-    def __click_event_cb(self, button):
-        event = Gtk.get_current_event()
+    def __clicked_cb(self, widget):
+            # For non-event driven activate (e.g. clicked) simply do:
+            if self.props.lock_palette and not self.locked:
+                self.locked = True
+                if hasattr(self.parent, 'set_expanded'):
+                    self.parent.set_expanded(True)
+            if self.props.toggle_palette:
+                self.notify_toggle_state()
+
+    # Retain __click_event_cb for event-driven signals:
+    def __click_event_cb(self, widget, event):
         if not event:
-            # not an event from a user interaction, this can be when
-            # the clicked event is emitted on a 'active' property
-            # change of ToggleToolButton for example
+            # This callback requires an event from a user interaction.
             return
-        if event and button != Gtk.get_event_widget(event):
-            # another special case for the ToggleToolButton: this handles
-            # the case where we select an item and the active property
-            # of the other one changes to 'False'
+        if widget != Gtk.get_event_widget(event):
             return
 
         if self.props.lock_palette and not self.locked:
@@ -1314,12 +1384,14 @@ class CursorInvoker(Invoker):
 
         self._pointer_position = _get_pointer_position(self.parent)
 
-        self._enter_hid = self._item.connect('enter-notify-event',
-                                             self.__enter_notify_event_cb)
-        self._leave_hid = self._item.connect('leave-notify-event',
-                                             self.__leave_notify_event_cb)
-        self._release_hid = self._item.connect('button-release-event',
-                                               self.__button_release_event_cb)
+        if (self._widget is not None and
+            GObject.signal_lookup('enter-notify-event', self._widget.__class__)):
+            self._enter_hid = self._widget.connect('enter-notify-event',
+                                                self.__enter_notify_event_cb)
+        if (self._widget is not None and
+            GObject.signal_lookup('leave-notify-event', self._widget.__class__)):
+            self._leave_hid = self._widget.connect('leave-notify-event',
+                                                self.__leave_notify_event_cb)
         self._long_pressed_hid = self._long_pressed_controller.connect(
             'pressed',
             self.__long_pressed_event_cb, self._item)

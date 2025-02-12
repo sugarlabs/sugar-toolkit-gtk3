@@ -22,8 +22,35 @@
 
 #include <gtk/gtk.h>
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+/* Define dummy types and function pointer types for GTK4,
+ * since the old GTK3 clipboard types are no longer available.
+ */
+typedef struct {
+    const gchar *target;
+    guint flags;
+    guint info;
+} GtkTargetEntry;
+
+typedef void (*GtkClipboardGetFunc)(GdkClipboard *clipboard,
+                                    const GtkTargetEntry *target,
+                                    gpointer user_data);
+
+typedef void (*GtkClipboardClearFunc)(GdkClipboard *clipboard,
+                                      gpointer user_data);
+#endif
+
 G_BEGIN_DECLS
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+gboolean
+sugar_clipboard_set_with_data (GdkClipboard *clipboard,
+                               const GtkTargetEntry *targets,
+                               guint n_targets,
+                               GtkClipboardGetFunc get_func,
+                               GtkClipboardClearFunc clear_func,
+                               gpointer user_data);
+#else
 gboolean
 sugar_clipboard_set_with_data (GtkClipboard *clipboard,
                                const GtkTargetEntry *targets,
@@ -31,8 +58,8 @@ sugar_clipboard_set_with_data (GtkClipboard *clipboard,
                                GtkClipboardGetFunc get_func,
                                GtkClipboardClearFunc clear_func,
                                gpointer user_data);
+#endif
 
 G_END_DECLS
 
 #endif /* __SUGAR_CLIPBOARD_H__ */
-

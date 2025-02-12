@@ -20,6 +20,19 @@
  */
 
 #include "sugar-touch-controller.h"
+#include <gdk/gdkevents.h>
+
+/* 
+ * If not provided by the system, define a local GdkPoint structure.
+ */
+#ifndef GDK_POINT_DEFINED
+typedef struct {
+  gint x;
+  gint y;
+} GdkPoint;
+#define GDK_POINT_DEFINED
+#endif
+
 #define TOUCHES_IN_RANGE(t,p) ((t) >= (p)->min_touches && (t) <= (p)->max_touches)
 
 typedef struct _SugarTouch SugarTouch;
@@ -94,64 +107,86 @@ static gboolean
 sugar_touch_controller_handle_event (SugarEventController *controller,
                                      GdkEvent             *event)
 {
-  SugarTouchControllerPrivate *priv;
-  GdkEventSequence *sequence;
-  gboolean handled = TRUE;
-  GdkPoint *point;
-  gint n_touches, prev_n_touches;
-  gboolean is_in_range, was_in_range;
+    SugarTouchControllerPrivate *priv;
+    GdkEventSequence *sequence;
+    gboolean handled = TRUE;
+    GdkPoint *point;
+    gint n_touches, prev_n_touches;
+    gboolean is_in_range, was_in_range;
+    GdkEventType type;
+    gdouble x = 0, y = 0;
 
-  priv = SUGAR_TOUCH_CONTROLLER (controller)->priv;
-  sequence = gdk_event_get_event_sequence (event);
-  prev_n_touches = g_hash_table_size (priv->touches);
-  was_in_range = TOUCHES_IN_RANGE (prev_n_touches, priv);
+    priv = SUGAR_TOUCH_CONTROLLER (controller)->priv;
+    sequence = gdk_event_get_event_sequence (event);
+    prev_n_touches = g_hash_table_size (priv->touches);
+    was_in_range = TOUCHES_IN_RANGE (prev_n_touches, priv);
 
-  if (!sequence)
-    return FALSE;
+    if (!sequence)
+        return FALSE;
 
-  switch (event->type)
+    type = gdk_event_get_event_type (event);
+    switch (type)
     {
     case GDK_TOUCH_BEGIN:
-      point = g_new0 (GdkPoint, 1);
-      point->x = event->touch.x;
-      point->y = event->touch.y;
-      g_hash_table_insert (priv->touches, sequence, point);
-      break;
+        {
+#if GTK_CHECK_VERSION(4,0,0)
+            if (!gdk_event_get_position (event, &x, &y))
+                return FALSE;
+#else
+            GdkEventTouch *tevent = (GdkEventTouch *) event;
+            x = tevent->x;
+            y = tevent->y;
+#endif
+            point = g_new0 (GdkPoint, 1);
+            point->x = (gint) x;
+            point->y = (gint) y;
+            g_hash_table_insert (priv->touches, sequence, point);
+            break;
+        }
     case GDK_TOUCH_END:
-      g_hash_table_remove (priv->touches, sequence);
-      break;
+        g_hash_table_remove (priv->touches, sequence);
+        break;
     case GDK_TOUCH_UPDATE:
-      point = g_hash_table_lookup (priv->touches, sequence);
-
-      if (point)
         {
-          point->x = event->touch.x;
-          point->y = event->touch.y;
+#if GTK_CHECK_VERSION(4,0,0)
+            if (!gdk_event_get_position (event, &x, &y))
+                return FALSE;
+#else
+            GdkEventTouch *tevent = (GdkEventTouch *) event;
+            x = tevent->x;
+            y = tevent->y;
+#endif
+            point = g_hash_table_lookup (priv->touches, sequence);
+            if (point)
+            {
+                point->x = (gint) x;
+                point->y = (gint) y;
+            }
+            else
+                handled = FALSE;
+            break;
         }
-      else
-        handled = FALSE;
-      break;
     default:
-      handled = FALSE;
+        handled = FALSE;
     }
 
-  n_touches = g_hash_table_size (priv->touches);
-  is_in_range = TOUCHES_IN_RANGE (n_touches, priv);
+    n_touches = g_hash_table_size (priv->touches);
+    is_in_range = TOUCHES_IN_RANGE (n_touches, priv);
 
-  if (handled)
+    if (handled)
     {
-      if (is_in_range)
+        if (is_in_range)
         {
-          if (!was_in_range)
-            g_signal_emit_by_name (controller, "began");
-          else
-            g_signal_emit_by_name (controller, "updated");
+            if (!was_in_range)
+                g_signal_emit_by_name (controller, "began");
+            else
+                g_signal_emit_by_name (controller, "updated");
         }
-      else if (was_in_range)
-        g_signal_emit_by_name (controller, "ended");
+        else if (was_in_range)
+            g_signal_emit_by_name (controller, "ended");
     }
 
-  return handled;
+    return handled;
 }
 
 static void
@@ -316,7 +351,7 @@ sugar_touch_controller_get_sequences (SugarTouchController *controller)
  * @controller: a #SugarTouchController
  * @sequence: a #GdkEventSequence
  * @x: (out) (transfer none): Return location for the X coordinate of the touch
- * @y: (out) (transfer none): Return location for the X coordinate of the touch
+ * @y: (out) (transfer none): Return location for the Y coordinate of the touch
  *
  * If @sequence is operating on @controller, this function returns %TRUE and
  * fills in @x and @y with the latest coordinates for that @sequence.

@@ -18,7 +18,7 @@
 
 """
 The toolbutton module provides the ToolButton class, which is a
-Gtk.ToolButton with icon and tooltip styled for Sugar.
+Gtk.Button with icon and tooltip styled for Sugar.
 
 Example:
     Add a tool button to a window
@@ -70,17 +70,42 @@ def _add_accelerator(tool_button):
 
 
 def _hierarchy_changed_cb(tool_button, previous_toplevel):
-    _add_accelerator(tool_button)
+    _add_accelerator_gtk4(tool_button)
+    # In GTK4, property notifications for "accelerator" can be handled by re-adding controllers,
+    # but for now we remove any obsolete signal connections.
 
+def _add_accelerator_gtk4(tool_button):
+    child = tool_button.get_child()
+    if not child:
+        return
 
+    accel = tool_button.get_property("accelerator")
+    if not accel:
+        return
+
+    try:
+        trigger = Gtk.ShortcutTrigger.parse(accel)
+    except Exception as e:
+        logging.error("Error parsing accelerator '%s': %s", accel, e)
+        return
+
+    # Create an action that activates the tool_button when the accelerator fires.
+    action = Gtk.CallbackAction.new(lambda *args: tool_button.activate())
+    shortcut = Gtk.Shortcut.new(trigger, action)
+
+    # Create a new ShortcutController and add the accelerator shortcut to the child.
+    controller = Gtk.ShortcutController.new()
+    controller.add_shortcut(shortcut)
+    child.add_controller(controller)
+    
 def setup_accelerator(tool_button):
     _add_accelerator(tool_button)
-    tool_button.connect('hierarchy-changed', _hierarchy_changed_cb)
+    tool_button.connect('notify::accelerator', _add_accelerator)
+    
 
-
-class ToolButton(Gtk.ToolButton):
+class ToolButton(Gtk.Button):
     '''
-    The ToolButton class manages a Gtk.ToolButton styled for Sugar.
+    The ToolButton class manages a Gtk.Button styled for Sugar.
 
     Keyword Args:
         icon_name(string): name of themed icon.
@@ -97,6 +122,15 @@ class ToolButton(Gtk.ToolButton):
     '''
 
     __gtype_name__ = 'SugarToolButton'
+    
+    __gsignals__ = {
+        'can-activate-accel': (
+            GObject.SignalFlags.RUN_FIRST,
+            GObject.TYPE_BOOLEAN,
+            ()
+        )
+    }
+
 
     def __init__(self, icon_name=None, **kwargs):
         self._accelerator = None
@@ -111,9 +145,7 @@ class ToolButton(Gtk.ToolButton):
         if icon_name:
             self.set_icon_name(icon_name)
 
-        self.get_child().connect('can-activate-accel',
-                                 self.__button_can_activate_accel_cb)
-
+        self.connect('can-activate-accel', self.__button_can_activate_accel_cb)
         self.connect('destroy', self.__destroy_cb)
 
     def __destroy_cb(self, icon):
@@ -139,7 +171,7 @@ class ToolButton(Gtk.ToolButton):
         self._tooltip = tooltip
 
         # Set label, shows up when toolbar overflows
-        Gtk.ToolButton.set_label(self, tooltip)
+        self.set_tooltip_text(tooltip)
 
     def get_tooltip(self):
         '''
@@ -200,15 +232,15 @@ class ToolButton(Gtk.ToolButton):
             icon_name (string): name of icon
         '''
         icon = Icon(icon_name=icon_name)
-        self.set_icon_widget(icon)
-        icon.show()
+        self.set_child(icon)
+        icon.set_visible(True)
 
     def get_icon_name(self):
         '''
         Return icon name, or None if there is no icon name.
         '''
-        if self.props.icon_widget is not None:
-            return self.props.icon_widget.props.icon_name
+        if self.get_child() is not None:
+            return self.get_child().props.icon_name
         else:
             return None
 
@@ -248,7 +280,7 @@ class ToolButton(Gtk.ToolButton):
             cr.rectangle(0, 0, allocation.width, allocation.height)
             cr.paint()
 
-        Gtk.ToolButton.do_draw(self, cr)
+        Gtk.Button.do_draw(self, cr)
 
         if self.palette and self.palette.is_up():
             invoker = self.palette.props.invoker
