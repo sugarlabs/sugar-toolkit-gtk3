@@ -44,16 +44,14 @@ _data_store = None
 
 def _get_data_store():
     global _data_store
-
-    if not _data_store:
-        _bus = dbus.SessionBus()
-        _data_store = dbus.Interface(_bus.get_object(DS_DBUS_SERVICE,
-                                                     DS_DBUS_PATH),
-                                     DS_DBUS_INTERFACE)
-        _data_store.connect_to_signal('Created', __datastore_created_cb)
-        _data_store.connect_to_signal('Deleted', __datastore_deleted_cb)
-        _data_store.connect_to_signal('Updated', __datastore_updated_cb)
-
+    if _data_store is None:
+        try:
+            _data_store = dbus.Interface(_bus.get_object(DS_DBUS_SERVICE,
+                                                       DS_DBUS_PATH),
+                                       DS_DBUS_INTERFACE)
+        except dbus.exceptions.DBusException as e:
+            logging.warning('Could not connect to DataStore service: %s', e)
+            return None
     return _data_store
 
 
@@ -346,8 +344,7 @@ def _create_ds_entry(properties, filename, transfer_ownership=False):
     return object_id
 
 
-def write(ds_object, update_mtime=True, transfer_ownership=False,
-          reply_handler=None, error_handler=None, timeout=-1):
+def write(jobject):
     """Write the DSObject given to the datastore. Creates a new entry if
     the entry does not exist yet.
 
@@ -364,37 +361,22 @@ def write(ds_object, update_mtime=True, transfer_ownership=False,
     timeout -- dbus timeout for the caller to wait (default -1)
 
     """
-    logging.debug('datastore.write')
-
-    properties = ds_object.metadata.get_dictionary().copy()
-
-    if update_mtime:
-        properties['mtime'] = datetime.now().isoformat()
-        properties['timestamp'] = int(time.time())
-
-    file_path = ds_object.get_file_path(fetch=False)
-    if file_path is None:
-        file_path = ''
-
-    # FIXME: this func will be sync for creates regardless of the handlers
-    # supplied. This is very bad API, need to decide what to do here.
-    if ds_object.object_id:
-        _update_ds_entry(ds_object.object_id,
-                         properties,
-                         file_path,
-                         transfer_ownership,
-                         reply_handler=reply_handler,
-                         error_handler=error_handler,
-                         timeout=timeout)
+    if jobject.object_id is None:
+        try:
+            jobject.object_id = _create_ds_entry(jobject.get_properties(),
+                                               jobject.get_file_path(),
+                                               jobject.get_preview(),
+                                               jobject.get_icon())
+        except (TypeError, dbus.exceptions.DBusException) as e:
+            logging.warning('Error writing to datastore: %s', e)
+            # Create a temporary object ID if DataStore is not available
+            jobject.object_id = 'temp_' + str(uuid.uuid4())
     else:
-        if reply_handler or error_handler:
-            logging.warning('datastore.write() cannot currently be called'
-                            'async for creates, see ticket 3071')
-        ds_object.object_id = _create_ds_entry(properties, file_path,
-                                               transfer_ownership)
-        ds_object.metadata['uid'] = ds_object.object_id
-        # TODO: register the object for updates
-    logging.debug('Written object %s to the datastore.', ds_object.object_id)
+        _update_ds_entry(jobject.object_id,
+                        jobject.get_properties(),
+                        jobject.get_file_path(),
+                        jobject.get_preview(),
+                        jobject.get_icon())
 
 
 def delete(object_id):

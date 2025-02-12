@@ -496,27 +496,28 @@ class Activity(Gtk.Window):
         self._session._main_loop.run()
 
     def _initialize_journal_object(self):
-        title = _('%s Activity') % get_bundle_name()
+        if self._jobject is not None:
+            return self._jobject
 
-        icon_color = get_color().to_string()
+        if self._object_id is None:
+            # Create a new activity instance
+            jobject = datastore.create()
+        else:
+            # Resume an activity instance
+            try:
+                jobject = datastore.get(self._object_id)
+            except (TypeError, dbus.exceptions.DBusException) as e:
+                logging.warning('Error getting object from datastore: %s', e)
+                jobject = datastore.create()
+                self._object_id = None
 
-        jobject = datastore.create()
-        jobject.metadata['title'] = title
-        jobject.metadata['title_set_by_user'] = '0'
-        jobject.metadata['activity'] = self.get_bundle_id()
-        jobject.metadata['activity_id'] = self.get_id()
-        jobject.metadata['keep'] = '0'
-        jobject.metadata['preview'] = ''
-        jobject.metadata['share-scope'] = SCOPE_PRIVATE
-        jobject.metadata['icon-color'] = icon_color
-        jobject.metadata['launch-times'] = str(int(time.time()))
-        jobject.metadata['spent-times'] = '0'
-        jobject.file_path = ''
-
-        # FIXME: We should be able to get an ID synchronously from the DS,
-        # then call async the actual create.
-        # http://bugs.sugarlabs.org/ticket/2169
-        datastore.write(jobject)
+        try:
+            jobject.metadata['activity'] = self.get_bundle_id()
+            jobject.metadata['activity_id'] = self.get_id()
+            jobject.metadata['keep'] = '0'
+            jobject.file_path = ''
+        except (AttributeError, TypeError) as e:
+            logging.warning('Error setting metadata: %s', e)
 
         return jobject
 
