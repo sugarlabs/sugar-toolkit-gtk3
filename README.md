@@ -54,9 +54,17 @@ Ensure the following dependencies are installed:
    ```
 3. Build and install:
    ```bash
-   make
+   sudo make clean
+   sudo make
    sudo make install
    ```
+   
+Alternatively, you can skip the `make clean` step with:
+```bash
+sudo ./autogen.sh
+sudo make
+sudo make install
+```
 
 ---
 ## Contributing
