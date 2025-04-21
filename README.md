@@ -33,12 +33,10 @@ To install Sugar Toolkit alone without Sugar desktop:
 sudo dnf install sugar-toolkit-gtk3
 ```
 
----
-
 ## Building from Source
 Sugar Toolkit GTK3 follows the [GNU Coding Standards](https://www.gnu.org/prep/standards/).
 
-### Prerequisites
+### Note
 Ensure the following dependencies are installed:
 - `sugar-artwork`
 - `sugar-datastore`
@@ -61,45 +59,6 @@ Ensure the following dependencies are installed:
    ```
 
 ---
-
-## Usage
-
-Sugar Toolkit GTK3 is primarily used to create Sugar activities. Below is a simple example of a "Hello World" activity:
-
-### File Structure
-```
-hello-world/
-├── activity/
-│   ├── activity.info
-│   └── icon.svg
-├── hello-world.py
-└── setup.py
-```
-
-### Code Example: `hello-world.py`
-```python
-from gi.repository import Gtk
-from sugar3.activity.activity import Activity
-
-class HelloWorldActivity(Activity):
-    def __init__(self, handle):
-        Activity.__init__(self, handle)
-
-        label = Gtk.Label(label="Hello, Sugar!")
-        self.set_canvas(label)
-        self.show_all()
-```
-
-### Running the Activity
-1. Bundle the activity:
-   ```bash
-   python3 setup.py dist_xo
-   ```
-2. Copy the `.xo` file to the Sugar environment's Activities folder (usually `~/Activities`).
-3. Restart Sugar and launch your activity!
-
----
-
 ## Contributing
 
 We welcome contributions from the community! Follow these steps to get started:
@@ -122,14 +81,11 @@ We welcome contributions from the community! Follow these steps to get started:
    ```
 5. **Submit a Pull Request**: Include a clear description of your changes and why they are beneficial.
 
-Use the above process to setup and create activities, and contribute to the Sugar Labs community.
-
 ---
+Use the above process to setup and create activities, and contribute to the Sugar Labs community.
 
 ## Community and Support
 
 If you have questions or need help, you can:
 - Join the [Sugar Labs Mailing List](https://lists.sugarlabs.org/)
 - Join the chat [Element Chat](https://app.element.io/#/room/#sugar:matrix.org)
-
-
