@@ -86,7 +86,7 @@ class SingleProcess(dbus.service.Object):
 
 
 def main():
-    usage = 'usage: %prog [options] [activity dir] [python class]'
+    usage = '%(prog)s [options] [activity dir] [python class]'
     epilog = 'If you are running from a directory containing an Activity, ' \
              'the argument may be omitted.  Otherwise please provide either '\
              'a directory containing a Sugar Activity [activity dir], a '\
