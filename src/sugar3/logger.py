@@ -65,20 +65,6 @@ def set_level(level):
         logging.warning('Invalid log level: %r' % level)
 
 
-# pylint: disable-msg=E1101,F0401
-def _except_hook(exctype, value, traceback):
-    # Attempt to provide verbose IPython tracebacks.
-    # Importing IPython is slow, so we import it lazily.
-    try:
-        from IPython.ultraTB import AutoFormattedTB
-        sys.excepthook = AutoFormattedTB(mode='Verbose',
-                                         color_scheme='NoColor')
-    except ImportError:
-        sys.excepthook = sys.__excepthook__
-
-    sys.excepthook(exctype, value, traceback)
-
-
 def cleanup():
     """Clean up the log directory, moving old logs into a numbered backup
     directory.  We only keep `_MAX_BACKUP_DIRS` of these backup directories
@@ -182,8 +168,6 @@ def start(log_filename=None):
             # if we're out of space, just continue
             if e.errno != errno.ENOSPC:
                 raise e
-
-    sys.excepthook = _except_hook
 
 
 class TraceRepr(repr_.Repr):
