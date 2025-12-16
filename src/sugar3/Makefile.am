@@ -58,8 +58,6 @@ libsugarext_la_SOURCES =		\
 	gsm-xsmp.h			\
 	sugar-clipboard.c		\
 	sugar-clipboard.h		\
-	sugar-fatattr.c			\
-	sugar-fatattr.h			\
 	sugar-grid.c			\
 	sugar-grid.h			\
 	sugar-cursor-tracker.c		\
@@ -111,8 +109,6 @@ SugarExt_1_0_gir_FILES = \
 	gsm-xsmp.h \
 	sugar-clipboard.c \
 	sugar-clipboard.h \
-	sugar-fatattr.c	\
-	sugar-fatattr.h	\
 	sugar-cursor-tracker.c \
 	sugar-cursor-tracker.h \
 	sugar-gesture-grabber.c \
