@@ -124,10 +124,11 @@ SugarExt_1_0_gir_FILES = \
     sugar-wm.c \
     sugar-wm.h
 
-SugarExt_1_0_gir: libsugarext.la
 SugarExt_1_0_gir_INCLUDES = Gtk-3.0 Gdk-3.0
 SugarExt_1_0_gir_PACKAGES = gtk+-3.0 gdk-3.0
 SugarExt_1_0_gir_EXPORT_PACKAGES = SugarExt-1.0
+SugarExt_1_0_gir_SCANNERFLAGS = --warn-all
+SugarExt-1.0.gir: libsugarext.la $(top_builddir)/src/sugar3/event-controller/libsugar-eventcontroller.la $(top_builddir)/src/sugar3/event-controller/SugarGestures-1.0.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = SugarExt-1.0.gir
