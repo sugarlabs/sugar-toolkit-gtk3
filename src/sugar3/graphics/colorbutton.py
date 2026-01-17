@@ -243,7 +243,8 @@ class _ColorButton(Gtk.Button):
     def __drag_data_get_cb(self, widget, context, selection_data, info, time):
         data = struct.pack('=HHHH', self._color.red, self._color.green,
                            self._color.blue, 65535)
-        selection_data.set(selection_data.target, 16, data)
+        target=selection_data.get_target()
+        selection_data.set(target,16,data)
 
     def __drag_data_received_cb(self, widget, context, x, y, selection_data,
                                 info, time):
