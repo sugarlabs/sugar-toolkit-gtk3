@@ -1,6 +1,6 @@
 AC_INIT([sugar-toolkit-gtk3],[0.121],[],[sugar-toolkit-gtk3])
 
-AC_PREREQ([2.71])
+AC_PREREQ([2.72])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([configure.ac])
