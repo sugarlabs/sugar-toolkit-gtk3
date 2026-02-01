@@ -29,6 +29,7 @@ from sugar3.graphics.icon import Icon
 from sugar3.graphics.palette import Palette, ToolInvoker, WidgetInvoker
 
 
+
 def _(msg):
     return gettext.dgettext('sugar-toolkit-gtk3', msg)
 
@@ -241,24 +242,32 @@ class _ColorButton(Gtk.Button):
         context.set_icon_pixbuf(pixbuf)
 
     def __drag_data_get_cb(self, widget, context, selection_data, info, time):
-        data = struct.pack('=HHHH', self._color.red, self._color.green,
-                           self._color.blue, 65535)
-        selection_data.set(selection_data.target, 16, data)
+        target = selection_data.get_target()
+        color_str = f"rgb({self._color.red},{self._color.green},{self._color.blue})"
+        data = color_str.encode('utf-8')
+        selection_data.set(target, 8, data)
+        print(f"DEBUG: Sent color string: {color_str}")
 
-    def __drag_data_received_cb(self, widget, context, x, y, selection_data,
-                                info, time):
-        if len(selection_data.data) != 8:
+    def __drag_data_received_cb(self, widget, context, x, y, selection_data, info, time):
+        data = selection_data.get_data()
+        if not data:
             return
 
-        dropped = selection_data.data
-        red = struct.unpack_from('=H', dropped, 0)[0]
-        green = struct.unpack_from('=H', dropped, 2)[0]
-        blue = struct.unpack_from('=H', dropped, 4)[0]
-        # dropped[6] and dropped[7] is alpha, but we ignore the alpha channel
-
-        color = Gdk.Color(red, green, blue)
-        self.set_color(color)
-
+        try:
+            color_str = data.decode('utf-8')
+            content = color_str.replace('rgb(', '').replace(')', '')
+            r, g, b = map(int, content.split(','))
+            new_color = Gdk.Color(r, g, b)
+            self._color = new_color
+            self._preview.fill_color = get_svg_color_string(self._color)
+            self.set_image(self._preview)
+            self.notify('color') 
+            self.emit('color-changed')
+            Gtk.drag_finish(context, True, False, time)
+            print(f"COMPLETE: Color {color_str} set and notified.")
+        except Exception as e:
+            print(f"ERROR: {e}")
+            Gtk.drag_finish(context, False, False, time)
 
 class _ColorPalette(Palette):
     """This is a color picker palette. It will usually be used indirectly
