@@ -136,9 +136,13 @@ def main():
         command = bundle.get_command()
         if command.startswith('sugar-activity'):
             if not command.startswith('sugar-activity3'):
-                logging.warning("Activity written for Python 2,"
-                                " consider porting to Python 3.")
+                logging.error(
+                    "Activity cannot start: written for an older version of Sugar "
+                    "and Python 2."
+                )
+                sys.exit(1)
             activity_class = command.split(" ")[1]
+
 
     # when an activity is started outside sugar,
     # activityfactory.get_environment has not executed in parent

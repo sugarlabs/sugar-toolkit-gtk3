@@ -225,13 +225,32 @@ class ActivityCreationHandler(GObject.GObject):
                               self._handle.invited)
 
         dev_null = open('/dev/null', 'r')
-        child = subprocess.Popen([str(s) for s in command],
-                                 env=environ,
-                                 cwd=str(self._bundle.get_path()),
-                                 close_fds=True,
-                                 stdin=dev_null.fileno(),
-                                 stdout=log_file.fileno(),
-                                 stderr=log_file.fileno())
+        try:
+            child = subprocess.Popen([str(s) for s in command],
+                                     env=environ,
+                                     cwd=str(self._bundle.get_path()),
+                                     close_fds=True,
+                                     stdin=dev_null.fileno(),
+                                     stdout=log_file.fileno(),
+                                     stderr=log_file.fileno())
+        except FileNotFoundError as e:
+            message = str(e)
+
+            if 'sugar-activity' in message:
+                log_file.write(
+                    'Activity cannot start: written for an older version of Sugar '
+                    'and Python 2.\n')
+            log_file.flush()
+
+            log_file.close()
+
+            self._shell.NotifyLaunchFailure(
+                self._handle.activity_id,
+                reply_handler=self._no_reply_handler,
+                error_handler=self._notify_launch_failure_error_handler)
+
+            return
+
 
         GLib.child_watch_add(child.pid,
                              _child_watch_cb,
