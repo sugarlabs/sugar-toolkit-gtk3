@@ -247,10 +247,10 @@ class _ColorButton(Gtk.Button):
 
     def __drag_data_received_cb(self, widget, context, x, y, selection_data,
                                 info, time):
-        if len(selection_data.data) != 8:
+        if selection_data.get_length() != 8:
             return
 
-        dropped = selection_data.data
+        dropped = selection_data.get_data()
         red = struct.unpack_from('=H', dropped, 0)[0]
         green = struct.unpack_from('=H', dropped, 2)[0]
         blue = struct.unpack_from('=H', dropped, 4)[0]
