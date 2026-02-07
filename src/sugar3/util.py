@@ -215,7 +215,7 @@ class LRU:
         return list(self.d.keys())
 
 
-units = [['%d year', '%d years', 356 * 24 * 60 * 60],
+units = [['%d year', '%d years', 365 * 24 * 60 * 60],
          ['%d month', '%d months', 30 * 24 * 60 * 60],
          ['%d week', '%d weeks', 7 * 24 * 60 * 60],
          ['%d day', '%d days', 24 * 60 * 60],
