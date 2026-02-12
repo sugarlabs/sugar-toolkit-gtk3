@@ -25,6 +25,7 @@ import os
 import logging
 import shutil
 import zipfile
+import subprocess
 
 
 class AlreadyInstalledException(Exception):
@@ -177,8 +178,8 @@ class Bundle(object):
         # correctly by hand, but handling all the oddities of
         # Windows/UNIX mappings, extension attributes, deprecated
         # features, etc makes it impractical.
-        if os.spawnlp(os.P_WAIT, 'unzip', 'unzip', '-o', self._path,
-                      '-x', 'mimetype', '-d', install_dir):
+        if subprocess.call(['unzip', '-o', self._path, '-x', 'mimetype',
+                            '-d', install_dir]):
             # clean up install dir after failure
             shutil.rmtree(os.path.join(install_dir, self._zip_root_dir),
                           ignore_errors=True)
