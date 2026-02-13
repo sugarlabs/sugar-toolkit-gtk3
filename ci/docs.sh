@@ -14,8 +14,8 @@ show-green () {
 
 # make source
 show-green "Compiling"
-sudo ./autogen.sh --with-python3
-sudo make
+./autogen.sh --with-python3
+make
 
 # make documentation
 show-green "Building documentation"
