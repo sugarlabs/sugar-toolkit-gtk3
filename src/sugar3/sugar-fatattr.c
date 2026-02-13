@@ -33,7 +33,7 @@
 #include <string.h>
 
 // This function is wrapped by getattrs/setattrs
-static int _ioctl_attrs(char *file, __u32 *attrs, int ioctlnum, char *verb)
+static int _ioctl_attrs(const char *file, __u32 *attrs, int ioctlnum, char *verb)
 {
     int fd;
 
@@ -57,20 +57,20 @@ static int _ioctl_attrs(char *file, __u32 *attrs, int ioctlnum, char *verb)
         return -1;
 }
 
-static int getattrs(char *file, __u32 *attrs)
+static int getattrs(const char *file, __u32 *attrs)
 {
     return _ioctl_attrs(file, attrs, FAT_IOCTL_GET_ATTRIBUTES, "reading");
 }
 
-static int setattrs(char *file, __u32 *attrs)
+static int setattrs(const char *file, __u32 *attrs)
 {
     return _ioctl_attrs(file, attrs, FAT_IOCTL_SET_ATTRIBUTES, "writing");
 }
 
-static int set_hidden_attrib(char *pathname)
+static int set_hidden_attrib(const char *pathname)
 {
     __u32 attrs = 0;
-    char *file = NULL;
+    const char *file = NULL;
 
     file = pathname;
     if (getattrs(file, &attrs) == 0) {

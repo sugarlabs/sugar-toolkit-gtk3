@@ -257,12 +257,12 @@ sugar_key_grabber_grab_keys(SugarKeyGrabber *grabber,
             continue;
         }
 
-        gdk_error_trap_push();
+        gdk_x11_display_error_trap_push(gdk_display_get_default());
 
         grab_key(grabber, keyinfo, TRUE);
 
         gdk_flush();
-        gint error_code = gdk_error_trap_pop ();
+        gint error_code = gdk_x11_display_error_trap_pop (gdk_display_get_default());
         if(!error_code)
             grabber->keys = g_list_append(grabber->keys, keyinfo);
         else if(error_code == BadAccess)
