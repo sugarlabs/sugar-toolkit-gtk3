@@ -35,11 +35,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx'
 ]
-if major >= 1 and minor >= 3:
-    # Included in Sphinx 1.3
-    extensions.append('sphinx.ext.napoleon')
-else:
-    extensions.append('sphinxcontrib.napoleon')
+# Included in Sphinx 1.3
+extensions.append('sphinx.ext.napoleon')
 
 intersphinx_mapping = {
     'glib': ('http://lazka.github.io/pgi-docs/GLib-2.0', None),
