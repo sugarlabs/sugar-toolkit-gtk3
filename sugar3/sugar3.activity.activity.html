@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.activity.activity module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.activity.activity module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.activity.activityfactory module" href="sugar3.activity.activityfactory.html" />
@@ -34,9 +32,9 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.activity.activity">
-<span id="sugar3-activity-activity-module"></span><h1>sugar3.activity.activity module<a class="headerlink" href="#module-sugar3.activity.activity" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-activity-activity-module"></span><h1>sugar3.activity.activity module<a class="headerlink" href="#module-sugar3.activity.activity" title="Link to this heading">¶</a></h1>
 <section id="activity">
-<h2>Activity<a class="headerlink" href="#activity" title="Permalink to this headline">¶</a></h2>
+<h2>Activity<a class="headerlink" href="#activity" title="Link to this heading">¶</a></h2>
 <p>A definitive reference for what a Sugar Python activity must do to
 participate in the Sugar desktop.</p>
 <div class="admonition note">
@@ -157,13 +155,14 @@ and connect to signals to detect sharing.</p>
 more about how to make an activity work.</p>
 <p>Hint: A good and simple activity to learn from is the Read activity.
 You may copy it and use it as a template.</p>
+</section>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">Activity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_jobject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="sugar3.graphics.window.html#sugar3.graphics.window.Window" title="sugar3.graphics.window.Window"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.window.Window</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.Gtk.Container</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">Activity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_jobject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sugar3.graphics.window.html#sugar3.graphics.window.Window" title="sugar3.graphics.window.Window"><code class="xref py py-class docutils literal notranslate"><span class="pre">Window</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></p>
 <p>Initialise an Activity.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>handle</strong> (<a class="reference internal" href="sugar3.activity.activityhandle.html#sugar3.activity.activityhandle.ActivityHandle" title="sugar3.activity.activityhandle.ActivityHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActivityHandle</span></code></a>) – instance providing the activity id and access to the presence
 service which <em>may</em> provide sharing for this application</p></li>
@@ -203,17 +202,17 @@ screen resolution.</p></li>
 <a class="reference internal" href="#sugar3.activity.activity.Activity" title="sugar3.activity.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Activity</span></code></a> specific code.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.active">
-<span class="sig-name descname"><span class="pre">active</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.active" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">active</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.active" title="Link to this definition">¶</a></dt>
 <dd><p>Whether an activity is active.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.add_stop_button">
-<span class="sig-name descname"><span class="pre">add_stop_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">button</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.add_stop_button" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_stop_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">button</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.add_stop_button" title="Link to this definition">¶</a></dt>
 <dd><p>Register an extra stop button.  Normally not required.  Use only
 when an activity has more than the default stop button.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>button</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Button.html#Gtk.Button" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Button</span></code></a>) – a stop button</p>
 </dd>
 </dl>
@@ -221,7 +220,7 @@ when an activity has more than the default stop button.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.busy">
-<span class="sig-name descname"><span class="pre">busy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.busy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">busy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.busy" title="Link to this definition">¶</a></dt>
 <dd><p>Show that the activity is busy.  If used, must be called once
 before a lengthy operation, and <a class="reference internal" href="#sugar3.activity.activity.Activity.unbusy" title="sugar3.activity.activity.Activity.unbusy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unbusy()</span></code></a> must be called
 after the operation completes.</p>
@@ -234,16 +233,16 @@ after the operation completes.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.can_close">
-<span class="sig-name descname"><span class="pre">can_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.can_close" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">can_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.can_close" title="Link to this definition">¶</a></dt>
 <dd><p>Return whether <a class="reference internal" href="#sugar3.activity.activity.Activity.close" title="sugar3.activity.activity.Activity.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a> is permitted.</p>
 <p>An activity may override this function to code extra checks
 before closing.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>whether <a class="reference internal" href="#sugar3.activity.activity.Activity.close" title="sugar3.activity.activity.Activity.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a> is permitted by activity,
 default True.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
 </dd>
 </dl>
@@ -251,21 +250,21 @@ default True.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.canvas">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">canvas</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.canvas" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">canvas</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.canvas" title="Link to this definition">¶</a></dt>
 <dd><p>The <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a> used as canvas, or work area of your
 activity.  A common canvas is <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/ScrolledWindow.html#Gtk.ScrolledWindow" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ScrolledWindow</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.close" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.close" title="Link to this definition">¶</a></dt>
 <dd><p>Save to the journal and stop the activity.</p>
 <p>Activities should not override this method, but should
 implement <a class="reference internal" href="#sugar3.activity.activity.Activity.write_file" title="sugar3.activity.activity.Activity.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write_file()</span></code></a> to do any state saving
 instead. If the activity wants to control wether it can close,
 it should override <a class="reference internal" href="#sugar3.activity.activity.Activity.can_close" title="sugar3.activity.activity.Activity.can_close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">can_close()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>skip_save</strong> (<em>bool</em>) – avoid last-chance save; but does not prevent
 a journal object, as an object is created when the activity
 starts.  Use this when an activity calls <a class="reference internal" href="#sugar3.activity.activity.Activity.save" title="sugar3.activity.activity.Activity.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a> just
@@ -276,7 +275,7 @@ prior to <a class="reference internal" href="#sugar3.activity.activity.Activity.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.copy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.copy" title="Link to this definition">¶</a></dt>
 <dd><p>Make a copy of the journal object.</p>
 <p>Activities may use this to ‘Keep in Journal’ the current state
 of the activity.  A new journal object will be created for the
@@ -288,25 +287,25 @@ running activity.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.do_get_property">
-<span class="sig-name descname"><span class="pre">do_get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.do_get_property" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.do_get_property" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.do_set_property">
-<span class="sig-name descname"><span class="pre">do_set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.do_set_property" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.do_set_property" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_active">
-<span class="sig-name descname"><span class="pre">get_active</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_active" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_active</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_active" title="Link to this definition">¶</a></dt>
 <dd><p>Get whether the activity is active.  An activity may be made
 inactive by the shell as a result of another activity being
 active.  An active activity accumulates usage metrics.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>if the activity is active.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>boolean</p>
 </dd>
 </dl>
@@ -314,19 +313,19 @@ active.  An active activity accumulates usage metrics.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_activity_root">
-<span class="sig-name descname"><span class="pre">get_activity_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_activity_root" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_activity_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_activity_root" title="Link to this definition">¶</a></dt>
 <dd><p>Deprecated. This part of the API has been moved
 out of this class to the module itself</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_bundle_id">
-<span class="sig-name descname"><span class="pre">get_bundle_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_bundle_id" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_bundle_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_bundle_id" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the bundle_id from the activity.info file</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
@@ -334,13 +333,13 @@ out of this class to the module itself</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_canvas">
-<span class="sig-name descname"><span class="pre">get_canvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_canvas" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_canvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_canvas" title="Link to this definition">¶</a></dt>
 <dd><p>Get the <a class="reference internal" href="#sugar3.activity.activity.Activity.canvas" title="sugar3.activity.activity.Activity.canvas"><code class="xref py py-attr docutils literal notranslate"><span class="pre">canvas</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the widget used as canvas</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a></p>
 </dd>
 </dl>
@@ -348,22 +347,22 @@ out of this class to the module itself</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_document_path">
-<span class="sig-name descname"><span class="pre">get_document_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">async_cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">async_err_cb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_document_path" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_document_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">async_cb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">async_err_cb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_document_path" title="Link to this definition">¶</a></dt>
 <dd><p>Not implemented.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_id">
-<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_id" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_id" title="Link to this definition">¶</a></dt>
 <dd><p>Get the activity id, a likely-unique identifier for the
 instance of an activity, randomly assigned when a new instance
 is started, or read from the journal object metadata when a
 saved instance is resumed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the activity id</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
 </dd>
 </dl>
@@ -374,15 +373,15 @@ and <a class="reference internal" href="sugar3.util.html#sugar3.util.unique_id" 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_max_participants">
-<span class="sig-name descname"><span class="pre">get_max_participants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_max_participants" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_max_participants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_max_participants" title="Link to this definition">¶</a></dt>
 <dd><p>Get the maximum number of users that can share a instance
 of this activity.  Should be configured in the activity.info
 file.  When not configured, it will be zero.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the maximum number of participants</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
@@ -393,13 +392,13 @@ in <a class="reference internal" href="sugar3.bundle.activitybundle.html#sugar3.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_metadata">
-<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_metadata" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Get the journal object metadata.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the journal object metadata, or None if there is no object.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
@@ -418,15 +417,15 @@ present.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_preview">
-<span class="sig-name descname"><span class="pre">get_preview</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_preview" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_preview</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_preview" title="Link to this definition">¶</a></dt>
 <dd><p>Get a preview image from the <a class="reference internal" href="#sugar3.activity.activity.Activity.canvas" title="sugar3.activity.activity.Activity.canvas"><code class="xref py py-attr docutils literal notranslate"><span class="pre">canvas</span></code></a>, for use as
 metadata for the journal object.  This should be what the user
 is seeing at the time.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>image data in PNG format</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bytes</p>
 </dd>
 </dl>
@@ -440,13 +439,13 @@ then resizes to a surface with the preview size.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_shared">
-<span class="sig-name descname"><span class="pre">get_shared</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_shared" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_shared</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_shared" title="Link to this definition">¶</a></dt>
 <dd><p>Get whether the activity is shared.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the activity is shared.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
 </dd>
 </dl>
@@ -454,19 +453,19 @@ then resizes to a surface with the preview size.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.get_shared_activity">
-<span class="sig-name descname"><span class="pre">get_shared_activity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_shared_activity" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_shared_activity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.get_shared_activity" title="Link to this definition">¶</a></dt>
 <dd><p>Get the shared activity of type
 <a class="reference internal" href="sugar3.presence.activity.html#sugar3.presence.activity.Activity" title="sugar3.presence.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.presence.activity.Activity</span></code></a>, or None if the
 activity is not shared, or is shared and not yet joined.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><dl class="simple">
 <dt>instance of</dt><dd><p>the shared activity or None</p>
 </dd>
 </dl>
 </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="sugar3.presence.activity.html#sugar3.presence.activity.Activity" title="sugar3.presence.activity.Activity"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.presence.activity.Activity</span></code></a></p>
 </dd>
 </dl>
@@ -474,12 +473,12 @@ activity is not shared, or is shared and not yet joined.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.handle_view_source">
-<span class="sig-name descname"><span class="pre">handle_view_source</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.handle_view_source" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">handle_view_source</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.handle_view_source" title="Link to this definition">¶</a></dt>
 <dd><p>An activity may override this method to show aditional
 information in the View Source window. Examples can be seen in
 Browse and TurtleArt.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>NotImplementedError</strong> – </p>
 </dd>
 </dl>
@@ -487,15 +486,15 @@ Browse and TurtleArt.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.iconify">
-<span class="sig-name descname"><span class="pre">iconify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.iconify" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">iconify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.iconify" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.invite">
-<span class="sig-name descname"><span class="pre">invite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.invite" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">invite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.invite" title="Link to this definition">¶</a></dt>
 <dd><p>Invite a buddy to join this activity.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>account_path</strong> – </p></li>
 <li><p><strong>contact_id</strong> – </p></li>
@@ -511,15 +510,15 @@ shared before.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.max_participants">
-<span class="sig-name descname"><span class="pre">max_participants</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.max_participants" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">max_participants</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.max_participants" title="Link to this definition">¶</a></dt>
 <dd><p>Get the maximum number of users that can share a instance
 of this activity.  Should be configured in the activity.info
 file.  When not configured, it will be zero.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the maximum number of participants</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
@@ -530,13 +529,13 @@ in <a class="reference internal" href="sugar3.bundle.activitybundle.html#sugar3.
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.metadata">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.metadata" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#sugar3.activity.activity.Activity.metadata" title="Link to this definition">¶</a></dt>
 <dd><p>Get the journal object metadata.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the journal object metadata, or None if there is no object.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>
@@ -555,14 +554,14 @@ present.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.notify_user">
-<span class="sig-name descname"><span class="pre">notify_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.notify_user" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">notify_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.notify_user" title="Link to this definition">¶</a></dt>
 <dd><p>Display a notification with the given summary and body.
 The notification will go under the activities icon in the frame.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.read_file">
-<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.read_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.read_file" title="Link to this definition">¶</a></dt>
 <dd><p>Subclasses implement this method if they support resuming objects from
 the journal. ‘file_path’ is the file to read from.</p>
 <p>You should immediately open the file from the file_path,
@@ -577,7 +576,7 @@ description and other metadata[‘tags’] may change. So if it is
 important for you to notice changes, this is the time to record the
 originals.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – the file path to read</p>
 </dd>
 </dl>
@@ -585,12 +584,12 @@ originals.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.run_main_loop">
-<span class="sig-name descname"><span class="pre">run_main_loop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.run_main_loop" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_main_loop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.run_main_loop" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.save" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.save" title="Link to this definition">¶</a></dt>
 <dd><p>Save to the journal.</p>
 <p>This may be called by the <a class="reference internal" href="#sugar3.activity.activity.Activity.close" title="sugar3.activity.activity.Activity.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> method.</p>
 <p>Activities should not override this method. This method is part of the
@@ -600,12 +599,12 @@ own implementation of write_file() to save your activity specific data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.set_active">
-<span class="sig-name descname"><span class="pre">set_active</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_active" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_active</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_active" title="Link to this definition">¶</a></dt>
 <dd><p>Set whether the activity is active.  An activity may declare
 itself active or inactive, as can the shell.  An active activity
 accumulates usage metrics.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>active</strong> (<em>boolean</em>) – if the activity is active.</p>
 </dd>
 </dl>
@@ -613,10 +612,10 @@ accumulates usage metrics.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.set_canvas">
-<span class="sig-name descname"><span class="pre">set_canvas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_canvas" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_canvas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_canvas" title="Link to this definition">¶</a></dt>
 <dd><p>Set the <a class="reference internal" href="#sugar3.activity.activity.Activity.canvas" title="sugar3.activity.activity.Activity.canvas"><code class="xref py py-attr docutils literal notranslate"><span class="pre">canvas</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>canvas</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a>) – the widget used as canvas</p>
 </dd>
 </dl>
@@ -624,14 +623,14 @@ accumulates usage metrics.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.set_max_participants">
-<span class="sig-name descname"><span class="pre">set_max_participants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_max_participants" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_max_participants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.set_max_participants" title="Link to this definition">¶</a></dt>
 <dd><p>Set the maximum number of users that can share a instance of
 this activity.  An activity may use this method instead of or
 as well as configuring the activity.info file.  When both are
 used, this method takes precedence over the activity.info
 file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>participants</strong> (<em>int</em>) – the maximum number of participants</p>
 </dd>
 </dl>
@@ -639,10 +638,10 @@ file.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.share">
-<span class="sig-name descname"><span class="pre">share</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">private</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.share" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">share</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">private</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.share" title="Link to this definition">¶</a></dt>
 <dd><p>Request that the activity be shared on the network.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>private</strong> (<em>bool</em>) – True to share by invitation only,
 False to advertise as shared to everyone.</p>
 </dd>
@@ -654,15 +653,15 @@ setting the <code class="xref py py-attr docutils literal notranslate"><span cla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.unbusy">
-<span class="sig-name descname"><span class="pre">unbusy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.unbusy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">unbusy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.unbusy" title="Link to this definition">¶</a></dt>
 <dd><p>Show that the activity is not busy.  An equal number of calls
 to <a class="reference internal" href="#sugar3.activity.activity.Activity.unbusy" title="sugar3.activity.activity.Activity.unbusy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unbusy()</span></code></a> are required to balance the calls to
 <a class="reference internal" href="#sugar3.activity.activity.Activity.busy" title="sugar3.activity.activity.Activity.busy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">busy()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a count of further calls to <a class="reference internal" href="#sugar3.activity.activity.Activity.unbusy" title="sugar3.activity.activity.Activity.unbusy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unbusy()</span></code></a> expected</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
@@ -670,7 +669,7 @@ to <a class="reference internal" href="#sugar3.activity.activity.Activity.unbusy
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.activity.Activity.write_file">
-<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.write_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.Activity.write_file" title="Link to this definition">¶</a></dt>
 <dd><p>Subclasses implement this method if they support saving data to objects
 in the journal. ‘file_path’ is the file to write to.</p>
 <p>If the user did make changes, you should create the file_path and save
@@ -683,7 +682,7 @@ one you received in <a class="reference internal" href="#sugar3.activity.activit
 file_path from <a class="reference internal" href="#sugar3.activity.activity.Activity.read_file" title="sugar3.activity.activity.Activity.read_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_file()</span></code></a> open until now, you must
 still write the entire file to this file_path.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – complete path of the file to write</p>
 </dd>
 </dl>
@@ -693,18 +692,18 @@ still write the entire file to this file_path.</p>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="sugar3.activity.activity.PREVIEW_SIZE">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">PREVIEW_SIZE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">(300,</span> <span class="pre">225)</span></em><a class="headerlink" href="#sugar3.activity.activity.PREVIEW_SIZE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">PREVIEW_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(300,</span> <span class="pre">225)</span></em><a class="headerlink" href="#sugar3.activity.activity.PREVIEW_SIZE" title="Link to this definition">¶</a></dt>
 <dd><p>Size of a preview image for journal object metadata.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activity.get_activity_root">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_activity_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_activity_root" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_activity_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_activity_root" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a path for saving Activity specific preferences, etc.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
 </dd>
 </dl>
@@ -722,10 +721,10 @@ DataStore.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activity.get_bundle">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle" title="Link to this definition">¶</a></dt>
 <dd><p>Get the bundle id of an activity that can open a journal object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bundle_id</strong> (<em>str</em>) – activity bundle id, optional</p></li>
 <li><p><strong>object_id</strong> (<em>object</em>) – journal object</p></li>
@@ -736,12 +735,12 @@ DataStore.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activity.get_bundle_name">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_bundle_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle_name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_bundle_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle_name" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the bundle name for the current process’ bundle</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
 </dd>
 </dl>
@@ -749,12 +748,12 @@ DataStore.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activity.get_bundle_path">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_bundle_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle_path" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">get_bundle_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.get_bundle_path" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the bundle path for the current process’ bundle</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
 </dd>
 </dl>
@@ -762,10 +761,10 @@ DataStore.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activity.launch_bundle">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">launch_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.launch_bundle" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">launch_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.launch_bundle" title="Link to this definition">¶</a></dt>
 <dd><p>Launch an activity for a journal object, or an activity.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bundle_id</strong> (<em>str</em>) – activity bundle id, optional</p></li>
 <li><p><strong>object_id</strong> (<em>object</em>) – journal object</p></li>
@@ -776,16 +775,15 @@ DataStore.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activity.show_object_in_journal">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">show_object_in_journal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.show_object_in_journal" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activity.</span></span><span class="sig-name descname"><span class="pre">show_object_in_journal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activity.show_object_in_journal" title="Link to this definition">¶</a></dt>
 <dd><p>Raise the journal activity and show a journal object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>object_id</strong> (<em>object</em>) – journal object</p>
 </dd>
 </dl>
 </dd></dl>
 
-</section>
 </section>
 
 
@@ -860,7 +858,7 @@ DataStore.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -874,10 +872,10 @@ DataStore.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

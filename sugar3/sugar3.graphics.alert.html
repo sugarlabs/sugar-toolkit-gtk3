@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.graphics.alert module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.graphics.alert module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.graphics.animator module" href="sugar3.graphics.animator.html" />
@@ -34,7 +32,7 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.graphics.alert">
-<span id="sugar3-graphics-alert-module"></span><h1>sugar3.graphics.alert module<a class="headerlink" href="#module-sugar3.graphics.alert" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-graphics-alert-module"></span><h1>sugar3.graphics.alert module<a class="headerlink" href="#module-sugar3.graphics.alert" title="Link to this heading">¶</a></h1>
 <p>Alerts appear in an activity below the toolbox and above the canvas.</p>
 <p><a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code></a> and the derived <a class="reference internal" href="#sugar3.graphics.alert.TimeoutAlert" title="sugar3.graphics.alert.TimeoutAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeoutAlert</span></code></a>,
 <a class="reference internal" href="#sugar3.graphics.alert.ConfirmationAlert" title="sugar3.graphics.alert.ConfirmationAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfirmationAlert</span></code></a>, <a class="reference internal" href="#sugar3.graphics.alert.ErrorAlert" title="sugar3.graphics.alert.ErrorAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorAlert</span></code></a>, and
@@ -63,8 +61,8 @@ and will emit a <cite>response</cite> signal when a timeout occurs.</p>
 <p>STABLE.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.Alert">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">Alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.EventBox</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">Alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EventBox</span></code></p>
 <p>Alerts are inside the activity window instead of being a
 separate popup window. They do not hide the canvas.</p>
 <p>Use <a class="reference internal" href="sugar3.graphics.window.html#sugar3.graphics.window.Window.add_alert" title="sugar3.graphics.window.Window.add_alert"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_alert()</span></code></a> and
@@ -75,7 +73,7 @@ remove an alert.  These methods are inherited by an
 <p>The alert is placed between the canvas and the toolbox, or above
 the canvas in fullscreen mode.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>title</strong> (<em>str</em>) – the title of the alert</p></li>
 <li><p><strong>message</strong> (<em>str</em>) – the message of the alert</p></li>
@@ -85,13 +83,13 @@ the canvas in fullscreen mode.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.Alert.add_button">
-<span class="sig-name descname"><span class="pre">add_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.add_button" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.add_button" title="Link to this definition">¶</a></dt>
 <dd><p>Create a button and add it to the alert.</p>
 <p>The button is added to the end of the alert.</p>
 <p>When the button is clicked, the <cite>response</cite> signal will be
 emitted, along with a response identifier.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>response_id</strong> (<em>int</em>) – the response identifier, a
 <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/enums.html#Gtk.ResponseType" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ResponseType</span></code></a> constant or any positive
@@ -102,10 +100,10 @@ integer,</p></li>
 the box of buttons,</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the button added to the alert</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Button.html#Gtk.Button" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Button</span></code></a></p>
 </dd>
 </dl>
@@ -113,17 +111,17 @@ the box of buttons,</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.Alert.add_entry">
-<span class="sig-name descname"><span class="pre">add_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.add_entry" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_entry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.add_entry" title="Link to this definition">¶</a></dt>
 <dd><p>Create an entry and add it to the alert.</p>
 <p>The entry is placed after the title and before the buttons.</p>
 <p>Caller is responsible for capturing the entry text in the
 <cite>response</cite> signal handler or a <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Entry.html#Gtk.Entry" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Entry</span></code></a> signal
 handler.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the entry added to the alert</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Entry.html#Gtk.Entry" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Entry</span></code></a></p>
 </dd>
 </dl>
@@ -131,7 +129,7 @@ handler.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.Alert.do_get_property">
-<span class="sig-name descname"><span class="pre">do_get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.do_get_property" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.do_get_property" title="Link to this definition">¶</a></dt>
 <dd><p>Get alert property, GObject internal method.
 Use the <cite>alert.props</cite> object, eg:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">title</span> <span class="o">=</span> <span class="n">alert</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">title</span>
@@ -141,7 +139,7 @@ Use the <cite>alert.props</cite> object, eg:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.Alert.do_set_property">
-<span class="sig-name descname"><span class="pre">do_set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.do_set_property" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.do_set_property" title="Link to this definition">¶</a></dt>
 <dd><p>Set alert property, GObject internal method.
 Use the <cite>alert.props</cite> object, eg:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alert</span><span class="o">.</span><span class="n">props</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Are you happy?&#39;</span>
@@ -151,15 +149,15 @@ Use the <cite>alert.props</cite> object, eg:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.Alert.remove_button">
-<span class="sig-name descname"><span class="pre">remove_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.remove_button" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">remove_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.Alert.remove_button" title="Link to this definition">¶</a></dt>
 <dd><p>Remove a button from the alert.</p>
 <p>The button is selected for removal using the response
 identifier that was passed to <a class="reference internal" href="#sugar3.graphics.alert.Alert.add_button" title="sugar3.graphics.alert.Alert.add_button"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_button()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>response_id</strong> (<em>int</em>) – the response identifier</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -169,8 +167,8 @@ identifier that was passed to <a class="reference internal" href="#sugar3.graphi
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.ConfirmationAlert">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">ConfirmationAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.ConfirmationAlert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.alert.Alert</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">ConfirmationAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.ConfirmationAlert" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code></a></p>
 <p>An alert with two buttons; Ok and Cancel.</p>
 <p>When a button is clicked, the <a class="reference internal" href="#sugar3.graphics.alert.ConfirmationAlert" title="sugar3.graphics.alert.ConfirmationAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfirmationAlert</span></code></a> will emit
 a <cite>response</cite> signal with a response identifier.  For the Ok
@@ -178,7 +176,7 @@ button, the response identifier will be
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ResponseType.OK</span></code>.  For the Cancel button,
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ResponseType.CANCEL</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>**kwargs</strong> – parameters for <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code></a></p>
 </dd>
 </dl>
@@ -208,14 +206,14 @@ button, the response identifier will be
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.ErrorAlert">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">ErrorAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.ErrorAlert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.alert.Alert</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">ErrorAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.ErrorAlert" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code></a></p>
 <p>An alert with one button; Ok.</p>
 <p>When the button is clicked, the <a class="reference internal" href="#sugar3.graphics.alert.ErrorAlert" title="sugar3.graphics.alert.ErrorAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorAlert</span></code></a> will
 emit a <cite>response</cite> signal with a response identifier
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ResponseType.OK</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>**kwargs</strong> – parameters for <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code></a></p>
 </dd>
 </dl>
@@ -243,8 +241,8 @@ emit a <cite>response</cite> signal with a response identifier
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.NotifyAlert">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">NotifyAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.NotifyAlert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.alert._TimeoutAlert</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">NotifyAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.NotifyAlert" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_TimeoutAlert</span></code></p>
 <p>A timed alert with one button; Ok.  The button contains a
 countdown of seconds remaining.</p>
 <p>When the button is clicked, the <a class="reference internal" href="#sugar3.graphics.alert.NotifyAlert" title="sugar3.graphics.alert.NotifyAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotifyAlert</span></code></a> will
@@ -254,7 +252,7 @@ emit a <cite>response</cite> signal with a response identifier
 <a class="reference internal" href="#sugar3.graphics.alert.NotifyAlert" title="sugar3.graphics.alert.NotifyAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotifyAlert</span></code></a> will emit a <cite>response</cite> signal with a
 response identifier of -1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – time in seconds, default 5</p></li>
 <li><p><strong>**kwargs</strong> – parameters for <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code></a></p></li>
@@ -286,8 +284,8 @@ response identifier of -1.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.alert.TimeoutAlert">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">TimeoutAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.TimeoutAlert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.graphics.alert._TimeoutAlert</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.alert.</span></span><span class="sig-name descname"><span class="pre">TimeoutAlert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.alert.TimeoutAlert" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_TimeoutAlert</span></code></p>
 <p>A timed alert with two buttons; Continue and Cancel.  The Continue
 button contains a countdown of seconds remaining.</p>
 <p>When a button is clicked, the <a class="reference internal" href="#sugar3.graphics.alert.TimeoutAlert" title="sugar3.graphics.alert.TimeoutAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeoutAlert</span></code></a> will emit
@@ -299,7 +297,7 @@ button, the response identifier will be
 <a class="reference internal" href="#sugar3.graphics.alert.TimeoutAlert" title="sugar3.graphics.alert.TimeoutAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeoutAlert</span></code></a> will emit a <cite>response</cite> signal with a
 response identifier of -1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – time in seconds, default 5</p></li>
 <li><p><strong>**kwargs</strong> – parameters for <a class="reference internal" href="#sugar3.graphics.alert.Alert" title="sugar3.graphics.alert.Alert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code></a></p></li>
@@ -424,7 +422,7 @@ response identifier of -1.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -438,10 +436,10 @@ response identifier of -1.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

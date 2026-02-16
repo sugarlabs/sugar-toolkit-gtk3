@@ -1,5 +1,5 @@
-src
-===
+sugar3
+======
 
 .. toctree::
    :maxdepth: 4

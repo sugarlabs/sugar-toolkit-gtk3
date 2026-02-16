@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.network module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.network module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.power module" href="sugar3.power.html" />
@@ -34,42 +32,42 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.network">
-<span id="sugar3-network-module"></span><h1>sugar3.network module<a class="headerlink" href="#module-sugar3.network" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-network-module"></span><h1>sugar3.network module<a class="headerlink" href="#module-sugar3.network" title="Link to this heading">¶</a></h1>
 <p>STABLE.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.network.ChunkedGlibHTTPRequestHandler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">ChunkedGlibHTTPRequestHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">http.server.SimpleHTTPRequestHandler</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">ChunkedGlibHTTPRequestHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleHTTPRequestHandler</span></code></p>
 <p>RequestHandler class that integrates with Glib mainloop.  It writes
 the specified file to the client in chunks, returning control to the
 mainloop between chunks.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sugar3.network.ChunkedGlibHTTPRequestHandler.CHUNK_SIZE">
-<span class="sig-name descname"><span class="pre">CHUNK_SIZE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4096</span></em><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.CHUNK_SIZE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CHUNK_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4096</span></em><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.CHUNK_SIZE" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.ChunkedGlibHTTPRequestHandler.do_GET">
-<span class="sig-name descname"><span class="pre">do_GET</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.do_GET" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_GET</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.do_GET" title="Link to this definition">¶</a></dt>
 <dd><p>Serve a GET request.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.ChunkedGlibHTTPRequestHandler.finish">
-<span class="sig-name descname"><span class="pre">finish</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.finish" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">finish</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.finish" title="Link to this definition">¶</a></dt>
 <dd><p>Close the sockets when we’re done, not before</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.ChunkedGlibHTTPRequestHandler.log_request">
-<span class="sig-name descname"><span class="pre">log_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.log_request" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">log_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.log_request" title="Link to this definition">¶</a></dt>
 <dd><p>Log an accepted request.</p>
 <p>This is called by send_response().</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.ChunkedGlibHTTPRequestHandler.send_head">
-<span class="sig-name descname"><span class="pre">send_head</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.send_head" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">send_head</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.send_head" title="Link to this definition">¶</a></dt>
 <dd><p>Common code for GET and HEAD commands.</p>
 <p>This sends the response code and MIME headers.</p>
 <p>Return value is either a file object (which has to be copied
@@ -83,28 +81,28 @@ None, in which case the caller has nothing further to do.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.network.GlibTCPServer">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">GlibTCPServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RequestHandlerClass</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibTCPServer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">socketserver.TCPServer</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">GlibTCPServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RequestHandlerClass</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibTCPServer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TCPServer</span></code></p>
 <p>Integrate socket accept into glib mainloop.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sugar3.network.GlibTCPServer.allow_reuse_address">
-<span class="sig-name descname"><span class="pre">allow_reuse_address</span></span><em class="property"> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#sugar3.network.GlibTCPServer.allow_reuse_address" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">allow_reuse_address</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sugar3.network.GlibTCPServer.allow_reuse_address" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.GlibTCPServer.close_request">
-<span class="sig-name descname"><span class="pre">close_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibTCPServer.close_request" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">close_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibTCPServer.close_request" title="Link to this definition">¶</a></dt>
 <dd><p>Called to clean up an individual request.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sugar3.network.GlibTCPServer.request_queue_size">
-<span class="sig-name descname"><span class="pre">request_queue_size</span></span><em class="property"> <span class="pre">=</span> <span class="pre">20</span></em><a class="headerlink" href="#sugar3.network.GlibTCPServer.request_queue_size" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">request_queue_size</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#sugar3.network.GlibTCPServer.request_queue_size" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.GlibTCPServer.shutdown_request">
-<span class="sig-name descname"><span class="pre">shutdown_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibTCPServer.shutdown_request" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">shutdown_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibTCPServer.shutdown_request" title="Link to this definition">¶</a></dt>
 <dd><p>Called to shutdown and close an individual request.</p>
 </dd></dl>
 
@@ -112,34 +110,34 @@ None, in which case the caller has nothing further to do.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.network.GlibURLDownloader">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">GlibURLDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">GlibURLDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code></p>
 <p>Grabs a URL in chunks, returning to the mainloop after each chunk</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sugar3.network.GlibURLDownloader.CHUNK_SIZE">
-<span class="sig-name descname"><span class="pre">CHUNK_SIZE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4096</span></em><a class="headerlink" href="#sugar3.network.GlibURLDownloader.CHUNK_SIZE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CHUNK_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4096</span></em><a class="headerlink" href="#sugar3.network.GlibURLDownloader.CHUNK_SIZE" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.GlibURLDownloader.cancel">
-<span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader.cancel" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader.cancel" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.GlibURLDownloader.cleanup">
-<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader.cleanup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader.cleanup" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.network.GlibURLDownloader.start">
-<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destfd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader.start" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destfd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.GlibURLDownloader.start" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.network.get_authinfo">
-<span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">get_authinfo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.get_authinfo" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.network.</span></span><span class="sig-name descname"><span class="pre">get_authinfo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.network.get_authinfo" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -169,7 +167,32 @@ None, in which case the caller has nothing further to do.</p>
 <li class="toctree-l3"><a class="reference internal" href="sugar3.env.html">sugar3.env module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sugar3.logger.html">sugar3.logger module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sugar3.mime.html">sugar3.mime module</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sugar3.network module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sugar3.network module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sugar3.network.ChunkedGlibHTTPRequestHandler"><code class="docutils literal notranslate"><span class="pre">ChunkedGlibHTTPRequestHandler</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.CHUNK_SIZE"><code class="docutils literal notranslate"><span class="pre">ChunkedGlibHTTPRequestHandler.CHUNK_SIZE</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.do_GET"><code class="docutils literal notranslate"><span class="pre">ChunkedGlibHTTPRequestHandler.do_GET()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.finish"><code class="docutils literal notranslate"><span class="pre">ChunkedGlibHTTPRequestHandler.finish()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.log_request"><code class="docutils literal notranslate"><span class="pre">ChunkedGlibHTTPRequestHandler.log_request()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.ChunkedGlibHTTPRequestHandler.send_head"><code class="docutils literal notranslate"><span class="pre">ChunkedGlibHTTPRequestHandler.send_head()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#sugar3.network.GlibTCPServer"><code class="docutils literal notranslate"><span class="pre">GlibTCPServer</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibTCPServer.allow_reuse_address"><code class="docutils literal notranslate"><span class="pre">GlibTCPServer.allow_reuse_address</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibTCPServer.close_request"><code class="docutils literal notranslate"><span class="pre">GlibTCPServer.close_request()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibTCPServer.request_queue_size"><code class="docutils literal notranslate"><span class="pre">GlibTCPServer.request_queue_size</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibTCPServer.shutdown_request"><code class="docutils literal notranslate"><span class="pre">GlibTCPServer.shutdown_request()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#sugar3.network.GlibURLDownloader"><code class="docutils literal notranslate"><span class="pre">GlibURLDownloader</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibURLDownloader.CHUNK_SIZE"><code class="docutils literal notranslate"><span class="pre">GlibURLDownloader.CHUNK_SIZE</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibURLDownloader.cancel"><code class="docutils literal notranslate"><span class="pre">GlibURLDownloader.cancel()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibURLDownloader.cleanup"><code class="docutils literal notranslate"><span class="pre">GlibURLDownloader.cleanup()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sugar3.network.GlibURLDownloader.start"><code class="docutils literal notranslate"><span class="pre">GlibURLDownloader.start()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#sugar3.network.get_authinfo"><code class="docutils literal notranslate"><span class="pre">get_authinfo()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="sugar3.power.html">sugar3.power module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sugar3.profile.html">sugar3.profile module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sugar3.speech.html">sugar3.speech module</a></li>
@@ -201,7 +224,7 @@ None, in which case the caller has nothing further to do.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -215,10 +238,10 @@ None, in which case the caller has nothing further to do.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

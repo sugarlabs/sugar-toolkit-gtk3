@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.graphics.combobox module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.graphics.combobox module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.graphics.icon module" href="sugar3.graphics.icon.html" />
@@ -34,7 +32,7 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.graphics.combobox">
-<span id="sugar3-graphics-combobox-module"></span><h1>sugar3.graphics.combobox module<a class="headerlink" href="#module-sugar3.graphics.combobox" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-graphics-combobox-module"></span><h1>sugar3.graphics.combobox module<a class="headerlink" href="#module-sugar3.graphics.combobox" title="Link to this heading">¶</a></h1>
 <p>The combobox module provides a combo box; a button like widget which
 creates a list popup when clicked.  It’s best used outside of a
 toolbar when the user needs to choose from a <em>short</em> list of items.</p>
@@ -68,19 +66,19 @@ toolbar when the user needs to choose from a <em>short</em> list of items.</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.combobox.</span></span><span class="sig-name descname"><span class="pre">ComboBox</span></span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.Gtk.ComboBox</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.combobox.</span></span><span class="sig-name descname"><span class="pre">ComboBox</span></span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ComboBox</span></code></p>
 <p>This class provides a simple wrapper based on the <a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/ComboBox.html#Gtk.ComboBox" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.ComboBox</span></code></a>.
 This lets you make a list of items, with a value, label and optionally an
 icon.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.append_item">
-<span class="sig-name descname"><span class="pre">append_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.append_item" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">append_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.append_item" title="Link to this definition">¶</a></dt>
 <dd><p>This function adds another item to the bottom of the combo box list.</p>
 <p>If either <cite>icon_name</cite> or <cite>file_name</cite> are supplied and icon column
 will be added to the combo box list.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>object</em>) – the value that will be returned by <cite>get_value</cite>,
 when this item is selected</p></li>
@@ -96,27 +94,27 @@ item, optional and conflicting with <cite>icon_name</cite></p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.append_separator">
-<span class="sig-name descname"><span class="pre">append_separator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.append_separator" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">append_separator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.append_separator" title="Link to this definition">¶</a></dt>
 <dd><p>Add a separator to the bottom of the combo box list.  The separator
 can not be selected.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.do_get_property">
-<span class="sig-name descname"><span class="pre">do_get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.do_get_property" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.do_get_property" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.do_set_property">
-<span class="sig-name descname"><span class="pre">do_set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.do_set_property" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pspec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.do_set_property" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.get_active_item">
-<span class="sig-name descname"><span class="pre">get_active_item</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.get_active_item" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_active_item</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.get_active_item" title="Link to this definition">¶</a></dt>
 <dd><p>Get the row of data for the currently selected item.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><p>row of data in the format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">value</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">pixbuf</span><span class="p">,</span> <span class="n">is_separator</span><span class="p">]</span>
 </pre></div>
@@ -128,11 +126,11 @@ can not be selected.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.get_value">
-<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.get_value" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.get_value" title="Link to this definition">¶</a></dt>
 <dd><p>The value of the currently selected item; the same as the <cite>value</cite>
 argument that was passed to the <cite>append_item</cite> func.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object, value of selected item</p>
 </dd>
 </dl>
@@ -140,17 +138,17 @@ argument that was passed to the <cite>append_item</cite> func.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.remove_all">
-<span class="sig-name descname"><span class="pre">remove_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.remove_all" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">remove_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.remove_all" title="Link to this definition">¶</a></dt>
 <dd><p>Remove all list items from the combo box.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sugar3.graphics.combobox.ComboBox.value">
-<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.value" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#sugar3.graphics.combobox.ComboBox.value" title="Link to this definition">¶</a></dt>
 <dd><p>The value of the currently selected item; the same as the <cite>value</cite>
 argument that was passed to the <cite>append_item</cite> func.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object, value of selected item</p>
 </dd>
 </dl>
@@ -250,7 +248,7 @@ argument that was passed to the <cite>append_item</cite> func.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -264,10 +262,10 @@ argument that was passed to the <cite>append_item</cite> func.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

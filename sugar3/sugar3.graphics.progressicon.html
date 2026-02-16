@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.graphics.progressicon module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.graphics.progressicon module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.graphics.radiopalette module" href="sugar3.graphics.radiopalette.html" />
@@ -34,12 +32,12 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.graphics.progressicon">
-<span id="sugar3-graphics-progressicon-module"></span><h1>sugar3.graphics.progressicon module<a class="headerlink" href="#module-sugar3.graphics.progressicon" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-graphics-progressicon-module"></span><h1>sugar3.graphics.progressicon module<a class="headerlink" href="#module-sugar3.graphics.progressicon" title="Link to this heading">¶</a></h1>
 <p>A progress icon is a progress indicator in the form of an icon.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.progressicon.ProgressIcon">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.progressicon.</span></span><span class="sig-name descname"><span class="pre">ProgressIcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icon_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke_color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vertical'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.repository.Gtk.DrawingArea</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.progressicon.</span></span><span class="sig-name descname"><span class="pre">ProgressIcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icon_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke_color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vertical'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DrawingArea</span></code></p>
 <p>Display the progress filling the icon.
 This class is compatible with the sugar3.graphics.icon.Icon class.
 Call update(progress) with the new progress to update the icon.
@@ -52,7 +50,7 @@ depending on the system’s language RTL setting.
 <div><p>[e.g. pixel_size=style.LARGE_ICON_SIZE]</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>icon_name</strong> (<em>string</em>) – Name of icon
 [e.g. icon_name=’test_icon’]</p></li>
@@ -64,19 +62,19 @@ depending on the system’s language RTL setting.
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.progressicon.ProgressIcon.do_get_preferred_height">
-<span class="sig-name descname"><span class="pre">do_get_preferred_height</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon.do_get_preferred_height" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_get_preferred_height</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon.do_get_preferred_height" title="Link to this definition">¶</a></dt>
 <dd><p>Calculate the minimum and natural height of the progressicon.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.progressicon.ProgressIcon.do_get_preferred_width">
-<span class="sig-name descname"><span class="pre">do_get_preferred_width</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon.do_get_preferred_width" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">do_get_preferred_width</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon.do_get_preferred_width" title="Link to this definition">¶</a></dt>
 <dd><p>Calculate the minimum and natural width of the progressicon.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.progressicon.ProgressIcon.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progress</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon.update" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progress</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.progressicon.ProgressIcon.update" title="Link to this definition">¶</a></dt>
 <dd><p>Updates progressicon with progress’s value.
 Example: update(0.9)</p>
 </dd></dl>
@@ -175,7 +173,7 @@ Example: update(0.9)</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -189,10 +187,10 @@ Example: update(0.9)</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

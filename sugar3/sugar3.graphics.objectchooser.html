@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.graphics.objectchooser module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.graphics.objectchooser module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.graphics.palette module" href="sugar3.graphics.palette.html" />
@@ -34,18 +32,18 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.graphics.objectchooser">
-<span id="sugar3-graphics-objectchooser-module"></span><h1>sugar3.graphics.objectchooser module<a class="headerlink" href="#module-sugar3.graphics.objectchooser" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-graphics-objectchooser-module"></span><h1>sugar3.graphics.objectchooser module<a class="headerlink" href="#module-sugar3.graphics.objectchooser" title="Link to this heading">¶</a></h1>
 <p>STABLE.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.graphics.objectchooser.ObjectChooser">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.objectchooser.</span></span><span class="sig-name descname"><span class="pre">ObjectChooser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_preview</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.graphics.objectchooser.</span></span><span class="sig-name descname"><span class="pre">ObjectChooser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_preview</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>UI interface for object choosers.</p>
 <p>Object choosers can be used by acivities to allow the
 user to select objects from the file system or from
 some other similar source.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Keyword Arguments</dt>
+<dt class="field-odd">Keyword Arguments<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>parent</strong> (<a class="reference external" href="http://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget" title="(in Gtk 3.0 v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gtk.Widget</span></code></a>) – the widget calling ObjectChooser</p></li>
 <li><p><strong>what_filter</strong> (<em>str</em>) – an activity bundle_id or a generic mime type as
@@ -84,16 +82,16 @@ filter_type=FILTER_TYPE_ACTIVITY)</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.objectchooser.ObjectChooser.destroy">
-<span class="sig-name descname"><span class="pre">destroy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.destroy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">destroy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.destroy" title="Link to this definition">¶</a></dt>
 <dd><p>Destroys and cleans up (disposes) the object chooser.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.objectchooser.ObjectChooser.get_selected_object">
-<span class="sig-name descname"><span class="pre">get_selected_object</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.get_selected_object" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_selected_object</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.get_selected_object" title="Link to this definition">¶</a></dt>
 <dd><p>Gets the object selected using the object chooser.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object, the object selected</p>
 </dd>
 </dl>
@@ -101,10 +99,10 @@ filter_type=FILTER_TYPE_ACTIVITY)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.graphics.objectchooser.ObjectChooser.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.run" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.ObjectChooser.run" title="Link to this definition">¶</a></dt>
 <dd><p>Runs the object chooser and displays it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Gtk.ResponseType constant, the response received
 from displaying the object chooser.</p>
 </dd>
@@ -115,15 +113,15 @@ from displaying the object chooser.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.graphics.objectchooser.get_preview_pixbuf">
-<span class="sig-prename descclassname"><span class="pre">sugar3.graphics.objectchooser.</span></span><span class="sig-name descname"><span class="pre">get_preview_pixbuf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preview_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.get_preview_pixbuf" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.graphics.objectchooser.</span></span><span class="sig-name descname"><span class="pre">get_preview_pixbuf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preview_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.graphics.objectchooser.get_preview_pixbuf" title="Link to this definition">¶</a></dt>
 <dd><p>Retrive a pixbuf with the content of the preview field</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>metadata</strong> (<em>dictionary</em>) – preview data from the metadata dictionary. Can’t
 be None. Returned from the
 sugar3.datastore.datastore.DSObject.get_metadata() method.</p>
 </dd>
-<dt class="field-even">Keyword Arguments</dt>
+<dt class="field-even">Keyword Arguments<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>width</strong> (<em>int</em>) – the pixbuf width, if is not set,</p></li>
 <li><p><strong>used</strong> (<em>the default height will be</em>) – </p></li>
@@ -131,7 +129,7 @@ sugar3.datastore.datastore.DSObject.get_metadata() method.</p>
 <li><p><strong>used</strong> – </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Pixbuf, the generated Pixbuf
 None, if it could not be created</p>
 </dd>
@@ -240,7 +238,7 @@ im.show()</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -254,10 +252,10 @@ im.show()</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

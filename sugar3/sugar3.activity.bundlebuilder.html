@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.activity.bundlebuilder module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.activity.bundlebuilder module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.activity.i18n module" href="sugar3.activity.i18n.html" />
@@ -34,7 +32,7 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.activity.bundlebuilder">
-<span id="sugar3-activity-bundlebuilder-module"></span><h1>sugar3.activity.bundlebuilder module<a class="headerlink" href="#module-sugar3.activity.bundlebuilder" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-activity-bundlebuilder-module"></span><h1>sugar3.activity.bundlebuilder module<a class="headerlink" href="#module-sugar3.activity.bundlebuilder" title="Link to this heading">¶</a></h1>
 <p>The bundle builder is a build system for Sugar activities.  Usually, it
 is setup by creating a <cite>setup.py</cite> file in the project with the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
@@ -45,136 +43,136 @@ is setup by creating a <cite>setup.py</cite> file in the project with the follow
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Builder">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_fail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_fail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Builder.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder.build" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder.build" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Builder.build_locale">
-<span class="sig-name descname"><span class="pre">build_locale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder.build_locale" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build_locale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder.build_locale" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Builder.get_locale_files">
-<span class="sig-name descname"><span class="pre">get_locale_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder.get_locale_files" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_locale_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Builder.get_locale_files" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Config">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Config" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Config" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Config.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Config.update" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Config.update" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Installer">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Installer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">builder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Installer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#sugar3.activity.bundlebuilder.Packager" title="sugar3.activity.bundlebuilder.Packager"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.activity.bundlebuilder.Packager</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Installer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">builder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Installer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.activity.bundlebuilder.Packager" title="sugar3.activity.bundlebuilder.Packager"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packager</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Installer.install">
-<span class="sig-name descname"><span class="pre">install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">install_mime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">install_desktop_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Installer.install" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">install_mime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">install_desktop_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Installer.install" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Packager">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Packager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Packager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">Packager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Packager" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.Packager.get_files_in_git">
-<span class="sig-name descname"><span class="pre">get_files_in_git</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Packager.get_files_in_git" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_files_in_git</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.Packager.get_files_in_git" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.SourcePackager">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">SourcePackager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.SourcePackager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#sugar3.activity.bundlebuilder.Packager" title="sugar3.activity.bundlebuilder.Packager"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.activity.bundlebuilder.Packager</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">SourcePackager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.SourcePackager" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.activity.bundlebuilder.Packager" title="sugar3.activity.bundlebuilder.Packager"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packager</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.SourcePackager.package">
-<span class="sig-name descname"><span class="pre">package</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.SourcePackager.package" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">package</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.SourcePackager.package" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.XOPackager">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">XOPackager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">builder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.XOPackager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#sugar3.activity.bundlebuilder.Packager" title="sugar3.activity.bundlebuilder.Packager"><code class="xref py py-class docutils literal notranslate"><span class="pre">sugar3.activity.bundlebuilder.Packager</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">XOPackager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">builder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.XOPackager" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sugar3.activity.bundlebuilder.Packager" title="sugar3.activity.bundlebuilder.Packager"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packager</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.XOPackager.package">
-<span class="sig-name descname"><span class="pre">package</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.XOPackager.package" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">package</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.XOPackager.package" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_build">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_build" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_build" title="Link to this definition">¶</a></dt>
 <dd><p>Build generated files</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_check">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_check" title="Link to this definition">¶</a></dt>
 <dd><p>Run tests for the activity</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_dev">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_dev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_dev" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_dev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_dev" title="Link to this definition">¶</a></dt>
 <dd><p>Setup for development</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_dist_source">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_dist_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_dist_source" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_dist_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_dist_source" title="Link to this definition">¶</a></dt>
 <dd><p>Create a tar source package</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_dist_xo">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_dist_xo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_dist_xo" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_dist_xo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_dist_xo" title="Link to this definition">¶</a></dt>
 <dd><p>Create a xo bundle package</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_fix_manifest">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_fix_manifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_fix_manifest" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_fix_manifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_fix_manifest" title="Link to this definition">¶</a></dt>
 <dd><p>Add missing files to the manifest (OBSOLETE)</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_genpot">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_genpot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_genpot" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_genpot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_genpot" title="Link to this definition">¶</a></dt>
 <dd><p>Generate the gettext pot file</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.cmd_install">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_install" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">cmd_install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.cmd_install" title="Link to this definition">¶</a></dt>
 <dd><p>Install the activity in the system</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.list_files">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">list_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.list_files" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">list_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.list_files" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.bundlebuilder.start">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.start" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.bundlebuilder.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.bundlebuilder.start" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -251,7 +249,7 @@ is setup by creating a <cite>setup.py</cite> file in the project with the follow
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -265,10 +263,10 @@ is setup by creating a <cite>setup.py</cite> file in the project with the follow
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sugar3.activity.activityfactory module &#8212; Sugar Toolkit GTK3 0.118 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>sugar3.activity.activityfactory module &#8212; Sugar Toolkit GTK3 0.121 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=cb25574f" />
+    <script src="_static/documentation_options.js?v=871114c8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sugar3.activity.activityhandle module" href="sugar3.activity.activityhandle.html" />
@@ -34,14 +32,14 @@
           <div class="body" role="main">
             
   <section id="module-sugar3.activity.activityfactory">
-<span id="sugar3-activity-activityfactory-module"></span><h1>sugar3.activity.activityfactory module<a class="headerlink" href="#module-sugar3.activity.activityfactory" title="Permalink to this headline">¶</a></h1>
+<span id="sugar3-activity-activityfactory-module"></span><h1>sugar3.activity.activityfactory module<a class="headerlink" href="#module-sugar3.activity.activityfactory" title="Link to this heading">¶</a></h1>
 <p>Shell side object which manages request to start activity</p>
 <p>UNSTABLE. Activities are currently not allowed to run other activities so at
 the moment there is no reason to stabilize this API.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.ActivityCreationHandler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">ActivityCreationHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.ActivityCreationHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gi.overrides.GObject.Object</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">ActivityCreationHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.ActivityCreationHandler" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code></p>
 <p>Sugar-side activity creation interface</p>
 <p>This object uses a dbus method on the ActivityFactory
 service to create the new activity.  It generates
@@ -52,41 +50,41 @@ create call.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.create">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activity_handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activity_handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create" title="Link to this definition">¶</a></dt>
 <dd><p>Create a new activity from its name.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.create_activity_id">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create_activity_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create_activity_id" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create_activity_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create_activity_id" title="Link to this definition">¶</a></dt>
 <dd><p>Generate a new, unique ID for this activity</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.create_with_object_id">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create_with_object_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create_with_object_id" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create_with_object_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create_with_object_id" title="Link to this definition">¶</a></dt>
 <dd><p>Create a new activity and pass the object id as handle.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.create_with_uri">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create_with_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create_with_uri" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">create_with_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bundle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.create_with_uri" title="Link to this definition">¶</a></dt>
 <dd><p>Create a new activity and pass the uri as handle.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.get_command">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">get_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activity_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activity_invite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.get_command" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">get_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activity_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activity_invite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.get_command" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.get_environment">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">get_environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.get_environment" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">get_environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.get_environment" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sugar3.activity.activityfactory.open_log_file">
-<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">open_log_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.open_log_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sugar3.activity.activityfactory.</span></span><span class="sig-name descname"><span class="pre">open_log_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sugar3.activity.activityfactory.open_log_file" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -163,7 +161,7 @@ create call.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -177,10 +175,10 @@ create call.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2021, Sugar Labs.
+      &copy;2026, Sugar Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
