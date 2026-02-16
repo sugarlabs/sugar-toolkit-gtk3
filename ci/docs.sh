@@ -14,6 +14,11 @@ show-green () {
 
 # make source
 show-green "Compiling"
+# Ubuntu seems to be packaged with autoconf v<2.72
+# this accounts for that as at the time this change
+# was made, the toolkit was built with v>=2.72
+
+sed -i 's/72/69/g' configure.ac
 ./autogen.sh --with-python3
 make
 
