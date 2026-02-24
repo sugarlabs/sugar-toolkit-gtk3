@@ -26,6 +26,7 @@ import logging
 import dbus
 from gi.repository import GObject
 from gi.repository import GLib
+from gettext import gettext as _
 
 from sugar3.activity.activityhandle import ActivityHandle
 from sugar3 import util
@@ -233,23 +234,27 @@ class ActivityCreationHandler(GObject.GObject):
                                      stdin=dev_null.fileno(),
                                      stdout=log_file.fileno(),
                                      stderr=log_file.fileno())
-        except FileNotFoundError as e:
-            message = str(e)
+        except FileNotFoundError as error:
+            filename = os.path.basename(error.filename or '')
+            if filename == 'sugar-activity':
+                message = _(
+                    'This activity was made for an older version and '
+                    'cannot run on this computer. Please ask your '
+                    'teacher for an updated version.\n'
+                )
+                log_file.write(message)
+                log_file.flush()
+                log_file.close()
 
-            if 'sugar-activity' in message:
-                log_file.write(
-                    'Activity cannot start: written for an older version of Sugar '
-                    'and Python 2.\n')
-            log_file.flush()
+                self._shell.NotifyLaunchFailure(
+                    self._handle.activity_id,
+                    reply_handler=self._no_reply_handler,
+                    error_handler=self._notify_launch_failure_error_handler)
 
-            log_file.close()
-
-            self._shell.NotifyLaunchFailure(
-                self._handle.activity_id,
-                reply_handler=self._no_reply_handler,
-                error_handler=self._notify_launch_failure_error_handler)
-
-            return
+                return
+            raise
+        finally:
+            dev_null.close()
 
 
         GLib.child_watch_add(child.pid,
