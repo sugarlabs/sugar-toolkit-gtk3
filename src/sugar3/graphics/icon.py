@@ -262,7 +262,7 @@ class _IconBuffer(object):
                 icon_width = handle.props.width
                 icon_height = handle.props.height
 
-                pixbuf = handle.get_pixbuf()
+                pixbuf = handle.render_pixbuf()
             else:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(badge_file_name)
 
@@ -411,7 +411,7 @@ class _IconBuffer(object):
             if sensitive:
                 handle.render_cairo(context)
             else:
-                pixbuf = handle.get_pixbuf()
+                pixbuf = handle.render_pixbuf()
                 pixbuf = self._get_insensitive_pixbuf(pixbuf, widget)
 
                 Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)

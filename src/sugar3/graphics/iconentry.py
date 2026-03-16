@@ -54,7 +54,7 @@ class IconEntry(Gtk.Entry):
             entities = {'fill_color': style.COLOR_TOOLBAR_GREY.get_svg(),
                         'stroke_color': style.COLOR_TOOLBAR_GREY.get_svg()}
             handle = loader.load(icon_info.get_filename(), entities, None)
-            pixbuf = handle.get_pixbuf()
+            pixbuf = handle.render_pixbuf()
         else:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon_info.get_filename())
         del icon_info
