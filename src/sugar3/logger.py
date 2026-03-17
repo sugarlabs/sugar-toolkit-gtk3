@@ -21,13 +21,10 @@ STABLE.
 """
 
 import six
-import array
-import collections
 import errno
 import logging
 import sys
 import os
-import decorator
 import time
 
 from six.moves import reprlib as repr_
@@ -36,18 +33,13 @@ from sugar3 import env
 # Let's keep this module self contained so that it can be easily
 # pasted in external sugar service like the datastore.
 
-# traces function calls, use SUGAR_LOGGER_LEVEL=trace to enable
-TRACE = 5
 _LEVELS = {
     'error': logging.ERROR,
     'warning': logging.WARNING,
     'debug': logging.DEBUG,
     'info': logging.INFO,
-    'trace': TRACE,
     'all': 0,
 }
-logging.addLevelName(TRACE, 'TRACE')
-
 
 # DEPRECATED
 def get_logs_dir():
@@ -170,69 +162,3 @@ def start(log_filename=None):
                 raise e
 
 
-class TraceRepr(repr_.Repr):
-
-    # better handling of subclasses of basic types, e.g. for DBus
-    _TYPES = [int, bool, tuple, list, array.array, set, frozenset,
-              collections.deque, dict, str]
-    if six.PY2:
-        _TYPES.append(long)
-
-    def repr1(self, x, level):
-        for t in self._TYPES:
-            if isinstance(x, t):
-                return getattr(self, 'repr_' + t.__name__)(x, level)
-
-        return repr_.Repr.repr1(self, x, level)
-
-    def repr_int(self, x, level):
-        return repr(x)
-
-    def repr_bool(self, x, level):
-        return repr(x)
-
-
-def trace(logger=None, logger_name=None, skip_args=None, skip_kwargs=None,
-          maxsize_list=30, maxsize_dict=30, maxsize_string=300):
-
-    if skip_args is None:
-        skip_args = []
-
-    if skip_kwargs is None:
-        skip_kwargs = []
-
-    # size-limit repr()
-    trace_repr = TraceRepr()
-    trace_repr.maxlist = maxsize_list
-    trace_repr.maxdict = maxsize_dict
-    trace_repr.maxstring = maxsize_string
-    trace_repr.maxother = maxsize_string
-    trace_logger = logger or logging.getLogger(logger_name)
-
-    def _trace(f, *args, **kwargs):
-        # don't do expensive formatting if loglevel TRACE is not enabled
-        enabled = trace_logger.isEnabledFor(TRACE)
-        if not enabled:
-            return f(*args, **kwargs)
-
-        params_formatted = ", ".join(
-            [trace_repr.repr(a)
-                for (idx, a) in enumerate(args) if idx not in skip_args] +
-            ['%s=%s' % (k, trace_repr.repr(v))
-                for (k, v) in list(kwargs.items()) if k not in skip_kwargs])
-
-        trace_logger.log(TRACE, "%s(%s) invoked", f.__name__,
-                         params_formatted)
-
-        try:
-            res = f(*args, **kwargs)
-        except BaseException:
-            trace_logger.exception("Exception occurred in %s" % f.__name__)
-            raise
-
-        trace_logger.log(TRACE, "%s(%s) returned %s", f.__name__,
-                         params_formatted, trace_repr.repr(res))
-
-        return res
-
-    return decorator.decorator(_trace)
