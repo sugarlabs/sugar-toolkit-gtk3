@@ -1,1 +1,1 @@
-dist_bin_SCRIPTS = sugar-activity sugar-activity-web sugar-activity3
+dist_bin_SCRIPTS = sugar-activity sugar-activity-web sugar-activity3 bundlebuilder
