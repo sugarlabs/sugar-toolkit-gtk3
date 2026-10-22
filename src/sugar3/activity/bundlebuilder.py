@@ -26,7 +26,6 @@ is setup by creating a `setup.py` file in the project with the following::
     bundlebuilder.start()
 '''
 
-import six
 import argparse
 import operator
 import os
@@ -41,13 +40,13 @@ import gettext
 import logging
 from glob import glob
 from fnmatch import fnmatch
-from six.moves.configparser import ConfigParser
+from configparser import ConfigParser
 import xml.etree.ElementTree as ET
-from six.moves.html_parser import HTMLParser
+from html.parser import HTMLParser
 
 from sugar3 import env
 from sugar3.bundle.activitybundle import ActivityBundle
-from six.moves import reduce
+from functools import reduce
 
 
 IGNORE_DIRS = ['dist', '.git', 'screenshots']
@@ -583,8 +582,7 @@ def cmd_genpot(config, options):
     args = ['xgettext', '--join-existing', '--language=Python',
             '--keyword=_', '--add-comments=TRANS:',
             '--output=%s' % pot_file]
-    if six.PY3:
-        args.insert(5, '--from-code=UTF-8')
+    args.insert(5, '--from-code=UTF-8')
 
     args += python_files
     retcode = subprocess.call(args)

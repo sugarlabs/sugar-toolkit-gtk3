@@ -20,7 +20,6 @@
 UNSTABLE. We have been adding helpers randomly to this module.
 """
 
-import six
 import os
 import time
 import hashlib
@@ -40,19 +39,15 @@ def printable_hash(in_hash):
     """Convert binary hash data into printable characters."""
     printable = ""
     for char in in_hash:
-        if six.PY3:
-            char = bytes([char])
-            printable = printable + binascii.b2a_hex(char).decode()
-        else:
-            printable = printable + binascii.b2a_hex(char)
+        char = bytes([char])
+        printable = printable + binascii.b2a_hex(char).decode()
     return printable
 
 
 def sha_data(data):
     """sha1 hash some bytes."""
     sha_hash = hashlib.sha1()
-    if six.PY3:
-        data = data.encode('utf-8')
+    data = data.encode('utf-8')
     sha_hash.update(data)
     return sha_hash.digest()
 
@@ -89,7 +84,7 @@ def is_hex(s):
 
 def validate_activity_id(actid):
     """Validate an activity ID."""
-    if not isinstance(actid, (six.binary_type, six.text_type)):
+    if not isinstance(actid, (bytes, str)):
         return False
     if len(actid) != ACTIVITY_ID_LEN:
         return False
@@ -210,7 +205,7 @@ class LRU:
         return iter(self.d)
 
     def itervalues(self):
-        for i_, j in six.iteritems(self):
+        for i_, j in self.d.items():
             yield j
 
     def keys(self):

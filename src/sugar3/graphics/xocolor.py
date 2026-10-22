@@ -20,7 +20,6 @@ This class represents all of the colors that the XO can take on.
 Each pair of colors represents the fill color and the stroke color
 '''
 
-import six
 import random
 import logging
 
@@ -216,7 +215,7 @@ def _parse_string(color_string):
     Args:
         color_string (string): two html format strings separated by a comma
     '''
-    if not isinstance(color_string, (six.text_type, six.binary_type)):
+    if not isinstance(color_string, (str, bytes)):
         logging.error('Invalid color string: %r', color_string)
         return None
 

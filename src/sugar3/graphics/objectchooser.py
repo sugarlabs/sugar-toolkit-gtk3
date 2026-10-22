@@ -19,7 +19,7 @@
 STABLE.
 """
 
-import six
+import io
 import logging
 import cairo
 
@@ -84,7 +84,7 @@ def get_preview_pixbuf(preview_data, width=-1, height=-1):
             import base64
             preview_data = base64.b64decode(preview_data)
 
-        png_file = six.BytesIO(preview_data)
+        png_file = io.BytesIO(preview_data)
         try:
             # Load image and scale to dimensions
             surface = cairo.ImageSurface.create_from_png(png_file)

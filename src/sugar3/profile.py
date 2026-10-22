@@ -22,7 +22,7 @@ from gi.repository import Gio
 import os
 import logging
 
-from six.moves.configparser import ConfigParser
+from configparser import ConfigParser
 
 from sugar3 import env
 from sugar3 import util

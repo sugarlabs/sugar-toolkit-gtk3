@@ -5,7 +5,6 @@ Provides a way to safely weakref any function, including bound methods (which
 aren't handled by the core weakref module).
 """
 
-import six
 import weakref
 import traceback
 
@@ -25,14 +24,9 @@ def safeRef(target, onDelete=None):
         if im_self(target) is not None:
             # Turn a bound method into a BoundMethodWeakref instance.
             # Keep track of these instances for lookup by disconnect().
-            if six.PY2:
-                assert hasattr(target, 'im_func'), \
-                    "safeRef target %r has im_self, but no im_func, " \
-                    "don't know how to create reference" % (target,)
-            else:
-                assert hasattr(target, '__func__'), \
-                    "safeRef target %r has __self__, but no __func__, " \
-                    "don't know how to create reference" % (target,)
+            assert hasattr(target, '__func__'), \
+                "safeRef target %r has __self__, but no __func__, " \
+                "don't know how to create reference" % (target,)
 
             reference = get_bound_method_weakref(
                 target=target,
@@ -271,14 +265,8 @@ def get_bound_method_weakref(target, onDelete):
 
 
 def im_self(func):
-    if six.PY2:
-        return func.im_self
-    elif six.PY3:
-        return func.__self__
+    return func.__self__
 
 
 def im_func(func):
-    if six.PY2:
-        return func.im_func
-    elif six.PY3:
-        return func.__func__
+    return func.__func__

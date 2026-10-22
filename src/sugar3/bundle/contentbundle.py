@@ -21,8 +21,8 @@
 UNSTABLE.
 """
 
-from six.moves import urllib
-from six.moves.configparser import ConfigParser
+import urllib
+from configparser import ConfigParser
 
 import tempfile
 import os

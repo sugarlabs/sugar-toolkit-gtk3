@@ -21,14 +21,14 @@ STABLE.
 
 import os
 import threading
-from six.moves import urllib
+import urllib
 import fcntl
 import tempfile
 
 from gi.repository import GObject
 from gi.repository import GLib
-from six.moves import SimpleHTTPServer
-from six.moves import socketserver
+from http.server import SimpleHTTPServer
+import socketserver
 
 
 __authinfos = {}

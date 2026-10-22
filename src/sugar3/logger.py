@@ -20,7 +20,6 @@
 STABLE.
 """
 
-import six
 import array
 import collections
 import errno
@@ -30,7 +29,7 @@ import os
 import decorator
 import time
 
-from six.moves import reprlib as repr_
+import reprlib as repr_
 from sugar3 import env
 
 # Let's keep this module self contained so that it can be easily
@@ -175,8 +174,6 @@ class TraceRepr(repr_.Repr):
     # better handling of subclasses of basic types, e.g. for DBus
     _TYPES = [int, bool, tuple, list, array.array, set, frozenset,
               collections.deque, dict, str]
-    if six.PY2:
-        _TYPES.append(long)
 
     def repr1(self, x, level):
         for t in self._TYPES:

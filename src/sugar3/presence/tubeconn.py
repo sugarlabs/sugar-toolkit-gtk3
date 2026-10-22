@@ -24,7 +24,6 @@ __all__ = ('TubeConnection', )
 __docformat__ = 'reStructuredText'
 
 
-import six
 import logging
 
 from dbus.connection import Connection
@@ -114,6 +113,6 @@ class TubeConnection(Connection):
             # GetDBusNames already returned: fake a participant add event
             # immediately
             added = []
-            for k, v in six.iteritems(self.participants):
+            for k, v in self.participants.items():
                 added.append((k, v))
             callback(added, [])

@@ -87,13 +87,12 @@ In this example, the badge will be centered at 97.0% on the X axis,
 and 85.0% on the Y axis.
 '''
 
-import six
 import re
 import math
 import logging
 import os
 
-from six.moves.configparser import ConfigParser
+from configparser import ConfigParser
 
 import gi
 gi.require_version('Rsvg', '2.0')
@@ -129,8 +128,8 @@ class _SVGLoader(object):
             if cache:
                 self._cache[file_name] = icon
 
-        for entity, value in list(entities.items()):
-            if isinstance(value, six.string_types):
+        for entity, value in entities.items():
+            if isinstance(value, str):
                 xml = '<!ENTITY %s "%s">' % (entity, value)
                 icon = re.sub('<!ENTITY %s .*>' % entity, xml, icon)
             else:
@@ -804,7 +803,7 @@ class EventIcon(Gtk.EventBox):
         # for example, after a touch palette invocation
         self.connect_after('button-release-event',
                            self.__button_release_event_cb)
-        for key, value in six.iteritems(kwargs):
+        for key, value in kwargs.items():
             self.set_property(key, value)
 
         from sugar3.graphics.palette import CursorInvoker

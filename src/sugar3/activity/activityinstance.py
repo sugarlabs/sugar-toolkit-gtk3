@@ -16,14 +16,7 @@
 
 import os
 import sys
-import six
 import logging
-
-# Change the default encoding to avoid UnicodeDecodeError
-# http://lists.sugarlabs.org/archive/sugar-devel/2012-August/038928.html
-if six.PY2:
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
 
 import gettext
 from argparse import ArgumentParser

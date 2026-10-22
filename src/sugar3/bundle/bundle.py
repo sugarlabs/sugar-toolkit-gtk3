@@ -20,7 +20,7 @@
 UNSTABLE.
 """
 
-import six
+import io
 import os
 import logging
 import shutil
@@ -124,7 +124,7 @@ class Bundle(object):
             path = os.path.join(self._zip_root_dir, filename)
             try:
                 data = self._zip_file.read(path)
-                f = six.BytesIO(data)
+                f = io.BytesIO(data)
             except KeyError:
                 logging.debug('%s not found in zip %s.' % (filename, path))
                 return None

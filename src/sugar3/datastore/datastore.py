@@ -20,7 +20,6 @@
 STABLE
 """
 
-import six
 import logging
 import time
 from datetime import datetime
@@ -87,12 +86,11 @@ class DSMetadata(GObject.GObject):
         if not properties:
             self._properties = {}
         else:
-            if six.PY3:
-                for x, y in list(properties.items()):
-                    try:
-                        properties[x] = y.decode()
-                    except BaseException:
-                        pass
+            for x, y in list(properties.items()):
+                try:
+                    properties[x] = y.decode()
+                except BaseException:
+                    pass
             self._properties = properties
 
         default_keys = ['activity', 'activity_id',
@@ -105,11 +103,10 @@ class DSMetadata(GObject.GObject):
         return self._properties[key]
 
     def __setitem__(self, key, value):
-        if six.PY3:
-            try:
-                value = value.decode()
-            except BaseException:
-                pass
+        try:
+            value = value.decode()
+        except BaseException:
+            pass
         if key not in self._properties or self._properties[key] != value:
             self._properties[key] = value
             self.emit('updated')

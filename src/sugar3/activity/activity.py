@@ -158,7 +158,7 @@ Hint: A good and simple activity to learn from is the Read activity.
 You may copy it and use it as a template.
 '''
 
-import six
+import io
 import gettext
 import logging
 import os
@@ -908,7 +908,7 @@ class Activity(Window, Gtk.Container):
         cr.set_source_surface(screenshot_surface)
         cr.paint()
 
-        preview_str = six.BytesIO()
+        preview_str = io.BytesIO()
         preview_surface.write_to_png(preview_str)
         return preview_str.getvalue()
 
@@ -917,10 +917,7 @@ class Activity(Window, Gtk.Container):
             buddies = {}
             for buddy in self.shared_activity.get_joined_buddies():
                 if not buddy.props.owner:
-                    if six.PY2:
-                        buddy_id = sha1(buddy.props.key).hexdigest()
-                    else:
-                        buddy_id = sha1((buddy.props.key).encode('utf-8')).hexdigest()
+                    buddy_id = sha1((buddy.props.key).encode('utf-8')).hexdigest()
                     buddies[buddy_id] = [buddy.props.nick, buddy.props.color]
             return buddies
         else:

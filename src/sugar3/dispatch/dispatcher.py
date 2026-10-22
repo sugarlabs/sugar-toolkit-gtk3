@@ -1,5 +1,4 @@
 import weakref
-import six
 
 from sugar3.dispatch import saferef
 
@@ -195,14 +194,8 @@ class Signal(object):
 
 
 def im_self(func):
-    if six.PY2:
-        return func.im_self
-    elif six.PY3:
-        return func.__self__
+    return func.__self__
 
 
 def im_func(func):
-    if six.PY2:
-        return func.im_func
-    elif six.PY3:
-        return func.__func__
+    return func.__func__
