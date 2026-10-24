@@ -644,7 +644,7 @@ def start():
 
     options = parser.parse_args()
 
-    source_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    source_dir = os.path.abspath(os.getcwd())
     config = Config(source_dir)
 
     if 'cmd_' + (options.command or '') in globals():
