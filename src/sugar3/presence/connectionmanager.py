@@ -93,10 +93,12 @@ class ConnectionManager(object):
             self._connections_per_account[account_path].connected = False
 
     def __status_changed_cb(self, account_path, status, reason):
-        if status == CONNECTION_STATUS_CONNECTED:
-            self._connections_per_account[account_path].connected = True
-        else:
-            self._connections_per_account[account_path].connected = False
+        connection = self._connections_per_account.get(account_path)
+        if connection is None:
+            # the connection is no longer tracked, for example when the
+            # account lost its connection before this signal was delivered
+            return
+        connection.connected = status == CONNECTION_STATUS_CONNECTED
 
     def get_preferred_connection(self):
         best_connection = None, None
