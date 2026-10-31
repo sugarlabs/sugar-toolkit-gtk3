@@ -93,6 +93,8 @@ class ConnectionManager(object):
             self._connections_per_account[account_path].connected = False
 
     def __status_changed_cb(self, account_path, status, reason):
+        if account_path not in self._connections_per_account:
+            return
         if status == CONNECTION_STATUS_CONNECTED:
             self._connections_per_account[account_path].connected = True
         else:
