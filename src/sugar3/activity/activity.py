@@ -228,7 +228,7 @@ CONNECTION_HANDLE_TYPE_ROOM = TelepathyGLib.HandleType.ROOM
 
 CONN_INTERFACE_ACTIVITY_PROPERTIES = 'org.laptop.Telepathy.ActivityProperties'
 
-PREVIEW_SIZE = style.zoom(300), style.zoom(225)
+PREVIEW_SIZE = style.zoom(720), style.zoom(540)
 """
 Size of a preview image for journal object metadata.
 """
