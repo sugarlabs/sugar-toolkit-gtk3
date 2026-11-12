@@ -110,6 +110,20 @@ class PresenceService(GObject.GObject):
         return None
 
     def get_activity_by_handle(self, connection_path, room_handle):
+        """Retrieve an Activity object by its connection path and room handle.
+
+        Parameters
+        ----------
+        connection_path : str
+            The D-Bus object path of the Telepathy connection.
+        room_handle : int
+            The handle of the room associated with the activity.
+
+        Returns
+        -------
+        Activity or None
+            The Activity object, or None if not found.
+        """
         if self._activity_cache is not None:
             if self._activity_cache.room_handle != room_handle:
                 raise RuntimeError('Activities can only access their own'
@@ -129,6 +143,23 @@ class PresenceService(GObject.GObject):
             return activity
 
     def get_buddy(self, account_path, contact_id):
+        """Retrieve a Buddy object for a given account and contact ID.
+
+        Results are cached so repeated calls with the same arguments
+        return the same object.
+
+        Parameters
+        ----------
+        account_path : str
+            The D-Bus object path of the Telepathy account.
+        contact_id : str
+            The contact identifier on that account.
+
+        Returns
+        -------
+        Buddy
+            The Buddy object for the given contact.
+        """
         if (account_path, contact_id) in self._buddy_cache:
             return self._buddy_cache[(account_path, contact_id)]
 
@@ -188,6 +219,28 @@ class PresenceService(GObject.GObject):
         self.emit('activity-shared', False, activity, error)
 
     def share_activity(self, activity, properties=None, private=True):
+        """Share an activity over the network using Telepathy.
+
+        Emits the ``activity-shared`` signal when sharing succeeds or fails.
+
+        Parameters
+        ----------
+        activity : sugar3.activity.Activity
+            The activity instance to share.
+        properties : dict, optional
+            Optional dictionary of activity properties such as ``id``,
+            ``type``, ``name``, and ``color``. Missing keys are filled
+            in automatically from the activity object.
+        private : bool, optional
+            Whether the activity is private. Defaults to True.
+
+        Raises
+        ------
+        ValueError
+            If the activity is already being tracked.
+        RuntimeError
+            If the activity is already shared.
+        """
         if properties is None:
             properties = {}
 
@@ -272,3 +325,4 @@ def get_instance(allow_offline_iface=False):
     if not _ps:
         _ps = PresenceService()
     return _ps
+    
