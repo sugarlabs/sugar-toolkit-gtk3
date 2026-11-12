@@ -37,6 +37,8 @@ from errno import EEXIST, ENOSPC
 import os
 import subprocess
 
+
+
 _SHELL_SERVICE = 'org.laptop.Shell'
 _SHELL_PATH = '/org/laptop/Shell'
 _SHELL_IFACE = 'org.laptop.Shell'
@@ -217,25 +219,59 @@ class ActivityCreationHandler(GObject.GObject):
             self._service_name, self._handle.activity_id,
             reply_handler=self._no_reply_handler,
             error_handler=self._notify_launch_error_handler)
-
+        
         environ = get_environment(self._bundle)
         (log_path, log_file) = open_log_file(self._bundle)
         command = get_command(self._bundle, self._handle.activity_id,
                               self._handle.object_id, self._handle.uri,
                               self._handle.invited)
 
-        dev_null = open('/dev/null', 'r')
-        child = subprocess.Popen([str(s) for s in command],
-                                 env=environ,
-                                 cwd=str(self._bundle.get_path()),
-                                 close_fds=True,
-                                 stdin=dev_null.fileno(),
-                                 stdout=log_file.fileno(),
-                                 stderr=log_file.fileno())
+        try:
+            dev_null = open('/dev/null', 'r')
+            child = subprocess.Popen([str(s) for s in command],
+                                    env=environ,
+                                    cwd=str(self._bundle.get_path()),
+                                    close_fds=True,
+                                    stdin=dev_null.fileno(),
+                                    stdout=log_file.fileno(),
+                                    stderr=log_file.fileno())
 
-        GLib.child_watch_add(child.pid,
-                             _child_watch_cb,
-                             (log_file, self._handle.activity_id))
+            GLib.child_watch_add(child.pid,
+                                _child_watch_cb,
+                                (log_file, self._handle.activity_id))
+
+        except FileNotFoundError as e:
+            if 'sugar-activity' in str(e):
+                log_file.write('Activity written for Python 2, needs to be ported to Python 3\n')
+                log_file.close()
+                
+                from jarabe.model import shell
+                shell_model = shell.get_model()
+                
+                if not hasattr(shell_model, '_python2_activity_check'):
+                    shell_model._python2_activity_check = set()
+                shell_model._python2_activity_check.add(self._handle.activity_id)
+                
+                bus = dbus.SessionBus()
+                bus_object = bus.get_object(_SHELL_SERVICE, _SHELL_PATH)
+                shell = dbus.Interface(bus_object, _SHELL_IFACE)
+                
+                shell.NotifyLaunchFailure(
+                    self._handle.activity_id, 
+                    reply_handler=self._no_reply_handler,
+                    error_handler=self._notify_launch_failure_error_handler)
+
+        except Exception as e:
+                logging.error('Activity launch failed with error: %s', str(e))
+                
+                bus = dbus.SessionBus()
+                bus_object = bus.get_object(_SHELL_SERVICE, _SHELL_PATH)
+                shell = dbus.Interface(bus_object, _SHELL_IFACE)
+                
+                shell.NotifyLaunchFailure(
+                    self._handle.activity_id, 
+                    reply_handler=self._no_reply_handler,
+                    error_handler=self._notify_launch_failure_error_handler)
 
     def _no_reply_handler(self, *args):
         pass
