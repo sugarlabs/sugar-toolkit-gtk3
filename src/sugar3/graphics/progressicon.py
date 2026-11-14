@@ -40,15 +40,25 @@ class ProgressIcon(Gtk.DrawingArea):
       stroke_color (string): Stroke color means border color.
       fill_color (string): The main (inside) color of progressicon
          [e.g. fill_color=style.COLOR_BLUE.get_svg()
+      fill_start (float): fraction of the icon dimension where the
+         fill area begins (0.0 = top or left edge).  Default is 0.0.
+      fill_end (float): fraction of the icon dimension where the
+         fill area ends (1.0 = bottom or right edge).  Default is 1.0.
+         For icons whose fill region does not span the full icon, set
+         fill_start and fill_end to the bounds of the fill area so
+         that progress steps are distributed over that region instead
+         of the entire surface.
     '''
 
     def __init__(self, icon_name, pixel_size, stroke_color, fill_color,
-                 direction='vertical'):
+                 direction='vertical', fill_start=0.0, fill_end=1.0):
         Gtk.DrawingArea.__init__(self)
 
         self._icon_name = icon_name
         self._direction = direction
         self._progress = 0
+        self._fill_start = fill_start
+        self._fill_end = fill_end
 
         self._stroke = get_surface(
             icon_name=icon_name, width=pixel_size, height=pixel_size,
@@ -71,19 +81,28 @@ class ProgressIcon(Gtk.DrawingArea):
         cr.translate(margin_x, margin_y)
 
         # Paint the fill, clipping it by the progress.
-        x_, y_ = 0, 0
-        width, height = self._stroke.get_width(), self._stroke.get_height()
+        total_width = self._stroke.get_width()
+        total_height = self._stroke.get_height()
+
         if self._direction == 'vertical':  # vertical direction, bottom to top
-            y_ = self._stroke.get_height()
-            height *= self._progress * -1
+            fill_region = (self._fill_end - self._fill_start) * total_height
+            # y_ is the bottom of the clip region (fill_end from the top).
+            y_ = self._fill_end * total_height
+            x_ = 0
+            width = total_width
+            height = fill_region * self._progress * -1
         else:
+            fill_region = (self._fill_end - self._fill_start) * total_width
             rtl_direction = \
                 Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL
+            y_ = 0
+            height = total_height
             if rtl_direction:  # horizontal direction, right to left
-                x_ = self._stroke.get_width()
-                width *= self._progress * -1
+                x_ = self._fill_end * total_width
+                width = fill_region * self._progress * -1
             else:  # horizontal direction, left to right
-                width *= self._progress
+                x_ = self._fill_start * total_width
+                width = fill_region * self._progress
 
         cr.rectangle(x_, y_, width, height)
         cr.clip()
