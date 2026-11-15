@@ -811,8 +811,7 @@ class Invoker(GObject.GObject):
 
         self._screen_area = Gdk.Rectangle()
         self._screen_area.x = self._screen_area.y = 0
-        self._screen_area.width = Gdk.Screen.width()
-        self._screen_area.height = Gdk.Screen.height()
+        self._update_screen_area()
         self._position_hint = self.ANCHORED
         self._cursor_x = -1
         self._cursor_y = -1
@@ -821,6 +820,10 @@ class Invoker(GObject.GObject):
         self._toggle_palette = False
         self._lock_palette = False
         self.locked = False
+
+    def _update_screen_area(self):
+        self._screen_area.width = Gdk.Screen.width()
+        self._screen_area.height = Gdk.Screen.height()
 
     def attach(self, parent):
         self.parent = parent
@@ -893,6 +896,7 @@ class Invoker(GObject.GObject):
             return self.BOTTOM + self.RIGHT + self.TOP + self.LEFT
 
     def get_position_for_alignment(self, alignment, palette_dim):
+        self._update_screen_area()
         rect = self._get_position_for_alignment(alignment, palette_dim)
         if self._in_screen(rect):
             return rect
@@ -915,6 +919,7 @@ class Invoker(GObject.GObject):
         return rect
 
     def get_alignment(self, palette_dim):
+        self._update_screen_area()
         best_alignment = None
         best_area = -1
         for alignment in self._get_alignments():
