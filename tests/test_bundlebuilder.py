@@ -38,6 +38,10 @@ class TestGit(unittest.TestCase):
 
     _share_locale_files = ["locale/es/LC_MESSAGES/org.sugarlabs.Sample.mo"]
 
+    def setUp(self):
+        cwd = os.getcwd()
+        self.addCleanup(os.chdir, cwd)
+
     def _get_all_locale_files(self):
         expected = self._share_locale_files[:]
         expected.extend(self._activity_locale_files)
@@ -75,12 +79,19 @@ class TestGit(unittest.TestCase):
     def _strip_root_dir(self, paths):
         return [path[path.find("/") + 1:] for path in paths]
 
-    def _test_dist_xo(self, source_path, build_path):
+    def _external_setup(self, repo_path):
+        directory = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, directory)
+        path = os.path.join(directory, 'setup.py')
+        shutil.copy2(os.path.join(repo_path, 'setup.py'), path)
+        return path
+
+    def _test_dist_xo(self, source_path, build_path, setup_path=None):
         cwd = os.getcwd()
         os.chdir(build_path)
 
-        setup_path = os.path.join(source_path, "setup.py")
-        subprocess.call([setup_path, "dist_xo"])
+        setup_path = setup_path or os.path.join(source_path, "setup.py")
+        subprocess.check_call([setup_path, "dist_xo"])
 
         xo_path = os.path.join(build_path, "dist", "Sample-1.xo")
         filenames = zipfile.ZipFile(xo_path).namelist()
@@ -88,31 +99,31 @@ class TestGit(unittest.TestCase):
         stripped_filenames = self._strip_root_dir(filenames)
         expected = self._source_files[:]
         expected.extend(self._get_all_locale_files())
-        self.assertItemsEqual(stripped_filenames, expected)
+        self.assertCountEqual(stripped_filenames, expected)
 
         os.chdir(cwd)
 
-    def _test_dist_source(self, source_path, build_path):
+    def _test_dist_source(self, source_path, build_path, setup_path=None):
         cwd = os.getcwd()
         os.chdir(build_path)
 
-        setup_path = os.path.join(source_path, "setup.py")
-        subprocess.call([setup_path, "dist_source"])
+        setup_path = setup_path or os.path.join(source_path, "setup.py")
+        subprocess.check_call([setup_path, "dist_source"])
 
         xo_path = os.path.join(build_path, "dist", "Sample-1.tar.bz2")
         filenames = tarfile.open(name=xo_path, mode="r:bz2").getnames()
 
         stripped_filenames = self._strip_root_dir(filenames)
-        self.assertItemsEqual(stripped_filenames, self._source_files)
+        self.assertCountEqual(stripped_filenames, self._source_files)
 
         os.chdir(cwd)
 
-    def _test_build(self, source_path, build_path):
+    def _test_build(self, source_path, build_path, setup_path=None):
         cwd = os.getcwd()
         os.chdir(build_path)
 
-        setup_path = os.path.join(source_path, "setup.py")
-        subprocess.call([setup_path, "build"])
+        setup_path = setup_path or os.path.join(source_path, "setup.py")
+        subprocess.check_call([setup_path, "build"])
 
         locale_path = os.path.join(build_path, "locale")
 
@@ -121,11 +132,11 @@ class TestGit(unittest.TestCase):
             rel_root = root[len(build_path) + 1:]
             filenames.extend([os.path.join(rel_root, name) for name in files])
 
-        self.assertItemsEqual(filenames, self._get_all_locale_files())
+        self.assertCountEqual(filenames, self._get_all_locale_files())
 
         os.chdir(cwd)
 
-    def _test_dev(self, source_path, build_path):
+    def _test_dev(self, source_path, build_path, setup_path=None):
         activities_path = tempfile.mkdtemp()
 
         cwd = os.getcwd()
@@ -133,8 +144,8 @@ class TestGit(unittest.TestCase):
 
         os.environ["SUGAR_ACTIVITIES_PATH"] = activities_path
 
-        setup_path = os.path.join(source_path, "setup.py")
-        subprocess.call([setup_path, "dev"])
+        setup_path = setup_path or os.path.join(source_path, "setup.py")
+        subprocess.check_call([setup_path, "dev"])
 
         activity_py_path = os.path.join(activities_path, "Sample.activity",
                                         "activity.py")
@@ -142,28 +153,29 @@ class TestGit(unittest.TestCase):
 
         os.chdir(cwd)
 
-    def _test_genpot(self, source_path, build_path):
+    def _test_genpot(self, source_path, build_path, setup_path=None):
         cwd = os.getcwd()
         os.chdir(build_path)
 
         pot_path = os.path.join(source_path, "po", "Sample.pot")
         os.unlink(pot_path)
 
-        setup_path = os.path.join(source_path, "setup.py")
-        subprocess.call([setup_path, "genpot"])
+        setup_path = setup_path or os.path.join(source_path, "setup.py")
+        subprocess.check_call([setup_path, "genpot"])
 
         self.assertTrue(os.path.exists(pot_path))
 
         os.chdir(cwd)
 
-    def _test_install(self, source_path, build_path):
+    def _test_install(self, source_path, build_path, setup_path=None):
         install_path = tempfile.mkdtemp()
 
         cwd = os.getcwd()
         os.chdir(build_path)
 
-        setup_path = os.path.join(source_path, "setup.py")
-        subprocess.call([setup_path, "install", "--prefix", install_path])
+        setup_path = setup_path or os.path.join(source_path, "setup.py")
+        subprocess.check_call(
+            [setup_path, "install", "--prefix", install_path])
 
         filenames = []
         activity_dir = os.path.join(install_path, "share",
@@ -175,7 +187,7 @@ class TestGit(unittest.TestCase):
         expected = self._source_files[:]
         expected.extend(self._activity_locale_files)
 
-        self.assertItemsEqual(filenames, expected)
+        self.assertCountEqual(filenames, expected)
 
         filenames = []
         share_dir = os.path.join(install_path, "share")
@@ -186,7 +198,7 @@ class TestGit(unittest.TestCase):
                 if "org.sugarlabs.Sample" in name:
                     filenames.append(os.path.join(rel_root, name))
 
-        self.assertItemsEqual(filenames, self._share_locale_files)
+        self.assertCountEqual(filenames, self._share_locale_files)
 
         os.chdir(cwd)
 
@@ -194,52 +206,52 @@ class TestGit(unittest.TestCase):
         repo_path = self._create_repo()
         self._test_dist_xo(repo_path, repo_path)
 
-    def test_dist_xo_out_of_source(self):
+    def test_dist_xo_external_setup(self):
         repo_path = self._create_repo()
-        build_path = tempfile.mkdtemp()
-        self._test_dist_xo(repo_path, build_path)
+        self._test_dist_xo(repo_path, repo_path,
+                           self._external_setup(repo_path))
 
     def test_dist_source_in_source(self):
         repo_path = self._create_repo()
         self._test_dist_source(repo_path, repo_path)
 
-    def test_dist_source_out_of_source(self):
+    def test_dist_source_external_setup(self):
         repo_path = self._create_repo()
-        build_path = tempfile.mkdtemp()
-        self._test_dist_source(repo_path, build_path)
+        self._test_dist_source(repo_path, repo_path,
+                               self._external_setup(repo_path))
 
     def test_install_in_source(self):
         repo_path = self._create_repo()
         self._test_install(repo_path, repo_path)
 
-    def test_install_out_of_source(self):
+    def test_install_external_setup(self):
         repo_path = self._create_repo()
-        build_path = tempfile.mkdtemp()
-        self._test_install(repo_path, build_path)
+        self._test_install(repo_path, repo_path,
+                           self._external_setup(repo_path))
 
     def test_build_in_source(self):
         repo_path = self._create_repo()
         self._test_build(repo_path, repo_path)
 
-    def test_build_out_of_source(self):
+    def test_build_external_setup(self):
         repo_path = self._create_repo()
-        build_path = tempfile.mkdtemp()
-        self._test_build(repo_path, build_path)
+        self._test_build(repo_path, repo_path,
+                         self._external_setup(repo_path))
 
     def test_dev_in_source(self):
         repo_path = self._create_repo()
         self._test_dev(repo_path, repo_path)
 
-    def test_dev_out_of_source(self):
+    def test_dev_external_setup(self):
         repo_path = self._create_repo()
-        build_path = tempfile.mkdtemp()
-        self._test_dev(repo_path, build_path)
+        self._test_dev(repo_path, repo_path,
+                       self._external_setup(repo_path))
 
     def test_genpot_in_source(self):
         repo_path = self._create_repo()
         self._test_genpot(repo_path, repo_path)
 
-    def test_genpot_out_of_source(self):
+    def test_genpot_external_setup(self):
         repo_path = self._create_repo()
-        build_path = tempfile.mkdtemp()
-        self._test_genpot(repo_path, build_path)
+        self._test_genpot(repo_path, repo_path,
+                          self._external_setup(repo_path))
