@@ -68,7 +68,7 @@ class ContentBundle(Bundle):
 
     def _parse_info(self, info_file):
         cp = ConfigParser()
-        cp.read_file(info_file)
+        cp.read_string(info_file.read().decode())
 
         section = 'Library'
 

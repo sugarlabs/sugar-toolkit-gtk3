@@ -17,6 +17,8 @@
 import os
 import unittest
 import subprocess
+import tempfile
+import shutil
 
 from sugar3.bundle.helpers import bundle_from_dir, bundle_from_archive
 from sugar3.bundle.activitybundle import ActivityBundle
@@ -29,6 +31,10 @@ SAMPLE_CONTENT_PATH = os.path.join(data_dir, 'sample.content')
 
 
 class TestBundle(unittest.TestCase):
+    def setUp(self):
+        cwd = os.getcwd()
+        self.addCleanup(os.chdir, cwd)
+
     def test_bundle_from_dir(self):
         bundle = bundle_from_dir(SAMPLE_ACTIVITY_PATH)
         self.assertIsInstance(bundle, ActivityBundle)
@@ -41,6 +47,18 @@ class TestBundle(unittest.TestCase):
         xo_path = os.path.join(".", "dist", "Sample-1.xo")
         bundle = bundle_from_archive(xo_path)
         self.assertIsInstance(bundle, ActivityBundle)
+
+    def test_content_bundle_unicode_name(self):
+        directory = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, directory)
+        path = os.path.join(directory, 'unicode.content')
+        shutil.copytree(SAMPLE_CONTENT_PATH, path)
+        info_path = os.path.join(path, 'library', 'library.info')
+        with open(info_path, encoding='utf-8') as stream:
+            info = stream.read()
+        with open(info_path, 'w', encoding='utf-8') as stream:
+            stream.write(info.replace('name = sample', 'name = Caf\u00e9'))
+        self.assertEqual(ContentBundle(path).get_name(), 'Caf\u00e9')
 
     def test_content_bundle_from_archive(self):
         os.chdir(data_dir)
