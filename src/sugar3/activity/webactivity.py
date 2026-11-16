@@ -18,6 +18,7 @@
 import json
 import os
 import logging
+import urllib.parse
 
 import gi
 gi.require_version('Gdk', '3.0')
@@ -160,8 +161,10 @@ class WebActivity(Gtk.Window):
                 return True
 
     def _app_scheme_cb(self, request, user_data):
+        # The request path may be percent-encoded (e.g. %22 for quotes),
+        # so decode it before joining with the bundle path.
         path = os.path.join(self._bundle_path,
-                            os.path.relpath(request.get_path(), "/"))
+                            os.path.relpath(urllib.parse.unquote(request.get_path()), "/"))
 
         request.finish(Gio.File.new_for_path(path).read(None),
                        -1, Gio.content_type_guess(path, None)[0])
