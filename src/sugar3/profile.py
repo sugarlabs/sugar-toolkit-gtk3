@@ -87,12 +87,14 @@ class Profile(object):
             logging.exception('Error reading public key')
             return None
 
-        magic = 'ssh-dss '
+        # Support both DSA (ssh-dss) for existing keys and RSA (ssh-rsa) for new keys
+        # This ensures backward compatibility with existing user profiles
+        supported_key_types = ('ssh-dss ', 'ssh-rsa ')
         for line in lines:
             line = line.strip()
-            if not line.startswith(magic):
-                continue
-            return line[len(magic):]
+            for magic in supported_key_types:
+                if line.startswith(magic):
+                    return line[len(magic):]
         else:
             logging.error('Error parsing public key.')
             return None
